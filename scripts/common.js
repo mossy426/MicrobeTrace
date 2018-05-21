@@ -198,22 +198,23 @@ app.titleize = function(title){
 
 app.tagClusters = function(){
   session.data.clusters = [];
-  session.data.nodes.forEach(function(node){ delete node.cluster; });
-  session.data.nodes.forEach(function(node){
-    if(typeof node.cluster === 'undefined'){
-      session.data.clusters.push({
-        id: session.data.clusters.length,
-        nodes: 0,
-        links: 0,
-        sum_distances: 0,
-        links_per_node: 0,
-        mean_genetic_distance: undefined,
-        visible: 1,
-        selected: 0
-      });
-      app.DFS(node);
-    }
-  });
+  var n = 0;
+  for(var i = 0; i < n; i++) delete session.data.nodes[i].cluster;
+  for(var i = 0; i < n; i++){
+    var node = session.data.nodes[i];
+    if(typeof node.cluster !== 'undefined') continue;
+    session.data.clusters.push({
+      id: session.data.clusters.length,
+      nodes: 0,
+      links: 0,
+      sum_distances: 0,
+      links_per_node: 0,
+      mean_genetic_distance: undefined,
+      visible: 1,
+      selected: 0
+    });
+    app.DFS(node);
+  }
   session.data.clusters = session.data.clusters.filter(function(c){ return c.nodes > 1; });
 };
 
