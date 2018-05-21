@@ -284,6 +284,10 @@ input[type="range"]{
   text-indent: 1px;
   text-overflow: '';
 }
+#link-reciprocalthickness-row {
+  display: none;
+}
+
 
 /* 3D Network */
 .graph-nav-info{
