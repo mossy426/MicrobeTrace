@@ -474,8 +474,11 @@
     session.network.force.force('link').links(vlinks);
 
     $(window).on('node_selected', function(){
-      nodes.select('path').classed('selected', d => d.selected);
-      $('#numberOfSelectedNodes').text(session.data.nodes.filter(d => d.selected).length.toLocaleString());
+      session.network.nodes.select('path').classed('selected', d => d.selected);
+      var selected = 0;
+      var n = session.data.nodes.length;
+      for(var i = 0; i < n; i++) if(session.data.nodes[i].selected) selected++;
+      $('#numberOfSelectedNodes').text(selected.toLocaleString());
     });
   };
 
