@@ -698,12 +698,19 @@
   function redrawNodes(){
     //Things to track in the function:
     //* Shapes:
+    var n = session.data.nodes.length;
     var type = d3[$('#default-node-symbol').val()];
     var symbolVariable = $('#nodeSymbolVariable').val();
     var o = (b => d3[$('#default-node-symbol').val()]);
     if(symbolVariable !== 'None'){
       var map = {};
-      var values = _.uniq(session.data.nodes.map(d => d[symbolVariable])).sort();
+      var values = [];
+      for(var i = 0; i < n; i++){
+        var d = session.data.nodes[i][symbolVariable];
+        if(values.includes(d)) continue;
+        values.push(d);
+      }
+      values.sort();
       $('#nodeShapes select').each(function(i, el){
         map[values[i]] = $(this).val();
       });
@@ -714,7 +721,6 @@
     var size = defaultSize;
     var sizeVariable = $('#nodeRadiusVariable').val();
     if(sizeVariable !== 'None'){
-      var n = session.data.nodes.length;
       var min = Number.MAX_VALUE;
       var max = Number.MIN_VALUE;
       for(var i = 0; i < n; i++){
@@ -731,11 +737,9 @@
       if(symbolVariable !== 'None') type = d3[o(d[symbolVariable])];
       if(sizeVariable !== 'None'){
         size = med;
-        if(typeof d[sizeVariable] !== 'undefined'){
-          size = d[sizeVariable];
-        }
+        if(typeof d[sizeVariable] !== 'undefined') size = d[sizeVariable];
         size = (size - min + 1) / oldrng
-        size = size * size * defaultSize;
+        size = size * size * defaultSize + 30;
       }
       d3.select(this).attr('d', d3.symbol().size(size).type(type));
     });
