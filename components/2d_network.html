@@ -294,9 +294,7 @@
       session.network.transform.invert(d3.event.selection[1])
     ];
     if(selection == null) return;
-    var node = session.network.svg
-      .select('g#nodes')
-      .selectAll('g.node');
+    var node = session.network.nodes;
     if(d3.event.sourceEvent.ctrlKey){
       node.classed('selected', function(d){
         return d.selected = d.previouslySelected ^ (
@@ -350,8 +348,7 @@
     .select('rect.overlay')
       .attr('pointer-events', 'none');
 
-  session.network.svg = d3.select('svg#network')
-    .append('g')
+  session.network.svg = d3.select('svg#network').append('g');
 
   session.network.fit = function(thing, bounds){
     if(!bounds) bounds = session.network.svg.node().getBBox();
@@ -403,7 +400,8 @@
     //OK, this is a little bit of expert-level D3 voodoo that deserves some explanation.
     var node = session.network.svg
       .select('g#nodes')
-      .selectAll('g.node').data(vnodes);
+      .selectAll('g.node')
+      .data(vnodes);
     node.exit().remove(); //Removing nodes with no representation in the dataset.
     node = node.enter().append('g').attr('class', 'node').attr('tabindex', '0') //Adding nodes that weren't represented in the dataset before.
       .call(d3.drag() //A bunch of mouse handlers.
@@ -443,7 +441,8 @@
     // Links are considerably simpler.
     var link = session.network.svg
       .select('g#links')
-      .selectAll('line').data(vlinks);
+      .selectAll('line')
+      .data(vlinks);
     link.exit().remove();
     link.enter().append('line')
       .attr('stroke', $('#default-link-color').val())
@@ -452,19 +451,20 @@
       .on('mouseenter', showLinkToolTip)
       .on('mouseout', hideTooltip);
 
+    session.network.nodes = session.network.svg
+      .select('g#nodes')
+      .selectAll('g.node');
+    session.network.links = session.network.svg
+      .select('g#links')
+      .selectAll('line');
+
     setLinkColor();
     scaleLinkThing($('#default-link-width').val(), $('#linkWidthVariable').val(), 'stroke-width');
 
-    var nodes = session.network.svg
-      .select('g#nodes')
-      .selectAll('g.node');
-    var links = session.network.svg
-      .select('g#links')
-      .selectAll('line');
     session.network.force.nodes(vnodes).on('tick', function(){
-      nodes
+      session.network.nodes
         .attr('transform', d => d.fixed ? `translate(${d.fx}, ${d.fy})` : `translate(${d.x}, ${d.y})`);
-      links
+      session.network.links
         .attr('x1', l => l.source.x)
         .attr('y1', l => l.source.y)
         .attr('x2', l => l.target.x)
@@ -659,14 +659,10 @@
       neighbors.push(l.source === node.id ? l.target : l.source);
     }
     neighbors.push(node.id);
-    session.network.svg
-      .select('g#nodes')
-      .selectAll('g.node')
+    session.network.nodes
       .selectAll('path')
       .attr('opacity', d => neighbors.includes(d.id) ? 1 : .1);
-    session.network.svg
-      .select('g#links')
-      .selectAll('line')
+    session.network.links
       .attr('opacity', l => lindices.includes(l.index) ? 1 : .1);
   }
 
@@ -685,15 +681,11 @@
   function hideTooltip(){
     if($('#highlight-neighbors').is(':checked')){
       var nodeOpacity = $('#default-node-opacity').val();
-      session.network.svg
-        .select('g#nodes')
-        .selectAll('g.node')
+      session.network.nodes
         .selectAll('path')
         .attr('opacity', nodeOpacity);
       var linkOpacity = $('default-link-opacity').val();
-      session.network.svg
-        .select('g#links')
-        .selectAll('line')
+      session.network.links
         .attr('opacity', linkOpacity);
     }
     var tooltip = d3.select('#tooltip');
@@ -763,14 +755,10 @@
 
   $('#nodeLabelVariable').change(e => {
     if(e.target.value === 'None'){
-      session.network.svg
-        .select('g#nodes')
-        .selectAll('g.node')
+      session.network.nodes
         .select('text').text('');
     } else {
-      session.network.svg
-        .select('g#nodes')
-        .selectAll('g.node')
+      session.network.nodes
         .select('text').text(d => d[e.target.value]);
     }
   });
@@ -803,15 +791,10 @@
   $('#default-node-radius').on('input', redrawNodes);
   $('#nodeRadiusVariable').change(redrawNodes);
 
-  $('#default-node-color').on('input', e => session.network.svg
-    .select('g#nodes')
-    .selectAll('g.node')
-    .select('path').attr('fill', e.target.value));
+  $('#default-node-color').on('input', e => session.network.nodes.select('path').attr('fill', e.target.value));
+
   $('#nodeColorVariable').change(e => {
-    var circles = session.network.svg
-      .select('g#nodes')
-      .selectAll('g.node')
-      .select('path');
+    var circles = session.network.nodes.select('path');
     if(e.target.value === 'None'){
       circles.attr('fill', $('#default-node-color').val());
       $('#node_color_value_row').slideDown();
@@ -843,17 +826,9 @@
     session.network.force.alpha(0.3).alphaTarget(0).restart();
   });
 
-  $('#DirectedLinks').parent().click(e => {
-    session.network.svg
-      .select('g#links')
-      .selectAll('line').attr('marker-end', 'url(#end-arrow)');
-  });
+  $('#DirectedLinks').parent().click(e => session.network.links.attr('marker-end', 'url(#end-arrow)'));
 
-  $('#UndirectedLinks').parent().click(e => {
-    session.network.svg
-      .select('g#links')
-      .selectAll('line').attr('marker-end', null);
-  });
+  $('#UndirectedLinks').parent().click(e => session.network.links.attr('marker-end', null));
 
   $('#default-link-length').on('input', e => {
     session.network.force.force('link').distance(e.target.value);
@@ -863,17 +838,14 @@
   function setLinkColor(e){
     var variable = $('#linkColorVariable').val();
     if(variable === 'None'){
-      session.network.svg.select('g#links')
-        .selectAll('line').attr('stroke', $('#default-link-color').val());
+      session.network.links.attr('stroke', $('#default-link-color').val());
       $('#default-link-color').fadeIn();
       $('#linkColors').fadeOut();
       return;
     }
     $('#default-link-color').fadeOut();
     var vlinks = getVLinks();
-    var links = session.network.svg
-      .select('g#links')
-      .selectAll('line');
+    var links = session.network.links;
     $('#linkColors').remove();
     var table = $('<tbody id="linkColors"></tbody>').appendTo('#network_group_key');
     table.append('<tr><th contenteditable>'+app.titleize(variable)+'</th><th>Color</th><tr>');
@@ -912,18 +884,18 @@
   $('#linkColorVariable').change(setLinkColor);
 
   function scaleLinkThing(scalar, variable, attribute, floor){
-    var vlinks = getVLinks();
-    var links = session.network.svg.select('g#links').selectAll('line');
     if(variable === 'None'){
-      return links.attr(attribute, scalar);
+      session.network.links.attr(attribute, scalar);
+      return;
     }
-    if(!floor){floor = 1;}
+    if(!floor) floor = 1;
+    var vlinks = getVLinks();
     var values = vlinks.map(l => l[variable]).filter(l => typeof l === 'undefined');
     var min = Math.min(values);
     var max = Math.max(values);
     var rng = max - min;
     var recip = $('#reciprocal-link-width').is(':checked');
-    links.attr(attribute, d => {
+    session.network.links.attr(attribute, d => {
       var v = d[variable];
       if(typeof v === 'undefined') v = rng / 2 + min;
       if(recip && attribute === 'stroke-width'){
@@ -991,10 +963,7 @@
   $('#fitbutton').click(session.network.fit);
 
   $('#pinbutton').click(function(){
-    var nodes = session.network.svg
-      .select('g#nodes')
-      .selectAll('g.node')
-      .select('path');
+    var nodes = session.network.nodes.select('path');
     if(session.network.allPinned){
       nodes.each(function(d){
         delete d.fx;
