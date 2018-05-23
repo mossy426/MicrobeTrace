@@ -433,12 +433,10 @@
     // E voila! node now refers to all the g.node elements in the network,
     // and they all have path and text elements, so we can confidently...
     node.select('path').attr('fill', $('#default-node-color').val());
+    // And append our label text...
+    node.select('text').attr('dy', 5).attr('dx', 8);
     // And style them according to the DOM State instructions.
     redrawNodes();
-    // And append our label text, too!
-    node.select('text')
-      .attr('dy', 5)
-      .attr('dx', 8);
 
     var vlinks = getVLinks();
 
@@ -458,6 +456,7 @@
     session.network.nodes = session.network.svg
       .select('g#nodes')
       .selectAll('g.node');
+
     session.network.links = session.network.svg
       .select('g#links')
       .selectAll('line');
@@ -657,20 +656,26 @@
   }
 
   function highlightNeighbors(node){
-    var lindices = [], neighbors = [];
-    var n = session.data.links.length;
+    var links = getVLinks();
+    var lindices = [], neighbors = [node.id];
+    var n = links.length;
     for(var i = 0; i < n; i++){
-      var l = session.data.links[i];
-      if(l.source !== node.id && l.target !== node.id) continue;
-      lindices.push(l.index);
-      neighbors.push(l.source === node.id ? l.target : l.source);
+      var l = links[i];
+      if(l.source.id !== node.id && l.target.id !== node.id){
+        lindices.push(l.index);
+      } else {
+        if(l.source.id === node.id){
+          neighbors.push(l.target.id);
+        } else {
+          neighbors.push(l.source.id);
+        }
+      }
     }
-    neighbors.push(node.id);
     session.network.nodes
       .selectAll('path')
       .attr('opacity', d => neighbors.includes(d.id) ? 1 : .1);
     session.network.links
-      .attr('opacity', l => lindices.includes(l.index) ? 1 : .1);
+      .attr('opacity', l => lindices.includes(l.index) ? .1 : 1);
   }
 
   function showLinkToolTip(d){
@@ -688,10 +693,10 @@
   function hideTooltip(){
     if($('#highlight-neighbors').is(':checked')){
       var nodeOpacity = $('#default-node-opacity').val();
+      var linkOpacity = $('default-link-opacity').val();
       session.network.nodes
         .selectAll('path')
         .attr('opacity', nodeOpacity);
-      var linkOpacity = $('default-link-opacity').val();
       session.network.links
         .attr('opacity', linkOpacity);
     }
