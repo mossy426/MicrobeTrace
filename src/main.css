@@ -193,18 +193,7 @@ button.navbar-toggler{
   padding: 15px;
   background-color: #ffffff;
 }
-.ie-warning {
-  display: none;
-  position: absolute;
-  top: 35%;
-  left: 0;
-  width: calc(100% - 15px);
-  background-color: red;
-  color: white;
-  padding: 15px;
-  text-align: center;
-}
-.ie-warning a{
+#ie-warning a{
   color: #ffffff;
 }
 #file-table {

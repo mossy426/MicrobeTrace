@@ -1,155 +1,8 @@
+import titleize from './helpers/titleize.js';
+import {sessionSkeleton, defaultWidgets} from './helpers/session.js';
+import node from './helpers/node';
+
 var app = {};
-
-app.componentCache = {};
-
-app.dataSkeleton = function(){
-  return {
-    nodes: [],
-    links: [],
-    clusters: [],
-    distance_matrix: {},
-    trees: {},
-    nodeFields: ['index', 'id', 'selected', 'cluster', 'visible', 'degree', 'origin'],
-    linkFields: ['index', 'source', 'target', 'visible', 'cluster', 'origin'],
-    clusterFields: ['id', 'index', 'nodes', 'links', 'sum_distances', 'links_per_node', 'mean_genetic_distance', 'visible'],
-    reference: 'CCTCAGGTCACTCTTTGGCAACGACCCCTCGTCACAATAAAGATAGGGGGGCAACTAAAGGAAGCTCTATTAGATACAGGAGCAGATGATACAGTATTAGAAGAAATGAGTTTGCCAGGAAGATGGAAACCAAAAATGATAGGGGGAATTGGAGGTTTTATCAAAGTAAGACAGTATGATCAGATACTCATAGAAATCTGTGGACATAAAGCTATAGGTACAGTATTAGTAGGACCTACACCTGTCAACATAATTGGAAGAAATCTGTTGACTCAGATTGGTTGCACTTTAAATTTTCCCATTAGCCCTATTGAGACTGTACCAGTAAAATTAAAGCCAGGAATGGATGGCCCAAAAGTTAAACAATGGCCATTGACAGAAGAAAAAATAAAAGCATTAGTAGAAATTTGTACAGAGATGGAAAAGGAAGGGAAAATTTCAAAAATTGGGCCTGAAAATCCATACAATACTCCAGTATTTGCCATAAAGAAAAAAGACAGTACTAAATGGAGAAAATTAGTAGATTTCAGAGAACTTAATAAGAGAACTCAAGACTTCTGGGAAGTTCAATTAGGAATACCACATCCCGCAGGGTTAAAAAAGAAAAAATCAGTAACAGTACTGGATGTGGGTGATGCATATTTTTCAGTTCCCTTAGATGAAGACTTCAGGAAGTATACTGCATTTACCATACCTAGTATAAACAATGAGACACCAGGGATTAGATATCAGTACAATGTGCTTCCACAGGGATGGAAAGGATCACCAGCAATATTCCAAAGTAGCATGACAAAAATCTTAGAGCCTTTTAGAAAACAAAATCCAGACATAGTTATCTATCAATACATGGATGATTTGTATGTAGGATCTGACTTAGAAATAGGGCAGCATAGAACAAAAATAGAGGAGCTGAGACAACATCTGTTGAGGTGGGGACTTACCACACCAGACAAAAAACATCAGAAAGAACCTCCATTCCTTTGGATGGGTTATGAACTCCATCCTGATAAATGGACAGTACAGCCTATAGTGCTGCCAGAAAAAGACAGCTGGACTGTCAATGACATACAGAAGTTAGTGGGGAAATTGAATTGGGCAAGTCAGATTTACCCAGGGATTAAAGTAAGGCAATTATGTAAACTCCTTAGAGGAACCAAAGCACTAACAGAAGTAATACCACTAACAGAAGAAGCAGAGCTAGAACTGGCAGAAAACAGAGAGATTCTAAAAGAACCAGTACATGGAGTGTATTATGACCCATCAAAAGACTTAATAGCAGAAATACAGAAGCAGGGGCAAGGCCAATGGACATATCAAATTTATCAAGAGCCATTTAAAAATCTGAAAACAGGAAAATATGCAAGAATGAGGGGTGCCCACACTAATGATGTAAAACAATTAACAGAGGCAGTGCAAAAAATAACCACAGAAAGCATAGTAATATGGGGAAAGACTCCTAAATTTAAACTGCCCATACAAAAGGAAACATGGGAAACATGGTGGACAGAGTATTGGCAAGCCACCTGGATTCCTGAGTGGGAGTTTGTTAATACCCCTCCCTTAGTGAAATTATGGTACCAGTTAGAGAAAGAACCCATAGTAGGAGCAGAAACCTTC'
-  };
-};
-
-app.defaultWidgets = {
-  '3DNet-link-tooltip-variable': 'None',
-  '3DNet-link-transparency': 0,
-  '3DNet-link-width': 1.6,
-  '3DNet-node-tooltip-variable': 'id',
-  '3DNet-node-radius': 4,
-  '3DNet-node-radius-variable': 'None',
-  'background-color': '#ffffff',
-  'background-color-contrast': '#000000',
-  'bubble-x': 'None',
-  'bubble-y': 'None',
-  'bubble-size': 5,
-  'flow-showNodes': 'selected',
-  'heatmap-metric': 'tn93',
-  'heatmap-invertX': false,
-  'heatmap-invertY': false,
-  'heatmap-color-high': '#a50026',
-  'heatmap-color-medium': '#ffffbf',
-  'heatmap-color-low': '#313695',
-  'heatmap-axislabels-show': false,
-  'histogram-axis-x': true,
-  'histogram-scale-log': false,
-  'histogram-variable': 'links-tn93',
-  'link-color': '#a6cee3',
-  'link-color-variable': 'None',
-  'link-directed': false,
-  'link-label-variable': 'None',
-  'link-length': 0.125,
-  'link-opacity': 0,
-  'link-tooltip-variable': 'None',
-  'link-width': 3,
-  'link-width-variable': 'None',
-  'link-width-reciprocal': true,
-  'map-basemap-show': false,
-  'map-counties-show': false,
-  'map-countries-show': true,
-  'map-field-lat': 'None',
-  'map-field-lon': 'None',
-  'map-field-tract': 'None',
-  'map-field-zipcode': 'None',
-  'map-field-county': 'None',
-  'map-field-state': 'None',
-  'map-field-country': 'None',
-  'map-link-show': false,
-  'map-link-tooltip-variable': 'None',
-  'map-link-transparency': 0,
-  'map-node-jitter': 0,
-  'map-node-show': true,
-  'map-node-tooltip-variable': 'id',
-  'map-node-transparency': 0,
-  'map-satellite-show': false,
-  'map-states-show': true,
-  'network-friction': 0.4,
-  'network-gravity': 0.05,
-  'node-charge': 200,
-  'node-color': '#1f77b4',
-  'node-color-variable': 'None',
-  'node-highlight': false,
-  'node-label-size': 16,
-  'node-label-variable': 'None',
-  'node-radius': 250,
-  'node-radius-variable': 'None',
-  'node-symbol': 'symbolCircle',
-  'node-symbol-variable': 'None',
-  'node-tooltip-variable': 'id',
-  'scatterplot-xVar': 'snps',
-  'scatterplot-yVar': 'tn93',
-  'scatterplot-logScale': false,
-  'scatterplot-showNodes': false,
-  'selected-color': '#ff8300',
-  'selected-color-contrast': '#000000',
-  'tree-epsilon': -10,
-  'tree-metric': 'tn93',
-  'tree-layout-circular': false,
-  'tree-labels-align': false,
-  'tree-labels-show': true
-};
-
-app.sessionSkeleton = function(){
-  return {
-    data: app.dataSkeleton(),
-    files: [],
-    layout: {
-      content: [{
-        type: 'files'
-      }],
-      type: 'stack'
-    },
-    meta: {
-      loadTime: 0,
-      startTime: 0
-    },
-    network: {
-      allPinned: false,
-      nodes: []
-    },
-    state: {
-      linkSortVariable: 'tn93',
-      linkThreshold: 0.015,
-      metrics: ['tn93', 'snps'],
-      timeStart: 0,
-      timeEnd: Date.now()
-    },
-    style: {
-      linkColors: d3.schemePaired,
-      nodeColors: [d3.schemeCategory10[0]].concat(d3.schemeCategory10.slice(2)),
-      nodeSymbols: ['symbolCircle', 'symbolCross', 'symbolDiamond', 'symbolSquare', 'symbolStar', 'symbolTriangle', 'symbolWye', 'symbolTriangleDown', 'symbolTriangleLeft', 'symbolTriangleRight', 'symbolDiamondAlt', 'symbolDiamondSquare', 'symbolPentagon', 'symbolHexagon', 'symbolHexagonAlt', 'symbolOctagon', 'symbolOctagonAlt', 'symbolX'],
-      widgets: app.defaultWidgets
-    },
-    warnings: []
-  };
-};
-
-app.tempSkeleton = function(){
-  return {
-    style: {
-      linkColorMap: function(){ return session.style.widgets['link-color']; },
-      nodeColorMap: function(){ return session.style.widgets['node-color']; },
-      nodeSymbolMap: function(){ return session.style.widgets['node-symbol']; }
-    }
-  };
-};
-
-app.defaultNode = function(){
-  return {
-    index: session.data.nodes.length,
-    id: '',
-    selected: false,
-    cluster: 1,
-    visible: true,
-    degree: 0,
-    origin: []
-  }
-};
 
 app.addNode = function(newNode){
   if(typeof newNode.id === 'number') newNode.id = '' + newNode.id;
@@ -160,7 +13,7 @@ app.addNode = function(newNode){
     return 0;
   } else {
     if('seq' in newNode) newNode._seqInt = newNode.seq.split('').map(function(c){ return tn93.mapChar[c.charCodeAt(0)]; });
-    session.data.nodes.push(Object.assign(app.defaultNode(), newNode));
+    session.data.nodes.push(new node(newNode));
     return 1;
   }
 };
@@ -219,9 +72,9 @@ app.processJSON = function(json, extension){
 app.applyHIVTrace = function(hivtrace){
   session = app.sessionSkeleton();
   session.meta.startTime = Date.now();
-  hivtrace['trace_results']['Nodes'].forEach(function(node){
-    var newNode = JSON.parse(JSON.stringify(node.patient_attributes));
-    newNode.id = node.id;
+  hivtrace['trace_results']['Nodes'].forEach(function(d){
+    var newNode = JSON.parse(JSON.stringify(d.patient_attributes));
+    newNode.id = d.id;
     newNode.origin = 'HIVTRACE Import';
     app.addNode(newNode);
   });
@@ -320,10 +173,10 @@ app.computeConsensusDistances = function(callback){
   var subset = [];
   var n = session.data.nodes.length;
   for(var i = 0; i < n; i++){
-    var node = session.data.nodes[i];
-    if(node.seq) subset.push({
+    var d = session.data.nodes[i];
+    if(d.seq) subset.push({
       index: i,
-      seq: node.seq
+      seq: d.seq
     });
   }
   computer.postMessage({
@@ -362,7 +215,7 @@ app.computeDM = function(callback){
   computer.postMessage({
     nodes: session.data.nodes,
     links: session.data.links.filter(function(l){
-      return _.any(session.state.metrics.map(function(m){ return _.isNumber(l[m]); }));
+      return session.state.metrics.map(function(m){ return typeof l[m] === 'number'; }).indexOf(true) > -1;
     }),
     metrics: session.state.metrics
   });
@@ -440,9 +293,9 @@ app.titleize = function(title){
 
 app.tagClusters = function(){
   session.data.clusters = [];
-  session.data.nodes.forEach(function(node){ delete node.cluster; });
-  session.data.nodes.forEach(function(node){
-    if(typeof node.cluster === 'undefined'){
+  session.data.nodes.forEach(function(d){ delete d.cluster; });
+  session.data.nodes.forEach(function(d){
+    if(typeof d.cluster === 'undefined'){
       session.data.clusters.push({
         id: session.data.clusters.length,
         nodes: 0,
@@ -452,21 +305,21 @@ app.tagClusters = function(){
         mean_genetic_distance: undefined,
         visible: true
       });
-      app.DFS(node);
+      app.DFS(d);
     }
   });
   session.data.clusters = session.data.clusters.filter(function(c){ return c.nodes > 1; });
 };
 
-app.DFS = function(node){
-  if(typeof node === 'string') node = session.data.nodes.find(function(d){ return d.id === node; });
-  if(typeof node === 'undefined') console.error('That\'s weird: An undefined node was referenced.');
-  if(typeof node.cluster !== 'undefined') return;
+app.DFS = function(d){
+  if(typeof d === 'string') d = session.data.nodes.find(function(d2){ return d2.id === d; });
+  if(typeof d === 'undefined') console.error('That\'s weird: An undefined node was referenced.');
+  if(typeof d.cluster !== 'undefined') return;
   var lsv = $('#links-filter-variable').val();
-  node.cluster = session.data.clusters.length - 1;
+  d.cluster = session.data.clusters.length - 1;
   session.data.clusters[session.data.clusters.length - 1].nodes++;
   session.data.links.forEach(function(l){
-    if(l.visible && (l.source === node.id || l.target === node.id)){
+    if(l.visible && (l.source === d.id || l.target === d.id)){
       l.cluster = session.data.clusters.length - 1;
       var cluster = session.data.clusters[session.data.clusters.length - 1];
       cluster.links++;
@@ -532,12 +385,12 @@ app.getVisibleNodes = function(copy){
   var n = nodes.length;
   var out = [];
   for(var i = 0; i < n; i++){
-    var node = nodes[i];
-    if(node.visible){
+    var d = nodes[i];
+    if(d.visible){
       if(copy){
-        out.push(JSON.parse(JSON.stringify(node)));
+        out.push(JSON.parse(JSON.stringify(d)));
       } else {
-        out.push(node);
+        out.push(d);
       }
     }
   }
@@ -588,12 +441,12 @@ app.createNodeColorMap = function(){
     temp.style.nodeColorMap = function(){ return session.style.widgets['node-color']; };
     return [];
   }
-  values = _.chain(session.data.nodes)
-            .filter(function(d){return d.visible;})
-            .pluck(variable)
-            .uniq()
-            .value();
-  if(_.isNumber(session.data.nodes[0][variable])){
+  values = [...Set(
+    session.data.nodes
+      .filter(function(d){return d.visible;})
+      .map(function(d){return d[variable];})
+  )];
+  if(typeof session.data.nodes[0][variable] === 'number'){
     values.sort(function(a, b){ return a - b; });
   } else {
     values.sort();
@@ -622,13 +475,13 @@ app.createLinkColorMap = function(){
       });
     });
   } else {
-    values = _.chain(session.data.links)
-              .filter(function(l){ return l.visible; })
-              .pluck(variable)
-              .uniq()
-              .value();
+    values = [...Set(
+      session.data.links
+        .filter(function(l){ return l.visible; })
+        .map(function(l){ return variable; })
+    )];
   }
-  if(_.isNumber(session.data.links[0][variable])){
+  if(typeof session.data.links[0][variable] === 'number'){
     values.sort(function(a, b){ return a - b; });
   } else {
     values.sort();
@@ -645,16 +498,18 @@ app.createLinkColorMap = function(){
 
 app.applyStyle = function(style){
   session.style = style;
-  session.style.widgets = Object.assign({}, app.defaultWidgets, session.style.widgets);
+  session.style.widgets = Object.assign({}, defaultWidgets, session.style.widgets);
   app.createLinkColorMap();
   app.createNodeColorMap();
   for(var id in session.style.widgets){
-    $id = $('#' + id);
-    if($id.length > 0){
-      if(['radio', 'checkbox'].includes($id[0].type)){
-        if(session.style.widgets[id]) $id.trigger('click');
-      } else {
-        $id.val(session.style.widgets[id]).trigger('change');
+    var $id = $('#' + id);
+    if($id){
+      if($id.length > 0){
+        if(['radio', 'checkbox'].includes($id[0].type)){
+          if(session.style.widgets[id]) $id.trigger('click');
+        } else {
+          $id.val(session.style.widgets[id]).trigger('change');
+        }
       }
     }
   }
@@ -672,7 +527,7 @@ app.applySession = function(data, startTime){
 app.reset = function(){
   $('#network-statistics-hide, #color-table-hide').parent().trigger('click');
   $('#SettingsTab').attr('data-target', '#aligner-controls-modal');
-  window.session = app.sessionSkeleton();
+  window.session = sessionSkeleton();
   layout.unbind('stateChanged');
   layout.root.replaceChild(layout.root.contentItems[0], {
     type: 'stack',
@@ -722,9 +577,9 @@ app.contrastColor = function(hexcolor){
 };
 
 app.launchView = function(view, callback){
-  if(!app.componentCache[view]){
+  if(!temp.componentCache[view]){
     $.get('components/' + view + '.html', function(response){
-      app.componentCache[view] = response;
+      temp.componentCache[view] = response;
       layout.registerComponent(view, function(container, state){
         container.getElement().html(state.text);
       });
@@ -741,15 +596,16 @@ app.launchView = function(view, callback){
     if(contentItem){
       contentItem.parent.setActiveContentItem(contentItem);
     } else {
-      var lastStack = _.last(layout.root.contentItems[0].getItemsByType('stack'));
+      var stacks = layout.root.contentItems[0].getItemsByType('stack');
+      var lastStack = stacks[stacks.length-1];
       if(!lastStack) lastStack = layout.root.contentItems[0];
       lastStack.addChild({
         componentName: view,
-        componentState: {text: app.componentCache[view]},
-        title: app.titleize(view),
+        componentState: {text: temp.componentCache[view]},
+        title: titleize(view),
         type: 'component'
       });
-      contentItem = _.last(lastStack.contentItems);
+      contentItem = lastStack.contentItems[lastStack.contentItems.length-1];
       contentItem.on('itemDestroyed', function(){
         var i = layout.contentItems.findIndex(function(item){
           return item === contentItem;
@@ -760,16 +616,16 @@ app.launchView = function(view, callback){
     }
     contentItem.element.find('select.nodeVariables').html(
       '<option>None</option>' +
-      session.data.nodeFields.map(function(field){ return '<option value="'+field+'">'+app.titleize(field)+'</option>'; }).join('\n')
+      session.data.nodeFields.map(function(field){ return '<option value="'+field+'">'+titleize(field)+'</option>'; }).join('\n')
     );
     contentItem.element.find('select.linkVariables').html(
       '<option>None</option>' +
-      session.data.linkFields.map(function(field){ return '<option value="'+field+'">'+app.titleize(field)+'</option>'; }).join('\n')
+      session.data.linkFields.map(function(field){ return '<option value="'+field+'">'+titleize(field)+'</option>'; }).join('\n')
     );
     contentItem.element.find('select.mixedVariables').html(
       '<option>None</option>' +
-      session.data.linkFields.map(function(field){ return '<option value="links-'+field+'">Links '+app.titleize(field)+'</option>'; }).concat(
-      session.data.nodeFields.map(function(field){ return '<option value="nodes-'+field+'">Nodes '+app.titleize(field)+'</option>'; })).join('\n')
+      session.data.linkFields.map(function(field){ return '<option value="links-'+field+'">Links '+titleize(field)+'</option>'; }).concat(
+      session.data.nodeFields.map(function(field){ return '<option value="nodes-'+field+'">Nodes '+titleize(field)+'</option>'; })).join('\n')
     );
     contentItem.element.find('.launch-color-options').click(function(){
       $('#color-tab').tab('show');
@@ -779,12 +635,14 @@ app.launchView = function(view, callback){
     });
     if(navigator.onLine) contentItem.element.find('.ifOnline').show();
     for(var id in session.style.widgets){
-      $id = $('#' + id);
-      if($id.length > 0){
-        if(['radio', 'checkbox'].includes($id[0].type)){
-          if(session.style.widgets[id]) $id.click();
-        } else {
-          $id.val(session.style.widgets[id]);
+      var $id = $('#' + id);
+      if($id){
+        if($id.length > 0){
+          if(['radio', 'checkbox'].includes($id[0].type)){
+            if(session.style.widgets[id]) $id.click();
+          } else {
+            $id.val(session.style.widgets[id]);
+          }
         }
       }
     }
@@ -814,21 +672,21 @@ app.loadLayout = function(component, parent){
   }
   if(['stack', 'row', 'column'].includes(component.type)){
     parent.addChild({type: component.type});
-    component.content.forEach(function(c){ app.loadLayout(c, _.last(parent.contentItems)); });
+    component.content.forEach(function(c){ app.loadLayout(c, parent.contentItems[parent.contentItems.length - 1]); });
   } else {
     app.launchView(component.type);
   }
 };
 
 app.unparseFASTA = function(nodes){
-  return nodes.map(function(node){
-    return '>' + node.id + '\r\n' + node.seq;
+  return nodes.map(function(d){
+    return '>' + d.id + '\r\n' + d.seq;
   }).join('\r\n');
 };
 
 app.unparseMEGA = function(nodes){
-  return nodes.map(function(node){
-    return '#' + node.id + '\r\n' + node.seq;
+  return nodes.map(function(d){
+    return '#' + d.id + '\r\n' + d.seq;
   }).join('\r\n');
 };
 
@@ -928,39 +786,125 @@ app.str2ab = function(str){
   return buf;
 };
 
-app.encrypt = async (plainText, password) => {
-  const ptUtf8 = new TextEncoder().encode(plainText);
-  const pwUtf8 = new TextEncoder().encode(password);
-  const pwHash = await crypto.subtle.digest('SHA-256', pwUtf8);
-  const iv = crypto.getRandomValues(new Uint8Array(12));
-  const alg = { name: 'AES-GCM', iv: iv };
-  const key = await crypto.subtle.importKey('raw', pwHash, alg, false, ['encrypt']);
-  return { iv, encBuffer: await crypto.subtle.encrypt(alg, key, ptUtf8) };
-};
+// app.encrypt = async (plainText, password) => {
+//   const ptUtf8 = new TextEncoder().encode(plainText);
+//   const pwUtf8 = new TextEncoder().encode(password);
+//   const pwHash = await crypto.subtle.digest('SHA-256', pwUtf8);
+//   const iv = crypto.getRandomValues(new Uint8Array(12));
+//   const alg = { name: 'AES-GCM', iv: iv };
+//   const key = await crypto.subtle.importKey('raw', pwHash, alg, false, ['encrypt']);
+//   return { iv, encBuffer: await crypto.subtle.encrypt(alg, key, ptUtf8) };
+// };
+//
+// app.decrypt = async (ctBuffer, iv, password) => {
+//   const pwUtf8 = new TextEncoder().encode(password);
+//   const pwHash = await crypto.subtle.digest('SHA-256', pwUtf8);
+//   const alg = { name: 'AES-GCM', iv: iv };
+//   const key = await crypto.subtle.importKey('raw', pwHash, alg, false, ['decrypt']);
+//   const ptBuffer = await crypto.subtle.decrypt(alg, key, ctBuffer);
+//   return new TextDecoder().decode(ptBuffer);
+// };
 
-app.decrypt = async (ctBuffer, iv, password) => {
-  const pwUtf8 = new TextEncoder().encode(password);
-  const pwHash = await crypto.subtle.digest('SHA-256', pwUtf8);
-  const alg = { name: 'AES-GCM', iv: iv };
-  const key = await crypto.subtle.importKey('raw', pwHash, alg, false, ['decrypt']);
-  const ptBuffer = await crypto.subtle.decrypt(alg, key, ctBuffer);
-  return new TextDecoder().decode(ptBuffer);
+app.finishUp = function(oldSession){
+  if(!oldSession){
+    app.computeDM(function(){
+      $('.show-for-dm').css('display', 'flex');
+      app.computeNN(session.state.linkSortVariable, function(){
+        $('.show-for-nn').css('display', 'flex');
+      });
+      session.state.metrics.forEach(function(m){ app.computeTree(m); });
+    });
+  }
+  clearTimeout(messageTimeout);
+  ['node', 'link'].forEach(function(v){
+    var n = session.data[v+'s'].length;
+    var fields = session.data[v+'Fields'];
+    for(var i = 0; i < n; i++){
+      var d = session.data[v+'s'][i];
+      fields.forEach(function(field){
+        if(!(field in d)) d[field] = null;
+      });
+    }
+  });
+  $('#links-filter-variable').html(
+    session.data.linkFields.map(function(field){
+      return '<option value="' + field + '">' + titleize(field) + '</option>';
+    }).join('\n')
+  ).val(session.state.linkSortVariable);
+  $('#node-color-variable').html(
+    '<option selected>None</option>' +
+    session.data.nodeFields.map(function(field){
+      return '<option value="' + field + '">' + titleize(field) + '</option>';
+    }).join('\n')
+  );
+  $('#link-color-variable').html(
+    '<option>None</option>' +
+    session.data.linkFields.map(function(field){
+      return '<option value="' + field + '">' + titleize(field) + '</option>';
+    }).join('\n')
+  );
+  try {
+    app.updateThresholdHistogram();
+  } catch(error){
+    console.error(error);
+    $('#loading-information-modal').modal('hide');
+    alertify
+      .error('Something went wrong! Please start a new session and try again.')
+      .delay(0)
+      .ondismiss(function(){
+        window.location.reload();
+      });
+  }
+  app.setLinkVisibility();
+  app.setNodeVisibility();
+  app.tagClusters();
+  app.computeDegree();
+  app.updateStatistics();
+  $('#network-statistics').fadeIn();
+  session.meta.loadTime = Date.now() - session.meta.startTime;
+  if(oldSession){
+    layout.root.contentItems[0].remove();
+    setTimeout(function(){app.loadLayout(session.layout)}, 80);
+  } else {
+    app.launchView($('#default-View').val());
+  }
+  if(localStorage.getItem('stash-auto') === 'true'){
+    temp.autostash = {
+      time: Date.now(),
+      interval: setInterval(function(){
+        var newTime = Date.now();
+        localforage.setItem('stash-' + newTime + '-autostash', JSON.stringify(session)).then(function(){
+          localforage.removeItem('stash-' + temp.autostash.time + '-autostash').then(function(){
+            temp.autostash.time = newTime;
+          });
+        });
+      }, 60000)
+    };
+  }
+  $('.hideForHIVTrace').css('display', 'flex');
+  setTimeout(function(){
+    let files = layout.contentItems.find(function(item){ return item.componentName === 'files'; });
+    if(files) files.remove();
+    $('#loading-information-modal').modal('hide');
+  }, 1200);
 };
 
 app.exportHIVTRACE = function(){
   var links = session.data.links.filter(function(l){ return l.visible });
   var geneticLinks = links.filter(function(l){ return l.origin.includes('Genetic Distance'); });
-  var sequences = _.union(
-    geneticLinks.map(function(l){ return l.source; }),
-    geneticLinks.map(function(l){ return l.target; })
-  );
+  var sequences = new Set();
+  geneticLinks.forEach(function(l){
+    sequences
+      .add(l.source)
+      .add(l.target);
+  });
   var pas = {};
   session.data.nodes.forEach(function(d){
     Object.keys(d).forEach(function(key){
       if(pas[key]) return;
       pas[key] = {
         label: key,
-        type: app.titleize(typeof d[key])
+        type: titleize(typeof d[key])
       }
     });
   });
@@ -1008,7 +952,7 @@ app.exportHIVTRACE = function(){
         'Clusters': session.data.clusters.length,
         'Edges': links.length,
         'Nodes': session.data.nodes.length,
-        'Sequences used to make links': sequences.length
+        'Sequences used to make links': sequences.size()
       },
       'Nodes': session.data.nodes.map(function(d){ return {
         'attributes': [],
@@ -1028,3 +972,5 @@ app.exportHIVTRACE = function(){
     }
   }, null, 2)
 };
+
+export default app;

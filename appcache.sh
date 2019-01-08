@@ -14,7 +14,6 @@ cat components/*.html | grep -o "node_modules/.*\.js" >> microbetrace.appcache
 cat scripts/*.js | grep -o "node_modules/.*\.js" >> microbetrace.appcache
 ls vendor/ | sed -e 's/^/vendor\//' >> microbetrace.appcache
 
-ls stylesheets/ | sed -e 's/^/stylesheets\//' >> microbetrace.appcache
 cat index.html | grep -o "node_modules/.*\.css" >> microbetrace.appcache
 cat components/*.html | grep -o "node_modules/.*\.css" >> microbetrace.appcache
 

@@ -1,13 +1,13 @@
 {
   "name": "MicrobeTrace",
   "version": "0.4.3",
-  "main": "index.js",
   "author": "Tony Boyles <nsp3@cdc.gov>",
   "license": "Apache-2.0",
   "repository": "https://github.com/CDCgov/MicrobeTrace.git",
   "scripts": {
+    "build": "webpack",
     "cache": "./appcache.sh && ./sw.sh",
-    "demo": "node_modules/http-server/bin/http-server",
+    "dev": "webpack-dev-server --open --mode development",
     "start": "node index.js"
   },
   "dependencies": {
@@ -24,6 +24,7 @@
     "express": "^4.16.3",
     "fileto": "0.0.1",
     "golden-layout": "^1.5.9",
+    "google_tag": "^1.1.1",
     "html2canvas": "^1.0.0-alpha.12",
     "html5sortable": "^0.9.8",
     "jquery": "^3.3.1",
@@ -36,8 +37,11 @@
     "open-iconic": "^1.1.1",
     "papaparse": "^4.4.0",
     "patristic": "git+https://github.com/CDCgov/patristic.git",
-    "plotly.js": "^1.37.1",
+    "plotly.js": "^1.43.1",
     "popper.js": "^1.14.6",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-plotly.js": "^2.2.0",
     "screenfull": "^3.3.2",
     "tabulator-tables": "^4.1.4",
     "tn93": "^0.2.2",
@@ -46,6 +50,17 @@
     "xss": "^1.0.3"
   },
   "devDependencies": {
-    "http-server": "^0.11.1"
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "css-loader": "^2.1.0",
+    "googletagmanager": "^1.0.2",
+    "http-server": "^0.11.1",
+    "style-loader": "^0.23.1",
+    "terser": "^3.14.0",
+    "webpack": "^4.28.3",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.14"
   }
 }

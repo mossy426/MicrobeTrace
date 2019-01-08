@@ -1,4 +1,4 @@
-var CACHE = 'MicrobeTraceD2018-12-21';
+var CACHE = 'MicrobeTraceD2019-01-04';
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
@@ -21,8 +21,9 @@ self.addEventListener('install', function(event) {
         'components/table.html',
         'components/timeline.html',
         'components/waterfall.html',
+        'dist/files.js',
+        'dist/main.js',
         'scripts/align-sw.js',
-        'scripts/common.js',
         'scripts/compute-consensus-distances.js',
         'scripts/compute-consensus.js',
         'scripts/compute-dm.js',
@@ -31,7 +32,8 @@ self.addEventListener('install', function(event) {
         'scripts/compute-patristic-matrix.js',
         'scripts/compute-tree.js',
         'scripts/polyfills.js',
-        'node_modules/underscore/underscore-min.js',
+        'node_modules/react/umd/react.production.min.js',
+        'node_modules/react-dom/umd/react-dom.production.min.js',
         'node_modules/jquery/dist/jquery.min.js',
         'node_modules/popper.js/dist/umd/popper.min.js',
         'node_modules/bootstrap/dist/js/bootstrap.min.js',
@@ -66,7 +68,6 @@ self.addEventListener('install', function(event) {
         'vendor/FileSaver.min.js',
         'vendor/phylotree.js',
         'vendor/shpwrite.js',
-        'stylesheets/main.css',
         'node_modules/bootstrap/dist/css/bootstrap.min.css',
         'node_modules/golden-layout/src/css/goldenlayout-base.css',
         'node_modules/golden-layout/src/css/goldenlayout-light-theme.css',
@@ -156,7 +157,7 @@ self.addEventListener('fetch', function(event) {
 
 // Open the cache where the assets were stored and search for the requested
 // resource. Notice that in case of no matching, the promise still resolves
-// but it does with  as value.
+// but it does with `undefined` as value.
 function fromCache(request){
   return caches.open(CACHE).then(function(cache){
     return cache.match(request).then(function(matching){

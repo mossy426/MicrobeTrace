@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2018-12-21
+# 2019-01-04
 
 CACHE:
 index.html
@@ -21,7 +21,6 @@ components/table.html
 components/timeline.html
 components/waterfall.html
 scripts/align-sw.js
-scripts/common.js
 scripts/compute-consensus-distances.js
 scripts/compute-consensus.js
 scripts/compute-dm.js
@@ -30,7 +29,8 @@ scripts/compute-nn.js
 scripts/compute-patristic-matrix.js
 scripts/compute-tree.js
 scripts/polyfills.js
-node_modules/underscore/underscore-min.js
+node_modules/react/umd/react.production.min.js
+node_modules/react-dom/umd/react-dom.production.min.js
 node_modules/jquery/dist/jquery.min.js
 node_modules/popper.js/dist/umd/popper.min.js
 node_modules/bootstrap/dist/js/bootstrap.min.js
@@ -66,7 +66,6 @@ vendor/d3.v3.min.js
 vendor/FileSaver.min.js
 vendor/phylotree.js
 vendor/shpwrite.js
-stylesheets/main.css
 node_modules/bootstrap/dist/css/bootstrap.min.css
 node_modules/golden-layout/src/css/goldenlayout-base.css
 node_modules/golden-layout/src/css/goldenlayout-light-theme.css
