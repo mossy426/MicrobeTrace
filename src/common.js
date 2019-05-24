@@ -1078,35 +1078,26 @@ MT.titleize = function(title) {
   return small.replace(/(?:^|\s|-)\S/g, MT.capitalize);
 };
 
-MT.tagClusters = function() {
-  var start = Date.now();
-  session.data.clusters = [];
-  var nodes = session.data.nodes;
-  var n = nodes.length;
-  temp.nodes = [];
-  for (var j = 0; j < n; j++) {
-    var node = nodes[j];
-    if (temp.nodes.indexOf(node.id) === -1) {
-      session.data.clusters.push({
-        id: session.data.clusters.length,
-        nodes: 0,
-        links: 0,
-        sum_distances: 0,
-        links_per_node: 0,
-        mean_genetic_distance: undefined,
-        visible: true
-      });
-      MT.DFS(node.id);
-    }
-  }
-  session.data.clusters = session.data.clusters.filter(function(c) {
-    return c.nodes > 1;
+MT.tagClusters = function(callback) {
+  var machine = new Worker("workers/compute-clusters.js");
+  machine.onmessage = function(response) {
+    var data = JSON.parse(
+      MT.decoder.decode(new Uint8Array(response.data.data))
+    );
+    session.data.nodes = data.nodes;
+    session.data.links = data.links;
+    session.data.clusters = data.clusters;
+    console.log(
+      "Cluster Transit time: ",
+      (Date.now() - response.data.start).toLocaleString(),
+      "ms"
+    );
+    if (callback) callback();
+  };
+  machine.postMessage({
+    nodes: session.data.nodes,
+    links: session.data.links
   });
-  console.log(
-    "Cluster Tagging time:",
-    (Date.now() - start).toLocaleString(),
-    "ms"
-  );
 };
 
 MT.DFS = function(id) {
@@ -1214,11 +1205,6 @@ MT.setLinkVisibility = function() {
     if (metric !== "none") v &= link[metric] <= threshold;
     if (showNN) v &= link.nn;
     link.visible = v;
-    // if(session.data.clusters.length > 0){
-    //   //The above condition is a dumb hack to initial load the network
-    //   var cluster = session.data.clusters.find(function(c){ return c.id === link.cluster; });
-    //   if(cluster) link.visible &= cluster.visible;
-    // }
   }
   console.log(
     "Link Visibility Setting time:",
