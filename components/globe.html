@@ -274,6 +274,9 @@
               <option>jpeg</option>
               <option>webp</option>
               <option>geojson</option>
+              <option>mp4</option>
+              <option>webm</option>
+              <option>ogg</option>
             </select>
           </div>
         </div>
@@ -790,6 +793,30 @@
           new Blob([JSON.stringify(makeGeoJSON())], { type: 'application/json;charset=utf-8' }),
           $('#globe-export-file-name').val() + '.' + format
         );
+      } else if (['webm', 'ogg', 'mp4'].includes(format)) {
+        let recorder = new MediaRecorder(canvg.node().captureStream(), { mimeType: "video/webm" });
+        let data = [];
+        recorder.ondataavailable = function(event) {
+          if (event.data && event.data.size) {
+            data.push(event.data);
+          }
+        };
+        recorder.onstop = () => {
+          saveAs(
+            new Blob(data, { type: 'video/' + format }),
+            $('#globe-export-file-name').val() + '.' + format
+          );
+        };
+        recorder.start();
+        autorotate = null;
+        $('#toggle-globe-autorotate').click();
+        let timer = d3.interval(elapsed => {
+          if(elapsed >= 6000){
+            recorder.stop();
+            timer.stop();
+            if(!$('#toggle-globe-autorotate').hasClass('active')) autorotate.stop();
+          }
+        }, 80);
       }
     });
 
