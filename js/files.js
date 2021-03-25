@@ -821,6 +821,7 @@
             links++;
           }
         }
+        console.log('actual tree: ', tree);
         console.log('Newick Tree Parse time:', (Date.now() - start).toLocaleString(), 'ms');
         message(` - Parsed ${newNodes} New, ${n} Total Nodes from Newick Tree.`);
         message(` - Parsed ${newLinks} New, ${links} Total Links from Newick Tree.`);

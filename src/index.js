@@ -1,6 +1,17 @@
 $(function() {
   "use strict";
 
+    // Table to instantiate when recall button is clicked
+    let table = new Tabulator("#recall-stashes-available", {
+      height: "100%",
+      layout: "fitColumns",
+      selectable: 1,
+      columns: [
+        { title: "Name", field: "name" },
+        { title: "Date", field: "date", align: "right", sorter: "date" }
+      ]
+    });
+
   if (navigator.userAgent.indexOf("MSIE") >= 0 || navigator.appName.indexOf("Microsoft Internet Explorer") >= 0) {
     $("#ie-warning").show();
     throw new Error("MicrobeTrace does not work on Internet Explorer.");
@@ -48,6 +59,7 @@ $(function() {
 
   self.$window = $(window);
 
+  /* ----- Drag Modals via Header ----- */
   $(".modal-header").on("mousedown", function(){
     let body = $("body");
     let parent = $(this).parent().parent().parent();
@@ -59,7 +71,11 @@ $(function() {
     body.on("mouseup", () => body.off("mousemove").off("mouseup"));
   });
 
-  // Let's set up the Nav Bar
+  /** -------------------- File Dropdown -------------------- */
+
+  /* ----- Stashing ----- */
+
+  // Stash data is button - stash session JSON in local storage
   $("#stash-data").on("click", () => {
     localforage.setItem(
       "stash-" + Date.now() + "-" + $("#stash-name").val(),
@@ -67,16 +83,35 @@ $(function() {
     ).then(() => alertify.success("Session Stashed Successfully!"));
   });
 
-  let table = new Tabulator("#recall-stashes-available", {
-    height: "100%",
-    layout: "fitColumns",
-    selectable: 1,
-    columns: [
-      { title: "Name", field: "name" },
-      { title: "Date", field: "date", align: "right", sorter: "date" }
-    ]
+  /* ----- Recalling ----- */
+
+  // Recall selection of dropdown -> updates instantiated table, then show model
+  $("#RecallDataTab").on("click", e => {
+    e.preventDefault();
+    updateTable();
+    $("#session-recall-modal").modal("show");
   });
 
+  // Recall modal delete button pressed 
+  $("#recall-delete-stash").on("click", () => {
+    let key = table.getSelectedData()[0].fullname;
+    localforage.removeItem(key).then(() => {
+      updateTable();
+      alertify.success("That stash has been deleted.");
+    });
+  });
+
+  // Recall load button pressed - apply session for stash loaded
+  $("#recall-load-stash").on("click", () => {
+    let key = table.getSelectedData()[0].fullname;
+    localforage.getItem(key).then(json => {
+      MT.applySession(JSON.parse(json));
+      $("#session-recall-modal").modal("hide");
+    });
+  });
+
+
+  // Updates stash table
   function updateTable() {
     let rows = [];
     localforage.keys().then(keys => {
@@ -92,28 +127,10 @@ $(function() {
     });
   }
 
-  $("#RecallDataTab").on("click", e => {
-    e.preventDefault();
-    updateTable();
-    $("#session-recall-modal").modal("show");
-  });
 
-  $("#recall-delete-stash").on("click", () => {
-    let key = table.getSelectedData()[0].fullname;
-    localforage.removeItem(key).then(() => {
-      updateTable();
-      alertify.success("That stash has been deleted.");
-    });
-  });
+  /* ----- Saving ----- */ 
 
-  $("#recall-load-stash").on("click", () => {
-    let key = table.getSelectedData()[0].fullname;
-    localforage.getItem(key).then(json => {
-      MT.applySession(JSON.parse(json));
-      $("#session-recall-modal").modal("hide");
-    });
-  });
-
+  // Save button on modal clicked -> calls saveAs()
   $("#save-data").on("click", () => {
     let name = $("#save-file-name").val();
     let format = $("#save-file-format").val();
@@ -143,6 +160,9 @@ $(function() {
     }
   });
 
+  /* ----- Opening File ----- */ 
+
+  // Open selection from dropdown of file menu
   $("#OpenTab").on("change", function(){
     if (this.files.length > 0) {
       let extension = this.files[0].name
@@ -167,30 +187,44 @@ $(function() {
     }
   });
 
+  /* ----- Add new data ----- */
+
+  // Clicking add data launches file view component
   $("#AddDataTab").on("click", e => {
     e.preventDefault();
     //$("#network-statistics-hide").trigger("click");
     MT.launchView("files");
   });
 
+  // Clicking new in dropdown triggers exit modal to start new session
   $("#NewTab").on("click", e => {
     e.preventDefault();
     $("#exit-modal").modal();
   });
 
+  // Exit button click in exit modal - data is reset
   $("#exit-button").on("click", MT.reset);
 
+  /** -------------------- Views Dropdown -------------------- */
+
+  /* ----- Viewing component ----- */
+
+  // Navigates to view from views dropdown by looking at href
   $(".viewbutton").on("click", function(e){
     e.preventDefault();
     MT.launchView($(this).data("href"))
   });
 
+  /** -------------------- Window Dropdown -------------------- */
+
+  // Reload Selection clicked - opens model and on exit - reload window
   $("#ReloadTab").on("click", e => {
     e.preventDefault();
     $("#exit-button").on("click", () => window.location.reload());
     $("#exit-modal").modal();
   });
 
+  // Full screen toggle clicked - goes to full screen
   $("#FullScreenTab").on("click", e => {
     e.preventDefault();
     screenfull.toggle();

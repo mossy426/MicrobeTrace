@@ -217,37 +217,7 @@ svg#link-threshold-sparkline {
   text-indent: 1px;
   text-overflow: "";
 }
-#polygon-color-table-wrapper {
-  position: absolute;
-  top: 893px;
-  right: 10px;
-  z-index: 999;
-  max-height: 400px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  border-radius: 0.25rem;
-  color: #303030;
-  background-color: #f8f9fa !important;
-}
-#polygon-color-table-draghandle {
-  display: none;
-  width: 100%;
-  text-align: center;
-}
-#polygon-color-table th {
-  text-align: center;
-  border: 1px solid lightgray;
-  padding: 4px;
-}
-#polygon-color-table td {
-  border: 1px solid lightgray;
-  padding: 4px;
-}
-#polygon-color-table input[type="color"] {
-  background: transparent;
-  border: none;
-  padding: 0;
-}
+
 #color-transparency-wrapper {
   display: none;
   position: absolute;
@@ -334,33 +304,7 @@ label[for="OpenTab"] {
 }
 
 /* File Panel */
-#file-panel {
-  overflow-y: scroll;
-  height: calc(100% - 68px);
-  padding: 15px;
-  padding-top: 40px;
-  background-color: #ffffff;
-}
-#file-table {
-  height: calc(100% - 50px);
-}
-#warning-prompt {
-  text-align: center;
-}
-#file-prompt {
-  text-align: center;
-  padding-top: 25%;
-}
-.file-table-row {
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 0.25rem;
-  margin: 10px 0;
-  background: #f8f9fa !important;
-  padding: 15px;
-}
-.file-table-row .btn {
-  background-color: #ffffff;
-}
+
 .filename {
   white-space: nowrap;
   overflow: hidden;
@@ -391,17 +335,7 @@ td {
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
 }
-#loading-information {
-  font-family: "Courier New", Courier, "Lucida Sans Typewriter",
-    "Lucida Typewriter", monospace;
-  font-size: 11px;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: 400;
-  line-height: 23px;
-  padding: 10px;
-  white-space: pre-line;
-}
+
 .dna {
   margin: 40px auto;
   width: 360px;
@@ -503,9 +437,7 @@ td {
     transform: none;
   }
 }
-#loadCancelButton {
-  display: none;
-}
+
 input[type="range"] {
   width: inherit;
 }
@@ -515,15 +447,7 @@ button.btn,
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
 }
-#file-footer {
-  background: #f8f9fa;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  position: absolute;
-  left: 0px;
-  bottom: 0px;
-  right: 15px;
-  z-index: 1030;
-}
+
 #global-settings-modal {
   pointer-events: none;
 }
@@ -590,7 +514,7 @@ button.btn,
 }
 
 
-/* other */
+/* 2d Network */
 
 .brush .extent {
   fill-opacity: 0.1;
@@ -613,154 +537,27 @@ button.btn,
   z-index: 1001;
 }
 
-/* 3D Network */
-
-
-/* FLOW DIAGRAM */
-#flow {
-  margin: 15px;
-  margin-top: 50px;
-  height: calc(100% - 65px);
-}
-#flow-variables {
-  padding-left: 0;
-}
-.flow-items {
-  list-style-type: none;
-}
-.flow-selector {
-  width: calc(100% - 47px);
-  margin: 5px;
-}
-
 /* MAP */
-#map {
-  width: 100%;
-  height: 100%;
-  background: #d3d9db;
-  cursor: -webkit-grab;
-}
-#map:hover:active {
-  cursor: hold;
-}
-#map-nodes circle.selected {
-  stroke: #ff8300;
-  stroke-width: 4px;
-  /* stroke-dasharray: 6, 13;
-  animation-duration: 1s;
-  animation-name: ripple;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear; */
-}
 .leaflet-control-attribution {
   display: none;
 }
 
-/* Sequences */
-#sequences-panel {
-  padding: 10px;
-  padding-top: 50px;
-  height: 100%;
-  cursor: grab;
-}
-
 /* Phylogenetic tree */
-#tree {
-  height: 100%;
-  width: 100%;
-}
-
-#tree_tooltip {
-  color: #fff;
-  position: absolute;
-  padding: 20px;
-  max-width: 200px;
-
-  /* need i.e. rule */
-  background-color: rgba(0, 0, 0, 0.85);
-  -webkit-border-radius: 12px;
-  -moz-border-radius: 12px;
-  border-radius: 12px;
-  display: none;
-}
-
 .tidytree-link path {
   stroke: rgba(0, 0, 0, 0.6);
 }
 
+/* 3D Network */
+/* FLOW DIAGRAM */
+/* Sequences */
 /* Table */
-#table {
-  height: 100% !important;
-  padding-top: 50px;
-  border: none;
-}
-
 /* Gantt */
-#gantt-settings-pane {
-  left: 0px;
-  display: block;
-}
-
 /* Timeline */
-#timeline {
-  padding-top: 50px;
-}
-#timeline .axis--grid .domain {
-  fill: #ddd;
-  stroke: none;
-}
-
-#timeline .axis--x .domain,
-#timeline .axis--grid .tick line {
-  stroke: #fff;
-}
-
-#timeline .axis--grid .tick--minor line {
-  stroke-opacity: 0.5;
-}
-#timeline-date-field {
-  width: auto;
-}
-
 /* Waterfall View */
-#waterfall {
-  padding: 30px;
-  height: 100%;
-}
-#waterfall h4 {
-  padding: 0.75rem 1.25rem;
-  border: 1px solid lightgray;
-  border-radius: 0.25rem;
-  background: white;
-  margin-bottom: 0;
-}
-.hideIfNotActive {
-  display: none;
-}
-.active .hideIfNotActive {
-  display: block;
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.ellipsisToFit {
-  text-overflow: ellipsis;
-  display: inline;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
 /* Bubbles View */
-#bubble-view circle.selected {
-  stroke: #ff8300;
-  stroke-width: 4px;
-  /* stroke-dasharray: 6, 13;
-  animation-duration: 1s;
-  animation-name: ripple;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear; */
-}
+/* Globe View */
+/* Choropleth */
+/* Crosstab */
 
 /* Auditor */
 #auditor-panel {
@@ -768,25 +565,6 @@ button.btn,
 }
 
 /* Aggregation */
-#aggregation {
-  width: calc(100% - 20px);
-  margin: 10px;
-  margin-top: 50px;
-}
-#aggregation-variables {
-  padding-left: 0;
-}
-.aggregation-items {
-  list-style-type: none;
-}
-.aggregation-variable {
-  width: calc(100% - 47px);
-  margin: 5px;
-}
-.aggregation-tables {
-  margin-bottom: 10px;
-}
-
 #help-panel {
   height: 100%;
   overflow-y: scroll;
@@ -805,28 +583,6 @@ button.btn,
 #help-footer {
   background-color: #e9ecef;
   text-align: center;
-}
-
-/* Globe View */
-#globe {
-  width: 100%;
-  height: 100%;
-  background-color: #000;
-}
-
-/* Choropleth */
-
-.legend canvas {
-  opacity: 0.7;
-}
-
-/* Crosstab */
-#crosstab {
-  height: calc(100% - 50px) !important;
-  width: calc(100% - 20px);
-  margin: 50px 10px 0 10px;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
 }
 
 /* Physics Tree */

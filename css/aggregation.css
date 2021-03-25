@@ -1,11 +1,18 @@
-.graph-nav-info {
-    display: none;
+#aggregation {
+    width: calc(100% - 20px);
+    margin: 10px;
+    margin-top: 50px;
 }
-
-.three-dee-node-tooltip {
-    color:#333333;
-    background:#f5f5f5;
-    border:1px solid #cccccc;
-    border-radius:.25rem;
-    padding:.25rem;
+#aggregation-variables {
+    padding-left: 0;
+}
+.aggregation-items {
+    list-style-type: none;
+}
+.aggregation-variable {
+    width: calc(100% - 47px);
+    margin: 5px;
+}
+.aggregation-tables {
+    margin-bottom: 10px;
 }

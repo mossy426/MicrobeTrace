@@ -33,6 +33,7 @@
     let panel = $('#tree').parent();
     if (!panel.length) return;
 
+    console.log('temp tree1: ', temp.tree)
     // only one input newick file, use original tree
     if (session.files.length == 1 && session.files[0].format == 'newick') {
       if (!temp.tree) {
@@ -40,6 +41,7 @@
         temp.tree = patristic.parseNewick(session.files[0].contents);
       } 
     } else {
+      console.log('in else:::')
       if (!temp.tree) return MT.computeTree().then(drawTree);
     }
 

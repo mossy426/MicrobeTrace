@@ -1,0 +1,19 @@
+#timeline {
+    padding-top: 50px;
+  }
+  #timeline .axis--grid .domain {
+    fill: #ddd;
+    stroke: none;
+  }
+  
+  #timeline .axis--x .domain,
+  #timeline .axis--grid .tick line {
+    stroke: #fff;
+  }
+  
+  #timeline .axis--grid .tick--minor line {
+    stroke-opacity: 0.5;
+  }
+  #timeline-date-field {
+    width: auto;
+  }
