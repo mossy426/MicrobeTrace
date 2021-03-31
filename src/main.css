@@ -82,6 +82,7 @@ a:focus {
     z-index: 1000000;
   }
 }
+
 .lm_header.lm_selectable {
   z-index: 1001 !important;
 }
@@ -546,6 +547,12 @@ button.btn,
 .tidytree-link path {
   stroke: rgba(0, 0, 0, 0.6);
 }
+
+#tree {
+  height: 100%;
+  width: 100%;
+}
+
 
 /* 3D Network */
 /* FLOW DIAGRAM */
