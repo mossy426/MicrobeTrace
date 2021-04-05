@@ -12,6 +12,7 @@ $(function() {
       ]
     });
 
+  // Table to instantiate when recall button is clicked
   if (navigator.userAgent.indexOf("MSIE") >= 0 || navigator.appName.indexOf("Microsoft Internet Explorer") >= 0) {
     $("#ie-warning").show();
     throw new Error("MicrobeTrace does not work on Internet Explorer.");
@@ -36,6 +37,124 @@ $(function() {
     navigator.serviceWorker.register("sw.js").catch(error => {
       console.error("Service Worker Registration failed with " + error);
     });
+  }
+
+  // TODO:: Move to common js
+  MT.updateThresholdHistogram = () => {
+    let width = 280,
+      height = 48,
+      svg = d3
+        .select("svg#link-threshold-sparkline")
+        .html(null)
+        .attr("width", width)
+        .attr("height", height);
+
+    let lsv = session.style.widgets["link-sort-variable"],
+      n = session.data.links.length,
+      max = Number.MIN_SAFE_INTEGER,
+      min = Number.MAX_SAFE_INTEGER,
+      data = Array(n),
+      dist = null;
+    for (let i = 0; i < n; i++) {
+      dist = parseFloat(session.data.links[i][lsv]);
+      data[i] = dist;
+      if (dist < min) min = dist;
+      if (dist > max) max = dist;
+    }
+    let range = max - min;
+    let ticks = 40;
+
+    let x = d3
+      .scaleLinear()
+      .domain([min, max])
+      .range([0, width]);
+
+    let bins = d3
+      .histogram()
+      .domain(x.domain())
+      .thresholds(x.ticks(ticks))(data);
+
+    let y = d3
+      .scaleLinear()
+      .domain([0, d3.max(bins, d => d.length)])
+      .range([height, 0]);
+
+    let bar = svg
+      .selectAll(".bar")
+      .data(bins)
+      .enter()
+      .append("g")
+      .attr("class", "bar")
+      .attr("transform", d => "translate(" + x(d.x0) + "," + y(d.length) + ")");
+
+    bar
+      .append("rect")
+      .attr("x", 1)
+      .attr("width", 6)
+      .attr("height", d => height - y(d.length));
+
+    function updateThreshold() {
+      let xc = d3.mouse(svg.node())[0];
+      session.style.widgets["link-threshold"] = (xc / width) * range * 1.05 + min;
+      $("#link-threshold").val(parseFloat(session.style.widgets["link-threshold"].toLocaleString()));
+    }
+
+    svg.on("click", () => {
+      updateThreshold();
+      updateNetwork();
+    });
+
+    svg.on("mousedown", () => {
+      d3.event.preventDefault();
+      svg.on("mousemove", updateThreshold);
+      svg.on("mouseup mouseleave", () => {
+        updateNetwork();
+        svg
+          .on("mousemove", null)
+          .on("mouseup", null)
+          .on("mouseleave", null);
+      });
+    });
+  };
+
+  MT.tabulate = (data, columns, wrapper, container) => {
+    let foreignObj = d3.select(container).append("svg:foreignObject")
+      .attr("x", wrapper.offsetLeft)
+      .attr("y", wrapper.offsetTop-60)
+      .attr("width", wrapper.offsetWidth)
+      .attr("height", wrapper.offsetHeight);
+    let body = foreignObj 
+      .append("xhtml:body")
+      .append("table")
+      .style('position', 'absolute')
+      .style('top', '0')
+      .style('width', '100%')
+      .style('height', '100%')
+      .attr('cellpadding', '1px')
+      .attr("class", "table-bordered");
+      // .html(nodeColorTable.innerHTML); SVG doesn't translate
+    let thead = body.append("thead"),
+        tbody = body.append("tbody");
+    thead.append("tr")
+      .selectAll("th")
+      .data(columns)
+      .enter()
+      .append("th")
+      .text(function(column) { return column; });
+    let rows = tbody.selectAll("tr")
+      .data(data)
+      .enter()
+      .append("tr");
+    let cells = rows.selectAll("td")
+      .data(function(row) {
+        return columns.map(function(column) {
+            return {column: column, value: row[column.split(" ")[0]]};
+        });
+      })
+      .enter()
+      .append("td")
+      .html(function(d) { return d.value; });
+    return foreignObj;
   }
 
   self.temp = MT.tempSkeleton();
@@ -230,7 +349,11 @@ $(function() {
     screenfull.toggle();
   });
 
+  /** -------------------- Network Functions -------------------- */
+  // Updates network 
+  // Link Visibility, Cluster Assigning, Cluster Visibility, Stats if not hidden
   let updateNetwork = () => {
+    // TODO:: Why Set Link Visbility Called Twice?
     MT.setLinkVisibility(true);
     MT.tagClusters().then(() => {
       MT.setClusterVisibility(true);
@@ -241,6 +364,13 @@ $(function() {
     });
   };
 
+  /** -------------------- Global Settings -------------------- */
+  
+  /* ----- Filtering Tab ----- */
+
+  // Prune with - None btn clicked
+  // Set nearest neighbor option to false and update network
+  // Hide Filtering episolon option if none is selected
   $("#link-show-all")
     .parent()
     .on("click", () => {
@@ -249,44 +379,76 @@ $(function() {
       updateNetwork();
     });
 
+  // Prune with - NN btn clicked
+  // Hide Filtering episolon option if none is selected
   $("#link-show-nn")
     .parent()
     .on("click", () => {
+      // Send to Google Analystics - someone hit nearest neighbor
       ga('send', 'event', 'nearest-neighbor', 'trigger', 'on');
+
+      // Set filtering epsilon text value to currently selected slide bar value by default (0.001 by defualt)
       $("#filtering-epsilon-copy").val(
         Math.pow(10, parseFloat($("#filtering-epsilon").val())).toLocaleString()
       );
+
+      // Add flex to container of fitlering
       $("#filtering-epsilon-row").css("display", "flex");
+
+      // Set session value of NN to updated value
       session.style.widgets["link-show-nn"] = true;
+
+      // Update new tree - default distance metric available in files tab menu, but nowhere else..
+      // TODO:: Do something about the availabilty here - what is TN93 v SNP
       MT.computeMST(session.style.widgets["default-distance-metric"]).then(updateNetwork);
+      // TODO:: Remove line if not needed
       //updateNetwork();
     });
 
+  // Handler for filter slider changes
   $("#filtering-epsilon")
+    // Called while slider is moving
     .on("input", () => {
+      // TODO:: Input called while holding, but text value no updating - Remove?
+      // Change value of epsilon text display to new value from slider
       $("#filtering-epsilon-copy").val(
         Math.pow(10, parseFloat(this.value)).toLocaleString()
       );
     })
+    // Called after slider is released
     .on("change", function() {
+
+      // Update slider value in session
       session.style.widgets["filtering-epsilon"] = parseFloat(this.value);
+      // Update text value based on current value
       $("#filtering-epsilon-copy").val(
         Math.pow(10, parseFloat(this.value)).toLocaleString()
       );
-      // MT.computeNN(session.style.widgets["default-distance-metric"]).then(updateNetwork);
+      // Compute new tree after updating filter object
       MT.computeMST(session.style.widgets["default-distance-metric"]).then(updateNetwork);
     });
 
+  // Handler for Minumum Size Cluster changes
   $("#cluster-minimum-size").on("change", function() {
+
+    // Update value in session
     let val = parseInt(this.value);
     session.style.widgets["cluster-minimum-size"] = val;
+
+    // Update new cluster based on minimum size -> Links -> Nodes
     MT.setClusterVisibility(true);
     MT.setLinkVisibility(true);
     MT.setNodeVisibility(true);
+
+    //Trigger changes in visbility
     ["cluster", "link", "node"].forEach(thing => {
       $window.trigger(thing + "-visibility");
     });
+
+    // Update stats with new changes
     MT.updateStatistics();
+
+    // TODO:: Why hide or show filtering if greater than one minimum cluster?
     if (val > 1) {
       $("#filtering-wrapper").slideUp();
     } else {
@@ -294,92 +456,27 @@ $(function() {
     }
   });
 
-  MT.updateThresholdHistogram = () => {
-    let width = 280,
-      height = 48,
-      svg = d3
-        .select("svg#link-threshold-sparkline")
-        .html(null)
-        .attr("width", width)
-        .attr("height", height);
-
-    let lsv = session.style.widgets["link-sort-variable"],
-      n = session.data.links.length,
-      max = Number.MIN_SAFE_INTEGER,
-      min = Number.MAX_SAFE_INTEGER,
-      data = Array(n),
-      dist = null;
-    for (let i = 0; i < n; i++) {
-      dist = parseFloat(session.data.links[i][lsv]);
-      data[i] = dist;
-      if (dist < min) min = dist;
-      if (dist > max) max = dist;
-    }
-    let range = max - min;
-    let ticks = 40;
-
-    let x = d3
-      .scaleLinear()
-      .domain([min, max])
-      .range([0, width]);
-
-    let bins = d3
-      .histogram()
-      .domain(x.domain())
-      .thresholds(x.ticks(ticks))(data);
-
-    let y = d3
-      .scaleLinear()
-      .domain([0, d3.max(bins, d => d.length)])
-      .range([height, 0]);
-
-    let bar = svg
-      .selectAll(".bar")
-      .data(bins)
-      .enter()
-      .append("g")
-      .attr("class", "bar")
-      .attr("transform", d => "translate(" + x(d.x0) + "," + y(d.length) + ")");
-
-    bar
-      .append("rect")
-      .attr("x", 1)
-      .attr("width", 6)
-      .attr("height", d => height - y(d.length));
-
-    function updateThreshold() {
-      let xc = d3.mouse(svg.node())[0];
-      session.style.widgets["link-threshold"] = (xc / width) * range * 1.05 + min;
-      $("#link-threshold").val(parseFloat(session.style.widgets["link-threshold"].toLocaleString()));
-    }
-
-    svg.on("click", () => {
-      updateThreshold();
-      updateNetwork();
-    });
-
-    svg.on("mousedown", () => {
-      d3.event.preventDefault();
-      svg.on("mousemove", updateThreshold);
-      svg.on("mouseup mouseleave", () => {
-        updateNetwork();
-        svg
-          .on("mousemove", null)
-          .on("mouseup", null)
-          .on("mouseleave", null);
-      });
-    });
-  };
-
+  // Update session variable bseed on selected column to filter by
   $("#link-sort-variable").on("change", function() {
     session.style.widgets["link-sort-variable"] = this.value;
+
+    // TODO:: Why does histogram need to be updated
     MT.updateThresholdHistogram();
+
+    // Update network where visbility is determined by selected column (lsv)
     updateNetwork();
   });
 
+  // Handler for link threshold changing
   $("#link-threshold").on("change", function() {
+    
+    // Google Analytics
     ga('send', 'event', 'threshold', 'update', this.value);
+    
+    // Update session
     session.style.widgets["link-threshold"] = parseFloat(this.value);
+
+    //Show links + clusters -> then update stats
     MT.setLinkVisibility(true);
     MT.tagClusters().then(() => {
       MT.setClusterVisibility(true);
@@ -394,21 +491,44 @@ $(function() {
     });
   });
 
+  // Handler for reveal everything btn
+  $("#RevealAllTab").on("click", () => {
+
+    // Set cluster back to 1
+    $("#cluster-minimum-size").val(1);
+    session.style.widgets["cluster-minimum-size"] = 1;
+
+    // Show filtering wrapper since val now 1
+    $("#filtering-wrapper").slideDown();
+
+    // Update network
+    // TODO:: Can we just call update network?
+    MT.setClusterVisibility();
+    MT.setNodeVisibility();
+    MT.setLinkVisibility();
+    MT.updateStatistics();
+  });
+
+  // Handler for show stats 
   $("#network-statistics-show")
     .parent()
     .on("click", () => {
+      // Update stats will show stat view
       MT.updateStatistics();
       $("#network-statistics-wrapper").fadeIn();
     });
 
+  // Handler for hide stats btn
   $("#network-statistics-hide")
     .parent()
     .on("click", () => {
       $("#network-statistics-wrapper").fadeOut();
     });
 
+  // Handler for display network stats
   $("#network-statistics-wrapper").on("contextmenu", e => {
     e.preventDefault();
+    // Set menu to bottom right of page
     $("#network-statistics-context").css({
       top: e.clientY,
       left: e.clientX,
@@ -416,11 +536,15 @@ $(function() {
     });
   });
 
+  // Handler for hide btn in net stats context
+  // TODO:: Not seeing doprown menu of stats to drag or hide?
   $("#hideStats").on("click", function() {
     $(this).parent().hide();
     $("#network-statistics-hide").parent().trigger('click');
   });
 
+  // Handler for drag btn in net stats context
+  // TODO:: Not seeing doprown menu of stats to drag or hide?
   $("#moveStats").on("click", function() {
     let $this = $(this);
     $this.parent().hide();
@@ -433,6 +557,7 @@ $(function() {
     }
   });
 
+  // TODO:: Not seeing doprown menu of stats to drag or hide?
   $("#network-statistics-draghandle").on("mousedown", function() {
     let body = $("body");
     let parent = $(this).parent();
@@ -444,80 +569,58 @@ $(function() {
     body.on("mouseup", () => body.off("mousemove").off("mouseup"));
   });
 
-  $("#RevealAllTab").on("click", () => {
-    $("#cluster-minimum-size").val(1);
-    session.style.widgets["cluster-minimum-size"] = 1;
-    $("#filtering-wrapper").slideDown();
-    MT.setClusterVisibility();
-    MT.setNodeVisibility();
-    MT.setLinkVisibility();
-    MT.updateStatistics();
-  });
+  /* ----- Styling Tab ----- */
 
-  MT.tabulate = (data, columns, wrapper, container) => {
-    let foreignObj = d3.select(container).append("svg:foreignObject")
-      .attr("x", wrapper.offsetLeft)
-      .attr("y", wrapper.offsetTop-60)
-      .attr("width", wrapper.offsetWidth)
-      .attr("height", wrapper.offsetHeight);
-    let body = foreignObj 
-      .append("xhtml:body")
-      .append("table")
-      .style('position', 'absolute')
-      .style('top', '0')
-      .style('width', '100%')
-      .style('height', '100%')
-      .attr('cellpadding', '1px')
-      .attr("class", "table-bordered");
-      // .html(nodeColorTable.innerHTML); SVG doesn't translate
-    let thead = body.append("thead"),
-        tbody = body.append("tbody");
-    thead.append("tr")
-      .selectAll("th")
-      .data(columns)
-      .enter()
-      .append("th")
-      .text(function(column) { return column; });
-    let rows = tbody.selectAll("tr")
-      .data(data)
-      .enter()
-      .append("tr");
-    let cells = rows.selectAll("td")
-      .data(function(row) {
-        return columns.map(function(column) {
-            return {column: column, value: row[column.split(" ")[0]]};
-        });
-      })
-      .enter()
-      .append("td")
-      .html(function(d) { return d.value; });
-    return foreignObj;
-  }
-
+  // Set value of node color based on session value
+  // Handler for Color Nodes By change
   $("#node-color-variable")
     .val(session.style.widgets["node-color-variable"])
     .on("change", function() { 
+
+      // Set session value to new value
       let variable = this.value;
       session.style.widgets["node-color-variable"] = variable;
+
+      // Hide color elements if not coloring nodes
       if (variable == "None") {
-        $("#node-color-value-row").slideDown();
+        // Hide Color Table
         $("#node-color-table-row").slideUp();
+        // Show Color value for all nodes
+        $("#node-color-value-row").slideDown();
+        // Empty table
         $("#node-color-table").empty();
+        // Broadcast change for on trigger of different views using nodes
         $window.trigger("node-color-change");
         return;
       }
+
+      // Else hide Color value for all nodes
       $("#node-color-value-row").slideUp();
+      // Show Color table to display Hide and Show btns
       $("#node-color-table-row").slideDown();
+
+  
+      /* ----- Color Table within change of Color Nodes by ----- */
+      
+      // On click of sort option in node color table, change sort of table nodes
       let nodeSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
         session.style.widgets["node-color-table-counts-sort"] = "";
+
         if (session.style.widgets["node-color-table-name-sort"] === "ASC")
           session.style.widgets["node-color-table-name-sort"] = "DESC"
         else
           session.style.widgets["node-color-table-name-sort"] = "ASC"
-          $('#node-color-variable').trigger("change");
+          
+        // Broadcast node color variable change
+        $('#node-color-variable').trigger("change");
       });
+
+      // Get title of node column in color table
       let nodeColorHeaderTitle =  (session.style.overwrite && session.style.overwrite.nodeColorHeaderVariable == variable ? session.style.overwrite.nodeColorHeaderTitle : "Node " + MT.titleize(variable));
+      // Set title of node column + Append sort btn
       let nodeHeader = $("<th class='p-1' contenteditable>" + nodeColorHeaderTitle + "</th>").append(nodeSort);
+     
+      // On click of count sort
       let countSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
         session.style.widgets["node-color-table-name-sort"] = "";
         if (session.style.widgets["node-color-table-counts-sort"] === "ASC")
@@ -526,15 +629,23 @@ $(function() {
           session.style.widgets["node-color-table-counts-sort"] = "ASC"
           $('#node-color-variable').trigger("change");
       });
+
+      // Set count header + Append sort btn
       let countHeader = $((session.style.widgets["node-color-table-counts"] ? "<th>Count</th>" : "")).append(countSort);
+      
+      // Create color table being used
       let nodeColorTable = $("#node-color-table")
         .empty()
-        .append($("<tr></tr>"))
-        .append(nodeHeader)
-        .append(countHeader)
-        .append((session.style.widgets["node-color-table-frequencies"] ? "<th>Frequency</th>" : ""))
-        .append("<th>Color</th>" );
+        .append($("<tr></tr>")) // Add on table
+        .append(nodeHeader) // Add on node header
+        .append(countHeader) // Add on count Header
+        .append((session.style.widgets["node-color-table-frequencies"] ? "<th>Frequency</th>" : "")) // Add on Frequency header is shown
+        .append("<th>Color</th>" ); // Add oon color header
+      
+      // Create nodeValueNames object in session if doesnt exist
       if (!session.style.nodeValueNames) session.style.nodeValueNames = {};
+      
+      // Get nodes that are visible + update color map
       let aggregates = MT.createNodeColorMap();
       let vnodes = MT.getVisibleNodes();
       let values = Object.keys(aggregates);

@@ -2,6 +2,40 @@
   'use strict';
 
   let MT = {};
+
+  /** Matrix
+   * ID1
+   * ID2
+   * cluster - id
+   * directed
+   * distance
+   * index
+   * nn
+   * origin = ['filename']
+   * source - id in string
+   * target - id in string
+   * type - "locationLink"
+   * visble
+   */
+
+  /** Node
+   * ID
+   * whatever Columns are
+   * type - "person"
+   * degree
+   * visble
+   */
+
+  /** Cluster
+   * ID
+   * nodes - count
+   * links - count
+   * sum_distances - count
+   * links_per_node - count,
+   * mean_genetic_distance - undefined,
+   * visible - bool
+   */
+
   
   MT.dataSkeleton = () => ({
     nodes: [],
@@ -1040,6 +1074,7 @@
     });
   };
   
+  // Computes new tree
   MT.computeMST = () => {
     return new Promise((resolve, reject) => {
       let mstMachine = new Worker("workers/compute-mst.js");
@@ -1274,6 +1309,7 @@
     return small.replace(/(?:^|\s|-)\S/g, c => c.toUpperCase());
   };
   
+  // Resets/Creates clusters in the session 
   MT.tagClusters = () => {
     return new Promise(resolve => {
       let start = Date.now();
@@ -1286,40 +1322,76 @@
       let tempnodes = temp.nodes = [];
       let lsv = session.style.widgets["link-sort-variable"];
   
+      // Id of node and current cluster
       let DFS = (id, cluster) => {
+        
+        // If id already exists in tempnodes, dont add
         if (tempnodes.indexOf(id) >= 0) return;
         tempnodes.push(id);
+
+        // Get node value to node found from id passed and available nodes
         let node = {};
         for (let i = 0; i < numNodes; i++) {
-          let d = nodes[i];
-          if (d._id == id) {
-            node = d;
+          if (nodes[i]._id == id) {
+            node = nodes[i];
             break;
           }
         }
+
+        // Getting cluster id TODO:: Remove line if not needed to assign to variable
         let clusterID = cluster.id;
+        // Set the cluster of node o the current cluster id
         node.cluster = clusterID;
+
+        // Increment the # of nodes (node count) in current clusder
         cluster.nodes++;
+
+        // Matrix is edge list
+        // Get all node values within relation to id of current node - from row in distance matrix
         let row = temp.matrix[id];
         if(!row) return;
+
+        // Go through all nodes
         for (let j = 0; j < numNodes; j++) {
+          // If node found in same row, then in same cluster
           let l = row[labels[j]];
+          
           if (!l) continue;
           if (!l.visible) continue;
+
+          // Set to cluster ID
           l.cluster = clusterID;
+
+          // Increment cluster links since one made
           cluster.links++;
+
+          // Add distance value of node total cluster distance
           cluster.sum_distances += l[lsv];
+
+          // No need to continue if all nodes possible have been iterated through
           if(tempnodes.length == numNodes) return;
+
+          // Add next nodes of edge list to current cluster until node does not exist or not visible 
+          // Link visibility determines whether or not linked
           DFS(l.source, cluster);
           DFS(l.target, cluster);
         }
       };
   
+      // Go through all nodes
       for (let k = 0; k < numNodes; k++) {
+        // TODO:: remove variable setting if not needed
         let d = nodes[k];
+
+        // degree default to zero
         d.degree = 0;
+
+        // TODO:: remove variable setting if not needed
         let id = d._id;
+
+        // If node not found in row being looked at, create new cluster
         if (tempnodes.indexOf(id) == -1) {
+
           let cluster = {
             id: clusters.length,
             nodes: 0,
@@ -1329,8 +1401,10 @@
             mean_genetic_distance: undefined,
             visible: true
           };
+
           clusters.push(cluster);
           DFS(id, cluster);
+          // Move on once gone through all nodes
           if(tempnodes.length == numNodes) break;
         }
       }
@@ -1338,7 +1412,7 @@
   
       start = Date.now();
       //This is O(N^3)
-      //TODO: Refactor using temp.matrix to get O(N^2)
+      //TODO:: Refactor using temp.matrix to get O(N^2)
       for (let m = 0; m < numLinks; m++) {
         let l = links[m];
         if (!l.visible) continue;
@@ -1346,6 +1420,8 @@
         t = false;
         for (let n = 0; n < numNodes; n++) {
           let node = nodes[n];
+
+          // Increment the degree each time there's a link between current node and any other node
           if (l.source == node._id) {
             s = true;
             node.degree++;
@@ -1354,10 +1430,14 @@
             t = true;
             node.degree++;
           }
+          // Wouldn't this cause a bug if it's done after?
+          // Once both source and target equal eachother, get out of loop
           if (s && t) break;
         }
       }
+
       clusters.forEach(c => {
+        // Links should be halfed since links are counted twice wehn source and target are swapped
         c.links = c.links / 2;
         c.links_per_node = c.links / c.nodes;
         c.mean_genetic_distance = c.sum_distances / 2 / c.links;
@@ -1365,6 +1445,7 @@
       console.log("Degree Computation time:", (Date.now() - start).toLocaleString(), "ms");
       resolve();
     });
+
   };
   
   MT.setNodeVisibility = silent => { 
@@ -1388,33 +1469,51 @@
     console.log("Node Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
   };
   
+  // Go through each link in the current session and set visbility property
   MT.setLinkVisibility = silent => { 
+
+    // Get date object for logging through console
     let start = Date.now();
+
+    // Retrive link variables from current session
     let metric = session.style.widgets["link-sort-variable"],
       threshold = session.style.widgets["link-threshold"],
       showNN = session.style.widgets["link-show-nn"];
     let links = session.data.links;
     let clusters = session.data.clusters;
     let n = links.length;
+
+    // Go through each link to check visbility
     for (let i = 0; i < n; i++) {
       let link = links[i];
       let visible = true;
+
+      // Don't show link if no metric associated
       if (link[metric] == null) {
         link.visible = false;
         continue;
+
+      // Visible true if the link metric is less thatn session threshold
       } else {
         visible = link[metric] <= threshold;
       }
       if (showNN) {
         visible = visible && link.nn;
       }
+
+      // Now check to see if within cluster that also has visible property set to true
       let cluster = clusters[link.cluster];
       if (cluster) {
         visible = visible && cluster.visible;
       }
       link.visible = visible;
     }
-    if (!silent) $window.trigger("link-visibility");
+
+    if (!silent) {
+      //Index.js - sets link and node color if exists
+      //2d_network.js - fits nodes to screen when timeline visible
+      $window.trigger("link-visibility");
+    } 
     console.log("Link Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
   };
   
@@ -1522,17 +1621,27 @@
     return out;
   };
   
+  // Updates stats regarding Tree
   MT.updateStatistics = () => {
+
+    // Only need to update once network stats hideen isnt checked
     if ($("#network-statistics-hide").is(":checked")) return;
+
     let vnodes = MT.getVisibleNodes();
     let vlinks = MT.getVisibleLinks();
     let linkCount = 0;
     let clusterCount = 0;
+
+    // If timeline date not showing - just grab values
     if (session.style.widgets["timeline-date-field"]== 'None') {
       linkCount = vlinks.length;
       clusterCount = session.data.clusters.filter(cluster => cluster.visible && cluster.nodes > 1).length;
+    
+    // If so, manually check visible nodes that are displayed currently
     } else {
       let n = vlinks.length;
+      
+      // Increment link for everything source and target of node is found in visible
       for (let i = 0; i < n; i++) {
         let src = vnodes.find(d => d._id == vlinks[i].source || d.id == vlinks[i].source);
         let tgt = vnodes.find(d => d._id == vlinks[i].target || d.id == vlinks[i].target);
@@ -1541,14 +1650,26 @@
 	  
       n = vnodes.length;
       let clusters = {};
+
+      //TODO:: Discuss with Michael on implementation
+      // Go through all nodes for clusters found
       for (let i = 0; i < n; i++) {
         let id = vnodes[i].cluster;
+        // If cluster found increment id by 1
         if (clusters[id]) clusters[id]++;
+        // Else set it to 1
         else clusters[id] = 1;
       }
+
+      // Filter out clusters bassed on current clusters found
       clusterCount = session.data.clusters.filter(cluster => clusters[cluster.id] && clusters[cluster.id]>2 && cluster.visible && cluster.nodes > 1).length;
+
     }
+
+    // Get nodes that are their own cluster if no degree
     let singletons = vnodes.filter(d => d.degree == 0).length;
+    
+    //Set text values of html ids to proper counts 
     $("#numberOfSelectedNodes").text(vnodes.filter(d => d.selected).length.toLocaleString());
     $("#numberOfNodes").text(vnodes.length.toLocaleString());
     $("#numberOfVisibleLinks").text(linkCount.toLocaleString());

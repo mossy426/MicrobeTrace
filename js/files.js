@@ -411,27 +411,48 @@
     $('.audit-exclude').trigger('click');
   });
 
+  /** ------ On Change ------ */
+
+  // Files Tab
+
+  // Distance Metric
   $('#default-distance-metric').change(function () {
     ga('send', 'event', 'default-distance-metric', 'update', this.value);
     const lsv = this.value;
     localforage.setItem('default-distance-metric', lsv);
+
+    // TODO:: is this needed?
+    //Update default distance to value
     $('#default-distance-metric').val(lsv);
+
+    // Select SNPA
     if (lsv == 'snps') {
+      // Hide ambiguities
       $('#ambiguities-row').slideUp();
-      $('#default-distance-threshold, #link-threshold')
+      // Update Link threshold to 16
+      $('#default-distance-threshold, #linkxz-threshold')
         .attr('step', 1)
         .val(16);
+      // Update Link threshold in session
       session.style.widgets["link-threshold"] = 16;
+
+    // Select TN93
     } else {
+      // Show Ambiguities
       $('#ambiguities-row').slideDown();
+      // Update Link thershold to 0.015
       $('#default-distance-threshold, #link-threshold')
         .attr('step', 0.001)
         .val(0.015);
+      // Update value in session
       session.style.widgets["link-threshold"] = 0.015;
     }
+
+    // Update distance metric to new distance metric (TN or SNS)
     session.style.widgets['default-distance-metric'] = lsv;
   });
 
+  // Link distance threshold update into session since session will be looked at when instantiating views
   $('#default-distance-threshold').change(function () {
     session.style.widgets["link-threshold"] = this.value;
   });
