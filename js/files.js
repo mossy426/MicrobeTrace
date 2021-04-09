@@ -158,11 +158,17 @@
 
       function matchHeaders(type) {
         const these = $(`[data-file='${file.name}'] select`);
+        console.log('matching headers: ', type);
         if(file.field1) {
           //#291 restore to previous variable selection if available
-          $(these.get(0)).val(file.field1);
-          $(these.get(1)).val(file.field2);
-          $(these.get(2)).val(file.field3);
+          if (type == 'node') {
+            $(these.get(0)).val(file.field1);
+            $(these.get(1)).val('None');
+          } else {
+            $(these.get(0)).val(file.field1);
+            $(these.get(1)).val(file.field2);
+            $(these.get(2)).val(file.field3);
+          } 
         } else {
           const a = type == 'node' ? ['ID', 'Id', 'id'] : ['SOURCE', 'Source', 'source'],
             b = type == 'node' ? ['SEQUENCE', 'SEQ', 'SEQS', 'Sequence', 'Seqs', 'sequence', 'seq', 'seqs'] : ['TARGET', 'Target', 'target'],

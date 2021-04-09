@@ -645,11 +645,12 @@ $(function() {
       // Create nodeValueNames object in session if doesnt exist
       if (!session.style.nodeValueNames) session.style.nodeValueNames = {};
       
-      // Get nodes that are visible + update color map
+      // Get nodes that are visible + create node color map
       let aggregates = MT.createNodeColorMap();
       let vnodes = MT.getVisibleNodes();
       let values = Object.keys(aggregates);
       
+      // Color Column: String vs Number Sorting
       if (isNaN(values[0])) { // String sorting
         if (session.style.widgets["node-color-table-name-sort"] == "ASC")
           values.sort();
@@ -662,23 +663,32 @@ $(function() {
           values.sort(function(a, b) { return b - a });
       }
 
+      // Count Column: Number Sorting
       if (session.style.widgets["node-color-table-counts-sort"] == "ASC")
         values.sort(function(a, b) { return aggregates[a] - aggregates[b] });
       else if (session.style.widgets["node-color-table-counts-sort"] == "DESC")
         values.sort(function(a, b) { return aggregates[b] - aggregates[a] });
 
+      // Node color map created by d3
+      // Create dom element for color in color column
       values.forEach((value, i) => {
         let colorinput = $('<input type="color" value="' + temp.style.nodeColorMap(value) + '">')
           .on("change", function(){
             
+            // Variable is Column in data sheet (.ie ID, Cluster, etc.)
+            // Key within color nodes table that has the value
             let key = session.style.nodeColorsTableKeys[variable].findIndex( k => k === value);
+
+            // Insert value/color at key within column of node color table
             session.style.nodeColorsTable[variable].splice(key, 1, this.value);
             
+            // Create node color map if not in timeline
             if (session.style.widgets["node-timeline-variable"] == 'None') {
               temp.style.nodeColorMap = d3
                 .scaleOrdinal(session.style.nodeColorsTable[variable])
                 .domain(session.style.nodeColorsTableKeys[variable]);
             } else {
+            // TODO:: Discuss with tony on this implementation
               let temKey = temp.style.nodeColorKeys.findIndex( k => k === value);
               temp.style.nodeColor.splice(temKey, 1, this.value);
               temp.style.nodeColorMap = d3
@@ -686,29 +696,47 @@ $(function() {
                 .domain(temp.style.nodeColorKeys);
             }
             
+            // Broadcast event to views
             $window.trigger("node-color-change");
+
           });
+         
+        // Create DOM element symbol for changing alpha
         let alphainput = $("<a>⇳</a>").on("click", e => {
+
+          // Set alpha slider to appear at the position of the click event
           $("#color-transparency-wrapper").css({
             top: e.clientY + 129,
             left: e.clientX,
             display: "block"
           });
+
+          // Set the value to the current index of the color value in the table
           $("#color-transparency")
             .val(session.style.nodeAlphas[i])
             .one("change", function() {
+
+              // Update node alpha object with new value once changed
               session.style.nodeAlphas.splice(i, 1, parseFloat(this.value));
+              // Update d3 alpha map with updated array/new value
               temp.style.nodeAlphaMap = d3
                 .scaleOrdinal(session.style.nodeAlphas)
                 .domain(values);
+              
+              // Dismiss alpha slider
               $("#color-transparency-wrapper").fadeOut();
+
+              // Broadcast event to views
               $window.trigger("node-color-change");
             });
         });
+
+        // Create color cell and add the color + alpha DOM element
         let cell = $("<td></td>")
           .append(colorinput)
           .append(alphainput);
 
+        // Create row of table by adding the Node Id/variable, count, frequency?, and color
         let row = $(
           "<tr>" +
             "<td data-value='" + value + "'>" +
@@ -718,20 +746,28 @@ $(function() {
             (session.style.widgets["node-color-table-frequencies"] ? "<td>" + (aggregates[value] / vnodes.length).toLocaleString() + "</td>" : "") +
           "</tr>"
         ).append(cell);
+
+        // Append the created row to the table - go though each visible node until done
         nodeColorTable.append(row);
+
       });
 
+      // Cells in the table are editable via double click
       nodeColorTable
         .find("td")
         .on("dblclick", function() {
+          // Make field editable
           $(this).attr("contenteditable", true).focus();
         })
         .on("focusout", function() {
           let $this = $(this);
+          // Make field read-only
           $this.attr("contenteditable", false);
+          // Save new value to session 
           session.style.nodeValueNames[$this.data("value")] = $this.text();
         });
-        
+      
+      /// If header edited, update value to session
       nodeColorTable
         .find(".p-1")
         .on("focusout", function() {
@@ -740,48 +776,81 @@ $(function() {
           session.style.overwrite.nodeColorHeaderTitle = $($(this).contents()[0]).text();
         });
 
+      // Allows table to be sortable via drag and drop table rows
       sortable("#node-color-table", { items: "tr" });
+
+      // Broadcast color change egent
       $window.trigger("node-color-change");
+
     })
     .trigger("change");
 
+  // TODO:: Move above the above code to be in global settings styling
+  // Node color field displayed  when Color Nodes By is set to NONE
+  // Changes color of all nodes vs distinguishing them by attribute/variable
   $("#node-color")
     .on("change", function() {
+      // Update session variable
       session.style.widgets["node-color"] = this.value;
+      // Broadcast event
       $window.trigger("node-color-change");
     })
-    .val(session.style.widgets["node-color"]);
+    .val(session.style.widgets["node-color"]); // TODO:: Is setting value needed?
 
+  // Handler for node border color change
   $("#node-color-border")
     .on("change", function() {
+      // Update session variable
       session.style.widgets["node-color-border"] = this.value;
+      // Broadcast event
       $window.trigger("node-border-change");
     });
 
+  // Handler for link color change  
   $("#link-color-variable")
-    .val(session.style.widgets["link-color-variable"])
+    .val(session.style.widgets["link-color-variable"]) // Set value to session value
     .on("change", function() {
+
+      // Variable is ID, Source, Cluster, NN, etc.
       let variable = this.value;
       session.style.widgets["link-color-variable"] = variable;
+
+
       if (variable == "None") {
-        $("#link-color-value-row").slideDown();
-        $("#link-color-table-row").slideUp();
-        $("#link-color-table").empty();
+        // Show link color value field since only one color for all links
+        $("#link-color-value-row").slideDown(); 
+        // Hide show/hide link color table field
+        $("#link-color-table-row").slideUp(); 
+        // Remove link color table
+        $("#link-color-table").empty(); 
+        // Broadcast event
         $window.trigger("link-color-change");
+
+        // End function since nothing left to do
         return;
       }
+
+      // If not NONE/distinguished colors, ensure link color value field is hidden and show/hide table for links is visible
       $("#link-color-value-row").slideUp();
       $("#link-color-table-row").slideDown();
+
+      // Create sort icon DOM Element for Link (Variable) column headfer
       let linkSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
         session.style.widgets["link-color-table-counts-sort"] = "";
         if (session.style.widgets["link-color-table-name-sort"] === "ASC")
           session.style.widgets["link-color-table-name-sort"] = "DESC"
         else
           session.style.widgets["link-color-table-name-sort"] = "ASC"
+
+        // Broadcast that variable has changed
         $('#link-color-variable').trigger("change");
       });
-     let linkColorHeaderTitle =  (session.style.overwrite && session.style.overwrite.linkColorHeaderVariable == variable ? session.style.overwrite.linkColorHeaderTitle : "Link " + MT.titleize(variable));
-     let linkHeader = $("<th class='p-1' contenteditable>" + linkColorHeaderTitle + "</th>").append(linkSort);
+      // Get title of Link Column based on variable to color by
+      let linkColorHeaderTitle =  (session.style.overwrite && session.style.overwrite.linkColorHeaderVariable == variable ? session.style.overwrite.linkColorHeaderTitle : "Link " + MT.titleize(variable));
+      // Create DOM element for Link (Variable) column header w/ sort icon
+      let linkHeader = $("<th class='p-1' contenteditable>" + linkColorHeaderTitle + "</th>").append(linkSort);
+
+      // Create sort icon DOM element for Count column header
       let countSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
         session.style.widgets["link-color-table-name-sort"] = "";
         if (session.style.widgets["link-color-table-counts-sort"] === "ASC")
@@ -790,7 +859,10 @@ $(function() {
           session.style.widgets["link-color-table-counts-sort"] = "ASC"
         $('#link-color-variable').trigger("change");
       });
+      // Create DOM element for Count column header w/ sort icon
       let countHeader = $((session.style.widgets["link-color-table-counts"] ? "<th>Count</th>" : "")).append(countSort);
+      
+      // Create empty link color table and append header row to it
       let linkColorTable = $("#link-color-table")
         .empty()
         .append($("<tr></tr>"))
@@ -798,35 +870,47 @@ $(function() {
         .append(countHeader)
         .append((session.style.widgets["link-color-table-frequencies"] ? "<th>Frequency</th>" : ""))
         .append("<th>Color</th>" );
+      
+      // Create link value names if does not already exist in session
       if (!session.style.linkValueNames) session.style.linkValueNames = {};
+
+      // Get visible linkes and create link color map
       let aggregates = MT.createLinkColorMap();
       let vlinks = MT.getVisibleLinks();
       let values = Object.keys(aggregates);
       
+      // Sort Link (Variable) column depending if values are strings or numbers
       if (isNaN(values[0])) { // String sorting
         if (session.style.widgets["link-color-table-name-sort"] == "ASC")
           values.sort();
         else if (session.style.widgets["link-color-table-name-sort"] == "DESC")
           values.sort(function(a, b) { if (a > b) return -1; if (b > a) return 1; return 0; }); 
-      } else {
+      } else { // Number sorting
         if (session.style.widgets["link-color-table-name-sort"] == "ASC")
           values.sort(function(a, b) { return a - b });
         else if (session.style.widgets["link-color-table-name-sort"] == "DESC")
           values.sort(function(a, b) { return b - a });        
       }
       
+      // Sort count column which will only be numbers
       if (session.style.widgets["link-color-table-counts-sort"] == "ASC")
         values.sort(function(a, b) { return aggregates[a] - aggregates[b] });
       else if (session.style.widgets["link-color-table-counts-sort"] == "DESC")
         values.sort(function(a, b) { return aggregates[b] - aggregates[a] });
 
+      // Link color map created by d3
+      // Create DOM element for link color in color column for each value
       values.forEach((value, i) => {
+
+        // Create DOM element to insert into cell based on current link
         let colorinput = $('<input type="color" value="' + temp.style.linkColorMap(value) + '">')
           .on("change", function(){
 
+            // Insert color value into linkColorsTable at current value index
             let key = session.style.linkColorsTableKeys[variable].findIndex( k => k === value);
             session.style.linkColorsTable[variable].splice(key, 1, this.value);
             
+            // TODO:: Tony understand this timeline fix 
             if (session.style.widgets["node-timeline-variable"] == 'None') {
               temp.style.linkColorMap = d3
                 .scaleOrdinal(session.style.linkColorsTable[variable])
@@ -839,10 +923,16 @@ $(function() {
                 .domain(temp.style.linkColorsKeys);
             }
 
+            // Broadcast event
             $window.trigger("link-color-change");
+
           });
+
+        // Create alpha icon DOM elemnt to append to color input within Color sell
         let alphainput = $("<a>⇳</a>")
           .on("click", e => {
+
+            // Show Alpha Slider at position of click/event
             $("#color-transparency-wrapper").css({
               top: e.clientY + 129,
               left: e.clientX,
@@ -851,14 +941,20 @@ $(function() {
             $("#color-transparency")
               .val(session.style.linkAlphas[i])
               .one("change", function() {
+                // Insert new value into proper index
                 session.style.linkAlphas.splice(i, 1, parseFloat(this.value));
+                // Update alphamap for d3
                 temp.style.linkAlphaMap = d3
                   .scaleOrdinal(session.style.linkAlphas)
                   .domain(values);
+                // Dismiss alpha slider after change
                 $("#color-transparency-wrapper").fadeOut();
+                // Broadcast change event
                 $window.trigger("link-color-change");
               });
           });
+        
+        // Create row DOM element combining all columns to append to link table
         let row = $(
           "<tr>" +
             "<td data-value='" + value + "'>" +
@@ -868,21 +964,30 @@ $(function() {
             (session.style.widgets["link-color-table-frequencies"] ? "<td>" + (aggregates[value] / vlinks.length).toLocaleString() + "</td>" : "") +
           "</tr>"
         );
+        // Add color/alpha column in row
         row.append($("<td></td>").append(colorinput).append(alphainput));
+
+        // Add row to table
         linkColorTable.append(row);
+
       });
 
+      // Edit cell values by double clicking
       linkColorTable
         .find("td")
         .on("dblclick", function() {
+          // Make text editable
           $(this).attr("contenteditable", true).focus();
         })
         .on("focusout", function() {
           let $this = $(this);
+          // Make text read only
           $this.attr("contenteditable", false);
+          // Save new text to value name
           session.style.linkValueNames[$this.data("value")] = $this.text();
         });
       
+        // If header edited, update session values with new header
         linkColorTable
         .find(".p-1")
         .on("focusout", function() {
@@ -891,18 +996,33 @@ $(function() {
           session.style.overwrite.linkColorHeaderTitle = $($(this).contents()[0]).text();
         });
 
+      // Allows link rows to be sorted via dragging
       sortable("#link-color-table", { items: "tr" });
-      $window.trigger("link-color-change");
-    })
-    .trigger("change");
 
+      // Broadcast event
+      $window.trigger("link-color-change");
+
+    })
+    .trigger("change"); //TODO:: Tony trigger change?
+
+  /* ----- Timeline Tab ----- */
+
+  // Handler for Timeline By Variable dropdown
   $("#node-timeline-variable")
     .val(session.style.widgets["node-timeline-variable"])
     .on("change", function() {  
+
+      // Reset/Remove timeline visual
       d3.select('#global-timeline svg').remove();
+      // Stop timeline increment function from executing
       clearInterval(session.timeline);
+
+      // Get variable (i.e id, cluster, degree, zip)
       let variable = this.value;  
+
+      // Whether or not variable has changed from the one thats currently being used in session
       let loadingJsonFile = session.style.widgets["node-timeline-variable"] == variable;
+      
       if (session.style.widgets["node-timeline-variable"] != 'None' && !loadingJsonFile) {
         // change timeline variable when end time not reaching target time - redraw netwrok to start fresh
         if (moment(session.state.timeEnd).toDate() < moment(session.state.timeTarget).toDate()) {
@@ -912,47 +1032,85 @@ $(function() {
           MT.updateStatistics();
         }
       }
+
+      // Retrieve stored timeline variable
       session.style.widgets["node-timeline-variable"] = variable;
+
+      /* ----- Timeline Bottom Bar ----- */
+      
       if (variable == "None") {
+        // Clear timeline field 
         $("#global-timeline-field").empty();
+        // Set session variable
         session.style.widgets["timeline-date-field"] = 'None'  
+        // Hide timeline
         $("#global-timeline-wrapper").fadeOut();
+        // Disable/Grey Out Pin button
         $('#pinbutton').prop("disabled", false);
+
+        // If session doesnt have timeline pinned, ensure network is pinned to not move nodes as they appear
         if(!session.network.timelinePinned) {
           $('#pinbutton').trigger('click');
           MT.updatePinNodes(false);
         }
+
+        // Reset nodes in current timeline
         session.network.timelineNodes = [];
+
+        // Hide all nodes and links + update statistics
         MT.setNodeVisibility(false);
         MT.setLinkVisibility(false);
         MT.updateStatistics();
+
         return;
       }
+
+      // TODO:: Tony If no node color set - trigger broadcast to default?
       if(!temp.style.nodeColor) $("#node-color-variable").trigger("change");
+
+      // If Pin NOT disabled
       if (!$('#pinbutton').prop('disabled')){
+
+        // If Json File not loading
         if (!loadingJsonFile) {
+
+          // Set pinned value to all pinned bool
           session.network.timelinePinned= session.network.allPinned;
+
+          //  If not pinned, ensure all are pinned
           if(!session.network.allPinned) {
             MT.updatePinNodes(true);
             $('#pinbutton').trigger('click');
           }
+
+          // Ensure all network nodes show in timline
           session.network.timelineNodes = MT.getNetworkNodes();
         }
+
+        // Disable pin
         $('#pinbutton').prop("disabled", true);
       }
+
+      // Sets and adds variable text used to determine timeline values 
       let globalTimelineField =  (session.style.overwrite && variable == session.style.overwrite.globalTimelineFieldVariable ? session.style.overwrite.globalTimelineField : MT.titleize(variable));
       $("#global-timeline-field").html(globalTimelineField); 
   
+      // Construct d3 Formatters
       var formatDateIntoYear = d3.timeFormat("%Y");
       var formatDateIntoMonthYear = d3.timeFormat("%b %y");
       var formatDateIntoMonth = d3.timeFormat("%b");
       var formatDateMonthYear = d3.timeFormat("%b %Y");
       var formatDateDateMonth = d3.timeFormat("%b %_d");
 
+      // Instantiate start/end
       let timeDomainStart, timeDomainEnd;
       let field = variable;
+
+      // Instantiate times array to hold all values
       let times = [],
-      vnodes = JSON.parse(JSON.stringify(session.data.nodes));
+      vnodes = JSON.parse(JSON.stringify(session.data.nodes)); // assign all nodes
+
+      // Update time to proper format for those with valid time
       vnodes.forEach(d => {
         let time = moment(d[field]); 
         if (time.isValid()) {
@@ -962,65 +1120,92 @@ $(function() {
           d[field] = null;
         }
       });
+
+      // If valid times not found, just create a default before and after time
       if (times.length < 2) {
         times = [new Date(2000, 1, 1), new Date()];
       }
+
+      // Get first and last time by getting smallest and greatest date
       timeDomainStart = Math.min(...times);
       timeDomainEnd = Math.max(...times);
 
+      // Get how many days span from start to end
       var days = moment(timeDomainEnd).diff(moment(timeDomainStart), 'days');
+
+      // Format dates of ticks depending on total days
       var tickDateFormat = d => {
         if (days<184) return formatDateDateMonth(d);
         else if (days<367) return formatDateIntoMonth(d);
         else if (days<367*5) return formatDateIntoMonthYear(d);
         else return formatDateIntoYear(d);		
       }
+
+      // TODO:: Tony why is there another formatter
       var handleDateFormat = d => {
         if (days<367) return formatDateDateMonth(d);
         else return formatDateMonthYear(d);		
       }
+
+      // TODO:: Is creating more variables necessary?
       let startDate = timeDomainStart;
       let endDate = timeDomainEnd;
+
+      // Margin styling 
       var margin = {top:50, right:50, bottom:0, left:50},
         width = ($('#network').parent().width() * 4 / 5) - margin.left - margin.right,
         height = 200 - margin.top - margin.bottom;
+
+      // Get timeline and append svg with margins
       var svgTimeline = d3.select("#global-timeline")
           .append("svg")
           .attr("width", width + margin.left + margin.right)
           .attr("height", 120);  
 
-          ////////// slider //////////
+      // Initial Time Slider Values
       var currentValue = 0;
       var targetValue = width;
+
+      // Get play button
       var playButton = d3.select("#timeline-play-button");
+
+      // If instantiated to pause, ensure play is set since it's not playing
       if (playButton.text() == "Pause") playButton.text("Play");
+
+      // Timer range
       var x = d3.scaleTime()
           .domain([startDate, endDate])
           .range([0, targetValue])
           .clamp(true)
           .nice();
+
+      // Get slider appended to to svg timeline
       var slider = svgTimeline.append("g")
           .attr("class", "slider")
-          .attr("transform", "translate(30," + height/2 + ")");
+          .attr("transform", "translate(30," + height/2 + ")"); // Set slider to horizontal
+
+      // Add track line with first two positions at 1 and 2
       slider.append("line")
           .attr("class", "track")
           .attr("x1", x.range()[0])
           .attr("x2", x.range()[1])
-        .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+        .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); }) // TODO:: Tony unsure of this
           .attr("class", "track-inset")
         .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
           .attr("class", "track-overlay")
           .call(d3.drag()
               .on("start.interrupt", function() { slider.interrupt(); })
-              .on("start drag", function() {
+              .on("start drag", function() { // Set to time on drage
                 currentValue = d3.event.x;
                 update(x.invert(currentValue));
-                if (playButton.text() == "Pause") {
+                if (playButton.text() == "Pause") { // If moved to specified time, stop playing
                   playButton.text("Play"); 
                   clearInterval(session.timeline);
                 }
               })
           );
+
+      // Add overlayed ticks
       slider.insert("g", ".track-overlay")
         .attr("class", "ticks")
         .attr("transform", "translate(0," + 18 + ")")
@@ -1032,70 +1217,107 @@ $(function() {
         .attr("y", 10)
         .attr("text-anchor", "middle")
         .text(function(d) { return tickDateFormat(d); });
+
+      // Create circular handle
       var handle = slider.insert("circle", ".track-overlay")
           .attr("class", "handle")
           .attr("r", 9);
+
+      // Create label to put above handle 
       var label = slider.append("text")  
           .attr("class", "label")
           .attr("text-anchor", "middle")
           .text(handleDateFormat(startDate))
           .attr("transform", "translate(25," + (-20) + ")")
+      
+      // Handler for play button
       playButton
         .on("click", function() {
+          
           var button = d3.select(this);  
+          
+          // Toggle text
           if (button.text() == "Pause") {
+            
             button.text("Play"); 
-            clearInterval(session.timeline);
+            
+            // Clear time interval is paused
+            clearInterval(session.timeline); 
+          
           } else {
+            
             button.text("Pause");
-            session.timeline = setInterval(step, 200);
+            
+            // Start time interval is play pressed
+            session.timeline = setInterval(step, 200); 
           }
         })
-      function step() { 
-        update(x.invert(currentValue));
-        if (currentValue > targetValue) { 
-          currentValue = 0;
-          clearInterval(session.timeline);
-          playButton.text("Play");
-          return;
-        }
-        currentValue = currentValue + (targetValue/151);
-      }
-      session.style.widgets["timeline-date-field"] = field;
-      session.state.timeStart = startDate;
-      session.state.timeTarget = x.invert(targetValue);
-      if (loadingJsonFile && moment(session.state.timeEnd).toDate() < moment(session.state.timeTarget).toDate()) {
-        let t = moment(session.state.timeEnd).toDate();
-        currentValue = x(t);
-        handle.attr("cx", x(t));
-        label
-          .attr("x", x(t))
-          .text(handleDateFormat(t));
-      }
-      $("#global-timeline-wrapper").fadeIn();
-      function update(h) {
-        handle.attr("cx", x(h));
-        label
-          .attr("x", x(h))
-          .text(handleDateFormat(h));
-        session.state.timeEnd = h;
-        MT.setNodeVisibility(false);
-        MT.setLinkVisibility(false);
-        MT.updateStatistics();
-      }
-    })
-    .trigger("change");
 
+        // How far each tick is
+        function step() { 
+          update(x.invert(currentValue));
+
+          // If past end date, stop playing
+          if (currentValue > targetValue) { 
+            currentValue = 0;
+            clearInterval(session.timeline);
+            playButton.text("Play");
+            return;
+          }
+
+          // Update current value with new step
+          // TODO:: Tony why 151?
+          currentValue = currentValue + (targetValue/151);
+
+        }
+
+        // Update session variables with new values
+        session.style.widgets["timeline-date-field"] = field;
+        session.state.timeStart = startDate;
+        session.state.timeTarget = x.invert(targetValue);
+
+        // TODO:: Unsure what this implementaiton is
+        if (loadingJsonFile && moment(session.state.timeEnd).toDate() < moment(session.state.timeTarget).toDate()) {
+          let t = moment(session.state.timeEnd).toDate();
+          currentValue = x(t);
+          handle.attr("cx", x(t));
+          label
+            .attr("x", x(t))
+            .text(handleDateFormat(t));
+        }
+
+        // NOW show timeline
+        $("#global-timeline-wrapper").fadeIn();
+
+        // Move handle and show nodes depending on date
+        function update(h) {
+          handle.attr("cx", x(h));
+          label
+            .attr("x", x(h))
+            .text(handleDateFormat(h));
+          session.state.timeEnd = h;
+          MT.setNodeVisibility(false);
+          MT.setLinkVisibility(false);
+          MT.updateStatistics();
+        }
+
+      })
+      .trigger("change"); // Broadcast change
+
+  // On focus out of field in tab, set to variable
   $("#global-timeline-field").on("focusout", function() {
       session.style.overwrite.globalTimelineFieldVariable = session.style.widgets["node-timeline-variable"];
       session.style.overwrite.globalTimelineField = $(this).text();
     });
 
+  // Update/trigger link color change if not coloring links by value
   $("#link-color").on("change", function() {
     session.style.widgets["link-color"] = this.value;
     $window.trigger("link-color-change");
   });
 
+
+  // Update/trigger node selected color
   $("#selected-color").on("change", function() {
     session.style.widgets["selected-color"] = this.value;
     session.style.widgets["selected-color-contrast"] = MT.contrastColor(
@@ -1104,40 +1326,49 @@ $(function() {
     $window.trigger("selected-color-change");
   });
 
+  // Update/trigger page background color
   $("#background-color").on("change", function() {
     session.style.widgets["background-color"] = this.value;
     session.style.widgets["background-color-contrast"] = MT.contrastColor(this.value);
     $window.trigger("background-color-change");
   });
 
+  // Update whether or not timeline is pinned in session
   $("#timeline-network-pinned")
     .parent()
     .on("click", () => {
       session.style.widgets["node-timeline-network"] = "Pinned";
     });
 
+  // Update wheter or not timeline is pinned
+  // TODO:: Refactor, can just be true or false I assume
   $("#timeline-network-normal")
     .parent()
     .on("click", () => {
       session.style.widgets["node-timeline-network"] = "Normal";
     });
 
+  // Show link color table on click
   $("#link-color-table-show")
     .parent()
     .on("click", () => $("#link-color-table-wrapper").fadeIn());
 
+  // Hide link color table on click
   $("#link-color-table-hide")
     .parent()
     .on("click", () => $("#link-color-table-wrapper").fadeOut());
 
+  // Show node color table on click
   $("#node-color-table-show")
     .parent()
     .on("click", () => $("#node-color-table-wrapper").fadeIn());
 
+  // Hide node color table on click
   $("#node-color-table-hide")
     .parent()
     .on("click", () => $("#node-color-table-wrapper").fadeOut());
 
+  // Apply MY style if style file uploaded
   $("#apply-style").on("change", function() {
     if (this.files.length > 0) {
       let reader = new FileReader();
@@ -1146,11 +1377,13 @@ $(function() {
     }
   });
 
+  // Update version text in modal of application based on package.json
   $.getJSON("package.json", r => {
     MT.manifest = r;
     $("#version").text(r.version);
   });
 
+  // Open right click menu where event click is on link color table
   $("#link-color-table-wrapper").on("contextmenu", e => {
     e.preventDefault();
     $("#link-color-table-context").css({
@@ -1160,6 +1393,8 @@ $(function() {
     });
   });
 
+  // Handler for drag clicked on context menu for link color table
+  // TODO:: should trigger to update link color table show/hide as well
   $("#link-color-table-drag").on("click", function() {
     let $this = $(this);
     $this.parent().hide();
@@ -1172,6 +1407,7 @@ $(function() {
     }
   });
 
+  // Drag color table to mouse position while mouse down
   $("#link-color-table-draghandle").on("mousedown", function() {
     let body = $("body");
     let parent = $(this).parent();
@@ -1183,8 +1419,11 @@ $(function() {
     body.on("mouseup", () => body.off("mousemove").off("mouseup"));
   });
 
+  // Hide color table on click of hide in context menu
   $("#link-color-table-context-hide").on("click", () => $("#link-color-table-hide").parent().trigger('click'));
 
+  // Expand color table to not make it scrollable
+  // TODO: If expansion is too long, cannot see the rest of the rows - this needs to be updated
   $("#link-color-table-expand").on("click", function() {
     let $this = $(this);
     if ($this.text() == "Expand") {
@@ -1202,6 +1441,7 @@ $(function() {
     }
   });
 
+  // Toggle counts column visibility
   $("#link-color-table-counts").on("click", function() {
     let $this = $(this);
     if (session.style.widgets["link-color-table-counts"]) {
@@ -1214,6 +1454,7 @@ $(function() {
     $("#link-color-variable").change();
   });
 
+  // Toggle frequency column visbility
   $("#link-color-table-frequencies").on("click", function() {
     let $this = $(this);
     if (session.style.widgets["link-color-table-frequencies"]) {
@@ -1226,6 +1467,7 @@ $(function() {
     $("#link-color-variable").change();
   });
 
+  // Create node context menu on right click of node color table
   $("#node-color-table-wrapper").on("contextmenu", e => {
     e.preventDefault();
     $("#node-color-table-context").css({
@@ -1235,6 +1477,7 @@ $(function() {
     });
   });
 
+  // On drag option click, show drag header on table to enable drag
   $("#node-color-table-drag").on("click", function() {
     let $this = $(this);
     $this.parent().hide();
@@ -1247,6 +1490,7 @@ $(function() {
     }
   });
 
+  // Move table to mouse position while mousedown/dragging
   $("#node-color-table-draghandle").on("mousedown", function() {
     let body = $("body");
     let parent = $(this).parent();
@@ -1258,8 +1502,11 @@ $(function() {
     body.on("mouseup", () => body.off("mousemove").off("mouseup"));
   });
 
+  // Hide node color table on click of hide
   $("#node-color-table-context-hide").on("click", () => $("#node-color-table-hide").parent().trigger('click'));
 
+  // Expand node color table with no scroll
+  // TODO:: same problem as the link color table
   $("#node-color-table-expand").on("click", function() {
     let $this = $(this);
     if ($this.text() == "Expand") {
@@ -1277,6 +1524,7 @@ $(function() {
     }
   });
 
+  // Toggle hide/show node table counts column
   $("#node-color-table-counts").on("click", function() {
     let $this = $(this);
     if (session.style.widgets["node-color-table-counts"]) {
@@ -1289,6 +1537,7 @@ $(function() {
     $("#node-color-variable").change();
   });
 
+  // Toggle hide/show node table frequencies column
   $("#node-color-table-frequencies").on("click", function() {
     let $this = $(this);
     if (session.style.widgets["node-color-table-frequencies"]) {
@@ -1301,26 +1550,38 @@ $(function() {
     $("#node-color-variable").change();
   });
 
+  // Handler for Search change
   $("#search")
     .on({"blur": function() {
       setTimeout(function () {
         $('#search-results').html("").hide();
       }, 300);
     },"input": function() {
+
+      // Retrieve nodes to search through
       let nodes = session.data.nodes
       const n = nodes.length
+
       //#298
+      // Retrieve Text to search for nodes
       let v = this.value;
       const val = v;
+
+      // If search text empty, ensure no nodes selected
       if (v == "") {
         $('#search-results').html("").hide();
         for(let i = 0; i < n; i++){
           nodes[i].selected = false;
         }
       } else {
+
+        // Hide results until finished populating
         $('#search-results').html("").hide();
+
+        // Get current field searching through
         const field = session.style.widgets["search-field"];
         
+        // Create data set of nodes that contain field
         let dataSet = new Set();
         for(let i = 0; i < n; i++){
           let node = nodes[i];
@@ -1328,13 +1589,23 @@ $(function() {
             dataSet.add(`${node[field]}`);
           }
         }
+
+        // Convert to array
+        // TODO:: not sure why cant be array in first place, unless not counting duplicates
         let dataArray = Array.from(dataSet).sort();
+
         //#298
+        // Uppercase w clicked, so searching for whole word - regex
         if (session.style.widgets["search-whole-word"])  v = '\\b' + v + '\\b';
+
+        // Initialize variable for regex
         let vre;
+
+        // Uppercase c clicked, so ensure case sensitive regex
         if (session.style.widgets["search-case-sensitive"])  vre = new RegExp(v);
         else  vre = new RegExp(v, 'i');
 
+        // Append list element to search results if regex matches item in array
         $.each(dataArray, function(i) {
           if (dataArray[i].match(vre)) {
             let $li = $('<li/>')
@@ -1344,6 +1615,8 @@ $(function() {
           }
         });
         
+        // If result clicked on autocomplete wrapper - apply search to selected value - repeat above process
+        // TODO:: can refactor for both above and below functionality to be in 1 function
         $('.autocomplete-wrapper li').on('click', function() {
           let ac_v = $(this).attr('data-value');
           const ac_val = ac_v;
@@ -1354,7 +1627,6 @@ $(function() {
           if (session.style.widgets["search-whole-word"])  ac_v = '\\b' + ac_v + '\\b';
           if (session.style.widgets["search-case-sensitive"])  ac_vre = new RegExp(ac_v);
           else ac_vre = new RegExp(ac_v, 'i');
-
           for(let i = 0; i < n; i++){
             let node = nodes[i];
             if (!node[field]) {
@@ -1366,10 +1638,13 @@ $(function() {
             if (typeof node[field] == "number") {
               node.selected = (node[field] + "" == ac_val);
             }
-          }        
+          }     
+          
+          // Node now should be selected, show trigger
           $window.trigger("node-selected");
         });
 
+        // Ensure all other nodes are not in selected state
         for(let i = 0; i < n; i++){
           let node = nodes[i];
           if (!node[field]) {
@@ -1383,47 +1658,60 @@ $(function() {
           }
         }
 
+        // If nothing selected, no match
+        // TODO:: Can refactor to not have to iterate through nodes list again to check for selected
+        // Just set a boolean when one selected node has been found
         if (!nodes.some(node => node.selected)) alertify.warning("No matches!");
       }
       $window.trigger("node-selected");
     }
   });
 
+  // Trigger search when field type changes (i.e. ID to Cluster)
   $("#search-field").on("change", function() {
     session.style.widgets["search-field"] = this.value;
     $("#search").trigger("input");
   });
 
+  // Show offline message when not connected to internet
   if (navigator.onLine) $(".ifOnline").show();
 
+  // If doing demo, launch demo, else launch files view
   if (location.hash == "#demo") {
     $.getJSON("demo/Demo_outbreak_session.microbetrace", MT.applySession);
   } else {
     MT.launchView("files");
   }
 
+  // Handler for macros
   $(document).on("keydown", e => {
+
+    // Ctrl + F for going into search
     if (e.ctrlKey && e.key == "f") {
       e.preventDefault();
       $("#search").focus();
     }
+
+    // Ctrl + S for saving session
     if (e.ctrlKey && e.key == "s") {
       e.preventDefault();
       $("#session-save-modal").modal();
     }
   });
 
+  // Save layout when changed
   layout.on("stateChanged", () => session.layout = MT.cacheLayout(layout.root.contentItems[0]));
 
+  // Triggered events that are view independant
   $window
-    .on("node-selected", () => $("#numberOfSelectedNodes").text(session.data.nodes.filter(d => d.selected).length.toLocaleString()))
-    .on("click", () => $("#network-statistics-context, #link-color-table-context, #node-color-table-context").hide())
-    .on("node-visibility", () => {  
+    .on("node-selected", () => $("#numberOfSelectedNodes").text(session.data.nodes.filter(d => d.selected).length.toLocaleString())) // Update selected nodes stat whenever node selected
+    .on("click", () => $("#network-statistics-context, #link-color-table-context, #node-color-table-context").hide()) // TODO:: Does this do anything?
+    .on("node-visibility", () => {  // When nodes become visible, trigger color change if by field
       if (session.style.widgets["node-color-variable"] !== "None") { 
         $("#node-color-variable").trigger("change");
       }
     })
-    .on("link-visibility", () => {
+    .on("link-visibility", () => { // Likewise for links
       if (session.style.widgets["link-color-variable"] !== "None") {
         $("#link-color-variable").trigger("change");
       }
@@ -1431,8 +1719,8 @@ $(function() {
         $("#node-color-variable").trigger("change");
       }
     })
-    .on("resize", () => layout.updateSize())
-    .on("devtoolschange", () => {
+    .on("resize", () => layout.updateSize()) 
+    .on("devtoolschange", () => { // Dev Tools Logging
       if (window.devtools.isOpen) {
         console.log(
           "%cPLEASE DO NOT TYPE OR PASTE ANYTHING HERE.",
@@ -1444,11 +1732,12 @@ $(function() {
       }
     });
 
-  if (window.devtools.isOpen) {
+  if (window.devtools.isOpen) { // TODO:: Not sure what this does.  Trigger devtoolschange
     $window.trigger("devtoolschange");
   }
 });
 
+// Styling of alerts that pop up
 alertify.defaults.transition = "slide";
 alertify.defaults.theme.ok = "btn btn-primary";
 alertify.defaults.theme.cancel = "btn btn-danger";

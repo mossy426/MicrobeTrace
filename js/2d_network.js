@@ -285,11 +285,22 @@
         if(d) return polygonsTick;
         else return layoutTick;		
       }
+
+      // setTimeout(function(){ 
+      //   alert("Hello"); 
+      // }, 3000);
+      
       force.nodes(session.network.nodes).on('tick', handleTick(settings['polygons-show']));
       force.force('link').links(vlinks);
       force.force('link').distance(settings['link-length']);
       force.alpha(0.3).alphaTarget(0).restart();
+
+
       console.log("Network render time:", (Date.now() - start).toLocaleString(), 'ms');
+    }
+
+    function InitialTicks() {
+      
     }
 
     function getVLinks() {
@@ -897,6 +908,7 @@
     });
 	
     $('#node-radius-variable').on('change', function () {
+      console.log('node radius variable::: ', this.value);
       if (this.value == 'None') {
         $('#node-max-radius-row').slideUp();
         $('#node-min-radius-row').slideUp();
@@ -917,7 +929,11 @@
     });
 
     function updateNodeColors() {
-      let variable = settings['node-color-variable'];
+
+      // TODO:: Temp fix to refresh settings
+      settings = session.style.widgets;
+      let variable = settings["node-color-variable"];
+      console.log('node colors var: ', variable);
       let nodes = svg.select('g.nodes').selectAll('g').select('path').data(session.network.nodes).classed('selected', d => d.selected);
       if (variable == 'None') {
         let col = settings['node-color'];
@@ -1345,10 +1361,13 @@
     
     $('#network-friction').on('input', function () {
       let v = parseFloat(this.value);
+      console.log('friction: ', this.value);
       force.velocityDecay(v);
       force.alpha(0.3).alphaTarget(0).restart();
       settings['network-friction'] = v;
     });
+
+    $('#network-friction').val(0.05).trigger("input");
 
     $('#network-gravity').on('input', function () {
       let v = parseFloat(this.value);

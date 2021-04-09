@@ -3,6 +3,8 @@
 
   let MT = {};
 
+  let sessionApplied = false;
+
   /** Matrix
    * ID1
    * ID2
@@ -560,6 +562,7 @@
       if(oldSession.data[v]) session.data[v] = uniq(session.data[v].concat(oldSession.data[v]));
     });
     if(oldSession.network) session.network = oldSession.network;
+    sessionApplied = true;
     MT.applyStyle(session.style);
     // if(!links[0]['distance']){  #249
     //   if(links[0]['tn93']){
@@ -592,6 +595,23 @@
         }
       }
     }
+
+    // Need session applied variable since this will break restoring full microbe trace file vs loading a style file
+    if (!sessionApplied) {
+      // Trigger global style updates
+      $("#node-color-variable").trigger("change");
+      $("#node-color-border").trigger("change");
+      $("#link-color-variable").trigger("change");
+      $("#selected-color").trigger("change");
+      $("#background-color").trigger("change");
+
+      // 2d Network Specific
+      $('#node-radius-variable').trigger("change");
+      $('#node-symbol-variable').trigger("change");
+    } else {
+      sessionApplied = false;
+    }
+
   };
   
   MT.applyHIVTrace = hivtrace => {
@@ -1430,7 +1450,7 @@
             t = true;
             node.degree++;
           }
-          // Wouldn't this cause a bug if it's done after?
+          
           // Once both source and target equal eachother, get out of loop
           if (s && t) break;
         }
@@ -1541,6 +1561,7 @@
     return out;
   };
 
+  //  TODO:: Tony
   MT.updatePinNodes = copy => {
     let nodes = session.network.nodes;
     let n = nodes.length;
