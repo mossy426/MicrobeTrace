@@ -172,12 +172,16 @@
     $('#table-font-size').on('input', resetTextsize);
 
     $('#table-export').click(function(){
+
       let format = $('#export-table-file-type').val();
       let data = JSON.parse(JSON.stringify(session.data[$('input[name=table-dataset]:checked').data('value')]));
       let name = $('#export-table-file-name').val();
+
       if(format == 'csv'){
+
         let blob = new Blob([Papa.unparse(data)], {type: 'text/csv;charset=utf-8'});
         saveAs(blob, name + '.' + format);
+
       } else if(format == 'xlsx'){
         let headers = session.data[$('input[name=table-dataset]:checked').data('value').slice(0,-1) + 'Fields'];
         data.forEach(thing => {
