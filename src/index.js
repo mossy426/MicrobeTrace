@@ -119,6 +119,7 @@ $(function() {
   });
 
   $("#save-data").on("click", () => {
+    let zip = new JSZip();
     let name = $("#save-file-name").val();
     let format = $("#save-file-format").val();
     let data;
@@ -127,7 +128,6 @@ $(function() {
     } else if (format == "hivtrace") {
       data = MT.exportHIVTRACE();
     } else {
-      let zip = new JSZip();
 
       if ($('#save-file-cluster').is(":checked")){
         // it is checked
@@ -229,7 +229,11 @@ $(function() {
       }
 
     }
+
+    format = 'microbetrace';
+
     if ($("#save-file-compress").is(":checked")) {
+      
       zip.file(name + "." + format, data);
       zip
         .generateAsync({
