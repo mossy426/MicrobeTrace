@@ -325,6 +325,7 @@
     warnings: []
   });
   
+  // Creates a skeleton of session to manipulate, which will replace the session if saved
   MT.tempSkeleton = () => ({
     componentCache: {},
     mapData: {},
@@ -342,6 +343,10 @@
     trees: {}
   });
   
+  /**
+   * Instantiates a node with default properties 
+   * @returns Node object
+   */
   MT.defaultNode = () => ({
     index: session.data.nodes.length,
     _id: "",
@@ -352,8 +357,14 @@
     origin: []
   });
   
+  // Determines whether or not data type is number
   let isNumber = a => typeof a == "number";
   
+  /**
+   * Determines f item is uniq in object
+   * @param {Object} a - object to check against 
+   * @returns boolean
+   */
   let uniq = a => {
     let seen = {};
     let out = [];
@@ -369,7 +380,14 @@
     return out;
   };
   
+  /**
+   * Determines f item is uniq in object
+   * @param {Node} newNode - node to be added
+   * @param {Boolean} check - TODO:: What is this?
+   * @returns {Boolean} - 0,1 - whether or not node is new node
+   */
   MT.addNode = (newNode, check) => {
+    // TODO: Determine cause
     if ('id' in newNode){
       if('_id' in newNode){
         //This is here because the logic won't negate for some reason. I don't get it...
@@ -377,8 +395,14 @@
         newNode._id = newNode.id;
       }
     }
+
+    // If id is number, convert to string
     if (isNumber(newNode._id)) newNode._id = "" + newNode._id;
+
+    // If in node exlustions - return false/0
     if (session.data.nodeExclusions.indexOf(newNode._id) > -1) return 0;
+
+    // If checked, TODO:: Tony what is this?
     if (check) {
       let nodes = session.data.nodes;
       const n = nodes.length;
@@ -391,31 +415,57 @@
         }
       }
     }
+
+    // Add new node to session
     session.data.nodes.push(Object.assign(MT.defaultNode(), newNode));
+
+    // Node was added/return true/1
     return 1;
   };
   
+  /**
+   * Add link to tree
+   * @param {Link} newLink - link to be added to true
+   * @returns {Boolean} - 0,1 - whether or not link is new link
+   */
   MT.addLink = newLink => {
+
+    // If the source node doesnt exist in the matrix, instantiate an empty object at the key
     if(!temp.matrix[newLink.source]){
       temp.matrix[newLink.source] = {};
     }
+
+    // If the target node doesnt exist in the matrix, instantiate an empty object at the key
     if(!temp.matrix[newLink.target]){
       temp.matrix[newLink.target] = {};
     }
+
+    // If link source + target are same return false since a new link is not added
     if (newLink.source == newLink.target) return 0;
+
+    // Default link to being new link
     let linkIsNew = 1;
+
+    // Get all links of session
     let sdlinks = session.data.links;
+
+    // If link exists..
     if(temp.matrix[newLink.source][newLink.target]){
       let oldLink = temp.matrix[newLink.source][newLink.target];
+      // TODO: Tony what does this do?
       let origin = uniq(newLink.origin.concat(oldLink.origin));
+      // Overwrite old link with new link
       Object.assign(oldLink, newLink, {origin: origin});
+      // Since overwritten, link is not added
       linkIsNew = 0;
+    // If link exists in reverse order
     } else if(temp.matrix[newLink.target][newLink.source]){
       console.warn("This scope should be unreachable. If you're using this code, something's wrong.");
       let oldLink = temp.matrix[newLink.target][newLink.source];
       let origin = uniq(newLink.origin.concat(oldLink.origin));
       Object.assign(oldLink, newLink, {origin: origin});
       linkIsNew = 0;
+    // Link doesn't exist - so create a new link and assign source/target
     } else {
       newLink = Object.assign({
         index: sdlinks.length,
@@ -427,20 +477,36 @@
       }, newLink);
       temp.matrix[newLink.source][newLink.target] = newLink;
       temp.matrix[newLink.target][newLink.source] = newLink;
+
+      // Push link to session links
       sdlinks.push(newLink);
+
+      // TODO: Remove this and test.  Shouldn't need to set to 1 since it's instatiated as 1
       linkIsNew = 1;
     }
     return linkIsNew;
   };
   
+  /**
+   * Process saved SVG to display in session
+   * @param {SVG} svg 
+   */
   MT.processSVG = svg => {
     let nodes = [];
+    // Get svg element in xml
     const $xml = $(svg);
+
+    // If edges exist
     if ($xml.find("#edges").length) {
+      // For each node
       $xml.find("#nodes circle").each((i, node) => {
+        // Retreive node
         const $node = $(node);
+        // get node id of gephi
         const gephid = $node.attr("class");
+        // add node to nodes list
         nodes.push(gephid);
+        // Add node to tree
         MT.addNode(
           {
             id: gephid + "",
@@ -451,23 +517,37 @@
           false
         );
       });
+      // Add color and size to node style fields 
       session.data.nodeFields.push("color");
       session.data.nodeFields.push("size");
+      // For each edge/link
       $xml.find("#edges path").each((i, link) => {
+        // Extract link
         const $link = $(link);
+        // Extract coordinates of link found in class
         const coords = $link.attr("class").split(" ");
+        // create data object for coordinates
         let base = {
           source: coords[0] + "",
           target: coords[1] + "",
           color: $link.attr("stroke"),
           origin: ["Scraped MicrobeTrace SVG"]
         };
+        // Apply default distance metric to 0
         base[session.style.widgets['default-distance-metric']] = 0;
+
+        // Add link to tree
         MT.addLink(base, true);
       });
+      
+      // Push the color attribute to link style fields 
       session.data.linkFields.push("color");
+
+    // If no edges, then check for nodes/singletons
     } else {
+      // For each node 
       $xml.find(".nodes g").each((i, node) => {
+        // Add node to nodes array
         nodes.push(
           $(node)
             .attr("transform")
@@ -475,6 +555,7 @@
             .split(",")
             .map(parseFloat)
         );
+        // Add node to tree
         MT.addNode(
           {
             id: i + "",
@@ -483,33 +564,50 @@
           false
         );
       });
+
+      // For each line/link/edge
       $xml.find("line").each((i, link) => {
+        // Extract Link
         let $l = $(link);
+        // Get source index of node where x1,y1 are true 
         const source = nodes.findIndex(d => {
           return (
             Math.abs(d[0] - parseFloat($l.attr("x1"))) < 0.0001 &&
             Math.abs(d[1] - parseFloat($l.attr("y1"))) < 0.0001
           );
         });
+        // Get target index of node where x2,y2 are true 
         const target = nodes.findIndex(d => {
           return (
             Math.abs(d[0] - parseFloat($l.attr("x2"))) < 0.0001 &&
             Math.abs(d[1] - parseFloat($l.attr("y2"))) < 0.0001
           );
         });
+
+        // If either source or target not found, end the function 
         if (source < 0 || target < 0) return;
+        // Create data object for link
         let base = {
           source: source + "",
           target: target + "",
           origin: ["Scraped SVG"]
         };
+        // Set default style for distance to 0
         base[session.style.widgets['default-distance-metric']] = 0;
+        // Add link to tree
         MT.addLink(base, true);
       });
     }
+    // TODO:: Find out what this does
     MT.runHamsters();
   };
   
+  /**
+   * Applies session of json object
+   * @param {JSON} json - json object to parse
+   * @param {String} extension - file extension
+   * @returns {void}
+   */
   MT.processJSON = (json, extension) => {
     let data;
     try {
@@ -532,6 +630,11 @@
     }
   };
   
+  /**
+   * Applies session of json object
+   * @param {Object} oldSession - parsed JSON object to display session
+   * @returns {void}
+   */
   MT.applySession = oldSession => {
     //If anything here seems eccentric, assume it's to maintain compatibility with
     //session files from older versions of MicrobeTrace.
@@ -542,8 +645,13 @@
     // since an event is registered in both 2d_network.html and index.js, add namespace to events in 2d_network so they can be removed without affecting events in index
     $window.off('.2d');
 
+    // Ensure tree is fresh/reset
     MT.reset();
+
+    // Disable launch button
     $("#launch").prop("disabled", true);
+
+    // Set session properties based on old session
     session.files = oldSession.files;
     session.state = oldSession.state;
     session.style = Object.assign({},
@@ -551,18 +659,32 @@
       oldSession.style
     );
     session.layout = oldSession.layout;
+
+    // New start time for new session instantiation
     session.meta.startTime = Date.now();
+
+    // Instaniate nodes/links
     const nodes = oldSession.data.nodes,
           links = oldSession.data.links,
           n = nodes.length,
           m = links.length;
+
+    // Add nodes/links to tree
     for(let i = 0; i < n; i++) MT.addNode(nodes[i]);
     for(let j = 0; j < m; j++) MT.addLink(links[j]);
+
+    // Set styling fields based on old sesssion
     ['nodeFields', 'linkFields', 'clusterFields', 'nodeExclusions'].forEach(v => {
       if(oldSession.data[v]) session.data[v] = uniq(session.data[v].concat(oldSession.data[v]));
     });
+
+    // Set network if exists in old session
     if(oldSession.network) session.network = oldSession.network;
+
+    // Session applied to apply style changes vs style applied
     sessionApplied = true;
+
+    // Apply styling based on session
     MT.applyStyle(session.style);
     // if(!links[0]['distance']){  #249
     //   if(links[0]['tn93']){
@@ -571,25 +693,37 @@
     //     session.style.widgets['link-sort-variable'] = 'snps';
     //   }
     // }
+    // TODO:: Determine what this does
     MT.finishUp(true);
+
+    // Show network statistics of new tree
     $("#network-statistics-show").parent().trigger("click");
   };
   
+  /**
+   * Applies style to session
+   * @param {Object} style - parsed JSON style to display session
+   * @returns {void}
+   */
   MT.applyStyle = style => {
     session.style = style;
     session.style.widgets = Object.assign({},
       MT.defaultWidgets,
       style.widgets
     );
+    // Create Color Maps
     MT.createLinkColorMap();
     MT.createNodeColorMap();
     MT.createPolygonColorMap();
+
     let $id = null;
     for (let id in session.style.widgets) {
       $id = $("#" + id);
       if ($id.length > 0) {
+        // If radio button or checkbox style, trigger the click to trigger styling/UX
         if (["radio", "checkbox"].includes($id[0].type)) {
           if (session.style.widgets[id]) $id.trigger("click");
+          // Set value of widget
         } else {
           $id.val(session.style.widgets[id]);
         }
@@ -614,6 +748,7 @@
 
   };
   
+  //TODO: Ignore for now since HIV may not be getting used
   MT.applyHIVTrace = hivtrace => {
     self.session = MT.sessionSkeleton();
     session.meta.startTime = Date.now();
@@ -646,6 +781,7 @@
     MT.runHamsters();
   };
   
+  // TODO: Tony what is ghost?  Only Sample data?
   MT.applyGHOST = ghost => {
     self.session = MT.sessionSkeleton();   
     session.meta.startTime = Date.now();
@@ -677,9 +813,15 @@
     MT.runHamsters();
   }; 
   
+  // Decodes utf 
   let decoder = new TextDecoder("utf-8");
   MT.decode = x => decoder.decode(x);
   
+  /**
+   * Parses through fasta using worker
+   * @param {String} text - fasta string to parse 
+   * @returns 
+   */
   MT.parseFASTA = text => {
     return new Promise(resolve => {
       let computer = new Worker("workers/parse-fasta.js");
@@ -692,6 +834,11 @@
     });
   };
 
+  /**
+   * Parses through mega using worker
+   * @param {String} text - MEGA string to parse 
+   * @returns 
+   */
   MT.parseMEGA = text => {
     return new Promise(resolve => {
       let computer = new Worker("workers/parse-mega.js");
@@ -704,6 +851,11 @@
     });
   };
   
+  /**
+   * Parses through csv matrix
+   * @param {File} file - csv file to be parsed
+   * @returns 
+   */
   MT.parseCSVMatrix = file => {
     return new Promise(resolve => {
       let check = session.files.length > 1;
@@ -722,7 +874,7 @@
             _id: filterXSS(nodes[i]),
             origin: origin
           }, check);
-        }
+        }s
         const links = data.links;
         const tl = links.length;
         for (let j = 0; j < tl; j++) {
