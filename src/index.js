@@ -1,6 +1,10 @@
 $(function() {
   "use strict";
 
+  let linkKeyboardPositionEnabled = false;
+  let nodeKeyboardPositionEnabled = false;
+  let statsKeyboardPositionEnabled = false;
+
   if (navigator.userAgent.indexOf("MSIE") >= 0 || navigator.appName.indexOf("Microsoft Internet Explorer") >= 0) {
     $("#ie-warning").show();
     throw new Error("MicrobeTrace does not work on Internet Explorer.");
@@ -115,18 +119,121 @@ $(function() {
   });
 
   $("#save-data").on("click", () => {
+    let zip = new JSZip();
     let name = $("#save-file-name").val();
     let format = $("#save-file-format").val();
     let data;
-    if (format == "microbetracestyle") {
+    if (format == "style") {
       data = JSON.stringify(session.style);
     } else if (format == "hivtrace") {
       data = MT.exportHIVTRACE();
     } else {
-      data = JSON.stringify(session);
+
+      if ($('#save-file-cluster').is(":checked")){
+        // it is checked
+
+        let clusterNodeList = [];
+        let clusterLinkList = [];
+        let singletonNodeList = [];
+        let dyadNodeList = [];
+        let dyadEdgeList = [];
+        let nodes = session.data.nodes;
+        let links = session.data.links;
+
+        session.data.clusters.forEach(cluster => {
+
+          console.log('cluster: ', cluster);
+          let clusterNodes = nodes.filter(node => node.cluster === cluster.id);
+          let clusterLinks = links.filter(link => link.cluster === cluster.id);
+
+          // We have a singleton - all singletons go into one file
+          if(clusterNodes.length == 1){
+            singletonNodeList.push(clusterNodes[0]);
+          // We have a dyad - all dyads go into one file
+          } else if (clusterNodes.length == 2) {
+            // Add both nodes
+            dyadNodeList.push(clusterNodes[0]);
+            dyadNodeList.push(clusterNodes[1]);
+            // Add the single link
+            dyadEdgeList.push(clusterLinks[0]);
+          // We have a cluster
+          } else {
+            // Add array object of nodes with matching cluster
+            clusterNodeList.push(clusterNodes);
+
+            // Add array object of links with matching cluster
+            clusterLinkList.push(clusterLinks);
+          }
+
+        });
+
+        console.log('cluster nodes List: ', clusterNodeList);
+
+        let singletonFolder = null;
+        let dyadFolder = null;
+
+        for (var i = 0; i < session.data.clusters.length; i++) {
+
+          let currentCluster = session.data.clusters[i];
+
+          let cluster = clusterNodeList.filter(nodeList => nodeList[0].cluster == currentCluster.id);
+          // Check if cluster is in clusterNodesList
+          if(cluster.length > 0){
+
+            console.log('creating cluster');
+            // Create cluster folder
+            var clusterFolder = zip.folder("cluster-" + cluster[0][0].cluster);
+          
+            // If node and edge lists exists, add them to the current folder
+            if(clusterNodeList[i]) {
+              let blob = new Blob([Papa.unparse(cluster[0])], {type: 'text/csv;charset=utf-8'});
+              clusterFolder.file("nodeList.csv", blob);
+            }
+
+            let clusterLink = clusterLinkList.filter(LinkList => LinkList[0].cluster == currentCluster.id);
+
+            if(clusterLink) {
+              let blob = new Blob([Papa.unparse(clusterLink[0])], {type: 'text/csv;charset=utf-8'});
+              clusterFolder.file("edgeList.csv", blob);
+            }
+          }
+        }
+
+        if(dyadNodeList.length > 0){
+          dyadFolder = zip.folder("dyads");
+          // Add all dyads in one shot
+          let nodesBlob = new Blob([Papa.unparse(dyadNodeList)], {type: 'text/csv;charset=utf-8'});
+          dyadFolder.file("nodeList.csv", nodesBlob);
+          let edgesBlob = new Blob([Papa.unparse(dyadEdgeList)], {type: 'text/csv;charset=utf-8'});
+          dyadFolder.file("edgeList.csv", edgesBlob);
+        }
+
+        if (singletonNodeList.length > 0) {
+          singletonFolder = zip.folder("singletons");
+          // Add all singletons in one shot
+          let blob = new Blob([Papa.unparse(singletonNodeList)], {type: 'text/csv;charset=utf-8'});
+          singletonFolder.file("nodeList.csv", blob);
+        }
+
+        // generate zip repsetnation in memory
+        zip.generateAsync({type:"blob"}).then(function(content) {
+            // see FileSaver.js
+            saveAs(content, name);
+        });
+
+        // End function
+        return;
+        
+      } else {
+        data = JSON.stringify(session);
+      }
+
     }
+
+    format = 'microbetrace';
+
     if ($("#save-file-compress").is(":checked")) {
-      let zip = new JSZip();
+      
       zip.file(name + "." + format, data);
       zip
         .generateAsync({
@@ -141,6 +248,30 @@ $(function() {
       let blob = new Blob([data], { type: "application/json;charset=utf-8" });
       saveAs(blob, name + "." + format);
     }
+  });
+
+  $("#save-file-cluster").on("change", function(){
+
+    if ($('#save-file-cluster').is(":checked")){
+      $("#save-file-compress").attr("disabled", true);
+      console.log('disabled');
+    } else {
+      $("#save-file-compress").removeAttr("disabled");
+    }
+   
+  });
+
+  $("#save-file-format").on("change", function(){
+
+    // Ensure compress is not disabled if format has been switched to style
+    if ($('#save-file-format').val() == 'style'){
+      $("#save-file-compress").removeAttr("disabled");
+      $("#cluster-checkbox-container").hide(true);
+    } else {
+      $('#save-file-cluster').prop('checked', false);
+      $("#cluster-checkbox-container").show(true);
+    }
+   
   });
 
   $("#OpenTab").on("change", function(){
@@ -390,13 +521,16 @@ $(function() {
   $("#moveStats").on("click", function() {
     let $this = $(this);
     $this.parent().hide();
-    if ($this.text() == "Drag") {
+    if ($this.text() == "Drag/Arrow Keys") {
       $("#network-statistics-draghandle").slideDown();
+      statsKeyboardPositionEnabled = true;
       $this.text("Pin");
     } else {
       $("#network-statistics-draghandle").slideUp();
-      $this.text("Drag");
+      statsKeyboardPositionEnabled = false;
+      $this.text("Drag/Arrow Keys");
     }
+
   });
 
   $("#network-statistics-draghandle").on("mousedown", function() {
@@ -1018,14 +1152,81 @@ $(function() {
   $("#link-color-table-drag").on("click", function() {
     let $this = $(this);
     $this.parent().hide();
-    if ($this.text() == "Drag") {
+    if ($this.text() == "Drag/Arrow Keys") {
+      linkKeyboardPositionEnabled = true;
       $("#link-color-table-draghandle").slideDown();
       $this.text("Pin");
     } else {
+      linkKeyboardPositionEnabled = false;
       $("#link-color-table-draghandle").slideUp();
-      $this.text("Drag");
+      $this.text("Drag/Arrow Keys");
     }
   });
+
+
+  // Move any draggable color menus on keydown
+  $(document).keydown(function(event) {
+  
+    if(linkKeyboardPositionEnabled || nodeKeyboardPositionEnabled || statsKeyboardPositionEnabled) {
+
+      switch(event.key) {
+        case 'ArrowRight':
+
+          if(linkKeyboardPositionEnabled) {
+            $("#link-color-table-wrapper").css("right", parseFloat($("#link-color-table-wrapper").css("right")) - 1 + "px");
+          }
+          if(nodeKeyboardPositionEnabled) {
+            $("#node-color-table-wrapper").css("right", parseFloat($("#node-color-table-wrapper").css("right")) - 1 + "px");
+          }
+          if(statsKeyboardPositionEnabled) {
+            $("#network-statistics-wrapper").css("right", parseFloat($("#network-statistics-wrapper").css("right")) - 1 + "px");
+          }
+         
+          break;
+        case 'ArrowLeft':
+
+          if(linkKeyboardPositionEnabled) {
+            $("#link-color-table-wrapper").css("right", parseFloat($("#link-color-table-wrapper").css("right")) + 1 + "px");
+          }
+          if(nodeKeyboardPositionEnabled) {
+            $("#node-color-table-wrapper").css("right", parseFloat($("#node-color-table-wrapper").css("right")) + 1 + "px");
+          }
+          if(statsKeyboardPositionEnabled) {
+            $("#network-statistics-wrapper").css("right", parseFloat($("#network-statistics-wrapper").css("right")) + 1 + "px");
+          }
+
+          break;
+        case 'ArrowUp':
+
+          if(linkKeyboardPositionEnabled) {
+            $("#link-color-table-wrapper").css("top", parseFloat($("#link-color-table-wrapper").css("top")) - 1 + "px");
+          }
+          if(nodeKeyboardPositionEnabled) {
+            $("#node-color-table-wrapper").css("top", parseFloat($("#node-color-table-wrapper").css("top")) - 1 + "px");
+          }
+          if(statsKeyboardPositionEnabled) {
+            $("#network-statistics-wrapper").css("bottom", parseFloat($("#network-statistics-wrapper").css("bottom")) + 1 + "px");
+          }
+
+          break;
+        case 'ArrowDown':
+
+          if(linkKeyboardPositionEnabled) {
+            $("#link-color-table-wrapper").css("top", parseFloat($("#link-color-table-wrapper").css("top")) + 1 + "px");
+          }
+          if(nodeKeyboardPositionEnabled) {
+            $("#node-color-table-wrapper").css("top", parseFloat($("#node-color-table-wrapper").css("top")) + 1 + "px");
+          }
+          if(statsKeyboardPositionEnabled) {
+            $("#network-statistics-wrapper").css("bottom", parseFloat($("#network-statistics-wrapper").css("bottom")) - 1 + "px");
+          }
+
+          break;
+        default:
+          break;
+      }
+    }
+});
 
   $("#link-color-table-draghandle").on("mousedown", function() {
     let body = $("body");
@@ -1093,12 +1294,14 @@ $(function() {
   $("#node-color-table-drag").on("click", function() {
     let $this = $(this);
     $this.parent().hide();
-    if ($this.text() == "Drag") {
+    if ($this.text() == "Drag/Arrow Keys") {
       $("#node-color-table-draghandle").slideDown();
+      nodeKeyboardPositionEnabled = true;
       $this.text("Pin");
     } else {
       $("#node-color-table-draghandle").slideUp();
-      $this.text("Drag");
+      nodeKeyboardPositionEnabled = false;
+      $this.text("Drag/Arrow Keys");
     }
   });
 

@@ -62,7 +62,7 @@
       <li class="nav-item dropdown">
         <a href="#" class="nav-link dropdown-toggle py-0" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View</a>
         <div class="dropdown-menu">
-          <a href="#" class="dropdown-item viewbutton" data-href="pixi">Pixi</a>
+          <!-- <a href="#" class="dropdown-item viewbutton" data-href="pixi">Pixi</a> -->
           <a href="#" class="dropdown-item viewbutton" data-href="2d_network">2D Network</a>
           <a href="#" class="dropdown-item viewbutton" data-href="3d_network">3D Network</a>
           <a href="#" class="dropdown-item viewbutton" data-href="histogram">Histogram</a>
@@ -74,7 +74,7 @@
           <a href="#" class="dropdown-item viewbutton" data-href="scatterplot">Scatterplot</a>
           <a href="#" class="dropdown-item viewbutton" data-href="waterfall">Waterfall</a>
           <a href="#" class="dropdown-item viewbutton" data-href="geo_map">Map</a>
-          <a href="#" class="dropdown-item viewbutton" data-href="choropleth">Choropleth</a>
+          <!-- <a href="#" class="dropdown-item viewbutton" data-href="choropleth">Choropleth</a> -->
           <a href="#" class="dropdown-item viewbutton" data-href="globe">Globe</a>
           <a href="#" class="dropdown-item viewbutton" data-href="gantt">Gantt</a>
           <a href="#" class="dropdown-item viewbutton" data-href="timeline">Epi Curve</a>
@@ -221,7 +221,7 @@ performance of this software.</pre>
   </div>
 
   <div id="link-color-table-context" class="dropdown-menu">
-    <a href="#" id="link-color-table-drag" class="dropdown-item">Drag</a>
+    <a href="#" id="link-color-table-drag" class="dropdown-item">Drag/Arrow Keys</a>
     <a href="#" id="link-color-table-context-hide" class="dropdown-item">Hide</a>
     <a href="#" id="link-color-table-expand" class="dropdown-item">Expand</a>
     <a href="#" id="link-color-table-counts" class="dropdown-item">Toggle Counts</a>
@@ -234,7 +234,7 @@ performance of this software.</pre>
   </div>
 
   <div id="node-color-table-context" class="dropdown-menu">
-    <a href="#" id="node-color-table-drag" class="dropdown-item">Drag</a>
+    <a href="#" id="node-color-table-drag" class="dropdown-item">Drag/Arrow Keys</a>
     <a href="#" id="node-color-table-context-hide" class="dropdown-item">Hide</a>
     <a href="#" id="node-color-table-expand" class="dropdown-item">Expand</a>
     <a href="#" id="node-color-table-counts" class="dropdown-item">Toggle Counts</a>
@@ -271,7 +271,7 @@ performance of this software.</pre>
   </div>
 
   <div id="network-statistics-context" class="dropdown-menu">
-    <a href="#" id="moveStats" class="dropdown-item">Drag</a>
+    <a href="#" id="moveStats" class="dropdown-item">Drag/Arrow Keys</a>
     <a href="#" id="hideStats" class="dropdown-item">Hide</a>
   </div>
 
@@ -492,9 +492,9 @@ performance of this software.</pre>
             </div>
             <div class="col-4">
               <select id="save-file-format" class="form-control form-control-sm" title="What format file would you like to save?">
-                <option selected>microbetrace</option>
-                <option>hivtrace</option>
-                <option>microbetracestyle</option>
+                <option selected>session</option>
+                <!-- <option>hivtrace</option> -->
+                <option>style</option>
               </select>
             </div>
           </div>
@@ -503,6 +503,10 @@ performance of this software.</pre>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="save-file-compress" checked>
                 <label class="form-check-label" for="save-file-compress">Compress?</label>
+              </div>
+              <div id="cluster-checkbox-container" class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="save-file-cluster">
+                <label class="form-check-label" for="save-file-cluster">By Cluster</label>
               </div>
             </div>
           </div>

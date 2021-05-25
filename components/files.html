@@ -95,7 +95,7 @@
         <div class="col-7">
           <select id="default-view" class="form-control form-control-sm" title="Which view should MicrobeTrace render first, once it has successfully processed the data?">
             <option value="2d_network" selected>2D Network</option>
-            <option value="pixi">Pixi</option>
+            <!-- <option value="pixi">Pixi</option> -->
             <option value="3d_network">3D Network</option>
             <option value="bubbles">Bubbles</option>
             <option value="table">Table</option>
@@ -494,9 +494,14 @@ Please note that this causes MicrobeTrace to store data on your computer's hard 
           const these = $(`[data-file='${file.name}'] select`);
           if(file.field1) {
             //#291 restore to previous variable selection if available
-            $(these.get(0)).val(file.field1);
-            $(these.get(1)).val(file.field2);
-            $(these.get(2)).val(file.field3);
+            if (type == 'node') {
+              $(these.get(0)).val(file.field1);
+              $(these.get(1)).val('None');
+            } else {
+              $(these.get(0)).val(file.field1);
+              $(these.get(1)).val(file.field2);
+              $(these.get(2)).val(file.field3);
+            } 
           } else {
             const a = type == 'node' ? ['ID', 'Id', 'id'] : ['SOURCE', 'Source', 'source'],
               b = type == 'node' ? ['SEQUENCE', 'SEQ', 'SEQS', 'Sequence', 'Seqs', 'sequence', 'seq', 'seqs'] : ['TARGET', 'Target', 'target'],
@@ -1137,6 +1142,7 @@ Please note that this causes MicrobeTrace to store data on your computer's hard 
           let newLinks = 0;
           let newNodes = 0;
           const tree = patristic.parseNewick(file.contents);
+          temp.tree = tree;
           let m = tree.toMatrix(), matrix = m.matrix, labels = m.ids.map(filterXSS), n = labels.length;
           for (let i = 0; i < n; i++) {
             const source = labels[i];

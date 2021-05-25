@@ -2,6 +2,9 @@
   'use strict';
 
   let MT = {};
+
+  let sessionApplied = false;
+
   
   MT.dataSkeleton = () => ({
     nodes: [],
@@ -175,6 +178,8 @@
     "polygons-color-show": false,
     "polygons-foci": "cluster",
     "polygons-gather-force": 0,
+    "polygons-label-show" : false,
+    "polygons-label-size" : 16,
     "polygons-show" : false,
     "reference-source-file": true,
     "reference-source-first": false,
@@ -526,6 +531,7 @@
       if(oldSession.data[v]) session.data[v] = uniq(session.data[v].concat(oldSession.data[v]));
     });
     if(oldSession.network) session.network = oldSession.network;
+    sessionApplied = true;
     MT.applyStyle(session.style);
     // if(!links[0]['distance']){  #249
     //   if(links[0]['tn93']){
@@ -558,6 +564,23 @@
         }
       }
     }
+
+    // Need session applied variable since this will break restoring full microbe trace file vs loading a style file
+    if (!sessionApplied) {
+      // Trigger global style updates
+      $("#node-color-variable").trigger("change");
+      $("#node-color-border").trigger("change");
+      $("#link-color-variable").trigger("change");
+      $("#selected-color").trigger("change");
+      $("#background-color").trigger("change");
+
+      // 2d Network Specific
+      $('#node-radius-variable').trigger("change");
+      $('#node-symbol-variable').trigger("change");
+    } else {
+      sessionApplied = false;
+    }
+    
   };
   
   MT.applyHIVTrace = hivtrace => {
@@ -1172,12 +1195,12 @@
         let node = session.data.nodes[i];
         if (node[field] != null) {
           let time = moment(node[field]); 
-          if (time.isValid())
+          if (time.isValid() && isNaN(node[field])) //#315
             times.push(time.toDate());
           else
             continue outerloop;
         }
-      }      
+      }
       if (times.length < n) {
         let minTime = Math.min(...times);
         let minTimeString = new Date(minTime).toString();
@@ -1186,7 +1209,7 @@
             d[field] = minTimeString;
           } 
         });
-      } 
+      }
     };
 
     $("#search-field")
