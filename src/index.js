@@ -167,8 +167,6 @@ $(function() {
 
         });
 
-        console.log('cluster nodes List: ', clusterNodeList);
-
         let singletonFolder = null;
         let dyadFolder = null;
 
@@ -180,7 +178,6 @@ $(function() {
           // Check if cluster is in clusterNodesList
           if(cluster.length > 0){
 
-            console.log('creating cluster');
             // Create cluster folder
             var clusterFolder = zip.folder("cluster-" + cluster[0][0].cluster);
           
