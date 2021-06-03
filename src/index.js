@@ -230,7 +230,9 @@ $(function() {
 
     }
 
-    format = 'microbetrace';
+    if (format == 'session') {
+      format = 'microbetrace';
+    }
 
     if ($("#save-file-compress").is(":checked")) {
       
