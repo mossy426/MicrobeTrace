@@ -167,8 +167,6 @@ $(function() {
 
         });
 
-        console.log('cluster nodes List: ', clusterNodeList);
-
         let singletonFolder = null;
         let dyadFolder = null;
 
@@ -230,7 +228,9 @@ $(function() {
 
     }
 
-    format = 'microbetrace';
+    if (format == 'session') {
+      format = 'microbetrace';
+    }
 
     if ($("#save-file-compress").is(":checked")) {
       
