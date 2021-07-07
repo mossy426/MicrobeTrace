@@ -325,22 +325,17 @@ Note that this may cause slow performance on larger networks.">
             </div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-header p-0">
-            <button class="bg-transparent border-0 w-100 launch-color-options collapsed" type="button" data-toggle="collapse" aria-expanded="false" style="color:#495057">Colors</button>
-          </div>
-        </div>
       </div>
     </div>
     <div class="tab-pane fade" id="network-polygons-settings" role="tabpanel" aria-labelledby="polygons-tab">
       <div class="accordion" id="polygons-controls-accordion">
-        <div class="card">
+        <div class="card" style="overflow:visible">
           <div class="card-header p-0">
-            <button class="bg-transparent border-0 w-100" type="button" data-toggle="collapse" data-target="#polygons-controls-labels" aria-expanded="true" aria-controls="polygons-controls-labels" style="color:#495057">Polygon controls</button>
+            <button class="bg-transparent border-0 w-100" type="button" data-toggle="collapse" data-target="#polygons-controls" aria-expanded="true" aria-controls="polygons-controls" style="color:#495057">Polygon controls</button>
           </div>
-          <div id="polygons-controls-labels" class="collapse show" data-parent="#polygons-controls-accordion">
+          <div id="polygons-controls" class="collapse show" data-parent="#polygons-controls-accordion">
             <div class="card-body">
-              <div class="form-group row" title="What data should be displayed when you hover over a link?">
+              <div class="form-group row" title="Show polygons?">
                 <div class="col-4">Polygons</div>
                 <div class="col-8">
                   <div class="btn-group btn-group-toggle btn-group-sm w-100" data-toggle="buttons">
@@ -371,7 +366,56 @@ Note that this may cause slow performance on larger networks.">
                   <input type="range" class="custom-range" id="polygons-gather-force" min="0" max=".02" value="0" step="0.0001">
                 </div>
               </div>
-              <div class="form-group row polygons-settings-row" title="Show polygons colored?">
+            </div>
+          </div>
+        </div>
+        <div style="display: none;" class="card polygons-settings-row">
+          <div class="card-header p-0">
+            <button class="bg-transparent border-0 w-100 collapsed" type="button" data-toggle="collapse" data-target="#polygons-controls-labels" aria-expanded="false" aria-controls="polygons-controls-labels" style="color:#495057">Labels</button>
+          </div>
+          <div id="polygons-controls-labels" class="collapse" data-parent="#polygons-controls-accordion">
+            <div class="card-body">
+              <div class="form-group row" title="Show polygons label?">
+                <div class="col-4">Label Polygons</div>
+                <div class="col-8">
+                  <div class="btn-group btn-group-toggle btn-group-sm w-100" data-toggle="buttons">
+                    <label class="btn btn-light col" title="Show ploygon label.">
+                      <input type="radio" name="polygons" id="polygons-label-show" autocomplete="off">
+                      Show
+                    </label>
+                    <label class="btn btn-light col active" title="Do Not show ploygon label.">
+                      <input type="radio" name="polygons" id="polygons-label-hide" autocomplete="off" checked>
+                      Hide
+                    </label>
+                  </div>                  
+                </div>
+              </div>
+              <div style="display: none;" class="form-group row polygons-label-row" title="How big should ploygon labels be?">
+                <div class="col-4"><label for="polygons-label-size">Label Size</label></div>
+                <div class="col-8"><input type="range" class="custom-range" id="polygons-label-size" min="6" value="16" max="72"></div>
+              </div>
+              <div style="display: none;" class="form-group row polygons-label-row" title="How should the labels be oriented relative to center of polygon?">
+                <div class="col-4"><label for="polygons-label-orientation">Orientation</label></div>
+                <div class="col-8">
+                  <select id="polygons-label-orientation" class="form-control form-control-sm">
+                    <option selected>Middle</option>
+					          <option>Right</option>
+                    <option>Left</option>
+                    <option>Top</option>
+                    <option>Bottom</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>      
+        <div style="display: none;" class="card polygons-settings-row">
+          <div class="card-header p-0">
+            <button class="bg-transparent border-0 w-100 collapsed" type="button" data-toggle="collapse" data-target="#polygons-controls-colors" aria-expanded="false" aria-controls="polygons-controls-colors" style="color:#495057">Colors</button>
+          </div>
+          <div id="polygons-controls-colors" class="collapse" data-parent="#polygons-controls-accordion">
+            <div class="card-body">
+              <div class="form-group row" title="Show polygons colored?">
                 <div class="col-4">Color Polygons</label></div>
                 <div class="col-8">
                   <div class="btn-group btn-group-toggle btn-group-sm w-100" data-toggle="buttons">
@@ -406,7 +450,7 @@ Note that this may cause slow performance on larger networks.">
                 <div class="col-8">
                   <input type="color" id="polygon-color" class="form-control form-control-sm" value="#1f77b4">
                 </div>
-              </div>
+              </div>              
             </div>
           </div>
         </div>
@@ -434,7 +478,7 @@ Note that this may cause slow performance on larger networks.">
 </div>
 
 <div id="polygon-color-table-context" class="dropdown-menu">
-  <a href="#" id="polygon-color-table-drag" class="dropdown-item">Drag</a>
+  <a href="#" id="polygon-color-table-drag" class="dropdown-item">Drag/Arrow Keys</a>
   <a href="#" id="polygon-color-table-context-hide" class="dropdown-item">Hide</a>
   <a href="#" id="polygon-color-table-expand" class="dropdown-item">Expand</a>
   <a href="#" id="polygon-color-table-counts" class="dropdown-item">Toggle Counts</a>
