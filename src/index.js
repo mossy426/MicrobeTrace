@@ -1,6 +1,11 @@
 $(function() {
   "use strict";
 
+  let linkKeyboardPositionEnabled = false;
+  let nodeKeyboardPositionEnabled = false;
+  let statsKeyboardPositionEnabled = false;
+
+
     // Table to instantiate when recall button is clicked
     let table = new Tabulator("#recall-stashes-available", {
       height: "100%",
@@ -674,12 +679,14 @@ $(function() {
   $("#moveStats").on("click", function() {
     let $this = $(this);
     $this.parent().hide();
-    if ($this.text() == "Drag") {
+    if ($this.text() == "Drag/Arrow Keys") {
       $("#network-statistics-draghandle").slideDown();
+      statsKeyboardPositionEnabled = true;
       $this.text("Pin");
     } else {
       $("#network-statistics-draghandle").slideUp();
-      $this.text("Drag");
+      statsKeyboardPositionEnabled = false;
+      $this.text("Drag/Arrow Keys");
     }
   });
 
