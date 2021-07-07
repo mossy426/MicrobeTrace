@@ -1616,12 +1616,14 @@ $(function() {
   $("#node-color-table-drag").on("click", function() {
     let $this = $(this);
     $this.parent().hide();
-    if ($this.text() == "Drag") {
+    if ($this.text() == "Drag/Arrow Keys") {
       $("#node-color-table-draghandle").slideDown();
+      nodeKeyboardPositionEnabled = true;
       $this.text("Pin");
     } else {
       $("#node-color-table-draghandle").slideUp();
-      $this.text("Drag");
+      nodeKeyboardPositionEnabled = false;
+      $this.text("Drag/Arrow Keys");
     }
   });
 
