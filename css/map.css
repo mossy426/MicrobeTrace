@@ -3,6 +3,7 @@
     height: 100%;
     background: #d3d9db;
     cursor: -webkit-grab;
+    z-index: 1;
 }
 
 #map:hover:active {
@@ -17,4 +18,17 @@
     animation-name: ripple;
     animation-iteration-count: infinite;
     animation-timing-function: linear; */
+}
+
+.OSM-credit {
+    position: absolute;
+    bottom: 7px;
+    left: 50px;
+    z-index: 2;
+}
+  
+.OSM-credit a {
+    color: #4e8bb7 !important;
+    text-decoration: underline !important;
+    cursor: pointer !important;
 }

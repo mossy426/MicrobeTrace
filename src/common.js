@@ -742,6 +742,7 @@
       // 2d Network Specific
       $('#node-radius-variable').trigger("change");
       $('#node-symbol-variable').trigger("change");
+      $('#node-label-variable').trigger("change");
     } else {
       sessionApplied = false;
     }
