@@ -15,6 +15,7 @@
     background-color: #f8f9fa !important;
   }
   #node-symbol-table-draghandle {
+    display: none;
     width: 100%;
     text-align: center;
   }
@@ -37,6 +38,10 @@
   .nodes path.selected {
     stroke: #ff8300;
     stroke-width: 4px;
+  }
+
+  .clusters path {
+    cursor: -webkit-grab;
   }
   
   #attributeModal .modal-body {
