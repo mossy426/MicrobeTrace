@@ -47,7 +47,7 @@
     center: [80, 0],
     zoom: 3,
     zoomControl: false,
-    maxZoom: 10,
+    maxZoom: 15,
     minZoom: 2,
     preferCanvas: true
   });
