@@ -368,17 +368,19 @@
     ga('set', 'title', 'Geo Map View');
     ga('send', 'pageview');
 
+    if (session.data.nodes.length > 0) {
     // save existing session styles
-    temp.mapData['map-countries-show'] = session.style.widgets['map-countries-show'];
-    temp.mapData['map-states-show'] = session.style.widgets['map-states-show'];
-    temp.mapData['map-counties-show'] = session.style.widgets['map-counties-show'];
-    temp.mapData['map-basemap-show'] = session.style.widgets['map-basemap-show'];
-    temp.mapData['map-satellite-show'] = session.style.widgets['map-satellite-show'];
-    session.style.widgets['map-countries-show']= true;
-    session.style.widgets['map-states-show']= true;
-    session.style.widgets['map-counties-show']= false;
-    session.style.widgets['map-basemap-show']= false;
-    session.style.widgets['map-satellite-show']= false;    
+      temp.mapData['map-countries-show'] = session.style.widgets['map-countries-show'];
+      temp.mapData['map-states-show'] = session.style.widgets['map-states-show'];
+      temp.mapData['map-counties-show'] = session.style.widgets['map-counties-show'];
+      temp.mapData['map-basemap-show'] = session.style.widgets['map-basemap-show'];
+      temp.mapData['map-satellite-show'] = session.style.widgets['map-satellite-show'];
+      session.style.widgets['map-countries-show']= true;
+      session.style.widgets['map-states-show']= true;
+      session.style.widgets['map-counties-show']= false;
+      session.style.widgets['map-basemap-show']= false;
+      session.style.widgets['map-satellite-show']= false;    
+    }
     
     if (navigator.onLine) {
       $('#map').parent().find('.ifOnline').css('display', 'flex');
@@ -991,16 +993,18 @@
     }
 
     setTimeout(function () {
-      matchCoordinates(function () {
-        rerollNodes();
-        drawLinks();
-        drawNodes();
-        initialLoadUpdate();
-      });
-      
-      if (layers.nodes.length) map.flyToBounds(layers.nodes.getBounds());
-      
-    }, 40);
+        if (session.data.nodes.length > 0) {
+          matchCoordinates(function () {
+          rerollNodes();
+          drawLinks();
+          drawNodes();
+          initialLoadUpdate();
+        });
+
+        map.flyToBounds(layers.nodes.getBounds());
+      }
+            
+    }, 500);
 
   })();
 </script>
