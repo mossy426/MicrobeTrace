@@ -454,6 +454,11 @@ $(function() {
       updateNetwork();
     });
 
+    svg.on("mouseover", () => {
+      let xc = d3.mouse(svg.node())[0];
+      $('#filtering-threshold').prop('title', "Whats the maximum genetic distance you're willing to call a link? " + parseFloat(((xc / width) * range * 1.05 + min).toLocaleString()));
+    });
+
     svg.on("mousedown", () => {
       d3.event.preventDefault();
       svg.on("mousemove", updateThreshold);
