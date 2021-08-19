@@ -346,6 +346,10 @@
         newNode._id = newNode.id;
       }
     }
+
+    // Ensure degree set to 0 when adding new node.
+    newNode.degree = 0;
+
     if (isNumber(newNode._id)) newNode._id = "" + newNode._id;
     if (session.data.nodeExclusions.indexOf(newNode._id) > -1) return 0;
     if (check) {
