@@ -383,11 +383,12 @@ $(function() {
       $window.trigger(thing + "-visibility");
     });
     MT.updateStatistics();
-    if (val > 1) {
-      $("#filtering-wrapper").slideUp();
-    } else {
-      $("#filtering-wrapper").slideDown();
-    }
+    // TODO assess if this needs to be back in
+    // if (val > 1) {
+    //   $("#filtering-wrapper").slideUp();
+    // } else {
+    //   $("#filtering-wrapper").slideDown();
+    // }
   });
 
   MT.updateThresholdHistogram = () => {
