@@ -1192,6 +1192,7 @@
     let fieldsToCheck = fields.filter(f => !nodeSkeleton.nodeFields.includes(f) && f != '_ambiguity' && f != '_diff'); 
     let n = session.data.nodes.length;
     let k = fieldsToCheck.length;
+    outerloop:
     for (let j = 0; j < k; j++) {
       let field = fieldsToCheck[j];
       let times = [];
@@ -1202,7 +1203,7 @@
           if (time.isValid() && isNaN(node[field])) //#315
             times.push(time.toDate());
           else
-            break;
+          continue outerloop;
         }
       }
       if (times.length < n) {
