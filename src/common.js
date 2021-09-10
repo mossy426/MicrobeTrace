@@ -1192,7 +1192,6 @@
     let fieldsToCheck = fields.filter(f => !nodeSkeleton.nodeFields.includes(f) && f != '_ambiguity' && f != '_diff'); 
     let n = session.data.nodes.length;
     let k = fieldsToCheck.length;
-    outerloop:
     for (let j = 0; j < k; j++) {
       let field = fieldsToCheck[j];
       let times = [];
@@ -1202,15 +1201,16 @@
           let time = moment(node[field]); 
           if (time.isValid() && isNaN(node[field])) //#315
             times.push(time.toDate());
-          else
-          continue outerloop;
-        }
+          }
       }
-      if (times.length < n) {
+
+      // If column has the word date in it, date expected to be in column 
+      if (field.toLowerCase().includes("date")){
+   
         let minTime = Math.min(...times);
         let minTimeString = new Date(minTime).toString();
         session.data.nodes.forEach(d => {
-          if (d[field] == null) {
+          if (d[field] == null || (d[field] && String(d[field]).trim() == ""))  {
             d[field] = minTimeString;
           } 
         });
