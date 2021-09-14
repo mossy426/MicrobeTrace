@@ -385,8 +385,7 @@
     if(temp.matrix[newLink.source][newLink.target]){
       let oldLink = temp.matrix[newLink.source][newLink.target];
       let origin = uniq(newLink.origin.concat(oldLink.origin));
-      oldLink.origin = origin;
-      newLink.origin = origin;
+      Object.assign(oldLink, newLink, {origin: origin});
       linkIsNew = 0;
     } else if(temp.matrix[newLink.target][newLink.source]){
       console.warn("This scope should be unreachable. If you're using this code, something's wrong.");
@@ -1442,8 +1441,14 @@
       let visible = true;
       if (link[metric] == null) {
         link.visible = false;
+        if(link.index == 24){
+          console.log('1');
+        }
         continue;
       } else {
+        if(link.index == 24){
+          console.log('2');
+        }
         visible = link[metric] <= threshold;
       }
       if (showNN) {
@@ -1452,8 +1457,18 @@
       let cluster = clusters[link.cluster];
       if (cluster) {
         visible = visible && cluster.visible;
+        if(link.index == 24){
+          console.log('3');
+        }
       }
+
       link.visible = visible;
+      if(link.index == 24){
+        console.log('link: ', link);
+        // link.origin = ["COVID-19_simulated_ContactTracing.csv"];
+        link.visible = true;
+      }
+
     }
     if (!silent) $window.trigger("link-visibility");
     console.log("Link Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
