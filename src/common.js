@@ -370,18 +370,23 @@
   
   MT.addLink = newLink => {
     if(!temp.matrix[newLink.source]){
-      temp.matrix[newLink.source] = {};
+        temp.matrix[newLink.source] = {};
     }
     if(!temp.matrix[newLink.target]){
       temp.matrix[newLink.target] = {};
     }
-    if (newLink.source == newLink.target) return 0;
+    if (newLink.source == newLink.target) {
+      return 0;
+    } 
+
     let linkIsNew = 1;
     let sdlinks = session.data.links;
+
     if(temp.matrix[newLink.source][newLink.target]){
       let oldLink = temp.matrix[newLink.source][newLink.target];
       let origin = uniq(newLink.origin.concat(oldLink.origin));
-      Object.assign(oldLink, newLink, {origin: origin});
+      oldLink.origin = origin;
+      newLink.origin = origin;
       linkIsNew = 0;
     } else if(temp.matrix[newLink.target][newLink.source]){
       console.warn("This scope should be unreachable. If you're using this code, something's wrong.");
@@ -398,11 +403,19 @@
         cluster: 1,
         origin: []
       }, newLink);
+      if((newLink.source == 'MZ797735' || newLink.target == 'MZ797735') && (newLink.source == 'MZ797519' || newLink.target == 'MZ797519') ){
+        console.log('------ newLink2: ', newLink)
+      }
       temp.matrix[newLink.source][newLink.target] = newLink;
       temp.matrix[newLink.target][newLink.source] = newLink;
       sdlinks.push(newLink);
       linkIsNew = 1;
     }
+
+    if(newLink.source == 'MZ797735' || newLink.target == 'MZ797735'){
+      // console.log('Links are 2: ', sdlinks);
+    }
+
     return linkIsNew;
   };
   
