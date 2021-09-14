@@ -318,7 +318,8 @@
     cluster: 1,
     visible: true,
     degree: 0,
-    origin: []
+    origin: [],
+    hasDistance : false
   });
   
   let isNumber = a => typeof a == "number";
@@ -400,7 +401,8 @@
         target: "",
         visible: false,
         cluster: 1,
-        origin: []
+        origin: [],
+        hasDistance: false
       }, newLink);
       if((newLink.source == 'MZ797735' || newLink.target == 'MZ797735') && (newLink.source == 'MZ797519' || newLink.target == 'MZ797519') ){
         console.log('------ newLink2: ', newLink)
@@ -985,7 +987,8 @@
               source: sourceID,
               target: targetID,
               distance: dists[l++],
-              origin: ['Genetic Distance']
+              origin: ['Genetic Distance'],
+              hasDistance: true
             }, check);
           }
         }
@@ -1439,35 +1442,47 @@
     for (let i = 0; i < n; i++) {
       let link = links[i];
       let visible = true;
+      // If genetic distance file was removed previously, add it back
+      if(link.hasDistance && !link.origin.includes("Genetic Distance")) {
+        link.origin.push("Genetic Distance");
+      }
+      // No distance value
       if (link[metric] == null) {
-        link.visible = false;
-        if(link.index == 24){
-          console.log('1');
+
+        // If origin file exists for link outside of distance, keep visible
+        if(link.origin.filter(fileName => !fileName.includes('Genetic Distance')).length > 0){
+          // Set visible and origin to only show the from the file outside of Distance
+          link.origin = link.origin.filter(fileName => !fileName.includes('Genetic Distance'));
+          visible = true;
+        } else {
+          link.visible = false;
+          continue;
         }
-        continue;
       } else {
-        if(link.index == 24){
-          console.log('2');
-        }
+
         visible = link[metric] <= threshold;
       }
       if (showNN) {
         visible = visible && link.nn;
       }
+      
+      // If not visible, but origin file exists for link outside of distance, keep visible
+      if(!visible && link.origin.filter(fileName => !fileName.includes('Genetic Distance')).length > 0){
+        // Set visible and origin to only show the from the file outside of Distance
+        link.origin = link.origin.filter(fileName => !fileName.includes('Genetic Distance'));
+        visible = true;
+      }
+      
       let cluster = clusters[link.cluster];
       if (cluster) {
         visible = visible && cluster.visible;
-        if(link.index == 24){
-          console.log('3');
-        }
       }
 
       link.visible = visible;
-      if(link.index == 24){
-        console.log('link: ', link);
-        // link.origin = ["COVID-19_simulated_ContactTracing.csv"];
-        link.visible = true;
-      }
+      // if(link.index == 24){
+      //   console.log('link: ', link);
+      //   link.visible = true;
+      // }
 
     }
     if (!silent) $window.trigger("link-visibility");
