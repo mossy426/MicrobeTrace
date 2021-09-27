@@ -701,10 +701,10 @@ Please note that this causes MicrobeTrace to store data on your computer's hard 
     let auditBlock = $('#audited-sequences');
     const logAudit = (id, type) => {
       let match = auditBlock.find(`[data-id="${id}"]`);
-      let encodedId = (id).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+      const encodedId = (id).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
               return '&#'+i.charCodeAt(0)+';';
       });
-      let encodedType = (type).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+      const encodedType = (type).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
               return '&#'+i.charCodeAt(0)+';';
       });
       let button = $(`<button class="btn btn-warning btn-sm audit-exclude" data-id="${encodedId}">Exclude</button>`).on('click', function(){

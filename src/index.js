@@ -1389,7 +1389,7 @@ $(function() {
           let node = nodes[i];
           if (node[field]) {
 
-            let encodedField = (node[field]).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+            const encodedField = (node[field]).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
               return '&#'+i.charCodeAt(0)+';';
            });
             dataSet.add(`${encodedField}`);
