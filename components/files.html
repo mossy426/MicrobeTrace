@@ -701,7 +701,13 @@ Please note that this causes MicrobeTrace to store data on your computer's hard 
     let auditBlock = $('#audited-sequences');
     const logAudit = (id, type) => {
       let match = auditBlock.find(`[data-id="${id}"]`);
-      let button = $(`<button class="btn btn-warning btn-sm audit-exclude" data-id="${id}">Exclude</button>`).on('click', function(){
+      let encodedId = (id).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+              return '&#'+i.charCodeAt(0)+';';
+      });
+      let encodedType = (type).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+              return '&#'+i.charCodeAt(0)+';';
+      });
+      let button = $(`<button class="btn btn-warning btn-sm audit-exclude" data-id="${encodedId}">Exclude</button>`).on('click', function(){
         let thi$ = $(this);
         const id = thi$.data('id');
         if(thi$.text() == 'Exclude'){
@@ -712,7 +718,7 @@ Please note that this causes MicrobeTrace to store data on your computer's hard 
           thi$.removeClass('btn-success').addClass('btn-warning').text('Exclude');
         }
       });
-      let row = $(`<div class="alert alert-warning w-100 d-flex justify-content-between" role="alert"><span>${id} appears to be ${type}.</span></div>`);
+      let row = $(`<div class="alert alert-warning w-100 d-flex justify-content-between" role="alert"><span>${encodedId} appears to be ${encodedType}.</span></div>`);
       row.append(button);
       auditBlock.append(row);
     };
