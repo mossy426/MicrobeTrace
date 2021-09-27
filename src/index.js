@@ -1389,11 +1389,10 @@ $(function() {
           let node = nodes[i];
           if (node[field]) {
 
-          //   let encodedField = (node[field]).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
-          //     return '&#'+i.charCodeAt(0)+';';
-          //  });
-            // dataSet.add(`${encodedField}`);
-            dataSet.add(`${node[field]}`);
+            let encodedField = (node[field]).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+              return '&#'+i.charCodeAt(0)+';';
+           });
+            dataSet.add(`${encodedField}`);
           }
         }
         let dataArray = Array.from(dataSet).sort();
