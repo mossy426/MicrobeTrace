@@ -1117,12 +1117,17 @@ Note that this may cause slow performance on larger networks.">
         let nd = session.data.nodes.find(nd => nd._id == d._id);
         for (let attribute in nd) {
           if (attribute[0] == '_') continue;
-          const encodedAttribute = attribute.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+          
+          let encodedAttribute = attribute.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
               return '&#'+i.charCodeAt(0)+';';
           });
-          const encodedAttributeValue = String(d[attribute]).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+          encodedAttribute.trim();
+
+          let encodedAttributeValue = String(d[attribute]).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
               return '&#'+i.charCodeAt(0)+';';
           });
+          encodedAttributeValue.trim();
+
           target.append(`<tr><td><strong>${MT.titleize(encodedAttribute)}</strong></td><td>${encodedAttributeValue}</td></tr>`);
         }
         $('#network-attribute-modal').modal('show');
