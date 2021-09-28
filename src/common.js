@@ -318,7 +318,8 @@
     cluster: 1,
     visible: true,
     degree: 0,
-    origin: []
+    origin: [],
+    hasDistance : false
   });
   
   let isNumber = a => typeof a == "number";
@@ -385,14 +386,6 @@
     if(temp.matrix[newLink.source][newLink.target]){
       let oldLink = temp.matrix[newLink.source][newLink.target];
       let origin = uniq(newLink.origin.concat(oldLink.origin));
-      
-      // Ensure new link keeps distance if already defined previously
-      if(oldLink.hasDistance) {
-        newLink.hasDistance = true;
-        newLink['distance'] = oldLink['distance'];
-        newLink.distanceOrigin = oldLink.distanceOrigin;
-      }
-
       Object.assign(oldLink, newLink, {origin: origin});
       linkIsNew = 0;
     } else if(temp.matrix[newLink.target][newLink.source]){
@@ -408,8 +401,12 @@
         target: "",
         visible: false,
         cluster: 1,
-        origin: []
+        origin: [],
+        hasDistance: false
       }, newLink);
+      if((newLink.source == 'MZ797735' || newLink.target == 'MZ797735') && (newLink.source == 'MZ797519' || newLink.target == 'MZ797519') ){
+        console.log('------ newLink2: ', newLink)
+      }
       temp.matrix[newLink.source][newLink.target] = newLink;
       temp.matrix[newLink.target][newLink.source] = newLink;
       sdlinks.push(newLink);
@@ -429,20 +426,12 @@
     if ($xml.find("#edges").length) {
       $xml.find("#nodes circle").each((i, node) => {
         const $node = $(node);
-        const gephid = $node.attr("class")
-        
-        const encodedGephid = (gephid).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
-          return '&#'+i.charCodeAt(0)+';';
-        });
-        const encodedFill = ($node.attr("fill")).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
-          return '&#'+i.charCodeAt(0)+';';
-        });
-        
+        const gephid = $node.attr("class");
         nodes.push(gephid);
         MT.addNode(
           {
-            id: encodedGephid + "",
-            color: encodedFill,
+            id: gephid + "",
+            color: $node.attr("fill"),
             size: parseFloat($node.attr("r")),
             origin: ["Scraped Gephi SVG"]
           },
@@ -999,7 +988,6 @@
               target: targetID,
               distance: dists[l++],
               origin: ['Genetic Distance'],
-              distanceOrigin: 'Genetic Distance',
               hasDistance: true
             }, check);
           }
@@ -1455,70 +1443,26 @@
       let link = links[i];
       let visible = true;
       // If genetic distance file was removed previously, add it back
-      if(link.hasDistance && !link.origin.includes(link.distanceOrigin)) {
-        // console.log('removed: ', link.distanceOrigin);
-        link.origin.push(link.distanceOrigin);
-      }
+      // if(link.hasDistance && !link.origin.includes("Genetic Distance")) {
+      //   link.origin.push("Genetic Distance");
+      // }
       // No distance value
       if (link[metric] == null) {
-        console.log('metric is null: ', link);
+
         // If origin file exists for link outside of distance, keep visible
-        if(link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0){
-          // Set visible and origin to only show the from the file outside of Distance
-          link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
-          visible = true;
-        } else {
-          link.visible = false;
-          continue;
-        }
-        // link.visible = false;
-        // continue;
-      } else {
-         // If origin file exists for link outside of distance, keep visible
-        //  if(link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0){
+        // if(link.origin.filter(fileName => !fileName.includes('Genetic Distance')).length > 0){
         //   // Set visible and origin to only show the from the file outside of Distance
-        //   link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
+        //   link.origin = link.origin.filter(fileName => !fileName.includes('Genetic Distance'));
         //   visible = true;
         // } else {
-        //   visible = link[metric] <= threshold;
+        //   link.visible = false;
+        //   continue;
         // }
-        // console.log('metric exists: ', link);
-        if(link.hasDistance) {
-          visible = link[metric] <= threshold;
-          if(link[metric] == 0){
-            console.log('link is: ', link);
-            if(link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0){
-              // Set visible and origin to only show the from the file outside of Distance
-              // console.log('no vis');
-              link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
-              visible = true;
-              // console.log('link origin is: ', link.origin, link.distanceOrigin);
-            } 
-          }
-          
-          if(!visible) {
-            if(link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0){
-              // Set visible and origin to only show the from the file outside of Distance
-              // console.log('no vis');
-              link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
-              visible = true;
-              // console.log('link origin is: ', link.origin, link.distanceOrigin);
-            } 
-          }
-          
-        } else {
-           // If origin file exists for link outside of distance, keep visible
-           if(link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0){
-            // Set visible and origin to only show the from the file outside of Distance
-            // console.log('no vis');
-            link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
-            visible = true;
-          } 
-          console.log('2link origin is: ', link.origin, link.distanceOrigin);
-        }
-        
-          
-    
+        link.visible = false;
+        continue;
+      } else {
+
+        visible = link[metric] <= threshold;
       }
       if (showNN) {
         visible = visible && link.nn;
