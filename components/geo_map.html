@@ -691,10 +691,6 @@
         const { name } = file;
         if (name.endsWith("json")) {
           const layerName = name.split('.').slice(0, -1).join('.').toLowerCase();
-          let encodedLayerName = layerName.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
-              return '&#'+i.charCodeAt(0)+';';
-            });
-          encodedLayerName.trim();
           const reader = new FileReader();
           reader.onload = function (event2) {
             temp.mapData[layerName] = JSON.parse(event2.target.result);
@@ -710,7 +706,7 @@
                 layers[layerName].setStyle(f => ({ color: e.target.value }));
               })
             );
-            var nameCell = $(`<div class="col-9">${encodedLayerName}</div>`).prepend(
+            var nameCell = $(`<div class="col-9">${layerName}</div>`).prepend(
               $('<a href="#" class="oi oi-circle-x align-middle p-1" title="Remove this file"></a>').on('click', function () {
                 nameCell.remove();
                 colorCell.remove();
