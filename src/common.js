@@ -425,19 +425,29 @@
     const $xml = $(svg);
     if ($xml.find("#edges").length) {
       $xml.find("#nodes circle").each((i, node) => {
+
         const $node = $(node);
-        const gephid = $node.attr("class");
+        const gephid = $node.attr("class")
+        
+        const encodedGephid = (gephid).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+          return '&#'+i.charCodeAt(0)+';';
+        });
+        const encodedFill = ($node.attr("fill")).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+          return '&#'+i.charCodeAt(0)+';';
+        });
+        
         nodes.push(gephid);
         MT.addNode(
           {
-            id: gephid + "",
-            color: $node.attr("fill"),
+            id: encodedGephid + "",
+            color: encodedFill,
             size: parseFloat($node.attr("r")),
             origin: ["Scraped Gephi SVG"]
           },
           false
         );
       });
+
       session.data.nodeFields.push("color");
       session.data.nodeFields.push("size");
       $xml.find("#edges path").each((i, link) => {
