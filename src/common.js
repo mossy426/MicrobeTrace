@@ -386,6 +386,14 @@
     if(temp.matrix[newLink.source][newLink.target]){
       let oldLink = temp.matrix[newLink.source][newLink.target];
       let origin = uniq(newLink.origin.concat(oldLink.origin));
+
+      // Ensure new link keeps distance if already defined previously
+      if(oldLink.hasDistance) {
+        newLink.hasDistance = true;
+        newLink['distance'] = oldLink['distance'];
+        newLink.distanceOrigin = oldLink.distanceOrigin;
+      }
+
       Object.assign(oldLink, newLink, {origin: origin});
       linkIsNew = 0;
     } else if(temp.matrix[newLink.target][newLink.source]){
@@ -554,7 +562,16 @@
           n = nodes.length,
           m = links.length;
     for(let i = 0; i < n; i++) MT.addNode(nodes[i]);
-    for(let j = 0; j < m; j++) MT.addLink(links[j]);
+    for(let j = 0; j < m; j++) {
+      // Add distance property for files saved prior to distance visibility fix
+      if((links[j].origin).includes('Genetic Distance')){
+        links[j].hasDistance = true;
+        links[j].distanceOrigin = 'Genetic Distance';
+      } else if (links[j].distance && links[j].distance > 0) {
+        links[j].hasDistance = true;
+      } 
+      MT.addLink(links[j]);
+    } 
     ['nodeFields', 'linkFields', 'clusterFields', 'nodeExclusions'].forEach(v => {
       if(oldSession.data[v]) session.data[v] = uniq(session.data[v].concat(oldSession.data[v]));
     });
@@ -1002,6 +1019,7 @@
               target: targetID,
               distance: dists[l++],
               origin: ['Genetic Distance'],
+              distanceOrigin: 'Genetic Distance',
               hasDistance: true
             }, check);
           }
@@ -1456,38 +1474,60 @@
     for (let i = 0; i < n; i++) {
       let link = links[i];
       let visible = true;
-      // If genetic distance file was removed previously, add it back
-      // if(link.hasDistance && !link.origin.includes("Genetic Distance")) {
-      //   link.origin.push("Genetic Distance");
-      // }
+      
+      if(link.hasDistance && !link.origin.includes(link.distanceOrigin)) {
+        link.origin.push(link.distanceOrigin);
+      }
+
       // No distance value
       if (link[metric] == null) {
 
         // If origin file exists for link outside of distance, keep visible
-        // if(link.origin.filter(fileName => !fileName.includes('Genetic Distance')).length > 0){
-        //   // Set visible and origin to only show the from the file outside of Distance
-        //   link.origin = link.origin.filter(fileName => !fileName.includes('Genetic Distance'));
-        //   visible = true;
-        // } else {
-        //   link.visible = false;
-        //   continue;
-        // }
-        link.visible = false;
-        continue;
+        if(link.origin.filter(fileName => !fileName.includes('Genetic Distance')).length > 0){
+          // Set visible and origin to only show the from the file outside of Distance
+          link.origin = link.origin.filter(fileName => !fileName.includes('Genetic Distance'));
+          visible = true;
+        } else {
+          link.visible = false;
+          continue;
+        }
+
       } else {
 
-        visible = link[metric] <= threshold;
+        if(link.hasDistance) {
+          visible = link[metric] <= threshold;
+          if(link[metric] == 0){
+            console.log('link is: ', link);
+            if(link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0){
+              // Set visible and origin to only show the from the file outside of Distance
+              // console.log('no vis');
+              link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
+              visible = true;
+              // console.log('link origin is: ', link.origin, link.distanceOrigin);
+            } 
+          }
+
+          if(!visible) {
+            if(link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0){
+              // Set visible and origin to only show the from the file outside of Distance
+              link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
+              visible = true;
+            } 
+          }
+
+        } else {
+           // If origin file exists for link outside of distance, keep visible
+           if(link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0){
+            // Set visible and origin to only show the from the file outside of Distance
+            link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
+            visible = true;
+          } 
+        }
+
       }
       if (showNN) {
         visible = visible && link.nn;
       }
-      
-      // // If not visible, but origin file exists for link outside of distance, keep visible
-      // if(!visible && link.origin.filter(fileName => !fileName.includes('Genetic Distance')).length > 0){
-      //   // Set visible and origin to only show the from the file outside of Distance
-      //   link.origin = link.origin.filter(fileName => !fileName.includes('Genetic Distance'));
-      //   visible = true;
-      // }
       
       let cluster = clusters[link.cluster];
       if (cluster) {
