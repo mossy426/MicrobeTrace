@@ -622,7 +622,10 @@ $(function() {
           $('#node-color-variable').trigger("change");
       });
       let nodeColorHeaderTitle =  (session.style.overwrite && session.style.overwrite.nodeColorHeaderVariable == variable ? session.style.overwrite.nodeColorHeaderTitle : "Node " + MT.titleize(variable));
-      let nodeHeader = $("<th class='p-1' contenteditable>" + nodeColorHeaderTitle + "</th>").append(nodeSort);
+      const encodedNodeColorHeaderTitle = nodeColorHeaderTitle.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+        return '&#'+i.charCodeAt(0)+';';
+});
+      let nodeHeader = $("<th class='p-1' contenteditable>" + encodedNodeColorHeaderTitle + "</th>").append(nodeSort);
       let countSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
         session.style.widgets["node-color-table-name-sort"] = "";
         if (session.style.widgets["node-color-table-counts-sort"] === "ASC")
@@ -662,7 +665,13 @@ $(function() {
         values.sort(function(a, b) { return aggregates[b] - aggregates[a] });
 
       values.forEach((value, i) => {
-        let colorinput = $('<input type="color" value="' + temp.style.nodeColorMap(value) + '">')
+
+        let val = temp.style.nodeColorMap(value);
+        const encodedValue = val.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+          return '&#'+i.charCodeAt(0)+';';
+        });
+
+        let colorinput = $('<input type="color" value="' + encodedValue + '">')
           .on("change", function(){
             
             let key = session.style.nodeColorsTableKeys[variable].findIndex( k => k === value);
@@ -703,10 +712,14 @@ $(function() {
           .append(colorinput)
           .append(alphainput);
 
+        let nodeValName = (session.style.nodeValueNames[value] ? session.style.nodeValueNames[value] : MT.titleize("" + value));
+        const encodedNodeValName = nodeValName.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+          return '&#'+i.charCodeAt(0)+';';
+  });
         let row = $(
           "<tr>" +
-            "<td data-value='" + value + "'>" +
-              (session.style.nodeValueNames[value] ? session.style.nodeValueNames[value] : MT.titleize("" + value)) +
+            "<td data-value='" + encodedValue + "'>" +
+            encodedNodeValName +
             "</td>" +
             (session.style.widgets["node-color-table-counts"] ? "<td>" + aggregates[value] + "</td>" : "") +
             (session.style.widgets["node-color-table-frequencies"] ? "<td>" + (aggregates[value] / vnodes.length).toLocaleString() + "</td>" : "") +
@@ -775,7 +788,10 @@ $(function() {
         $('#link-color-variable').trigger("change");
       });
      let linkColorHeaderTitle =  (session.style.overwrite && session.style.overwrite.linkColorHeaderVariable == variable ? session.style.overwrite.linkColorHeaderTitle : "Link " + MT.titleize(variable));
-     let linkHeader = $("<th class='p-1' contenteditable>" + linkColorHeaderTitle + "</th>").append(linkSort);
+     const encodedLinkColorHeaderTitle = linkColorHeaderTitle.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+      return '&#'+i.charCodeAt(0)+';';
+     });
+     let linkHeader = $("<th class='p-1' contenteditable>" + encodedLinkColorHeaderTitle + "</th>").append(linkSort);
       let countSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
         session.style.widgets["link-color-table-name-sort"] = "";
         if (session.style.widgets["link-color-table-counts-sort"] === "ASC")
@@ -935,7 +951,10 @@ $(function() {
         $('#pinbutton').prop("disabled", true);
       }
       let globalTimelineField =  (session.style.overwrite && variable == session.style.overwrite.globalTimelineFieldVariable ? session.style.overwrite.globalTimelineField : MT.titleize(variable));
-      $("#global-timeline-field").html(globalTimelineField); 
+      const encodedGlobalTimelineField = globalTimelineField.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+        return '&#'+i.charCodeAt(0)+';';
+      });
+      $("#global-timeline-field").html(encodedGlobalTimelineField); 
   
       var formatDateIntoYear = d3.timeFormat("%Y");
       var formatDateIntoMonthYear = d3.timeFormat("%b %y");
