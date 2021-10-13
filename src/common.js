@@ -1497,7 +1497,7 @@
         if(link.hasDistance) {
           visible = link[metric] <= threshold;
           if(link[metric] == 0){
-            console.log('link is: ', link);
+            // console.log('link is: ', link);
             if(link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0){
               // Set visible and origin to only show the from the file outside of Distance
               // console.log('no vis');
