@@ -641,12 +641,8 @@
     Object.keys(
       hivtrace["trace_results"]["Nodes"][0]["patient_attributes"]
     ).forEach(key => {
-      if (!session.data.nodeFields.includes(key)) {
-        const encodedKey = key.replace(/[\u00A0-\u9999<>()\&]/g, function(i) {
-          return '&#'+i.charCodeAt(0)+';';
-        });
-        session.data.nodeFields.push(encodedKey);
-      }
+      if (!session.data.nodeFields.includes(key))
+        session.data.nodeFields.push(key);
     });
     let n = hivtrace["trace_results"]["Edges"].length;
     let metric = session.style.widgets['default-distance-metric'];
