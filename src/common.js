@@ -1307,6 +1307,11 @@
       MT.setLinkVisibility(true);
       MT.setNodeVisibility(true);
       ["cluster", "link", "node"].forEach(thing => $window.trigger(thing + "-visibility"));
+      // Default link color variable to origin on launch if variable not set
+      if($("#link-color-variable").val() || $("#link-color-variable").val() === ""){
+        $("#link-color-variable").val("origin");
+        $("#link-color-variable").trigger("change");
+      }
       MT.updateStatistics();
       $("#network-statistics-wrapper").fadeIn();
     });
