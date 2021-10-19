@@ -1475,7 +1475,8 @@
     for (let i = 0; i < n; i++) {
       let link = links[i];
       let visible = true;
-      
+      let overrideNN = false;
+
       if(link.hasDistance && !link.origin.includes(link.distanceOrigin)) {
         link.origin.push(link.distanceOrigin);
       }
@@ -1484,9 +1485,10 @@
       if (link[metric] == null) {
 
         // If origin file exists for link outside of distance, keep visible
-        if(link.origin.filter(fileName => !fileName.includes('Genetic Distance')).length > 0){
+        if(link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0){
           // Set visible and origin to only show the from the file outside of Distance
-          link.origin = link.origin.filter(fileName => !fileName.includes('Genetic Distance'));
+          link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
+          overrideNN = true;
           visible = true;
         } else {
           link.visible = false;
@@ -1498,12 +1500,13 @@
         if(link.hasDistance) {
           visible = link[metric] <= threshold;
           if(link[metric] == 0){
-            console.log('link is: ', link);
+
             if(link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0){
               // Set visible and origin to only show the from the file outside of Distance
               // console.log('no vis');
               link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
               visible = true;
+              overrideNN = true;
               // console.log('link origin is: ', link.origin, link.distanceOrigin);
             } 
           }
@@ -1512,22 +1515,23 @@
             if(link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0){
               // Set visible and origin to only show the from the file outside of Distance
               link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
+              overrideNN = true;
               visible = true;
             } 
           }
 
         } else {
-           // If origin file exists for link outside of distance, keep visible
-           if(link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0){
-            // Set visible and origin to only show the from the file outside of Distance
-            link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
-            visible = true;
-          } 
+          
+          // If has no distance, then link should be visible and unnaffected by NN
+          overrideNN = true;
+          visible = true;
+
         }
 
       }
-      if (showNN) {
-        visible = visible && link.nn;
+
+      if (showNN && !overrideNN) {
+         visible = visible && link.nn;
       }
       
       let cluster = clusters[link.cluster];
