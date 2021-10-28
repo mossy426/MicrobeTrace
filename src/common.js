@@ -1479,7 +1479,7 @@
 
       if(link.hasDistance && !link.origin.includes(link.distanceOrigin)) {
         link.origin.push(link.distanceOrigin);
-      }
+      } 
 
       // No distance value
       if (link[metric] == null) {
@@ -1518,10 +1518,10 @@
               overrideNN = true;
               visible = true;
             } 
-          }
+          } 
 
         } else {
-          
+
           // If has no distance, then link should be visible and unnaffected by NN
           overrideNN = true;
           visible = true;
@@ -1530,15 +1530,20 @@
 
       }
 
-      if (showNN && !overrideNN) {
+
+      if (visible && showNN && !overrideNN) {
          visible = visible && link.nn;
+         // Keep link visible of not nearest neighbor, but still connected via an edge list
+         if (!visible && link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0) {
+          visible = true;
+        }
       }
       
       let cluster = clusters[link.cluster];
       if (cluster) {
         visible = visible && cluster.visible;
       }
-
+     
       link.visible = visible;
  
 
