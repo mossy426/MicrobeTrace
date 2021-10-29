@@ -184,14 +184,14 @@ $(function() {
             // If node and edge lists exists, add them to the current folder
             if(clusterNodeList[i]) {
               let blob = new Blob([Papa.unparse(cluster[0])], {type: 'text/csv;charset=utf-8'});
-              clusterFolder.file("nodeList.csv", blob);
+              clusterFolder.file( "nodeList_cluster_" + cluster[0][0].cluster + ".csv", blob);
             }
 
             let clusterLink = clusterLinkList.filter(LinkList => LinkList[0].cluster == currentCluster.id);
 
             if(clusterLink) {
               let blob = new Blob([Papa.unparse(clusterLink[0])], {type: 'text/csv;charset=utf-8'});
-              clusterFolder.file("edgeList.csv", blob);
+              clusterFolder.file("edgeList_cluster_" + cluster[0][0].cluster + ".csv", blob);
             }
           }
         }
@@ -200,16 +200,16 @@ $(function() {
           dyadFolder = zip.folder("dyads");
           // Add all dyads in one shot
           let nodesBlob = new Blob([Papa.unparse(dyadNodeList)], {type: 'text/csv;charset=utf-8'});
-          dyadFolder.file("nodeList.csv", nodesBlob);
+          dyadFolder.file("nodeList_cluster_" + cluster[0][0].cluster + ".csv", nodesBlob);
           let edgesBlob = new Blob([Papa.unparse(dyadEdgeList)], {type: 'text/csv;charset=utf-8'});
-          dyadFolder.file("edgeList.csv", edgesBlob);
+          dyadFolder.file("edgeList_cluster_" + cluster[0][0].cluster + ".csv", edgesBlob);
         }
 
         if (singletonNodeList.length > 0) {
           singletonFolder = zip.folder("singletons");
           // Add all singletons in one shot
           let blob = new Blob([Papa.unparse(singletonNodeList)], {type: 'text/csv;charset=utf-8'});
-          singletonFolder.file("nodeList.csv", blob);
+          singletonFolder.file("nodeList_cluster_" + cluster[0][0].cluster + ".csv", blob);
         }
 
         // generate zip repsetnation in memory
