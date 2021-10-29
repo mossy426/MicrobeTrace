@@ -1530,14 +1530,10 @@
 
       }
 
-      console.log('link: ', link.id, link);
-
-
       if (visible && showNN && !overrideNN) {
          visible = visible && link.nn;
          // Keep link visible of not nearest neighbor, but still connected via an edge list
          if (!visible && link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0) {
-           console.log('link origin: ', link.origin);
           link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
           visible = true;
         }
