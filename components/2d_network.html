@@ -589,6 +589,8 @@ Note that this may cause slow performance on larger networks.">
     ga('send', 'pageview');
     
     if (session.network.allPinned && !$('#pinbutton').hasClass('active')) $('#pinbutton').button('toggle');
+
+    session.style.widgets['loaded'] = true;
     
     let halfWidth = $('#network').parent().width() / 2,
       halfHeight = $('#network').parent().parent().parent().height() / 2,

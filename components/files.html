@@ -782,9 +782,11 @@ Please note that this causes MicrobeTrace to store data on your computer's hard 
     });
 
     localforage.getItem('default-distance-metric').then(cachedLSV => {
-      if (cachedLSV) {
+      if(session.style.widgets['loaded']) {
+        $('#default-distance-metric').val(session.style.widgets['default-distance-metric']).trigger('change');
+      } else if (cachedLSV) {
         $('#default-distance-metric').val(cachedLSV).trigger('change');
-      }
+      } 
     });
 
     $('#ambiguity-resolution-strategy').on('change', function () {
