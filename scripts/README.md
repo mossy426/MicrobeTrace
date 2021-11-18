@@ -27,7 +27,7 @@ _A directory for shell and python scripts_
   unless you're deploying to a system with very little free space, or other
   weird constraints.**
 
-- [`make_example_link_list.py`](https://www.cdc.gov/) -
+- [`make_example_link_list.py`](https://github.com/CDCgov/MicrobeTrace/blob/dev/scripts/make_example_link_list.py) -
   Generates an example link list with randomly generated node ids. The script can set
   the total number of nodes to generate, cluster size and the number of links generated 
   within each cluster.
