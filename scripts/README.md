@@ -29,8 +29,9 @@ _A directory for shell and python scripts_
 
 - [`make_example_link_list.py`](https://github.com/CDCgov/MicrobeTrace/blob/dev/scripts/make_example_link_list.py) -
   Generates an example link list with randomly generated node ids. The script can set
-  the total number of nodes to generate, cluster size and the number of links generated 
-  within each cluster.
+  the range to generate IDs from, the total number of nodes to generate, cluster size 
+  and the number of links generated within each cluster. The default values will generate
+  a large file that includes approximately 5000 nodes across 300+ clusters.
 
     usage: make_example_link_list.py [-h] [--num_nodes NUM_NODES]
                                      [--range_start RANGE_START]
