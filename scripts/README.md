@@ -1,6 +1,6 @@
 # Scripts
 
-_A directory for shell scripts_
+_A directory for shell and python scripts_
 
 ...Because I don't like writing Makefiles.
 
@@ -26,3 +26,38 @@ _A directory for shell scripts_
   Deletes everything MicrobeTrace doesn't need in order to run. **Don't use this
   unless you're deploying to a system with very little free space, or other
   weird constraints.**
+
+- [`make_example_link_list.py`](https://github.com/CDCgov/MicrobeTrace/blob/dev/scripts/make_example_link_list.py) -
+  Generates an example link list with randomly generated node ids. The script can set
+  the range to generate IDs from, the total number of nodes to generate, cluster size 
+  and the number of links generated within each cluster. The default values will generate
+  a large file that includes approximately 5000 nodes across 300+ clusters.
+
+    usage: make_example_link_list.py [-h] [--num_nodes NUM_NODES]
+                                     [--range_start RANGE_START]
+                                     [--range_finish RANGE_FINISH]
+                                     [--min_chunk_size MIN_CHUNK_SIZE]
+                                     [--max_chunk_size MAX_CHUNK_SIZE]
+                                     [--min_combs_chosen MIN_COMBS_CHOSEN]
+                                     [--max_combs_chosen MAX_COMBS_CHOSEN]
+                                     [--outfile OUTFILE]
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      --num_nodes NUM_NODES
+                            How many nodes to generate
+      --range_start RANGE_START
+                            ID at beginning of range
+      --range_finish RANGE_FINISH
+                            ID at end of range
+      --min_chunk_size MIN_CHUNK_SIZE
+                            Minimum nodes per cluster
+      --max_chunk_size MAX_CHUNK_SIZE
+                            Maximum nodes per cluster
+      --min_combs_chosen MIN_COMBS_CHOSEN
+                            Minimum number of combinations to select from a
+                            cluster
+      --max_combs_chosen MAX_COMBS_CHOSEN
+                            Maximum number of combinations to select from a
+                            cluster
+      --outfile OUTFILE     Name of the file to create
