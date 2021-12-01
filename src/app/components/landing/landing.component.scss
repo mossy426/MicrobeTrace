@@ -1,0 +1,51 @@
+.wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.welcome-msg {
+    margin-top: 325px;
+    text-align: center;
+}
+
+.top {
+    font-size: 65px;
+}
+
+.bottom {
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.microbe {
+    font-weight: 600;
+}
+
+.trace {
+    /* font-weight: 300; */
+}
+
+.add-data-container {
+    margin-top: 200px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.add-btns{
+    margin-top: 40px;
+}
+
+.recall {
+    margin-right: 50px; 
+}
+
+.launch-options-container {
+    display: flex;
+    justify-content: space-evenly;
+    position: absolute;
+    bottom: 35px;
+    width: 100%;
+}

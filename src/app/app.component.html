@@ -1,5 +1,40 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
+<div class="wrapper">
+  <mat-toolbar class="nav-bar">
+    <div class="navbar-logo">
+      <span class="microbe-font">Microbe</span>
+      <span class="trace-font">Trace</span>
+    </div>
+    <div class="menu-items">
+      <button mat-button [matMenuTriggerFor]="fileMenu">File</button>
+      <mat-menu #fileMenu="matMenu" yPosition="below">
+        <button mat-menu-item>Stash</button>
+        <button mat-menu-item>Recall</button>
+        <button mat-menu-item>Save</button>
+        <button mat-menu-item>Open</button>
+        <button mat-menu-item>Add Data</button>
+        <button mat-menu-item>New</button>
+      </mat-menu>
+      <button mat-button [matMenuTriggerFor]="windowMenu">Window</button>
+      <mat-menu #windowMenu="matMenu" yPosition="below">
+        <button mat-menu-item>Reload</button>
+        <button mat-menu-item>Toggle Fullscreen</button>
+      </mat-menu>
+      <button mat-button [matMenuTriggerFor]="helpMenu">Help</button>
+      <mat-menu #helpMenu="matMenu" yPosition="below">
+        <button mat-menu-item>Help</button>
+        <button mat-menu-item>Report Bug</button>
+        <button mat-menu-item>About</button>
+      </mat-menu>
+    </div>
+  </mat-toolbar>
+
+  <router-outlet></router-outlet>
+
+</div>
+
+
+<!-- <div style="text-align:center">
   <h1>
     Welcome to {{ title }}!
   </h1>
@@ -17,4 +52,4 @@
     <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
   </li>
 </ul>
-
+ -->
