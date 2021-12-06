@@ -6,7 +6,7 @@ declare var $: any;
 @Component({
     selector: 'TwoDComponent',
     templateUrl: './twoD-plugin.component.html',
-    styleUrls: ['./twoD-plugin.component.css']
+    styleUrls: ['./twoD-plugin.component.scss']
 })
 export class TwoDComponent implements OnInit {
 
