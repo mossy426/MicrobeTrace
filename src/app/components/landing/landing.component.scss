@@ -10,6 +10,10 @@
     text-align: center;
 }
 
+.files-msg {
+    font-size: 20px;;
+}
+
 .top {
     font-size: 65px;
 }
@@ -23,8 +27,10 @@
     font-weight: 600;
 }
 
-.trace {
-    /* font-weight: 300; */
+.here-link {
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .add-data-container {
@@ -48,4 +54,34 @@
     position: absolute;
     bottom: 35px;
     width: 100%;
+    font-size: 20px;
+}
+
+.mt-icon {
+    width: 50px;
+    height: 50px;
+}
+
+.dropdown-symbol {
+    font-size: 12px;
+}
+
+.threshold-option {
+    display: flex;
+}
+
+.threshold-input {
+    margin-top: -25px;
+}
+
+.threshold-input-length {
+    max-width: 60px;;
+}
+
+.onload-bold {
+    font-weight: 800;
+}
+
+.option-value {
+    cursor: pointer;
 }

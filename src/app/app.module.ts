@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 
 import { TwoDComponent } from './components/twoDComponent/twoD-plugin.component';
 import { LandingComponent } from './components/landing/landing.component';
+import { MatInputModule } from '@angular/material';
 
 
 
@@ -26,6 +27,7 @@ import { LandingComponent } from './components/landing/landing.component';
     BrowserModule,
     BrowserAnimationsModule,
     MatButtonModule,
+    MatInputModule,
     MatMenuModule,
     RouterModule.forRoot([
       {
