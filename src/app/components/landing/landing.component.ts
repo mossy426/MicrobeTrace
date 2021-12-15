@@ -10,6 +10,7 @@ declare var $: any;
 })
 export class LandingComponent implements OnInit {
 
+    // Launch Options
     public metric: string = "TN93";
     public ambiguity: string = "Average";
     public launchView: string = "2D Network";
@@ -72,5 +73,19 @@ export class LandingComponent implements OnInit {
      public continueClicked() : void {
     }
 
+    /**
+     * Handler for here link
+     * Opens file explorer to upload
+     * @param {void}
+     */
+     public hereLinkClicked() : void {
+    }
+
+    /**
+     * Trigger when file dragged onto view
+     * @param {void}
+     */
+     public fileDragged() : void {
+    }
 
 }

@@ -6,7 +6,7 @@
       <span class="trace-font">Trace</span>
     </div>
     <div class="menu-items">
-      <button class="navbar-item" mat-button [matMenuTriggerFor]="fileMenu">File<span class="dropdown-symbol">&#9660;</span></button>
+      <button class="navbar-item" mat-button [matMenuTriggerFor]="fileMenu">{{ 'APP.FILE' | translate:param }}<span class="dropdown-symbol">&#9660;</span></button>
       <mat-menu #fileMenu="matMenu" overlapTrigger="false">
         <button mat-menu-item>Stash</button>
         <button mat-menu-item>Recall</button>
@@ -15,16 +15,21 @@
         <button mat-menu-item>Add Data</button>
         <button mat-menu-item>New</button>
       </mat-menu>
-      <button class="navbar-item" mat-button [matMenuTriggerFor]="windowMenu">Window<span class="dropdown-symbol">&#9660;</span></button>
+      <button class="navbar-item" mat-button [matMenuTriggerFor]="windowMenu">{{ 'APP.WINDOW' | translate:param }}<span class="dropdown-symbol">&#9660;</span></button>
       <mat-menu #windowMenu="matMenu" overlapTrigger="false">
         <button mat-menu-item>Reload</button>
         <button mat-menu-item>Toggle Fullscreen</button>
       </mat-menu>
-      <button class="navbar-item" mat-button [matMenuTriggerFor]="helpMenu">Help<span class="dropdown-symbol">&#9660;</span></button>
+      <button class="navbar-item" mat-button [matMenuTriggerFor]="helpMenu">{{ 'APP.HELP' | translate:param }}<span class="dropdown-symbol">&#9660;</span></button>
       <mat-menu #helpMenu="matMenu" overlapTrigger="false">
         <button mat-menu-item>Help</button>
         <button mat-menu-item>Report Bug</button>
         <button mat-menu-item>About</button>
+      </mat-menu>
+      <button class="navbar-item" mat-button [matMenuTriggerFor]="langMenu">{{ 'APP.LANG' | translate:param }}<span class="dropdown-symbol">&#9660;</span></button>
+      <mat-menu #langMenu="matMenu" overlapTrigger="false">
+        <button mat-menu-item (click)="changeLanguage('en')">{{ 'APP.ENGLISH' | translate:param }}</button>
+        <button mat-menu-item (click)="changeLanguage('sp')">{{ 'APP.SPANISH' | translate:param }}</button>
       </mat-menu>
     </div>
   </mat-toolbar>

@@ -1,0 +1,12 @@
+{
+    "APP" : {
+        "ENGLISH" : "Inglés",
+        "FILE": "Archivo",
+        "HELP" : "Ayuda",
+        "LANG" : "Idioma",
+        "SPANISH" : "Español",
+        "VISUALIZATION" : "La Multiherramienta de Visualización para Epidemiología Molecular y Bioinformática",
+        "WELCOME" : "Bienvenidos a",
+        "WINDOW" : "Ventana"
+    }
+}

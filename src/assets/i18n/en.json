@@ -1,0 +1,12 @@
+{
+    "APP" : {
+        "ENGLISH" : "English",
+        "FILE": "File",
+        "HELP" : "Help",
+        "LANG" : "Language",
+        "SPANISH" : "Spanish",
+        "VISUALIZATION" : "The Visualization Multitool for Molecular Epidemiology and Bioinformatics",
+        "WELCOME" : "Welcome to",
+        "WINDOW" : "Window"
+    }
+}
