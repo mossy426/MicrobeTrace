@@ -1608,9 +1608,12 @@ Note that this may cause slow performance on larger networks.">
       
       temp.style.nodeSymbolMap = d3.scaleOrdinal(nodeSymbols).domain(values);
       let nodeSymbolHeaderTitle =  (session.style.overwrite && session.style.overwrite.nodeSymbolHeaderTitle ? session.style.overwrite.nodeSymbolHeaderTitle : "Node " + MT.titleize(variable));
+      const encodedNodeSymbolHeaderTitle = nodeSymbolHeaderTitle.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+              return '&#'+i.charCodeAt(0)+';';
+      });
       table.empty().append(
         '<tr>' +
-        '<th class="p-1" contenteditable>' + nodeSymbolHeaderTitle + '</th>' +
+        '<th class="p-1" contenteditable>' + encodedNodeSymbolHeaderTitle + '</th>' +
         (settings['node-symbol-table-counts'] ? '<th>Count</th>' : '') +
         (settings['node-symbol-table-frequencies'] ? '<th>Frequency</th>' : '') +
         '<th>Shape</th>' +
