@@ -587,6 +587,8 @@ Note that this may cause slow performance on larger networks.">
     ga('set', 'page', '/2d_network');
     ga('set', 'title', '2D View');
     ga('send', 'pageview');
+
+    $('#tipsTab').show()
     
     if (session.network.allPinned && !$('#pinbutton').hasClass('active')) $('#pinbutton').button('toggle');
 

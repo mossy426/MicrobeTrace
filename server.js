@@ -21,4 +21,5 @@ app.use(
   })
 );
 
-app.listen(process.env.PORT || 5000);
+// Updated port due to 5000 being used in new MacOS Monterrey
+app.listen(process.env.PORT || 5051);

@@ -99,6 +99,10 @@
           <a href="#" id="AboutTab" class="dropdown-item" data-toggle="modal" data-target="#about-modal">About</a>
         </div>
       </li>
+      <li class="nav-item">
+        <a href="#" id="tipsTab" class="nav-link py-0" data-toggle="modal" data-target="#tips-modal">Tips for Use</a>
+      </li>
+
 
       <li><span id="development-version" style="margin-left: 40px; color: #0037ff; font-weight: bolder; font-size: x-small;"> non production environment </span></li>
 
@@ -464,6 +468,37 @@ performance of this software.</pre>
                   </select>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="btn-group" data-toggle="buttons">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+          </div>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+  <div id="tips-modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="false">
+    <div class="modal-dialog tips" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Tips For Use</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="filtering-config" role="tabpanel" aria-labelledby="filtering-tab">
+              <ol>
+                <li>Click and hold the header of this tip window to drag it.</li>
+                <li>Click and hold in white space of the network to drag entire image.</li>
+                <li>Right click key/boxes to hide or drag.</li>
+                <li>Zoom in with touchpad.</li>
+                <li>Drag by clicking, holding, moving.</li>
+              </ol>
             </div>
           </div>
         </div>

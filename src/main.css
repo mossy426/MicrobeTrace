@@ -529,10 +529,32 @@ button.btn,
 }
 #global-settings-modal {
   pointer-events: none;
+  top: 35px;
 }
+
 #global-settings-modal .modal-content {
   background: rgba(255, 255, 255, 0.8);
 }
+
+#tips-modal {
+  width: auto;
+  min-width: 0;
+  right: 5px;
+  left:auto;
+  top: 63px;
+  height: auto;
+}
+
+.tips {
+  margin: 0;
+  width: 585px;
+  max-width: none;
+}
+
+#tipsTab {
+  display: none;
+}
+
 #global-timeline-wrapper {
   /* background: #f8f9fa; */
   border-top: 1px solid rgba(0, 0, 0, 0.1);
