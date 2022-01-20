@@ -1,4 +1,4 @@
-// import { CommonService } from "../services/common.service";
+import { CommonService } from "../contactTraceCommonServices/common.service";
 
 export class DialogSettings {
     public isVisible: boolean = false;

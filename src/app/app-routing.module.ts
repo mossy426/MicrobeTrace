@@ -1,13 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { TwoDComponent } from './components/twoDComponent/twoD-plugin.component';
+import { MicrobeTraceNextHomeComponent } from './microbe-trace-next-plugin.component';
 
 const routes: Routes = [
-  {
-    path: './components/twoDComponent',
-    component: TwoDComponent
-  },
-  { path: 'second-component', component: TwoDComponent },
+  { path: '', component: MicrobeTraceNextHomeComponent }
 ];
 
 @NgModule({

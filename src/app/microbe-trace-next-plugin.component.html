@@ -1,0 +1,319 @@
+<div class="m-content">   
+    <div class="m-portlet m-portlet--mobile">
+
+        <mat-toolbar class="nav-bar">
+            <div class="navbar-logo">
+              <span class="microbe-font">Microbe</span>
+              <span class="trace-font">Trace</span>
+            </div>
+            <div class="menu-items">
+              <button class="navbar-item" mat-button [matMenuTriggerFor]="fileMenu"><i class="far nav-icon flaticon-file-1"></i>File<span class="dropdown-symbol">&#9660;</span></button>
+              <mat-menu #fileMenu="matMenu" overlapTrigger="false">
+                <button mat-menu-item>Stash</button>
+                <button mat-menu-item>Recall</button>
+                <button mat-menu-item (click)="FileClick('Save Session')">Save</button>
+                <button mat-menu-item>Open</button>
+                <button mat-menu-item>Add Data</button>
+                <button mat-menu-item (click)="FileClick('New Session')">New</button>
+              </mat-menu>
+              <button class="navbar-item" mat-button [matMenuTriggerFor]="windowMenu"><i class="far nav-icon flaticon-web"></i>Window<span class="dropdown-symbol">&#9660;</span></button>
+              <mat-menu #windowMenu="matMenu" overlapTrigger="false">
+                <button mat-menu-item (click)="WindowClick('Reload Screen')">Reload</button>
+                <button mat-menu-item>Toggle Fullscreen</button>
+              </mat-menu>
+              <button class="navbar-item" mat-button [matMenuTriggerFor]="helpMenu"><i class="far nav-icon flaticon-questions-circular-button"></i>Help<span class="dropdown-symbol">&#9660;</span></button>
+              <mat-menu #helpMenu="matMenu" overlapTrigger="false">
+                <button mat-menu-item>Help</button>
+                <button mat-menu-item>Report Bug</button>
+                <button mat-menu-item>About</button>
+              </mat-menu>
+              <button class="navbar-item" mat-button [matMenuTriggerFor]="langMenu"><i class="far nav-icon flaticon-earth-globe"></i>Language<span class="dropdown-symbol">&#9660;</span></button>
+              <mat-menu #langMenu="matMenu" overlapTrigger="false">
+                <button mat-menu-item (click)="changeLanguage('en')">English</button>
+                <button mat-menu-item (click)="changeLanguage('sp')">Spanish</button>
+              </mat-menu>
+            </div>
+          </mat-toolbar>
+
+        <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="kt-portlet__head kt-portlet__head--lg">
+                    <div class="m-portlet__body" style="flex: 1 100%; max-width:100%">
+
+                        <p-tabView id="main-tabset" (onClose)="removeTab($event)" (click)="setActiveTabProperties()">
+                                <p-tabPanel id="homepageTabs{{i}}" *ngFor="let tab of homepageTabs; let i = index" [closable]="i > 0" header={{tab.label}} [selected]="tab.isActive">
+
+                                <div class="m-portlet">
+                                    <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showSettings == true">
+                                        <a title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings(i)"><i class="flaticon-settings"></i></a>
+                                    </span>
+                                    <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showExport == true">
+                                        <a title="Export Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openExport(i)"><i class="flaticon-download"></i></a>
+                                    </span>
+                                    <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showCenter == true">
+                                        <a title="Center Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openCenter(i)"><i class="flaticon-eye"></i></a>
+                                    </span>
+                                    <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showPinAllNodes == true">
+                                        <a title="Pin All Nodes" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openPinAllNodes(i)"
+                                            [style.background]="commonService.session.network.allPinned ? 'lightblue': 'transparent'"
+                                        ><i class="flaticon-pin"></i></a>
+                                    </span>
+                                    <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showRefresh == true">
+                                        <a title="Refresh Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openRefreshScreen(i)"><i class="flaticon-refresh"></i></a>
+                                    </span>
+                                    <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showButtonGroup == true">
+                                        <p-selectButton #dataSet [options]="dataSetView" [(ngModel)]="dataSetViewSelected" (onOptionClick)="openSelectDataSetScreen(i,$event)"></p-selectButton>
+                                    </span>
+                                </div>
+
+                                <div class="m-portlet__body" style="background-color:white;">
+                                    <ng-container #placeholder>{{tab.templateRef}}</ng-container>
+                                </div>
+
+                            </p-tabPanel> 
+                        </p-tabView>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <p-dialog id="ledger-loader-modal" [(visible)]="displayLedgerLoaderDialog" header="Blockchain Ledgers" styleClass="ui-dialog" [contentStyle]="{'max-height':'50vh'}">
+
+            <div class="position-relative" #ledgerloadDiv>
+                <div class="loader">
+                    <i class="fa fa-spinner fa-spin" style="font-size:40px;z-index:1;display:none;" #ledgerloader></i>
+                </div>
+            </div>
+
+            <div style="min-height: 100px;">
+                <p-tree [value]="ledgerOptions" selectionMode="checkbox"  [filter]="true" [(selection)]="ledgerOptionSelected" *ngIf="ledgerOptions && ledgerOptions.length > 0" scrollHeight="flex"></p-tree>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-error" (click)="ToggleDisplayLedgerLoaderDialog()">Cancel</button>
+                <button type="button" id="stash-data2" class="btn btn-primary" (click)="DisplayLedgerLoaderDialog('Load')" [disabled]="!ledgerOptionSelected || ledgerOptionSelected.length === 0">Load</button>
+            </div>
+
+        </p-dialog><!-- /.modal -->
+
+
+        <p-dialog id="global-settings-modal" 
+                    [positionLeft]="GlobalSettingsDialogSettings.left" 
+                    [positionTop]="GlobalSettingsDialogSettings.top" 
+                    [(visible)]="GlobalSettingsDialogSettings.isVisible"  
+                    header="Global Settings" >
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <tabset #globalSettingsTab class="tab-container tabbable-line" style='width: 100%; height: 100%;'>
+                            <tab heading="{{'Filtering' | localize}}" customClass="m-tabs__item" style='width: 400px; height: 100%;'>
+
+                                <div id="filtering-config" role="tabpanel" aria-labelledby="filtering-tab">
+                                    <div class="form-group row" title="By what algorithm would you like to prune links from the network?">
+                                        <div class="col-4">Prune With</div>
+                                        <div class="col-8">
+                                            <p-selectButton [options]="PruneWityTypes" [(ngModel)]="SelectedPruneWityTypesVariable" (onChange)="onPruneWithTypesChanged()"></p-selectButton>
+                                        </div>
+                                    </div>                                    
+                                    <div class="form-group row" title="What's the minimum number of nodes a cluster must have in order to be visible?">
+                                        <div class="col-4">
+                                            <label for="cluster-minimum-size">Minimum Cluster Size</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input type="number" class="form-control form-control-sm" id="cluster-minimum-size" min="1" value="1" step="1" [(ngModel)]="SelectedClusterMinimumSizeVariable" (ngModelChange)="onMinimumClusterSizeChanged()">
+                                        </div>
+                                    </div>
+                                    <div id="filtering-wrapper">
+                                        <div class="form-group row" title="By what variable would you like to prune links from the network?">
+                                            <div class="col-4"><label for="link-sort-variable">Filter Links on</label></div>
+                                            <div class="col-8">
+                                                <p-dropdown id="link-sort-variable" [options]="ToolTipFieldList" appendTo="body" [(ngModel)]="SelectedLinkSortVariable" (onChange)="onLinkSortChanged()"></p-dropdown>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" title="What's the maximum genetic distance you're willing to call a link?">
+                                            <div class="col-4"><label for="link-threshold">Filtering Threshold</label></div>
+                                            <div class="col-8"><svg id="link-threshold-sparkline" style="width: 280px; height: 48px;"></svg></div>
+                                            <div class="col-8  offset-4">
+                                                <input type="number" class="form-control form-control-sm" id="link-threshold" min="-1" value="1" step="0.001" [(ngModel)]="SelectedLinkThresholdVariable" (ngModelChange)="onLinkThresholdChanged()">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" hidden title="Click to reveal all hidden elements of the network.">
+                                        <div class="col-4"><label for="RevealAllTab">Reveal</label></div>
+                                        <div class="col-8">
+                                            <p-selectButton [options]="RevealTypes" [(ngModel)]="SelectedRevealTypesVariable" (onChange)="updateGlobalSettingsModel()"></p-selectButton>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="form-group row" title="Display a table of overview statistics for the network">
+                                        <div class="col-4">Statistics</div>
+                                        <div class="col-8">
+                                            <p-selectButton [options]="StatisticsTypes" [(ngModel)]="SelectedStatisticsTypesVariable" (onChange)="onShowStatisticsChanged()"></p-selectButton>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tab>
+                            <tab heading="{{'Styling' | localize}}" customClass="m-tabs__item" style='width: 400px; height: 100%;'>
+
+                                <div id="style-config" role="tabpanel" aria-labelledby="style-tab">
+                                    <div class="form-group row" title="By what variable nodes be colored?">
+                                        <div class="col-4"><label for="node-color-variable">Color Nodes By</label></div>
+                                        <div class="col-8">
+                                            <p-dropdown id="node-color-variable" [options]="FieldList" appendTo="body" [(ngModel)]="SelectedColorNodesByVariable" (onChange)="onColorNodesByChanged()"></p-dropdown>
+                                        </div>
+                                    </div>
+                                    <div id="link-color-table-row" class="form-group row" title="Should MicrobeTrace display the table of colors?">
+                                        <div class="col-4"><label>Nodes Color Table</label></div>
+                                        <div class="col-8">
+                                            <p-selectButton [options]="NodeColorTableTypes" [(ngModel)]="SelectedNodeColorTableTypesVariable" (onChange)="onNodeColorTableChanged()"></p-selectButton>
+                                        </div>
+                                    </div>
+
+
+                                    <div id="node-color-value-row" class="form-group row" title="What color should the nodes be?">
+                                        <div class="col-4"><label for="node-color">Nodes</label></div>
+                                        <div class="col-8">
+                                            <input type="color" id="node-color" class="form-control form-control-sm" value="#1f77b4" [(ngModel)]="SelectedNodeColorVariable" (ngModelChange)="onNodeColorChanged()">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" title="By what variable should links be colored?">
+                                        <div class="col-4"><label for="link-color-variable">Color Links By</label></div>
+                                        <div class="col-8">
+                                            <p-dropdown id="link-tooltip-variable" [options]="ToolTipFieldList" appendTo="body" [(ngModel)]="SelectedColorLinksByVariable" (onChange)="onColorLinksByChanged()"></p-dropdown>
+                                        </div>
+                                    </div>
+                                    <div id="link-color-table-row2" class="form-group row" title="Should MicrobeTrace display the table of colors?">
+                                        <div class="col-4"><label>Link Color Table</label></div>
+                                        <div class="col-8">
+                                            <p-selectButton [options]="LinkColorTableTypes" [(ngModel)]="SelectedLinkColorTableTypesVariable" (onChange)="onLinkColorTableChanged()"></p-selectButton>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row" title="What color should denote selection?">
+                                        <div class="col-4"><label for="selected-color">Selected</label></div>
+                                        <div class="col-8">
+                                            <input type="color" id="selected-color" class="form-control form-control-sm" value="#ff8300" [(ngModel)]="SelectedColorVariable" (ngModelChange)="updateGlobalSettingsModel()">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" title="What color should the background be?">
+                                        <div class="col-4"><label for="background-color">Background</label></div>
+                                        <div class="col-8">
+                                            <input type="color" id="background-color" class="form-control form-control-sm" value="#ffffff" [(ngModel)]="SelectedBackgroundColorVariable" (ngModelChange)="onBackgroundChanged()">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" title="Load an existing MicrobeTrace style file" hidden>
+                                        <div class="col-4">Apply Style</div>
+                                        <div class="col-8">
+                                            <input type="file" id="apply-style" class="d-none" [(ngModel)]="SelectedApplyStyleVariable" (ngModelChange)="updateGlobalSettingsModel()">
+                                            <label class="custom-file-label" for="apply-style">Choose MicrobeTrace Style File</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tab>
+                        </tabset>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="btn-group" data-toggle="buttons">
+                    <button type="button" class="btn btn-primary" (click)="GlobalSettingsDialogSettings.setVisibility(false)">Done</button>
+                </div>
+            </div>
+        </p-dialog><!-- /.modal -->
+
+
+
+
+
+
+
+        <p-dialog id="session-recall-modal" [(visible)]="displayRecallStashDialog" header="Recall Stash">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div *ngIf="!HideThisForNow" class="modal-body">
+                        <div id="recall-stashes-available" class="table-sm"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button *ngIf="!HideThisForNow" type="button" class="btn btn-danger" id="recall-delete-stash" (click)="DisplayRecallStashDialog('Delete')">Delete</button>
+                        <button type="button" class="btn" (click)="DisplayRecallStashDialog('Cancel')">Cancel</button>
+                        <button type="button" class="btn btn-success" id="recall-load-stash" (click)="DisplayRecallStashDialog('Recall')">Recall</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </p-dialog><!-- /.modal -->
+
+
+        <p-dialog id="session-stash-modal" [(visible)]="displayStashDialog" header="Save Session">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <div class="form-group row" title="What would you like to call this session?">
+                            <div class="col">
+                                <input type="text" id="stash-name" class="form-control form-control-sm" [(ngModel)]="saveFileName" placeholder="Name your session!">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-error" (click)="DisplayStashDialog('Cancel')">Cancel</button>
+                        <button type="button" id="stash-data" class="btn btn-primary" (click)="DisplayStashDialog('Save')" [disabled]="saveFileName === undefined || saveFileName === ''">Save</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </p-dialog><!-- /.modal -->
+
+
+        <p-dialog id="about-dialog" [(visible)]="displayAbout" header="About Micro-Tracing Next">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h3>
+                            <span>{{"Micro-Tracing " | localize}}</span>
+                            <span>{{"Next" | localize}}</span>
+                            <span><sup>&reg;</sup></span>
+                            <small>v<span id="version">{{version}}</span></small>
+                        </h3>
+                      
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" (click)="DisplayAbout()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </p-dialog>
+
+       
+        <p-dialog id="global-settings-link-color-table" 
+                    [positionLeft]="GlobalSettingsLinkColorDialogSettings.left" 
+                    [positionTop]="GlobalSettingsLinkColorDialogSettings.top" 
+                    [(visible)]="GlobalSettingsLinkColorDialogSettings.isVisible"  
+                    header="Link Color Table" [style]="{width: '25vw'}"
+                    (onShow)="SelectedLinkColorTableTypesVariable='Show'"
+                    (onHide)="SelectedLinkColorTableTypesVariable='Hide'"
+                    >
+            <div class="col-12" style="max-height: 50vh">
+                <table id="link-color-table" style="width:100%;height:100%;"></table>
+            </div>
+        </p-dialog>
+
+
+        <p-dialog id="global-settings-node-color-table" 
+                    [positionLeft]="GlobalSettingsNodeColorDialogSettings.left" 
+                    [positionTop]="GlobalSettingsNodeColorDialogSettings.top" 
+                    [(visible)]="GlobalSettingsNodeColorDialogSettings.isVisible"  
+                    header="Node Color Table" [style]="{width: '25vw'}"
+                    (onShow)="SelectedNodeColorTableTypesVariable='Show'"
+                    (onHide)="SelectedNodeColorTableTypesVariable='Hide'"
+                    >
+            <div class="col-12" style="max-height: 50vh">
+                <table id="node-color-table" style="width:100%;height:100%;"></table>
+            </div>
+        </p-dialog>
+
+
+    </div>
+</div>

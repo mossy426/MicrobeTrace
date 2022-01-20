@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
+
+declare var $: any;
 
 @Component({
   selector: 'app-root',
@@ -7,21 +8,7 @@ import {TranslateService} from '@ngx-translate/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'app';
-
-  param = {value : 'world'};
-
-  constructor(translate: TranslateService) {
-
-    translate.addLangs(['en', 'es']);
-
-    // this language will be used as a fallback when a translation isn't found in the current language
-    translate.setDefaultLang('en');
-
-     // the lang to use, if the lang isn't available, it will use the current loader to get them
-    const browserLang = translate.getBrowserLang();
-    translate.use(browserLang.match(/en|es/) ? browserLang : 'en');
-    
-  }
-
+  title = 'sample-app';
 }
+
+
