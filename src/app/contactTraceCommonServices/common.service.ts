@@ -1557,7 +1557,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             window.context.commonService.setNodeVisibility(true);
             ["cluster", "link", "node"].forEach(thing => $(document).trigger(thing + "-visibility"));// $window.trigger(thing + "-visibility"));
             window.context.commonService.updateStatistics();
-            // $("#network-statistics-wrapper").fadeIn();
+            $("#network-statistics-wrapper").fadeIn();
             // console.log
         });
         /*if (localStorage.getItem("stash-auto") == "true") {
