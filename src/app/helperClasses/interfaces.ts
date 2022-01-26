@@ -14,6 +14,19 @@ export interface StashObjects  {
     tabs: HomePageTabItem[]
 }
 
+export interface StashObject  {
+    data: any
+    files: any
+    layout: any
+    messages: any
+    meta: any
+    network: any
+    state: any
+    style: any
+    timeline: any
+    warnings: any
+}
+
 export interface HomePageTabItem {
     label: string,
     templateRef: any,

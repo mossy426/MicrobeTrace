@@ -15,10 +15,11 @@ import { LocalStorageService } from '@shared/utils/local-storage.service';
 //import starsJson from '../data/stars.json';
 
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { StashObjects } from '../helperClasses/interfaces';
+import { StashObjects, StashObject } from '../helperClasses/interfaces';
 import { MicrobeTraceNextVisuals } from '../microbe-trace-next-plugin-visuals';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+// import { ConsoleReporter } from 'jasmine';
 
 
 @Injectable({
@@ -760,7 +761,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             console.error(error);
             return;
         }
-        if (extension == "microbetracenext") {
+        if (extension == "microbetrace") {
             window.context.commonService.applySession(data);
         } else {
             if (data.version) {
@@ -772,23 +773,28 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     };
 
-    applySession(stashObject: StashObjects) {
+    applySession(stashObject: StashObject) {
         //If anything here seems eccentric, assume it's to maintain compatibility with
         //session files from older versions of MicrobeTrace.
-        $("#launch").prop("disabled", true);
-        const oldSession = stashObject.session;
+        $("#launch").prop("disabled", true)
+        console.log(stashObject);
+        const oldSession = stashObject;
         window.context.commonService.session.files = oldSession.files;
         window.context.commonService.session.state = oldSession.state;
+        window.context.commonService.session.style = oldSession.style;
         window.context.commonService.session.meta.startTime = Date.now();
         const nodes = oldSession.data.nodes,
             links = oldSession.data.links,
             n = nodes.length,
             m = links.length;
+
+            console.log('nodes: ', oldSession.data.nodes);
         for (let i = 0; i < n; i++) window.context.commonService.addNode(nodes[i]);
         for (let j = 0; j < m; j++) window.context.commonService.addLink(links[j]);
         ['nodeFields', 'linkFields', 'clusterFields', 'nodeExclusions'].forEach(v => {
             if (oldSession.data[v]) window.context.commonService.session.data[v] = window.context.commonService.uniq(window.context.commonService.session.data[v].concat(oldSession.data[v]));
         });
+        window.context.commonService.processData();
         if (oldSession.network) window.context.commonService.session.network = oldSession.network;
         window.context.commonService.applyStyle(window.context.commonService.session.style);
         if (!links[0]['distance']) {
@@ -798,9 +804,27 @@ export class CommonService extends AppComponentBase implements OnInit {
                 window.context.commonService.session.style.widgets['link-sort-variable'] = 'snps';
             }
         }
-        this.finishUp();
+        window.context.commonService.finishUp();
 
     };
+
+    processData() {
+        let nodes = this.session.data.nodes;
+        this.session.data.nodeFilteredValues = nodes;
+        console.log('nodessss: ', nodes);
+        //Add links for nodes with no edges
+        // this.uniqueNodes.forEach(x => {
+        //     this.commonService.addLink(Object.assign({
+        //         source: '' + x,
+        //         target: '' + x,
+        //         origin: origin,
+        //         visible: true,
+        //         distance: 0,
+        //     }, 'generated'));
+        // })
+
+        // this.processSequence()
+    }
 
     applyStyle(style) {
         window.context.commonService.session.style = style;
@@ -1533,7 +1557,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             window.context.commonService.setNodeVisibility(true);
             ["cluster", "link", "node"].forEach(thing => $(document).trigger(thing + "-visibility"));// $window.trigger(thing + "-visibility"));
             window.context.commonService.updateStatistics();
-            $("#network-statistics-wrapper").fadeIn();
+            // $("#network-statistics-wrapper").fadeIn();
+            // console.log
         });
         /*if (localStorage.getItem("stash-auto") == "true") {
             this.temp.autostash = {
@@ -1694,6 +1719,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     getVisibleNodes(copy: any = false) {
         let nodes = window.context.commonService.session.data.nodeFilteredValues;
+        console.log('nodes filt: ', nodes);
         let n = nodes.length;
         let out = [];
         for (let i = 0; i < n; i++) {
@@ -1751,6 +1777,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         if ($("#network-statistics-hide").is(":checked")) return;
         let vnodes = window.context.commonService.getVisibleNodes();
+        console.log('get visible nodes: ', vnodes);
         let vlinks = window.context.commonService.getVisibleLinks();
         let singletons = vnodes.filter(d => d.degree == 0).length;
         $("#numberOfSelectedNodes").text(vnodes.filter(d => d.selected).length.toLocaleString());
@@ -2506,8 +2533,11 @@ export class CommonService extends AppComponentBase implements OnInit {
             node.visible = true;
             let cluster = clusters[node.cluster];
             if (cluster) {
-                node.visible = node.visible && cluster.visible;
+                cluster.visible = true;
+                // node.visible = node.visible && cluster.visible;
+                console.log('cluster visible: ', node.visible);
             }
+            console.log('node visible: ', node.visible);
             if (dateField != "None") {
                 if (this.session.state.timeEnd) {
                     node.visible =
@@ -2531,11 +2561,16 @@ export class CommonService extends AppComponentBase implements OnInit {
         let links = window.context.commonService.session.data.links;
         let clusters = window.context.commonService.session.data.clusters;
         let n = links.length;
+
+        console.log('style: ', window.context.commonService.session.style.widgets);
+        console.log('metric: ', metric);
+
         for (let i = 0; i < n; i++) {
             let link = links[i];
             let visible = true;
             if (link[metric] == null) {
-                link.visible = false;
+                console.log('visible is false');
+                link.visible = true;
                 continue;
             } else {
                 visible = link[metric] <= threshold;
@@ -2548,6 +2583,8 @@ export class CommonService extends AppComponentBase implements OnInit {
                 visible = visible && cluster.visible;
             }
             link.visible = visible;
+
+            console.log('visibility: ', link.visible);
         }
         if (!silent) $(document).trigger("link-visibility");
         console.log("Link Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");

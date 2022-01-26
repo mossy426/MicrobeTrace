@@ -45,6 +45,11 @@ import { first } from 'rxjs/operators';
 export class MicrobeTraceNextHomeComponent extends AppComponentBase implements AfterViewInit, OnInit, OnDestroy {
 
 
+    public metric: string = "TN93";
+    public ambiguity: string = "Average";
+    public launchView: string = "2D Network";
+    public threshold: string = "0.015";
+
     showSettings: boolean = false;
     showExport: boolean = false;
     showCenter: boolean = false;
@@ -246,6 +251,71 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         this.commonService.updateThresholdHistogram();
 
+        // $('#visualwrapper').hide()'
+
+        setTimeout(() => {
+            $('#top-toolbar').fadeTo("slow", 1);
+        }, 1000);
+        setTimeout(() => {
+            $('#overlay').fadeTo("slow", 1);
+        }, 2000);
+        setTimeout(() => {
+            $('#visualwrapper').fadeTo("slow", 1);
+        }, 4000);
+        
+        // $.getJSON("../assets/testttt.microbetrace", window.context.commonService.applySession);
+        // reader.onloadend = out => this.commonService.processJSON(out.target, extension);
+    }
+
+    /**
+     * Updates metric based on selection
+     * @param value - metric selected
+     */
+     public updateMetric( value: string ) : void {
+        this.metric = value;
+    }
+
+    /**
+     * Updates metric based on selection
+     * @param value - ambiguity selected
+     */
+     public updateAmbiguity( value: string ) : void {
+        this.ambiguity = value;
+    }
+
+    /**
+     * Updates metric based on selection
+     * @param value - view selected
+     */
+     public updateLaunchView( value: string ) : void {
+        this.launchView = value;
+    }
+
+    /**
+     * Updates metric based on selection
+     * @param value - threshold input
+     */
+     public updateThreshold( value: string ) : void {
+        this.threshold = value;
+    }
+
+    /**
+     * Handler for recall btn
+     * Opens recall window
+     * @param {void}
+     */
+     public recallClicked() : void {
+    }
+
+    /**
+     * Handler for continue btn
+     * Opens recall window
+     * @param {void}
+     */
+     public continueClicked() : void {
+        $('#overlay').fadeOut("slow");
+        $('.ui-tabview-nav').fadeTo("slow", 1);
+        $('.m-portlet').fadeTo("slow", 1);
     }
 
 
@@ -259,7 +329,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         }
 
     }
-
 
 
     onMinimumClusterSizeChanged() {
@@ -820,6 +889,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.homepageTabs[0].componentRef = this.cmpRef;
 
         this.cmpRef.instance.LoadDefaultVisualizationEvent.subscribe((v) => {
+            console.log('init: ', v);
             this.loadDefaultVisualization(v);
             this.publishLoadNewData();
         });
@@ -1330,7 +1400,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     Viewclick(viewName: string) {
 
         let tabNdx = this.homepageTabs.findIndex(x => x.label == viewName);
-
+        if (viewName == "2d network") {
+            viewName = "2D Network";
+        }
         /*/
          * Don't allow duplicate tabs to get added.
         /*/
@@ -1341,13 +1413,16 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             this.addTab(viewName, viewName + this.activeTabIndex, this.activeTabIndex);
 
             setTimeout(() => {
-
+          
+                console.log('view name: ', viewName);
                 let _type: any = this.GetComponentTypeByName(viewName);
 
                 let factory = this.cfr.resolveComponentFactory(_type);
                 this.cmpRef = this.targets.last.createComponent(factory)
 
                 tabNdx = this.homepageTabs.findIndex(x => x.label == viewName);
+                console.log('tab ind: ', tabNdx);
+                console.log('homepage: ', this.homepageTabs);
                 this.homepageTabs[tabNdx].componentRef = this.cmpRef;
                 this.tabView.tabs[tabNdx].selected = true;
 

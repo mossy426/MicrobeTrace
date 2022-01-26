@@ -1,7 +1,7 @@
-<div class="m-content">   
-    <div class="m-portlet m-portlet--mobile">
+<div class="m-content" style="height:100%; overflow-y: hidden;">   
+    <div class="m-portlet m-portlet--mobile" style="height:100%;">
 
-        <mat-toolbar class="nav-bar">
+        <mat-toolbar id="top-toolbar" class="nav-bar">
             <div class="navbar-logo">
               <span class="microbe-font">Microbe</span>
               <span class="trace-font">Trace</span>
@@ -35,15 +35,15 @@
             </div>
           </mat-toolbar>
 
-        <div class="kt-container  kt-grid__item kt-grid__item--fluid">
-            <div class="kt-portlet kt-portlet--mobile">
-                <div class="kt-portlet__head kt-portlet__head--lg">
-                    <div class="m-portlet__body" style="flex: 1 100%; max-width:100%">
+        <div id="visualwrapper" class="kt-container  kt-grid__item kt-grid__item--fluid " style="height:100%">
+            <div class="kt-portlet kt-portlet--mobile" style="height:100%">
+                <div class="kt-portlet__head kt-portlet__head--lg" style="height:100%">
+                    <div class="m-portlet__body" style="flex: 1 100%; max-width:100%; height:100%">
 
                         <p-tabView id="main-tabset" (onClose)="removeTab($event)" (click)="setActiveTabProperties()">
-                                <p-tabPanel id="homepageTabs{{i}}" *ngFor="let tab of homepageTabs; let i = index" [closable]="i > 0" header={{tab.label}} [selected]="tab.isActive">
+                                <p-tabPanel id="homepageTabs{{i}}" *ngFor="let tab of homepageTabs; let i = index" [closable]="i > 0" header={{tab.label}} [selected]="tab.isActive" style="height:100%">
 
-                                <div class="m-portlet">
+                                <div id="tool-btn-container" class="m-portlet">
                                     <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showSettings == true">
                                         <a title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings(i)"><i class="flaticon-settings"></i></a>
                                     </span>
@@ -66,7 +66,7 @@
                                     </span>
                                 </div>
 
-                                <div class="m-portlet__body" style="background-color:white;">
+                                <div class="m-portlet__body" style="background-color:white; height: 100%">
                                     <ng-container #placeholder>{{tab.templateRef}}</ng-container>
                                 </div>
 
@@ -76,6 +76,61 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div id="overlay">
+            <div class="welcome-msg">
+                <div class="top">
+                    <span class="primary">Welcome to </span>
+                    <span class="microbe primary">Microbe</span>
+                    <span class="primary">Trace</span>
+                    <span><img class="mt-icon" src="../../assets/images/MT-Icon.png"></span>
+                </div>
+                <div class="bottom primary">The Visualization Multitool for Molecular Epidemiology and Bioinformatics</div>
+            </div>
+            <div class="add-data-container">
+                <div class="files-msg">
+                    <span class="primary">Click </span>
+                    <a class="here-link primary" (click)="hereClicked()">here</a>
+                    <span class="primary"> or Drag & Drop files to load data</span>
+                </div>
+                <div class="add-btns primary">
+                    <button mat-raised-button color="primary" class="recall" (click)="recallClicked()">Recall Previous Session</button>
+                    <button mat-raised-button color="primary" (click)="continueClicked()">Continue with Sample Dataset</button>
+                </div>
+            </div>
+            <div class="launch-options-container primary">
+                <span class="onload-bold">Onload Settings:</span>
+                <span>Distance Metric: <span class="option-value" [matMenuTriggerFor]="metricMenu">{{metric}} <span class="dropdown-symbol">&#9660;</span></span></span>
+                <span>Ambiguities: <span class="option-value" [matMenuTriggerFor]="ambiMenu">{{ambiguity}} <span class="dropdown-symbol">&#9660;</span></span></span>
+                <span>View to Launch: <span class="option-value" [matMenuTriggerFor]="viewMenu">{{launchView}} <span class="dropdown-symbol">&#9660;</span></span></span>
+                <span class="threshold-option">Link Threshold: 
+                    <form class="threshold-input">
+                    <mat-form-field class="threshold-input-length">
+                        <mat-label></mat-label>
+                      <input matInput [value]="threshold">
+                    </mat-form-field>
+                  </form>
+                </span>
+            </div>
+            <mat-menu #metricMenu="matMenu"overlapTrigger="false">
+                <button mat-menu-item (click)="updateMetric('TN93')">TN93</button>
+                <button mat-menu-item (click)="updateMetric('SNPs')">SNPs</button>
+            </mat-menu>
+            <mat-menu #ambiMenu="matMenu" overlapTrigger="false">
+                <button mat-menu-item (click)="updateAmbiguity('Average')">Average</button>
+                <button mat-menu-item (click)="updateAmbiguity('Resolve')">Resolve</button>
+                <button mat-menu-item (click)="updateAmbiguity('Skip')">Skip</button>
+                <button mat-menu-item (click)="updateAmbiguity('GapMM')">GapMM</button>
+                <button mat-menu-item (click)="updateAmbiguity('HIV-Trace -g')">HIV-Trace -g</button>
+            </mat-menu>
+            <mat-menu #viewMenu="matMenu" overlapTrigger="false">
+                <button mat-menu-item (click)="updateLaunchView('2D Network')">2D Network</button>
+                <button mat-menu-item (click)="updateLaunchView('3D Network')">3D Network</button>
+                <button mat-menu-item (click)="updateLaunchView('Bubbles')">Bubbles</button>
+                <button mat-menu-item (click)="updateLaunchView('Table')">Table</button>
+                <button mat-menu-item (click)="updateLaunchView('Phylogenetic Tree')">Phylogenetic Tree</button>
+            </mat-menu>
         </div>
 
 

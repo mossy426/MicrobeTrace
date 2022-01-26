@@ -185,7 +185,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
 
             this.visuals.twoD.svgStyle = {
-                'height': 'calc(100vh - 350px)',
+                'height': '84vh',
                 'min-width.%': 100
 
             };
@@ -351,6 +351,22 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     onDataChange(event) {
 
     }
+
+    // loadDefaultVisualization(e: String) {
+
+    //     setTimeout(() => {
+
+    //         this.commonService.session.messages = [];
+    //         // this.messages = [];
+    //         $('#loading-information').html('');
+    //         $('#launch').prop('disabled', false).focus();
+
+    //         // this.displayloadingInformationModal = false;
+
+    //     }, 1000);
+
+    //     this.LoadDefaultVisualizationEvent.emit(e);
+    // }
 
 
     updateCalculatedResolution(event) {
@@ -749,12 +765,12 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         let htmlValue: any = this.visuals.twoD.SelectedNodeTooltipVariable;
 
 
-        $('#tooltip').css({ top: d3.event.pageY - 128, left: d3.event.pageX - 300, position: 'absolute' });
+        $('#tooltip').css({ top: d3.event.pageY - 28, left: d3.event.pageX + 8, position: 'absolute' });
 
         d3.select('#tooltip')
             .html(d[htmlValue])
-            .style('left', (d3.event.pageX - 300) + 'px')
-            .style('top', (d3.event.pageY - 128) + 'px')
+            .style('left', (d3.event.pageX) + 8 + 'px')
+            .style('top', (d3.event.pageY) - 28 + 'px')
             .style('z-index', 1000)
             .transition().duration(100)
             .style('opacity', 1)
@@ -1268,6 +1284,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         let stroke = this.visuals.twoD.commonService.session.style.widgets['selected-node-stroke-color'];
         let stroke_width = parseInt(this.visuals.twoD.commonService.session.style.widgets['selected-node-stroke-width']);
 
+        nodes.style('cursor: pointer;')
         if (variable == 'None') {
 
             nodes
