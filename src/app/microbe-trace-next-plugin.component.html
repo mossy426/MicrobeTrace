@@ -45,21 +45,21 @@
 
                                 <div id="tool-btn-container" class="m-portlet">
                                     <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showSettings == true">
-                                        <a title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings(i)"><i class="flaticon-settings"></i></a>
+                                        <a title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings(i)"><i class="flaticon-settings primary"></i></a>
                                     </span>
                                     <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showExport == true">
-                                        <a title="Export Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openExport(i)"><i class="flaticon-download"></i></a>
+                                        <a title="Export Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openExport(i)"><i class="flaticon-download primary"></i></a>
                                     </span>
                                     <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showCenter == true">
-                                        <a title="Center Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openCenter(i)"><i class="flaticon-eye"></i></a>
+                                        <a title="Center Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openCenter(i)"><i class="flaticon-eye primary"></i></a>
                                     </span>
                                     <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showPinAllNodes == true">
                                         <a title="Pin All Nodes" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openPinAllNodes(i)"
                                             [style.background]="commonService.session.network.allPinned ? 'lightblue': 'transparent'"
-                                        ><i class="flaticon-pin"></i></a>
+                                        ><i class="flaticon-pin primary"></i></a>
                                     </span>
                                     <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showRefresh == true">
-                                        <a title="Refresh Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openRefreshScreen(i)"><i class="flaticon-refresh"></i></a>
+                                        <a title="Refresh Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openRefreshScreen(i)"><i class="flaticon-refresh primary"></i></a>
                                     </span>
                                     <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showButtonGroup == true">
                                         <p-selectButton #dataSet [options]="dataSetView" [(ngModel)]="dataSetViewSelected" (onOptionClick)="openSelectDataSetScreen(i,$event)"></p-selectButton>
@@ -80,15 +80,15 @@
 
         <div id="overlay">
             <div class="welcome-msg">
-                <div class="top">
+                <div id="welcome-title" class="top">
                     <span class="primary">Welcome to </span>
                     <span class="microbe primary">Microbe</span>
                     <span class="primary">Trace</span>
                     <span><img class="mt-icon" src="../../assets/images/MT-Icon.png"></span>
                 </div>
-                <div class="bottom primary">The Visualization Multitool for Molecular Epidemiology and Bioinformatics</div>
+                <div id="welcome-description" class="bottom primary">The Visualization Multitool for Molecular Epidemiology and Bioinformatics</div>
             </div>
-            <div class="add-data-container">
+            <div id="add-data-container" class="add-data-container">
                 <div class="files-msg">
                     <span class="primary">Click </span>
                     <a class="here-link primary" (click)="hereClicked()">here</a>
@@ -99,11 +99,11 @@
                     <button mat-raised-button color="primary" (click)="continueClicked()">Continue with Sample Dataset</button>
                 </div>
             </div>
-            <div class="launch-options-container primary">
+            <div id="onload-container" class="launch-options-container primary">
                 <span class="onload-bold">Onload Settings:</span>
-                <span>Distance Metric: <span class="option-value" [matMenuTriggerFor]="metricMenu">{{metric}} <span class="dropdown-symbol">&#9660;</span></span></span>
-                <span>Ambiguities: <span class="option-value" [matMenuTriggerFor]="ambiMenu">{{ambiguity}} <span class="dropdown-symbol">&#9660;</span></span></span>
-                <span>View to Launch: <span class="option-value" [matMenuTriggerFor]="viewMenu">{{launchView}} <span class="dropdown-symbol">&#9660;</span></span></span>
+                <span>Distance Metric: <span class="option-value" [matMenuTriggerFor]="metricMenu">{{metric}} <span class="onload-dropdown-symbol">&#9660;</span></span></span>
+                <span>Ambiguities: <span class="option-value" [matMenuTriggerFor]="ambiMenu">{{ambiguity}} <span class="onload-dropdown-symbol">&#9660;</span></span></span>
+                <span>View to Launch: <span class="option-value" [matMenuTriggerFor]="viewMenu">{{launchView}} <span class="onload-dropdown-symbol">&#9660;</span></span></span>
                 <span class="threshold-option">Link Threshold: 
                     <form class="threshold-input">
                     <mat-form-field class="threshold-input-length">

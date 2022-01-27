@@ -243,6 +243,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     margin-left: 8px;
 }
 
+.flex-fill {
+    flex: 1 auto;
+}
+
+.onload-dropdown-symbol {
+    font-size: 12px;
+    margin-left: 8px;
+}
+
 body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active, body .ui-tabview.ui-tabview-bottom .ui-tabview-nav li.ui-state-active, body .ui-tabview.ui-tabview-left .ui-tabview-nav li.ui-state-active, body .ui-tabview.ui-tabview-right .ui-tabview-nav li.ui-state-active {
     background-color: #005daa !important;
     border: 1px solid #005daa !important;
@@ -258,7 +267,6 @@ body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active, body .ui-tab
     right: 0;
     bottom: 0;
     backdrop-filter: blur(8px);
-    opacity: 0;
     z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
 
     display: flex;
@@ -270,9 +278,24 @@ body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active, body .ui-tab
   }
 
   #visualwrapper {
-    //   display: none;
     opacity: 0;
   }
+
+  #add-data-container {
+      opacity: 0;
+  }
+
+  #onload-container {
+    opacity: 0;
+}
+
+#welcome-title {
+    opacity: 0;
+}
+
+#welcome-description {
+    opacity: 0;
+}
 
   .recall {
     margin-right: 50px !important; 
@@ -292,7 +315,7 @@ body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active, body .ui-tab
   }
 
   .welcome-msg {
-    margin-top: 325px;
+    margin-top: 355px;
     text-align: center;
 }
 
@@ -307,6 +330,7 @@ body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active, body .ui-tab
 .bottom {
     font-size: 25px;
     font-weight: 500;
+    margin-top: 30px;
 }
 
 .microbe {

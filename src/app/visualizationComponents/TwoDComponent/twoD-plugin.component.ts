@@ -185,8 +185,9 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
 
             this.visuals.twoD.svgStyle = {
-                'height': '84vh',
-                'min-width.%': 100
+                'height': '88vh',
+                'min-width.%': 100,
+                "margin-top" : '-39px'
 
             };
 
@@ -338,9 +339,10 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
             setTimeout(() =>{
                 this.visuals.twoD.fit(undefined, undefined);
                 this.loadSettings();
-            
+                // Add a little force for effect in landing
+                this.visuals.twoD.force.alpha(1).alphaTarget(0).restart();
             }
-                , 2000);
+                , 3000);
 
 
         }

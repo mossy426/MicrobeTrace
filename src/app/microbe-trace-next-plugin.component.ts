@@ -251,19 +251,30 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         this.commonService.updateThresholdHistogram();
 
-        // $('#visualwrapper').hide()'
 
         setTimeout(() => {
             $('#top-toolbar').fadeTo("slow", 1);
+           
         }, 1000);
         setTimeout(() => {
-            $('#overlay').fadeTo("slow", 1);
+            $("#welcome-title").animate({
+                marginTop: '-30px',
+                opacity: '1'
+            }, 1000);
         }, 2000);
         setTimeout(() => {
+            $("#welcome-description").animate({
+                marginTop: '0px',
+                opacity: '1'
+            }, 1000);
+        }, 3000);
+        setTimeout(() => {
             $('#visualwrapper').fadeTo("slow", 1);
-        }, 4000);
+            $('#add-data-container').fadeTo("slow", 1);
+            $('#onload-container').fadeTo("slow", 1);
+        }, 5000);
         
-        // $.getJSON("../assets/testttt.microbetrace", window.context.commonService.applySession);
+       
         // reader.onloadend = out => this.commonService.processJSON(out.target, extension);
     }
 
