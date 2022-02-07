@@ -414,7 +414,7 @@ Please note that this causes MicrobeTrace to store data on your computer's hard 
 
     function addToTable(file) {
       // Remove parenthesis and <> from filename
-      file.name = file.name.replace(/[\u00A0-\u9999<>()\&]/g, function(i) {
+      file.name = file.name.replace(/[\u00A0-\u9999<>(){}\&]/g, function(i) {
             return '';
       });
       const extension = file.extension ? file.extension : filterXSS(file.name).split('.').pop().toLowerCase();
@@ -479,7 +479,7 @@ Please note that this causes MicrobeTrace to store data on your computer's hard 
         fnamerow.appendTo(root);
         let optionsrow = $('<div class="row w-100"></div>');
         let options = '<option>None</option>' + headers.map(h => {
-          let encodedHeader = h.replace(/[\u00A0-\u9999<>()\&]/g, function(i) {
+          let encodedHeader = h.replace(/[\u00A0-\u9999<>(){}\&]/g, function(i) {
             return '';
           });
           return `<option value="${encodedHeader}">${encodedHeader}</option>`;
