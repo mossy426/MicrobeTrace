@@ -41,7 +41,7 @@ import { MapComponent } from './visualizationComponents/MapComponent/map-plugin.
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
 import { MatButtonModule, MatInputModule, MatMenuModule, MatToolbarModule } from '@angular/material';
-
+import { DndDirective } from '@shared/dnd.directive';
 
 @NgModule({
   declarations: [
@@ -61,13 +61,13 @@ import { MatButtonModule, MatInputModule, MatMenuModule, MatToolbarModule } from
     GanttComponent,
     TimelineComponent,
     HeatMapComponent,
+    DndDirective,
     PhylogeneticComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-
     //ngCommon.CommonModule,
     FormsModule,
     HttpClientModule,

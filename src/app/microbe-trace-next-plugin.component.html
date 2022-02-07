@@ -78,7 +78,8 @@
             </div>
         </div>
 
-        <div id="overlay">
+        <div id="overlay" appDnd (fileDropped)="onFileDropped($event)">
+            <input class="dnd-input" type="file" #fileDropRef id="fileDropRef" multiple (change)="fileBrowseHandler($event.target.files)" />
             <div class="welcome-msg">
                 <div id="welcome-title" class="top">
                     <span class="primary">Welcome to </span>
@@ -91,7 +92,7 @@
             <div id="add-data-container" class="add-data-container">
                 <div class="files-msg">
                     <span class="primary">Click </span>
-                    <a class="here-link primary" (click)="hereClicked()">here</a>
+                    <a class="here-link primary" for="fileDropRef">here</a>
                     <span class="primary"> or Drag & Drop files to load data</span>
                 </div>
                 <div class="add-btns primary">
@@ -102,13 +103,13 @@
             <div id="onload-container" class="launch-options-container primary">
                 <span class="onload-bold">Onload Settings:</span>
                 <span>Distance Metric: <span class="option-value" [matMenuTriggerFor]="metricMenu">{{metric}} <span class="onload-dropdown-symbol">&#9660;</span></span></span>
-                <span>Ambiguities: <span class="option-value" [matMenuTriggerFor]="ambiMenu">{{ambiguity}} <span class="onload-dropdown-symbol">&#9660;</span></span></span>
+                <span id="ambiguities-menu">Ambiguities: <span class="option-value" [matMenuTriggerFor]="ambiMenu">{{ambiguity}} <span class="onload-dropdown-symbol">&#9660;</span></span></span>
                 <span>View to Launch: <span class="option-value" [matMenuTriggerFor]="viewMenu">{{launchView}} <span class="onload-dropdown-symbol">&#9660;</span></span></span>
                 <span class="threshold-option">Link Threshold: 
                     <form class="threshold-input">
                     <mat-form-field class="threshold-input-length">
                         <mat-label></mat-label>
-                      <input matInput [value]="threshold">
+                      <input matInput (input)="updateThreshold($event)" [value]="threshold">
                     </mat-form-field>
                   </form>
                 </span>

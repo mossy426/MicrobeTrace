@@ -14,6 +14,7 @@ import * as patristic from 'patristic';
 import { window } from 'ngx-bootstrap';
 import * as _ from 'lodash';
 import { MicrobeTraceNextVisuals } from '../microbe-trace-next-plugin-visuals';
+import { EventEmitterService } from '@shared/utils/event-emitter.service';
 
 
 @Component({
@@ -105,6 +106,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
     constructor(
         injector: Injector,
+        private eventEmitterService: EventEmitterService,
         public commonService: CommonService) {
 
         super(injector);
@@ -125,6 +127,12 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         this.commonService.LoadViewEvent.subscribe((v) => { this.loadDefaultVisualization(v); });
         this.commonService.session.data.reference = this.commonService.HXB2.substr(2000, 2100);
 
+        if (this.eventEmitterService.subsVar==undefined) {    
+            this.eventEmitterService.subsVar = this.eventEmitterService.    
+            invokeFirstComponentFunction.subscribe((name:string) => {    
+              this.processFile();    
+            });    
+          }  
 
         $('.alignConfigRow').hide();
 
@@ -970,7 +978,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
 
 
-    processFiles(files: FileList) {
+    processFiles(files?: FileList) {
 
         if (Array.from(files).length > 0) {
 
@@ -981,7 +989,12 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         }
     };
 
-    processFile(rawfile) {
+    processFile(rawfile?) {
+
+        if(!rawfile) {
+            rawfile = this.commonService.session.files[0];
+            console.log('ra file: ', rawfile);
+        }
 
         $('#loading-information').html('');
 
@@ -1014,7 +1027,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             reader.readAsText(rawfile, 'UTF-8');
             return;
         }
-        fileto.promise(rawfile, (extension == 'xlsx' || extension == 'xls') ? 'ArrayBuffer' : 'Text').then(file => {
+        fileto.promise(rawfile, (extension == 'xlsx' || extension == 'xls' || extension == 'csv') ? 'ArrayBuffer' : 'Text').then(file => {
             //debugger;
             file.name = this.commonService.filterXSS(file.name);
             file.extension = file.name.split('.').pop().toLowerCase();

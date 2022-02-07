@@ -1719,7 +1719,6 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     getVisibleNodes(copy: any = false) {
         let nodes = window.context.commonService.session.data.nodeFilteredValues;
-        console.log('nodes filt: ', nodes);
         let n = nodes.length;
         let out = [];
         for (let i = 0; i < n; i++) {
@@ -1777,7 +1776,6 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         if ($("#network-statistics-hide").is(":checked")) return;
         let vnodes = window.context.commonService.getVisibleNodes();
-        console.log('get visible nodes: ', vnodes);
         let vlinks = window.context.commonService.getVisibleLinks();
         let singletons = vnodes.filter(d => d.degree == 0).length;
         $("#numberOfSelectedNodes").text(vnodes.filter(d => d.selected).length.toLocaleString());
@@ -2535,9 +2533,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             if (cluster) {
                 cluster.visible = true;
                 // node.visible = node.visible && cluster.visible;
-                console.log('cluster visible: ', node.visible);
             }
-            console.log('node visible: ', node.visible);
             if (dateField != "None") {
                 if (this.session.state.timeEnd) {
                     node.visible =

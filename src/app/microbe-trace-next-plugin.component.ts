@@ -33,6 +33,7 @@ import { MicrobeTraceNextVisuals } from './microbe-trace-next-plugin-visuals';
 import * as _ from 'lodash';
 import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { EventEmitterService } from '@shared/utils/event-emitter.service';
 
 
 @Component({
@@ -175,6 +176,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     public HideThisForNow: boolean = true;
 
+    files: any[] = [];
+
     homepageTabs: HomePageTabItem[] = [
         {
             label: 'Files',
@@ -194,6 +197,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         private _userService: UserServiceProxy,
         public domSanitizer: DomSanitizer,
         private cdref: ChangeDetectorRef,
+        private eventEmitterService: EventEmitterService,
         private bpaasLedgerPluginServiceProxy: BpaasLedgerPluginServiceProxy,
         private route: ActivatedRoute
     ) {
@@ -251,12 +255,50 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         this.commonService.updateThresholdHistogram();
 
+         // Update distance metric in cashe
+         let cachedLSV = "";
+         let cachedView = "";
+
+        this.commonService.localStorageService.getItem('default-distance-metric',function(err, result) {
+            // Run this code once the value has been
+            // loaded from the offline store.
+            cachedLSV = result;
+            console.log('cacheL 1: ', cachedLSV);
+
+        });
+
+        
+
+        this.commonService.localStorageService.getItem('default-view',function(err, result) {
+            cachedView = result;
+        });
+
+
 
         setTimeout(() => {
             $('#top-toolbar').fadeTo("slow", 1);
            
         }, 1000);
         setTimeout(() => {
+            if (cachedLSV) {
+                console.log('cacheL 2: ', cachedLSV);
+                if (cachedLSV == "snps") {
+                   this.metric = "SNPs";
+                   this.threshold = "16";
+                   this.commonService.session.style.widgets["link-threshold"] = 16;
+                   $('#ambiguities-menu').hide();
+                } else {
+                   this.metric = "TN93";
+                   this.threshold = "0.015";
+                   this.commonService.session.style.widgets["link-threshold"] = 0.015;
+                }
+            }
+
+            if (cachedView) {
+                this.updateLaunchView(cachedView);
+    
+            }
+
             $("#welcome-title").animate({
                 marginTop: '-30px',
                 opacity: '1'
@@ -278,36 +320,107 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         // reader.onloadend = out => this.commonService.processJSON(out.target, extension);
     }
 
+        /**
+     * on file drop handler
+     */
+    onFileDropped($event) {
+        console.log('filedd:');
+        this.prepareFilesList($event);
+    }
+
+    /**
+     * handle file from browsing
+     */
+    fileBrowseHandler(files) {
+        this.prepareFilesList(files);
+    }
+
+    /**
+     * Delete file from files list
+     * @param index (File index)
+     */
+    deleteFile(index: number) {
+        this.files.splice(index, 1);
+    }
+
+    /**
+     * Convert Files list to normal array list
+     * @param files (Files List)
+     */
+    prepareFilesList(files: Array<any>) {
+        // for (const item of files) {
+        // item.progress = 0;
+        // this.files.push(item);
+        // }
+        // console.log('files: ', this.files);
+        this.homepageTabs[1].isActive = false;
+        this.homepageTabs[0].isActive = true;
+        $('#overlay').fadeOut();
+        $('.ui-tabview-nav').fadeTo("slow", 1);
+        $('.m-portlet').fadeTo("slow", 1);
+        for (const item of files) {
+            this.commonService.session.files.push(item);
+        }
+        
+        this.eventEmitterService.onFirstComponentButtonClick(); 
+        // this.uploadFilesSimulator(0);
+    }
+
     /**
      * Updates metric based on selection
      * @param value - metric selected
      */
      public updateMetric( value: string ) : void {
         this.metric = value;
+        console.log('updaating metric: ', this.metric);
+
+        if (this.metric === "SNPs") {
+            //Hide Ambiguities
+            $('#ambiguities-menu').hide();
+            this.threshold = "16";
+            this.commonService.session.style.widgets["link-threshold"] = 16;
+        } else {
+
+            $('#ambiguities-menu').show();
+            this.threshold = "0.015";
+            this.commonService.session.style.widgets["link-threshold"] = 0.015;
+        }
+
+        // Update distance metric in style
+        this.commonService.session.style.widgets['default-distance-metric'] = this.metric.toLocaleLowerCase();
+        this.commonService.localStorageService.setItem('default-distance-metric', this.metric.toLocaleLowerCase());
+
     }
 
     /**
-     * Updates metric based on selection
+     * Updates ambiguity based on selection and store in style widgets
      * @param value - ambiguity selected
      */
      public updateAmbiguity( value: string ) : void {
         this.ambiguity = value;
+        this.commonService.session.style.widgets['ambiguity-resolution-strategy'] = this.ambiguity.toLocaleUpperCase();
+
     }
 
     /**
-     * Updates metric based on selection
+     * Updates launch view based on selection
      * @param value - view selected
      */
      public updateLaunchView( value: string ) : void {
         this.launchView = value;
+
+        this.commonService.localStorageService.setItem('default-view', this.launchView);
+        this.commonService.session.style.widgets['default-view'] = this.launchView;
+        this.commonService.session.layout.content[0].type = this.launchView;
+
     }
 
     /**
-     * Updates metric based on selection
-     * @param value - threshold input
+     * Updates threshold based on selection and stores in style widget
      */
-     public updateThreshold( value: string ) : void {
-        this.threshold = value;
+     public updateThreshold(ev : any) : void {
+        this.threshold = ev.target.value;
+        this.commonService.session.style.widgets["link-threshold"] = Number(this.threshold);
     }
 
     /**
