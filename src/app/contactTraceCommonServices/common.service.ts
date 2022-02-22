@@ -1329,9 +1329,10 @@ export class CommonService extends AppComponentBase implements OnInit {
             let metric = window.context.commonService.session.style.widgets['link-sort-variable'];
             const n = labels.length;
             let dm = new Array(n);
+            let m = new Array(n);
             for (let i = 0; i < n; i++) {
                 dm[i] = new Array(n);
-                dm[i][i] = 0;
+                dm[i][i] = 0;                
                 let source = labels[i];
                 let row = window.context.commonService.temp.matrix[source];
                 if (!row) {
@@ -1364,7 +1365,6 @@ export class CommonService extends AppComponentBase implements OnInit {
                     matrix: dm,
                     round: window.context.commonService.session.style.widgets["tree-round"]
                 });
-
 
                 computer.compute_treeWorker.onmessage().subscribe((response) => {
 

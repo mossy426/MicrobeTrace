@@ -1,4 +1,4 @@
-<div class="m-content" style="height:100%; overflow-y: hidden;">   
+<div class="m-content">   
     <div class="m-portlet m-portlet--mobile" style="height:100%;">
 
         <mat-toolbar id="top-toolbar" class="nav-bar">
@@ -78,8 +78,8 @@
             </div>
         </div>
 
-        <div id="overlay" appDnd (fileDropped)="onFileDropped($event)">
-            <input class="dnd-input" type="file" #fileDropRef id="fileDropRef" multiple (change)="fileBrowseHandler($event.target.files)" />
+        <div id="overlay" appDnd (fileDropped)="prepareFilesLists($event)">
+            <input class="dnd-input" type="file" #fileDropRef id="fileDropRef" multiple (change)="prepareFilesLists($event.target.files)" />
             <div class="welcome-msg">
                 <div id="welcome-title" class="top">
                     <span class="primary">Welcome to </span>

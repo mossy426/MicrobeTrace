@@ -15,6 +15,7 @@ import { window } from 'ngx-bootstrap';
 import * as _ from 'lodash';
 import { MicrobeTraceNextVisuals } from '../microbe-trace-next-plugin-visuals';
 import { EventEmitterService } from '@shared/utils/event-emitter.service';
+// import { ConsoleReporter } from 'jasmine';
 
 
 @Component({
@@ -524,7 +525,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
     creatLaunchSequences() {
 
-
+        console.log('launch seq1');
         this.commonService.session.meta.startTime = Date.now();
         $('#launch').prop('disabled', true);
 
@@ -543,6 +544,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
 
         this.commonService.session.meta.anySequences = this.commonService.session.files.some(file => (file.format == "fasta") || (file.format == "node" && file.field2 !== "None"));
+        console.log('launch seq2', this.commonService.session.files);
 
         this.commonService.session.files.forEach((file, fileNum) => {
             const start = Date.now();
@@ -570,6 +572,8 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                 });
 
             } else if (file.format == 'link') {
+
+                console.log('linkkkk')
 
                 this.showMessage(`Parsing ${file.name} as Link List...`);
                 let l = 0;
@@ -976,6 +980,16 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
     };
 
+    accordianToggle( open : Number) {
+
+        if(open){
+            $(".m-content").css("overflow-y", "auto");
+        } else {
+            $(".m-content").css("overflow-y", "hidden");
+        }
+
+    }
+
 
 
     processFiles(files?: FileList) {
@@ -990,11 +1004,15 @@ export class FilesComponent extends AppComponentBase implements OnInit {
     };
 
     processFile(rawfile?) {
+        
 
         if(!rawfile) {
             rawfile = this.commonService.session.files[0];
-            console.log('ra file: ', rawfile);
+            // console.log('ra file: ', rawfile);
         }
+
+        console.log('raw file: ', rawfile);
+
 
         $('#loading-information').html('');
 
@@ -1013,6 +1031,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                 });
             return;
         }
+
         if (extension == 'microbetrace' || extension == 'hivtrace') {
             //debugger;
             let reader = new FileReader();
@@ -1027,7 +1046,9 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             reader.readAsText(rawfile, 'UTF-8');
             return;
         }
-        fileto.promise(rawfile, (extension == 'xlsx' || extension == 'xls' || extension == 'csv') ? 'ArrayBuffer' : 'Text').then(file => {
+
+        console.log('1');
+        fileto.promise(rawfile, (extension == 'xlsx' || extension == 'xls') ? 'ArrayBuffer' : 'Text').then(file => {
             //debugger;
             file.name = this.commonService.filterXSS(file.name);
             file.extension = file.name.split('.').pop().toLowerCase();

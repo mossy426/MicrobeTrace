@@ -781,8 +781,8 @@ export class WorkerModule implements OnInit {
                 parseMatrix = (matrix = null, labels = null) => {
                     let that: any = {};
                     let N = (that.N = matrix.length);
-
                    
+
                     if (!labels) labels = [new Array(N).keys()]; //[...Array(N).keys()];
                     that.cN = that.N;
                     that.D = matrix;
@@ -865,7 +865,7 @@ export class WorkerModule implements OnInit {
 
                     node1 = setUpNode(l1, d1);
                     node2 = setUpNode(l2, d2);
-
+                    
                     let tree = new Branch({ children: [node1, node2] });
                     tree.fixParenthood();
                     return tree.fixDistances();
@@ -886,11 +886,25 @@ export class WorkerModule implements OnInit {
                         minJ = -1,
                         c2;
 
-                    // initial guess for qMin
-                    for (let r = 0; r < t.N; r++) {
-                        if (removedColumns.has(r)) continue;
-                        c2 = I[r][0];
+                   // initial guess for qMin
+                   for (let r = 0; r < t.N; r++) {
+                    if (removedColumns.has(r)) continue;
+                    c2 = I[r][0];
+                    if (removedColumns.has(c2)) continue;
+                    q = D[r][c2] * n2 - rowSums[r] - rowSums[c2];
+                    if (q < qMin) {
+                        qMin = q;
+                        minI = r;
+                        minJ = c2;
+                    }
+                }
+
+                for (let r = 0; r < t.N; r++) {
+                    if (removedColumns.has(r)) continue;
+                    for (let c = 0; c < S[r].length; c++) {
+                        c2 = I[r][c];
                         if (removedColumns.has(c2)) continue;
+                        if (S[r][c] * n2 - rowSums[r] - uMax > qMin) break;
                         q = D[r][c2] * n2 - rowSums[r] - rowSums[c2];
                         if (q < qMin) {
                             qMin = q;
@@ -898,21 +912,7 @@ export class WorkerModule implements OnInit {
                             minJ = c2;
                         }
                     }
-
-                    for (let r = 0; r < t.N; r++) {
-                        if (removedColumns.has(r)) continue;
-                        for (let c = 0; c < S[r].length; c++) {
-                            c2 = I[r][c];
-                            if (removedColumns.has(c2)) continue;
-                            if (S[r][c] * n2 - rowSums[r] - uMax > qMin) break;
-                            q = D[r][c2] * n2 - rowSums[r] - rowSums[c2];
-                            if (q < qMin) {
-                                qMin = q;
-                                minI = r;
-                                minJ = c2;
-                            }
-                        }
-                    }
+                }
 
                     return { minI, minJ };
                 };

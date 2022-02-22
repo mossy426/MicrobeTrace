@@ -1286,7 +1286,6 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         let stroke = this.visuals.twoD.commonService.session.style.widgets['selected-node-stroke-color'];
         let stroke_width = parseInt(this.visuals.twoD.commonService.session.style.widgets['selected-node-stroke-width']);
 
-        nodes.style('cursor: pointer;')
         if (variable == 'None') {
 
             nodes

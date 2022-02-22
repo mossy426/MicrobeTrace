@@ -282,6 +282,11 @@ body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active, body .ui-tab
     flex-direction: column;
   }
 
+  .m-content {
+    height:100%; 
+    overflow-y: hidden;
+  }
+
   #top-toolbar{
       opacity: 0;
   }
@@ -417,6 +422,7 @@ body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active, body .ui-tab
 
 #tool-btn-container {
     opacity: 0;
+    z-index: 4;
 }
 
 .nodes path {

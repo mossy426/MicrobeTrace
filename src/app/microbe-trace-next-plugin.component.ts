@@ -266,7 +266,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             console.log('cacheL 1: ', cachedLSV);
 
         });
-
         
 
         this.commonService.localStorageService.getItem('default-view',function(err, result) {
@@ -274,10 +273,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         });
 
 
-
         setTimeout(() => {
-            $('#top-toolbar').fadeTo("slow", 1);
-           
+            $('#top-toolbar').fadeTo("slow", 1);   
         }, 1000);
         setTimeout(() => {
             if (cachedLSV) {
@@ -320,20 +317,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         // reader.onloadend = out => this.commonService.processJSON(out.target, extension);
     }
 
-        /**
-     * on file drop handler
-     */
-    onFileDropped($event) {
-        console.log('filedd:');
-        this.prepareFilesList($event);
-    }
-
-    /**
-     * handle file from browsing
-     */
-    fileBrowseHandler(files) {
-        this.prepareFilesList(files);
-    }
 
     /**
      * Delete file from files list
@@ -347,23 +330,25 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
      * Convert Files list to normal array list
      * @param files (Files List)
      */
-    prepareFilesList(files: Array<any>) {
-        // for (const item of files) {
-        // item.progress = 0;
-        // this.files.push(item);
-        // }
-        // console.log('files: ', this.files);
+    prepareFilesLists($event) {
+
+        this.commonService.session.files = [];
+        this.commonService.session.style.widgets = this.commonService.defaultWidgets();
+
+        this.loadSettings();
+ 
         this.homepageTabs[1].isActive = false;
         this.homepageTabs[0].isActive = true;
         $('#overlay').fadeOut();
         $('.ui-tabview-nav').fadeTo("slow", 1);
         $('.m-portlet').fadeTo("slow", 1);
-        for (const item of files) {
-            this.commonService.session.files.push(item);
-        }
-        
-        this.eventEmitterService.onFirstComponentButtonClick(); 
-        // this.uploadFilesSimulator(0);
+        this.showExport = false;
+        this.showCenter = false;
+        this.showPinAllNodes = false;
+        this.showRefresh = false;
+        this.showButtonGroup = false;
+        this.showSorting = false;
+        this.getfileContent($event);
     }
 
     /**
@@ -1294,7 +1279,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 };
 
                 const blob = new Blob([JSON.stringify(stash)], { type: "application/json;charset=utf-8" });
-                saveAs(blob, `${this.saveFileName}.microbetracenext`);
+                saveAs(blob, `${this.saveFileName}.microbetrace`);
                 break;
             }
             case "Cancel": {
