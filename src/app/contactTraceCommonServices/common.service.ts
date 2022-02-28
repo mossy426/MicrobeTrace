@@ -752,7 +752,11 @@ export class CommonService extends AppComponentBase implements OnInit {
     processJSON(json: any, extension: any) {
         let data;
         try {
-            data = JSON.parse(json);
+            if(json.result) {
+                data = JSON.parse(json.result);
+            } else {
+                data = JSON.parse(json);
+            }
         } catch (error) {
 
             abp.notify.error(
@@ -762,6 +766,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             return;
         }
         if (extension == "microbetrace") {
+            window.context.commonService.session = this.sessionSkeleton();
+
             window.context.commonService.applySession(data);
         } else {
             if (data.version) {
@@ -773,12 +779,29 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     };
 
-    applySession(stashObject: StashObject) {
+    applySession(stashObject: StashObjects) {
         //If anything here seems eccentric, assume it's to maintain compatibility with
         //session files from older versions of MicrobeTrace.
         $("#launch").prop("disabled", true)
-        console.log(stashObject);
-        const oldSession = stashObject;
+
+        if(stashObject.session) {
+
+        } else {
+            stashObject = {
+                tabs : [{
+                    label: 'Files',
+                    templateRef: null,
+                    tabTitle: 'Files',
+                    isActive: true,
+                    componentRef: null
+                }],
+                session: stashObject
+            }
+        }
+
+        console.log('sessions: ', stashObject.session);
+     
+        const oldSession = stashObject.session;
         window.context.commonService.session.files = oldSession.files;
         window.context.commonService.session.state = oldSession.state;
         window.context.commonService.session.style = oldSession.style;
@@ -811,7 +834,6 @@ export class CommonService extends AppComponentBase implements OnInit {
     processData() {
         let nodes = this.session.data.nodes;
         this.session.data.nodeFilteredValues = nodes;
-        console.log('nodessss: ', nodes);
         //Add links for nodes with no edges
         // this.uniqueNodes.forEach(x => {
         //     this.commonService.addLink(Object.assign({

@@ -1196,6 +1196,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     public getfileContent(fileList: FileList) {
 
         this.homepageTabs.map(x => {
+            console.log('homepage1: ', x);
             if (x.tabTitle === "Files") {
                 if (x.componentRef != null) {
                     x.componentRef.instance.processFiles(fileList);
@@ -1207,6 +1208,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     public getSinglefileContent(file: File) {
 
         this.homepageTabs.map(x => {
+            console.log('homepage2: ', x);
             if (x.tabTitle === "Files") {
                 if (x.componentRef != null) {
                     x.componentRef.instance.processFile(file);
@@ -1508,6 +1510,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     Viewclick(viewName: string) {
 
+        console.log('viewClick: ', viewName);
         let tabNdx = this.homepageTabs.findIndex(x => x.label == viewName);
         if (viewName == "2d network") {
             viewName = "2D Network";
@@ -1519,6 +1522,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
             this.activeTabIndex = this.activeTabIndex + 1;
 
+            
             this.addTab(viewName, viewName + this.activeTabIndex, this.activeTabIndex);
 
             setTimeout(() => {
@@ -1571,6 +1575,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                     }
 
                 });
+
+                console.log('activeee');
 
                 this.setActiveTabProperties();
                 this.loadSettings();
@@ -1642,6 +1648,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         let activeComponentName: string = this.homepageTabs[tabNdx].label;
 
+        console.log('show active tab: ', this.homepageTabs);
         this.homepageTabs.forEach((item: HomePageTabItem) => {
             item.isActive = item.label === activeComponentName;
         });
@@ -1913,6 +1920,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     addTab(tabLabel: any, tabTitle: any, tabPosition: any, activate: boolean = true): void {
 
+        console.log('adding tab: ', tabLabel, tabTitle, activate);
         /*/
          * Ensure that all tabs are not selected before we set the next new tab.
          * This will ensure that the newly created component appears on the currently selected tab, 
