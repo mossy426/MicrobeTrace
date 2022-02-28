@@ -1121,10 +1121,10 @@ Note that this may cause slow performance on larger networks.">
         let nd = session.data.nodes.find(nd => nd._id == d._id);
         for (let attribute in nd) {
           if (attribute[0] == '_') continue;
-          const encodedAttribute = attribute.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+          const encodedAttribute = attribute.replace(/[\u00A0-\u9999<>(){}`"\&]/g, function(i) {
               return '&#'+i.charCodeAt(0)+';';
           });
-          const encodedAttributeValue = String(d[attribute]).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+          const encodedAttributeValue = String(d[attribute]).replace(/[\u00A0-\u9999<>(){}`"\&]/g, function(i) {
               return '&#'+i.charCodeAt(0)+';';
           });
           target.append(`<tr><td><strong>${MT.titleize(encodedAttribute)}</strong></td><td>${encodedAttributeValue}</td></tr>`);
@@ -1610,7 +1610,7 @@ Note that this may cause slow performance on larger networks.">
       
       temp.style.nodeSymbolMap = d3.scaleOrdinal(nodeSymbols).domain(values);
       let nodeSymbolHeaderTitle =  (session.style.overwrite && session.style.overwrite.nodeSymbolHeaderTitle ? session.style.overwrite.nodeSymbolHeaderTitle : "Node " + MT.titleize(variable));
-      const encodedNodeSymbolHeaderTitle = nodeSymbolHeaderTitle.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+      const encodedNodeSymbolHeaderTitle = nodeSymbolHeaderTitle.replace(/[\u00A0-\u9999<><>(){}`"\&]/g, function(i) {
               return '&#'+i.charCodeAt(0)+';';
       });
       table.empty().append(
