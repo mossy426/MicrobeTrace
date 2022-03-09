@@ -348,6 +348,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.showRefresh = false;
         this.showButtonGroup = false;
         this.showSorting = false;
+
+        // Remove the default tab
+        this.removeTab({index : 1})
+
         this.getfileContent($event);
     }
 
@@ -1196,7 +1200,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     public getfileContent(fileList: FileList) {
 
         this.homepageTabs.map(x => {
-            console.log('homepage1: ', x);
             if (x.tabTitle === "Files") {
                 if (x.componentRef != null) {
                     x.componentRef.instance.processFiles(fileList);
@@ -1208,7 +1211,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     public getSinglefileContent(file: File) {
 
         this.homepageTabs.map(x => {
-            console.log('homepage2: ', x);
             if (x.tabTitle === "Files") {
                 if (x.componentRef != null) {
                     x.componentRef.instance.processFile(file);
@@ -1648,7 +1650,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         let activeComponentName: string = this.homepageTabs[tabNdx].label;
 
-        console.log('show active tab: ', this.homepageTabs);
         this.homepageTabs.forEach((item: HomePageTabItem) => {
             item.isActive = item.label === activeComponentName;
         });

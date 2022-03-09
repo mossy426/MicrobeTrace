@@ -13,7 +13,7 @@ import { DialogSettings } from '../../helperClasses/dialogSettings';
 import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
 import * as _ from 'lodash';
 import { MicrobeTraceNextVisuals } from '../../microbe-trace-next-plugin-visuals';
-
+import { CustomShapes } from '@app/helperClasses/customShapes';
 
 @Component({
     selector: 'TwoDComponent',
@@ -28,6 +28,8 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         'height': '0px',
         'width': '1000px'
     };
+
+    private customShapes : CustomShapes = new CustomShapes();
 
     ShowNetworkAttributes: boolean = false;
     ShowStatistics: boolean = false;
@@ -862,6 +864,12 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         //* Shapes:
         let type = d3[this.visuals.twoD.commonService.session.style.widgets['node-symbol']];
         let symbolVariable = this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'];
+       
+        // Custom Shape Selected
+        if (type === undefined) {
+            type = this.customShapes.shapes[this.visuals.twoD.commonService.session.style.widgets['node-symbol']]
+        }
+
         //* Sizes:
         let defaultSize = this.visuals.twoD.commonService.session.style.widgets['node-radius'];
         let size = defaultSize, med = defaultSize, oldrng, min, max;
@@ -880,12 +888,20 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
             med = oldrng / 2;
         }
         let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes);
-        
+
         nodes.selectAll('path')._parents.forEach(x=>{
             const path = x.childNodes[0];
             const data = x.__data__;
 
-            if (symbolVariable !== 'None') type = d3[this.visuals.twoD.commonService.temp.style.nodeSymbolMap(data[symbolVariable])];
+            if (symbolVariable !== 'None') {
+                type = d3[this.visuals.twoD.commonService.temp.style.nodeSymbolMap(data[symbolVariable])];
+
+                // Custom Shape Selected
+                if (type === undefined) {
+                    type = this.customShapes.shapes[this.visuals.twoD.commonService.session.style.widgets['node-symbol']]
+                }
+
+            }
             if (sizeVariable !== 'None') {
                 size = data[sizeVariable];
                 if (!this.visuals.twoD.isNumber(size)) size = med;
@@ -893,10 +909,9 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
                 size = size * size * defaultSize + 100;
             }
 
-            if (type != undefined){
                 d3.select(path).attr('d', d3.symbol().size(size).type(type));
-            }
-        });
+
+            });
     };
 
 
@@ -994,7 +1009,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
             this.visuals.twoD.cdref.detectChanges();
 
             this.generateNodeSymbolSelectionTable("#node-symbol-table", e);
-
+            
             this.visuals.twoD.redrawNodes();
       //  }
     }
