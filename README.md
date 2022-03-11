@@ -1,4 +1,4 @@
-[![MicrobeTrace](https://raw.githubusercontent.com/CDCgov/MicrobeTrace/master/img/android-chrome-192x192.png "MicrobeTrace")](https://microbetrace.cdc.gov/MicrobeTrace/)
+![image](https://user-images.githubusercontent.com/33426295/150403131-0468f0be-2539-4f2d-88ee-0fb7d4fd411c.png)
 
 # MicrobeTrace [![MicrobeTrace DOI](https://img.shields.io/badge/DOI-10.1101%2F2020.07.22.216275-blue)](https://doi.org/10.1101/2020.07.22.216275)
 
