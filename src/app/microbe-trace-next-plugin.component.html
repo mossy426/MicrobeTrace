@@ -221,10 +221,10 @@
                                             <p-dropdown id="node-color-variable" [options]="FieldList" appendTo="body" [(ngModel)]="SelectedColorNodesByVariable" (onChange)="onColorNodesByChanged()"></p-dropdown>
                                         </div>
                                     </div>
-                                    <div id="link-color-table-row" class="form-group row" title="Should MicrobeTrace display the table of colors?">
+                                    <div id="node-color-table-row" [hidden]="!ShowGlobalSettingsNodeColorTable" class="form-group row" title="Should MicrobeTrace display the table of colors?">
                                         <div class="col-4"><label>Nodes Color Table</label></div>
                                         <div class="col-8">
-                                            <p-selectButton [options]="NodeColorTableTypes" [(ngModel)]="SelectedNodeColorTableTypesVariable" (onChange)="onNodeColorTableChanged()"></p-selectButton>
+                                            <p-selectButton hidde [options]="NodeColorTableTypes" [(ngModel)]="SelectedNodeColorTableTypesVariable" (onChange)="onNodeColorTableChanged()"></p-selectButton>
                                         </div>
                                     </div>
 
@@ -241,10 +241,17 @@
                                             <p-dropdown id="link-tooltip-variable" [options]="ToolTipFieldList" appendTo="body" [(ngModel)]="SelectedColorLinksByVariable" (onChange)="onColorLinksByChanged()"></p-dropdown>
                                         </div>
                                     </div>
-                                    <div id="link-color-table-row2" class="form-group row" title="Should MicrobeTrace display the table of colors?">
+                                    <div id="link-color-table-row" [hidden]="!ShowGlobalSettingsLinkColorTable"  class="form-group row" title="Should MicrobeTrace display the table of colors?">
                                         <div class="col-4"><label>Link Color Table</label></div>
                                         <div class="col-8">
                                             <p-selectButton [options]="LinkColorTableTypes" [(ngModel)]="SelectedLinkColorTableTypesVariable" (onChange)="onLinkColorTableChanged()"></p-selectButton>
+                                        </div>
+                                    </div>
+
+                                    <div id="link-color-value-row" class="form-group row" title="What color should the links be?">
+                                        <div class="col-4"><label for="link-color">Links</label></div>
+                                        <div class="col-8">
+                                            <input type="color" id="link-color" class="form-control form-control-sm" [(ngModel)]="SelectedLinkColorVariable" (ngModelChange)="onLinkColorChanged()">
                                         </div>
                                     </div>
 

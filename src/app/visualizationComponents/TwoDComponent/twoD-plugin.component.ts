@@ -123,6 +123,8 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     SelectedColorTransparencyVariable: any = 1;
     SelectedNodeLabelSizeVariable: any = 16;
 
+    public nodeBorderWidth = 2.0;
+
     ShowNodeSymbolWrapper: boolean = false;
     ShowNodeSymbolTable: boolean = false;
     ShowAdvancedExport: boolean = true;
@@ -508,8 +510,8 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
                             if (d3.event.shiftKey && d3.event.key == 'F10') this.visuals.twoD.showContextMenu(n);
                         });
                        g.append('path')
-                        .attr('stroke', '#ffffff')
-                        .attr('stroke-width', '2px');
+                        .style('stroke', 'black')
+                        .style('stroke-width', '2px');
                     g.append('text')
                         .attr('dy', 5)
                         .attr('dx', 8);
@@ -521,6 +523,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         this.visuals.twoD.redrawNodes();
         this.visuals.twoD.updateNodeColors();
         this.visuals.twoD.redrawLabels();
+        this.visuals.twoD.redrawNodeBorder();
 
 
         let vlinks = this.visuals.twoD.getVLinks();
@@ -819,13 +822,13 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         let v: any = this.visuals.twoD.SelectedLinkTooltipVariable;
         if (v == 'None') return;
 
-        $('#tooltip').css({ top: d3.event.pageY - 128, left: d3.event.pageX - 300, position: 'absolute' });
+        $('#tooltip').css({ top: d3.event.pageY - 28, left: d3.event.pageX + 8, position: 'absolute' });
 
 
         d3.select('#tooltip')
             .html((v == 'source' || v == 'target') ? d[v]._id : d[v])
-            .style('left', (d3.event.pageX - 300) + 'px')
-            .style('top', (d3.event.pageY - 128) + 'px')
+            .style('left', (d3.event.pageX + 8) + 'px')
+            .style('top', (d3.event.pageY - 28) + 'px')
             .style('z-index', 1000)
             .transition().duration(100)
             .style('opacity', 1);
@@ -889,6 +892,11 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         }
         let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes);
 
+        // TODO: Hides table row by default if no symbol variable - clean up
+        if(symbolVariable === 'None') {
+            $('#node-symbol-table-row').slideUp();
+        }
+
         nodes.selectAll('path')._parents.forEach(x=>{
             const path = x.childNodes[0];
             const data = x.__data__;
@@ -898,7 +906,9 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
                 // Custom Shape Selected
                 if (type === undefined) {
-                    type = this.customShapes.shapes[this.visuals.twoD.commonService.session.style.widgets['node-symbol']]
+
+                    type = this.customShapes.shapes[this.visuals.twoD.commonService.temp.style.nodeSymbolMap(data[symbolVariable])];
+
                 }
 
             }
@@ -913,6 +923,14 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
             });
     };
+
+    private redrawNodeBorder(){
+        let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes);
+        nodes
+          .selectAll('path')
+          .style('stroke', 'black')
+          .style('stroke-width', this.visuals.twoD.commonService.session.style.widgets['node-border-width']);
+      }
 
 
     redrawLabels() {
@@ -996,22 +1014,44 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     }
 
     onNodeSymbolVariableChange(e, setVisibility = true) {
-    //    if(this.SelectedNodeSymbolVariable != this.context.twoD.commonService.session.style.widgets['node-symbol-variable']){
 
             this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'] = this.SelectedNodeSymbolVariable;
 
+
             if(setVisibility){
                 this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.setVisibility(true);
-                this.visuals.twoD.ShowNodeSymbolTable = true;
                 this.visuals.twoD.SelectedNetworkTableTypeVariable = "Show";
+
+                if (this.SelectedNodeSymbolVariable !== 'None') {
+
+                    $('#node-symbol-row').slideUp();
+                    
+                    //If hidden by default, unhide to perform slide up and down
+                    if(!this.ShowNodeSymbolTable){
+                        this.ShowNodeSymbolTable = true;
+                    } else {
+                        $('#node-symbol-table-row').slideDown();
+                    }
+
+                // No shape by variable selected
+                // show shape, hide table 
+                } else {
+
+                    $('#node-symbol-row').slideDown();
+                    $('#node-symbol-table-row').slideUp();
+                    this.onNodeSymbolTableChange('Hide');
+
+                }
+    
             }
+
 
             this.visuals.twoD.cdref.detectChanges();
 
             this.generateNodeSymbolSelectionTable("#node-symbol-table", e);
             
             this.visuals.twoD.redrawNodes();
-      //  }
+
     }
 
     generateNodeSymbolSelectionTable(tableId: string, variable: string, isEditable: boolean = true) {
@@ -1071,7 +1111,6 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
             }
             this.visuals.twoD.commonService.session.style.nodeSymbols = symbols;
         }
-        this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
 
         table.empty().append(
             '<tr>' +
@@ -1081,14 +1120,20 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
             '<th>Shape</th>' +
             '</tr>');
         let options = $('#node-symbol2').html();
+
         values.sort( (a, b)  => {
             return aggregates[b] - aggregates[a];
-        }).forEach((v, i) => {
+        });
+        
+        this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
+        
+        values.forEach((v, i) => {
+
             let selector = $(`<select ${disabled}></select>`).append(options).val(this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v)).on('change',  (e) => {
                 this.visuals.twoD.commonService.session.style.nodeSymbols.splice(i, 1, (e.target as any).value);
                 this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
                 this.visuals.twoD.redrawNodes();
-            });
+            });        
             let symbolText = symbolMapping.find(x => x.key === this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v));
 
             let cell = $('<td></td>').append(isEditable ? selector : symbolText ? symbolText.value : '');
@@ -1108,6 +1153,11 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         this.visuals.twoD.commonService.session.style.widgets['node-radius-variable'] = e;
         this.visuals.twoD.redrawNodes();
 
+    }
+
+    onNodeBorderWidthChange(e) {
+        this.visuals.twoD.commonService.session.style.widgets['node-border-width'] = e;
+        this.visuals.twoD.redrawNodeBorder();
     }
 
     onNodeRadiusChange(e) {
@@ -1351,8 +1401,8 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
                          * Otherwise, turn on the node(s) selected.
                         /*/
 
-                        y.style['stroke'] = "#FFFFFF";
-                        y.style['strokeWidth'] = stroke_width;
+                        y.style['stroke'] = "#000000";
+                        y.style['strokeWidth'] = this.visuals.twoD.commonService.session.style.widgets['node-border-width'];
                     }
                 });
             });
@@ -1372,8 +1422,8 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
                         * Otherwise, turn on the node(s) selected.
                     /*/
 
-                    y.style['stroke'] = "#FFFFFF";
-                    y.style['strokeWidth'] = stroke_width;
+                    y.style['stroke'] = "#000000";
+                    y.style['strokeWidth'] = this.visuals.twoD.commonService.session.style.widgets['node-border-width'];
 
                 });
             });
