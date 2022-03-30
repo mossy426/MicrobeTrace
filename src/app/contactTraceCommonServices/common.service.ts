@@ -186,6 +186,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             "map-states-show": true,
             "network-friction": 0.4,
             "network-gravity": 0.05,
+            "network-link-strength": 0.124,
             "node-charge": 200,
             "node-border-width" : 2.0,
             "node-color": "#1f77b4",
@@ -196,6 +197,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             "node-label-size": 16,
             "node-label-variable": "None",
             "node-label-orientation": "Right",
+            "node-opacity" : 0,
             "node-radius": 250,
             "node-radius-variable": "None",
             "node-symbol": "symbolCircle",
@@ -850,6 +852,7 @@ export class CommonService extends AppComponentBase implements OnInit {
     }
 
     applyStyle(style) {
+        console.log('applying style: ', style);
         window.context.commonService.session.style = style;
         window.context.commonService.session.style.widgets = Object.assign({},
             window.context.commonService.defaultWidgets(),
@@ -1855,6 +1858,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     createLinkColorMap() {
         let variable = window.context.commonService.session.style.widgets["link-color-variable"];
+        console.log('link var: ', variable);
         if (variable == "None") {
             window.context.commonService.temp.style.linkColorMap = () => window.context.commonService.session.style.widgets["link-color"];
             window.context.commonService.temp.style.linkAlphaMap = () => 1 - window.context.commonService.session.style.widgets["link-opacity"];

@@ -135,6 +135,10 @@ body.swal2-height-auto {
     animation: glowing 2s infinite;
 }
 
+.tab-content {
+    padding-top: 15px;
+}
+
 /*<Visuals>*/
 .graph-nav-info {
     display: none;
@@ -428,3 +432,18 @@ body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active, body .ui-tab
 .nodes path {
     cursor: -webkit-grab;
   }
+
+// Symbol next to color in color table - Adding in main styles here since added dynamically
+.transparency-symbol {
+    cursor: pointer;
+    padding-left: 4px;
+    font-size: 22px;
+}
+
+.transparency-symbol:hover {
+    text-decoration: none;
+}
+
+.custom-file-label::after {
+    cursor: pointer;
+}

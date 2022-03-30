@@ -17,6 +17,11 @@
     color: #ffffff;
 }
 
+.tab-content {
+
+    padding-top: 15px;
+
+}
 
 .loader {
     position: absolute;
@@ -53,3 +58,55 @@
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
+
+// color table
+.floater {
+    border: 1px solid #cccccc;
+    border-radius: 0.25rem;
+}
+
+#color-transparency-wrapper {
+    display: none;
+    position: absolute;
+    z-index: 1100;
+    border-radius: 0.25rem;
+    color: #303030;
+    background-color: #f8f9fa !important;
+    padding: 4px 8px;
+    transform: rotate(270deg);
+    transform-origin: top left;
+}
+
+.transparency-symbol {
+    cursor: pointer;
+}
+
+#network-statistics-wrapper {
+    display: none;
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    z-index: 999;
+    color: #303030;
+    background-color: #f8f9fa !important;
+    border: 1px solid #c0c0c0;
+    border-radius: 0.25rem;
+  }
+  #network-statistics-draghandle {
+    display: none;
+    width: 100%;
+    text-align: center;
+  }
+  #network-statistics-table td {
+    border: none;
+    padding: 0.125rem 0.25rem;
+  }
+
+  #reveal-all {
+    background-color: #dadada;
+  }
+
+  .custom-file-label {
+    margin-left: 15px;
+    margin-right: 15px;
+  }

@@ -104,6 +104,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     SelectedNetworkChargeVariable: any = 200;
     SelectedNetworkGravityVariable: any = .05;
     SelectedNetworkFrictionVariable: any = .4;
+    SelecetedNetworkLinkStrengthVariable: any = 0.123;
     SelectedNetworkExportFilenameVariable: string = "";
 
     NetworkExportFileTypeList: any = [
@@ -120,7 +121,6 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     CalculatedResolutionHeight: any = 909;
     CalculatedResolution: any = ((this.CalculatedResolutionWidth * this.SelectedNetworkExportScaleVariable) + " x " + (this.CalculatedResolutionHeight * this.SelectedNetworkExportScaleVariable) + "px");
 
-    SelectedColorTransparencyVariable: any = 1;
     SelectedNodeLabelSizeVariable: any = 16;
 
     public nodeBorderWidth = 2.0;
@@ -282,7 +282,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
                 .force('link', d3.forceLink()
                     .id(d => d._id)
                     .distance(l => l.origin.length * this.visuals.twoD.commonService.session.style.widgets['link-length'])
-                    .strength(0.125)
+                    .strength(this.visuals.twoD.commonService.session.style.widgets['network-link-strength'])
                 )
                 .force('charge', d3.forceManyBody()
                     .strength(-this.visuals.twoD.commonService.session.style.widgets['node-charge'])
@@ -413,6 +413,15 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
     onCloseExport() {
         this.isExportClosed = true;
+    }
+
+    // Remove pop windows that should dissapear when clicked on the network
+    networkWhitespaceClicked() : void {
+
+        // The color transparency slider should dissapear if clicked out
+        $("#color-transparency-wrapper").css({
+            display: "none"
+        });
     }
 
     exportWork() {
@@ -1070,8 +1079,8 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
             { key: "symbolPentagon", value: '&#11039; (Pentagon)' },
             { key: "symbolHexagon", value: '&#11042; (Hexagon)' },
             { key: "symbolHexagonAlt", value: '&#11043; (Tilted Hexagon)' },
-            { key: "symbolOctagon", value: '&#11204; (Octagon)' },
-            { key: "symbolOctagonAlt", value: '&#11203; (Tilted Octagon)' },
+            { key: "symbolOctagon", value: '&#11042; (Octagon)' },
+            { key: "symbolOctagonAlt", value: '&#11043; (Tilted Octagon)' },
             { key: "symbolCross", value: '&#10010; (Addition Sign)' },
             { key: "symbolX", value: '&#10006; (Multiplication Sign)' },
             { key: "symbolWye", value: '&#120300; (Wye)' },
@@ -1281,6 +1290,11 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     onNetworkGridlinesShowHideChange(e) {
 
         if (e == "Show") {
+
+            // Reset width and height in case they have changed
+            this.visuals.twoD.halfWidth = $('#network').parent().width() / 2;
+            this.visuals.twoD.halfHeight = $('#network').parent().parent().parent().height() / 2;
+
             this.visuals.twoD.commonService.session.style.widgets['network-gridlines-show'] = true;
             let range = Math.ceil(Math.max(this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight) / 50);
             let ords = Object.keys(new Array(range).fill(null)).map(parseFloat);
@@ -1325,6 +1339,15 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         this.visuals.twoD.commonService.session.style.widgets['network-friction'] = e;
     }
 
+    onNetworkLinkStrengthVariableChange(e) {
+
+        console.log('st change: ', e);
+        let v = parseFloat(e);
+        this.visuals.twoD.force.force('link').strength(v);
+        this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+        this.visuals.twoD.commonService.session.style.widgets['network-link-strength'] = e;
+    }
+
 
     onNetworkExportFiletypeChange(e) {
         if (e == "svg") {
@@ -1333,12 +1356,6 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         else
             this.visuals.twoD.ShowAdvancedExport = true;
     }
-
-    onSelectedColorTransparencyVariableChange(e){
-        //Place holder event
-        //this.context.twoD.commonService.session.data.nodes
-    }
-
 
     updateNodeColors() {
 
@@ -1438,8 +1455,10 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     updateLinkColor() {
 
         let variable = this.visuals.twoD.commonService.session.style.widgets['link-color-variable'];
+        console.log('updating variable: ',variable );
         let links = this.visuals.twoD.svg.select('g.links').selectAll('line');
         if (variable == 'None') {
+            console.log('link colo in : ', this.visuals.twoD.commonService.session.style.widgets['link-color']);
             let color = this.visuals.twoD.commonService.session.style.widgets['link-color'],
                 opacity = 1 - this.visuals.twoD.commonService.session.style.widgets['link-opacity'];
             links
@@ -1698,6 +1717,10 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         //Network|Friction
         this.SelectedNetworkFrictionVariable = this.visuals.twoD.commonService.session.style.widgets['network-friction'];
         this.onNetworkFrictionChange(this.SelectedNetworkFrictionVariable);
+
+        //Network|Link Strength
+        this.SelecetedNetworkLinkStrengthVariable = this.visuals.twoD.commonService.session.style.widgets['network-link-strength'];
+        this.onNetworkFrictionChange(this.SelecetedNetworkLinkStrengthVariable);
 
     }
 }

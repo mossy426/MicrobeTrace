@@ -246,7 +246,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         this.SelectedColorNodesByVariable = this.commonService.GlobalSettingsModel.SelectedColorNodesByVariable;
         this.SelectedNodeColorVariable = this.commonService.session.style.widgets['node-color'];
-        // this.SelectedColorLinksByVariable = this.commonService.session.style.widgets['link-tooltip-variable'];
+        this.SelectedColorLinksByVariable = this.commonService.session.style.widgets['link-tooltip-variable'];
 
         this.SelectedColorVariable = this.commonService.session.style.widgets['selected-color'];
 
@@ -261,11 +261,12 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
          let cachedLSV = "";
          let cachedView = "";
 
+         console.log('initVariable1 ', this.commonService.session.style.widgets['link-color-variable']);  
+
         this.commonService.localStorageService.getItem('default-distance-metric',function(err, result) {
             // Run this code once the value has been
             // loaded from the offline store.
             cachedLSV = result;
-            console.log('cacheL 1: ', cachedLSV);
 
         });
         
@@ -275,8 +276,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         });
 
 
+
         setTimeout(() => {
-            $('#top-toolbar').fadeTo("slow", 1);   
+            $('#top-toolbar').fadeTo("slow", 1); 
+            console.log('initVariable3 ', this.commonService.session.style.widgets['link-color-variable']);  
         }, 1000);
         setTimeout(() => {
             if (cachedLSV) {
@@ -294,8 +297,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             }
 
             if (cachedView) {
-                this.updateLaunchView(cachedView);
-    
+                this.updateLaunchView(cachedView);    
             }
 
             $("#welcome-title").animate({
@@ -475,6 +477,17 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     }
 
+    public onApplyStyle( file: any ){
+
+        console.log('aplystin stay')
+        if (this.files.length > 0) {
+            let reader = new FileReader();
+            reader.onload = e => this.commonService.applyStyle(JSON.parse((e as any).target.result));
+            reader.readAsText(this.files[0]);
+          }
+
+    }
+
 
 
     onPruneWithTypesChanged() {
@@ -574,6 +587,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     public onLinkColorChanged() : void {
 
+        console.log('link color var: ', this.SelectedLinkColorVariable);
         this.commonService.session.style.widgets["link-color"] = this.SelectedLinkColorVariable;
 
         this.publishUpdateLinkColor();
@@ -582,6 +596,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     onColorLinksByChanged() {
 
+        console.log('links changed by');
         this.visuals.microbeTrace.SelectedColorLinksByVariable = this.visuals.microbeTrace.SelectedColorLinksByVariable;
 
         this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedColorLinksByVariable = this.visuals.microbeTrace.SelectedColorLinksByVariable;
@@ -632,7 +647,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             .empty()
             .append(
                 "<tr>" +
-                ("<th class='p-1' contenteditable>Link " + this.visuals.microbeTrace.commonService.titleize(this.visuals.microbeTrace.SelectedColorLinksByVariable) + "</th>") +
+                ("<th class='p-1' >Link " + this.visuals.microbeTrace.commonService.titleize(this.visuals.microbeTrace.SelectedColorLinksByVariable) + "</th>") +
                 (this.visuals.microbeTrace.commonService.session.style.widgets["link-color-table-counts"] ? "<th>Count</th>" : "") +
                 (this.visuals.microbeTrace.commonService.session.style.widgets["link-color-table-frequencies"] ? "<th>Frequency</th>" : "") +
                 "<th>Color</th>" +
@@ -641,7 +656,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         if (!this.visuals.microbeTrace.commonService.session.style.linkValueNames)
             this.visuals.microbeTrace.commonService.session.style.linkValueNames = {};
-
+            
         let aggregates = this.visuals.microbeTrace.commonService.createLinkColorMap();
         let vlinks = this.visuals.microbeTrace.commonService.getVisibleLinks();
         let aggregateValues = Object.keys(aggregates);
@@ -650,26 +665,31 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         aggregateValues.forEach((value, i) => {
 
+            // Grab color of link from session
             const color = this.visuals.microbeTrace.commonService.temp.style.linkColorMap(value);
 
+            // Create color input element with color value and assign id to retrieve new value on change
             let colorinput = $(`<input type="color" value="${color}" ${disabled}>`)
-                .on("change", () => {
+                .on("change", e => {
 
-                    let $this: any = $(this);
-                    let colorValue = $this[0].value;
+                    // Need to get value from id since "this" keyword is used by angular
+                    // Update that value at the index in the color table
+                    this.visuals.microbeTrace.commonService.session.style.linkColors.splice(i, 1,e.target['value']);
 
-                    this.visuals.microbeTrace.commonService.session.style.linkColors.splice(i, 1, colorValue);
+                    // Generate new color map with updated table
                     this.visuals.microbeTrace.commonService.temp.style.linkColorMap = d3
                         .scaleOrdinal(this.visuals.microbeTrace.commonService.session.style.linkColors)
                         .domain(aggregateValues);
 
 
+                    // Call the updateLinkColor method in the active tab
                     this.visuals.microbeTrace.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef.instance.updateLinkColor();
 
                 });
 
-            let alphainput = $("<a>⇳</a>")
+            let alphainput = $(`<a class="transparency-symbol">⇳</a>`)
                 .on("click", e => {
+
                     $("#color-transparency-wrapper").css({
                         top: e.clientY + 129,
                         left: e.clientX,
@@ -678,12 +698,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
                     $("#color-transparency")
                         .val(this.visuals.microbeTrace.commonService.session.style.linkAlphas[i])
-                        .one("change", () => {
+                        .on("change", (f) => {
 
-                            let $this: any = $(this);
-                            let transparencyValue = $this[0].value;
-
-                            this.visuals.microbeTrace.commonService.session.style.linkAlphas.splice(i, 1, parseFloat(transparencyValue));
+                            // Update table with new alpha value
+                            // Need to get value from id since "this" keyword is used by angular
+                            this.visuals.microbeTrace.commonService.session.style.linkAlphas.splice(i, 1, parseFloat((f.target['value'] as string)));
                             this.visuals.microbeTrace.commonService.temp.style.linkAlphaMap = d3
                                 .scaleOrdinal(this.visuals.microbeTrace.commonService.session.style.linkAlphas)
                                 .domain(aggregateValues);
@@ -807,12 +826,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             const color = this.visuals.microbeTrace.commonService.temp.style.nodeColorMap(value);
 
             let colorinput = $(`<input type="color" value="${color}" ${disabled}>`)
-                .on("change", (e) => {
+                .on("change", e => {
 
-                    let $this: any = $(this);
-                    let colorValue = $this[0].value;
-
-                    this.visuals.microbeTrace.commonService.session.style.nodeColors.splice(i, 1, colorValue);
+                    // Update table with new alpha value
+                    // Need to get value from id since "this" keyword is used by angular
+                    this.visuals.microbeTrace.commonService.session.style.nodeColors.splice(i, 1, e.target['value']);
                     this.visuals.microbeTrace.commonService.temp.style.nodeColorMap = d3
                         .scaleOrdinal(this.visuals.microbeTrace.commonService.session.style.nodeColors)
                         .domain(aggregateValues);
@@ -821,7 +839,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
                 });
 
-            let alphainput = $("<a>⇳</a>").on("click", e => {
+            let alphainput = $(`<a class="transparency-symbol">⇳</a>`).on("click", e => {
 
                 $("#color-transparency-wrapper").css({
                     top: e.clientY + 129,
@@ -831,16 +849,18 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
                 $("#color-transparency")
                     .val(this.visuals.microbeTrace.commonService.session.style.nodeAlphas[i])
-                    .one("change", () => {
+                    .one("change", f => {
 
-                        //debugger;
-                        let $this: any = $(this);
-                        let transparencyValue = $this[0].value;
+                        // Update table with new alpha value
+                        // Need to get value from id since "this" keyword is used by angular
+                        this.visuals.microbeTrace.commonService.session.style.nodeAlphas.splice(i, 1, parseFloat(f.target['value'] as string));
 
-                        this.visuals.microbeTrace.commonService.session.style.nodeAlphas.splice(i, 1, parseFloat(transparencyValue));
                         this.visuals.microbeTrace.commonService.temp.style.nodeAlphaMap = d3
                             .scaleOrdinal(this.visuals.microbeTrace.commonService.session.style.nodeAlphas)
                             .domain(aggregateValues);
+
+                        this.visuals.microbeTrace.publishUpdateNodeColors();
+
                         $("#color-transparency-wrapper").fadeOut();
 
                     });
@@ -906,8 +926,27 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         });
 
-
     }
+
+    revealClicked() : void {
+
+        $("#cluster-minimum-size").val(1);
+        this.visuals.microbeTrace.commonService.session.style.widgets["cluster-minimum-size"] = 1;
+        $("#filtering-wrapper").slideDown();
+        this.visuals.microbeTrace.commonService.setClusterVisibility(true);
+       
+        this.visuals.microbeTrace.commonService.setNodeVisibility(true);
+         //To catch links that should be filtered out based on cluster size:
+         this.visuals.microbeTrace.commonService.setLinkVisibility(true);
+        //Because the network isn't robust to the order in which these operations
+        //take place, we just do them all silently and then react as though we did
+        //them each after all of them are already done.
+
+        this.visuals.microbeTrace.updatedVisualization();
+
+        this.visuals.microbeTrace.commonService.updateStatistics();
+
+    };
 
 
     updateGlobalSettingsModel() {
