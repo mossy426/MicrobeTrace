@@ -302,6 +302,127 @@
                     </p-accordionTab>
                 </p-accordion>
             </tab>
+            <tab heading="{{'Polygons' | localize}}" customClass="m-tabs__item">
+                <p-accordion>
+                    <p-accordionTab style="color:#495057" header="Polygon Controls" id="polygons-controls-accordion">
+                          <div id="polygons-controls" class="show" data-parent="#polygons-controls-accordion">
+                            <div class="card-body">
+                              <div class="form-group row" title="Show polygons?">
+                                <div class="col-4">Polygons</div>
+                                <div class="col-8">
+                                  <div class="btn-group btn-group-toggle btn-group-sm w-100" data-toggle="buttons">
+                                    <label class="btn btn-light col" title="Show convex hull under the network.">
+                                      <input type="radio" (click) ="polygonsShow()" name="polygons" id="polygons-show" autocomplete="off">
+                                      Show
+                                    </label>
+                                    <label class="btn btn-light col active" title="Do Not show convex hull under the network.">
+                                      <input type="radio" name="polygons" id="polygons-hide" autocomplete="off" checked>
+                                      Hide
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group row polygons-settings-row" title="What Foci should be used when creating convex hulls?">
+                                <div class="col-4"><label for="polygons-foci">Center</label></div>
+                                <div class="col-8">
+                                  <select id="polygons-foci" class="form-control form-control-sm nodeVariables">
+                                    <option>None</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="form-group row polygons-settings-row" title="What amount of gather force should be used?">
+                                <div class="col-4">
+                                  <label for="polygons-gather-force">Gather</label>
+                                </div>
+                                <div class="col-8">
+                                  <input type="range" class="custom-range" id="polygons-gather-force" min="0" max=".02" value="0" step="0.0001">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                    </p-accordionTab>
+                    <p-accordionTab style="color:#495057" header="Labels" id="polygons-controls-accordion">
+                          <div id="polygons-controls-labels" data-parent="#polygons-controls-accordion">
+                            <div class="card-body">
+                              <div class="form-group row" title="Show polygons label?">
+                                <div class="col-4">Label Polygons</div>
+                                <div class="col-8">
+                                  <div class="btn-group btn-group-toggle btn-group-sm w-100" data-toggle="buttons">
+                                    <label class="btn btn-light col" title="Show ploygon label.">
+                                      <input type="radio" name="polygons" id="polygons-label-show" autocomplete="off">
+                                      Show
+                                    </label>
+                                    <label class="btn btn-light col active" title="Do Not show ploygon label.">
+                                      <input type="radio" name="polygons" id="polygons-label-hide" autocomplete="off" checked>
+                                      Hide
+                                    </label>
+                                  </div>                  
+                                </div>
+                              </div>
+                              <div class="form-group row polygons-label-row" title="How big should ploygon labels be?">
+                                <div class="col-4"><label for="polygons-label-size">Label Size</label></div>
+                                <div class="col-8"><input type="range" class="custom-range" id="polygons-label-size" min="6" value="16" max="72"></div>
+                              </div>
+                              <div class="form-group row polygons-label-row" title="How should the labels be oriented relative to center of polygon?">
+                                <div class="col-4"><label for="polygons-label-orientation">Orientation</label></div>
+                                <div class="col-8">
+                                  <select id="polygons-label-orientation" class="form-control form-control-sm">
+                                    <option selected>Middle</option>
+                                              <option>Right</option>
+                                    <option>Left</option>
+                                    <option>Top</option>
+                                    <option>Bottom</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </p-accordionTab>
+                        <!-- style="display: none;" -->
+                        <p-accordionTab style="color:#495057" header="Colors" id="polygons-controls-accordion">  
+                          <div id="polygons-controls-colors" data-parent="#polygons-controls-accordion">
+                            <div class="card-body">
+                              <div class="form-group row" title="Show polygons colored?">
+                                <div class="col-4">Color Polygons</div>
+                                <div class="col-8">
+                                  <div class="btn-group btn-group-toggle btn-group-sm w-100" data-toggle="buttons">
+                                    <label class="btn btn-light col" title="Show convex hull under the network.">
+                                      <input type="radio" name="polygons" id="polygons-color-show" autocomplete="off">
+                                      Show
+                                    </label>
+                                    <label class="btn btn-light col active" title="Do Not show convex hull under the network.">
+                                      <input type="radio" name="polygons" id="polygons-color-hide" autocomplete="off" checked>
+                                      Hide
+                                    </label>
+                                  </div>                  
+                                </div>
+                              </div>
+                              <div id="polygon-color-table-row" class="form-group row" title="Should MicrobeTrace display the table of colors?">
+                                <div class="col-4">Polygon Color Table</div>
+                                <div class="col-8">
+                                  <div class="btn-group btn-group-toggle btn-group-sm w-100" data-toggle="buttons">
+                                    <label class="btn btn-light active col">
+                                      <input type="radio" name="polygonColorTableShowHide" id="polygon-color-table-show" autocomplete="off" checked>
+                                      Show
+                                    </label>
+                                    <label class="btn btn-light col">
+                                      <input type="radio" name="polygonColorTableShowHide" id="polygon-color-table-hide" autocomplete="off">
+                                      Hide
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div id="polygon-color-value-row" class="form-group row" title="What color should the polygons be?">
+                                <div class="col-4"><label for="polygon-color">Polygons</label></div>
+                                <div class="col-8">
+                                  <input type="color" id="polygon-color" class="form-control form-control-sm" value="#1f77b4">
+                                </div>
+                              </div>              
+                            </div>
+                          </div>
+                    </p-accordionTab>
+                </p-accordion>
+            </tab>
         </tabset>
 
     </p-dialog>
@@ -346,6 +467,11 @@
 
     </p-dialog>
 
+    <!-- <p-dialog id="polygon-color-table-wrapper" class="floater">
+        <div id="polygon-color-table-draghandle"><span class="oi oi-move"></span></div>
+        <table id="polygon-color-table"></table>
+    </p-dialog> -->
+
 
 
 
@@ -357,6 +483,15 @@
     <a href="#" id="node-symbol-table-counts" class="dropdown-item">Toggle Counts</a>
     <a href="#" id="node-symbol-table-frequencies" class="dropdown-item">Toggle Frequencies</a>
 </div>
+
+  
+  <div id="polygon-color-table-context" class="dropdown-menu">
+    <a href="#" id="polygon-color-table-drag" class="dropdown-item">Drag/Arrow Keys</a>
+    <a href="#" id="polygon-color-table-context-hide" class="dropdown-item">Hide</a>
+    <a href="#" id="polygon-color-table-expand" class="dropdown-item">Expand</a>
+    <a href="#" id="polygon-color-table-counts" class="dropdown-item">Toggle Counts</a>
+    <a href="#" id="polygon-color-table-frequencies" class="dropdown-item">Toggle Frequencies</a>
+  </div>
 
 <div id="context-menu" class="dropdown-menu">
     <a href="javascript:;" id="pinNode" class="dropdown-item">Pin Node</a>

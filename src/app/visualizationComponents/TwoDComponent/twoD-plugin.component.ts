@@ -552,7 +552,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
             .attr('dy', this.visuals.twoD.commonService.session.style.widgets['link-width'] + 2)
             .text(l => l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']]);
 
-        this.visuals.twoD.force.nodes(this.visuals.twoD.commonService.session.network.nodes).on('tick', () => {
+        let layoutTick = this.visuals.twoD.force.nodes(this.visuals.twoD.commonService.session.network.nodes).on('tick', () => {
             nodes
                 .attr('transform', d => {
                     var ew =
@@ -581,6 +581,111 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
                     );
             }
         });
+
+        let foci = this.visuals.twoD.commonService.session.style.widgets['polygons-foci'];
+        let gather = this.visuals.twoD.commonService.session.style.widgets['polygons-gather-force'];
+        let fill = this.visuals.twoD.commonService.session.style.widgets['polygon-color'] as any;
+        var opacity;
+        
+        if (this.visuals.twoD.commonService.session.style.widgets['polygons-color-show']) {
+            fill = d => this.visuals.twoD.commonService.temp.style.polygonColorMap(d.key);
+            opacity = (d) => this.visuals.twoD.commonService.temp.style.polygonAlphaMap(d.key);
+        } else {
+            opacity = 0.4;
+        }
+
+        d3.select('#network g.clusters').html(null);
+        d3.select('#network g.clustersLabels').html(null);
+        let groups = d3.nest().key(function(d) { return d[foci]; }).entries(newNodes).map(function(d) {
+                var key = d.key
+                var values = d.values.map(function(dd){
+                dd.foci = key;
+                return dd;
+                })
+                return {'key':key, 'values':values}
+            });
+        groups = groups.filter(group => group.values.length > 2 && group.key != 'null');  // remove group by empty
+        let groupPath = function(d) {
+            return "M" + 
+            d3.polygonHull(d.values.map(function(i) { return [i.x, i.y]; }))
+                .join("L")
+            + "Z";
+        }; 
+        let polygonTextCord = function(d) {
+            return d3.polygonHull(d.values.map(function(i) { return [i.x, i.y]; }));
+        };
+        let clusters = new Array(groups.length);  // The largest node for each cluster.
+        newNodes.forEach(d => {
+            let r =  d[foci];
+            let i = d.foci;
+            if (!clusters[i] || (r > clusters[i].radius)) 
+            clusters[i] = d;
+        })
+        let polygonsTick = () => {
+            newNodes.forEach(function(o, i) {
+            o.y += (clusters[o.foci].y - o.y) * gather;
+            o.x += (clusters[o.foci].x - o.x) * gather;
+            });
+            nodes.attr('transform', d => `translate(${d.x}, ${d.y})`);
+            links
+            .attr('x1', l => l.source.x)
+            .attr('y1', l => l.source.y)
+            .attr('x2', l => l.target.x)
+            .attr('y2', l => l.target.y);
+            if (this.visuals.twoD.commonService.session.style.widgets['link-label-variable'] !== 'None') {
+            linklabels
+                .attr('x', l => (l.source.x + l.target.x) / 2)
+                .attr('y', l => (l.source.y + l.target.y) / 2)
+                .attr('transform', l => 'rotate(' +
+                this.calcAngle(l.source, l.target) + ' ' +
+                (l.source.x + l.target.x) / 2 + ' ' +
+                (l.source.y + l.target.y) / 2 + ')'
+                );
+            }
+            d3.select('#network g.clusters').selectAll('path')
+            .data(groups)
+            .attr("d", groupPath) 
+            .enter()
+            .insert("path", "circle")
+            .style("fill", fill)
+            .style("stroke", fill)
+            .style("stroke-width", 40)
+            .style("stroke-linejoin", "round")
+            .style("opacity", opacity)
+            .attr("d", groupPath);
+            d3.select('#network g.clusters').selectAll('path')
+            .call(d3.drag() //A bunch of mouse handlers.
+                    .on('start', this.polygonDragStarted)
+                    .on('drag', this.polygonDragged)
+                    .on('end', this.polygonDragEnded))
+
+            if (this.visuals.twoD.commonService.session.style.widgets['polygons-label-show']) {
+
+            let g= d3.select('#network g.clustersLabels').text("").selectAll('text')
+                .data(groups)
+                .enter()
+                .append("text")
+                .attr('transform', function (d) { return "translate("+d3.polygonCentroid(polygonTextCord(d))+")"; })
+                .text(d => this.visuals.twoD.commonService.titleize("" + d.key));
+                
+                d3.select('#network g.clustersLabels').selectAll('text').attr("class","WashingT")
+                .call(d3.drag()
+                .on("start", this.polygonLabelDragStarted)
+                .on("drag", this.polygonLabelDragged)
+                .on("end", this.polygonLabelDragEnded));
+
+            this.redrawPolygonLabels();
+            }
+        }      
+        
+        if(this.visuals.twoD.commonService.session.style.widgets['polygons-show']) this.visuals.twoD.commonService.temp.polygonGroups = groups;
+        else delete this.visuals.twoD.commonService.temp.polygonGroups;
+
+        let handleTick = d => {
+            if(d) return polygonsTick;
+            else return layoutTick;		
+        }
+
         this.visuals.twoD.force.force('link').links(vlinks);
         this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
         $('#node-symbol-variable').trigger('change');
@@ -591,7 +696,247 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         console.log("Network render time:", (Date.now() - start).toLocaleString(), 'ms');
     };
 
+    polygonLabelDragStarted(d) {
+        d3.select(this).raise().attr("class", "polygonText");
+    }
+    
+    polygonLabelDragged(d) {
 
+        console.log('select Label this: ', d3.select(this));
+        d3.select(this).attr("transform", "translate(" + d3.event.x + "," + d3.event.y + ")");
+
+    }
+
+    // updatePolygonColors() {
+    //     let polygonSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
+    //       session.style.widgets["polygon-color-table-counts-sort"] = "";
+    //       if (session.style.widgets["polygon-color-table-name-sort"] === "ASC")
+    //         session.style.widgets["polygon-color-table-name-sort"] = "DESC"
+    //       else
+    //         session.style.widgets["polygon-color-table-name-sort"] = "ASC"
+    //         updatePolygonColors();
+    //     });
+    //     let polygonColorHeaderTitle =  (session.style.overwrite && session.style.overwrite.polygonColorHeaderVariable == settings['polygons-foci'] ? session.style.overwrite.polygonColorHeaderTitle : "Polygon " + MT.titleize(settings['polygons-foci']));
+    //     let polygonHeader = $("<th class='p-1' contenteditable>" + polygonColorHeaderTitle + "</th>").append(polygonSort);
+    //     let countSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
+  
+    //       session.style.widgets["polygon-color-table-name-sort"] = "";
+    //       if (session.style.widgets["polygon-color-table-counts-sort"] === "ASC")
+    //         session.style.widgets["polygon-color-table-counts-sort"] = "DESC"
+    //       else
+    //         session.style.widgets["polygon-color-table-counts-sort"] = "ASC"
+    //         updatePolygonColors();
+    //     });
+    //     let countHeader = $((session.style.widgets["polygon-color-table-counts"] ? "<th>Count</th>" : "")).append(countSort);
+    //     let polygonColorTable = $("#polygon-color-table")
+    //       .empty()
+    //       .append($("<tr></tr>"))
+    //       .append(polygonHeader)
+    //       .append(countHeader)
+    //       .append((session.style.widgets["polygon-color-table-frequencies"] ? "<th>Frequency</th>" : ""))
+    //       .append("<th>Color</th>" );
+    //     if (!session.style.polygonValueNames) session.style.polygonValueNames = {};
+    //     let aggregates = MT.createPolygonColorMap();
+    //     let values = Object.keys(aggregates);
+  
+    //     if (session.style.widgets["polygon-color-table-counts-sort"] == "ASC")
+    //       values.sort(function(a, b) { return aggregates[a] - aggregates[b] });
+    //     else if (session.style.widgets["polygon-color-table-counts-sort"] == "DESC")
+    //       values.sort(function(a, b) { return aggregates[b] - aggregates[a] });
+    //     if (session.style.widgets["polygon-color-table-name-sort"] == "ASC")
+    //       values.sort(function(a, b) { return a - b });
+    //     else if (session.style.widgets["polygon-color-table-name-sort"] == "DESC")
+    //       values.sort(function(a, b) { return b - a });
+  
+    //     let total = 0;
+    //     values.forEach(d => total += aggregates[d] );
+  
+    //     values.forEach((value, i) => {
+    //       session.style.polygonColors.splice(i, 1, temp.style.polygonColorMap(value));
+    //       session.style.polygonAlphas.splice(i, 1, temp.style.polygonAlphaMap(value));
+    //       let colorinput = $('<input type="color" value="' + temp.style.polygonColorMap(value) + '">')
+    //         .on("change", function(){
+    //           session.style.polygonColors.splice(i, 1, this.value);
+    //           temp.style.polygonColorMap = d3
+    //             .scaleOrdinal(session.style.polygonColors)
+    //             .domain(values);
+    //           render();
+    //         });
+    //       let alphainput = $("<a>⇳</a>").on("click", e => {
+    //         $("#color-transparency-wrapper").css({
+    //           top: e.clientY + 129,
+    //           left: e.clientX,
+    //           display: "block"
+    //         });
+    //         $("#color-transparency")
+    //           .val(session.style.polygonAlphas[i])
+    //           .one("change", function() {
+    //             session.style.polygonAlphas.splice(i, 1, parseFloat(this.value));
+    //             temp.style.polygonAlphaMap = d3
+    //               .scaleOrdinal(session.style.polygonAlphas)
+    //               .domain(values);
+    //             $("#color-transparency-wrapper").fadeOut();
+    //             render();
+    //           });
+    //       });
+    //       let cell = $("<td></td>")
+    //         .append(colorinput)
+    //         .append(alphainput);
+  
+    //       let row = $(
+    //         "<tr>" +
+    //           "<td data-value='" + value + "'>" +
+    //             (session.style.polygonValueNames[value] ? session.style.polygonValueNames[value] : MT.titleize("" + value)) +
+    //           "</td>" +
+    //           (session.style.widgets["polygon-color-table-counts"] ? "<td>" + aggregates[value] + "</td>" : "") +
+    //           (session.style.widgets["polygon-color-table-frequencies"] ? "<td>" + (aggregates[value] / total).toLocaleString() + "</td>" : "") +
+    //         "</tr>"
+    //       ).append(cell);
+    //       polygonColorTable.append(row);
+    //     });
+        
+    //     temp.style.polygonColorMap = d3
+    //       .scaleOrdinal(session.style.polygonColors)
+    //       .domain(values);
+    //     temp.style.polygonAlphaMap = d3
+    //       .scaleOrdinal(session.style.polygonAlphas)
+    //       .domain(values);
+  
+    //     polygonColorTable
+    //       .find("td")
+    //       .on("dblclick", function() {
+    //         $(this).attr("contenteditable", true).focus();
+    //       })
+    //       .on("focusout", function() {
+    //         let $this = $(this);
+    //         $this.attr("contenteditable", false);
+    //         session.style.polygonValueNames[$this.data("value")] = $this.text();
+    //       });
+          
+    //     polygonColorTable
+    //       .find(".p-1")
+    //       .on("focusout", function() {
+    //         session.style.overwrite.polygonColorHeaderVariable = session.style.widgets["polygons-foci"];
+    //         session.style.overwrite.polygonColorHeaderTitle = $($(this).contents()[0]).text();
+    //       });
+  
+    //     sortable("#polygon-color-table", { items: "tr" });
+    //     render();
+    //   }
+
+    polygonsShow() {
+        console.log("show");
+        this.visuals.twoD.commonService.session.style.widgets['polygons-show'] = true;
+      $(".polygons-settings-row").slideDown();
+      if(this.visuals.twoD.commonService.session.style.widgets['polygons-color-show'] == true){
+        $('#polygons-color-show').click();
+      } else {
+        $('#polygons-color-hide').click();
+      }
+      if(this.visuals.twoD.commonService.session.style.widgets['polygons-label-show'] == true){
+        $('#polygons-label-show').click();
+      } else {
+        $('#polygons-label-hide').click();
+      }
+
+      this.render();
+    }
+
+    polygonLabelDragEnded(d) {
+        d3.select(this).attr("class", "");
+    }
+
+    redrawPolygonLabels() {
+        let nodes = d3.select('#network g.clustersLabels').selectAll('text');
+        let size = this.visuals.twoD.commonService.session.style.widgets['polygons-label-size'],
+          orientation = this.visuals.twoD.commonService.session.style.widgets['polygons-label-orientation'];
+        nodes
+          .style('font-size', size + 'px');
+        switch (orientation) {
+          case 'Left':
+            nodes
+              .attr('text-anchor', 'end')
+              .attr('dx', -8)
+              .attr('dy', (size - 4) / 2);
+            break;
+          case 'Top':
+            nodes
+              .attr('text-anchor', 'middle')
+              .attr('dx', 0)
+              .attr('dy', 4 - size);
+            break;
+          case 'Bottom':
+            nodes
+              .attr('text-anchor', 'middle')
+              .attr('dx', 0)
+              .attr('dy', size + 4);
+            break;
+          case 'Right':
+            nodes
+              .attr('text-anchor', 'start')
+              .attr('dx', 8)
+              .attr('dy', (size - 4) / 2);		  
+            break;
+          default: // 'Middle':
+            nodes
+              .attr('text-anchor', 'middle')
+              .attr('dx', 0)
+              .attr('dy', (size - 4) / 2);     
+        }
+      }
+
+    private polygonNodeSelected = null;
+
+    polygonDragStarted(n) {
+
+        this.visuals.twoD.commonService.session.data.nodes.forEach(sessionNode => {
+
+        let tempAry = n.values.filter(node => node._id == sessionNode._id);
+
+        if (tempAry.length > 0) {
+          sessionNode.selected = true
+          if(!this.polygonNodeSelected) {
+            this.polygonNodeSelected = sessionNode;
+          }
+        } else {
+          sessionNode.selected = false
+        }
+
+      });
+
+    //   $window.trigger('node-selected');
+
+      
+      if(this.polygonNodeSelected) {
+        // this.dragstarted(this.polygonNodeSelected);
+      }
+
+    }
+
+    polygonDragged(n) {
+
+      if(this.polygonNodeSelected) {
+        this.dragged(this.polygonNodeSelected);
+      }
+
+    }
+
+
+    polygonDragEnded(n) {
+
+      if(this.polygonNodeSelected) {
+        this.dragended(this.polygonNodeSelected);
+      }
+
+      this.polygonNodeSelected = null;
+
+      this.visuals.twoD.commonService.session.data.nodes.forEach(sessionNode => {
+        sessionNode.selected = false
+      });
+
+    //   $window.trigger('node-selected');
+
+    }
 
     getVLinks() {
         let vlinks = this.visuals.twoD.commonService.getVisibleLinks(true);
