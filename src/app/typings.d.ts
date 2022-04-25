@@ -28,8 +28,12 @@ declare module "*.json" {
     export default value;
 }
 
+declare module 'tidytree';
+declare module 'd3';
+
 /**
  * rtl-detect
  */
 
 declare module 'rtl-detect';
+
