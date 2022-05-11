@@ -50,6 +50,14 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     brush: any = null;
     FieldList: SelectItem[] = [];
     ToolTipFieldList: SelectItem[] = [];
+    
+    //Polygon Tab
+    SelectedPolygonLabelVariable: string = "None";
+    SelectedPolygonLabelOrientationVariable: string = "Right";
+    SelectedPolygonLabelSizeVariable: number = 0.0;
+    SelectedPolygonGatherValue: number = 0.0;
+    CenterPolygonVariable: string = "None";
+    SelectedPolygonLabelShowVariable: string = "Hide";
 
     // Node Tab    
     SelectedNodeLabelVariable: string = "None";
@@ -83,6 +91,11 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     SelectedLinkWidthVariable: any = 0;
     SelectedLinkLengthVariable: any = 0;
     ArrowTypes: any = [
+        { label: 'Hide', value: 'Hide' },
+        { label: 'Show', value: 'Show' }
+    ];
+
+    hideShowOptions: any = [
         { label: 'Hide', value: 'Hide' },
         { label: 'Show', value: 'Show' }
     ];
@@ -237,7 +250,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
 
                     this.visuals.twoD.render();
-                    //window.trigger('node-selected');
+                    $(document).trigger('node-selected');
                 });
 
             d3.select('svg#network')
@@ -264,8 +277,10 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
             this.visuals.twoD.svg = d3.select('svg#network').append('g');
 
+            this.visuals.twoD.svg.append('g').attr('class', 'clusters');
             this.visuals.twoD.svg.append('g').attr('class', 'links');
             this.visuals.twoD.svg.append('g').attr('class', 'nodes');
+            this.visuals.twoD.svg.append('g').attr('class', 'clustersLabels');
 
             this.visuals.twoD.svg.append('svg:defs').append('marker')
                 .attr('id', 'end-arrow')
@@ -588,8 +603,10 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         var opacity;
         
         if (this.visuals.twoD.commonService.session.style.widgets['polygons-color-show']) {
-            fill = d => this.visuals.twoD.commonService.temp.style.polygonColorMap(d.key);
+            console.log('showing polys: ');
+            // fill = d => this.visuals.twoD.commonService.temp.style.polygonColorMap(d.key);
             opacity = (d) => this.visuals.twoD.commonService.temp.style.polygonAlphaMap(d.key);
+            console.log('fill: ', fill);
         } else {
             opacity = 0.4;
         }
@@ -655,9 +672,11 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
             .attr("d", groupPath);
             d3.select('#network g.clusters').selectAll('path')
             .call(d3.drag() //A bunch of mouse handlers.
-                    .on('start', this.polygonDragStarted)
-                    .on('drag', this.polygonDragged)
-                    .on('end', this.polygonDragEnded))
+                    .on('start', (x) => this.visuals.twoD.polygonDragStarted(x))
+                    .on('drag', (x) => this.visuals.twoD.polygonDragged(x))
+                    .on('end', (x) =>  this.visuals.twoD.polygonDragEnded(x)))
+
+                    // (x) => this.visuals.twoD.dragstarted(x)
 
             if (this.visuals.twoD.commonService.session.style.widgets['polygons-label-show']) {
 
@@ -670,9 +689,9 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
                 
                 d3.select('#network g.clustersLabels').selectAll('text').attr("class","WashingT")
                 .call(d3.drag()
-                .on("start", this.polygonLabelDragStarted)
-                .on("drag", this.polygonLabelDragged)
-                .on("end", this.polygonLabelDragEnded));
+                .on("start", this.visuals.twoD.polygonLabelDragStarted)
+                .on("drag", this.visuals.twoD.polygonLabelDragged)
+                .on("end", this.visuals.twoD.polygonLabelDragEnded));
 
             this.redrawPolygonLabels();
             }
@@ -686,6 +705,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
             else return layoutTick;		
         }
 
+        this.visuals.twoD.force.nodes(this.visuals.twoD.commonService.session.network.nodes).on('tick', handleTick(this.visuals.twoD.commonService.session.style.widgets['polygons-show']));
         this.visuals.twoD.force.force('link').links(vlinks);
         this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
         $('#node-symbol-variable').trigger('change');
@@ -702,127 +722,128 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     
     polygonLabelDragged(d) {
 
-        console.log('select Label this: ', d3.select(this));
         d3.select(this).attr("transform", "translate(" + d3.event.x + "," + d3.event.y + ")");
 
     }
 
-    // updatePolygonColors() {
-    //     let polygonSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
-    //       session.style.widgets["polygon-color-table-counts-sort"] = "";
-    //       if (session.style.widgets["polygon-color-table-name-sort"] === "ASC")
-    //         session.style.widgets["polygon-color-table-name-sort"] = "DESC"
-    //       else
-    //         session.style.widgets["polygon-color-table-name-sort"] = "ASC"
-    //         updatePolygonColors();
-    //     });
-    //     let polygonColorHeaderTitle =  (session.style.overwrite && session.style.overwrite.polygonColorHeaderVariable == settings['polygons-foci'] ? session.style.overwrite.polygonColorHeaderTitle : "Polygon " + MT.titleize(settings['polygons-foci']));
-    //     let polygonHeader = $("<th class='p-1' contenteditable>" + polygonColorHeaderTitle + "</th>").append(polygonSort);
-    //     let countSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
+    updatePolygonColors() {
+        let polygonSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
+            this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts-sort"] = "";
+          if (this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-name-sort"] === "ASC")
+          this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-name-sort"] = "DESC"
+          else
+          this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-name-sort"] = "ASC"
+            this.updatePolygonColors();
+        });
+        let polygonColorHeaderTitle =  (this.visuals.twoD.commonService.session.style['overwrite'] && this.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderVariable'] == this.visuals.twoD.commonService.session.style['polygons-foci'] ? this.visuals.twoD.commonService.session.style['overwrite'].polygonColorHeaderTitle : "Polygon " + this.visuals.twoD.commonService.titleize(this.visuals.twoD.commonService.session.style['polygons-foci']));
+        let polygonHeader = $("<th class='p-1' contenteditable>" + polygonColorHeaderTitle + "</th>").append(polygonSort);
+        let countSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
   
-    //       session.style.widgets["polygon-color-table-name-sort"] = "";
-    //       if (session.style.widgets["polygon-color-table-counts-sort"] === "ASC")
-    //         session.style.widgets["polygon-color-table-counts-sort"] = "DESC"
-    //       else
-    //         session.style.widgets["polygon-color-table-counts-sort"] = "ASC"
-    //         updatePolygonColors();
-    //     });
-    //     let countHeader = $((session.style.widgets["polygon-color-table-counts"] ? "<th>Count</th>" : "")).append(countSort);
-    //     let polygonColorTable = $("#polygon-color-table")
-    //       .empty()
-    //       .append($("<tr></tr>"))
-    //       .append(polygonHeader)
-    //       .append(countHeader)
-    //       .append((session.style.widgets["polygon-color-table-frequencies"] ? "<th>Frequency</th>" : ""))
-    //       .append("<th>Color</th>" );
-    //     if (!session.style.polygonValueNames) session.style.polygonValueNames = {};
-    //     let aggregates = MT.createPolygonColorMap();
-    //     let values = Object.keys(aggregates);
+            this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-name-sort"] = "";
+          if (this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts-sort"] === "ASC")
+          this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts-sort"] = "DESC"
+          else
+          this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts-sort"] = "ASC"
+            this.updatePolygonColors();
+        });
+        let countHeader = $((this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts"] ? "<th>Count</th>" : "")).append(countSort);
+        let polygonColorTable = $("#polygon-color-table")
+          .empty()
+          .append($("<tr></tr>"))
+          .append(polygonHeader)
+          .append(countHeader)
+          .append((this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-frequencies"] ? "<th>Frequency</th>" : ""))
+          .append("<th>Color</th>" );
+        if (!this.visuals.twoD.commonService.session.style['polygonValueNames']) this.visuals.twoD.commonService.session.style['polygonValueNames'] = {};
+        let aggregates = this.visuals.twoD.commonService.createPolygonColorMap();
+        let values = Object.keys(aggregates);
   
-    //     if (session.style.widgets["polygon-color-table-counts-sort"] == "ASC")
-    //       values.sort(function(a, b) { return aggregates[a] - aggregates[b] });
-    //     else if (session.style.widgets["polygon-color-table-counts-sort"] == "DESC")
-    //       values.sort(function(a, b) { return aggregates[b] - aggregates[a] });
-    //     if (session.style.widgets["polygon-color-table-name-sort"] == "ASC")
-    //       values.sort(function(a, b) { return a - b });
-    //     else if (session.style.widgets["polygon-color-table-name-sort"] == "DESC")
-    //       values.sort(function(a, b) { return b - a });
+        if (this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts-sort"] == "ASC")
+          values.sort(function(a, b) { return aggregates[a] - aggregates[b] });
+        else if (this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts-sort"] == "DESC")
+          values.sort(function(a, b) { return aggregates[b] - aggregates[a] });
+        if (this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-name-sort"] == "ASC")
+          values.sort(function(a, b) { return a as any - (b as any) });
+        else if (this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-name-sort"] == "DESC")
+          values.sort(function(a, b) { return b as any - (a as any) });
   
-    //     let total = 0;
-    //     values.forEach(d => total += aggregates[d] );
+        let total = 0;
+        values.forEach(d => total += aggregates[d] );
   
-    //     values.forEach((value, i) => {
-    //       session.style.polygonColors.splice(i, 1, temp.style.polygonColorMap(value));
-    //       session.style.polygonAlphas.splice(i, 1, temp.style.polygonAlphaMap(value));
-    //       let colorinput = $('<input type="color" value="' + temp.style.polygonColorMap(value) + '">')
-    //         .on("change", function(){
-    //           session.style.polygonColors.splice(i, 1, this.value);
-    //           temp.style.polygonColorMap = d3
-    //             .scaleOrdinal(session.style.polygonColors)
-    //             .domain(values);
-    //           render();
-    //         });
-    //       let alphainput = $("<a>⇳</a>").on("click", e => {
-    //         $("#color-transparency-wrapper").css({
-    //           top: e.clientY + 129,
-    //           left: e.clientX,
-    //           display: "block"
-    //         });
-    //         $("#color-transparency")
-    //           .val(session.style.polygonAlphas[i])
-    //           .one("change", function() {
-    //             session.style.polygonAlphas.splice(i, 1, parseFloat(this.value));
-    //             temp.style.polygonAlphaMap = d3
-    //               .scaleOrdinal(session.style.polygonAlphas)
-    //               .domain(values);
-    //             $("#color-transparency-wrapper").fadeOut();
-    //             render();
-    //           });
-    //       });
-    //       let cell = $("<td></td>")
-    //         .append(colorinput)
-    //         .append(alphainput);
+        let that = this;
+
+        values.forEach((value, i) => {
+            this.visuals.twoD.commonService.session.style['polygonColors'].splice(i, 1, this.visuals.twoD.commonService.temp.style.polygonColorMap(value));
+            this.visuals.twoD.commonService.session.style['polygonAlphas'].splice(i, 1, this.visuals.twoD.commonService.temp.style.polygonAlphaMap(value));
+          let colorinput = $('<input type="color" value="' + this.visuals.twoD.commonService.temp.style.polygonColorMap(value) + '">')
+            .on("change", function(){
+                that.visuals.twoD.commonService.session.style['polygonColors'].splice(i, 1, $(this).val());
+                that.visuals.twoD.commonService.temp.style.polygonColorMap = d3
+                .scaleOrdinal(that.visuals.twoD.commonService.session.style['polygonColors'])
+                .domain(values);
+                that.render();
+            });
+          let alphainput = $("<a>⇳</a>").on("click", e => {
+            $("#color-transparency-wrapper").css({
+              top: e.clientY + 129,
+              left: e.clientX,
+              display: "block"
+            });
+            $("#color-transparency")
+              .val(this.visuals.twoD.commonService.session.style['polygonAlphas'][i])
+              .one("change", function() {
+                that.visuals.twoD.commonService.session.style['polygonAlphas'].splice(i, 1, parseFloat($(this).val() as string));
+                that.visuals.twoD.commonService.temp.style.polygonAlphaMap = d3
+                  .scaleOrdinal(that.visuals.twoD.commonService.session.style['polygonAlphas'])
+                  .domain(values);
+                $("#color-transparency-wrapper").fadeOut();
+                that.render();
+              });
+          });
+          let cell = $("<td></td>")
+            .append(colorinput)
+            .append(alphainput);
   
-    //       let row = $(
-    //         "<tr>" +
-    //           "<td data-value='" + value + "'>" +
-    //             (session.style.polygonValueNames[value] ? session.style.polygonValueNames[value] : MT.titleize("" + value)) +
-    //           "</td>" +
-    //           (session.style.widgets["polygon-color-table-counts"] ? "<td>" + aggregates[value] + "</td>" : "") +
-    //           (session.style.widgets["polygon-color-table-frequencies"] ? "<td>" + (aggregates[value] / total).toLocaleString() + "</td>" : "") +
-    //         "</tr>"
-    //       ).append(cell);
-    //       polygonColorTable.append(row);
-    //     });
+          let row = $(
+            "<tr>" +
+              "<td data-value='" + value + "'>" +
+                (that.visuals.twoD.commonService.session.style['polygonValueNames'][value] ? this.visuals.twoD.commonService.session.style['polygonValueNames'][value] : this.visuals.twoD.commonService.titleize("" + value)) +
+              "</td>" +
+              (that.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts"] ? "<td>" + aggregates[value] + "</td>" : "") +
+              (that.visuals.twoD.commonService.session.style.widgets["polygon-color-table-frequencies"] ? "<td>" + (aggregates[value] / total).toLocaleString() + "</td>" : "") +
+            "</tr>"
+          ).append(cell);
+          polygonColorTable.append(row);
+        });
         
-    //     temp.style.polygonColorMap = d3
-    //       .scaleOrdinal(session.style.polygonColors)
-    //       .domain(values);
-    //     temp.style.polygonAlphaMap = d3
-    //       .scaleOrdinal(session.style.polygonAlphas)
-    //       .domain(values);
+        this.visuals.twoD.commonService.temp.style.polygonColorMap = d3
+          .scaleOrdinal(this.visuals.twoD.commonService.session.style['polygonColors'])
+          .domain(values);
+          this.visuals.twoD.commonService.temp.style.polygonAlphaMap = d3
+          .scaleOrdinal(this.visuals.twoD.commonService.session.style['polygonAlphas'])
+          .domain(values);
   
-    //     polygonColorTable
-    //       .find("td")
-    //       .on("dblclick", function() {
-    //         $(this).attr("contenteditable", true).focus();
-    //       })
-    //       .on("focusout", function() {
-    //         let $this = $(this);
-    //         $this.attr("contenteditable", false);
-    //         session.style.polygonValueNames[$this.data("value")] = $this.text();
-    //       });
+        polygonColorTable
+          .find("td")
+          .on("dblclick", function() {
+            // $(this).attr("contenteditable", true).focus();
+          })
+          .on("focusout", function() {
+            let $this = $(this);
+            // $this.attr("contenteditable", false);
+            that.visuals.twoD.commonService.session.style['polygonValueNames'][$this.data("value")] = $this.text();
+          });
           
-    //     polygonColorTable
-    //       .find(".p-1")
-    //       .on("focusout", function() {
-    //         session.style.overwrite.polygonColorHeaderVariable = session.style.widgets["polygons-foci"];
-    //         session.style.overwrite.polygonColorHeaderTitle = $($(this).contents()[0]).text();
-    //       });
+        polygonColorTable
+          .find(".p-1")
+          .on("focusout", function() {
+            that.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderVariable'] = that.visuals.twoD.commonService.session.style.widgets["polygons-foci"];
+            that.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderTitle'] = $($(this).contents()[0]).text();
+          });
   
-    //     sortable("#polygon-color-table", { items: "tr" });
-    //     render();
-    //   }
+        // this.sortable("#polygon-color-table", { items: "tr" });
+        this.render();
+      }
 
     polygonsShow() {
         console.log("show");
@@ -842,6 +863,36 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
       this.render();
     }
 
+    polygonsHide() {
+
+        console.log('hide called');
+
+        this.visuals.twoD.commonService.session.style.widgets['polygons-show'] = false;
+        $(".polygons-settings-row").slideUp();
+        $('.polygons-label-row').slideUp();
+        $("#polygon-color-table-row").slideUp();
+        $("#polygon-color-value-row").slideUp();
+        $("#polygon-color-table").empty();
+
+      this.render();
+    }
+
+    polygonColorsToggle( show : boolean ) {
+
+        if (show) {
+            this.visuals.twoD.commonService.session.style.widgets['polygons-color-show'] = true;
+            $("#polygon-color-value-row").slideUp();
+            $("#polygon-color-table-row").slideDown();
+            this.updatePolygonColors();
+        } else {
+            $("#polygon-color-value-row").slideDown();
+            $("#polygon-color-table-row").slideUp();
+            $("#polygon-color-table").empty();
+        }
+
+      this.render();
+    }
+
     polygonLabelDragEnded(d) {
         d3.select(this).attr("class", "");
     }
@@ -850,6 +901,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         let nodes = d3.select('#network g.clustersLabels').selectAll('text');
         let size = this.visuals.twoD.commonService.session.style.widgets['polygons-label-size'],
           orientation = this.visuals.twoD.commonService.session.style.widgets['polygons-label-orientation'];
+
         nodes
           .style('font-size', size + 'px');
         switch (orientation) {
@@ -891,24 +943,24 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
         this.visuals.twoD.commonService.session.data.nodes.forEach(sessionNode => {
 
-        let tempAry = n.values.filter(node => node._id == sessionNode._id);
+            let tempAry = n.values.filter(node => node._id == sessionNode._id);
 
-        if (tempAry.length > 0) {
-          sessionNode.selected = true
-          if(!this.polygonNodeSelected) {
-            this.polygonNodeSelected = sessionNode;
-          }
-        } else {
-          sessionNode.selected = false
-        }
+            if (tempAry.length > 0) {
+                sessionNode.selected = true;
+                if(!this.polygonNodeSelected) {
+                    this.polygonNodeSelected = sessionNode;
+                }
+            } else {
+                sessionNode.selected = false
+            }
 
       });
 
-    //   $window.trigger('node-selected');
+      window.dispatchEvent(new Event('node-selected'));
 
       
       if(this.polygonNodeSelected) {
-        // this.dragstarted(this.polygonNodeSelected);
+        this.dragstarted(this.polygonNodeSelected);
       }
 
     }
@@ -934,7 +986,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         sessionNode.selected = false
       });
 
-    //   $window.trigger('node-selected');
+      window.dispatchEvent(new Event('node-selected'));
 
     }
 
@@ -1332,6 +1384,65 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
             }
         }
     };
+
+    //Polygon Events
+
+    onPolygonLabelVariableChange(e) {
+
+        this.visuals.twoD.commonService.session.style.widgets['polygons-label-variable'] = e;
+        if (e == 'None') {
+            $('.polygon-label-row').slideUp();
+        } else {
+            $('.polygon-label-row').css('display', 'flex');
+        }
+        this.redrawPolygonLabels();
+        
+    }
+
+    centerPolygons(e) {
+
+        this.visuals.twoD.commonService.session.style.widgets['polygons-foci'] = e;
+        this.visuals.twoD.render();
+        if(this.visuals.twoD.commonService.session.style.widgets['polygons-color-show'] == true) {
+          $("#polygon-color-table").empty();
+          this.visuals.twoD.updatePolygonColors();
+        }
+
+    }
+
+    setPolygonLabelSize(size) {
+        this.visuals.twoD.commonService.session.style.widgets['polygons-label-size'] = parseFloat(size);
+        this.visuals.twoD.redrawPolygonLabels();
+    }
+
+    onPolygonLabelSizeChange(e) {
+        this.setPolygonLabelSize(e);
+    }
+
+    onPolygonLabelOrientationChange(e) {
+        this.visuals.twoD.commonService.session.style.widgets['polygons-label-orientation'] = e;
+        this.visuals.twoD.redrawPolygonLabels();
+    }
+
+    onPolygonGatherChange(e) {
+        let v = parseFloat(e);
+        this.visuals.twoD.commonService.session.style.widgets['polygons-gather-force'] = v;
+        this.visuals.twoD.render();
+    }
+
+    onPolygonLabelShowChange(e) {
+        if (e == "Show") {
+            console.log('true');
+            this.visuals.twoD.commonService.session.style.widgets['polygons-label-show'] = true;
+            $('.polygons-label-row').slideDown();
+            this.visuals.twoD.render();
+        }
+        else {
+            this.visuals.twoD.commonService.session.style.widgets['polygons-label-show'] = false;
+            $('.polygons-label-row').slideUp();
+            this.visuals.twoD.render();
+        }
+    }
 
 
     /*/
@@ -1800,7 +1911,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     updateLinkColor() {
 
         let variable = this.visuals.twoD.commonService.session.style.widgets['link-color-variable'];
-        console.log('updating variable: ',variable );
+        // console.log('updating variable: ',variable );
         let links = this.visuals.twoD.svg.select('g.links').selectAll('line');
         if (variable == 'None') {
             console.log('link colo in : ', this.visuals.twoD.commonService.session.style.widgets['link-color']);
@@ -1971,6 +2082,19 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
     loadSettings(){
         //this.context.twoD.zoom = null;
+
+        //Polygons|Label
+        this.SelectedPolygonLabelVariable = this.visuals.twoD.commonService.session.style.widgets['polygons-label-variable'];
+        this.onPolygonLabelVariableChange(this.SelectedPolygonLabelVariable);
+
+        //Polygons|Label Size
+        this.SelectedPolygonLabelSizeVariable = this.visuals.twoD.commonService.session.style.widgets['polygons-label-size'];
+        this.setPolygonLabelSize(this.SelectedPolygonLabelSizeVariable);
+
+        //Node|Orientation
+        this.SelectedPolygonLabelOrientationVariable = this.visuals.twoD.commonService.session.style.widgets['polygons-label-orientation'];
+        this.onPolygonLabelOrientationChange(this.SelectedPolygonLabelOrientationVariable);
+
 
        //Nodes|Label
         this.SelectedNodeLabelVariable = this.visuals.twoD.commonService.session.style.widgets['node-label-variable'];

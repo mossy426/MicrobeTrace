@@ -11,3 +11,7 @@
 .bottom-table{
     font-size: calc((.5vmax));   
 }
+
+.clusters path {
+    cursor: -webkit-grab;
+  }

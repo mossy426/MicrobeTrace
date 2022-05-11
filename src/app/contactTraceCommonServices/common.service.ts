@@ -683,6 +683,52 @@ export class CommonService extends AppComponentBase implements OnInit {
         return linkIsNew;
     };
 
+    createPolygonColorMap = () => {
+        if (!window.context.commonService.temp.polygonGroups || !window.context.commonService.session.style.widgets["polygons-color-show"]) {
+            window.context.commonService.temp.style.polygonColorMap = () => window.context.commonService.session.style.widgets["polygon-color"];
+          return [];
+        }
+    
+        let aggregates = {};
+        let groups = window.context.commonService.temp.polygonGroups;
+        groups.forEach(d => aggregates[d.key] = d.values.length);
+        let values = Object.keys(aggregates);
+    
+        if (window.context.commonService.session.style.widgets["polygon-color-table-counts-sort"] == "ASC")
+          values.sort(function(a, b) { return aggregates[a] - aggregates[b] });
+        else if (window.context.commonService.session.style.widgets["polygon-color-table-counts-sort"] == "DESC")
+          values.sort(function(a, b) { return aggregates[b] - aggregates[a] });
+        if (window.context.commonService.session.style.widgets["polygon-color-table-name-sort"] == "ASC")
+          values.sort(function(a, b) { return a as any - (b as any) });
+        else if (window.context.commonService.session.style.widgets["polygon-color-table-name-sort"] == "DESC")
+          values.sort(function(a, b) { return b as any - (a as any)});
+    
+        if (values.length > window.context.commonService.session.style.polygonColors.length) {
+          let colors = [];
+          let m = Math.ceil(values.length / window.context.commonService.session.style.polygonColors.length);
+          while (m-- > 0) {
+            colors = colors.concat(window.context.commonService.session.style.polygonColors);
+          }
+          window.context.commonService.session.style.polygonColors = colors;
+        }
+        if(!window.context.commonService.session.style.polygonAlphas) window.context.commonService.session.style.polygonAlphas = new Array(values.length).fill(1);
+        if (values.length > window.context.commonService.session.style.polygonAlphas.length) {
+            window.context.commonService.session.style.polygonAlphas = window.context.commonService.session.style.polygonAlphas.concat(
+            new Array(values.length - window.context.commonService.session.style.polygonAlphas.length).fill(0.5)
+          );
+        }
+        if (window.context.commonService.temp.style.polygonColorMap.domain === undefined)
+        window.context.commonService.temp.style.polygonColorMap = d3
+            .scaleOrdinal(this.session.style['polygonColors'])
+            .domain(values);
+        if (window.context.commonService.temp.style.polygonAlphaMap.domain === undefined)
+        window.context.commonService.temp.style.polygonAlphaMap = d3
+            .scaleOrdinal(window.context.commonService.session.style.polygonAlphas)
+            .domain(values);
+          
+        return aggregates;
+      };
+
     processSVG(svg: any) {
         let nodes = [];
 

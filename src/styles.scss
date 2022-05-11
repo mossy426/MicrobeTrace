@@ -35,6 +35,11 @@ $sample-app-warn: mat-palette($mat-red);
     margin-right: 5px !important;
 }
 
+.clusters path {
+    cursor: -webkit-grab;
+    cursor: grab;
+  }
+
 .margin-top-5 {
     margin-top: 5px !important;
 }
