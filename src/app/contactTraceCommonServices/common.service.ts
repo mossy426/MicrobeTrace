@@ -717,11 +717,11 @@ export class CommonService extends AppComponentBase implements OnInit {
             new Array(values.length - window.context.commonService.session.style.polygonAlphas.length).fill(0.5)
           );
         }
-        if (window.context.commonService.temp.style.polygonColorMap.domain === undefined)
+        if (window.context.commonService.temp.style.polygonColorMap === undefined || window.context.commonService.temp.style.polygonColorMap.domain === undefined)
         window.context.commonService.temp.style.polygonColorMap = d3
             .scaleOrdinal(this.session.style['polygonColors'])
             .domain(values);
-        if (window.context.commonService.temp.style.polygonAlphaMap.domain === undefined)
+        if (window.context.commonService.temp.style.polygonAlphaMap === undefined || window.context.commonService.temp.style.polygonColorMap.domain === undefined)
         window.context.commonService.temp.style.polygonAlphaMap = d3
             .scaleOrdinal(window.context.commonService.session.style.polygonAlphas)
             .domain(values);

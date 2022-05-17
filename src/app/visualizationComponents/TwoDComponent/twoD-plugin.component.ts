@@ -58,6 +58,9 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     SelectedPolygonGatherValue: number = 0.0;
     CenterPolygonVariable: string = "None";
     SelectedPolygonLabelShowVariable: string = "Hide";
+    SelectedPolygonColorShowVariable: string = "Hide";
+    SelectedPolygonColorTableShowVariable: string = "Hide";
+
 
     // Node Tab    
     SelectedNodeLabelVariable: string = "None";
@@ -140,9 +143,12 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
     ShowNodeSymbolWrapper: boolean = false;
     ShowNodeSymbolTable: boolean = false;
+    ShowPolygonColorTable: boolean = false;
     ShowAdvancedExport: boolean = true;
 
     NodeSymbolTableWrapperDialogSettings: DialogSettings = new DialogSettings('#node-symbol-table-wrapper', false);
+    PolygonColorTableWrapperDialogSettings: DialogSettings = new DialogSettings('#polygon-color-table-wrapper', false);
+
     Node2DNetworkExportDialogSettings: DialogSettings = new DialogSettings('#network-settings-pane', false);
 
     ContextSelectedNodeAttributes: {attribute: string, value: string}[] = [];
@@ -487,6 +493,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
                         this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.restoreStateAfterExport();
                         this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.restoreStateAfterExport();
                         this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.restoreStateAfterExport();
+                        this.visuals.twoD.PolygonColorTableWrapperDialogSettings.restoreStateAfterExport();
                         this.visuals.twoD.Node2DNetworkExportDialogSettings.restoreStateAfterExport();
                     });
             }, 1000);
@@ -877,20 +884,38 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
       this.render();
     }
 
-    polygonColorsToggle( show : boolean ) {
+    polygonColorsToggle(e) {
 
-        if (show) {
+        if (e == "Show") {
             this.visuals.twoD.commonService.session.style.widgets['polygons-color-show'] = true;
             $("#polygon-color-value-row").slideUp();
             $("#polygon-color-table-row").slideDown();
-            this.updatePolygonColors();
-        } else {
+            this.visuals.twoD.PolygonColorTableWrapperDialogSettings.setVisibility(true);
+            this.visuals.twoD.updatePolygonColors();
+
+        }
+        else {
+            this.visuals.twoD.commonService.session.style.widgets['polygons-color-show'] = false;
             $("#polygon-color-value-row").slideDown();
             $("#polygon-color-table-row").slideUp();
             $("#polygon-color-table").empty();
+            this.visuals.twoD.PolygonColorTableWrapperDialogSettings.setVisibility(false);
+
         }
 
-      this.render();
+        this.visuals.twoD.render();
+    }
+
+    polygonColorsTableToggle(e) {
+
+        if (e == "Show") {
+            this.visuals.twoD.onPolygonColorTableChange('Show')
+        }
+        else {
+            this.visuals.twoD.onPolygonColorTableChange('Hide')
+        }
+
+        this.visuals.twoD.render();
     }
 
     polygonLabelDragEnded(d) {
@@ -1432,7 +1457,6 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
     onPolygonLabelShowChange(e) {
         if (e == "Show") {
-            console.log('true');
             this.visuals.twoD.commonService.session.style.widgets['polygons-label-show'] = true;
             $('.polygons-label-row').slideDown();
             this.visuals.twoD.render();
@@ -1443,6 +1467,131 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
             this.visuals.twoD.render();
         }
     }
+
+    onPolygonShowChange(e) {
+        if (e == "Show") {
+            this.visuals.twoD.commonService.session.style.widgets['polygons-label-show'] = true;
+            $('.polygons-label-row').slideDown();
+            this.visuals.twoD.render();
+             //If hidden by default, unhide to perform slide up and down
+            //  if(!this.ShowGlobalSettingsNodeColorTable){
+            //     this.ShowGlobalSettingsNodeColorTable = true;
+            // } else {
+            //     $('#node-color-table-row').slideDown();
+            // }
+        }
+        else {
+            this.visuals.twoD.commonService.session.style.widgets['polygons-label-show'] = false;
+            $('#node-color-value-row').slideDown();
+            $('#node-color-table-row').slideUp();
+            this.visuals.twoD.render();
+        }
+    }
+
+generatePolygonColorSelectionTable(tableId: string, variable: string, isEditable: boolean = true) {
+    this.visuals.microbeTrace.clearTable(tableId);
+
+    let symbolMapping: { key: string, value: string }[] = [
+        { key: 'symbolCircle', value: '&#11044; (Circle)' },
+        { key: "symbolTriangle", value: '&#9650; (Up Triangle)' },
+        { key: "symbolTriangleDown", value: '&#9660; (Down Triangle)' },
+        { key: "symbolTriangleLeft", value: '&#9664; (Left Triangle)' },
+        { key: "symbolTriangleRight", value: '&#9654; (Right Triangle)' },
+        { key: "symbolDiamond", value: '&#10731; (Vertical Diamond)' },
+        { key: "symbolDiamondAlt", value: '&#10731; (Horizontal Diamond)' },
+        { key: "symbolSquare", value: '&#9632; (Square)' },
+        { key: "symbolDiamondSquare", value: '&#9670; (Tilted Square)' },
+        { key: "symbolPentagon", value: '&#11039; (Pentagon)' },
+        { key: "symbolHexagon", value: '&#11042; (Hexagon)' },
+        { key: "symbolHexagonAlt", value: '&#11043; (Tilted Hexagon)' },
+        { key: "symbolOctagon", value: '&#11042; (Octagon)' },
+        { key: "symbolOctagonAlt", value: '&#11043; (Tilted Octagon)' },
+        { key: "symbolCross", value: '&#10010; (Addition Sign)' },
+        { key: "symbolX", value: '&#10006; (Multiplication Sign)' },
+        { key: "symbolWye", value: '&#120300; (Wye)' },
+        { key: "symbolStar", value: '&#9733; (Star)' },
+    ];
+
+    let table = $(tableId)
+    const disabled: string = isEditable ? '' : 'disabled';
+
+    this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'] = variable;
+
+    if (variable === 'None' && !isEditable) return;
+
+
+    let values = [];
+    let aggregates = {};
+    let nodes = this.visuals.twoD.commonService.session.data.nodes;
+    let n = nodes.length;
+    let vnodes = 0;
+    for (let i = 0; i < n; i++) {
+        let d = nodes[i];
+        if (!d.visible) continue;
+        vnodes++;
+        let dv = d[variable];
+        if (values.indexOf(dv) == -1) values.push(dv);
+        if (dv in aggregates) {
+            aggregates[dv]++;
+        } else {
+            aggregates[dv] = 1;
+        }
+    }
+    if (values.length > this.visuals.twoD.commonService.session.style.nodeSymbols.length) {
+        let symbols = [];
+        let m = Math.ceil(values.length / this.visuals.twoD.commonService.session.style.nodeSymbols.length);
+        while (m-- > 0) {
+            symbols = symbols.concat(this.visuals.twoD.commonService.session.style.nodeSymbols);
+        }
+        this.visuals.twoD.commonService.session.style.nodeSymbols = symbols;
+    }
+
+    table.empty().append(
+        '<tr>' +
+        `<th ${isEditable ? 'contenteditable' : ''}>Node ${this.visuals.twoD.commonService.titleize(variable)}</th>` +
+        (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-counts'] ? '<th>Count</th>' : '') +
+        (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-frequencies'] ? '<th>Frequency</th>' : '') +
+        '<th>Shape</th>' +
+        '</tr>');
+    let options = $('#node-symbol2').html();
+
+    values.sort( (a, b)  => {
+        return aggregates[b] - aggregates[a];
+    });
+    
+    this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
+    
+    values.forEach((v, i) => {
+
+        let selector = $(`<select ${disabled}></select>`).append(options).val(this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v)).on('change',  (e) => {
+            this.visuals.twoD.commonService.session.style.nodeSymbols.splice(i, 1, (e.target as any).value);
+            this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
+            this.visuals.twoD.redrawNodes();
+        });        
+        let symbolText = symbolMapping.find(x => x.key === this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v));
+
+        let cell = $('<td></td>').append(isEditable ? selector : symbolText ? symbolText.value : '');
+        let row = $(
+            '<tr>' +
+            `<td ${isEditable ? 'contenteditable' : ''}> ${this.visuals.twoD.commonService.titleize('' + v)} </td> ` +
+            (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-counts'] ? ('<td>' + aggregates[v] + '</td>') : '') +
+            (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-frequencies'] ? ('<td>' + (aggregates[v] / vnodes).toLocaleString() + '</td>') : '') +
+            '</tr>'
+        ).append(cell);
+        table.append(row);
+    });
+}
+
+onPolygonColorTableChange(e) {
+    this.SelectedNetworkTableTypeVariable = e;
+    this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-visible"] = this.SelectedNetworkTableTypeVariable;
+    if (this.SelectedNetworkTableTypeVariable == "Show") {
+        this.PolygonColorTableWrapperDialogSettings.setVisibility(true);
+    }
+    else {
+        // this.PolygonColorTableWrapperDialogSettings.setVisibility(false);
+    }
+}
 
 
     /*/
