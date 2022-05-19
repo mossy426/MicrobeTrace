@@ -610,8 +610,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         var opacity;
         
         if (this.visuals.twoD.commonService.session.style.widgets['polygons-color-show']) {
-            console.log('showing polys: ');
-            // fill = d => this.visuals.twoD.commonService.temp.style.polygonColorMap(d.key);
+            fill = d => this.visuals.twoD.commonService.temp.style.polygonColorMap(d.key);
             opacity = (d) => this.visuals.twoD.commonService.temp.style.polygonAlphaMap(d.key);
             console.log('fill: ', fill);
         } else {
@@ -740,9 +739,9 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
           this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-name-sort"] = "DESC"
           else
           this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-name-sort"] = "ASC"
-            this.updatePolygonColors();
+            this.visuals.twoD.updatePolygonColors();
         });
-        let polygonColorHeaderTitle =  (this.visuals.twoD.commonService.session.style['overwrite'] && this.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderVariable'] == this.visuals.twoD.commonService.session.style['polygons-foci'] ? this.visuals.twoD.commonService.session.style['overwrite'].polygonColorHeaderTitle : "Polygon " + this.visuals.twoD.commonService.titleize(this.visuals.twoD.commonService.session.style['polygons-foci']));
+        let polygonColorHeaderTitle =  (this.visuals.twoD.commonService.session.style['overwrite'] && this.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderVariable'] && this.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderVariable'] == this.visuals.twoD.commonService.session.style.widgets['polygons-foci'] ? this.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderTitle'] : "Polygon " + this.visuals.twoD.commonService.titleize(this.visuals.twoD.commonService.session.style.widgets['polygons-foci']));
         let polygonHeader = $("<th class='p-1' contenteditable>" + polygonColorHeaderTitle + "</th>").append(polygonSort);
         let countSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
   
@@ -751,7 +750,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
           this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts-sort"] = "DESC"
           else
           this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts-sort"] = "ASC"
-            this.updatePolygonColors();
+            this.visuals.twoD.updatePolygonColors();
         });
         let countHeader = $((this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts"] ? "<th>Count</th>" : "")).append(countSort);
         let polygonColorTable = $("#polygon-color-table")
@@ -849,7 +848,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
           });
   
         // this.sortable("#polygon-color-table", { items: "tr" });
-        this.render();
+        this.visuals.twoD.render();
       }
 
     polygonsShow() {
@@ -885,13 +884,16 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     }
 
     polygonColorsToggle(e) {
-
         if (e == "Show") {
             this.visuals.twoD.commonService.session.style.widgets['polygons-color-show'] = true;
             $("#polygon-color-value-row").slideUp();
             $("#polygon-color-table-row").slideDown();
             this.visuals.twoD.PolygonColorTableWrapperDialogSettings.setVisibility(true);
             this.visuals.twoD.updatePolygonColors();
+
+            setTimeout(() => {
+                this.visuals.twoD.updatePolygonColors();
+            }, 200);
 
         }
         else {
@@ -903,6 +905,11 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
         }
 
+        this.visuals.twoD.render();
+    }
+
+    onPolygonColorChanged(e) {
+        this.visuals.twoD.commonService.session.style.widgets["polygon-color"] = e;
         this.visuals.twoD.render();
     }
 

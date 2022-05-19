@@ -385,24 +385,13 @@
                                 <div class="col-4">Color Polygons</div>
                                 <div class="col-8">
                                     <p-selectButton id="colorPolygons" [options]="hideShowOptions" [(ngModel)]="SelectedPolygonColorShowVariable" (ngModelChange)="polygonColorsToggle($event)"></p-selectButton>
-
-                                  <!-- <div class="btn-group btn-group-toggle btn-group-sm w-100" data-toggle="buttons">
-                                    <label class="btn btn-light col" title="Show convex hull under the network.">
-                                      <input type="radio" name="polygons" (click)="polygonColorsToggle(true)" id="polygons-color-show" autocomplete="off">
-                                      Show
-                                    </label>
-                                    <label class="btn btn-light col active" title="Do Not show convex hull under the network.">
-                                      <input type="radio" name="polygons"  (click)="polygonColorsToggle(true)" id="polygons-color-hide" autocomplete="off" checked>
-                                      Hide
-                                    </label>
-                                  </div>                   -->
                                 </div>
                               </div>
-                              <div id="polygon-color-table-row" class="form-group row" title="Should MicrobeTrace display the table of colors?">
+                              <!-- <div id="polygon-color-table-row" class="form-group row" title="Should MicrobeTrace display the table of colors?">
                                 <div class="col-4">Polygon Color Table</div>
                                 <div class="col-8">
-                                    <p-selectButton id="colorPolygons" [options]="hideShowOptions" [(ngModel)]="SelectedPolygonColorShowVariable" (ngModelChange)="polygonColorsToggle($event)"></p-selectButton>
-                                  <!-- <div class="btn-group btn-group-toggle btn-group-sm w-100" data-toggle="buttons">
+                                    <p-selectButton id="colorPolygonsTable" [options]="hideShowOptions" [(ngModel)]="SelectedPolygonColorTableShowVariable" (ngModelChange)="polygonColorsTableToggle($event)"></p-selectButton>
+                                    <div class="btn-group btn-group-toggle btn-group-sm w-100" data-toggle="buttons">
                                     <label class="btn btn-light active col">
                                       <input type="radio" name="polygonColorTableShowHide" id="polygon-color-table-show" autocomplete="off" checked>
                                       Show
@@ -411,13 +400,13 @@
                                       <input type="radio" name="polygonColorTableShowHide" id="polygon-color-table-hide" autocomplete="off">
                                       Hide
                                     </label>
-                                  </div> -->
+                                  </div> 
                                 </div>
-                              </div>
+                              </div> -->
                               <div id="polygon-color-value-row" class="form-group row" title="What color should the polygons be?">
                                 <div class="col-4"><label for="polygon-color">Polygons</label></div>
                                 <div class="col-8">
-                                  <input type="color" id="polygon-color" class="form-control form-control-sm" value="#1f77b4" [(ngModel)]="SelectedPolygonColorVariable" (ngModelChange)="onPolygonColorChanged()">
+                                  <input type="color" id="polygon-color" class="form-control form-control-sm" value="#1f77b4" [(ngModel)]="SelectedPolygonColorVariable" (ngModelChange)="onPolygonColorChanged($event)">
                                 </div>
                               </div>              
                             </div>

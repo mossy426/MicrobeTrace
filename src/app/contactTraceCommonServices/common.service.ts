@@ -321,6 +321,10 @@ export class CommonService extends AppComponentBase implements OnInit {
                     "symbolX"
                 ],
                 nodeValueNames: {},
+                polygonAlphas: [0.5],
+                polygonColors: ['#bbccee','#cceeff','#ccddaa','#eeeebb','#ffcccc','#dddddd'],
+                polygonValueNames: {},
+                overwrite: {},
                 widgets: this.defaultWidgets()
             },
             warnings: []
@@ -338,7 +342,9 @@ export class CommonService extends AppComponentBase implements OnInit {
                 linkColorMap: () => this.session.style.widgets["link-color"],
                 nodeAlphaMap: () => 1,
                 nodeColorMap: () => this.session.style.widgets["node-color"],
-                nodeSymbolMap: () => this.session.style.widgets["node-symbol"]
+                nodeSymbolMap: () => this.session.style.widgets["node-symbol"],
+                polygonAlphaMap: () => 0.5,
+                polygonColorMap: () => this.session.style.widgets["polygon-color"]
             },
             trees: {}
         };
@@ -686,7 +692,7 @@ export class CommonService extends AppComponentBase implements OnInit {
     createPolygonColorMap = () => {
         if (!window.context.commonService.temp.polygonGroups || !window.context.commonService.session.style.widgets["polygons-color-show"]) {
             window.context.commonService.temp.style.polygonColorMap = () => window.context.commonService.session.style.widgets["polygon-color"];
-          return [];
+            return [];
         }
     
         let aggregates = {};
@@ -844,6 +850,9 @@ export class CommonService extends AppComponentBase implements OnInit {
         //session files from older versions of MicrobeTrace.
         $("#launch").prop("disabled", true)
 
+        $(document).trigger("stop-force-simulation"); // stop previous network ticks so previous polygon won't show up
+        $(document).off('.2d');
+
         if(stashObject.session) {
 
         } else {
@@ -916,7 +925,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             style.widgets
         );
         window.context.commonService.createLinkColorMap();
-        window.context.commonService.createNodeColorMap();
+        window.context.commonService.createNodeColorMap()
+        window.context.commonService.createPolygonColorMap();
         let $id = null;
         for (let id in window.context.commonService.session.style.widgets) {
             $id = $("#" + id);
