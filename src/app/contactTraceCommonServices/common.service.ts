@@ -205,6 +205,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             "node-symbol-table-frequencies": false,
             "node-symbol-variable": "None",
             "node-symbol-table-visible": "Hide",
+            "node-timeline-variable" : "None",
             "node-tooltip-variable": "_id",
             "physics-tree-branch-type": "Straight",
             "physics-tree-charge": 30,
@@ -288,11 +289,14 @@ export class CommonService extends AppComponentBase implements OnInit {
             },
             network: {
                 allPinned: false,
-                nodes: []
+                timelinePinned : false,
+                nodes: [],
+                timelineNodes: []
             },
             state: {
                 timeStart: 0,
-                timeEnd: new Date()
+                timeEnd: new Date(),
+                timeTarget: null
             },
             style: {
                 linkAlphas: [1],
@@ -300,6 +304,13 @@ export class CommonService extends AppComponentBase implements OnInit {
                 linkValueNames: {},
                 nodeAlphas: [1],
                 nodeColors: [d3.schemeCategory10[0]].concat(d3.schemeCategory10.slice(2)),
+                nodeColorsTable: {},
+                nodeColorsTableHistory: {
+                    "null" : "#EAE553"
+                },
+                nodeColorsTableKeys: {},
+                linkColorsTable: {},
+                linkColorsTableKeys: {},
                 nodeSymbols: [
                     "symbolCircle",
                     "symbolCross",
@@ -320,6 +331,8 @@ export class CommonService extends AppComponentBase implements OnInit {
                     "symbolOctagonAlt",
                     "symbolX"
                 ],
+                nodeSymbolsTable: {},
+                nodeSymbolsTableKeys: {},
                 nodeValueNames: {},
                 polygonAlphas: [0.5],
                 polygonColors: ['#bbccee','#cceeff','#ccddaa','#eeeebb','#ffcccc','#dddddd'],
@@ -327,6 +340,7 @@ export class CommonService extends AppComponentBase implements OnInit {
                 overwrite: {},
                 widgets: this.defaultWidgets()
             },
+            timeline: 0,
             warnings: []
         };
     };
@@ -1603,6 +1617,38 @@ export class CommonService extends AppComponentBase implements OnInit {
             }
         });
 
+        
+         // patch missing date fields to earliest date in the the data
+        let fields = window.context.commonService.session.data["nodeFields"];
+        let nodeSkeleton = window.context.commonService.dataSkeleton();
+        let fieldsToCheck = fields.filter(f => !nodeSkeleton.nodeFields.includes(f) && f != '_ambiguity' && f != '_diff'); 
+        let n = window.context.commonService.session.data.nodes.length;
+        let k = fieldsToCheck.length;
+        for (let j = 0; j < k; j++) {
+        let field = fieldsToCheck[j];
+        let times = [];
+        for (let i = 0; i < n; i++) {
+            let node = window.context.commonService.session.data.nodes[i];
+            if (node[field] != null) {
+            let time = moment(node[field]); 
+            if (time.isValid() && isNaN(node[field])) //#315
+                times.push(time.toDate());
+            }
+        }
+
+        // If column has the word date in it, date expected to be in column 
+        if (field.toLowerCase().includes("date")){
+    
+            let minTime = Math.min(...times);
+            let minTimeString = new Date(minTime).toString();
+            window.context.commonService.session.data.nodes.forEach(d => {
+            if (d[field] == null || (d[field] && String(d[field]).trim() == ""))  {
+                d[field] = minTimeString;
+            } 
+            });
+        }
+        };
+
         this.foldMultiSelect();
 
         $("#search-field")
@@ -1870,12 +1916,34 @@ export class CommonService extends AppComponentBase implements OnInit {
         if ($("#network-statistics-hide").is(":checked")) return;
         let vnodes = window.context.commonService.getVisibleNodes();
         let vlinks = window.context.commonService.getVisibleLinks();
+        let linkCount = 0;
+        let clusterCount = 0;
+        if (window.context.commonService.session.style.widgets["timeline-date-field"] == 'None') {
+            linkCount = vlinks.length;
+            clusterCount = window.context.commonService.session.data.clusters.filter(cluster => cluster.visible && cluster.nodes > 1).length;
+        } else {
+            let n = vlinks.length;
+            for (let i = 0; i < n; i++) {
+                let src = vnodes.find(d => d._id == vlinks[i].source || d.id == vlinks[i].source);
+                let tgt = vnodes.find(d => d._id == vlinks[i].target || d.id == vlinks[i].target);
+                if (src && tgt) linkCount++;
+            }
+            
+            n = vnodes.length;
+            let clusters = {};
+            for (let i = 0; i < n; i++) {
+                let id = vnodes[i].cluster;
+                if (clusters[id]) clusters[id]++;
+                else clusters[id] = 1;
+            }
+            clusterCount = window.context.commonService.session.data.clusters.filter(cluster => clusters[cluster.id] && clusters[cluster.id]>2 && cluster.visible && cluster.nodes > 1).length;
+        }
         let singletons = vnodes.filter(d => d.degree == 0).length;
         $("#numberOfSelectedNodes").text(vnodes.filter(d => d.selected).length.toLocaleString());
         $("#numberOfNodes").text(vnodes.length.toLocaleString());
-        $("#numberOfVisibleLinks").text(vlinks.length.toLocaleString());
+        $("#numberOfVisibleLinks").text(linkCount.toLocaleString());
         $("#numberOfSingletonNodes").text(singletons.toLocaleString());
-        $("#numberOfDisjointComponents").text(window.context.commonService.session.data.clusters.length - singletons);
+        $("#numberOfDisjointComponents").text(clusterCount);
     };
 
     createNodeColorMap() {
@@ -1884,6 +1952,14 @@ export class CommonService extends AppComponentBase implements OnInit {
             window.context.commonService.temp.style.nodeColorMap = () => window.context.commonService.session.style.widgets["node-color"];
             return [];
         }
+
+        let nodeColors;
+        if(window.context.commonService.session.style.nodeColorsTable[variable]) {
+        nodeColors = [...window.context.commonService.session.style.nodeColorsTable[variable]];
+        } else {
+        nodeColors = window.context.commonService.session.style.nodeColorsTable[variable] = [...window.context.commonService.session.style.nodeColors];
+        }
+
         let aggregates = {};
         let nodes = window.context.commonService.session.data.nodes;
         let n = nodes.length;
@@ -1906,6 +1982,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             while (m-- > 0) {
                 colors = colors.concat(window.context.commonService.session.style.nodeColors);
             }
+            nodeColors = colors;
             window.context.commonService.session.style.nodeColors = colors;
         }
         if (!window.context.commonService.session.style.nodeAlphas) window.context.commonService.session.style.nodeAlphas = new Array(values.length).fill(1);
@@ -1914,6 +1991,79 @@ export class CommonService extends AppComponentBase implements OnInit {
                 new Array(values.length - window.context.commonService.session.style.nodeAlphas.length).fill(1)
             );
         }
+
+        let keys = Object.keys(window.context.commonService.session.style.nodeColorsTableHistory)
+
+        //Update Table History
+        values.forEach( (val, ind) => {
+
+        // Get index of value in history
+        let index = keys.findIndex(key => key === val);
+
+        //If found in history set previous color
+        if (index !== -1) {
+
+            // Update color of where value currently is
+            nodeColors[ind] = window.context.commonService.session.style.nodeColorsTableHistory[val];
+
+        //If value not found in history, add it
+        } else {
+            window.context.commonService.session.style.nodeColorsTableHistory[val] = nodeColors[ind];
+        }
+
+        if (val === "null"){
+            nodeColors[ind] = "#EAE553"
+        }
+
+        });
+
+        if (window.context.commonService.session.style.widgets["node-timeline-variable"] == 'None') {
+            window.context.commonService.session.style.nodeColorsTableKeys[variable] = values;
+            window.context.commonService.session.style.nodeColorsTable[variable] = nodeColors;
+        } else {
+        
+        // During timeline mode, user Pause and switch to a different Node varaible but nodeColorsTableKeys[variable] is not available
+        if(!window.context.commonService.session.style.nodeColorsTableKeys[variable]) {
+            let aggregatesTL = {};
+            let nodesTL = window.context.commonService.session.network.timelineNodes;
+            let n = nodesTL.length;
+            let nodeColorsTL = [...window.context.commonService.session.style.nodeColors];
+            for (let i = 0; i < n; i++) {
+            let d = nodesTL[i];
+            if (!d.visible) continue;
+            let dv = d[variable];
+            if (dv in aggregatesTL) {
+                aggregatesTL[dv]++;
+            } else {
+                aggregatesTL[dv] = 1;
+            }
+            }
+            let valuesTL = Object.keys(aggregatesTL);
+            if (valuesTL.length > nodeColorsTL.length) {
+            let colors = [];
+            let m = Math.ceil(valuesTL.length / nodeColorsTL.length);
+            while (m-- > 0) {
+                colors = colors.concat(nodeColorsTL);
+            }
+            nodeColorsTL = colors;
+            }
+            window.context.commonService.session.style.nodeColorsTableKeys[variable] = valuesTL;
+            window.context.commonService.session.style.nodeColorsTable[variable] = nodeColorsTL;
+        }
+
+        let key;
+        let tempNodeColors=[];
+        for(let v of values) {
+            let table = window.context.commonService.session.style.nodeColorsTableKeys[variable];
+            key = table.findIndex( k => k === v);
+            tempNodeColors.push(nodeColors[key]);
+        }
+
+        nodeColors = window.context.commonService.temp.style.nodeColor = tempNodeColors; // temp node color maps saved only under timeline
+        window.context.commonService.temp.style.nodeColorKeys = [...values];
+
+    }
+
         window.context.commonService.temp.style.nodeColorMap = d3
             .scaleOrdinal(window.context.commonService.session.style.nodeColors)
             .domain(values);
@@ -1931,6 +2081,14 @@ export class CommonService extends AppComponentBase implements OnInit {
             window.context.commonService.temp.style.linkAlphaMap = () => 1 - window.context.commonService.session.style.widgets["link-opacity"];
             return [];
         }
+
+        let linkColors;
+        if( window.context.commonService.session.style.linkColorsTable[variable]) {
+        linkColors =  window.context.commonService.session.style.linkColorsTable[variable];
+        } else {
+        linkColors =  window.context.commonService.session.style.linkColorsTable[variable] = [... window.context.commonService.session.style.linkColors];
+        }
+
         let aggregates = {};
         let links = window.context.commonService.getVisibleLinks();
         let i = 0,
@@ -1972,6 +2130,74 @@ export class CommonService extends AppComponentBase implements OnInit {
                 new Array(values.length - window.context.commonService.session.style.linkAlphas.length).fill(1)
             );
         }
+
+        if ( window.context.commonService.session.style.widgets["node-timeline-variable"] == 'None') {
+            window.context.commonService.session.style.linkColorsTableKeys[variable] = values;
+            window.context.commonService.session.style.linkColorsTable[variable] = linkColors;
+          } else {
+      
+            // During timeline mode, user Pause and switch to a different link varaible but linkColorsTableKeys[variable] is not available
+            if(! window.context.commonService.session.style.linkColorsTableKeys[variable]) {
+              let aggregatesTL = {};
+              let linksTL =  window.context.commonService.getVisibleLinks();
+              let linkColorsTL = [...window.context.commonService.session.style.linkColors];
+              let i = 0,
+                n = linksTL.length,
+                l;
+              if (variable == "origin") {
+                while (i < n) {
+                  l = linksTL[i++];
+                  if (!l.visible) continue;
+                  let src =  window.context.commonService.session.network.timelineNodes.find(dd => dd._id == l.source || dd.id == l.source);
+                  let tgt =  window.context.commonService.session.network.timelineNodes.find(dd => dd._id == l.target || dd.id == l.target);
+                  if (src === undefined || src.visible === false) continue;
+                  if (tgt === undefined || tgt.visible === false) continue;
+                  l.origin.forEach(o => {
+                    if (o in aggregatesTL) {
+                      aggregatesTL[o]++;
+                    } else {
+                      aggregatesTL[o] = 1;
+                    }
+                  });
+                }
+              } else {
+                while (i < n) {
+                  l = linksTL[i++];
+                  if (!l.visible) continue;
+                  let src = window.context.commonService.session.network.timelineNodes.find(dd => dd._id == l.source || dd.id == l.source);
+                  let tgt = window.context.commonService.session.network.timelineNodes.find(dd => dd._id == l.target || dd.id == l.target);
+                  if (src === undefined || src.visible === false) continue;
+                  if (tgt === undefined || tgt.visible === false) continue;  
+                  let lv = l[variable];
+                  if (lv in aggregatesTL) {
+                    aggregatesTL[lv]++;
+                  } else {
+                    aggregatesTL[lv] = 1;
+                  }
+                }
+              }       
+              let valuesTL = Object.keys(aggregatesTL);      
+              if (valuesTL.length > linkColorsTL.length) {
+                let colors = [];
+                let cycles = Math.ceil(valuesTL.length / linkColorsTL.length);
+                while (cycles-- > 0) colors = colors.concat(linkColorsTL);
+                linkColorsTL = colors;
+              }
+              window.context.commonService.session.style.linkColorsTableKeys[variable] = valuesTL;
+              window.context.commonService.session.style.linkColorsTable[variable] = linkColorsTL;
+            }
+      
+            let key;
+            let tempLinkColors=[];
+            for(let v of values) {
+              let table = window.context.commonService.session.style.linkColorsTableKeys[variable];
+              key = table.findIndex( k => k === v);
+              tempLinkColors.push(linkColors[key]);
+            }
+            linkColors = window.context.commonService.temp.style.linkColor = tempLinkColors; // temp link color maps saved only under timeline
+            window.context.commonService.temp.style.linkColorsKeys = [...values];
+          }
+
         window.context.commonService.temp.style.linkColorMap = d3
             .scaleOrdinal(window.context.commonService.session.style.linkColors)
             .domain(values);
@@ -2642,6 +2868,31 @@ export class CommonService extends AppComponentBase implements OnInit {
         if (!silent) $(document).trigger("node-visibility");
         console.log("Node Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
     };
+
+    updatePinNodes(copy) {
+        let nodes =  window.context.commonService.session.network.nodes;
+        let n = nodes.length;
+        for (let i = 0; i < n; i++) {
+            let node = nodes[i]; 
+            if (copy && node.fixed) node.preFixed = true;
+            if (!copy &&  window.context.commonService.session.network.timelineNodes[i].preFixed) {
+                node.fixed = true;
+                node.fx = node.x;
+                node.fy = node.y;
+            }
+        }
+    }
+
+    getNetworkNodes = () => {
+        let nodes =  window.context.commonService.session.network.nodes;
+        let n = nodes.length;
+        let out = [];
+          for (let i = 0; i < n; i++) {
+            let node = nodes[i];
+            out.push(JSON.parse(JSON.stringify(node)));
+          }
+        return out;
+      };
 
     setLinkVisibility(silent) {
         let start = Date.now();

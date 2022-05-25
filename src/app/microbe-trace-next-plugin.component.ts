@@ -34,6 +34,7 @@ import * as _ from 'lodash';
 import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { EventEmitterService } from '@shared/utils/event-emitter.service';
+import * as moment from 'moment';
 
 
 @Component({
@@ -123,6 +124,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     SelectedNodeColorVariable: string = "#1f77b4";
     SelectedLinkColorVariable: string = "#1f77b4";
     SelectedColorLinksByVariable: string = "None";
+
+    SelectedTimelineVariable : string = "None";
 
 
     LinkColorTableTypes: any = [
@@ -248,6 +251,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.SelectedNodeColorVariable = this.commonService.session.style.widgets['node-color'];
         this.SelectedColorLinksByVariable = this.commonService.session.style.widgets['link-tooltip-variable'];
 
+        this.SelectedTimelineVariable = this.commonService.session.style.widgets['node-timeline-variable'];
         this.SelectedColorVariable = this.commonService.session.style.widgets['selected-color'];
 
         this.SelectedLinkColorTableTypesVariable = this.commonService.GlobalSettingsModel.SelectedLinkColorTableTypesVariable;
@@ -750,6 +754,197 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         }
     }
 
+    public onTimelineChanged(e) : void {
+        this.SelectedTimelineVariable = e;
+        console.log('timeline changed: ', e);
+        d3.select('#global-timeline svg').remove();
+        clearInterval(this.visuals.microbeTrace.commonService.session.timeline);
+        let variable = e;  
+        let loadingJsonFile = this.visuals.microbeTrace.commonService.session.style.widgets["node-timeline-variable"] == variable;
+        if (this.visuals.microbeTrace.commonService.session.style.widgets["node-timeline-variable"] != 'None' && !loadingJsonFile) {
+            // change timeline variable when end time not reaching target time - redraw netwrok to start fresh
+            if (moment(this.visuals.microbeTrace.commonService.session.state.timeEnd).toDate() < moment(this.visuals.microbeTrace.commonService.session.state.timeTarget).toDate()) {
+                this.visuals.microbeTrace.commonService.session.state.timeEnd = this.visuals.microbeTrace.commonService.session.state.timeTarget;
+            this.visuals.microbeTrace.commonService.setNodeVisibility(false);
+            this.visuals.microbeTrace.commonService.setLinkVisibility(false);
+            this.visuals.microbeTrace.commonService.updateStatistics();
+            }
+        }
+        this.visuals.microbeTrace.commonService.session.style.widgets["node-timeline-variable"] = variable;
+        if (variable == "None") {
+            $("#global-timeline-field").empty();
+            this.visuals.microbeTrace.commonService.session.style.widgets["timeline-date-field"] = 'None'  
+            $("#global-timeline-wrapper").fadeOut();
+            $('#pinbutton').prop("disabled", false);
+            if(!this.visuals.microbeTrace.commonService.session.network.timelinePinned) {
+            $('#pinbutton').trigger('click');
+            this.visuals.microbeTrace.commonService.updatePinNodes(false);
+            }
+            this.visuals.microbeTrace.commonService.session.network.timelineNodes = [];
+            this.visuals.microbeTrace.commonService.setNodeVisibility(false);
+            this.visuals.microbeTrace.commonService.setLinkVisibility(false);
+            this.visuals.microbeTrace.commonService.updateStatistics();
+            return;
+        }
+        if(!this.visuals.microbeTrace.commonService.temp.style.nodeColor) $("#node-color-variable").trigger("change");
+        if (!$('#pinbutton').prop('disabled')){
+            if (!loadingJsonFile) {
+                this.visuals.microbeTrace.commonService.session.network.timelinePinned = this.visuals.microbeTrace.commonService.session.network.allPinned;
+            if(!this.visuals.microbeTrace.commonService.session.network.allPinned) {
+                this.visuals.microbeTrace.commonService.updatePinNodes(true);
+                $('#pinbutton').trigger('click');
+            }
+            this.visuals.microbeTrace.commonService.session.network.timelineNodes = this.visuals.microbeTrace.commonService.getNetworkNodes();
+            }
+            $('#pinbutton').prop("disabled", true);
+        }
+        let globalTimelineField =  (this.visuals.microbeTrace.commonService.session.style.overwrite && variable == this.visuals.microbeTrace.commonService.session.style.overwrite['globalTimelineFieldVariable'] ? this.visuals.microbeTrace.commonService.session.style.overwrite['globalTimelineField'] : this.visuals.microbeTrace.commonService.titleize(variable));
+        const encodedGlobalTimelineField = globalTimelineField.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+            return '&#'+i.charCodeAt(0)+';';
+        });
+        $("#global-timeline-field").html(encodedGlobalTimelineField);   
+        var formatDateIntoYear = d3.timeFormat("%Y");
+        var formatDateIntoMonthYear = d3.timeFormat("%b %y");
+        var formatDateIntoMonth = d3.timeFormat("%b");
+        var formatDateMonthYear = d3.timeFormat("%b %Y");
+        var formatDateDateMonth = d3.timeFormat("%b %_d");
+
+        let timeDomainStart, timeDomainEnd;
+        let field = variable;
+        let times = [],
+        vnodes = JSON.parse(JSON.stringify(this.visuals.microbeTrace.commonService.session.data.nodes));
+        vnodes.forEach(d => {
+            let time = moment(d[field]); 
+            if (time.isValid()) {
+            d[field] = time.toDate();
+            times.push(d[field]);
+            } else {
+            d[field] = null;
+            }
+        });
+        if (times.length < 2) {
+            times = [new Date(2000, 1, 1), new Date()];
+        }
+        timeDomainStart = Math.min(...times);
+        timeDomainEnd = Math.max(...times);
+
+        var days = moment(timeDomainEnd).diff(moment(timeDomainStart), 'days');
+        var tickDateFormat = d => {
+            if (days<184) return formatDateDateMonth(d);
+            else if (days<367) return formatDateIntoMonth(d);
+            else if (days<367*5) return formatDateIntoMonthYear(d);
+            else return formatDateIntoYear(d);		
+        }
+        var handleDateFormat = d => {
+            if (days<367) return formatDateDateMonth(d);
+            else return formatDateMonthYear(d);		
+        }
+        let startDate = timeDomainStart;
+        let endDate = timeDomainEnd;
+        var margin = {top:50, right:50, bottom:0, left:50},
+            width = ($('#network').parent().width() * 4 / 5) - margin.left - margin.right,
+            height = 200 - margin.top - margin.bottom;
+        var svgTimeline = d3.select("#global-timeline")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", 120);  
+
+            ////////// slider //////////
+        var currentValue = 0;
+        var targetValue = width;
+        var playButton = d3.select("#timeline-play-button");
+        if (playButton.text() == "Pause") playButton.text("Play");
+        var x = d3.scaleTime()
+            .domain([startDate, endDate])
+            .range([0, targetValue])
+            .clamp(true)
+            .nice();
+        var slider = svgTimeline.append("g")
+            .attr("class", "slider")
+            .attr("transform", "translate(30," + height/2 + ")");
+        slider.append("line")
+            .attr("class", "track")
+            .attr("x1", x.range()[0])
+            .attr("x2", x.range()[1])
+            .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+            .attr("class", "track-inset")
+            .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+            .attr("class", "track-overlay")
+            .call(d3.drag()
+                .on("start.interrupt", function() { slider.interrupt(); })
+                .on("start drag", function() {
+                    currentValue = d3.event.x;
+                    update(x.invert(currentValue));
+                    if (playButton.text() == "Pause") {
+                    playButton.text("Play"); 
+                    clearInterval(this.visuals.microbeTrace.commonService.session.timeline);
+                    }
+                })
+            );
+        slider.insert("g", ".track-overlay")
+            .attr("class", "ticks")
+            .attr("transform", "translate(0," + 18 + ")")
+            .selectAll("text")
+            .data(x.ticks(12))
+            .enter()
+            .append("text")
+            .attr("x", x)
+            .attr("y", 10)
+            .attr("text-anchor", "middle")
+            .text(function(d) { return tickDateFormat(d); });
+        var handle = slider.insert("circle", ".track-overlay")
+            .attr("class", "handle")
+            .attr("r", 9);
+        var label = slider.append("text")  
+            .attr("class", "label")
+            .attr("text-anchor", "middle")
+            .text(handleDateFormat(startDate))
+            .attr("transform", "translate(25," + (-20) + ")")
+        playButton
+            .on("click", function() {
+            var button = d3.select(this);  
+            if (button.text() == "Pause") {
+                button.text("Play"); 
+                clearInterval(this.visuals.microbeTrace.commonService.session.timeline);
+            } else {
+                button.text("Pause");
+                this.visuals.microbeTrace.commonService.session.timeline = setInterval(step, 200);
+            }
+            })
+        function step() { 
+            update(x.invert(currentValue));
+            if (currentValue > targetValue) { 
+            currentValue = 0;
+            clearInterval(this.visuals.microbeTrace.commonService.session.timeline);
+            playButton.text("Play");
+            return;
+            }
+            currentValue = currentValue + (targetValue/151);
+        }
+        this.visuals.microbeTrace.commonService.session.style.widgets["timeline-date-field"] = field;
+        this.visuals.microbeTrace.commonService.session.state.timeStart = startDate;
+        this.visuals.microbeTrace.commonService.session.state.timeTarget = x.invert(targetValue);
+        if (loadingJsonFile && moment(this.visuals.microbeTrace.commonService.session.state.timeEnd).toDate() < moment(this.visuals.microbeTrace.commonService.session.state.timeTarget).toDate()) {
+            let t = moment(this.visuals.microbeTrace.commonService.session.state.timeEnd).toDate();
+            currentValue = x(t);
+            handle.attr("cx", x(t));
+            label
+            .attr("x", x(t))
+            .text(handleDateFormat(t));
+        }
+        $("#global-timeline-wrapper").fadeIn();
+        function update(h) {
+            handle.attr("cx", x(h));
+            label
+            .attr("x", x(h))
+            .text(handleDateFormat(h));
+            this.visuals.microbeTrace.commonService.session.state.timeEnd = h;
+            this.visuals.microbeTrace.commonService.setNodeVisibility(false);
+            this.visuals.microbeTrace.commonService.setLinkVisibility(false);
+            this.visuals.microbeTrace.commonService.updateStatistics();
+      }
+    }
+
     onColorNodesByChanged() {
 
         this.commonService.GlobalSettingsModel.SelectedColorNodesByVariable = this.SelectedColorNodesByVariable;
@@ -828,12 +1023,31 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             let colorinput = $(`<input type="color" value="${color}" ${disabled}>`)
                 .on("change", e => {
 
-                    // Update table with new alpha value
-                    // Need to get value from id since "this" keyword is used by angular
-                    this.visuals.microbeTrace.commonService.session.style.nodeColors.splice(i, 1, e.target['value']);
-                    this.visuals.microbeTrace.commonService.temp.style.nodeColorMap = d3
-                        .scaleOrdinal(this.visuals.microbeTrace.commonService.session.style.nodeColors)
-                        .domain(aggregateValues);
+                    let key = this.visuals.microbeTrace.commonService.session.style.nodeColorsTableKeys[this.SelectedColorNodesByVariable].findIndex( k => k === value);
+                    this.visuals.microbeTrace.commonService.session.style.nodeColorsTable[this.SelectedColorNodesByVariable].splice(key, 1, e);
+
+                    // Update history with new color
+                    this.visuals.microbeTrace.commonService.session.style.nodeColorsTableHistory[this.visuals.microbeTrace.commonService.session.style.nodeColorsTableKeys[this.SelectedColorNodesByVariable][key]] = e;
+
+                  
+
+                    if (this.visuals.microbeTrace.commonService.session.style.widgets["node-timeline-variable"] == 'None') {
+                          // Update table with new alpha value
+                        // Need to get value from id since "this" keyword is used by angular
+                        this.visuals.microbeTrace.commonService.session.style.nodeColors.splice(i, 1, e.target['value']);
+                        this.visuals.microbeTrace.commonService.temp.style.nodeColorMap = d3
+                            .scaleOrdinal(this.visuals.microbeTrace.commonService.session.style.nodeColors)
+                            .domain(aggregateValues);
+                        // temp.style.nodeColorMap = d3
+                            // .scaleOrdinal(session.style.nodeColorsTable[variable])
+                            // .domain(session.style.nodeColorsTableKeys[variable]);
+                        } else {
+                            let temKey = this.visuals.microbeTrace.commonService.temp.style.nodeColorKeys.findIndex( k => k === value);
+                            this.visuals.microbeTrace.commonService.temp.style.nodeColor.splice(temKey, 1, e);
+                            this.visuals.microbeTrace.commonService.temp.style.nodeColorMap = d3
+                                .scaleOrdinal(this.visuals.microbeTrace.commonService.temp.style.nodeColor)
+                                .domain(this.visuals.microbeTrace.commonService.temp.style.nodeColorKeys);
+                        }
 
                     this.visuals.microbeTrace.publishUpdateNodeColors();
 

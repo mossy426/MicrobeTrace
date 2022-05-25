@@ -783,7 +783,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
             this.visuals.twoD.commonService.session.style['polygonAlphas'].splice(i, 1, this.visuals.twoD.commonService.temp.style.polygonAlphaMap(value));
           let colorinput = $('<input type="color" value="' + this.visuals.twoD.commonService.temp.style.polygonColorMap(value) + '">')
             .on("change", function(){
-                that.visuals.twoD.commonService.session.style['polygonColors'].splice(i, 1, $(this).val());
+                that.visuals.twoD.commonService.session.style['polygonColors'].splice(i, 1, $(this).val() as string);
                 that.visuals.twoD.commonService.temp.style.polygonColorMap = d3
                 .scaleOrdinal(that.visuals.twoD.commonService.session.style['polygonColors'])
                 .domain(values);
