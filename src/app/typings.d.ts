@@ -29,7 +29,6 @@ declare module "*.json" {
 }
 
 declare module 'tidytree';
-declare module 'd3';
 
 /**
  * rtl-detect
