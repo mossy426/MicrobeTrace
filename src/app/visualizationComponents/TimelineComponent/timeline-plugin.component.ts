@@ -189,7 +189,7 @@ export class TimelineComponent extends AppComponentBase implements OnInit, Micob
         if (this.selection[0] > 0) {
             this.selection[0] = 0;
             this.brushG.call(this.brush.move, this.selection);
-            propagate();
+            // propagate();
         }
         });
 
@@ -200,83 +200,83 @@ export class TimelineComponent extends AppComponentBase implements OnInit, Micob
         .call(this.brush);
     }
 
-    $("#timeline-play").click( () {
-    var $this = $(this);
-    if (this.isPlaying) {
-        $this.html('<span class="oi oi-media-play"></span>');
-        this.timer.stop();
-        this.isPlaying = false;
-    } else {
-        $this.html('<span class="oi oi-media-pause"></span>');
-        this.isPlaying = true;
-        setTimer();
-    }
-    });
+    // $("#timeline-play").click( () {
+    // var $this = $(this);
+    // if (this.isPlaying) {
+    //     $this.html('<span class="oi oi-media-play"></span>');
+    //     this.timer.stop();
+    //     this.isPlaying = false;
+    // } else {
+    //     $this.html('<span class="oi oi-media-pause"></span>');
+    //     this.isPlaying = true;
+    //     setTimer();
+    // }
+    // });
 
-    function setTimer() {
-    if (this.timer) {
-        this.timer.stop();
-        d3.timerFlush();
-    }
-    this.timer = d3.interval(function () {
-        var selection = d3.brushSelection(this.brushG.node());
-        if (!selection) return this.timer.stop(); // Ignore empty selections
-        if (selection[1] >= this.width) {
-        $("#timeline-play").click();
-        return;
-        }
-        this.brushG.call(this.brush.move, selection.map(s => s + 1));
-        if(++this.tick % 5 == 0) propagate();
-    }, 110 - parseInt($("#timeline-speed").val() as string));
-    if (!this.isPlaying) this.timer.stop();
-    }
+    // function setTimer() {
+    // if (this.timer) {
+    //     this.timer.stop();
+    //     d3.timerFlush();
+    // }
+    // this.timer = d3.interval(function () {
+    //     var selection = d3.brushSelection(this.brushG.node());
+    //     if (!selection) return this.timer.stop(); // Ignore empty selections
+    //     if (selection[1] >= this.width) {
+    //     $("#timeline-play").click();
+    //     return;
+    //     }
+    //     this.brushG.call(this.brush.move, selection.map(s => s + 1));
+    //     if(++this.tick % 5 == 0) propagate();
+    // }, 110 - parseInt($("#timeline-speed").val() as string));
+    // if (!this.isPlaying) this.timer.stop();
+    // }
 
-    function propagate(){
-        this.visuals.microbeTrace.commonService.session.state.timeStart = this.x.invert(this.selection[0]);
-        this.visuals.microbeTrace.commonService.session.state.timeEnd = this.x.invert(this.selection[1]);
-        this.visuals.microbeTrace.commonService.setNodeVisibility(true);
-        this.visuals.microbeTrace.commonService.setLinkVisibility(true);
-        this.visuals.microbeTrace.commonService.tagClusters().then(() => {
-        ["node", "link"].forEach(function (thing) {
-            $(document).trigger(thing + "-visibility");
-        });
-    });
-    }
+    // function propagate(){
+    //     this.visuals.microbeTrace.commonService.session.state.timeStart = this.x.invert(this.selection[0]);
+    //     this.visuals.microbeTrace.commonService.session.state.timeEnd = this.x.invert(this.selection[1]);
+    //     this.visuals.microbeTrace.commonService.setNodeVisibility(true);
+    //     this.visuals.microbeTrace.commonService.setLinkVisibility(true);
+    //     this.visuals.microbeTrace.commonService.tagClusters().then(() => {
+    //     ["node", "link"].forEach(function (thing) {
+    //         $(document).trigger(thing + "-visibility");
+    //     });
+    // });
+    // }
 
-    $("#timeline-toggle-settings")
-    .click(function () {
-        var pane = $("#timeline-settings-pane");
-        if ($(this).hasClass('active')) {
-        pane.animate({ left: "-400px" }, function () {
-            pane.hide();
-        });
-        } else {
-        pane.show(0, function () {
-            pane.animate({ left: "0px" });
-        });
-        }
-    })
-    .trigger("click");
+    // $("#timeline-toggle-settings")
+    // .click(function () {
+    //     var pane = $("#timeline-settings-pane");
+    //     if ($(this).hasClass('active')) {
+    //     pane.animate({ left: "-400px" }, function () {
+    //         pane.hide();
+    //     });
+    //     } else {
+    //     pane.show(0, function () {
+    //         pane.animate({ left: "0px" });
+    //     });
+    //     }
+    // })
+    // .trigger("click");
 
-    $("#timeline-date-field").on("change", function () {
-        this.visuals.microbeTrace.commonService.session.style.widgets["timeline-date-field"] = this.value;
-    this.refresh();
-    });
+    // $("#timeline-date-field").on("change", function () {
+    //     this.visuals.microbeTrace.commonService.session.style.widgets["timeline-date-field"] = this.value;
+    // this.refresh();
+    // });
 
-    $('[name="timeline-cumulation"]').on("change", function () {
-        this.visuals.microbeTrace.commonService.session.style.widgets["timeline-noncumulative"] =
-        $("#timeline-noncumulative").is(":checked");
-        this.refresh();
-    });
+    // $('[name="timeline-cumulation"]').on("change", function () {
+    //     this.visuals.microbeTrace.commonService.session.style.widgets["timeline-noncumulative"] =
+    //     $("#timeline-noncumulative").is(":checked");
+    //     this.refresh();
+    // });
 
-    $(document).on("node-color-change", function () {
-        this.svg
-        .select(".timeline-epi-curve")
-        .selectAll("rect")
-        .attr("fill", this.visuals.microbeTrace.commonService.session.style.widgets["node-color"]);
-    });
+    // $(document).on("node-color-change", function () {
+    //     this.svg
+    //     .select(".timeline-epi-curve")
+    //     .selectAll("rect")
+    //     .attr("fill", this.visuals.microbeTrace.commonService.session.style.widgets["node-color"]);
+    // });
 
-    $("#timeline-speed").on("change", setTimer);
+    // $("#timeline-speed").on("change", setTimer);
 
-    this.layout.on("stateChanged", refresh);
+    // this.layout.on("stateChanged", refresh);
 }
