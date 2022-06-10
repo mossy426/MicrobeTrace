@@ -9,3 +9,6 @@
     height: 100%;
 }
 
+#phylocanvas__canvas {
+    height: 100% !important;
+}

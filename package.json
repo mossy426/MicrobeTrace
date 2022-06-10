@@ -83,6 +83,7 @@
     "papaparse": "^5.2.0",
     "patristic": "^0.5.4",
     "phylocanvas": "^2.8.1",
+    "phylocanvas-plugin-context-menu": "^3.11.0",
     "protractor": "~5.4.0",
     "tn93": "^0.3.0",
     "ts-node": "~7.0.0",
