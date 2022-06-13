@@ -163,6 +163,20 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     cmpRef: ComponentRef<any>;
 
+    public playBtnText: string = "Play";
+
+    public handle: any;
+    
+    public label: any;
+
+    public xAttribute: any;
+
+    public handleDateFormat: any;
+
+    public currentTimelineValue: any;
+
+    public currentTimelineTargetValue: any;
+
     private previousTab: string = '';
 
     private visuals: MicrobeTraceNextVisuals;
@@ -835,7 +849,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             else if (days<367*5) return formatDateIntoMonthYear(d);
             else return formatDateIntoYear(d);		
         }
-        var handleDateFormat = d => {
+        this.handleDateFormat = d => {
             if (days<367) return formatDateDateMonth(d);
             else return formatDateMonthYear(d);		
         }
@@ -850,99 +864,125 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             .attr("height", 120);  
 
             ////////// slider //////////
-        var currentValue = 0;
-        var targetValue = width;
+        this.currentTimelineValue = 0;
+        this.currentTimelineTargetValue = width;
+        this.visuals.microbeTrace.commonService.session.state.timeStart = startDate;
+
         var playButton = d3.select("#timeline-play-button");
         if (playButton.text() == "Pause") playButton.text("Play");
-        var x = d3.scaleTime()
+        this.xAttribute = d3.scaleTime()
             .domain([startDate, endDate])
-            .range([0, targetValue])
+            .range([0, this.currentTimelineTargetValue])
             .clamp(true)
             .nice();
         var slider = svgTimeline.append("g")
             .attr("class", "slider")
             .attr("transform", "translate(30," + height/2 + ")");
-        slider.append("line")
-            .attr("class", "track")
-            .attr("x1", x.range()[0])
-            .attr("x2", x.range()[1])
-            .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
-            .attr("class", "track-inset")
-            .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
-            .attr("class", "track-overlay")
-            .call(d3.drag()
-                .on("start.interrupt", function() { slider.interrupt(); })
-                .on("start drag", function() {
-                    currentValue = d3.event.x;
-                    update(x.invert(currentValue));
-                    if (playButton.text() == "Pause") {
-                    playButton.text("Play"); 
-                    clearInterval(this.visuals.microbeTrace.commonService.session.timeline);
-                    }
-                })
-            );
+        slider.append("mat-slider")
+            // .attr("class", "track")
+            // .attr("x1", this.xAttribute.range()[0])
+            // .attr("x2", this.xAttribute.range()[1])
+            // .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+            // .attr("class", "track-inset")
+            // .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+            // .attr("class", "track-overlay")
+            // .call(d3.drag()
+            //     .on("start.interrupt", function() { slider.interrupt(); })
+            //     .on("start drag", function() {
+            //         this.currentTimelineTargetValue = d3.event.x;
+            //         this.update(this.xAtttribute.invert(this.currentTimelineTargetValue));
+            //         if (this.playBtnText == "Pause") {
+            //         this.playBtnText = "Play";
+            //         clearInterval(this.visuals.microbeTrace.commonService.session.timeline);
+            //         }
+            //     })
+            // );
+            console.log('start date: ', startDate);
+            console.log('start date: ', this.handleDateFormat(startDate));
         slider.insert("g", ".track-overlay")
             .attr("class", "ticks")
             .attr("transform", "translate(0," + 18 + ")")
             .selectAll("text")
-            .data(x.ticks(12))
+            .data(this.xAttribute.ticks(12))
             .enter()
             .append("text")
-            .attr("x", x)
+            .attr("x", this.xAttribute)
             .attr("y", 10)
             .attr("text-anchor", "middle")
             .text(function(d) { return tickDateFormat(d); });
-        var handle = slider.insert("circle", ".track-overlay")
+        this.handle = slider.insert("circle", ".track-overlay")
             .attr("class", "handle")
             .attr("r", 9);
-        var label = slider.append("text")  
+        this.label = slider.append("text")  
             .attr("class", "label")
             .attr("text-anchor", "middle")
-            .text(handleDateFormat(startDate))
+            .text(this.handleDateFormat(startDate))
             .attr("transform", "translate(25," + (-20) + ")")
-        playButton
-            .on("click", function() {
-            var button = d3.select(this);  
-            if (button.text() == "Pause") {
-                button.text("Play"); 
-                clearInterval(this.visuals.microbeTrace.commonService.session.timeline);
-            } else {
-                button.text("Pause");
-                this.visuals.microbeTrace.commonService.session.timeline = setInterval(step, 200);
-            }
-            })
-        function step() { 
-            update(x.invert(currentValue));
-            if (currentValue > targetValue) { 
-            currentValue = 0;
-            clearInterval(this.visuals.microbeTrace.commonService.session.timeline);
-            playButton.text("Play");
-            return;
-            }
-            currentValue = currentValue + (targetValue/151);
-        }
+
         this.visuals.microbeTrace.commonService.session.style.widgets["timeline-date-field"] = field;
         this.visuals.microbeTrace.commonService.session.state.timeStart = startDate;
-        this.visuals.microbeTrace.commonService.session.state.timeTarget = x.invert(targetValue);
+        this.visuals.microbeTrace.commonService.session.state.timeTarget = this.xAttribute.invert(this.currentTimelineTargetValue);
         if (loadingJsonFile && moment(this.visuals.microbeTrace.commonService.session.state.timeEnd).toDate() < moment(this.visuals.microbeTrace.commonService.session.state.timeTarget).toDate()) {
             let t = moment(this.visuals.microbeTrace.commonService.session.state.timeEnd).toDate();
-            currentValue = x(t);
-            handle.attr("cx", x(t));
-            label
-            .attr("x", x(t))
-            .text(handleDateFormat(t));
+            this.currentTimelineTargetValue = this.xAttribute(t);
+            this.handle.attr("cx", this.xAttribute(t));
+            this.label
+            .attr("x", this.xAttribute(t))
+            .text(this.handleDateFormat(t));
         }
         $("#global-timeline-wrapper").fadeIn();
-        function update(h) {
-            handle.attr("cx", x(h));
-            label
-            .attr("x", x(h))
-            .text(handleDateFormat(h));
-            this.visuals.microbeTrace.commonService.session.state.timeEnd = h;
-            this.visuals.microbeTrace.commonService.setNodeVisibility(false);
-            this.visuals.microbeTrace.commonService.setLinkVisibility(false);
-            this.visuals.microbeTrace.commonService.updateStatistics();
-      }
+
+        console.log('attribute2: ', this.xAttribute);
+
+       
+    }
+
+    public playTimeline() : void {
+
+            if (this.playBtnText == "Pause") {
+                this.playBtnText = "Play";
+                clearInterval(this.visuals.microbeTrace.commonService.session.timeline);
+            } else {
+                this.playBtnText = "Pause";
+                this.visuals.microbeTrace.commonService.session.timeline = setInterval(this.step, 200, this);
+            }
+
+    }
+
+    update(h) {
+
+        console.log('updating:', h);
+        console.log('text: ', this.xAttribute(h));
+        this.handle.attr("cx", this.xAttribute(h));
+        this.label
+        .attr("x", this.xAttribute(h))
+        .text(this.handleDateFormat(h));
+        this.visuals.microbeTrace.commonService.session.state.timeEnd = h;
+        this.visuals.microbeTrace.commonService.setNodeVisibility(false);
+        // this.visuals.microbeTrace.commonService.setLinkVisibility(false);
+        this.visuals.microbeTrace.commonService.updateStatistics();
+
+        for (let i = 0; i < window.context.commonService.session.data.nodes.length; i++) {
+
+            let node = this.visuals.microbeTrace.commonService.session.data.nodes[i];
+            console.log("node: ", node, node.visible);
+
+        }
+  }
+
+    step(that : any) { 
+        // console.log('xx: ', that.xAttribute);
+        that.update(that.xAttribute.invert(that.currentTimelineValue));
+        if (that.currentTimelineValue > that.currentTimelineTargetValue) { 
+            that.currentTimelineValue = 0;
+        clearInterval(that.visuals.microbeTrace.commonService.session.timeline);
+        that.playBtnText = "Play";
+        return;
+        }
+        that.currentTimelineValue = that.currentTimelineValue + (that.currentTimelineTargetValue/151);
+
+        console.log('timelineValue: ', that.currentTimelineValue);
+
     }
 
     onColorNodesByChanged() {

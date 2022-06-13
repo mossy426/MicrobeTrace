@@ -375,8 +375,10 @@
             </noscript>
             <div id="global-timeline-wrapper" style="display: none;">
               <div id="global-timeline" align="center">
-                <div><button type="button" id="timeline-play-button" class="btn btn-light btn-sm">Play</button>
+                <div><button type="button" id="timeline-play-button" class="btn btn-light btn-sm" (click)="playTimeline()">{{playBtnText}}</button>
                 <span id="global-timeline-field" contenteditable></span></div>
+                <!-- <svg></svg>
+                <mat-slider></mat-slider> -->
               </div>  
             </div>
           </div>

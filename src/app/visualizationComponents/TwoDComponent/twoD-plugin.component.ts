@@ -340,10 +340,30 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
                 $('#network').css('background-color', this.visuals.twoD.commonService.session.style.widgets['background-color']);
             });
 
-            this.visuals.twoD.eventManager.addGlobalEventListener('window', 'node-visibility link-visibility cluster-visibility node-selected', () => {
+            this.visuals.twoD.eventManager.addGlobalEventListener('document', 'node-visibility link-visibility cluster-visibility node-selected', () => {
 
+                console.log('rendering');
                 this.visuals.twoD.render(false);
             });
+
+            // $(document).on("node-visibility", {
+            //     console.log('rendering');
+            //     this.visuals.twoD.render(false);
+            // });
+
+            let that = this;
+
+            $( document ).on( "node-visibility", function( ) {
+                that.visuals.twoD.render(false);
+              });
+
+              $( document ).on( "link-visibility", function( ) {
+                that.visuals.twoD.render(false);
+              });
+
+              $( document ).on( "cluster-visibility", function( ) {
+                that.visuals.twoD.render(false);
+              });
 
             this.visuals.twoD.eventManager.addGlobalEventListener('window', "node-selected", () => {
                 this.visuals.twoD.render(false);

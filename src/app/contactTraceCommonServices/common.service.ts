@@ -340,7 +340,7 @@ export class CommonService extends AppComponentBase implements OnInit {
                 overwrite: {},
                 widgets: this.defaultWidgets()
             },
-            timeline: 0,
+            timeline: 0 as any,
             warnings: []
         };
     };
@@ -2852,20 +2852,34 @@ export class CommonService extends AppComponentBase implements OnInit {
             let cluster = clusters[node.cluster];
             if (cluster) {
                 cluster.visible = true;
-                // node.visible = node.visible && cluster.visible;
+                node.visible = node.visible && cluster.visible;
             }
             if (dateField != "None") {
-                if (this.session.state.timeEnd) {
-                    node.visible =
+                if (window.context.commonService.session.state.timeEnd) {
+                    if (node[dateField]){
+                        console.log('in date: ', node[dateField]);
+                        node.visible =
                         node.visible &&
-                        this.session.state.timeEnd > moment(node[dateField]).toDate();
+                        window.context.commonService.session.state.timeEnd > moment(node[dateField]).toDate();                    }else {
+                        node.visible = false;
+                    }
+                   
                 }
-                // if (session.state.timeStart) {
-                //   node.visible = node.visible && session.state.timeStart > moment(n[dateField]).toDate();
-                // }
+                if (window.context.commonService.session.state.timeStart) {
+                  if (node[dateField]){
+                      console.log('in date: ', node[dateField], node.visible);
+                    node.visible = node.visible && window.context.commonService.session.state.timeStart > moment(n[dateField]).toDate();
+                  }else {
+                      node.visible = false;
+                  }
+                }
             }
         }
         if (!silent) $(document).trigger("node-visibility");
+
+        console.log('trigering');
+        $(document).trigger("node-visibility");
+       
         console.log("Node Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
     };
 
@@ -2903,9 +2917,6 @@ export class CommonService extends AppComponentBase implements OnInit {
         let clusters = window.context.commonService.session.data.clusters;
         let n = links.length;
 
-        console.log('style: ', window.context.commonService.session.style.widgets);
-        console.log('metric: ', metric);
-
         for (let i = 0; i < n; i++) {
             let link = links[i];
             let visible = true;
@@ -2925,7 +2936,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             }
             link.visible = visible;
 
-            console.log('visibility: ', link.visible);
+            link.visible = false;
+
         }
         if (!silent) $(document).trigger("link-visibility");
         console.log("Link Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
