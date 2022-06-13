@@ -29,8 +29,8 @@
               </mat-menu>
               <button class="navbar-item" mat-button [matMenuTriggerFor]="langMenu"><i class="far nav-icon flaticon-earth-globe"></i>Language<span class="dropdown-symbol">&#9660;</span></button>
               <mat-menu #langMenu="matMenu" overlapTrigger="false">
-                <!-- <button mat-menu-item (click)="changeLanguage('en')">English</button>
-                <button mat-menu-item (click)="changeLanguage('sp')">Spanish</button> -->
+                <button mat-menu-item >English</button>
+                <button mat-menu-item >Spanish</button>
               </mat-menu>
             </div>
           </mat-toolbar>
@@ -153,6 +153,7 @@
             </div>
 
         </p-dialog><!-- /.modal -->
+        
 
 
         <p-dialog id="global-settings-modal" 
@@ -281,6 +282,17 @@
                                     </div>
                                 </div>
                             </tab>
+
+                            <tab heading="{{'Timeline' | localize}}" customClass="m-tabs__item" style='width: 400px; height: 100%;'>
+                                <div id="timeline-config" role="tabpanel" aria-labelledby="timeline-tab">
+                                    <div class="form-group row" title="By what variable timeline applied?">
+                                        <div class="col-4"><label for="node-timeline-variable">Timeline By</label></div>
+                                        <div class="col-8">
+                                            <p-dropdown id="node-timeline-variable" [options]="FieldList" appendTo="body" [(ngModel)]="SelectedTimelineVariable" (onChange)="onTimelineChanged($event.value)"></p-dropdown>
+                                        </div>
+                                      </div>
+                                </div> 
+                            </tab>
                         </tabset>
                     </div>
                 </div>
@@ -353,6 +365,23 @@
                 </div>
             </div>
         </p-dialog>
+
+        <div id="main-panel" class="pane-container pane-horizontal">
+            <noscript class="container-fluid">
+              <div class="jumbotron">
+                <h1>Sorry!</h1>
+                <p class="lead">MicrobeTrace requires Javascript to run. Please <a href="https://www.enable-javascript.com/">enable Javascript</a> and refresh MicrobeTrace.</p>
+              </div>
+            </noscript>
+            <div id="global-timeline-wrapper" style="display: none;">
+              <div id="global-timeline" align="center">
+                <div><button type="button" id="timeline-play-button" class="btn btn-light btn-sm" (click)="playTimeline()">{{playBtnText}}</button>
+                <span id="global-timeline-field" contenteditable></span></div>
+                <!-- <svg></svg>
+                <mat-slider></mat-slider> -->
+              </div>  
+            </div>
+          </div>
 
        
         <p-dialog id="global-settings-link-color-table" 
