@@ -25,7 +25,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets/images/MT-Icon.png",
-              "src/MT-Icon.png"
+              "src/MT-Icon.png",
+              "src/default.microbetrace"
             ],
             "styles": [
               {
