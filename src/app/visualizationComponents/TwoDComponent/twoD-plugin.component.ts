@@ -53,6 +53,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     
     //Polygon Tab
     SelectedPolygonLabelVariable: string = "None";
+    SelectedPolygonColorVariable: string = "None";
     SelectedPolygonLabelOrientationVariable: string = "Right";
     SelectedPolygonLabelSizeVariable: number = 0.0;
     SelectedPolygonGatherValue: number = 0.0;
