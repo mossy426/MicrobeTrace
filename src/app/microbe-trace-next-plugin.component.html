@@ -54,7 +54,7 @@
                                         <a title="Center Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openCenter(i)"><i class="flaticon-eye primary"></i></a>
                                     </span>
                                     <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showPinAllNodes == true">
-                                        <a title="Pin All Nodes" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openPinAllNodes(i)"
+                                        <a #pinbutton title="Pin All Nodes" id="pinbutton" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openPinAllNodes(i)"
                                             [style.background]="commonService.session.network.allPinned ? 'lightblue': 'transparent'"
                                         ><i class="flaticon-pin primary"></i></a>
                                     </span>

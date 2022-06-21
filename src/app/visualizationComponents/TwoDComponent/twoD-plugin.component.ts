@@ -326,45 +326,56 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
                     .attr('pointer-events', d3.event.ctrlKey ? 'all' : 'none');
             });
 
-            this.visuals.twoD.eventManager.addGlobalEventListener('window', 'node-color-change', () => {
+            let that = this;
 
-                this.visuals.twoD.updateNodeColors;
-            });
+            // this.visuals.twoD.eventManager.addGlobalEventListener('window', 'node-color-change', () => {
 
-            this.visuals.twoD.eventManager.addGlobalEventListener('window', 'link-color-change', () => {
-
-                this.visuals.twoD.updateLinkColor;
-            });
-
-            this.visuals.twoD.eventManager.addGlobalEventListener('window', 'background-color-change', () => {
-
-                $('#network').css('background-color', this.visuals.twoD.commonService.session.style.widgets['background-color']);
-            });
-
-            this.visuals.twoD.eventManager.addGlobalEventListener('document', 'node-visibility link-visibility cluster-visibility node-selected', () => {
-
-                console.log('rendering');
-                this.visuals.twoD.render(false);
-            });
-
-            // $(document).on("node-visibility", {
-            //     console.log('rendering');
-            //     this.visuals.twoD.render(false);
+            //     this.visuals.twoD.updateNodeColors;
             // });
 
-            let that = this;
+            // $( document ).on( "node-color-change", function( ) {
+            //     that.visuals.twoD.updateNodeColors;
+            // });
+
+            // // this.visuals.twoD.eventManager.addGlobalEventListener('window', 'link-color-change', () => {
+
+            // //     this.visuals.twoD.updateLinkColor;
+            // // });
+
+            // $( document ).on( "link-color-change", function( ) {
+            //     that.visuals.twoD.updateLinkColor;
+            // });
+
+            // // this.visuals.twoD.eventManager.addGlobalEventListener('window', 'background-color-change', () => {
+
+            // //     $('#network').css('background-color', this.visuals.twoD.commonService.session.style.widgets['background-color']);
+            // // });
+
+            // $( document ).on( "background-color-change", function( ) {
+            //     $('#network').css('background-color', that.visuals.twoD.commonService.session.style.widgets['background-color']);
+            // });
+
+            // // this.visuals.twoD.eventManager.addGlobalEventListener('document', 'node-visibility link-visibility cluster-visibility node-selected', () => {
+
+            // //     this.visuals.twoD.render(false);
+            // // });
+
+
+            // $( document ).on( "node-selected", function( ) {
+            //         that.visuals.twoD.render(false);
+            // });
 
             $( document ).on( "node-visibility", function( ) {
                 that.visuals.twoD.render(false);
-              });
+            });
 
-              $( document ).on( "link-visibility", function( ) {
-                that.visuals.twoD.render(false);
-              });
+            $( document ).on( "link-visibility", function( ) {
+            that.visuals.twoD.render(false);
+            });
 
-              $( document ).on( "cluster-visibility", function( ) {
-                that.visuals.twoD.render(false);
-              });
+            $( document ).on( "cluster-visibility", function( ) {
+            that.visuals.twoD.render(false);
+            });
 
             this.visuals.twoD.eventManager.addGlobalEventListener('window', "node-selected", () => {
                 this.visuals.twoD.render(false);
@@ -531,13 +542,24 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
         const start = Date.now();
         let newNodes = this.visuals.twoD.commonService.getVisibleNodes(true);
-        let oldNodes = this.visuals.twoD.commonService.session.network.nodes;
+        let oldNodes;
+
+        if(this.visuals.twoD.commonService.session.style.widgets["timeline-date-field"] != 'None')
+            oldNodes = this.visuals.twoD.commonService.session.network.timelineNodes;
+        else
+            oldNodes = this.visuals.twoD.commonService.session.network.nodes;
+        
+        if (newNodes.length === 0 && this.visuals.twoD.commonService.session.style.widgets["timeline-date-field"] == 'None') return;
 
         newNodes.forEach((d, i) => {
-            let match = oldNodes.find(d2 => d2._id == d._id);
+            let match = oldNodes.find(d2 => d2.id == d.id);
             if (match) {
                 ['x', 'y', 'fx', 'fy', 'vx', 'vy', 'fixed'].forEach(v => {
-                    if (typeof match[v] != "undefined") d[v] = match[v];
+                    
+                    if (typeof match[v] != "undefined") {
+                        d[v] = match[v];
+                    } 
+
                 });
             }
         });
@@ -573,6 +595,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
 
         this.visuals.twoD.redrawNodes();
+        console.log('redrawing');
         this.visuals.twoD.updateNodeColors();
         this.visuals.twoD.redrawLabels();
         this.visuals.twoD.redrawNodeBorder();
@@ -595,8 +618,8 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
             .attr('dy', this.visuals.twoD.commonService.session.style.widgets['link-width'] + 2)
             .text(l => l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']]);
 
-        let layoutTick = this.visuals.twoD.force.nodes(this.visuals.twoD.commonService.session.network.nodes).on('tick', () => {
-            nodes
+        let layoutTick = () => {
+             nodes
                 .attr('transform', d => {
                     var ew =
                         d.fixed ?
@@ -623,7 +646,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
                         (l.source.y + l.target.y) / 2 + ')'
                     );
             }
-        });
+        };
 
         let foci = this.visuals.twoD.commonService.session.style.widgets['polygons-foci'];
         let gather = this.visuals.twoD.commonService.session.style.widgets['polygons-gather-force'];
@@ -728,7 +751,9 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         else delete this.visuals.twoD.commonService.temp.polygonGroups;
 
         let handleTick = d => {
-            if(d) return polygonsTick;
+            if(d) {
+                return polygonsTick;
+            }
             else return layoutTick;		
         }
 
@@ -1009,7 +1034,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
       });
 
-      window.dispatchEvent(new Event('node-selected'));
+      $(document).trigger('node-selected');
 
       
       if(this.polygonNodeSelected) {
@@ -1039,7 +1064,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         sessionNode.selected = false
       });
 
-      window.dispatchEvent(new Event('node-selected'));
+      $(document).trigger('node-selected');
 
     }
 
@@ -1130,11 +1155,24 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
     dragended(n) {
         if (!d3.event.active) this.visuals.twoD.force.alphaTarget(0);
+        let that = this;
         function unsetNode(d) {
             if (!d.fixed) {
+                console.log('not fixed');
                 d.fx = null;
                 d.fy = null;
-            }
+            } else {
+                // save node location back to temp network for pinned network
+                if(that.visuals.twoD.commonService.session.style.widgets["timeline-date-field"] != 'None') {
+                  let node = that.visuals.twoD.commonService.session.network.timelineNodes.find(d2 => d2._id == d._id);
+                  if(node) {
+                    node.x = d.x;
+                    node.y = d.y;
+                    node.fx = d.fx;
+                    node.fy = d.fy;
+                  }
+                }
+              }
         }
         if (this.visuals.twoD.multidrag) {
             this.visuals.twoD.selected.each(unsetNode);
@@ -1158,7 +1196,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
  
         this.visuals.twoD.render(false);
 
-        window.dispatchEvent(new Event('node-selected'));
+        $(document).trigger('node-selected');
     };
 
     showContextMenu(d) {
@@ -1336,7 +1374,11 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         let defaultSize = this.visuals.twoD.commonService.session.style.widgets['node-radius'];
         let size = defaultSize, med = defaultSize, oldrng, min, max;
         let sizeVariable = this.visuals.twoD.commonService.session.style.widgets['node-radius-variable'];
+        let scale;
+        let nodes;
         if (sizeVariable !== 'None') {
+            if (this.visuals.twoD.commonService.session.style.widgets["timeline-date-field"] == 'None') nodes = this.visuals.twoD.commonService.session.network.nodes;
+            else nodes = this.visuals.twoD.commonService.session.network.timelineNodes;
             let n = this.visuals.twoD.commonService.session.network.nodes.length;
             min = Number.MAX_VALUE;
             max = Number.MIN_VALUE;
@@ -1348,39 +1390,61 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
             }
             oldrng = max - min;
             med = oldrng / 2;
-        }
-        let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes);
+
+            let maxWidth = this.visuals.twoD.commonService.session.style.widgets['node-radius-max'];
+            let minWidth = this.visuals.twoD.commonService.session.style.widgets['node-radius-min'];
+            scale = d3.scaleLinear()
+            .domain([min, max])
+            .range([minWidth, maxWidth]);
+            }
+        
+        nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes);
 
         // TODO: Hides table row by default if no symbol variable - clean up
         if(symbolVariable === 'None') {
             $('#node-symbol-table-row').slideUp();
         }
 
-        nodes.selectAll('path')._parents.forEach(x=>{
-            const path = x.childNodes[0];
-            const data = x.__data__;
+        // console.log('nodes: ', nodes);
 
-            if (symbolVariable !== 'None') {
-                type = d3[this.visuals.twoD.commonService.temp.style.nodeSymbolMap(data[symbolVariable])];
+        nodes.selectAll('path').each(function (d) {
 
-                // Custom Shape Selected
-                if (type === undefined) {
-
-                    type = this.customShapes.shapes[this.visuals.twoD.commonService.temp.style.nodeSymbolMap(data[symbolVariable])];
-
-                }
-
-            }
+            if (symbolVariable !== 'None') type = d3[this.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
             if (sizeVariable !== 'None') {
-                size = data[sizeVariable];
-                if (!this.visuals.twoD.isNumber(size)) size = med;
-                size = (size - min) / oldrng;
-                size = size * size * defaultSize + 100;
+              size = d[sizeVariable];
+              if (!this.isNumber(size)) size = med;
+              size = scale(size);
             }
+            d3.select(this).attr('d', d3.symbol().size(size).type(type));          
+          });
 
-                d3.select(path).attr('d', d3.symbol().size(size).type(type));
+        // nodes.selectAll('path')._parents.forEach(x=>{
+        //     const path = x.childNodes[0];
+        //     const data = x.__data__;
 
-            });
+            
+
+        //     if (symbolVariable !== 'None') {
+        //         type = d3[this.visuals.twoD.commonService.temp.style.nodeSymbolMap(data[symbolVariable])];
+
+        //         // Custom Shape Selected
+        //         if (type === undefined) {
+
+        //             type = this.customShapes.shapes[this.visuals.twoD.commonService.temp.style.nodeSymbolMap(data[symbolVariable])];
+
+        //         }
+
+        //     }
+        //     if (sizeVariable !== 'None') {
+        //         size = data[sizeVariable];
+        //         if (!this.visuals.twoD.isNumber(size)) size = med;
+        //         size = (size - min) / oldrng;
+        //         size = size * size * defaultSize + 100;
+        //     }
+
+        //         d3.select(path).attr('d', d3.symbol().size(size).type(type));
+
+        //     });
     };
 
     private redrawNodeBorder(){
@@ -2091,7 +2155,6 @@ onPolygonColorTableChange(e) {
         // console.log('updating variable: ',variable );
         let links = this.visuals.twoD.svg.select('g.links').selectAll('line');
         if (variable == 'None') {
-            console.log('link colo in : ', this.visuals.twoD.commonService.session.style.widgets['link-color']);
             let color = this.visuals.twoD.commonService.session.style.widgets['link-color'],
                 opacity = 1 - this.visuals.twoD.commonService.session.style.widgets['link-opacity'];
             links

@@ -1954,10 +1954,13 @@ export class CommonService extends AppComponentBase implements OnInit {
         }
 
         let nodeColors;
-        if(window.context.commonService.session.style.nodeColorsTable[variable]) {
-        nodeColors = [...window.context.commonService.session.style.nodeColorsTable[variable]];
+
+        if(window.context.commonService.session.style.nodeColorsTable && window.context.commonService.session.style.nodeColorsTable[variable]) {
+            nodeColors = [...window.context.commonService.session.style.nodeColorsTable[variable]];
         } else {
-        nodeColors = window.context.commonService.session.style.nodeColorsTable[variable] = [...window.context.commonService.session.style.nodeColors];
+            window.context.commonService.session.style.nodeColorsTable = {};
+            window.context.commonService.session.style.nodeColorsTableKeys = {};
+            nodeColors = window.context.commonService.session.style.nodeColorsTable[variable] = [...window.context.commonService.session.style.nodeColors];
         }
 
         let aggregates = {};
@@ -1992,7 +1995,13 @@ export class CommonService extends AppComponentBase implements OnInit {
             );
         }
 
-        let keys = Object.keys(window.context.commonService.session.style.nodeColorsTableHistory)
+
+        if(!window.context.commonService.session.style.nodeColorsTableHistory) {
+            window.context.commonService.session.style.nodeColorsTableHistory = {
+                "null" : "#EAE553"
+            };
+        }
+        let keys = Object.keys(window.context.commonService.session.style.nodeColorsTableHistory);
 
         //Update Table History
         values.forEach( (val, ind) => {
@@ -2083,10 +2092,13 @@ export class CommonService extends AppComponentBase implements OnInit {
         }
 
         let linkColors;
-        if( window.context.commonService.session.style.linkColorsTable[variable]) {
-        linkColors =  window.context.commonService.session.style.linkColorsTable[variable];
+        console.log('link col: ',  window.context.commonService.session.style.linkColorsTable);
+        if( window.context.commonService.session.style.linkColorsTable && window.context.commonService.session.style.linkColorsTable[variable]) {
+            linkColors =  window.context.commonService.session.style.linkColorsTable[variable];
         } else {
-        linkColors =  window.context.commonService.session.style.linkColorsTable[variable] = [... window.context.commonService.session.style.linkColors];
+            window.context.commonService.session.style.linkColorsTable = {};
+            window.context.commonService.session.style.linkColorsTableKeys = {};
+            linkColors =  window.context.commonService.session.style.linkColorsTable[variable] = [... window.context.commonService.session.style.linkColors];
         }
 
         let aggregates = {};
@@ -2124,6 +2136,10 @@ export class CommonService extends AppComponentBase implements OnInit {
             let cycles = Math.ceil(values.length / window.context.commonService.session.style.linkColors.length);
             while (cycles-- > 0) colors = colors.concat(window.context.commonService.session.style.linkColors);
             window.context.commonService.session.style.linkColors = colors;
+        }
+
+        if (!window.context.commonService.session.style.linkAlphas) {
+            window.context.commonService.session.style.linkAlphas = [1];
         }
         if (values.length > window.context.commonService.session.style.linkAlphas.length) {
             window.context.commonService.session.style.linkAlphas = window.context.commonService.session.style.linkAlphas.concat(
@@ -2855,30 +2871,13 @@ export class CommonService extends AppComponentBase implements OnInit {
                 node.visible = node.visible && cluster.visible;
             }
             if (dateField != "None") {
-                if (window.context.commonService.session.state.timeEnd) {
-                    if (node[dateField]){
-                        console.log('in date: ', node[dateField]);
-                        node.visible =
-                        node.visible &&
-                        window.context.commonService.session.state.timeEnd > moment(node[dateField]).toDate();                    }else {
-                        node.visible = false;
-                    }
-                   
-                }
-                if (window.context.commonService.session.state.timeStart) {
-                  if (node[dateField]){
-                      console.log('in date: ', node[dateField], node.visible);
-                    node.visible = node.visible && window.context.commonService.session.state.timeStart > moment(n[dateField]).toDate();
-                  }else {
-                      node.visible = false;
-                  }
-                }
+                // console.log('date field not none: visible: ', node.visible);
+                node.visible = node.visible && moment(window.context.commonService.session.state.timeEnd).toDate() >= moment(node[dateField]).toDate();
+                // console.log('date compare: ', moment(window.context.commonService.session.state.timeEnd).toDate() >= moment(node[dateField]).toDate());
+
             }
         }
         if (!silent) $(document).trigger("node-visibility");
-
-        console.log('trigering');
-        $(document).trigger("node-visibility");
        
         console.log("Node Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
     };
@@ -2917,15 +2916,19 @@ export class CommonService extends AppComponentBase implements OnInit {
         let clusters = window.context.commonService.session.data.clusters;
         let n = links.length;
 
+        console.log('threshold: ', threshold);
+
         for (let i = 0; i < n; i++) {
             let link = links[i];
             let visible = true;
             if (link[metric] == null) {
-                console.log('visible is false');
                 link.visible = true;
                 continue;
             } else {
                 visible = link[metric] <= threshold;
+                if (visible){
+                    console.log('link metric: ', link[metric] , link);
+                }
             }
             if (showNN) {
                 visible = visible && link.nn;
@@ -2936,7 +2939,9 @@ export class CommonService extends AppComponentBase implements OnInit {
             }
             link.visible = visible;
 
-            link.visible = false;
+            if(link.visible) {
+                console.log('visible: ', link);
+            }
 
         }
         if (!silent) $(document).trigger("link-visibility");
@@ -2949,7 +2954,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             window.context.commonService.setClusterVisibility(true);
             window.context.commonService.setLinkVisibility(true);
             window.context.commonService.setNodeVisibility(true);
-            //["cluster", "link", "node"].forEach(thing => $(document).trigger(thing + "-visibility"));
+            ["cluster", "link", "node"].forEach(thing => $(document).trigger(thing + "-visibility"));
             window.context.commonService.updateStatistics();
         });
     };

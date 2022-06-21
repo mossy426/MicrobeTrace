@@ -1,6 +1,5 @@
-﻿import { ChangeDetectionStrategy, Component, OnInit, Injector, ViewChild, ViewChildren, AfterViewInit, Compiler, TemplateRef, ComponentRef, ViewContainerRef, QueryList, ElementRef, Output, EventEmitter, ChangeDetectorRef, OnDestroy } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, OnInit, Injector, ViewChild, ViewChildren, AfterViewInit, Compiler, TemplateRef, ComponentRef, ViewContainerRef, QueryList, ElementRef, Output, EventEmitter, ChangeDetectorRef, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
-
 import { CommonService } from './contactTraceCommonServices/common.service';
 import { FilesComponent } from './filesComponent/files-plugin.component';
 import { TwoDComponent } from './visualizationComponents/TwoDComponent/twoD-plugin.component';
@@ -40,6 +39,7 @@ import * as moment from 'moment';
 @Component({
     changeDetection: ChangeDetectionStrategy.Default,
     selector: 'contact-trace',
+    encapsulation: ViewEncapsulation.None,
     templateUrl: './microbe-trace-next-plugin.component.html',
     styleUrls: ['./microbe-trace-next-plugin.component.less']
 })
@@ -191,6 +191,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     @ViewChild('ledgerloader') spinnerElement: ElementRef;
     @ViewChild('ledgerloadDiv') spinnerDivElement: ElementRef;
     @ViewChild('globalSettingsTab') globalSettingsTab: TabsetComponent;
+
+    @ViewChild('pinbutton') pinBtn: ElementRef<HTMLElement>;
+
 
     public HideThisForNow: boolean = true;
 
@@ -801,12 +804,15 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             return;
         }
         if(!this.visuals.microbeTrace.commonService.temp.style.nodeColor) $("#node-color-variable").trigger("change");
+
+        let el: HTMLElement = this.pinBtn.nativeElement;
+        // console.log('pin : ', el);
         if (!$('#pinbutton').prop('disabled')){
             if (!loadingJsonFile) {
                 this.visuals.microbeTrace.commonService.session.network.timelinePinned = this.visuals.microbeTrace.commonService.session.network.allPinned;
             if(!this.visuals.microbeTrace.commonService.session.network.allPinned) {
                 this.visuals.microbeTrace.commonService.updatePinNodes(true);
-                $('#pinbutton').trigger('click');
+                this.openPinAllNodes(1);
             }
             this.visuals.microbeTrace.commonService.session.network.timelineNodes = this.visuals.microbeTrace.commonService.getNetworkNodes();
             }
@@ -868,6 +874,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.currentTimelineTargetValue = width;
         this.visuals.microbeTrace.commonService.session.state.timeStart = startDate;
 
+        let that = this;
         var playButton = d3.select("#timeline-play-button");
         if (playButton.text() == "Pause") playButton.text("Play");
         this.xAttribute = d3.scaleTime()
@@ -878,27 +885,25 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         var slider = svgTimeline.append("g")
             .attr("class", "slider")
             .attr("transform", "translate(30," + height/2 + ")");
-        slider.append("mat-slider")
-            // .attr("class", "track")
-            // .attr("x1", this.xAttribute.range()[0])
-            // .attr("x2", this.xAttribute.range()[1])
-            // .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
-            // .attr("class", "track-inset")
-            // .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
-            // .attr("class", "track-overlay")
-            // .call(d3.drag()
-            //     .on("start.interrupt", function() { slider.interrupt(); })
-            //     .on("start drag", function() {
-            //         this.currentTimelineTargetValue = d3.event.x;
-            //         this.update(this.xAtttribute.invert(this.currentTimelineTargetValue));
-            //         if (this.playBtnText == "Pause") {
-            //         this.playBtnText = "Play";
-            //         clearInterval(this.visuals.microbeTrace.commonService.session.timeline);
-            //         }
-            //     })
-            // );
-            console.log('start date: ', startDate);
-            console.log('start date: ', this.handleDateFormat(startDate));
+        slider.append("line")
+            .attr("class", "track")
+            .attr("x1", this.xAttribute.range()[0])
+            .attr("x2", this.xAttribute.range()[1])
+            .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+            .attr("class", "track-inset")
+            .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+            .attr("class", "track-overlay")
+            .call(d3.drag()
+                .on("start.interrupt", function() { slider.interrupt(); })
+                .on("start drag", function() {
+                    that.currentTimelineTargetValue = d3.event.x;
+                    that.update(that.xAttribute.invert(that.currentTimelineTargetValue));
+                    if (that.playBtnText == "Pause") {
+                        that.playBtnText = "Play";
+                    clearInterval(that.visuals.microbeTrace.commonService.session.timeline);
+                    }
+                })
+            );
         slider.insert("g", ".track-overlay")
             .attr("class", "ticks")
             .attr("transform", "translate(0," + 18 + ")")
@@ -910,14 +915,17 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             .attr("y", 10)
             .attr("text-anchor", "middle")
             .text(function(d) { return tickDateFormat(d); });
-        this.handle = slider.insert("circle", ".track-overlay")
-            .attr("class", "handle")
-            .attr("r", 9);
+
+
         this.label = slider.append("text")  
             .attr("class", "label")
             .attr("text-anchor", "middle")
             .text(this.handleDateFormat(startDate))
             .attr("transform", "translate(25," + (-20) + ")")
+
+            this.handle = slider.insert("circle", ".label")
+            .attr("class", "handle")
+            .attr("r", 9);
 
         this.visuals.microbeTrace.commonService.session.style.widgets["timeline-date-field"] = field;
         this.visuals.microbeTrace.commonService.session.state.timeStart = startDate;
@@ -951,27 +959,17 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     update(h) {
 
-        console.log('updating:', h);
-        console.log('text: ', this.xAttribute(h));
         this.handle.attr("cx", this.xAttribute(h));
         this.label
         .attr("x", this.xAttribute(h))
         .text(this.handleDateFormat(h));
         this.visuals.microbeTrace.commonService.session.state.timeEnd = h;
         this.visuals.microbeTrace.commonService.setNodeVisibility(false);
-        // this.visuals.microbeTrace.commonService.setLinkVisibility(false);
+        this.visuals.microbeTrace.commonService.setLinkVisibility(false);
         this.visuals.microbeTrace.commonService.updateStatistics();
-
-        for (let i = 0; i < window.context.commonService.session.data.nodes.length; i++) {
-
-            let node = this.visuals.microbeTrace.commonService.session.data.nodes[i];
-            console.log("node: ", node, node.visible);
-
-        }
   }
 
     step(that : any) { 
-        // console.log('xx: ', that.xAttribute);
         that.update(that.xAttribute.invert(that.currentTimelineValue));
         if (that.currentTimelineValue > that.currentTimelineTargetValue) { 
             that.currentTimelineValue = 0;
@@ -980,8 +978,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         return;
         }
         that.currentTimelineValue = that.currentTimelineValue + (that.currentTimelineTargetValue/151);
-
-        console.log('timelineValue: ', that.currentTimelineValue);
 
     }
 
@@ -2229,6 +2225,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     openPinAllNodes(tabNdx: any): void {
+        console.log('open : ', tabNdx);
         this.homepageTabs[tabNdx].componentRef.instance.openPinAllNodes();
     }
 
