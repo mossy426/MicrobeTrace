@@ -18,7 +18,7 @@ import { CustomShapes } from '@app/helperClasses/customShapes';
 @Component({
     selector: 'TwoDComponent',
     templateUrl: './twoD-plugin.component.html',
-    styleUrls: ['./twoD-plugin.component.css']
+    styleUrls: ['./twoD-plugin.component.scss']
 })
 export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTraceNextPluginEvents, OnDestroy {
 
@@ -2243,7 +2243,7 @@ onPolygonColorTableChange(e) {
     openSettings() {
 
         this.visuals.twoD.Node2DNetworkExportDialogSettings.setVisibility(true);
-       // this.context.twoD.ShowStatistics = !this.context.twoD.Show2DSettingsPane;
+       this.visuals.twoD.ShowStatistics = !this.visuals.twoD.Show2DSettingsPane;
 
     }
 

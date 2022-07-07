@@ -116,9 +116,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     StatisticsTypes: any = [
         { label: 'Show', value: 'Show' }
-        //,{ label: 'Hide', value: 'Hide' }
+        ,{ label: 'Hide', value: 'Hide' }
     ];
-    SelectedStatisticsTypesVariable: string = "";
+    SelectedStatisticsTypesVariable: string = "Hide";
 
     SelectedColorNodesByVariable: string = "None";
     SelectedNodeColorVariable: string = "#1f77b4";
@@ -563,11 +563,24 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     onShowStatisticsChanged() {
 
+
+        if (this.SelectedStatisticsTypesVariable === "Show"){
+            console.log('updateing 1: ' );
+            this.visuals.microbeTrace.commonService.updateStatistics();
+            $("#network-statistics-wrapper").fadeIn();
+        } else {
+            console.log('updateing 12 ' );
+            this.visuals.microbeTrace.commonService.updateStatistics();
+            $("#network-statistics-wrapper").fadeOut();
+        }
+  
+
         this.commonService.GlobalSettingsModel.SelectedStatisticsTypesVariable = this.SelectedStatisticsTypesVariable;
 
-        if (this.homepageTabs[this.activeTabNdx].label == "2D Network") {
-            this.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef.instance.enableSettings();
-        }
+
+        // if (this.homepageTabs[this.activeTabNdx].label == "2D Network") {
+        //     this.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef.instance.enableSettings();
+        // }
 
     }
 
@@ -1528,7 +1541,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     public loadDefaultVisualization(e: string) {
 
         e = e.replace("_", " ");
-        this.Viewclick(e);
+        // this.Viewclick(e);
+        this.Viewclick("Table");
     }
 
     public getfileContent(fileList: FileList) {

@@ -36,37 +36,39 @@
 
 
 
-<!-- <p-sidebar [(visible)]="ShowStatistics" position="right"> -->
+<!-- <p-sidebar [(visible)]="ShowStatistics" position="right">
 
-    <!-- <div id="color-transparency-wrapper" *ngIf="false">
+    <div id="color-transparency-wrapper" *ngIf="false">
         <input type="range" class="custom-range" id="color-transparency" min="0" max="1" step="0.05" value="1" [(ngModel)]="SelectedColorTransparencyVariable" (change)="onSelectedColorTransparencyVariableChange($event)">
-    </div> -->
-
-    <!-- <div id="network-statistics-wrapper">
-        <div id="network-statistics-draghandle"><span class="oi oi-move"></span></div>
-        <table id="network-statistics-table">
-            <tr>
-                <td class="text-right">
-                    <span id="numberOfNodes"></span>
-                    (<span id="numberOfSelectedNodes"></span>)
-                </td>
-                <td>Nodes (Selected)</td>
-            </tr>
-            <tr>
-                <td id="numberOfVisibleLinks" class="text-right"></td>
-                <td>Links</td>
-            </tr>
-            <tr>
-                <td id="numberOfDisjointComponents" class="text-right"></td>
-                <td>Clusters</td>
-            </tr>
-            <tr>
-                <td id="numberOfSingletonNodes" class="text-right"></td>
-                <td>Singletons</td>
-            </tr>
-        </table>
     </div>
-</p-sidebar> -->
+
+
+</p-sidebar>  -->
+
+<div id="network-statistics-wrapper">
+    <div id="network-statistics-draghandle"><span class="oi oi-move"></span></div>
+    <table id="network-statistics-table">
+        <tr>
+            <td class="text-right">
+                <span id="numberOfNodes"></span>
+                (<span id="numberOfSelectedNodes"></span>)
+            </td>
+            <td>Nodes (Selected)</td>
+        </tr>
+        <tr>
+            <td id="numberOfVisibleLinks" class="text-right"></td>
+            <td>Links</td>
+        </tr>
+        <tr>
+            <td id="numberOfDisjointComponents" class="text-right"></td>
+            <td>Clusters</td>
+        </tr>
+        <tr>
+            <td id="numberOfSingletonNodes" class="text-right"></td>
+            <td>Singletons</td>
+        </tr>
+    </table>
+</div>
 
 
 
@@ -80,7 +82,7 @@
         <tabset class="tab-container tabbable-line">
             <tab heading="{{'Nodes' | localize}}" [active]="true" customClass="m-tabs__item">
                 <p-accordion>
-                    <p-accordionTab style="color:#495057" header="Labels and Tooltips">
+                    <p-accordionTab [selected]="false" style="color:#495057" header="Labels and Tooltips">
                         <div #nodecontrolslabels>
                             <div class="form-group row" title="What field should be displayed as a label for the node?">
                                 <div class="col-4"><label for="node-label-variable">Label</label></div>
@@ -182,7 +184,7 @@
                         </div>
                     </p-accordionTab>
 
-                    <p-accordionTab style="color:#495057" header="Colors">
+                    <p-accordionTab style="color:#495057" [selected]="false" header="Colors">
                         <button pButton type="button" label="Show Colors" class="ui-button-raised" (click)="showGlobalSettings()"></button>
                     </p-accordionTab>
 

@@ -372,7 +372,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         SelectedNodeColorVariable: "None",
         SelectedLinkColorVariable: "#a6cee3",
         SelectedPruneWityTypesVariable: "None",
-        SelectedStatisticsTypesVariable: "",
+        SelectedStatisticsTypesVariable: "Hide",
         SelectedClusterMinimumSizeVariable: 0,
         SelectedLinkSortVariable: "Distance",
         SelectedLinkThresholdVariable: 0,
@@ -1685,7 +1685,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         console.log("Total load time:", window.context.commonService.session.meta.loadTime.toLocaleString(), "ms");
 
         setTimeout(() => {
-
+            console.log('launching view: ',window.context.commonService.session.style.widgets['default-view']);
             window.context.commonService.launchView(window.context.commonService.session.style.widgets['default-view']);
 
         }, 1000);
@@ -1894,6 +1894,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     getVisibleClusters(copy: any = false) {
         let clusters = window.context.commonService.session.data.clusters;
+        console.log('get vis: ', clusters);
         let n = clusters.length;
         let out = [],
             cluster = null;
@@ -1920,7 +1921,9 @@ export class CommonService extends AppComponentBase implements OnInit {
         let clusterCount = 0;
         if (window.context.commonService.session.style.widgets["timeline-date-field"] == 'None') {
             linkCount = vlinks.length;
+            console.log('clusterss: ', window.context.commonService.session.data.clusters);
             clusterCount = window.context.commonService.session.data.clusters.filter(cluster => cluster.visible && cluster.nodes > 1).length;
+            console.log('cluster count 1: ', clusterCount);
         } else {
             let n = vlinks.length;
             for (let i = 0; i < n; i++) {
@@ -1937,6 +1940,8 @@ export class CommonService extends AppComponentBase implements OnInit {
                 else clusters[id] = 1;
             }
             clusterCount = window.context.commonService.session.data.clusters.filter(cluster => clusters[cluster.id] && clusters[cluster.id]>2 && cluster.visible && cluster.nodes > 1).length;
+            console.log('cluster count 2: ', clusterCount);
+
         }
         let singletons = vnodes.filter(d => d.degree == 0).length;
         $("#numberOfSelectedNodes").text(vnodes.filter(d => d.selected).length.toLocaleString());
@@ -2226,8 +2231,8 @@ export class CommonService extends AppComponentBase implements OnInit {
     reset() {
         //debugger;
 
-        //$("#network-statistics-hide").parent().trigger("click");
-        //$("#SettingsTab").attr("data-target", "#sequence-controls-modal");
+        // $("#network-statistics-hide").parent().trigger("click");
+        // $("#SettingsTab").attr("data-target", "#sequence-controls-modal");
 
         const mapData = this.temp.mapData;
         this.temp = this.tempSkeleton();
@@ -2777,11 +2782,12 @@ export class CommonService extends AppComponentBase implements OnInit {
 
             let DFS = (id, cluster) => {
                 if (tempnodes.indexOf(id) >= 0) return;
+                // console.log('past return, temp');
                 tempnodes.push(id);
                 let node: any = {};
                 for (let i = 0; i < numNodes; i++) {
                     let d = nodes[i];
-                    if (d._id == id) {
+                    if (d.id == id) {
                         node = d;
                         break;
                     }
@@ -2807,7 +2813,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             for (let k = 0; k < numNodes; k++) {
                 let d = nodes[k];
                 d.degree = 0;
-                let id = d._id;
+                let id = d.id;
+                console.log('node: ', id);
                 if (tempnodes.indexOf(id) == -1) {
                     let cluster = {
                         id: clusters.length,
@@ -2823,6 +2830,7 @@ export class CommonService extends AppComponentBase implements OnInit {
                     if (tempnodes.length == numNodes) break;
                 }
             }
+
             console.log("Cluster Tagging time:", (Date.now() - start).toLocaleString(), "ms");
 
             start = Date.now();
@@ -2835,17 +2843,18 @@ export class CommonService extends AppComponentBase implements OnInit {
                     t = false;
                 for (let n = 0; n < numNodes; n++) {
                     let node = nodes[n];
-                    if (l.source == node._id) {
+                    if (l.source == node.id) {
                         s = true;
                         node.degree++;
                     }
-                    if (l.target == node._id) {
+                    if (l.target == node.id) {
                         t = true;
                         node.degree++;
                     }
                     if (s && t) break;
                 }
             }
+            console.log('clustersssss: ' , clusters);
             clusters.forEach(c => {
                 c.links = c.links / 2;
                 c.links_per_node = c.links / c.nodes;
@@ -2916,8 +2925,6 @@ export class CommonService extends AppComponentBase implements OnInit {
         let clusters = window.context.commonService.session.data.clusters;
         let n = links.length;
 
-        console.log('threshold: ', threshold);
-
         for (let i = 0; i < n; i++) {
             let link = links[i];
             let visible = true;
@@ -2926,9 +2933,6 @@ export class CommonService extends AppComponentBase implements OnInit {
                 continue;
             } else {
                 visible = link[metric] <= threshold;
-                if (visible){
-                    console.log('link metric: ', link[metric] , link);
-                }
             }
             if (showNN) {
                 visible = visible && link.nn;
@@ -2939,9 +2943,6 @@ export class CommonService extends AppComponentBase implements OnInit {
             }
             link.visible = visible;
 
-            if(link.visible) {
-                console.log('visible: ', link);
-            }
 
         }
         if (!silent) $(document).trigger("link-visibility");
