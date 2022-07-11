@@ -53,13 +53,13 @@
     header="Geospatial Settings" [contentStyle]="{'max-height': '70vh'}">
     <tabset class="tab-container tabbable-line">
         <tab heading="{{'Data' | localize}}" customClass="m-tabs__item">
-            <div class="form-group row">
+            <!-- <div class="form-group row">
                 <div class="col-4">Geospatial</div>
                 <div class="col-8">
                     <p-selectButton [options]="GeospatialTypes" [(ngModel)]="SelectedGeospatialTypeVariable"
                         (ngModelChange)="onGeospatialTypeChange($event)"></p-selectButton>
                 </div>
-            </div>
+            </div> -->
 
             <ng-container *ngIf="SelectedGeospatialTypeVariable === 'Off'">
 

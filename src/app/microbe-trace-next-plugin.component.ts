@@ -1542,7 +1542,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         e = e.replace("_", " ");
         // this.Viewclick(e);
-        this.Viewclick("Table");
+        this.Viewclick("Map");
     }
 
     public getfileContent(fileList: FileList) {
