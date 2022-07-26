@@ -71,8 +71,10 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     }
 
     openSettings() {
-
+        this.visuals.twoD.PhylogeneticTreeExportDialogSettings.setVisibility(true);
+       // this.context.twoD.ShowStatistics = !this.context.twoD.Show2DSettingsPane;
     }
+
 
     openExport() {
 
