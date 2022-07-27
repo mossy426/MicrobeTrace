@@ -32,11 +32,12 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Update angular web app
 
 1. Checkout angularMigration branch of forked repo.
-2. Run an npm install to get node modules.
-3. Make changes to the webapp and test locally.
-4. Run ng build --prod --optimization=false --base-href "https://YOURusername.github.io/MicrobeTrace/"
-5. Copy all content generated within the dist folder of your local repo after building.
-6. Checkout gh-pages branch and replace all content with copied content - The url should build in a couple minutes.
+2. Run npm i angular-cli-ghpages --save-dev  (Only if you dont already have it. This will install globally)
+3. Run an npm install to get node modules if not done yet.
+4. Make changes to the webapp and test locally.
+5. Run ng build --prod --optimization=false --base-href "https://YOURusername.github.io/MicrobeTrace/"
+6. Run npx ngh --dir dist/Microbetrace
+7. Updates will be visible in 5-10 minutes.
 
 IMPORTANT before building dist folder - If adding new assets that are loaded via filepath in the app (.ie src="img/img.png"), follow these steps:
 1. Add the asset filepath to the assets array in the angular.json file starting from the root.
