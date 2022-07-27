@@ -7,13 +7,15 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "deploy": "ng build --prod --optimization=false --base-href https://mossy426.github.io/MicrobeTrace/ && npx ngh --dir dist/Microbetrace"
   },
   "browser": {
     "image-size": false
   },
   "private": true,
   "dependencies": {
+    "3d-force-graph": "^1.55.13",
     "@angular/animations": "~7.2.0",
     "@angular/cdk": "^7.3.2",
     "@angular/common": "~7.2.0",
@@ -30,7 +32,6 @@
     "@types/googlemaps": "^3.39.6",
     "@types/jquery": "^3.3.38",
     "@types/leaflet.markercluster": "^1.4.2",
-    "3d-force-graph": "^1.55.13",
     "abp-ng2-module": "^3.2.4",
     "abp-web-resources": "^3.8.5",
     "core-js": "^2.5.4",
@@ -44,6 +45,7 @@
     "moment": "^2.29.3",
     "moment-timezone": "^0.5.23",
     "ngx-bootstrap": "^4.0.0",
+    "node-sass": "^4.12.0",
     "object-path": "^0.11.8",
     "plotly.js": "^1.50.1",
     "primeicons": "^1.0.0",
