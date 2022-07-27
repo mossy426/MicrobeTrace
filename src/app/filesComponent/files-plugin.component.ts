@@ -418,8 +418,9 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             this.commonService.localStorageService.setItem('stash-auto', 'false');
         });
 
-        $.getJSON("outbreak.microbetrace", window.context.commonService.applySession);
-        
+        // $.getJSON("../assets/outbreak.microbetrace", window.context.commonService.applySession);
+        // Use this when building production (.ie gh-pages branch)
+        $.getJSON("outbreak.microbetrace", window.context.commonService.applySession);        
     }
 
 
