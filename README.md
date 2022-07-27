@@ -26,7 +26,7 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 1. Fork repo to personal account.
 2. Navigate to settings of forked repo.
-3. Go to pages in the sidebar
+3. Go to pages in the sidebar.
 4. Source should be gh-pages branch and the root folder.
 
 ## Update angular web app
