@@ -33,7 +33,7 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 1. Checkout angularMigration branch of forked repo.
 2. Run an npm install to get node modules.
-3, Make changes to the webapp and test locally.
+3. Make changes to the webapp and test locally.
 4. Run ng build --prod --optimization=false --base-href "https://YOURusername.github.io/MicrobeTrace/"
 5. Copy all content generated within the dist folder of your local repo after building.
 6. Checkout gh-pages branch and replace all content with copied content - The url should build in a couple minutes.
