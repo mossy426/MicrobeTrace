@@ -40,8 +40,9 @@ import { HistogramComponent } from './visualizationComponents/HistogramComponent
 import { MapComponent } from './visualizationComponents/MapComponent/map-plugin.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
-import { MatButtonModule, MatInputModule, MatMenuModule, MatToolbarModule } from '@angular/material';
+import { MatButtonModule, MatInputModule, MatMenuModule, MatToolbarModule, MatSliderModule } from '@angular/material';
 import { DndDirective } from '@shared/dnd.directive';
+
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { DndDirective } from '@shared/dnd.directive';
     MatButtonModule,
     MatInputModule,
     MatMenuModule,
+    MatSliderModule,
     MatToolbarModule,
     HttpClientJsonpModule,
     ModalModule.forRoot(),

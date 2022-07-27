@@ -418,7 +418,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             this.commonService.localStorageService.setItem('stash-auto', 'false');
         });
 
-        $.getJSON("../assets/default.microbetrace", window.context.commonService.applySession);
+        $.getJSON("outbreak.microbetrace", window.context.commonService.applySession);
         
     }
 
@@ -525,7 +525,6 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
     creatLaunchSequences() {
 
-        console.log('launch seq1');
         this.commonService.session.meta.startTime = Date.now();
         $('#launch').prop('disabled', true);
 
@@ -544,12 +543,10 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
 
         this.commonService.session.meta.anySequences = this.commonService.session.files.some(file => (file.format == "fasta") || (file.format == "node" && file.field2 !== "None"));
-        console.log('launch seq2', this.commonService.session.files);
 
         this.commonService.session.files.forEach((file, fileNum) => {
             const start = Date.now();
             const origin = [file.name];
-            console.log('files: ', file);
             if (file.format == 'fasta') {
 
                 this.showMessage(`Parsing ${file.name} as FASTA...`);
@@ -910,7 +907,6 @@ export class FilesComponent extends AppComponentBase implements OnInit {
     processData() {
         let nodes = this.commonService.session.data.nodes;
         this.commonService.session.data.nodeFilteredValues = nodes;
-        console.log('nodessss: ', nodes);
         //Add links for nodes with no edges
         this.uniqueNodes.forEach(x => {
             this.commonService.addLink(Object.assign({
