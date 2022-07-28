@@ -9,6 +9,7 @@ import { HistogramComponent } from "./visualizationComponents/HistogramComponent
 import { TableComponent } from "./visualizationComponents/TableComponent/table-plugin-component";
 import { GanttComponent } from "./visualizationComponents/GanttCompnent/gantt-plugin.component";
 import { PhylogeneticComponent } from "./visualizationComponents/PhylogeneticComponent/phylogenetic-plugin.component";
+import { TimelineComponent } from "./visualizationComponents/TimelineComponent/timeline-plugin.component";
 
 @Injectable({
     providedIn: 'root',
@@ -17,6 +18,7 @@ export class MicrobeTraceNextVisuals {
     public microbeTrace: MicrobeTraceNextHomeComponent;
     public filesPlugin: FilesComponent;
     public twoD: TwoDComponent;
+    public timeline: TimelineComponent;
     public threeD: ThreeDComponent;
     public gisMap: MapComponent;
     public histogram: HistogramComponent;
