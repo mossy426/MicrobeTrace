@@ -152,20 +152,34 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
         fillCanvas: true,
         size: 15,
         shape: 'circle',
+        showLabels: true,
         hoverLabels: true,
         selectedColour: '#FF8300',
+        showBranchLengthLabels: true,
       });
       tree.load(treeString);
       tree.setTreeType('rectangular');
       tree.setNodeSize(15);
-      tree.setTextSize(20);
+      // tree.setTextSize(20);
       tree.leaves.forEach((x) => {
         x.setDisplay({
+          labelStyle: {
+            textSize: 30,
+          },
           leafStyle: {
             fillStyle: '#1F77B4',
           }
         });
       });
+      for (const branch in tree.branches.keys()) {
+        if (branch in tree.branches.keys()) {
+          tree.branches[branch].setDisplay({
+            labelStyle: {
+              textSize: 20,
+            }
+          });
+        }
+      }
       tree.saveOriginalTree();
       const phyCanv = document.querySelector('#phylocanvas');
       const canvHeight = phyCanv.clientHeight;
