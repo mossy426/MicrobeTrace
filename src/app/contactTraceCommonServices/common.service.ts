@@ -1685,8 +1685,10 @@ export class CommonService extends AppComponentBase implements OnInit {
         console.log("Total load time:", window.context.commonService.session.meta.loadTime.toLocaleString(), "ms");
 
         setTimeout(() => {
-            console.log('launching view: ',window.context.commonService.session.style.widgets['default-view']);
-            window.context.commonService.launchView(window.context.commonService.session.style.widgets['default-view']);
+            // console.log('launching view: ',window.context.commonService.session.style.widgets['default-view']);
+            // window.context.commonService.launchView(window.context.commonService.session.style.widgets['default-view']);
+            console.log('launching view: Phylogenetic Tree');
+            window.context.commonService.launchView("Phylogenetic Tree");
 
         }, 1000);
 
