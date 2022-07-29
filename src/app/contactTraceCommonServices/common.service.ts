@@ -634,8 +634,16 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     addNode(newNode: any, check: any = null) {
 
+        //  If no _id, set _id to id
         if (window.context.commonService.isNumber(newNode._id)) {
             newNode._id = "" + newNode._id;
+            if (!newNode._id || newNode._id === "") {
+                newNode._id = newNode.id;
+            }
+        } else {
+            if (newNode.id) {
+                newNode._id = newNode.id;
+            }
         }
 
         if (window.context.commonService.session.data.nodeExclusions.indexOf(newNode._id) > -1) {

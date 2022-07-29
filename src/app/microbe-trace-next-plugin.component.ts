@@ -1541,8 +1541,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     public loadDefaultVisualization(e: string) {
 
         e = e.replace("_", " ");
-        // this.Viewclick(e);
-        this.Viewclick("Map");
+        this.Viewclick(e);
+        // this.Viewclick("Map");
     }
 
     public getfileContent(fileList: FileList) {

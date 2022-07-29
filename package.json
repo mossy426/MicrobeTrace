@@ -1,5 +1,5 @@
 {
-  "name": "sample-app",
+  "name": "MicrobeTrace",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,7 +7,11 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "deploy": "ng build --prod --optimization=false --base-href https://mossy426.github.io/MicrobeTrace/ && npx ngh --dir dist/Microbetrace"
+  },
+  "browser": {
+    "image-size": false
   },
   "private": true,
   "dependencies": {
@@ -40,7 +44,7 @@
     "moment": "^2.29.3",
     "moment-timezone": "^0.5.23",
     "ngx-bootstrap": "^4.0.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^4.12.0",
     "object-path": "^0.11.8",
     "plotly.js": "^1.50.1",
     "primeicons": "^1.0.0",
@@ -89,6 +93,6 @@
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "typescript": "~3.2.2",
-    "xlsx": "0.14.5"
+    "xlsx": "^0.18.5"
   }
 }

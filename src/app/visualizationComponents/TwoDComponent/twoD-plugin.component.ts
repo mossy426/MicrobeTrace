@@ -1367,7 +1367,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
        
         // Custom Shape Selected
         if (type === undefined) {
-            type = this.customShapes.shapes[this.visuals.twoD.commonService.session.style.widgets['node-symbol']]
+            type = this.customShapes.shapes[this.visuals.twoD.commonService.session.style.widgets['node-symbol']];
         }
 
         //* Sizes:
@@ -1407,17 +1407,30 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
         // console.log('nodes: ', nodes);
 
+        let that = this;
+
         nodes.selectAll('path').each(function (d) {
 
-            if (symbolVariable !== 'None') type = d3[this.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
+            if (symbolVariable !== 'None') {
+
+                type = d3[that.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
+
+                if (type === undefined) {
+                    type = that.customShapes.shapes[that.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
+                }
+    
+            } 
             if (sizeVariable !== 'None') {
               size = d[sizeVariable];
-              if (!this.isNumber(size)) size = med;
+              if (!that.isNumber(size)) size = med;
               size = scale(size);
             }
-            d3.select(this).attr('d', d3.symbol().size(size).type(type));          
+
+            d3.select(this).attr('d', d3.symbol().size(size).type(type));    
+            
           });
 
+        // TODO: Remove when done
         // nodes.selectAll('path')._parents.forEach(x=>{
         //     const path = x.childNodes[0];
         //     const data = x.__data__;
