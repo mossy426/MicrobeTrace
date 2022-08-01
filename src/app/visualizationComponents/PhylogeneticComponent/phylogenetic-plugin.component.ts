@@ -54,47 +54,49 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     ToolTipFieldList: SelectItem[] = [];
 
 
-    // Node Tab
-    SelectedNodeLabelVariable: string = "None";
-    SelectedNodeLabelOrientationVariable: string = "Right";
-    SelectedNodeTooltipVariable: string = "None";
-    SelectedNodeSymbolVariable: string = "None";
-    SelectedNodeShapeVariable: string = "symbolCircle";
-    SelectedNodeRadiusVariable: string = "None";
-    SelectedNodeRadiusSizeVariable: string = "None";
-    TableTypes: any = [
-        { label: 'Show', value: 'Show' },
-        { label: 'Hide', value: 'Hide' }
+    // Tree Tab
+    TreeTypes: any = [
+        { label: 'Weighted Dendrogram', value: 'weighted_dendrogram' },
+        { label: 'Unweighted Dendrogram', value: 'weighted_dendrogram' },
+        { label: 'Tree', value: 'Tree' },
     ];
-    SelectedNetworkTableTypeVariable: string = "Hide";
+    SelectedTreeTypeVariable: string = 'weighted_dendrogram';
+    TreeLayouts: any = [
+        { label: 'Rectangular', value: 'rectangular' },
+        { label: 'Radial', value: 'radial' },
+        { label: 'Circular', value: 'circular' },
+        { label: 'Diagonal', value: 'diagonal' },
+        { label: 'Hierarchical', value: 'hierarchical' },
+    ];
+    SelectedTreeLayoutVariable: string = 'rectangular';
+
+    // Leaves Tab
+    SelectedLeafLabelShowVariable: string = 'Show';
+    SelectedLeafLabelVariable: string = 'None';
+    SelectedLeafLabelSizeVariable: number = 30;
+    LeafShapes: any = [
+      { label: 'Circle', value: 'circle' },
+      { label: 'Triangle', value: 'triangle' },
+      { label: 'Square', value: 'square' },
+      { label: 'Star', value: 'star' },
+    ];
+    SelectedLeafShapeVariable: string = 'circle';
+    SelectedLeafSizeVariable: number = 15;
+
+    // Branch Tab
+    SelectedBranchLabelShowVariable: string = 'Hide';
+    SelectedBranchTooltipShowVariable: string = 'Show';
+    // Node Tab
 
     private isExportClosed: boolean = false;
     public isExporting: boolean = false;
 
     // Link Tab
-    SelectedLinkTooltipVariable: string = "None";
-    SelectedLinkLabelVariable: string = "None";
-    SelectedLinkTransparencyVariable: any = 0;
-    SelectedLinkWidthByVariable: string = "None";
-
-    ReciprocalTypes: any = [
-        { label: 'Reciprocal', value: 'Reciprocal' },
-        { label: 'Non-Reciprocal', value: 'Non-Reciprocal' }
-    ];
-    SelectedLinkReciprocalTypeVariable: string = "Reciprocal";
-
-    SelectedLinkWidthVariable: any = 0;
-    SelectedLinkLengthVariable: any = 0;
-    ArrowTypes: any = [
-        { label: 'Hide', value: 'Hide' },
-        { label: 'Show', value: 'Show' }
-    ];
 
     hideShowOptions: any = [
         { label: 'Hide', value: 'Hide' },
         { label: 'Show', value: 'Show' }
     ];
-    SelectedLinkArrowTypeVariable: string = "Hide";
 
     // Network 
     SelectedNetworkExportFilenameVariable: string = "";
@@ -125,9 +127,10 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     NodeSymbolTableWrapperDialogSettings: DialogSettings = new DialogSettings('#node-symbol-table-wrapper', false);
     PolygonColorTableWrapperDialogSettings: DialogSettings = new DialogSettings('#polygon-color-table-wrapper', false);
 
-    PhylogeneticTreeExportDialogSettings: DialogSettings = new DialogSettings('#network-settings-pane', false);
+    PhylogeneticTreeExportDialogSettings: DialogSettings = new DialogSettings('#phylotree-settings-pane', false);
 
     ContextSelectedNodeAttributes: {attribute: string, value: string}[] = [];
+    tree: any = null;
 
     private visuals: MicrobeTraceNextVisuals;
 
@@ -155,7 +158,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
         showLabels: true,
         hoverLabels: true,
         selectedColour: '#FF8300',
-        showBranchLengthLabels: true,
+        showInternalNodeLabels: true,
       });
       tree.load(treeString);
       tree.setTreeType('rectangular');
@@ -171,16 +174,15 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
           }
         });
       });
-      for (const branch in tree.branches.keys()) {
-        if (branch in tree.branches.keys()) {
-          tree.branches[branch].setDisplay({
-            labelStyle: {
+      for (const branch in tree.branches) {
+        if (branch in tree.branches) {
+          tree.branches[branch].internalLabelStyle = {
               textSize: 20,
-            }
-          });
+            };
+          }
         }
-      }
       tree.saveOriginalTree();
+      this.commonService.visuals.phylogenetic.tree = tree;
       const phyCanv = document.querySelector('#phylocanvas');
       const canvHeight = phyCanv.clientHeight;
       console.log(canvHeight);
@@ -201,6 +203,26 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
     InitView() {
         console.log('InitView is called');
+        this.visuals.phylogenetic.IsDataAvailable = (this.visuals.phylogenetic.commonService.session.data.nodes.length === 0 ? false : true);
+
+        if (this.visuals.phylogenetic.IsDataAvailable === true && this.visuals.phylogenetic.zoom == null) {
+
+            // d3.select('svg#network').exit().remove();
+            // this.visuals.phylogenetic.svg = d3.select('svg#network').append('g');
+
+            this.visuals.phylogenetic.FieldList = [];
+
+            this.visuals.phylogenetic.FieldList.push({ label: "None", value: "None" });
+            this.visuals.phylogenetic.commonService.session.data['nodeFields'].map((d, i) => {
+
+                this.visuals.phylogenetic.FieldList.push(
+                    {
+                        label: this.visuals.phylogenetic.commonService.capitalize(d.replace("_", "")),
+                        value: d
+                    });
+
+            });
+        }
     }
 
     openSettings() {
@@ -230,5 +252,42 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
     }
 
+    onTreeLayoutChange(event) {
+      this.commonService.visuals.phylogenetic.tree.setTreeType(event);
+    }
+
+    onLeafLabelShowChange(event) {
+      this.commonService.visuals.phylogenetic.tree.toggleLabels();
+    }
+
+    onLeafShapeVariableChange(event) {
+      const thisTree = this.commonService.visuals.phylogenetic.tree;
+      thisTree.leaves.forEach((x) => {
+        x.setDisplay({
+          shape: event,
+        });
+      });
+      thisTree.draw();
+    }
+
+    onBranchLabelShowChange(event) {
+      this.SelectedBranchLabelShowVariable = event;
+      if (event === 'Hide') {
+        this.commonService.visuals.phylogenetic.tree.showBranchLengthLabels = false;
+      } else if (event === 'Show') {
+        this.commonService.visuals.phylogenetic.tree.showBranchLengthLabels = true;
+      }
+      this.commonService.visuals.phylogenetic.tree.draw();
+    }
+
+    onBranchTooltipShowChange(event) {
+      this.SelectedBranchTooltipShowVariable = event;
+      if (event === 'Hide') {
+        this.commonService.visuals.phylogenetic.tree.showBranchLengthLabels = false;
+      } else if (event === 'Show') {
+        this.commonService.visuals.phylogenetic.tree.showBranchLengthLabels = true;
+      }
+      this.commonService.visuals.phylogenetic.tree.draw();
+    }
 
 }
