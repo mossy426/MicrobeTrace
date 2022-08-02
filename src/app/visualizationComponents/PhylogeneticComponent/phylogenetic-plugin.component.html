@@ -81,16 +81,11 @@
                                   <p-selectButton id="branch-label-visibility" [options]="hideShowOptions" [(ngModel)]="SelectedBranchLabelShowVariable" (ngModelChange)="onBranchLabelShowChange($event)"></p-selectButton>
                               </div>
                           </div>
-                          <div class="form-group row branch-tooltip-visibility-row" title="Show internal node tooltips?">
-                              <div class="col-4"><label for="branch-tooltip-visibility">Show Tooltips</label></div>
-                              <div class="col-8">
-                                  <p-selectButton id="branch-tooltip-visibility" [options]="hideShowOptions" [(ngModel)]="SelectedBranchTooltipShowVariable" (ngModelChange)="onBranchTooltipShowChange($event)"></p-selectButton>
-                              </div>
-                          </div>
                     </div>
                   </p-accordionTab>
 
                   <p-accordionTab style="color:#495057" header="Colors">
+                      <button pButton type="button" label="Show Colors" class="ui-button-raised" (click)="showGlobalSettings()"></button>
                   </p-accordionTab>
 
               </p-accordion>
