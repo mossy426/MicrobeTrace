@@ -83,7 +83,14 @@
                           </div>
                     </div>
                   </p-accordionTab>
-
+                <p-accordionTab style="color:#495057" header="Branch Size">
+                    <div #branchcontrollables>
+                          <div class="form-group row link-size-row" title="How big should links be?">
+                            <div class="col-4"><label for="link-size">Branch Size</label></div>
+                            <input type="range" class="custom-range" id="link-size" min="1" value="1" step="1" max="25" [(ngModel)]="SelectedLinkSizeVariable" (ngModelChange)="onLinkSizeChange($event)">
+                          </div>
+                      </div>
+                  </p-accordionTab>
                   <p-accordionTab style="color:#495057" header="Colors">
                       <button pButton type="button" label="Show Colors" class="ui-button-raised" (click)="showGlobalSettings()"></button>
                   </p-accordionTab>

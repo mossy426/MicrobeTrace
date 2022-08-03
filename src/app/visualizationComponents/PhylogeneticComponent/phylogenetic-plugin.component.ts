@@ -87,6 +87,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     // Branch Tab
     SelectedBranchLabelShowVariable: string = 'Hide';
     SelectedBranchTooltipShowVariable: string = 'Show';
+    SelectedLinkSizeVariable: number = 1;
 
     private isExportClosed: boolean = false;
     public isExporting: boolean = false;
@@ -138,6 +139,8 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     openTree() {
       console.log('Called the tree opening function');
       Phylocanvas.plugin(contextMenu);
+      const newickString = this.commonService.computeTree().then()
+      console.log(this.commonService.visuals.phylogenetic.tree);
       const treeString = '((((A:0.0431,(((B:0.06836,(C:0.00628,D:0.00069):0.00473):0.00678,E:0.0455):0.002908,F:0.00240):0.01085):0.096,G:0.01784):0.03,(H:0.0480,I:0.0026):0.0336):0.001917,J:0.01917)';
       // const treeString = '(A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5)F;';
       const tree = Phylocanvas.createTree('phylocanvas', {
@@ -148,7 +151,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
         selectedColour: '#FF8300',
         showInternalNodeLabels: true,
       });
-      tree.load(treeString);
+      tree.load(this.commonService.temp.tree);
       tree.setTreeType('rectangular');
       tree.setNodeSize(this.SelectedLeafSizeVariable);
       tree.leaves.forEach((x) => {
@@ -292,13 +295,22 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
       this.updateLeaves(labelConfig);
     }
 
+    onLinkSizeChange(event) {
+      const thisTree = this.commonService.visuals.phylogenetic.tree;
+      this.SelectedLinkSizeVariable = event;
+      thisTree.lineWidth = event;
+      thisTree.draw();
+    }
+
+
     updateNodeColors() {
       const nodeColor = this.visuals.phylogenetic.commonService.session.style.widgets['node-color'];
       this.SelectedNodeColorVariable = nodeColor;
       console.log(this.SelectedNodeColorVariable);
       const colorConfig = { leafStyle: { fillStyle: this.SelectedNodeColorVariable } };
       this.updateLeaves(colorConfig);
-      const selectedColor = this.visuals.phylogenetic.commonService.session.style.widgets['selected-color'];
+      const selectedColor = this.visuals.phylogenetic.commonService.GlobalSettingsModel.SelectedColorVariable;
+      console.log(`Changing selected color to ${selectedColor}`);
       this.commonService.visuals.phylogenetic.tree.selectedColour = selectedColor;
       this.commonService.visuals.phylogenetic.tree.draw();
     }
