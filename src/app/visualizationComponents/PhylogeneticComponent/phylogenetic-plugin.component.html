@@ -9,6 +9,7 @@
               [positionLeft]="PhylogeneticTreeExportDialogSettings.left" 
               [positionTop]="PhylogeneticTreeExportDialogSettings.top" 
               [(visible)]="PhylogeneticTreeExportDialogSettings.isVisible"  
+              [contentStyle]="{'overflow': 'visible'}"
               header="Phylogenetic Tree Settings" 
               >
               <tabset class="tab-container tabbable-line">
@@ -16,7 +17,7 @@
               <p-accordion>
                   <p-accordionTab style="color:#495057" header="Layout">
                       <div #treecontrolslabels>
-                          <div class="form-group row tree-type-row" title="What kind of tree should be displayed?">
+                          <div class="form-group row tree-type-row" title="What kind of tree should be displayed?" style="overflow:visible">
                               <div class="col-4"><label for="tree-layout">Layout</label></div>
                               <div class="col-8">
                                   <p-dropdown id="tree-layout" [options]="TreeLayouts" [(ngModel)]="SelectedTreeLayoutVariable" (ngModelChange)="onTreeLayoutChange($event)"> </p-dropdown>
@@ -45,7 +46,7 @@
                           </div>
                           <div class="form-group row leaf-label-size-row" title="How big should leaf labels be?">
                             <div class="col-4"><label for="leaf-label-size">Label Size</label></div>
-                            <input type="range" class="custom-range" id="leaf-label-size" min="10" value="30" step="1" max="72" [(ngModel)]="SelectedLeafLabelSizeVariable" (ngModelChange)="onLeafLabelSizeChange($event)">
+                            <input type="range" class="custom-range" id="leaf-label-size" min="5" value="30" step="1" max="72" [(ngModel)]="SelectedLeafLabelSizeVariable" (ngModelChange)="onLeafLabelSizeChange($event)">
                           </div>
                       </div>
                   </p-accordionTab>

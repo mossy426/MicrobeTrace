@@ -1484,10 +1484,9 @@ export class CommonService extends AppComponentBase implements OnInit {
                 computer.compute_treeWorker.onmessage().subscribe((response) => {
                   const treeObj = window.context.commonService.decode(new Uint8Array(response.data.tree));
 
-                  window.context.commonService.visuals.phylogenetic.tree = patristic.parseJSON(treeObj).toNewick();
-                  console.log(window.context.commonService.visuals.phylogenetic.tree);
+                  const treeString = patristic.parseJSON(treeObj).toNewick();
                   console.log('Tree Transit time: ', (Date.now() - response.data.start).toLocaleString(), 'ms');
-                  resolve();
+                  resolve(treeString);
 
               });
 

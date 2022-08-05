@@ -88,6 +88,8 @@
     "patristic": "^0.5.4",
     "phylocanvas": "^2.8.1",
     "phylocanvas-plugin-context-menu": "^3.11.0",
+    "phylocanvas-plugin-history": "^2.1.1",
+    "phylocanvas-plugin-scalebar": "^1.1.1",
     "protractor": "~5.4.0",
     "tn93": "^0.3.0",
     "ts-node": "~7.0.0",

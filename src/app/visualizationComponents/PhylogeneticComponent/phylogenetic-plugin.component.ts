@@ -1,10 +1,13 @@
-﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit,
+﻿/* eslint-disable @typescript-eslint/no-inferrable-types */
+import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit,
         ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { EventManager, DOCUMENT } from '@angular/platform-browser';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
 import Phylocanvas from 'phylocanvas';
 import contextMenu from 'phylocanvas-plugin-context-menu';
+import scalebar from 'phylocanvas-plugin-scalebar';
+import history from 'phylocanvas-plugin-history';
 import * as ClipboardJS from 'clipboard';
 import * as saveAs from 'file-saver';
 import * as domToImage from 'dom-to-image-more';
@@ -27,8 +30,8 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
     @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
     svgStyle: {} = {
-        'height': '0px',
-        'width': '1000px'
+        height: '0px',
+        width: '1000px'
     };
 
     private customShapes: CustomShapes = new CustomShapes();
@@ -55,12 +58,6 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
 
     // Tree Tab
-    TreeTypes: any = [
-        { label: 'Weighted Dendrogram', value: 'weighted_dendrogram' },
-        { label: 'Unweighted Dendrogram', value: 'weighted_dendrogram' },
-        { label: 'Tree', value: 'Tree' },
-    ];
-    SelectedTreeTypeVariable: string = 'weighted_dendrogram';
     TreeLayouts: any = [
         { label: 'Rectangular', value: 'rectangular' },
         { label: 'Radial', value: 'radial' },
@@ -73,7 +70,8 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     // Leaves Tab
     SelectedLeafLabelShowVariable: string = 'Show';
     SelectedLeafLabelVariable: string = 'None';
-    SelectedLeafLabelSizeVariable: number = 30;
+    // SelectedLeafLabelSizeVariable: number = 20;
+    SelectedLeafLabelSizeVariable: number = 8;
     LeafShapes: any = [
       { label: 'Circle', value: 'circle' },
       { label: 'Triangle', value: 'triangle' },
@@ -81,7 +79,8 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
       { label: 'Star', value: 'star' },
     ];
     SelectedLeafShapeVariable: string = 'circle';
-    SelectedLeafSizeVariable: number = 15;
+    // SelectedLeafSizeVariable: number = 15;
+    SelectedLeafSizeVariable: number = 5;
     SelectedNodeColorVariable: string = '#1f77b4';
 
     // Branch Tab
@@ -112,7 +111,8 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     SelectedNetworkExportQualityVariable: any = 0.92;
     CalculatedResolutionWidth: any = 1918;
     CalculatedResolutionHeight: any = 909;
-    CalculatedResolution: any = ((this.CalculatedResolutionWidth * this.SelectedNetworkExportScaleVariable) + " x " + (this.CalculatedResolutionHeight * this.SelectedNetworkExportScaleVariable) + "px");
+    CalculatedResolution: any = ((this.CalculatedResolutionWidth * this.SelectedNetworkExportScaleVariable) + ' x ' + (
+      this.CalculatedResolutionHeight * this.SelectedNetworkExportScaleVariable) + 'px');
 
 
     ShowAdvancedExport: boolean = true;
@@ -137,48 +137,57 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     }
 
     openTree() {
-      console.log('Called the tree opening function');
       Phylocanvas.plugin(contextMenu);
-      const newickString = this.commonService.computeTree().then()
-      console.log(this.commonService.visuals.phylogenetic.tree);
-      const treeString = '((((A:0.0431,(((B:0.06836,(C:0.00628,D:0.00069):0.00473):0.00678,E:0.0455):0.002908,F:0.00240):0.01085):0.096,G:0.01784):0.03,(H:0.0480,I:0.0026):0.0336):0.001917,J:0.01917)';
+      Phylocanvas.plugin(scalebar);
+      Phylocanvas.plugin(history);
+      const newickString = this.commonService.computeTree();
+      // const treeString = '((((A:0.0431,(((B:0.06836,(C:0.00628,D:0.00069):0.00473):0.00678,E:0.0455):0.002908,
+      // F:0.00240):0.01085):0.096,G:0.01784):0.03,(H:0.0480,I:0.0026):0.0336):0.001917,J:0.01917)';
       // const treeString = '(A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5)F;';
       const tree = Phylocanvas.createTree('phylocanvas', {
         fillCanvas: true,
         shape: 'circle',
         showLabels: true,
         hoverLabels: true,
-        selectedColour: '#FF8300',
         showInternalNodeLabels: true,
       });
-      tree.load(this.commonService.temp.tree);
-      tree.setTreeType('rectangular');
-      tree.setNodeSize(this.SelectedLeafSizeVariable);
-      tree.leaves.forEach((x) => {
-        x.setDisplay({
-          labelStyle: {
-            textSize: this.SelectedLeafLabelSizeVariable,
-          },
-          leafStyle: {
-            fillStyle: this.SelectedNodeColorVariable,
-          }
-        });
-      });
-      for (const branch in tree.branches) {
-        if (branch in tree.branches) {
-          tree.branches[branch].internalLabelStyle = {
-              textSize: this.SelectedLeafLabelSizeVariable,
-          };
-        }
-      }
-      tree.saveOriginalTree();
-      this.commonService.visuals.phylogenetic.tree = tree;
       const phyCanv = document.querySelector('#phylocanvas');
-      const canvHeight = phyCanv.clientHeight;
+      const canvHeight = phyCanv.clientHeight * 1.5;
       const canvWidth = phyCanv.clientWidth;
+      tree.backgroundColour = '#ffffff';
       tree.setSize(canvWidth, canvHeight);
+      tree.selectedColour = this.visuals.phylogenetic.commonService.GlobalSettingsModel.SelectedColorVariable;
+      // tree.fillCanvas = true;
+      tree.setFontSize(300);
+      newickString.then((x) => {
+        tree.load(x);
+        tree.setTreeType('rectangular');
+        tree.setNodeSize(this.SelectedLeafSizeVariable);
+        tree.leaves.forEach((y) => {
+          y.setDisplay({
+            labelStyle: {
+              textSize: this.SelectedLeafLabelSizeVariable,
+            },
+            leafStyle: {
+              fillStyle: this.SelectedNodeColorVariable,
+              lineWidth: 0,
+              strokeStyle: this.SelectedNodeColorVariable,
+            }
+          });
+        });
+        for (const branch in tree.branches) {
+          if (branch in tree.branches) {
+            tree.branches[branch].interactive = true;
+            tree.branches[branch].internalLabelStyle = {
+                textSize: this.SelectedLeafLabelSizeVariable,
+            };
+          }
+        }
+        tree.saveOriginalTree();
+        this.commonService.visuals.phylogenetic.tree = tree;
+        tree.draw();
+      });
 
-      tree.draw();
 
 
     }
@@ -190,7 +199,9 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     }
 
     InitView() {
-        this.visuals.phylogenetic.IsDataAvailable = (this.visuals.phylogenetic.commonService.session.data.nodes.length === 0 ? false : true);
+        this.visuals.phylogenetic.IsDataAvailable = (
+          this.visuals.phylogenetic.commonService.session.data.nodes.length === 0 ? false : true
+        );
 
         if (this.visuals.phylogenetic.IsDataAvailable === true && this.visuals.phylogenetic.zoom == null) {
 
@@ -207,7 +218,6 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
                         label: this.visuals.phylogenetic.commonService.capitalize(d.replace('_', '')),
                         value: d
                     });
-
             });
         }
     }
@@ -219,11 +229,18 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
 
     openExport() {
+        this.ShowPhylogeneticExportPane = true;
+
+        this.visuals.microbeTrace.GlobalSettingsDialogSettings.setStateBeforeExport();
+        this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.setStateBeforeExport();
+        this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.setStateBeforeExport();
 
     }
 
     openCenter() {
-
+      const thisTree = this.commonService.visuals.phylogenetic.tree;
+      thisTree.fitInPanel(thisTree.leaves);
+      thisTree.draw();
     }
 
     openPinAllNodes() {
@@ -306,11 +323,9 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     updateNodeColors() {
       const nodeColor = this.visuals.phylogenetic.commonService.session.style.widgets['node-color'];
       this.SelectedNodeColorVariable = nodeColor;
-      console.log(this.SelectedNodeColorVariable);
       const colorConfig = { leafStyle: { fillStyle: this.SelectedNodeColorVariable } };
       this.updateLeaves(colorConfig);
       const selectedColor = this.visuals.phylogenetic.commonService.GlobalSettingsModel.SelectedColorVariable;
-      console.log(`Changing selected color to ${selectedColor}`);
       this.commonService.visuals.phylogenetic.tree.selectedColour = selectedColor;
       this.commonService.visuals.phylogenetic.tree.draw();
     }
