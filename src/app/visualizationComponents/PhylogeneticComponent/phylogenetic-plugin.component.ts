@@ -96,8 +96,9 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
         { label: 'Show', value: 'Show' }
     ];
 
-    // Network 
-    SelectedNetworkExportFilenameVariable: string = "";
+    // Export Settings
+    SelectedTreeImageFilenameVariable: string = "default_tree.png";
+    SelectedNewickStringFilenameVariable: string = "default_tree.nwk";
 
     NetworkExportFileTypeList: any = [
         { label: 'png', value: 'png' },
@@ -186,6 +187,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
         tree.saveOriginalTree();
         this.commonService.visuals.phylogenetic.tree = tree;
         tree.draw();
+        console.log(tree);
       });
 
 
@@ -234,6 +236,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
         this.visuals.microbeTrace.GlobalSettingsDialogSettings.setStateBeforeExport();
         this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.setStateBeforeExport();
         this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.setStateBeforeExport();
+        this.isExportClosed = false;
 
     }
 
@@ -342,5 +345,22 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
         x.setDisplay(config);
       });
       thisTree.draw();
+    }
+
+    savePNG(event) {
+      const thisTree = this.commonService.visuals.phylogenetic.tree;
+      const fileName = this.SelectedTreeImageFilenameVariable;
+      const canvasId = 'phylocanvas__canvas';
+      domToImage.toBlob(document.getElementById(canvasId)).then(
+        blob => {
+          saveAs(blob, 'microbeTraceTree.png');
+        });
+    }
+
+    saveNewickString(event) {
+      const thisTree = this.commonService.visuals.phylogenetic.tree;
+      const newickBlob = new Blob([thisTree.stringRepresentation], {type: 'text/plain;charset=utf-8'});
+      saveAs(newickBlob, this.SelectedNewickStringFilenameVariable);
+
     }
 }
