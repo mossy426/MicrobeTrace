@@ -14,7 +14,7 @@
               >
               <tabset class="tab-container tabbable-line">
               <tab heading="{{'Tree' | localize}}" [active]="true" customClass="m-tabs__item">
-              <p-accordion>
+              <p-accordion [multiple]='true'>
                   <p-accordionTab style="color:#495057" header="Layout">
                       <div #treecontrolslabels>
                           <div class="form-group row tree-type-row" title="What kind of tree should be displayed?" style="overflow:visible">
@@ -45,8 +45,8 @@
                               </div>
                           </div>
                           <div class="form-group row leaf-label-size-row" title="How big should leaf labels be?">
-                            <div class="col-4"><label for="leaf-label-size">Label Size</label></div>
-                            <input type="range" class="custom-range" id="leaf-label-size" min="5" value="30" step="1" max="72" [(ngModel)]="SelectedLeafLabelSizeVariable" (ngModelChange)="onLeafLabelSizeChange($event)">
+                              <div class="col-4"><label for="leaf-label-size">Label Size</label></div>
+                              <input type="range" class="custom-range" id="leaf-label-size" min="5" value="30" step="1" max="72" [(ngModel)]="SelectedLeafLabelSizeVariable" (ngModelChange)="onLeafLabelSizeChange($event)">
                           </div>
                       </div>
                   </p-accordionTab>
@@ -54,14 +54,14 @@
                   <p-accordionTab style="color:#495057" header="Shapes and Sizes">
                       <div #branchcontrolslabels>
                           <div class="form-group row leaf-shape-row" title="What shape should leaves be?">
-                            <div class="col-4"><label for="leaf-shape-variable">Leaf Shape</label></div>
+                              <div class="col-4"><label for="leaf-shape-variable">Leaf Shape</label></div>
                               <p-dropdown id="leaf-shape-variable" [options]="LeafShapes" appendTo="body" [(ngModel)]="SelectedLeafShapeVariable" (ngModelChange)="onLeafShapeVariableChange($event)"></p-dropdown>
                           </div>
                           <div class="form-group row leaf-size-row" title="How big should leaves be?">
-                            <div class="col-4"><label for="leaf-size">Leaf Size</label></div>
-                            <input type="range" class="custom-range" id="leaf-size" min="5" value="15" step="1" max="50" [(ngModel)]="SelectedLeafSizeVariable" (ngModelChange)="onLeafSizeChange($event)">
+                              <div class="col-4"><label for="leaf-size">Leaf Size</label></div>
+                              <input type="range" class="custom-range" id="leaf-size" min="5" value="15" step="1" max="50" [(ngModel)]="SelectedLeafSizeVariable" (ngModelChange)="onLeafSizeChange($event)">
                           </div>
-                    </div>
+                      </div>
                   </p-accordionTab>
 
 
@@ -82,13 +82,13 @@
                                   <p-selectButton id="branch-label-visibility" [options]="hideShowOptions" [(ngModel)]="SelectedBranchLabelShowVariable" (ngModelChange)="onBranchLabelShowChange($event)"></p-selectButton>
                               </div>
                           </div>
-                    </div>
+                      </div>
                   </p-accordionTab>
-                <p-accordionTab style="color:#495057" header="Branch Size">
-                    <div #branchcontrollables>
+                  <p-accordionTab style="color:#495057" header="Branch Size">
+                      <div #branchcontrollables>
                           <div class="form-group row link-size-row" title="How big should links be?">
-                            <div class="col-4"><label for="link-size">Branch Size</label></div>
-                            <input type="range" class="custom-range" id="link-size" min="1" value="1" step="1" max="25" [(ngModel)]="SelectedLinkSizeVariable" (ngModelChange)="onLinkSizeChange($event)">
+                              <div class="col-4"><label for="link-size">Branch Size</label></div>
+                              <input type="range" class="custom-range" id="link-size" min="1" value="1" step="1" max="25" [(ngModel)]="SelectedLinkSizeVariable" (ngModelChange)="onLinkSizeChange($event)">
                           </div>
                       </div>
                   </p-accordionTab>
@@ -108,31 +108,36 @@
 <p-dialog id="network-export-modal" [(visible)]="ShowPhylogeneticExportPane" header="Export Phylogenetic Tree" class="dialogSize" (onHide)="onCloseExport()">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-                <div class="modal-body" style='min-width: 400px; height: 100%;'>
-                    <div class="form-group row">
-                    <div class="col-9">
-                        <input type="text" id="tree-image-filename" class="form-control form-control-sm" placeholder="Image Filename" [(ngModel)]="SelectedTreeImageFilenameVariable" (ngModelChange)="onDataChange($event)">
-                    </div>
-                    <div class="col-3">
-                        <button type="button" id="export-tree" class="btn btn-primary" (click)="savePNG($event)">Save PNG</button>
-                    </div>
-                    </div>
-                    <div class="form-group row">
-                    <div class="col-9">
-                        <input type="text" id="newick-string-filename" class="form-control form-control-sm" placeholder="Newick Filename" [(ngModel)]="SelectedNewickStringFilenameVariable" (ngModelChange)="onDataChange($event)">
-                    </div>
-                    <div class="col-3">
-                        <button type="button" id="export-newick" class="btn btn-primary" (click)="saveNewickString($event)">Save Newick String</button>
-                    </div>
-                    </div>
-                <div>
-
-                    <div [hidden]="!ShowAdvancedExport">
-                    </div>
+            <div class="modal-body" style='min-width: 500px; height: 100%;'>
+                <p-accordion [multiple]="true">
+                    <p-accordionTab header="Export Image of Tree" style="color:#495057" [selected]="true">
+                        <div class="form-group row">
+                            <div class="col-8">
+                                <input type="text" id="tree-image-filename" class="form-control form-control-sm" placeholder="Image Filename" [(ngModel)]="SelectedTreeImageFilenameVariable" (ngModelChange)="onDataChange($event)">
+                            </div>
+                            <div class="col-3">
+                                <p-dropdown id="network-export-filetype" [options]="NetworkExportFileTypeList" [(ngModel)]="SelectedNetworkExportFileTypeListVariable" (ngModelChange)="onNetworkExportFiletypeChange($event)"></p-dropdown>
+                            </div>
+                            <div class="col-8">
+                                <button type="button" id="export-tree" class="btn btn-primary" (click)="saveImage($event)">Save Image</button>
+                            </div>
+                        </div>
+                    </p-accordionTab>
+                    <p-accordionTab header="Export Newick String" style="color:#495057" [selected]="true">
+                        <div class="form-group row">
+                            <div class="col-8">
+                                <input type="text" id="newick-string-filename" class="form-control form-control-sm" placeholder="Newick Filename" [(ngModel)]="SelectedNewickStringFilenameVariable" (ngModelChange)="onDataChange($event)">
+                            </div>
+                            <div class="col-3"></div>
+                            <div class="col-8">
+                                <button type="button" id="export-newick" class="btn btn-primary" (click)="saveNewickString($event)">Save Newick String</button>
+                            </div>
+                        </div>
+                    </p-accordionTab>
+                </p-accordion>
+            </div>
+                <div class="modal-footer">
                 </div>
-            </div>
-            <div class="modal-footer">
-            </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </p-dialog><!-- /.modal -->

@@ -97,17 +97,16 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     ];
 
     // Export Settings
-    SelectedTreeImageFilenameVariable: string = "default_tree.png";
-    SelectedNewickStringFilenameVariable: string = "default_tree.nwk";
+    SelectedTreeImageFilenameVariable: string = 'default_tree';
+    SelectedNewickStringFilenameVariable: string = 'default_tree.nwk';
 
     NetworkExportFileTypeList: any = [
         { label: 'png', value: 'png' },
         { label: 'jpeg', value: 'jpeg' },
-        { label: 'webp', value: 'webp' },
         { label: 'svg', value: 'svg' }
     ];
 
-    SelectedNetworkExportFileTypeListVariable: string = "png";
+    SelectedNetworkExportFileTypeListVariable: string = 'png';
     SelectedNetworkExportScaleVariable: any = 1;
     SelectedNetworkExportQualityVariable: any = 0.92;
     CalculatedResolutionWidth: any = 1918;
@@ -155,11 +154,9 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
       const phyCanv = document.querySelector('#phylocanvas');
       const canvHeight = phyCanv.clientHeight * 1.5;
       const canvWidth = phyCanv.clientWidth;
-      tree.backgroundColour = '#ffffff';
       tree.setSize(canvWidth, canvHeight);
       tree.selectedColour = this.visuals.phylogenetic.commonService.GlobalSettingsModel.SelectedColorVariable;
       // tree.fillCanvas = true;
-      tree.setFontSize(300);
       newickString.then((x) => {
         tree.load(x);
         tree.setTreeType('rectangular');
@@ -347,14 +344,34 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
       thisTree.draw();
     }
 
-    savePNG(event) {
+    saveImage(event) {
       const thisTree = this.commonService.visuals.phylogenetic.tree;
       const fileName = this.SelectedTreeImageFilenameVariable;
       const canvasId = 'phylocanvas__canvas';
-      domToImage.toBlob(document.getElementById(canvasId)).then(
-        blob => {
-          saveAs(blob, 'microbeTraceTree.png');
+      const exportImageType = this.SelectedNetworkExportFileTypeListVariable ;
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      ctx.globalCompositeOperation = 'destination-over';
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      if (exportImageType === 'png') {
+        domToImage.toPng(document.getElementById(canvasId)).then(
+          dataUrl => {
+            saveAs(dataUrl, fileName);
         });
+      } else if (exportImageType === 'jpeg') {
+        domToImage.toJpeg(document.getElementById(canvasId), { quality: 0.95}).then(
+          dataUrl => {
+            saveAs(dataUrl, fileName);
+        });
+      } else if (exportImageType === 'svg') {
+        domToImage.toSvg(document.getElementById(canvasId)).then(
+          dataUrl => {
+            saveAs(dataUrl, fileName);
+        });
+
+      }
+
     }
 
     saveNewickString(event) {
