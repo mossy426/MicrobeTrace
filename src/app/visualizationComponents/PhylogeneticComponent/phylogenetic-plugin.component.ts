@@ -349,7 +349,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
       const fileName = this.SelectedTreeImageFilenameVariable;
       const canvasId = 'phylocanvas__canvas';
       const exportImageType = this.SelectedNetworkExportFileTypeListVariable ;
-      const canvas = document.getElementById(canvasId);
+      const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
       const ctx = canvas.getContext('2d');
       ctx.globalCompositeOperation = 'destination-over';
       ctx.fillStyle = 'white';
