@@ -16,6 +16,13 @@
                 <button mat-menu-item>Add Data</button>
                 <button mat-menu-item (click)="FileClick('New Session')">New</button>
               </mat-menu>
+              <button class="navbar-item" mat-button [matMenuTriggerFor]="viewMenu"><i class="far nav-icon flaticon-web"></i>View<span class="dropdown-symbol">&#9660;</span></button>
+              <mat-menu #viewMenu="matMenu" overlapTrigger="false">
+                <button mat-menu-item (click)="Viewclick('2D Network')">2D Network</button>
+                <button mat-menu-item (click)="Viewclick('Table')">Table</button>
+                <button mat-menu-item (click)="Viewclick('Map')">Map</button>
+                <button mat-menu-item (click)="Viewclick('Phylogenetic Tree')">Phylogenetic Tree</button>
+              </mat-menu>
               <button class="navbar-item" mat-button [matMenuTriggerFor]="windowMenu"><i class="far nav-icon flaticon-web"></i>Window<span class="dropdown-symbol">&#9660;</span></button>
               <mat-menu #windowMenu="matMenu" overlapTrigger="false">
                 <button mat-menu-item (click)="WindowClick('Reload Screen')">Reload</button>
@@ -85,9 +92,9 @@
                     <span class="primary">Welcome to </span>
                     <span class="microbe primary">Microbe</span>
                     <span class="primary">Trace</span>
-                    <!-- <span><img class="mt-icon" src="../../assets/images/MT-Icon.png"></span> -->
+                    <span><img class="mt-icon" src="../../assets/images/MT-Icon.png"></span>
                     <!-- Swap/Uncomment when building productions -->
-                    <span><img class="mt-icon" src="MT-Icon.png"></span>
+                    <!-- <span><img class="mt-icon" src="MT-Icon.png"></span> -->
                 </div>
                 <div id="welcome-description" class="bottom primary">The Visualization Multitool for Molecular Epidemiology and Bioinformatics</div>
             </div>
@@ -127,13 +134,13 @@
                 <button mat-menu-item (click)="updateAmbiguity('GapMM')">GapMM</button>
                 <button mat-menu-item (click)="updateAmbiguity('HIV-Trace -g')">HIV-Trace -g</button>
             </mat-menu>
-            <mat-menu #viewMenu="matMenu" overlapTrigger="false">
+            <!-- <mat-menu #viewMenu="matMenu" overlapTrigger="false">
                 <button mat-menu-item (click)="updateLaunchView('2D Network')">2D Network</button>
                 <button mat-menu-item (click)="updateLaunchView('3D Network')">3D Network</button>
-                <button mat-menu-item (click)="updateLaunchView('Bubbles')">Bubbles</button>
                 <button mat-menu-item (click)="updateLaunchView('Table')">Table</button>
+                <button mat-menu-item (click)="updateLaunchView('Map')">Bubbles</button>
                 <button mat-menu-item (click)="updateLaunchView('Phylogenetic Tree')">Phylogenetic Tree</button>
-            </mat-menu>
+            </mat-menu> -->
         </div>
 
 
