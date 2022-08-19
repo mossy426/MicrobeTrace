@@ -1482,12 +1482,13 @@ export class CommonService extends AppComponentBase implements OnInit {
                 });
 
                 computer.compute_treeWorker.onmessage().subscribe((response) => {
+                  const treeObj = window.context.commonService.decode(new Uint8Array(response.data.tree));
 
-                    window.context.commonService.temp.tree = patristic.parseJSON(window.context.commonService.decode(new Uint8Array(response.data.tree)));
-                    console.log("Tree Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
-                    resolve();
+                  const treeString = patristic.parseJSON(treeObj).toNewick();
+                  console.log('Tree Transit time: ', (Date.now() - response.data.start).toLocaleString(), 'ms');
+                  resolve(treeString);
 
-                });
+              });
 
             });
 
@@ -1693,8 +1694,10 @@ export class CommonService extends AppComponentBase implements OnInit {
         console.log("Total load time:", window.context.commonService.session.meta.loadTime.toLocaleString(), "ms");
 
         setTimeout(() => {
-            console.log('launching view: ',window.context.commonService.session.style.widgets['default-view']);
-            window.context.commonService.launchView(window.context.commonService.session.style.widgets['default-view']);
+            // console.log('launching view: ',window.context.commonService.session.style.widgets['default-view']);
+            // window.context.commonService.launchView(window.context.commonService.session.style.widgets['default-view']);
+            console.log('launching view: Phylogenetic Tree');
+            window.context.commonService.launchView("Phylogenetic Tree");
 
         }, 1000);
 

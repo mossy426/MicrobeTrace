@@ -28,8 +28,10 @@ declare module "*.json" {
     export default value;
 }
 
+
 /**
  * rtl-detect
  */
 
 declare module 'rtl-detect';
+
