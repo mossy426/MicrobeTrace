@@ -121,7 +121,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             "choropleth-satellite-show": false,
             "choropleth-transparency": 0.3,
             "cluster-minimum-size": 1,
-            "default-view": "2D Network",
+            "default-view": "Phylogenetic Tree", // "2D Network",
             "filtering-epsilon": -8,
             "flow-showNodes": "selected",
             "gantt-date-list": "",
@@ -2273,7 +2273,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         this.temp.matrix = newTempSkeleton.matrix;
         this.temp.trees = newTempSkeleton.trees;
 
-        const files = window.context.commonService.session.files;
+        const files = window.context.commonService.session.files.filter( obj => obj.name !== 'Demo_outbreak_NodeList.csv');
         const meta = window.context.commonService.session.meta;
 
         const newSessionSkeleton = this.sessionSkeleton();

@@ -156,9 +156,12 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
       const canvWidth = phyCanv.clientWidth;
       tree.setSize(canvWidth, canvHeight);
       tree.selectedColour = this.visuals.phylogenetic.commonService.GlobalSettingsModel.SelectedColorVariable;
+      this.visuals.phylogenetic.commonService.session.style.widgets['link-color'] = '#000000';
       // tree.fillCanvas = true;
       newickString.then((x) => {
         tree.load(x);
+        console.log(x);
+        tree.branchColour = this.visuals.phylogenetic.commonService.session.style.widgets['link-color'];
         tree.setTreeType('rectangular');
         tree.setNodeSize(this.SelectedLeafSizeVariable);
         tree.leaves.forEach((y) => {
