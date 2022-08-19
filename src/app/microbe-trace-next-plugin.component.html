@@ -113,7 +113,7 @@
                 <span class="onload-bold">Onload Settings:</span>
                 <span>Distance Metric: <span class="option-value" [matMenuTriggerFor]="metricMenu">{{metric}} <span class="onload-dropdown-symbol">&#9660;</span></span></span>
                 <span id="ambiguities-menu">Ambiguities: <span class="option-value" [matMenuTriggerFor]="ambiMenu">{{ambiguity}} <span class="onload-dropdown-symbol">&#9660;</span></span></span>
-                <span>View to Launch: <span class="option-value" [matMenuTriggerFor]="viewMenu">{{launchView}} <span class="onload-dropdown-symbol">&#9660;</span></span></span>
+                <span>View to Launch: <span class="option-value" [matMenuTriggerFor]="viewMenuBottom">{{launchView}} <span class="onload-dropdown-symbol">&#9660;</span></span></span>
                 <span class="threshold-option">Link Threshold: 
                     <form class="threshold-input">
                     <mat-form-field class="threshold-input-length">
@@ -134,13 +134,12 @@
                 <button mat-menu-item (click)="updateAmbiguity('GapMM')">GapMM</button>
                 <button mat-menu-item (click)="updateAmbiguity('HIV-Trace -g')">HIV-Trace -g</button>
             </mat-menu>
-            <!-- <mat-menu #viewMenu="matMenu" overlapTrigger="false">
+            <mat-menu #viewMenuBottom="matMenu" overlapTrigger="false">
                 <button mat-menu-item (click)="updateLaunchView('2D Network')">2D Network</button>
-                <button mat-menu-item (click)="updateLaunchView('3D Network')">3D Network</button>
                 <button mat-menu-item (click)="updateLaunchView('Table')">Table</button>
                 <button mat-menu-item (click)="updateLaunchView('Map')">Bubbles</button>
                 <button mat-menu-item (click)="updateLaunchView('Phylogenetic Tree')">Phylogenetic Tree</button>
-            </mat-menu> -->
+            </mat-menu>
         </div>
 
 
