@@ -28,7 +28,6 @@ declare module "*.json" {
     export default value;
 }
 
-declare module 'tidytree';
 
 /**
  * rtl-detect
