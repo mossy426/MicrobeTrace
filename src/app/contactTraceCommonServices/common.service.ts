@@ -121,7 +121,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             "choropleth-satellite-show": false,
             "choropleth-transparency": 0.3,
             "cluster-minimum-size": 1,
-            "default-view": "Phylogenetic Tree", // "2D Network",
+            "default-view": "2D Network", // "Phylogenetic Tree"
             "filtering-epsilon": -8,
             "flow-showNodes": "selected",
             "gantt-date-list": "",
@@ -1694,10 +1694,10 @@ export class CommonService extends AppComponentBase implements OnInit {
         console.log("Total load time:", window.context.commonService.session.meta.loadTime.toLocaleString(), "ms");
 
         setTimeout(() => {
-            // console.log('launching view: ',window.context.commonService.session.style.widgets['default-view']);
-            // window.context.commonService.launchView(window.context.commonService.session.style.widgets['default-view']);
-            console.log('launching view: Phylogenetic Tree');
-            window.context.commonService.launchView("Phylogenetic Tree");
+            console.log('launching view: ',window.context.commonService.session.style.widgets['default-view']);
+            window.context.commonService.launchView(window.context.commonService.session.style.widgets['default-view']);
+            // console.log('launching view: Phylogenetic Tree');
+            // window.context.commonService.launchView("Phylogenetic Tree");
 
         }, 1000);
 
