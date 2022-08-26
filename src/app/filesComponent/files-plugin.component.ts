@@ -506,8 +506,12 @@ export class FilesComponent extends AppComponentBase implements OnInit {
     }
 
     launchClick() {
+        console.log(`${JSON.stringify(this.commonService.session.files)}`);
 
         this.commonService.resetData();
+
+        console.log(`${JSON.stringify(this.commonService.session.files)}`);
+
         this.commonService.session.messages = [];
         this.messages = [];
 

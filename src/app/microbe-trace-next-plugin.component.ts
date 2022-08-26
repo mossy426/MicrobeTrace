@@ -1231,7 +1231,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.commonService.GlobalSettingsModel.SelectedColorVariable = this.SelectedColorVariable;
         this.commonService.session.style.widgets['selected-color'] = this.SelectedColorVariable;
         this.commonService.session.style.widgets['selected-node-stroke-color'] = this.SelectedColorVariable;
-        this.commonService.visuals.phylogenetic.updateNodeColors();
+        if (this.commonService.visuals.phylogenetic) {
+          this.commonService.visuals.phylogenetic.updateNodeColors();
+        }
 
 
         this.commonService.GlobalSettingsModel.SelectedBackgroundColorVariable = this.SelectedBackgroundColorVariable;
