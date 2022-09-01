@@ -26,13 +26,13 @@
               <button class="navbar-item" mat-button [matMenuTriggerFor]="windowMenu"><i class="far nav-icon flaticon-web"></i>Window<span class="dropdown-symbol">&#9660;</span></button>
               <mat-menu #windowMenu="matMenu" overlapTrigger="false">
                 <button mat-menu-item (click)="WindowClick('Reload Screen')">Reload</button>
-                <button mat-menu-item>Toggle Fullscreen</button>
+                <button mat-menu-item (click)="WindowClick('Fullscreen')">Fullscreen</button>
               </mat-menu>
               <button class="navbar-item" mat-button [matMenuTriggerFor]="helpMenu"><i class="far nav-icon flaticon-questions-circular-button"></i>Help<span class="dropdown-symbol">&#9660;</span></button>
               <mat-menu #helpMenu="matMenu" overlapTrigger="false">
-                <button mat-menu-item>Help</button>
-                <button mat-menu-item>Report Bug</button>
-                <button mat-menu-item>About</button>
+                <a href="https://github.com/CDCgov/MicrobeTrace/wiki" class="dropdown-item ifOnline" target="_blank" rel="noreferrer noopener" mat-menu-item>Help</a>
+                <a href="https://github.com/CDCgov/MicrobeTrace/issues/new" class="dropdown-item ifOnline" target="_blank" rel="noreferrer noopener" mat-menu-item>Report Bug</a>
+                <button (click)="HelpClick('About')" mat-menu-item>About</button>
               </mat-menu>
               <button class="navbar-item" mat-button [matMenuTriggerFor]="langMenu"><i class="far nav-icon flaticon-earth-globe"></i>Language<span class="dropdown-symbol">&#9660;</span></button>
               <mat-menu #langMenu="matMenu" overlapTrigger="false">
@@ -355,17 +355,34 @@
         </p-dialog><!-- /.modal -->
 
 
-        <p-dialog id="about-dialog" [(visible)]="displayAbout" header="About Micro-Tracing Next">
+        <p-dialog id="about-dialog" [(visible)]="displayAbout" header="About Microbetrace">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
                         <h3>
-                            <span>{{"Micro-Tracing " | localize}}</span>
-                            <span>{{"Next" | localize}}</span>
-                            <span><sup>&reg;</sup></span>
+                            <span>{{"MicrobeTrace" | localize}} </span>
                             <small>v<span id="version">{{version}}</span></small>
                         </h3>
-                      
+                        <p>
+                            MicrobeTrace is an interactive web application that renders existing data from high-risk contact networks
+                            in an easy-to-use Graphical User Interface (GUI). The network visualization can be customized according to
+                            supplemental data sources and mathematical inferences like the most probable transmission pathways.
+                            MicrobeTrace is a highly responsive, visual sequence analytics tool which can reduce the gap between data
+                            production and analytics and help you to discover, understand, and display relationships (links) between
+                            patients (nodes). MicrobeTrace can be deployed on laptops to locations without any Internet access, thereby
+                            reducing both the startup cost and analysis time and effort.
+                          </p>
+                          <p class="about-links">
+                            <a href="https://github.com/CDCgov/MicrobeTrace/wiki" target="_blank" rel="noreferrer noopener">
+                              Click Here to Learn More
+                            </a>
+                          </p>
+                          <p>
+                            MicrobeTrace was built by the Molecular Epidemiology and Bionformatics Team at the CDC in Atlanta.</p>
+                            <a class="about-links" href="https://cdcgov.github.io/MEBT" target="_blank" rel="noreferrer noopener" style="display: block;">
+                              Click Here to See MEBT's Other Tools
+                            </a>
+                          
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success" (click)="DisplayAbout()">Close</button>

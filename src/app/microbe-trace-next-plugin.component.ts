@@ -52,6 +52,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     public launchView: string = "2D Network";
     public threshold: string = "0.015";
 
+    elem : any;
     showSettings: boolean = false;
     showExport: boolean = false;
     showCenter: boolean = false;
@@ -244,6 +245,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     ngOnInit() {
 
         this.getGlobalSettingsData();
+
+        this.elem = document.documentElement;
 
         if (!this.GlobalSettingsDialogSettings) {
             this.GlobalSettingsDialogSettings = new DialogSettings('#global-settings-modal', false);
@@ -1963,20 +1966,35 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     WindowClick(actionName: any) {
         switch (actionName) {
-            case "Phylogeography Mode": {
+            case "Fullscreen": 
 
+                if (this.elem.requestFullscreen) {
+                    this.elem.requestFullscreen();
+                    } else if (this.elem.mozRequestFullScreen) {
+                    /* Firefox */
+                    this.elem.mozRequestFullScreen();
+                    } else if (this.elem.webkitRequestFullscreen) {
+                    /* Chrome, Safari and Opera */
+                    this.elem.webkitRequestFullscreen();
+                    } else if (this.elem.msRequestFullscreen) {
+                    /* IE/Edge */
+                    this.elem.msRequestFullscreen();
+                    }
+                
                 break;
-            }
+
             case "Reload Screen": {
 
                 this.onReloadScreen();
 
-                this.homepageTabs.forEach(tab => {
-                    if (tab.componentRef &&
-                        tab.componentRef.instance.openRefreshScreen) {
-                        tab.componentRef.instance.openRefreshScreen();
-                    }
-                })
+                window.location.reload()
+
+                // this.homepageTabs.forEach(tab => {
+                //     if (tab.componentRef &&
+                //         tab.componentRef.instance.openRefreshScreen) {
+                //         tab.componentRef.instance.openRefreshScreen();
+                //     }
+                // })
                 break;
             }
         }
@@ -1985,6 +2003,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     HelpClick(actionName: any) {
         switch (actionName) {
             case "Help": {
+                this.DisplayHelp();
+                break;
+            }
+            case "Report": {
                 this.DisplayHelp();
                 break;
             }
