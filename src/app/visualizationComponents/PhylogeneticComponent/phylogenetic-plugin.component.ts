@@ -70,6 +70,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     // Leaves Tab
     SelectedLeafLabelShowVariable: string = 'Show';
     SelectedLeafLabelVariable: string = 'None';
+    LeafLabelFieldList: object[] = [];
     // SelectedLeafLabelSizeVariable: number = 20;
     SelectedLeafLabelSizeVariable: number = 8;
     LeafShapes: any = [
@@ -210,12 +211,11 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
             // d3.select('svg#network').exit().remove();
             // this.visuals.phylogenetic.svg = d3.select('svg#network').append('g');
 
-            this.visuals.phylogenetic.FieldList = [];
 
-            this.visuals.phylogenetic.FieldList.push({ label: 'None', value: 'None' });
-            this.visuals.phylogenetic.commonService.session.data['nodeFields'].map((d, i) => {
+            this.LeafLabelFieldList.push({ label: 'None', value: 'None' });
+            this.commonService.session.data['nodeFields'].map((d, i) => {
 
-                this.visuals.phylogenetic.FieldList.push(
+                this.visuals.phylogenetic.LeafLabelFieldList.push(
                     {
                         label: this.visuals.phylogenetic.commonService.capitalize(d.replace('_', '')),
                         value: d
@@ -322,6 +322,9 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
       thisTree.draw();
     }
 
+    onCloseExport() {
+        this.isExportClosed = true;
+    }
 
     updateNodeColors() {
       const nodeColor = this.visuals.phylogenetic.commonService.session.style.widgets['node-color'];

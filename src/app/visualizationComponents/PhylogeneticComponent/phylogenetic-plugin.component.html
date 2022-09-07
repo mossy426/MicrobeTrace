@@ -38,12 +38,12 @@
                                   <p-selectButton id="leaf-label-visibility" [options]="hideShowOptions" [(ngModel)]="SelectedLeafLabelShowVariable" (ngModelChange)="onLeafLabelShowChange($event)"></p-selectButton>
                               </div>
                           </div>
-                          <div class="form-group row leaf-label-variable-row" title="What data should be displayed as the label for a leaf?">
+                          <!--<div class="form-group row leaf-label-variable-row" title="What data should be displayed as the label for a leaf?">
                               <div class="col-4"><label for="leaf-label-variable">Leaf Label</label></div>
                               <div class="col-8">
                                   <p-dropdown id="leaf-label-variable" [options]="LeafLabelFieldList" appendTo="body" [(ngModel)]="SelectedLeafLabelVariable" (ngModelChange)="onLeafLabelVariableChange($event)"></p-dropdown>
                               </div>
-                          </div>
+                          </div>-->
                           <div class="form-group row leaf-label-size-row" title="How big should leaf labels be?">
                               <div class="col-4"><label for="leaf-label-size">Label Size</label></div>
                               <input type="range" class="custom-range" id="leaf-label-size" min="5" value="30" step="1" max="72" [(ngModel)]="SelectedLeafLabelSizeVariable" (ngModelChange)="onLeafLabelSizeChange($event)">
@@ -113,10 +113,10 @@
                     <p-accordionTab header="Export Image of Tree" style="color:#495057" [selected]="true">
                         <div class="form-group row">
                             <div class="col-8">
-                                <input type="text" id="tree-image-filename" class="form-control form-control-sm" placeholder="Image Filename" [(ngModel)]="SelectedTreeImageFilenameVariable" (ngModelChange)="onDataChange($event)">
+                                <input type="text" id="tree-image-filename" class="form-control form-control-sm" placeholder="Image Filename" [(ngModel)]="SelectedTreeImageFilenameVariable" >
                             </div>
                             <div class="col-3">
-                                <p-dropdown id="network-export-filetype" [options]="NetworkExportFileTypeList" [(ngModel)]="SelectedNetworkExportFileTypeListVariable" (ngModelChange)="onNetworkExportFiletypeChange($event)"></p-dropdown>
+                                <p-dropdown id="network-export-filetype" [options]="NetworkExportFileTypeList" [(ngModel)]="SelectedNetworkExportFileTypeListVariable" ></p-dropdown>
                             </div>
                             <div class="col-8">
                                 <button type="button" id="export-tree" class="btn btn-primary" (click)="saveImage($event)">Save Image</button>
@@ -126,7 +126,7 @@
                     <p-accordionTab header="Export Newick String" style="color:#495057" [selected]="true">
                         <div class="form-group row">
                             <div class="col-8">
-                                <input type="text" id="newick-string-filename" class="form-control form-control-sm" placeholder="Newick Filename" [(ngModel)]="SelectedNewickStringFilenameVariable" (ngModelChange)="onDataChange($event)">
+                                <input type="text" id="newick-string-filename" class="form-control form-control-sm" placeholder="Newick Filename" [(ngModel)]="SelectedNewickStringFilenameVariable" >
                             </div>
                             <div class="col-3"></div>
                             <div class="col-8">
