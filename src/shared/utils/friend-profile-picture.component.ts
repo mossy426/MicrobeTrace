@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Input } from '@angular/core';
 import { AppConsts } from '@shared/AppConsts';
-import { ProfileServiceProxy } from '@shared/service-proxies/service-proxies';
+// import { ProfileServiceProxy } from '@shared/service-proxies/service-proxies';
 
 @Component({
     selector: 'friend-profile-picture',
@@ -17,7 +17,7 @@ export class FriendProfilePictureComponent implements AfterViewInit {
     profilePicture = AppConsts.appBaseUrl + '/assets/common/images/default-profile-picture.png';
 
     constructor(
-        private _profileService: ProfileServiceProxy
+        // private _profileService: ProfileServiceProxy
     ) {
     }
 
@@ -38,10 +38,10 @@ export class FriendProfilePictureComponent implements AfterViewInit {
             return;
         }
 
-        this._profileService.getFriendProfilePictureById(this.profilePictureId, this.userId, this.tenantId).subscribe((result) => {
-            if (result && result.profilePicture) {
-                this.profilePicture = 'data:image/jpeg;base64,' + result.profilePicture;
-            }
-        });
+        // this._profileService.getFriendProfilePictureById(this.profilePictureId, this.userId, this.tenantId).subscribe((result) => {
+        //     if (result && result.profilePicture) {
+        //         this.profilePicture = 'data:image/jpeg;base64,' + result.profilePicture;
+        //     }
+        // });
     }
 }

@@ -1,7 +1,8 @@
 ﻿import { Component, EventEmitter, Output, Injector, OnInit, OnDestroy } from '@angular/core';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
 import * as d3 from 'd3';
-import * as moment from 'moment';
+import moment from 'moment';
+
 import { MicrobeTraceNextVisuals } from '../../microbe-trace-next-plugin-visuals';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { MicobeTraceNextPluginEvents } from '@app/helperClasses/interfaces';

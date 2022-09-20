@@ -45,7 +45,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     radToDeg: any = (180 / Math.PI);
     selected: any = null;
     multidrag: boolean = false;
-    clipboard = new ClipboardJS('#copyID, #copySeq');
+    // clipboard = new ClipboardJS('#copyID, #copySeq');
     zoom: any = null;
     brush: any = null;
     FieldList: SelectItem[] = [];
@@ -317,7 +317,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
             if (this.visuals.twoD.commonService.session.style.widgets['network-friction']) this.visuals.twoD.force.velocityDecay(this.visuals.twoD.commonService.session.style.widgets['network-friction']);
 
-            this.visuals.twoD.clipboard.on('success', ()=>this.hideContextMenu());
+            // this.visuals.twoD.clipboard.on('success', ()=>this.hideContextMenu());
 
             d3.select(window).on('keydown keyup', () => {
                 d3.select('g.brush')
@@ -436,6 +436,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
 
     showGlobalSettings() {
+        console.log("threshold: ",  this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable);
         this.DisplayGlobalSettingsDialogEvent.emit("Styling");
     }
 

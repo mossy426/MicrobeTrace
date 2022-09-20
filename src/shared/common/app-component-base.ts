@@ -11,7 +11,7 @@ import { AppUrlService } from '@shared/common/nav/app-url.service';
 import { AppSessionService } from '@shared/common/session/app-session.service';
 import { AppUiCustomizationService } from '@shared/common/ui/app-ui-customization.service';
 import { PrimengTableHelper } from '@shared/helpers/PrimengTableHelper';
-import { UiCustomizationSettingsDto } from '@shared/service-proxies/service-proxies';
+// import { UiCustomizationSettingsDto } from '@shared/service-proxies/service-proxies';
 
 export abstract class AppComponentBase {
 
@@ -99,7 +99,7 @@ export abstract class AppComponentBase {
         return this.appUrlService.appRootUrl;
     }
 
-    get currentTheme(): UiCustomizationSettingsDto {
-        return this.appSession.theme;
-    }
+    // get currentTheme(): UiCustomizationSettingsDto {
+    //     // return this.appSession.theme;
+    // }
 }

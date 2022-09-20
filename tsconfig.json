@@ -25,6 +25,8 @@
       "@app/*": [ "./src/app/*" ],
       "@abp/*": [ "node_modules/abp-ng2-module/dist/src/*" ],
       "@metronic/*": [ "./src/assets/metronic/*" ]
-    }
+    },
+    "esModuleInterop": true, 
+    "allowSyntheticDefaultImports": true
   }
 }

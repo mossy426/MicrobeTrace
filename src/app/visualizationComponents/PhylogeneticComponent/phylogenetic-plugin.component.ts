@@ -50,7 +50,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     radToDeg: any = (180 / Math.PI);
     selected: any = null;
     multidrag: boolean = false;
-    clipboard = new ClipboardJS('#copyID, #copySeq');
+    // clipboard = new ClipboardJS('#copyID, #copySeq');
     zoom: any = null;
     brush: any = null;
     FieldList: SelectItem[] = [];

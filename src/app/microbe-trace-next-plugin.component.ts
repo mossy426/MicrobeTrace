@@ -21,7 +21,7 @@ import { window, TabsetComponent } from 'ngx-bootstrap';
 import { TabView, TabPanel, Button } from 'primeng/primeng';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { SelectItem, TreeNode } from 'primeng/api';
-import { BpaasLedgerPluginServiceProxy, BlockchainProofHashDto, GetAllBlockByBlockchainLedgerIDDto, OutputblockchainaccessDto, DeleteBlockdetailsDto, LockblockchainledgerDto, OutputlockblockchainledgerDto, DownloadBlockDto, OutputDeleteblockDto, LeidosPluginServiceProxy, Auth, UserServiceProxy, UserRoleDto, UserEditDto, Blockdata, DownloadFilteredBlockDto, OutputGetJurisdictionDtoItem, MarkAllUnreadMessagesOfUserAsReadInput, OutputDownloadFilteredBlock } from '@shared/service-proxies/service-proxies';
+// import { BpaasLedgerPluginServiceProxy, BlockchainProofHashDto, GetAllBlockByBlockchainLedgerIDDto, OutputblockchainaccessDto, DeleteBlockdetailsDto, LockblockchainledgerDto, OutputlockblockchainledgerDto, DownloadBlockDto, OutputDeleteblockDto, LeidosPluginServiceProxy, Auth, UserServiceProxy, UserRoleDto, UserEditDto, Blockdata, DownloadFilteredBlockDto, OutputGetJurisdictionDtoItem, MarkAllUnreadMessagesOfUserAsReadInput, OutputDownloadFilteredBlock } from '@shared/service-proxies/service-proxies';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AppSessionService } from '@shared/common/session/app-session.service';
 import { DialogSettings } from './helperClasses/dialogSettings';
@@ -33,7 +33,10 @@ import * as _ from 'lodash';
 import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { EventEmitterService } from '@shared/utils/event-emitter.service';
-import * as moment from 'moment';
+// import * as moment from 'moment';
+import moment from 'moment';
+
+import { Tabulator } from 'tabulator-tables';
 
 
 @Component({
@@ -46,6 +49,8 @@ import * as moment from 'moment';
 
 export class MicrobeTraceNextHomeComponent extends AppComponentBase implements AfterViewInit, OnInit, OnDestroy {
 
+
+    @ViewChild('stashes') stashes: ElementRef;
 
     public metric: string = "TN93";
     public ambiguity: string = "Average";
@@ -84,10 +89,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     saveFileName: string = '';
 
 
-    posts: BlockchainProofHashDto[] = new Array<BlockchainProofHashDto>();
-    Blockchaindata: BlockchainProofHashDto = new BlockchainProofHashDto();
+    // posts: BlockchainProofHashDto[] = new Array<BlockchainProofHashDto>();
+    // Blockchaindata: BlockchainProofHashDto = new BlockchainProofHashDto();
     date: Date;
-    Inputdownloadblock: DownloadFilteredBlockDto = new DownloadFilteredBlockDto();
+    // Inputdownloadblock: DownloadFilteredBlockDto = new DownloadFilteredBlockDto();
     Filepath: SafeResourceUrl;
 
     BlockChainLedgerNodeList: any[] = [];
@@ -150,7 +155,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     activeTabNdx = null;
     ShowGlobalSettingsLinkColorTable: boolean = false;
     ShowGlobalSettingsNodeColorTable: boolean = false;
-    user: UserEditDto = new UserEditDto();
+    // user: UserEditDto = new UserEditDto();
     roles: Array<string> = new Array<string>();
 
     ShowGlobalSettingsSettingsPane: boolean = false;
@@ -196,7 +201,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     @ViewChild('pinbutton') pinBtn: ElementRef<HTMLElement>;
 
 
-    public HideThisForNow: boolean = true;
+    public HideThisForNow: boolean = false;
 
     files: any[] = [];
 
@@ -215,12 +220,12 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         private cfr: ComponentFactoryResolver,
         private compiler: Compiler,
         public commonService: CommonService,
-        private keenService: BpaasLedgerPluginServiceProxy,
-        private _userService: UserServiceProxy,
+        // private keenService: BpaasLedgerPluginServiceProxy,
+        // private _userService: UserServiceProxy,
         public domSanitizer: DomSanitizer,
         private cdref: ChangeDetectorRef,
         private eventEmitterService: EventEmitterService,
-        private bpaasLedgerPluginServiceProxy: BpaasLedgerPluginServiceProxy,
+        // private bpaasLedgerPluginServiceProxy: BpaasLedgerPluginServiceProxy,
         private route: ActivatedRoute
     ) {
 
@@ -280,6 +285,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.SelectedLinkThresholdVariable = this.commonService.session.style.widgets['link-threshold'];
 
         this.commonService.updateThresholdHistogram();
+
+        console.log("global settings: ", this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable);
+        console.log("SelectedLinkThresholdVariable: ", this.SelectedLinkThresholdVariable);
 
          // Update distance metric in cashe
          let cachedLSV = "";
@@ -389,6 +397,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
      */
      public updateMetric( value: string ) : void {
         this.metric = value;
+        console.log('metric updating');
         console.log('updaating metric: ', this.metric);
 
         if (this.metric === "SNPs") {
@@ -437,7 +446,12 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
      */
      public updateThreshold(ev : any) : void {
         this.threshold = ev.target.value;
-        this.commonService.session.style.widgets["link-threshold"] = Number(this.threshold);
+        console.log('threshold: ', this.threshold);
+        this.SelectedLinkThresholdVariable = this.threshold;
+        this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = this.SelectedLinkThresholdVariable;
+        console.log('loading settingss1: ', this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"]);
+        this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"] = Number(this.threshold);
+        console.log('loading settingss2: ', this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"]);
     }
 
     /**
@@ -1172,6 +1186,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         //debugger;
 
+        console.log("changed: ", this.SelectedLinkThresholdVariable);
         this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = this.SelectedLinkThresholdVariable;
 
         this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"] = parseFloat(this.SelectedLinkThresholdVariable);
@@ -1332,18 +1347,18 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     getUserRoles() {
 
-        this._userService.getUserForEdit(this.appSession.userId).subscribe(userResult => {
+        // this._userService.getUserForEdit(this.appSession.userId).subscribe(userResult => {
 
-            this.user = userResult.user;
+        //     this.user = userResult.user;
 
-            userResult.roles.map(x => {
+        //     userResult.roles.map(x => {
 
-                if (x.isAssigned === true) {
-                    this.roles.push(x.roleName);
-                }
-            });
+        //         if (x.isAssigned === true) {
+        //             this.roles.push(x.roleName);
+        //         }
+        //     });
 
-        });
+        // });
     }
 
 
@@ -1368,62 +1383,62 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     getLedgerData() {
 
-        this.ledgerOptions = [];
-        this.ledgerOptionSelected = [];
-        this.ledgerOptionSelectedFlag = true;
+        // this.ledgerOptions = [];
+        // this.ledgerOptionSelected = [];
+        // this.ledgerOptionSelectedFlag = true;
 
-        this.showSpinner();
+        // this.showSpinner();
 
-        this.posts = new Array<BlockchainProofHashDto>();
-        this.Blockchaindata = new BlockchainProofHashDto();
+        // this.posts = new Array<BlockchainProofHashDto>();
+        // this.Blockchaindata = new BlockchainProofHashDto();
 
 
-        this.keenService.getAllBlockchainsByTenantID().subscribe((resA: BlockchainProofHashDto[]) => {
-            this.posts = resA.filter(x => x.ledgerName.toLowerCase() === 'ContactTrace'.toLowerCase());
+        // this.keenService.getAllBlockchainsByTenantID().subscribe((resA: BlockchainProofHashDto[]) => {
+        //     this.posts = resA.filter(x => x.ledgerName.toLowerCase() === 'ContactTrace'.toLowerCase());
 
-            let ok2Exit = false;
+        //     let ok2Exit = false;
 
-            let getBlockByLedgerIdObservable: Observable<GetAllBlockByBlockchainLedgerIDDto[]>[] = [];
+        //     let getBlockByLedgerIdObservable: Observable<GetAllBlockByBlockchainLedgerIDDto[]>[] = [];
 
-            for (let i = 0; i < this.posts.length; i++) {
-                this.posts[i].blockdata = [];
-                this.date = new Date(parseInt(this.posts[i].lastUpdated.substring(6, 26)));
-                this.posts[i].lastUpdated = this.date.toString();
-                this.Blockchaindata = this.posts[i];
+        //     for (let i = 0; i < this.posts.length; i++) {
+        //         this.posts[i].blockdata = [];
+        //         this.date = new Date(parseInt(this.posts[i].lastUpdated.substring(6, 26)));
+        //         this.posts[i].lastUpdated = this.date.toString();
+        //         this.Blockchaindata = this.posts[i];
 
-                getBlockByLedgerIdObservable.push(this.keenService.getAllBlockByBlockchainLedgerID(
-                    this.Blockchaindata.ledgerName,
-                    this.Blockchaindata.blockChainProofHashCode,
-                    this.Blockchaindata.tenantID,
-                    this.Blockchaindata.userID));
+        //         getBlockByLedgerIdObservable.push(this.keenService.getAllBlockByBlockchainLedgerID(
+        //             this.Blockchaindata.ledgerName,
+        //             this.Blockchaindata.blockChainProofHashCode,
+        //             this.Blockchaindata.tenantID,
+        //             this.Blockchaindata.userID));
 
-            }
+        //     }
 
-            forkJoin(getBlockByLedgerIdObservable).subscribe(results => {
-                results.forEach((data: GetAllBlockByBlockchainLedgerIDDto[], index: number) => {
-                    this.posts[index].blockdata = data;
+        //     forkJoin(getBlockByLedgerIdObservable).subscribe(results => {
+        //         results.forEach((data: GetAllBlockByBlockchainLedgerIDDto[], index: number) => {
+        //             this.posts[index].blockdata = data;
 
-                    for (let j = 0; j < this.posts[index].blockdata.length; j++) {
+        //             for (let j = 0; j < this.posts[index].blockdata.length; j++) {
 
-                        this.date = new Date(parseInt(this.posts[index].blockdata[j].blockUpdatedDate.substring(6, 26)));
-                        this.posts[index].blockdata[j].blockUpdatedDate = this.date.toString();
-                    }
+        //                 this.date = new Date(parseInt(this.posts[index].blockdata[j].blockUpdatedDate.substring(6, 26)));
+        //                 this.posts[index].blockdata[j].blockUpdatedDate = this.date.toString();
+        //             }
 
-                    if (index == this.posts.length - 1) {
-                        ok2Exit = true;
+        //             if (index == this.posts.length - 1) {
+        //                 ok2Exit = true;
 
-                        this.loadLedgerOptions();
-                    }
-                })
-            },
-                error => {
-                    console.log("error retrieving posts.");
-                },
-                () => {
+        //                 this.loadLedgerOptions();
+        //             }
+        //         })
+        //     },
+        //         error => {
+        //             console.log("error retrieving posts.");
+        //         },
+        //         () => {
 
-                });
+        //         });
 
-        })
+        // })
 
     }
 
@@ -1447,7 +1462,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 if (this.downloadedBlocks.findIndex(x => x == block.data.blockName) == -1) {
                     this.downloadedBlocks.push(block.data.blockName);
                     const isNodeList: boolean = block.label.includes('nodelist');
-                    this.downloadLedgerBlock(block.data, block.data.ledgerName, isNodeList)
+                    // this.downloadLedgerBlock(block.data, block.data.ledgerName, isNodeList)
                 }
             }
 
@@ -1493,24 +1508,24 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         return str;
     }
 
-    downloadLedgerBlock(item: DownloadFilteredBlockDto, ledgerId, isNodeList: boolean): void {
-        const filteredWrappers = this.bpaaSPayloadWrappers.filter(x => x.BlockName &&  x.BlockName.toLowerCase() === item.blockName.toLowerCase());
+    // downloadLedgerBlock(item: DownloadFilteredBlockDto, ledgerId, isNodeList: boolean): void {
+    //     const filteredWrappers = this.bpaaSPayloadWrappers.filter(x => x.BlockName &&  x.BlockName.toLowerCase() === item.blockName.toLowerCase());
 
-        const detailRows = _.flatten(filteredWrappers.map(x => x.BpaaSPayload.Data))
+    //     const detailRows = _.flatten(filteredWrappers.map(x => x.BpaaSPayload.Data))
 
-        let blob: any = new Blob([JSON.stringify(detailRows)], { type: 'text/plain' });
-        blob.lastModifiedDate = new Date();
-        blob.name = (item.blockName + ".json");
+    //     let blob: any = new Blob([JSON.stringify(detailRows)], { type: 'text/plain' });
+    //     blob.lastModifiedDate = new Date();
+    //     blob.name = (item.blockName + ".json");
 
 
-        var file: File = <File>blob;
+    //     var file: File = <File>blob;
 
-        this.getSinglefileContent(file);
+    //     this.getSinglefileContent(file);
 
-        abp.notify.success("Ledger block successfully downloaded.");
-        this.hideSpinner();
+    //     abp.notify.success("Ledger block successfully downloaded.");
+    //     this.hideSpinner();
 
-    }
+    // }
 
     showSpinner() {
         this.spinnerDivElement.nativeElement.style.display = "block";
@@ -1529,9 +1544,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.BlockChainLedgerEdgeList = [];
         this.ledgerOptions = [];
 
-        let postCount = this.posts.length;
+        // let postCount = this.posts.length;
         let loadedAny: boolean = false;
-        let observableFilterBlocks: { post: BlockchainProofHashDto, ob: Observable<OutputDownloadFilteredBlock> }[] = [];
+        // let observableFilterBlocks: { post: BlockchainProofHashDto, ob: Observable<OutputDownloadFilteredBlock> }[] = [];
 
         const endLoadBadly = () => {
             this.hideSpinner();
@@ -1722,35 +1737,35 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     DisplayRecallStashDialog(recallStash: string) {
         switch (recallStash) {
             case "Recall": {
-                this._userService.getUserForEdit(this.appSession.userId).subscribe(userResult => {
-                    const email: string = userResult.user.emailAddress;
-                    this.visuals.microbeTrace.commonService.localStorageService.getItem("stash-" + email, (err, sessionData) => {
-                        if (sessionData) {
-                            const sessionObject: StashObjects = JSON.parse(sessionData);
-                            if (sessionObject) {
-                                this.visuals.microbeTrace.commonService.session = sessionObject.session;
+                // this._userService.getUserForEdit(this.appSession.userId).subscribe(userResult => {
+                //     const email: string = userResult.user.emailAddress;
+                //     this.visuals.microbeTrace.commonService.localStorageService.getItem("stash-" + email, (err, sessionData) => {
+                //         if (sessionData) {
+                //             const sessionObject: StashObjects = JSON.parse(sessionData);
+                //             if (sessionObject) {
+                //                 this.visuals.microbeTrace.commonService.session = sessionObject.session;
 
-                                //Load Tabs
-                                sessionObject.tabs.forEach(loadedTab => {
-                                    if (this.homepageTabs.find(x => x.label === loadedTab.label) === undefined) {
-                                        this.Viewclick(loadedTab.label);
-                                    }
-                                })
+                //                 //Load Tabs
+                //                 sessionObject.tabs.forEach(loadedTab => {
+                //                     if (this.homepageTabs.find(x => x.label === loadedTab.label) === undefined) {
+                //                         this.Viewclick(loadedTab.label);
+                //                     }
+                //                 })
 
-                                this.loadSettings();
+                //                 this.loadSettings();
 
-                                this.homepageTabs.forEach(tab => {
-                                    if (tab.componentRef &&
-                                        tab.componentRef.instance.onRecallSession) {
-                                        tab.componentRef.instance.onRecallSession();
-                                    }
-                                })
+                //                 this.homepageTabs.forEach(tab => {
+                //                     if (tab.componentRef &&
+                //                         tab.componentRef.instance.onRecallSession) {
+                //                         tab.componentRef.instance.onRecallSession();
+                //                     }
+                //                 })
 
-                            }
-                        }
-                    });
+                //             }
+                //         }
+                //     });
 
-                });
+                // });
 
                 break;
             }
@@ -1772,16 +1787,23 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 this.NewSession();
                 break;
             }
+            case "Stash Session": {
+                this.stashSession();
+                break;
+            }
             case "Recall Session": {
-                this.DisplayRecallStashDialog("Cancel");
+                // this.DisplayRecallStashDialog("Cancel");
+                this.displayRecallStashDialog = true;
+                this.updateTable();
                 break;
             }
             case "Save Session": {
                 this.DisplayStashDialog("Cancel");
                 break;
             }
-            case "Add Ledger Data": {
-                this.DisplayLedgerLoaderDialog();
+            case "Add Data": {
+                // this.commonService.launchView("files");
+                // this.DisplayLedgerLoaderDialog();
                 break;
             }
 
@@ -1797,6 +1819,50 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         }
     }
+
+    stashSession() {
+        console.log('sesssion: ', this.commonService.session);
+        this.commonService.localStorageService.setItem(
+            "stash-" + Date.now() + "-" + $("#stash-name").val(),
+            JSON.stringify(this.commonService.session)
+          )
+    }
+
+    public table;
+    
+    updateTable() {
+        
+        this.table = new Tabulator(this.stashes.nativeElement, {
+            height: "100%",
+            layout: "fitData",
+            selectable: 1,
+            columns: [
+              { title: "Name", field: "name" },
+              { title: "Date", field: "date", align: "right", sorter: "date" }
+            ]
+          });
+        let rows = [];
+        this.commonService.localStorageService.keys().then(keys => {
+          keys.forEach(k => {
+            console.log('k is: ', k);
+            if (k.substring(0, 5) !== "stash") return;
+            rows.push({
+              fullname: k,
+              name: k.substring(20),
+              date: new Date(parseFloat(k.substring(6, 19))).toISOString()
+            });
+          });
+          this.table.setData(rows);
+        });
+      }
+
+    // $("#recall-load-stash").on("click", () => {
+    //     let key = table.getSelectedData()[0].fullname;
+    //     localforage.getItem(key).then(json => {
+    //       MT.applySession(JSON.parse(json));
+    //       $("#session-recall-modal").modal("hide");
+    //     });
+    //   });
 
     GetComponentTypeByName(viewName: string) {
         let _type: any = null;
@@ -2333,7 +2399,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     loadSettings() {
-        console.log('loading settings');
+        console.log('loading settingss: ', this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"]);
         //Filtering|Prune With
         this.SelectedPruneWityTypesVariable = this.visuals.microbeTrace.commonService.session.style.widgets["link-show-nn"] ? "Nearest Neighbor" : "None";
         this.onPruneWithTypesChanged();
@@ -2341,7 +2407,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         //Filtering|Minimum Cluster Size
         this.SelectedClusterMinimumSizeVariable = this.visuals.microbeTrace.commonService.session.style.widgets["cluster-minimum-size"];
         this.onMinimumClusterSizeChanged();
-
+        
         //Filtering|Filter Links on
         this.SelectedLinkSortVariable = this.visuals.microbeTrace.commonService.session.style.widgets["link-sort-variable"];
         this.onLinkSortChanged();

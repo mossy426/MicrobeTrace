@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import * as $ from 'jquery';
 import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { ServiceProxyModule } from '@shared/service-proxies/service-proxy.module';
+// import { ServiceProxyModule } from '@shared/service-proxies/service-proxy.module';
 import { UtilsModule } from '@shared/utils/utils.module';
 import { AbpModule } from 'abp-ng2-module/dist/src/abp.module';
 import { ModalModule, TooltipModule, TabsModule, BsDropdownModule, PopoverModule } from 'ngx-bootstrap';
@@ -88,7 +88,7 @@ import { DndDirective } from '@shared/dnd.directive';
     AppRoutingModule,
     UtilsModule,
     //AppCommonModule.forRoot(),
-    ServiceProxyModule,
+    // ServiceProxyModule,
     TableModule,
     ListboxModule,   
     RadioButtonModule,     

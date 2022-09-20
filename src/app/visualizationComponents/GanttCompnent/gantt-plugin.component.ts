@@ -2,7 +2,9 @@
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
 import * as d3 from 'd3';
-import * as moment from 'moment';
+// import * as moment from 'moment';
+import moment from 'moment';
+
 import * as saveAs from 'file-saver';
 import * as domToImage from 'dom-to-image-more';
 import { MicrobeTraceNextVisuals } from '../../microbe-trace-next-plugin-visuals';

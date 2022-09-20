@@ -124,7 +124,9 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         this.RefSeqIDTypes.push(
             { label: 'Complete', value: this.commonService.HXB2 });
 
-
+        
+        this.SelectedDefaultDistanceThresholdVariable = this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"];
+        console.log('selected de: ', this.SelectedDefaultDistanceThresholdVariable);
         this.commonService.LoadViewEvent.subscribe((v) => { this.loadDefaultVisualization(v); });
         this.commonService.session.data.reference = this.commonService.HXB2.substr(2000, 2100);
 
@@ -1020,16 +1022,16 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         const extension = rawfile.name.split('.').pop().toLowerCase();
         if (extension == 'zip') {
             //debugger;
-            let new_zip = new JSZip();
-            new_zip
-                .loadAsync(rawfile)
-                .then(zip => {
-                    zip.forEach((relativePath, zipEntry) => {
-                        zipEntry.async("text").then(c => {
-                            this.commonService.processJSON(c, zipEntry.name.split('.').pop())
-                        });
-                    });
-                });
+            // let new_zip = new JSZip();
+            // new_zip
+            //     .loadAsync(rawfile)
+            //     .then(zip => {
+            //         zip.forEach((relativePath, zipEntry) => {
+            //             zipEntry.async("text").then(c => {
+            //                 this.commonService.processJSON(c, zipEntry.name.split('.').pop())
+            //             });
+            //         });
+            //     });
             return;
         }
 

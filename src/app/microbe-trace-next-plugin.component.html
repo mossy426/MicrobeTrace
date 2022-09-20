@@ -9,11 +9,11 @@
             <div class="menu-items">
               <button class="navbar-item" mat-button [matMenuTriggerFor]="fileMenu"><i class="far nav-icon flaticon-file-1"></i>File<span class="dropdown-symbol">&#9660;</span></button>
               <mat-menu #fileMenu="matMenu" overlapTrigger="false">
-                <button mat-menu-item>Stash</button>
-                <button mat-menu-item>Recall</button>
+                <button mat-menu-item (click)="FileClick('Stash Session')">Stash</button>
+                <button mat-menu-item (click)="FileClick('Recall Session')">Recall</button>
                 <button mat-menu-item (click)="FileClick('Save Session')">Save</button>
-                <button mat-menu-item>Open</button>
-                <button mat-menu-item>Add Data</button>
+                <button mat-menu-item (click)="FileClick('Open Session')">Open</button>
+                <button mat-menu-item (click)="FileClick('Add Data')">Add Data</button>
                 <button mat-menu-item (click)="FileClick('New Session')">New</button>
               </mat-menu>
               <button class="navbar-item" mat-button [matMenuTriggerFor]="viewMenu"><i class="far nav-icon flaticon-web"></i>View<span class="dropdown-symbol">&#9660;</span></button>
@@ -92,9 +92,9 @@
                     <span class="primary">Welcome to </span>
                     <span class="microbe primary">Microbe</span>
                     <span class="primary">Trace&#8482;</span>
-                    <!-- <span><img class="mt-icon" src="../../assets/images/Logo.png"></span> -->
+                    <span><img class="mt-icon" src="../../assets/images/Logo.png"></span>
                     <!-- Swap/Uncomment when building productions -->
-                    <span><img class="mt-icon" src="Logo.png"></span>
+                    <!-- <span><img class="mt-icon" src="Logo.png"></span> -->
                 </div>
                 <div id="welcome-description" class="bottom primary">The Visualization Multitool for Molecular Epidemiology and Bioinformatics</div>
             </div>
@@ -109,7 +109,7 @@
                     <button mat-raised-button color="primary" (click)="continueClicked()">Continue with Sample Dataset</button>
                 </div>
             </div>
-            <div id="onload-container" class="launch-options-container primary">
+            <!-- <div id="onload-container" class="launch-options-container primary">
                 <span class="onload-bold">Onload Settings:</span>
                 <span>Distance Metric: <span class="option-value" [matMenuTriggerFor]="metricMenu">{{metric}} <span class="onload-dropdown-symbol">&#9660;</span></span></span>
                 <span id="ambiguities-menu">Ambiguities: <span class="option-value" [matMenuTriggerFor]="ambiMenu">{{ambiguity}} <span class="onload-dropdown-symbol">&#9660;</span></span></span>
@@ -139,7 +139,7 @@
                 <button mat-menu-item (click)="updateLaunchView('Table')">Table</button>
                 <button mat-menu-item (click)="updateLaunchView('Map')">Bubbles</button>
                 <button mat-menu-item (click)="updateLaunchView('Phylogenetic Tree')">Phylogenetic Tree</button>
-            </mat-menu>
+            </mat-menu> -->
         </div>
 
 
@@ -322,9 +322,8 @@
         <p-dialog id="session-recall-modal" [(visible)]="displayRecallStashDialog" header="Recall Stash">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div *ngIf="!HideThisForNow" class="modal-body">
-                        <div id="recall-stashes-available" class="table-sm"></div>
-                    </div>
+                    <div #stashes id="recall-stashes-available" class="table-sm"></div>
+
                     <div class="modal-footer">
                         <button *ngIf="!HideThisForNow" type="button" class="btn btn-danger" id="recall-delete-stash" (click)="DisplayRecallStashDialog('Delete')">Delete</button>
                         <button type="button" class="btn" (click)="DisplayRecallStashDialog('Cancel')">Cancel</button>

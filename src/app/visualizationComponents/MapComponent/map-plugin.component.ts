@@ -6,7 +6,8 @@ import * as saveAs from 'file-saver';
 import * as d3 from 'd3';
 import * as domToImage from 'dom-to-image-more';
 import * as L from 'leaflet';
-import * as moment from 'moment';
+// import * as moment from 'moment';
+import moment from 'moment';
 import 'leaflet.markercluster';
 
 //import * as MarkerCluster from 'leaflet.markercluster';

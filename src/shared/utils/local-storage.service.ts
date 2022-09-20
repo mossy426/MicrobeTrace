@@ -37,4 +37,13 @@ export class LocalStorageService {
         localForage.removeItem(key, value);
     }
 
+    keys() {
+
+        if (!localForage) {
+            return;
+        }
+
+        return localForage.keys();
+    }
+
 }

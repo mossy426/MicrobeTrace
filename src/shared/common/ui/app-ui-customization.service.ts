@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
-import { UiCustomizationSettingsDto } from '@shared/service-proxies/service-proxies';
+// import { UiCustomizationSettingsDto } from '@shared/service-proxies/service-proxies';
 
 @Injectable()
 export class AppUiCustomizationService {
 
-    private _theme: UiCustomizationSettingsDto;
+    // private _theme: UiCustomizationSettingsDto;
+    private _theme: any;
 
-    init(theme: UiCustomizationSettingsDto): void {
-        this._theme = theme;
+
+    // init(theme: UiCustomizationSettingsDto): void {
+    //     this._theme = theme;
+    // }
+
+    init(): void {
     }
 
     getContainerClass() {
