@@ -1,13 +1,9 @@
 ﻿/* eslint-disable @typescript-eslint/no-inferrable-types */
 import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit,
-        ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
+  ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { EventManager, DOCUMENT } from '@angular/platform-browser';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
-import Phylocanvas from 'phylocanvas';
-import contextMenu from 'phylocanvas-plugin-context-menu';
-import scalebar from 'phylocanvas-plugin-scalebar';
-import history from 'phylocanvas-plugin-history';
 import * as ClipboardJS from 'clipboard';
 import * as saveAs from 'file-saver';
 import * as domToImage from 'dom-to-image-more';
@@ -17,373 +13,418 @@ import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
 import * as _ from 'lodash';
 import { MicrobeTraceNextVisuals } from '../../microbe-trace-next-plugin-visuals';
 import { CustomShapes } from '@app/helperClasses/customShapes';
+import TidyTree from './tidytree';
+import * as d3 from 'd3';
 
 
 /**
  * @title PhylogeneticComponent
  */
 @Component({
-    selector: 'PhylogeneticComponent',
-    templateUrl: './phylogenetic-plugin.component.html',
+  selector: 'PhylogeneticComponent',
+  templateUrl: './phylogenetic-plugin.component.html',
 })
 export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
-    @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
-    svgStyle: {} = {
-        height: '0px',
-        width: '1000px'
-    };
+  @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
+  svgStyle: {} = {
+    height: '0px',
+    width: '1000px'
+  };
 
-    private customShapes: CustomShapes = new CustomShapes();
+  private customShapes: CustomShapes = new CustomShapes();
 
-    ShowNetworkAttributes: boolean = false;
-    ShowStatistics: boolean = false;
-    ShowPhylogeneticExportPane: boolean = false;
-    ShowPhylogeneticSettingsPane: boolean = false;
-    IsDataAvailable: boolean = false;
-    svg: any = null;
-    settings: any = this.commonService.session.style.widgets;
-    halfWidth: any = null;
-    halfHeight: any = null;
-    transform: any = null;
-    force: any = null;
-    radToDeg: any = (180 / Math.PI);
-    selected: any = null;
-    multidrag: boolean = false;
-    // clipboard = new ClipboardJS('#copyID, #copySeq');
-    zoom: any = null;
-    brush: any = null;
-    FieldList: SelectItem[] = [];
-    ToolTipFieldList: SelectItem[] = [];
-
-
-    // Tree Tab
-    TreeLayouts: any = [
-        { label: 'Rectangular', value: 'rectangular' },
-        { label: 'Radial', value: 'radial' },
-        { label: 'Circular', value: 'circular' },
-        { label: 'Diagonal', value: 'diagonal' },
-        { label: 'Hierarchical', value: 'hierarchical' },
-    ];
-    SelectedTreeLayoutVariable: string = 'rectangular';
-
-    // Leaves Tab
-    SelectedLeafLabelShowVariable: string = 'Show';
-    SelectedLeafLabelVariable: string = 'None';
-    LeafLabelFieldList: object[] = [];
-    // SelectedLeafLabelSizeVariable: number = 20;
-    SelectedLeafLabelSizeVariable: number = 8;
-    LeafShapes: any = [
-      { label: 'Circle', value: 'circle' },
-      { label: 'Triangle', value: 'triangle' },
-      { label: 'Square', value: 'square' },
-      { label: 'Star', value: 'star' },
-    ];
-    SelectedLeafShapeVariable: string = 'circle';
-    // SelectedLeafSizeVariable: number = 15;
-    SelectedLeafSizeVariable: number = 5;
-    SelectedNodeColorVariable: string = '#1f77b4';
-
-    // Branch Tab
-    SelectedBranchLabelShowVariable: string = 'Hide';
-    SelectedBranchTooltipShowVariable: string = 'Show';
-    SelectedLinkSizeVariable: number = 1;
-
-    private isExportClosed: boolean = false;
-    public isExporting: boolean = false;
-
-    hideShowOptions: any = [
-        { label: 'Hide', value: 'Hide' },
-        { label: 'Show', value: 'Show' }
-    ];
-
-    // Export Settings
-    SelectedTreeImageFilenameVariable: string = 'default_tree';
-    SelectedNewickStringFilenameVariable: string = 'default_tree.nwk';
-
-    NetworkExportFileTypeList: any = [
-        { label: 'png', value: 'png' },
-        { label: 'jpeg', value: 'jpeg' },
-        { label: 'svg', value: 'svg' }
-    ];
-
-    SelectedNetworkExportFileTypeListVariable: string = 'png';
-    SelectedNetworkExportScaleVariable: any = 1;
-    SelectedNetworkExportQualityVariable: any = 0.92;
-    CalculatedResolutionWidth: any = 1918;
-    CalculatedResolutionHeight: any = 909;
-    CalculatedResolution: any = ((this.CalculatedResolutionWidth * this.SelectedNetworkExportScaleVariable) + ' x ' + (
-      this.CalculatedResolutionHeight * this.SelectedNetworkExportScaleVariable) + 'px');
+  ShowNetworkAttributes: boolean = false;
+  ShowStatistics: boolean = false;
+  ShowPhylogeneticExportPane: boolean = false;
+  ShowPhylogeneticSettingsPane: boolean = false;
+  IsDataAvailable: boolean = false;
+  svg: any = null;
+  settings: any = this.commonService.session.style.widgets;
+  halfWidth: any = null;
+  halfHeight: any = null;
+  transform: any = null;
+  force: any = null;
+  radToDeg: any = (180 / Math.PI);
+  selected: any = null;
+  multidrag: boolean = false;
+  // clipboard = new ClipboardJS('#copyID, #copySeq');
+  zoom: any = null;
+  brush: any = null;
+  FieldList: SelectItem[] = [];
+  ToolTipFieldList: SelectItem[] = [];
 
 
-    ShowAdvancedExport: boolean = true;
+  // Tree Tab
+  TreeLayouts: any = [
+    { label: 'Rectangular', value: 'rectangular' },
+    { label: 'Radial', value: 'radial' },
+    { label: 'Circular', value: 'circular' },
+    { label: 'Diagonal', value: 'diagonal' },
+    { label: 'Hierarchical', value: 'hierarchical' },
+  ];
+  SelectedTreeLayoutVariable: string = 'rectangular';
 
-    PhylogeneticTreeExportDialogSettings: DialogSettings = new DialogSettings('#phylotree-settings-pane', false);
+  // Leaves Tab
+  SelectedLeafLabelShowVariable: string = 'Show';
+  SelectedLeafLabelVariable: string = 'None';
+  LeafLabelFieldList: object[] = [];
+  // SelectedLeafLabelSizeVariable: number = 20;
+  SelectedLeafLabelSizeVariable: number = 8;
+  LeafShapes: any = [
+    { label: 'Circle', value: 'circle' },
+    { label: 'Triangle', value: 'triangle' },
+    { label: 'Square', value: 'square' },
+    { label: 'Star', value: 'star' },
+  ];
+  SelectedLeafShapeVariable: string = 'circle';
+  // SelectedLeafSizeVariable: number = 15;
+  SelectedLeafSizeVariable: number = 5;
+  SelectedNodeColorVariable: string = '#1f77b4';
 
-    ContextSelectedNodeAttributes: {attribute: string, value: string}[] = [];
-    tree: any = null;
+  // Branch Tab
+  SelectedBranchLabelShowVariable: string = 'Hide';
+  SelectedBranchTooltipShowVariable: string = 'Show';
+  SelectedLinkSizeVariable: number = 1;
 
-    private visuals: MicrobeTraceNextVisuals;
+  private isExportClosed: boolean = false;
+  public isExporting: boolean = false;
+
+  hideShowOptions: any = [
+    { label: 'Hide', value: 'Hide' },
+    { label: 'Show', value: 'Show' }
+  ];
+
+  // Export Settings
+  SelectedTreeImageFilenameVariable: string = 'default_tree';
+  SelectedNewickStringFilenameVariable: string = 'default_tree.nwk';
+
+  NetworkExportFileTypeList: any = [
+    { label: 'png', value: 'png' },
+    { label: 'jpeg', value: 'jpeg' },
+    { label: 'svg', value: 'svg' }
+  ];
+
+  SelectedNetworkExportFileTypeListVariable: string = 'png';
+  SelectedNetworkExportScaleVariable: any = 1;
+  SelectedNetworkExportQualityVariable: any = 0.92;
+  CalculatedResolutionWidth: any = 1918;
+  CalculatedResolutionHeight: any = 909;
+  CalculatedResolution: any = ((this.CalculatedResolutionWidth * this.SelectedNetworkExportScaleVariable) + ' x ' + (
+    this.CalculatedResolutionHeight * this.SelectedNetworkExportScaleVariable) + 'px');
 
 
-    constructor(injector: Injector,
-                private eventManager: EventManager,
-                public commonService: CommonService,
-                private cdref: ChangeDetectorRef) {
+  ShowAdvancedExport: boolean = true;
 
-        super(injector);
+  PhylogeneticTreeExportDialogSettings: DialogSettings = new DialogSettings('#phylotree-settings-pane', false);
 
-        this.visuals = commonService.visuals;
-        this.commonService.visuals.phylogenetic = this;
-    }
+  ContextSelectedNodeAttributes: {attribute: string, value: string}[] = [];
+  tree: any = null;
 
-    openTree() {
-      Phylocanvas.plugin(contextMenu);
-      Phylocanvas.plugin(scalebar);
-      Phylocanvas.plugin(history);
-      const newickString = this.commonService.computeTree();
-      // const treeString = '((((A:0.0431,(((B:0.06836,(C:0.00628,D:0.00069):0.00473):0.00678,E:0.0455):0.002908,
-      // F:0.00240):0.01085):0.096,G:0.01784):0.03,(H:0.0480,I:0.0026):0.0336):0.001917,J:0.01917)';
-      // const treeString = '(A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5)F;';
-      const tree = Phylocanvas.createTree('phylocanvas', {
-        fillCanvas: true,
-        shape: 'circle',
-        showLabels: true,
-        hoverLabels: true,
-        showInternalNodeLabels: true,
-      });
-      const phyCanv = document.querySelector('#phylocanvas');
-      const canvHeight = phyCanv.clientHeight * 1.5;
-      const canvWidth = phyCanv.clientWidth;
-      tree.setSize(canvWidth, canvHeight);
-      tree.selectedColour = this.visuals.phylogenetic.commonService.GlobalSettingsModel.SelectedColorVariable;
-      this.visuals.phylogenetic.commonService.session.style.widgets['link-color'] = '#000000';
-      // tree.fillCanvas = true;
-      newickString.then((x) => {
-        tree.load(x);
-        console.log(x);
-        tree.branchColour = this.visuals.phylogenetic.commonService.session.style.widgets['link-color'];
-        tree.setTreeType('rectangular');
-        tree.setNodeSize(this.SelectedLeafSizeVariable);
-        tree.leaves.forEach((y) => {
-          y.setDisplay({
-            labelStyle: {
-              textSize: this.SelectedLeafLabelSizeVariable,
-            },
-            leafStyle: {
-              fillStyle: this.SelectedNodeColorVariable,
-              lineWidth: 0,
-              strokeStyle: this.SelectedNodeColorVariable,
-            }
+  private visuals: MicrobeTraceNextVisuals;
+
+
+  constructor(injector: Injector,
+    private eventManager: EventManager,
+    public commonService: CommonService,
+    private cdref: ChangeDetectorRef) {
+
+    super(injector);
+
+    this.visuals = commonService.visuals;
+    this.commonService.visuals.phylogenetic = this;
+  }
+
+  openTree() {
+    const newickString = this.commonService.computeTree();
+    // const treeString = '((((A:0.0431,(((B:0.06836,(C:0.00628,D:0.00069):0.00473):0.00678,E:0.0455):0.002908,
+    // F:0.00240):0.01085):0.096,G:0.01784):0.03,(H:0.0480,I:0.0026):0.0336):0.001917,J:0.01917)';
+    // const treeString = '(A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5)F;';
+    const phyCanv = document.querySelector('#phylocanvas');
+    const canvHeight = phyCanv.clientHeight * 1.5;
+    const canvWidth = phyCanv.clientWidth;
+    this.visuals.phylogenetic.commonService.session.style.widgets['link-color'] = '#000000';
+    newickString.then((x) => {
+      console.log(x);
+      this.tree = this.buildTree(x);
+    });
+
+
+
+  }
+  buildTree(newick) {
+    const tree = TidyTree(
+      newick ? newick : this.tree.data.clone(),
+      {
+        parent: '#phylocanvas',
+        layout: 'horizontal',  // d3.select('#layout').node().value,
+        mode: 'square',  // d3.select('#mode').node().value,
+        type: 'weighted', // d3.select('#type').node().value,
+        leafNodes: '2.5',  // range 0.5-10 in 0.5 steps
+        branchNodes:  '2.5',  // range 0.5-10 in 0.5 steps
+        leafLabels: '12',  // range 1-32
+        branchLabels: '6', // range 1-32
+        branchDistances: '12', // range 1-32
+        ruler: true,
+        animation: parseFloat('0'),  // range 0-2000 in steps of 10
+        margin: [10, 10, 70, 30]
+      },
+      {
+        contextmenu: this.contextMenu,
+        showtooltip: this.showTooltip,
+        hidetooltip: this.hideTooltip
+      }
+    );
+    return tree;
+  }
+
+
+  ngOnInit() {
+    this.openTree();
+
+  }
+
+  InitView() {
+    this.visuals.phylogenetic.IsDataAvailable = (
+      this.visuals.phylogenetic.commonService.session.data.nodes.length === 0 ? false : true
+    );
+
+    if (this.visuals.phylogenetic.IsDataAvailable === true && this.visuals.phylogenetic.zoom == null) {
+
+      // d3.select('svg#network').exit().remove();
+      // this.visuals.phylogenetic.svg = d3.select('svg#network').append('g');
+
+
+      this.LeafLabelFieldList.push({ label: 'None', value: 'None' });
+      this.commonService.session.data['nodeFields'].map((d, i) => {
+
+        this.visuals.phylogenetic.LeafLabelFieldList.push(
+          {
+            label: this.visuals.phylogenetic.commonService.capitalize(d.replace('_', '')),
+            value: d
           });
-        });
-        for (const branch in tree.branches) {
-          if (branch in tree.branches) {
-            tree.branches[branch].interactive = true;
-            tree.branches[branch].internalLabelStyle = {
-                textSize: this.SelectedLeafLabelSizeVariable,
-            };
-          }
-        }
-        tree.saveOriginalTree();
-        this.commonService.visuals.phylogenetic.tree = tree;
-        tree.draw();
-        console.log(tree);
       });
-
-
-
     }
+  }
+
+  openSettings() {
+    this.visuals.phylogenetic.PhylogeneticTreeExportDialogSettings.setVisibility(true);
+    // this.context.twoD.ShowStatistics = !this.context.twoD.Show2DSettingsPane;
+  }
 
 
-    ngOnInit() {
-      this.openTree();
+  openExport() {
+    this.ShowPhylogeneticExportPane = true;
 
+    this.visuals.microbeTrace.GlobalSettingsDialogSettings.setStateBeforeExport();
+    this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.setStateBeforeExport();
+    this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.setStateBeforeExport();
+    this.isExportClosed = false;
+
+  }
+
+  openCenter() {
+    const thisTree = this.commonService.visuals.phylogenetic.tree;
+    thisTree.fitInPanel(thisTree.leaves);
+    thisTree.draw();
+  }
+
+  openPinAllNodes() {
+
+
+  }
+
+  openRefreshScreen() {
+
+  }
+
+  openSelectDataSetScreen() {
+
+  }
+
+  onTreeLayoutChange(event) {
+    this.commonService.visuals.phylogenetic.tree.setTreeType(event);
+  }
+
+  onLeafLabelShowChange(event) {
+    this.SelectedLeafLabelShowVariable = event;
+    if (event === 'Hide') {
+      this.commonService.visuals.phylogenetic.tree.showLabels = false;
+    } else if (event === 'Show') {
+      this.commonService.visuals.phylogenetic.tree.showLabels = true;
     }
+    this.commonService.visuals.phylogenetic.tree.draw();
+  }
 
-    InitView() {
-        this.visuals.phylogenetic.IsDataAvailable = (
-          this.visuals.phylogenetic.commonService.session.data.nodes.length === 0 ? false : true
-        );
+  onLeafShapeVariableChange(event) {
+    const shapeConfig = { shape: event };
+    this.updateLeaves(shapeConfig);
+  }
 
-        if (this.visuals.phylogenetic.IsDataAvailable === true && this.visuals.phylogenetic.zoom == null) {
-
-            // d3.select('svg#network').exit().remove();
-            // this.visuals.phylogenetic.svg = d3.select('svg#network').append('g');
-
-
-            this.LeafLabelFieldList.push({ label: 'None', value: 'None' });
-            this.commonService.session.data['nodeFields'].map((d, i) => {
-
-                this.visuals.phylogenetic.LeafLabelFieldList.push(
-                    {
-                        label: this.visuals.phylogenetic.commonService.capitalize(d.replace('_', '')),
-                        value: d
-                    });
-            });
-        }
+  onBranchLabelShowChange(event) {
+    this.SelectedBranchLabelShowVariable = event;
+    if (event === 'Hide') {
+      this.commonService.visuals.phylogenetic.tree.showBranchLengthLabels = false;
+    } else if (event === 'Show') {
+      this.commonService.visuals.phylogenetic.tree.showBranchLengthLabels = true;
     }
+    this.commonService.visuals.phylogenetic.tree.draw();
+  }
 
-    openSettings() {
-        this.visuals.phylogenetic.PhylogeneticTreeExportDialogSettings.setVisibility(true);
-       // this.context.twoD.ShowStatistics = !this.context.twoD.Show2DSettingsPane;
+  onBranchTooltipShowChange(event) {
+    this.SelectedBranchTooltipShowVariable = event;
+    if (event === 'Hide') {
+      this.commonService.visuals.phylogenetic.tree.showInternalNodeLabels = false;
+    } else if (event === 'Show') {
+      this.commonService.visuals.phylogenetic.tree.showInternalNodeLabels = true;
     }
+    this.commonService.visuals.phylogenetic.tree.draw();
+  }
 
+  showGlobalSettings() {
+    this.DisplayGlobalSettingsDialogEvent.emit('Styling');
+  }
 
-    openExport() {
-        this.ShowPhylogeneticExportPane = true;
+  onLeafSizeChange(event) {
+    this.SelectedLeafSizeVariable = event;
+    const thisTree = this.commonService.visuals.phylogenetic.tree;
+    thisTree.setNodeSize(event);
+    thisTree.draw();
+  }
 
-        this.visuals.microbeTrace.GlobalSettingsDialogSettings.setStateBeforeExport();
-        this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.setStateBeforeExport();
-        this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.setStateBeforeExport();
-        this.isExportClosed = false;
+  onLeafLabelSizeChange(event) {
+    this.SelectedLeafLabelSizeVariable = event;
+    const labelConfig = { labelStyle: { textSize: event } };
+    this.updateLeaves(labelConfig);
+  }
 
-    }
+  onLinkSizeChange(event) {
+    const thisTree = this.commonService.visuals.phylogenetic.tree;
+    this.SelectedLinkSizeVariable = event;
+    thisTree.lineWidth = event;
+    thisTree.draw();
+  }
 
-    openCenter() {
-      const thisTree = this.commonService.visuals.phylogenetic.tree;
-      thisTree.fitInPanel(thisTree.leaves);
-      thisTree.draw();
-    }
+  onCloseExport() {
+    this.isExportClosed = true;
+  }
 
-    openPinAllNodes() {
+  updateNodeColors() {
+    const nodeColor = this.visuals.phylogenetic.commonService.session.style.widgets['node-color'];
+    this.SelectedNodeColorVariable = nodeColor;
+    const colorConfig = { leafStyle: { fillStyle: this.SelectedNodeColorVariable } };
+    this.updateLeaves(colorConfig);
+    const selectedColor = this.visuals.phylogenetic.commonService.GlobalSettingsModel.SelectedColorVariable;
+    this.commonService.visuals.phylogenetic.tree.selectedColour = selectedColor;
+    this.commonService.visuals.phylogenetic.tree.draw();
+  }
 
+  updateLinkColor() {
+    const linkColor = this.visuals.phylogenetic.commonService.session.style.widgets['link-color'];
+    this.commonService.visuals.phylogenetic.tree.branchColour = linkColor;
+    this.commonService.visuals.phylogenetic.tree.draw();
+  }
 
-    }
+  updateLeaves(config) {
+    const thisTree = this.commonService.visuals.phylogenetic.tree;
+    thisTree.leaves.forEach((x) => {
+      x.setDisplay(config);
+    });
+    thisTree.draw();
+  }
 
-    openRefreshScreen() {
-
-    }
-
-    openSelectDataSetScreen() {
-
-    }
-
-    onTreeLayoutChange(event) {
-      this.commonService.visuals.phylogenetic.tree.setTreeType(event);
-    }
-
-    onLeafLabelShowChange(event) {
-      this.SelectedLeafLabelShowVariable = event;
-      if (event === 'Hide') {
-        this.commonService.visuals.phylogenetic.tree.showLabels = false;
-      } else if (event === 'Show') {
-        this.commonService.visuals.phylogenetic.tree.showLabels = true;
-      }
-      this.commonService.visuals.phylogenetic.tree.draw();
-    }
-
-    onLeafShapeVariableChange(event) {
-      const shapeConfig = { shape: event };
-      this.updateLeaves(shapeConfig);
-    }
-
-    onBranchLabelShowChange(event) {
-      this.SelectedBranchLabelShowVariable = event;
-      if (event === 'Hide') {
-        this.commonService.visuals.phylogenetic.tree.showBranchLengthLabels = false;
-      } else if (event === 'Show') {
-        this.commonService.visuals.phylogenetic.tree.showBranchLengthLabels = true;
-      }
-      this.commonService.visuals.phylogenetic.tree.draw();
-    }
-
-    onBranchTooltipShowChange(event) {
-      this.SelectedBranchTooltipShowVariable = event;
-      if (event === 'Hide') {
-        this.commonService.visuals.phylogenetic.tree.showInternalNodeLabels = false;
-      } else if (event === 'Show') {
-        this.commonService.visuals.phylogenetic.tree.showInternalNodeLabels = true;
-      }
-      this.commonService.visuals.phylogenetic.tree.draw();
-    }
-
-    showGlobalSettings() {
-      this.DisplayGlobalSettingsDialogEvent.emit('Styling');
-    }
-
-    onLeafSizeChange(event) {
-      this.SelectedLeafSizeVariable = event;
-      const thisTree = this.commonService.visuals.phylogenetic.tree;
-      thisTree.setNodeSize(event);
-      thisTree.draw();
-    }
-
-    onLeafLabelSizeChange(event) {
-      this.SelectedLeafLabelSizeVariable = event;
-      const labelConfig = { labelStyle: { textSize: event } };
-      this.updateLeaves(labelConfig);
-    }
-
-    onLinkSizeChange(event) {
-      const thisTree = this.commonService.visuals.phylogenetic.tree;
-      this.SelectedLinkSizeVariable = event;
-      thisTree.lineWidth = event;
-      thisTree.draw();
-    }
-
-    onCloseExport() {
-        this.isExportClosed = true;
-    }
-
-    updateNodeColors() {
-      const nodeColor = this.visuals.phylogenetic.commonService.session.style.widgets['node-color'];
-      this.SelectedNodeColorVariable = nodeColor;
-      const colorConfig = { leafStyle: { fillStyle: this.SelectedNodeColorVariable } };
-      this.updateLeaves(colorConfig);
-      const selectedColor = this.visuals.phylogenetic.commonService.GlobalSettingsModel.SelectedColorVariable;
-      this.commonService.visuals.phylogenetic.tree.selectedColour = selectedColor;
-      this.commonService.visuals.phylogenetic.tree.draw();
-    }
-
-    updateLinkColor() {
-      const linkColor = this.visuals.phylogenetic.commonService.session.style.widgets['link-color'];
-      this.commonService.visuals.phylogenetic.tree.branchColour = linkColor;
-      this.commonService.visuals.phylogenetic.tree.draw();
-    }
-
-    updateLeaves(config) {
-      const thisTree = this.commonService.visuals.phylogenetic.tree;
-      thisTree.leaves.forEach((x) => {
-        x.setDisplay(config);
-      });
-      thisTree.draw();
-    }
-
-    saveImage(event) {
-      const thisTree = this.commonService.visuals.phylogenetic.tree;
-      const fileName = this.SelectedTreeImageFilenameVariable;
-      const canvasId = 'phylocanvas__canvas';
-      const exportImageType = this.SelectedNetworkExportFileTypeListVariable ;
-      const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
-      const ctx = canvas.getContext('2d');
-      ctx.globalCompositeOperation = 'destination-over';
-      ctx.fillStyle = 'white';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      if (exportImageType === 'png') {
-        domToImage.toPng(document.getElementById(canvasId)).then(
-          dataUrl => {
-            saveAs(dataUrl, fileName);
+  saveImage(event) {
+    const thisTree = this.commonService.visuals.phylogenetic.tree;
+    const fileName = this.SelectedTreeImageFilenameVariable;
+    const canvasId = 'phylocanvas__canvas';
+    const exportImageType = this.SelectedNetworkExportFileTypeListVariable ;
+    const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d');
+    ctx.globalCompositeOperation = 'destination-over';
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    if (exportImageType === 'png') {
+      domToImage.toPng(document.getElementById(canvasId)).then(
+        dataUrl => {
+          saveAs(dataUrl, fileName);
         });
-      } else if (exportImageType === 'jpeg') {
-        domToImage.toJpeg(document.getElementById(canvasId), { quality: 0.95}).then(
-          dataUrl => {
-            saveAs(dataUrl, fileName);
+    } else if (exportImageType === 'jpeg') {
+      domToImage.toJpeg(document.getElementById(canvasId), { quality: 0.95}).then(
+        dataUrl => {
+          saveAs(dataUrl, fileName);
         });
-      } else if (exportImageType === 'svg') {
-        domToImage.toSvg(document.getElementById(canvasId)).then(
-          dataUrl => {
-            saveAs(dataUrl, fileName);
+    } else if (exportImageType === 'svg') {
+      domToImage.toSvg(document.getElementById(canvasId)).then(
+        dataUrl => {
+          saveAs(dataUrl, fileName);
         });
 
-      }
-
     }
 
-    saveNewickString(event) {
-      const thisTree = this.commonService.visuals.phylogenetic.tree;
-      const newickBlob = new Blob([thisTree.stringRepresentation], {type: 'text/plain;charset=utf-8'});
-      saveAs(newickBlob, this.SelectedNewickStringFilenameVariable);
+  }
 
-    }
+  saveNewickString(event) {
+    const thisTree = this.commonService.visuals.phylogenetic.tree;
+    const newickBlob = new Blob([thisTree.stringRepresentation], {type: 'text/plain;charset=utf-8'});
+    saveAs(newickBlob, this.SelectedNewickStringFilenameVariable);
+
+  }
+  contextMenu(d) {
+    let e = d3.event;
+    const tree = this.tree;
+    if (!e) return;
+    e.preventDefault();
+    this.hideTooltip();
+    d3.select('#context-menu')
+      .style('top', e.pageY + 'px')
+      .style('left', e.pageX + 'px')
+      .style('z-index', 1000)
+      .style('display', 'block');
+    d3.select('#reroot').on('click', c =>
+      tree.setData(d[0].data.reroot())
+    );
+    d3.select('#rotate').on('click', c =>
+      tree.setData(d[0].data.rotate().getRoot())
+    );
+    d3.select('#flip').on('click', c =>
+      tree.setData(d[0].data.flip().getRoot())
+    );
+    d3.select('#sort').on('click', c =>
+      tree.setData(d[0].data.sort().getRoot())
+    );
+    d3.select('#remove').on('click', c =>
+      tree.setData(d[0].data.remove())
+    );
+    d3.select('#isolate').on('click', c =>
+      tree.setData(d[0].data.isolate())
+    );
+    d3.select('#excise').on('click', c =>
+      tree.setData(d[0].data.excise().getRoot())
+    );
+    d3.select('#simplify').on('click', c =>
+      tree.setData(d[0].data.simplify().getRoot())
+    );
+    d3.select('#consolidate').on('click', c =>
+      tree.setData(d[0].data.consolidate().getRoot())
+    );
+  }
+
+  showTooltip(d) {
+    if (!d3.select('#tooltips').node().checked) return;
+    let e = d3.event;
+    e.preventDefault();
+    d3.select('#tooltip')
+      .text(d[0].data.id)
+      .style('top', e.pageY + 'px')
+      .style('left', e.pageX + 5 + 'px')
+      .style('z-index', 1000)
+      .style('display', 'block');
+  }
+
+  hideTooltip() {
+    d3.selectAll('#tooltip')
+      .style('z-index', -1)
+      .style('display', 'none');
+  }
+
 }
