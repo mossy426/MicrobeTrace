@@ -1,4 +1,4 @@
-import 'patristic';
+import * as patristic from 'patristic';
 import * as d3 from 'd3';
 
 /**
@@ -24,6 +24,7 @@ export default function TidyTree(data, options, events) {
     margin: [50, 50, 50, 50] //CSS order: top, right, bottom, left
   };
   if (!options) options = {};
+  console.log(this);
   Object.assign(this, defaults, options, {
     events: {
       draw: [],
@@ -119,14 +120,16 @@ TidyTree.prototype.draw = function (selector) {
     parseFloat(parent.style('width')) - this.margin[1] - this.margin[3];
   this.height =
     parseFloat(parent.style('height')) - this.margin[0] - this.margin[2] - 25;
+  console.log(parent.style);
 
   let tree = d3.tree();
 
   let svg = parent
     .html(null)
     .append('svg')
-    .attr('width', '100%')
-    .attr('height', '100%');
+    .attr('id', 'tidytree')
+    .attr('height', '100%')
+    .attr('width', '100%');
 
   let g = svg.append('g');
 

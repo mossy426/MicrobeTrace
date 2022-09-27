@@ -9,7 +9,6 @@
     height: 100%;
 }
 
-#phylocanvas__canvas {
-    height: 100% !important;
-    background-color: '#ffffff';
+g.tidytree-links g.tidytree-link path {
+    stroke-width: 2px;
 }

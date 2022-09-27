@@ -23,6 +23,7 @@ import * as d3 from 'd3';
 @Component({
   selector: 'PhylogeneticComponent',
   templateUrl: './phylogenetic-plugin.component.html',
+  styleUrls: ['./phylogenetic-plugin.component.css']
 })
 export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
@@ -140,20 +141,25 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     // const treeString = '((((A:0.0431,(((B:0.06836,(C:0.00628,D:0.00069):0.00473):0.00678,E:0.0455):0.002908,
     // F:0.00240):0.01085):0.096,G:0.01784):0.03,(H:0.0480,I:0.0026):0.0336):0.001917,J:0.01917)';
     // const treeString = '(A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5)F;';
-    const phyCanv = document.querySelector('#phylocanvas');
-    const canvHeight = phyCanv.clientHeight * 1.5;
-    const canvWidth = phyCanv.clientWidth;
+    // phyCanv.setAttribute('height', '1000px');
     this.visuals.phylogenetic.commonService.session.style.widgets['link-color'] = '#000000';
     newickString.then((x) => {
-      console.log(x);
-      this.tree = this.buildTree(x);
+      const tree = this.buildTree(x);
+      this.tree = tree;
+      console.log(tree);
+      this.commonService.visuals.phylogenetic.tree = tree;
+      const treeEl = document.querySelector('#tidytree');
+      const branchEls = document.querySelectorAll('g.tidytree-link > path');
+      treeEl.setAttribute('style', 'background-color: rgba(255, 255, 255); height: 88vh;');
+      branchEls.forEach( y => console.log(typeof(y)));
+      branchEls.forEach( y => <HTMLElement> y.setAttributes('style', 'stroke-width: 3px;'));
     });
 
 
 
   }
   buildTree(newick) {
-    const tree = TidyTree(
+    const tree = new TidyTree(
       newick ? newick : this.tree.data.clone(),
       {
         parent: '#phylocanvas',
