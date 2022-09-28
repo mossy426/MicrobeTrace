@@ -58,42 +58,52 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
   // Tree Tab
   TreeLayouts: any = [
-    { label: 'Rectangular', value: 'rectangular' },
-    { label: 'Radial', value: 'radial' },
+    { label: 'Horizontal', value: 'horizontal' },
+    { label: 'Vertical', value: 'vertical' },
     { label: 'Circular', value: 'circular' },
-    { label: 'Diagonal', value: 'diagonal' },
-    { label: 'Hierarchical', value: 'hierarchical' },
   ];
-  SelectedTreeLayoutVariable: string = 'rectangular';
+  SelectedTreeLayoutVariable: string = 'horizontal';
+  TreeModes: any = [
+    { label: 'Smooth', value: 'smooth' },
+    { label: 'Square', value: 'square' },
+    { label: 'Straight', value: 'straight' },
+  ];
+  SelectedTreeModeVariable: string = 'square';
+  TreeTypes: any = [
+    { label: 'Weighted', value: 'weighted' },
+    { label: 'Unweighted', value: 'unweighted' },
+    { label: 'Dendrogram', value: 'dendrogram' },
+  ];
+  SelectedTreeTypeVariable: string = 'weighted';
+
 
   // Leaves Tab
-  SelectedLeafLabelShowVariable: string = 'Show';
+  SelectedLeafLabelShowVariable = true;
   SelectedLeafLabelVariable: string = 'None';
   LeafLabelFieldList: object[] = [];
-  // SelectedLeafLabelSizeVariable: number = 20;
-  SelectedLeafLabelSizeVariable: number = 8;
-  LeafShapes: any = [
-    { label: 'Circle', value: 'circle' },
-    { label: 'Triangle', value: 'triangle' },
-    { label: 'Square', value: 'square' },
-    { label: 'Star', value: 'star' },
-  ];
-  SelectedLeafShapeVariable: string = 'circle';
-  // SelectedLeafSizeVariable: number = 15;
-  SelectedLeafSizeVariable: number = 5;
-  SelectedNodeColorVariable: string = '#1f77b4';
+  SelectedLeafLabelSizeVariable: number = 12;
+  SelectedLeafNodeShowVariable = true;
+  SelectedLeafNodeSizeVariable: number = 5;
+  SelectedLeafNodeColorVariable: string = '#1f77b4';
 
   // Branch Tab
-  SelectedBranchLabelShowVariable: string = 'Hide';
-  SelectedBranchTooltipShowVariable: string = 'Show';
-  SelectedLinkSizeVariable: number = 1;
+  SelectedBranchNodeShowVariable = true;
+  SelectedBranchNodeSizeVariable: number = 5;
+  SelectedBranchNodeColorVariable: string = '#1f77b4';
+  SelectedBranchSizeVariable: number = 3;
+  SelectedBranchLabelSizeVariable: number = 12;
+  SelectedLinkColorVariable = this.settings['link-color'];
+  SelectedBranchLabelShowVariable = false;
+  SelectedBranchDistanceShowVariable = false;
+  SelectedBranchDistanceSizeVariable = 12;
+  SelectedBranchTooltipShowVariable = false;
 
   private isExportClosed: boolean = false;
   public isExporting: boolean = false;
 
   hideShowOptions: any = [
-    { label: 'Hide', value: 'Hide' },
-    { label: 'Show', value: 'Show' }
+    { label: 'Hide', value: false },
+    { label: 'Show', value: true }
   ];
 
   // Export Settings
@@ -136,29 +146,65 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     this.commonService.visuals.phylogenetic = this;
   }
 
-  openTree() {
+  openTree = () => {
     const newickString = this.commonService.computeTree();
-    // const treeString = '((((A:0.0431,(((B:0.06836,(C:0.00628,D:0.00069):0.00473):0.00678,E:0.0455):0.002908,
-    // F:0.00240):0.01085):0.096,G:0.01784):0.03,(H:0.0480,I:0.0026):0.0336):0.001917,J:0.01917)';
-    // const treeString = '(A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5)F;';
-    // phyCanv.setAttribute('height', '1000px');
     this.visuals.phylogenetic.commonService.session.style.widgets['link-color'] = '#000000';
     newickString.then((x) => {
       const tree = this.buildTree(x);
       this.tree = tree;
-      console.log(tree);
       this.commonService.visuals.phylogenetic.tree = tree;
-      const treeEl = document.querySelector('#tidytree');
-      const branchEls = document.querySelectorAll('g.tidytree-link > path');
-      treeEl.setAttribute('style', 'background-color: rgba(255, 255, 255); height: 88vh;');
-      branchEls.forEach( y => console.log(typeof(y)));
-      branchEls.forEach( y => <HTMLElement> y.setAttributes('style', 'stroke-width: 3px;'));
+      this.styleTree();
     });
 
-
-
   }
-  buildTree(newick) {
+
+  styleTree = () => {
+    this.tree.setBranchLabels(this.SelectedBranchLabelShowVariable);
+    this.tree.eachBranchLabel(this.styleBranchLabel);
+    this.tree.setBranchNodes(this.SelectedBranchNodeShowVariable);
+    this.tree.eachBranchNode(this.styleBranchNode);
+    this.tree.setBranchDistances(this.SelectedBranchDistanceShowVariable);
+    this.tree.eachBranchDistance(this.styleBranchDistance);
+    this.tree.setLeafNodes(this.SelectedLeafNodeSizeVariable);
+    this.tree.eachLeafNode(this.styleLeafNode);
+    this.tree.setLeafLabels(this.SelectedLeafLabelShowVariable);
+    this.tree.eachLeafLabel(this.styleLeafLabel);
+    const treeEl = document.querySelector('#tidytree');
+    const branchEls = document.querySelectorAll('g.tidytree-link > path');
+    d3.select(treeEl).style('background-color', 'rgba(255, 255, 255);');
+    d3.select(treeEl).style('height', '88vh;');
+    branchEls.forEach(this.styleBranch);
+  }
+
+  styleBranch = (el) => {
+    d3.select(el).style('stroke', this.SelectedLinkColorVariable);
+    d3.select(el).style('stroke-width', `${this.SelectedBranchSizeVariable}px`);
+  }
+
+  styleBranchLabel = (label, data) => {
+    d3.select(label).style('font-size', `${this.SelectedBranchLabelSizeVariable}px`);
+  }
+
+  styleBranchNode = (node, data) => {
+    d3.select(node).attr('r', this.SelectedLeafNodeSizeVariable);
+    d3.select(node).style('fill', this.SelectedLeafNodeColorVariable);
+  }
+
+  styleBranchDistance = (label, data) => {
+    d3.select(label).style('font-size', `${this.SelectedBranchDistanceSizeVariable}px`);
+  }
+
+
+  styleLeafLabel = (label, data) => {
+    d3.select(label).style('font-size', `${this.SelectedLeafLabelSizeVariable}px`);
+  }
+
+  styleLeafNode = (node, data) => {
+    d3.select(node).attr('r', this.SelectedLeafNodeSizeVariable);
+    d3.select(node).style('fill', this.SelectedLeafNodeColorVariable);
+  }
+
+  buildTree = (newick) => {
     const tree = new TidyTree(
       newick ? newick : this.tree.data.clone(),
       {
@@ -166,7 +212,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
         layout: 'horizontal',  // d3.select('#layout').node().value,
         mode: 'square',  // d3.select('#mode').node().value,
         type: 'weighted', // d3.select('#type').node().value,
-        leafNodes: '2.5',  // range 0.5-10 in 0.5 steps
+        leafNodes: this.SelectedLeafNodeShowVariable ? this.SelectedLeafNodeSizeVariable : this.SelectedLeafNodeShowVariable,
         branchNodes:  '2.5',  // range 0.5-10 in 0.5 steps
         leafLabels: '12',  // range 1-32
         branchLabels: '6', // range 1-32
@@ -231,8 +277,8 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
   openCenter() {
     const thisTree = this.commonService.visuals.phylogenetic.tree;
-    thisTree.fitInPanel(thisTree.leaves);
-    thisTree.draw();
+    thisTree.recenter()
+    .redraw();
   }
 
   openPinAllNodes() {
@@ -249,17 +295,18 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   }
 
   onTreeLayoutChange(event) {
-    this.commonService.visuals.phylogenetic.tree.setTreeType(event);
+    this.SelectedTreeLayoutVariable = event;
+    this.tree.setLayout(event);
   }
 
-  onLeafLabelShowChange(event) {
-    this.SelectedLeafLabelShowVariable = event;
-    if (event === 'Hide') {
-      this.commonService.visuals.phylogenetic.tree.showLabels = false;
-    } else if (event === 'Show') {
-      this.commonService.visuals.phylogenetic.tree.showLabels = true;
-    }
-    this.commonService.visuals.phylogenetic.tree.draw();
+  onTreeModeChange(event) {
+    this.SelectedTreeModeVariable = event;
+    this.tree.setMode(event);
+  }
+
+  onTreeTypeChange(event) {
+    this.SelectedTreeTypeVariable = event;
+    this.tree.setType(event);
   }
 
   onLeafShapeVariableChange(event) {
@@ -269,22 +316,41 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
   onBranchLabelShowChange(event) {
     this.SelectedBranchLabelShowVariable = event;
-    if (event === 'Hide') {
-      this.commonService.visuals.phylogenetic.tree.showBranchLengthLabels = false;
-    } else if (event === 'Show') {
-      this.commonService.visuals.phylogenetic.tree.showBranchLengthLabels = true;
-    }
-    this.commonService.visuals.phylogenetic.tree.draw();
+    this.tree.setBranchLabels(event);
+  }
+
+  onBranchLabelSizeChange(event) {
+    this.SelectedBranchLabelSizeVariable = event;
+    this.styleTree();
+  }
+
+  onBranchDistanceShowChange(event) {
+    this.SelectedBranchDistanceShowVariable = event;
+    this.tree.setBranchDistances(event);
+  }
+
+  onBranchDistanceSizeChange(event) {
+    this.SelectedBranchDistanceSizeVariable = event;
+    this.styleTree();
+  }
+
+  onBranchNodeShowChange(event) {
+    this.SelectedBranchNodeShowVariable = event;
+    this.tree.setBranchNodes(event);
+  }
+
+  onBranchNodeSizeChange(event) {
+    this.SelectedBranchNodeSizeVariable = event;
+    this.styleTree();
   }
 
   onBranchTooltipShowChange(event) {
     this.SelectedBranchTooltipShowVariable = event;
-    if (event === 'Hide') {
-      this.commonService.visuals.phylogenetic.tree.showInternalNodeLabels = false;
-    } else if (event === 'Show') {
-      this.commonService.visuals.phylogenetic.tree.showInternalNodeLabels = true;
-    }
-    this.commonService.visuals.phylogenetic.tree.draw();
+  }
+
+  onLeafLabelShowChange(event) {
+    this.SelectedLeafLabelShowVariable = event;
+    this.tree.setLeafLabels(event);
   }
 
   showGlobalSettings() {
@@ -292,23 +358,19 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   }
 
   onLeafSizeChange(event) {
-    this.SelectedLeafSizeVariable = event;
-    const thisTree = this.commonService.visuals.phylogenetic.tree;
-    thisTree.setNodeSize(event);
-    thisTree.draw();
+    this.SelectedLeafNodeSizeVariable = event;
+    this.styleTree();
   }
 
   onLeafLabelSizeChange(event) {
     this.SelectedLeafLabelSizeVariable = event;
-    const labelConfig = { labelStyle: { textSize: event } };
-    this.updateLeaves(labelConfig);
+    this.styleTree();
   }
 
-  onLinkSizeChange(event) {
+  onBranchSizeChange(event) {
     const thisTree = this.commonService.visuals.phylogenetic.tree;
-    this.SelectedLinkSizeVariable = event;
-    thisTree.lineWidth = event;
-    thisTree.draw();
+    this.SelectedBranchSizeVariable = event;
+    this.styleTree();
   }
 
   onCloseExport() {
@@ -317,18 +379,15 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
   updateNodeColors() {
     const nodeColor = this.visuals.phylogenetic.commonService.session.style.widgets['node-color'];
-    this.SelectedNodeColorVariable = nodeColor;
-    const colorConfig = { leafStyle: { fillStyle: this.SelectedNodeColorVariable } };
-    this.updateLeaves(colorConfig);
+    this.SelectedLeafNodeColorVariable = nodeColor;
+    this.styleTree();
     const selectedColor = this.visuals.phylogenetic.commonService.GlobalSettingsModel.SelectedColorVariable;
-    this.commonService.visuals.phylogenetic.tree.selectedColour = selectedColor;
-    this.commonService.visuals.phylogenetic.tree.draw();
   }
 
   updateLinkColor() {
     const linkColor = this.visuals.phylogenetic.commonService.session.style.widgets['link-color'];
-    this.commonService.visuals.phylogenetic.tree.branchColour = linkColor;
-    this.commonService.visuals.phylogenetic.tree.draw();
+    this.SelectedLinkColorVariable = linkColor;
+    this.styleTree();
   }
 
   updateLeaves(config) {
@@ -375,7 +434,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     saveAs(newickBlob, this.SelectedNewickStringFilenameVariable);
 
   }
-  contextMenu(d) {
+  contextMenu = (d) => {
     let e = d3.event;
     const tree = this.tree;
     if (!e) return;
@@ -415,8 +474,11 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     );
   }
 
-  showTooltip(d) {
-    if (!d3.select('#tooltips').node().checked) return;
+  showTooltip = (d) => {
+    /**if (!this.SelectedBranchTooltipShowVariable) {
+      return;
+    }
+    */
     let e = d3.event;
     e.preventDefault();
     d3.select('#tooltip')
@@ -427,7 +489,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
       .style('display', 'block');
   }
 
-  hideTooltip() {
+  hideTooltip = () => {
     d3.selectAll('#tooltip')
       .style('z-index', -1)
       .style('display', 'none');
