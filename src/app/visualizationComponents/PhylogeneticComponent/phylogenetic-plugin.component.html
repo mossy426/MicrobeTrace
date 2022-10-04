@@ -2,9 +2,9 @@
     <div class="m-portlet__body" style="height: 100%;">
         <br />
         <div className="phylocanvas" id="phylocanvas" style="height: 700px;"></div>
+        <div id="phyloTooltip"></div>
     </div>
 </div>
-<span id="tooltip"></span>
 <div class="view-controls">
 
     <p-dialog id="phylotree-settings-pane" 
@@ -132,16 +132,10 @@
               </tabset>
     </p-dialog>
 </div>
-<div id="context-menu" class="dropdown-menu">
+<div id="phylo-context-menu" class="dropdown-menu">
     <div id="reroot" class="dropdown-item">Set As Root</div>
     <div id="rotate" class="dropdown-item">Rotate</div>
     <div id="flip" class="dropdown-item">Flip</div>
-    <div id="sort" class="dropdown-item">Sort</div>
-    <div id="remove" class="dropdown-item">Remove</div>
-    <div id="isolate" class="dropdown-item">Isolate</div>
-    <div id="excise" class="dropdown-item">Excise</div>
-    <div id="simplify" class="dropdown-item">Simplify</div>
-    <div id="consolidate" class="dropdown-item">Consolidate</div>
 </div>
 <p-dialog id="network-export-modal" [(visible)]="ShowPhylogeneticExportPane" header="Export Phylogenetic Tree" class="dialogSize" (onHide)="onCloseExport()">
     <div class="modal-dialog" role="document">

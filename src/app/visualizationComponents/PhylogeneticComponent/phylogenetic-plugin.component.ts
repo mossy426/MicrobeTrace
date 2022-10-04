@@ -6,7 +6,7 @@ import { MatMenu } from '@angular/material/menu';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
 import * as ClipboardJS from 'clipboard';
 import * as saveAs from 'file-saver';
-import * as domToImage from 'dom-to-image-more';
+import * as domToImage from 'html-to-image';
 import { SelectItem } from 'primeng/api';
 import { DialogSettings } from '../../helperClasses/dialogSettings';
 import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
@@ -23,7 +23,7 @@ import * as d3 from 'd3';
 @Component({
   selector: 'PhylogeneticComponent',
   templateUrl: './phylogenetic-plugin.component.html',
-  styleUrls: ['./phylogenetic-plugin.component.css']
+  styleUrls: ['./phylogenetic-plugin.component.scss']
 })
 export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
@@ -158,6 +158,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
       this.commonService.visuals.phylogenetic.tree = tree;
       this.hideTooltip();
       this.styleTree();
+      d3.select('#tidytree').style('background-color', '#ffffff');
     });
 
   }
@@ -250,7 +251,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
         margin: [10, 10, 70, 30]
       },
       {
-        contextmenu: this.contextMenu,
+        contextmenu: this.showContextMenu,
         showtooltip: this.showTooltip,
         hidetooltip: this.hideTooltip
       }
@@ -270,11 +271,8 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     );
 
     if (this.visuals.phylogenetic.IsDataAvailable === true && this.visuals.phylogenetic.zoom == null) {
-
       // d3.select('svg#network').exit().remove();
       // this.visuals.phylogenetic.svg = d3.select('svg#network').append('g');
-
-      console.log(this.commonService.session.data.nodes);
 
       this.LeafLabelFieldList.push({ label: 'None', value: 'None' });
       this.commonService.session.data['nodeFields'].map((d, i) => {
@@ -423,23 +421,21 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     const fileName = this.SelectedTreeImageFilenameVariable;
     const treeId = 'tidytree';
     const exportImageType = this.SelectedNetworkExportFileTypeListVariable ;
+    const content = document.getElementById(treeId);
     if (exportImageType === 'png') {
-      domToImage.toPng(document.getElementById(treeId)).then(
+      domToImage.toPng(content).then(
         dataUrl => {
-          console.log(dataUrl);
           saveAs(dataUrl, fileName);
-        });
+      });
     } else if (exportImageType === 'jpeg') {
-      domToImage.toJpeg(document.getElementById(treeId), { quality: 0.95}).then(
-        dataUrl => {
-          saveAs(dataUrl, fileName);
-        });
+        domToImage.toJpeg(content, { quality: 0.85 }).then(
+          dataUrl => {
+            saveAs(dataUrl, fileName);
+          });
     } else if (exportImageType === 'svg') {
-      domToImage.toSvg(document.getElementById(treeId)).then(
-        dataUrl => {
-          saveAs(dataUrl, fileName);
-        });
-
+        const svgContent = this.visuals.phylogenetic.commonService.unparseSVG(content);
+        const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+        saveAs(blob, fileName);
     }
 
   }
@@ -452,74 +448,38 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   }
 
   showContextMenu = (d) => {
-    console.log('showContextMenu called');
     d3.event.preventDefault();
     this.hideTooltip();
-    d3.select('#context-menu')
+    const tree = this.tree;
+    d3.select('#phylo-context-menu')
     .style('z-index', 1000)
     .style('display', 'block')
     .style('opacity', 1)
-    .style('left', `${d3.event.pageX - 300}px`)
-    .style('top', `${d3.event.pageY - 125}px`);
+    .style('left', `${d3.event.pageX - 175}px`)
+    .style('top', `${d3.event.pageY - 75}px`);
+    d3.select('#reroot').on('click', c => {
+      tree.setData(d[0].data.reroot());
+      this.hideContextMenu();
+    });
+    d3.select('#rotate').on('click', c => {
+      tree.setData(d[0].data.rotate().getRoot());
+      this.hideContextMenu();
+    });
+    d3.select('#flip').on('click', c => {
+      tree.setData(d[0].data.flip().getRoot());
+      this.hideContextMenu();
+    });
   }
 
   hideContextMenu = () => {
-
-    console.log('Hiding context menu');
-    $('#context-menu').animate({ opacity: 0 }, 80, () => {
+    $('#phylo-context-menu').animate({ opacity: 0 }, 80, () => {
       $(this).css('z-index', -1);
     });
-  }
-  contextMenu = (d) => {
-    this.showContextMenu(d);
-    /**
-    console.log('Context menu called');
-    const e = d3.event;
-    const tree = this.tree;
-    if (!e) {
-      console.log('Is there not an event?');
-      return;
-    }
-    e.preventDefault();
-    this.hideTooltip();
-    d3.select('#context-menu')
-      .style('top', e.pageY + 'px')
-      .style('left', e.pageX + 'px')
-      .style('z-index', 1000)
-      .style('display', 'block');
-    d3.select('#reroot').on('click', c =>
-      tree.setData(d[0].data.reroot())
-    );
-    d3.select('#rotate').on('click', c =>
-      tree.setData(d[0].data.rotate().getRoot())
-    );
-    d3.select('#flip').on('click', c =>
-      tree.setData(d[0].data.flip().getRoot())
-    );
-    d3.select('#sort').on('click', c =>
-      tree.setData(d[0].data.sort().getRoot())
-    );
-    d3.select('#remove').on('click', c =>
-      tree.setData(d[0].data.remove())
-    );
-    d3.select('#isolate').on('click', c =>
-      tree.setData(d[0].data.isolate())
-    );
-    d3.select('#excise').on('click', c =>
-      tree.setData(d[0].data.excise().getRoot())
-    );
-    d3.select('#simplify').on('click', c =>
-      tree.setData(d[0].data.simplify().getRoot())
-    );
-    d3.select('#consolidate').on('click', c =>
-      tree.setData(d[0].data.consolidate().getRoot())
-    );
-    */
   }
 
   clickHandler = (n) => {
     if (d3.event.ctrlKey) {
-      this.visuals.phylogenetic.commonService.session.data.nodes.find(node => node._id == n._id).selected = !n.selected;
+      this.visuals.phylogenetic.commonService.session.data.nodes.find(node => node._id === n._id).selected = !n.selected;
     } else {
       this.visuals.phylogenetic.commonService.session.data.nodes.forEach(node => {
         if (node._id === n._id) {
@@ -537,10 +497,16 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
       // $('#tooltip').css({ top: d3.event.pageY - 28, left: d3.event.pageX + 8, position: 'absolute' });
 
-      d3.select('#tooltip')
+      const leftVal = d3.event.pageX + 8;
+      const topVal = d3.event.pageY - 28;
+      console.log(leftVal);
+      console.log(topVal);
+      d3.select('#phyloTooltip')
         .html(d[0].data[htmlValue])
-        .style('left', (d3.event.pageX) + 8 + 'px')
-        .style('top', (d3.event.pageY) - 28 + 'px')
+        .style('position', 'absolute')
+        .style('display', 'block')
+        .style('left', leftVal)
+        .style('top', topVal)
         .style('z-index', 1000)
         .transition().duration(100)
         .style('opacity', 1)
@@ -554,7 +520,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   }
 
   hideTooltip = () => {
-    let tooltip = d3.select('#tooltip');
+    let tooltip = d3.select('#phyloTooltip');
     tooltip
       .transition().duration(100)
       .style('opacity', 0)
