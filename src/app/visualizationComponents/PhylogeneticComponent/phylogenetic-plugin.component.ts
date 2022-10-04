@@ -1,8 +1,8 @@
-﻿/* eslint-disable @typescript-eslint/no-inferrable-types */
-import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit,
+﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit,
   ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { EventManager, DOCUMENT } from '@angular/platform-browser';
+import { MatMenu } from '@angular/material/menu';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
 import * as ClipboardJS from 'clipboard';
 import * as saveAs from 'file-saver';
@@ -35,11 +35,11 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
   private customShapes: CustomShapes = new CustomShapes();
 
-  ShowNetworkAttributes: boolean = false;
-  ShowStatistics: boolean = false;
-  ShowPhylogeneticExportPane: boolean = false;
-  ShowPhylogeneticSettingsPane: boolean = false;
-  IsDataAvailable: boolean = false;
+  ShowNetworkAttributes = false;
+  ShowStatistics = false;
+  ShowPhylogeneticExportPane = false;
+  ShowPhylogeneticSettingsPane = false;
+  IsDataAvailable = false;
   svg: any = null;
   settings: any = this.commonService.session.style.widgets;
   halfWidth: any = null;
@@ -48,7 +48,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   force: any = null;
   radToDeg: any = (180 / Math.PI);
   selected: any = null;
-  multidrag: boolean = false;
+  multidrag = false;
   // clipboard = new ClipboardJS('#copyID, #copySeq');
   zoom: any = null;
   brush: any = null;
@@ -62,44 +62,48 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     { label: 'Vertical', value: 'vertical' },
     { label: 'Circular', value: 'circular' },
   ];
-  SelectedTreeLayoutVariable: string = 'horizontal';
+  SelectedTreeLayoutVariable = 'horizontal';
   TreeModes: any = [
     { label: 'Smooth', value: 'smooth' },
     { label: 'Square', value: 'square' },
     { label: 'Straight', value: 'straight' },
   ];
-  SelectedTreeModeVariable: string = 'square';
+  SelectedTreeModeVariable = 'square';
   TreeTypes: any = [
     { label: 'Weighted', value: 'weighted' },
     { label: 'Unweighted', value: 'unweighted' },
     { label: 'Dendrogram', value: 'dendrogram' },
   ];
-  SelectedTreeTypeVariable: string = 'weighted';
+  SelectedTreeTypeVariable = 'weighted';
 
 
   // Leaves Tab
   SelectedLeafLabelShowVariable = true;
-  SelectedLeafLabelVariable: string = 'None';
+  SelectedLeafLabelVariable = 'None';
   LeafLabelFieldList: object[] = [];
-  SelectedLeafLabelSizeVariable: number = 12;
+  SelectedLeafLabelSizeVariable = 12;
+  SelectedLeafTooltipShowVariable = true;
+  SelectedLeafTooltipVariable = 'id';
+  LeafTooltipFieldList: object[] = [];
   SelectedLeafNodeShowVariable = true;
-  SelectedLeafNodeSizeVariable: number = 5;
-  SelectedLeafNodeColorVariable: string = '#1f77b4';
+  SelectedLeafNodeSizeVariable = 5;
+  SelectedLeafNodeColorVariable = this.settings['node-color'];
+  SelectedSelectedLeafNodeColorVariable = this.settings['selected-color'];
 
   // Branch Tab
   SelectedBranchNodeShowVariable = true;
-  SelectedBranchNodeSizeVariable: number = 5;
-  SelectedBranchNodeColorVariable: string = '#1f77b4';
-  SelectedBranchSizeVariable: number = 3;
-  SelectedBranchLabelSizeVariable: number = 12;
+  SelectedBranchNodeSizeVariable = 5;
+  SelectedBranchNodeColorVariable = this.settings['node-color'];
+  SelectedBranchSizeVariable = 3;
+  SelectedBranchLabelSizeVariable = 12;
   SelectedLinkColorVariable = this.settings['link-color'];
   SelectedBranchLabelShowVariable = false;
   SelectedBranchDistanceShowVariable = false;
   SelectedBranchDistanceSizeVariable = 12;
   SelectedBranchTooltipShowVariable = false;
 
-  private isExportClosed: boolean = false;
-  public isExporting: boolean = false;
+  private isExportClosed = false;
+  public isExporting = false;
 
   hideShowOptions: any = [
     { label: 'Hide', value: false },
@@ -107,8 +111,8 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   ];
 
   // Export Settings
-  SelectedTreeImageFilenameVariable: string = 'default_tree';
-  SelectedNewickStringFilenameVariable: string = 'default_tree.nwk';
+  SelectedTreeImageFilenameVariable = 'default_tree';
+  SelectedNewickStringFilenameVariable = 'default_tree.nwk';
 
   NetworkExportFileTypeList: any = [
     { label: 'png', value: 'png' },
@@ -116,7 +120,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     { label: 'svg', value: 'svg' }
   ];
 
-  SelectedNetworkExportFileTypeListVariable: string = 'png';
+  SelectedNetworkExportFileTypeListVariable = 'png';
   SelectedNetworkExportScaleVariable: any = 1;
   SelectedNetworkExportQualityVariable: any = 0.92;
   CalculatedResolutionWidth: any = 1918;
@@ -125,7 +129,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     this.CalculatedResolutionHeight * this.SelectedNetworkExportScaleVariable) + 'px');
 
 
-  ShowAdvancedExport: boolean = true;
+  ShowAdvancedExport = true;
 
   PhylogeneticTreeExportDialogSettings: DialogSettings = new DialogSettings('#phylotree-settings-pane', false);
 
@@ -148,17 +152,41 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
   openTree = () => {
     const newickString = this.commonService.computeTree();
-    this.visuals.phylogenetic.commonService.session.style.widgets['link-color'] = '#000000';
     newickString.then((x) => {
       const tree = this.buildTree(x);
       this.tree = tree;
       this.commonService.visuals.phylogenetic.tree = tree;
+      this.hideTooltip();
       this.styleTree();
     });
 
   }
 
   styleTree = () => {
+    this.svg = d3.select('#tidytree');
+    let nodes = this.visuals.phylogenetic.commonService.session.data;
+    nodes = this.svg.select('g.nodes').selectAll('g').data(nodes, d => d.id)
+      .join(
+        enter => {
+          let g = enter.append('g')
+            .attr('tabindex', '0')
+            .on('mouseenter focusin', (x) => this.showTooltip(x))
+            .on('mouseout focusout', (x) => this.hideTooltip())
+            .on('contextmenu', (x) => this.showContextMenu(x))
+            .on('click', (x) => this.clickHandler(x))
+            .on('keydown', n => {
+              if (d3.event.code === 'Space') this.clickHandler(n);
+              if (d3.event.shiftKey && d3.event.key === 'F10') this.showContextMenu(n);
+            });
+          g.append('path')
+            .style('stroke', 'black')
+            .style('stroke-width', '2px');
+          g.append('text')
+            .attr('dy', 5)
+            .attr('dx', 8);
+          return g;
+        }
+      );
     this.tree.setBranchLabels(this.SelectedBranchLabelShowVariable);
     this.tree.eachBranchLabel(this.styleBranchLabel);
     this.tree.setBranchNodes(this.SelectedBranchNodeShowVariable);
@@ -209,14 +237,14 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
       newick ? newick : this.tree.data.clone(),
       {
         parent: '#phylocanvas',
-        layout: 'horizontal',  // d3.select('#layout').node().value,
-        mode: 'square',  // d3.select('#mode').node().value,
-        type: 'weighted', // d3.select('#type').node().value,
-        leafNodes: this.SelectedLeafNodeShowVariable ? this.SelectedLeafNodeSizeVariable : this.SelectedLeafNodeShowVariable,
-        branchNodes:  '2.5',  // range 0.5-10 in 0.5 steps
-        leafLabels: '12',  // range 1-32
-        branchLabels: '6', // range 1-32
-        branchDistances: '12', // range 1-32
+        layout: this.SelectedTreeLayoutVariable,  // d3.select('#layout').node().value,
+        mode: this.SelectedTreeModeVariable,  // d3.select('#mode').node().value,
+        type: this.SelectedTreeTypeVariable, // d3.select('#type').node().value,
+        leafNodes: this.SelectedLeafNodeShowVariable,
+        branchNodes:  this.SelectedBranchNodeSizeVariable,  // range 0.5-10 in 0.5 steps
+        leafLabels: this.SelectedLeafLabelSizeVariable,  // range 1-32
+        branchLabels: this.SelectedBranchLabelSizeVariable, // range 1-32
+        branchDistances: this.SelectedBranchDistanceSizeVariable, // range 1-32
         ruler: true,
         animation: parseFloat('0'),  // range 0-2000 in steps of 10
         margin: [10, 10, 70, 30]
@@ -246,6 +274,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
       // d3.select('svg#network').exit().remove();
       // this.visuals.phylogenetic.svg = d3.select('svg#network').append('g');
 
+      console.log(this.commonService.session.data.nodes);
 
       this.LeafLabelFieldList.push({ label: 'None', value: 'None' });
       this.commonService.session.data['nodeFields'].map((d, i) => {
@@ -278,7 +307,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   openCenter() {
     const thisTree = this.commonService.visuals.phylogenetic.tree;
     thisTree.recenter()
-    .redraw();
+      .redraw();
   }
 
   openPinAllNodes() {
@@ -309,9 +338,8 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     this.tree.setType(event);
   }
 
-  onLeafShapeVariableChange(event) {
-    const shapeConfig = { shape: event };
-    this.updateLeaves(shapeConfig);
+  onLeafLabelVariableChange(event) {
+    this.SelectedLeafLabelVariable = event;
   }
 
   onBranchLabelShowChange(event) {
@@ -368,7 +396,6 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   }
 
   onBranchSizeChange(event) {
-    const thisTree = this.commonService.visuals.phylogenetic.tree;
     this.SelectedBranchSizeVariable = event;
     this.styleTree();
   }
@@ -390,36 +417,25 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     this.styleTree();
   }
 
-  updateLeaves(config) {
-    const thisTree = this.commonService.visuals.phylogenetic.tree;
-    thisTree.leaves.forEach((x) => {
-      x.setDisplay(config);
-    });
-    thisTree.draw();
-  }
-
   saveImage(event) {
+    console.log(event);
     const thisTree = this.commonService.visuals.phylogenetic.tree;
     const fileName = this.SelectedTreeImageFilenameVariable;
-    const canvasId = 'phylocanvas__canvas';
+    const treeId = 'tidytree';
     const exportImageType = this.SelectedNetworkExportFileTypeListVariable ;
-    const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
-    const ctx = canvas.getContext('2d');
-    ctx.globalCompositeOperation = 'destination-over';
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
     if (exportImageType === 'png') {
-      domToImage.toPng(document.getElementById(canvasId)).then(
+      domToImage.toPng(document.getElementById(treeId)).then(
         dataUrl => {
+          console.log(dataUrl);
           saveAs(dataUrl, fileName);
         });
     } else if (exportImageType === 'jpeg') {
-      domToImage.toJpeg(document.getElementById(canvasId), { quality: 0.95}).then(
+      domToImage.toJpeg(document.getElementById(treeId), { quality: 0.95}).then(
         dataUrl => {
           saveAs(dataUrl, fileName);
         });
     } else if (exportImageType === 'svg') {
-      domToImage.toSvg(document.getElementById(canvasId)).then(
+      domToImage.toSvg(document.getElementById(treeId)).then(
         dataUrl => {
           saveAs(dataUrl, fileName);
         });
@@ -430,14 +446,40 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
   saveNewickString(event) {
     const thisTree = this.commonService.visuals.phylogenetic.tree;
-    const newickBlob = new Blob([thisTree.stringRepresentation], {type: 'text/plain;charset=utf-8'});
+    const newickBlob = new Blob([thisTree.data.toNewick(false)], {type: 'text/plain;charset=utf-8'});
     saveAs(newickBlob, this.SelectedNewickStringFilenameVariable);
 
   }
+
+  showContextMenu = (d) => {
+    console.log('showContextMenu called');
+    d3.event.preventDefault();
+    this.hideTooltip();
+    d3.select('#context-menu')
+    .style('z-index', 1000)
+    .style('display', 'block')
+    .style('opacity', 1)
+    .style('left', `${d3.event.pageX - 300}px`)
+    .style('top', `${d3.event.pageY - 125}px`);
+  }
+
+  hideContextMenu = () => {
+
+    console.log('Hiding context menu');
+    $('#context-menu').animate({ opacity: 0 }, 80, () => {
+      $(this).css('z-index', -1);
+    });
+  }
   contextMenu = (d) => {
-    let e = d3.event;
+    this.showContextMenu(d);
+    /**
+    console.log('Context menu called');
+    const e = d3.event;
     const tree = this.tree;
-    if (!e) return;
+    if (!e) {
+      console.log('Is there not an event?');
+      return;
+    }
     e.preventDefault();
     this.hideTooltip();
     d3.select('#context-menu')
@@ -472,27 +514,51 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     d3.select('#consolidate').on('click', c =>
       tree.setData(d[0].data.consolidate().getRoot())
     );
+    */
+  }
+
+  clickHandler = (n) => {
+    if (d3.event.ctrlKey) {
+      this.visuals.phylogenetic.commonService.session.data.nodes.find(node => node._id == n._id).selected = !n.selected;
+    } else {
+      this.visuals.phylogenetic.commonService.session.data.nodes.forEach(node => {
+        if (node._id === n._id) {
+          node.selected = !n.selected;
+        } else {
+          node.selected = false;
+        }
+      });
+    }
   }
 
   showTooltip = (d) => {
-    /**if (!this.SelectedBranchTooltipShowVariable) {
-      return;
+    if (this.SelectedLeafTooltipShowVariable) {
+      const htmlValue: any = this.SelectedLeafTooltipVariable;
+
+      // $('#tooltip').css({ top: d3.event.pageY - 28, left: d3.event.pageX + 8, position: 'absolute' });
+
+      d3.select('#tooltip')
+        .html(d[0].data[htmlValue])
+        .style('left', (d3.event.pageX) + 8 + 'px')
+        .style('top', (d3.event.pageY) - 28 + 'px')
+        .style('z-index', 1000)
+        .transition().duration(100)
+        .style('opacity', 1)
+        .style('color', '#333333')
+        .style('background', '#f5f5f5')
+        .style('border', '1px solid #cccccc')
+        .style('border-radius', '.25rem')
+        .style('padding', '.25rem')
+      ;
     }
-    */
-    let e = d3.event;
-    e.preventDefault();
-    d3.select('#tooltip')
-      .text(d[0].data.id)
-      .style('top', e.pageY + 'px')
-      .style('left', e.pageX + 5 + 'px')
-      .style('z-index', 1000)
-      .style('display', 'block');
   }
 
   hideTooltip = () => {
-    d3.selectAll('#tooltip')
-      .style('z-index', -1)
-      .style('display', 'none');
+    let tooltip = d3.select('#tooltip');
+    tooltip
+      .transition().duration(100)
+      .style('opacity', 0)
+      .on('end', () => tooltip.style('z-index', -1));
   }
 
 }

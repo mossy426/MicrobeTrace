@@ -36,5 +36,7 @@ testem.log
 /typings
 
 # System Files
+*.swp
+.nfs*
 .DS_Store
 Thumbs.db

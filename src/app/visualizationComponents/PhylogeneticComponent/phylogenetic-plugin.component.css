@@ -9,8 +9,8 @@
     height: 100%;
 }
 
-#context-menu, #tooltip {
-    position: absolute;
-    display: none;
-    z-index: -1;
-  }
+#tooltip {
+    background: lightgray;
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+}
