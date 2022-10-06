@@ -42,7 +42,7 @@
                           <div class="form-group row tree-type-row" title="What kind of tree should be displayed?" style="overflow:visible">
                               <div class="col-4"><label for="tree-type">Type</label></div>
                               <div class="col-8">
-                                  <p-dropdown id="tree-mode" [options]="TreeTypes" [(ngModel)]="SelectedTreeTypeVariable" (ngTypelChange)="onTreeTypeChange($event)"> </p-dropdown>
+                                  <p-dropdown id="tree-type" [options]="TreeTypes" [(ngModel)]="SelectedTreeTypeVariable" (ngModelChange)="onTreeTypeChange($event)"> </p-dropdown>
                               </div>
                           </div>
                       </div>

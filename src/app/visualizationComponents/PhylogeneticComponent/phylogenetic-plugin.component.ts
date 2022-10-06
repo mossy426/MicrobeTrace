@@ -49,7 +49,6 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   radToDeg: any = (180 / Math.PI);
   selected: any = null;
   multidrag = false;
-  // clipboard = new ClipboardJS('#copyID, #copySeq');
   zoom: any = null;
   brush: any = null;
   FieldList: SelectItem[] = [];
@@ -71,10 +70,10 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   SelectedTreeModeVariable = 'square';
   TreeTypes: any = [
     { label: 'Weighted', value: 'weighted' },
-    { label: 'Unweighted', value: 'unweighted' },
+    { label: 'Unweighted (Tree)', value: 'tree' },
     { label: 'Dendrogram', value: 'dendrogram' },
   ];
-  SelectedTreeTypeVariable = 'weighted';
+  SelectedTreeTypeVariable = 'tree';  // 'weighted';
 
 
   // Leaves Tab
@@ -102,15 +101,15 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   SelectedBranchDistanceSizeVariable = 12;
   SelectedBranchTooltipShowVariable = false;
 
-  private isExportClosed = false;
-  public isExporting = false;
-
   hideShowOptions: any = [
     { label: 'Hide', value: false },
     { label: 'Show', value: true }
   ];
 
   // Export Settings
+  private isExportClosed = false;
+  public isExporting = false;
+
   SelectedTreeImageFilenameVariable = 'default_tree';
   SelectedNewickStringFilenameVariable = 'default_tree.nwk';
 
@@ -140,9 +139,9 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
 
   constructor(injector: Injector,
-    private eventManager: EventManager,
-    public commonService: CommonService,
-    private cdref: ChangeDetectorRef) {
+              private eventManager: EventManager,
+              public commonService: CommonService,
+              private cdref: ChangeDetectorRef) {
 
     super(injector);
 
@@ -158,7 +157,6 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
       this.commonService.visuals.phylogenetic.tree = tree;
       this.hideTooltip();
       this.styleTree();
-      d3.select('#tidytree').style('background-color', '#ffffff');
     });
 
   }
@@ -169,7 +167,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     nodes = this.svg.select('g.nodes').selectAll('g').data(nodes, d => d.id)
       .join(
         enter => {
-          let g = enter.append('g')
+          const g = enter.append('g')
             .attr('tabindex', '0')
             .on('mouseenter focusin', (x) => this.showTooltip(x))
             .on('mouseout focusout', (x) => this.hideTooltip())
@@ -198,11 +196,10 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     this.tree.eachLeafNode(this.styleLeafNode);
     this.tree.setLeafLabels(this.SelectedLeafLabelShowVariable);
     this.tree.eachLeafLabel(this.styleLeafLabel);
-    const treeEl = document.querySelector('#tidytree');
     const branchEls = document.querySelectorAll('g.tidytree-link > path');
-    d3.select(treeEl).style('background-color', 'rgba(255, 255, 255);');
-    d3.select(treeEl).style('height', '88vh;');
+    this.svg.style('height', '88vh;');
     branchEls.forEach(this.styleBranch);
+    this.svg.style('background-color', '#ffffff');
   }
 
   styleBranch = (el) => {
@@ -416,7 +413,6 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   }
 
   saveImage(event) {
-    console.log(event);
     const thisTree = this.commonService.visuals.phylogenetic.tree;
     const fileName = this.SelectedTreeImageFilenameVariable;
     const treeId = 'tidytree';
@@ -444,29 +440,53 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     const thisTree = this.commonService.visuals.phylogenetic.tree;
     const newickBlob = new Blob([thisTree.data.toNewick(false)], {type: 'text/plain;charset=utf-8'});
     saveAs(newickBlob, this.SelectedNewickStringFilenameVariable);
+  }
 
+
+  getContextLeftVal = (xPos) => {
+    if (xPos - 175 < 0) {
+      return xPos + 25;
+    } else {
+      return xPos - 175;
+    }
+  }
+
+  getContextTopVal = (yPos) => {
+    if (yPos > (this.svg.clientHeight - 125)) {
+      return yPos - 125;
+    } else {
+      return yPos + 25;
+    }
   }
 
   showContextMenu = (d) => {
     d3.event.preventDefault();
     this.hideTooltip();
     const tree = this.tree;
+    const leftVal = this.getContextLeftVal(d3.event.pageX);
+    const topVal = this.getContextTopVal(d3.event.pageY);
     d3.select('#phylo-context-menu')
     .style('z-index', 1000)
     .style('display', 'block')
     .style('opacity', 1)
-    .style('left', `${d3.event.pageX - 175}px`)
-    .style('top', `${d3.event.pageY - 75}px`);
+    .style('left', `${leftVal}px`)
+    .style('top', `${topVal}px`);
     d3.select('#reroot').on('click', c => {
       tree.setData(d[0].data.reroot());
+      this.styleTree();
       this.hideContextMenu();
     });
     d3.select('#rotate').on('click', c => {
       tree.setData(d[0].data.rotate().getRoot());
+      this.styleTree();
       this.hideContextMenu();
     });
     d3.select('#flip').on('click', c => {
       tree.setData(d[0].data.flip().getRoot());
+      this.styleTree();
+      this.hideContextMenu();
+    });
+    d3.select('#tidytree').on('click', c => {
       this.hideContextMenu();
     });
   }
@@ -499,14 +519,12 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
 
       const leftVal = d3.event.pageX + 8;
       const topVal = d3.event.pageY - 28;
-      console.log(leftVal);
-      console.log(topVal);
       d3.select('#phyloTooltip')
         .html(d[0].data[htmlValue])
         .style('position', 'absolute')
         .style('display', 'block')
-        .style('left', leftVal)
-        .style('top', topVal)
+        .style('left', `${leftVal}px`)
+        .style('top', `${topVal}px`)
         .style('z-index', 1000)
         .transition().duration(100)
         .style('opacity', 1)
@@ -520,7 +538,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   }
 
   hideTooltip = () => {
-    let tooltip = d3.select('#phyloTooltip');
+    const tooltip = d3.select('#phyloTooltip');
     tooltip
       .transition().duration(100)
       .style('opacity', 0)
