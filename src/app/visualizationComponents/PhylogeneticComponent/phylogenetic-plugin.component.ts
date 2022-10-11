@@ -3,17 +3,18 @@
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { EventManager, DOCUMENT } from '@angular/platform-browser';
 import { MatMenu } from '@angular/material/menu';
-import { CommonService } from '../../contactTraceCommonServices/common.service';
+import { CommonService } from '@app/contactTraceCommonServices/common.service';
 import * as ClipboardJS from 'clipboard';
 import * as saveAs from 'file-saver';
 import * as domToImage from 'html-to-image';
 import { SelectItem } from 'primeng/api';
-import { DialogSettings } from '../../helperClasses/dialogSettings';
-import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
+import { DialogSettings } from '@app/helperClasses/dialogSettings';
+import { MicobeTraceNextPluginEvents } from '@app/helperClasses/interfaces';
 import * as _ from 'lodash';
-import { MicrobeTraceNextVisuals } from '../../microbe-trace-next-plugin-visuals';
+import { MicrobeTraceNextVisuals } from '@app/microbe-trace-next-plugin-visuals';
 import { CustomShapes } from '@app/helperClasses/customShapes';
 import TidyTree from './tidytree';
+import AuspiceHandler from '@app/helperClasses/auspiceHandler';
 import * as d3 from 'd3';
 
 
@@ -158,6 +159,9 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
       this.hideTooltip();
       this.styleTree();
     });
+    const ausHand = new AuspiceHandler();
+    console.log(ausHand);
+    ausHand.testHandler('../../helperClasses/auspice_example_formatted.json');
 
   }
 

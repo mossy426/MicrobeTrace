@@ -35,3 +35,4 @@ declare module "*.json" {
 
 declare module 'rtl-detect';
 
+declare module 'patristic';
