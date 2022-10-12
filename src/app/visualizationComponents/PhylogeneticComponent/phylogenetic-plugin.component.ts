@@ -74,7 +74,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     { label: 'Unweighted (Tree)', value: 'tree' },
     { label: 'Dendrogram', value: 'dendrogram' },
   ];
-  SelectedTreeTypeVariable = 'tree';  // 'weighted';
+  SelectedTreeTypeVariable = 'weighted';  // 'weighted';
 
 
   // Leaves Tab
