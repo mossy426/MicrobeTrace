@@ -28,6 +28,7 @@
       "@metronic/*": [ "./src/assets/metronic/*" ]
     },
     "esModuleInterop": true, 
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
   }
 }

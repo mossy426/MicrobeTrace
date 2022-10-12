@@ -437,7 +437,6 @@ export class CommonService extends AppComponentBase implements OnInit {
     clearData() {
         window.context.commonService.session = window.context.commonService.sessionSkeleton();
 
-
         window.context.commonService.temp = window.context.commonService.tempSkeleton();
 
     }
@@ -462,8 +461,8 @@ export class CommonService extends AppComponentBase implements OnInit {
 
 
     includes(container: any, value: any) {
-        var returnValue = false;
-        var pos = container.indexOf(value);
+        let returnValue = false;
+        const pos = container.indexOf(value);
         if (pos >= 0) {
             returnValue = true;
         }
