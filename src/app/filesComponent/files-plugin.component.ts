@@ -11,6 +11,7 @@ import * as JSZip from 'jszip';
 import * as alignmentViewer from 'alignment-viewer';
 import * as tn93 from 'tn93';
 import * as patristic from 'patristic';
+import AuspiceHandler from '@app/helperClasses/auspiceHandler';
 import { window } from 'ngx-bootstrap';
 import * as _ from 'lodash';
 import { MicrobeTraceNextVisuals } from '../microbe-trace-next-plugin-visuals';
@@ -1077,6 +1078,12 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             //debugger;
             let reader = new FileReader();
             reader.onloadend = out => this.commonService.processSVG(out.target);
+            reader.readAsText(rawfile, 'UTF-8');
+            return;
+        }
+        if (extension == 'json') {
+            let reader = new FileReader();
+            reader.onloadend = out => this.commonService.processJSON(out.target, extension);
             reader.readAsText(rawfile, 'UTF-8');
             return;
         }
