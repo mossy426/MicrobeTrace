@@ -434,120 +434,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
 
     clearData() {
-        /*this.dataSkeleton = {
-            nodes: [],
-            links: [],
-            clusters: [],
-            nodeFields: [
-                "index",
-                "_id",
-                "selected",
-                "cluster",
-                "visible",
-                "degree",
-                "origin"
-            ],
-            nodeExclusions: [],
-            linkFields: [
-                "index",
-                "source",
-                "target",
-                "distance",
-                "visible",
-                "cluster",
-                "origin",
-                "nn",
-                "directed"
-            ],
-            clusterFields: [
-                "id",
-                "nodes",
-                "links",
-                "sum_distances",
-                "links_per_node",
-                "mean_genetic_distance",
-                "visible"
-            ],
-            reference:
-                "CCTCAGGTCACTCTTTGGCAACGACCCCTCGTCACAATAAAGATAGGGGGGCAACTAAAGGAAGCTCTATTAGATACAGGAGCAGATGATACAGTATTAGAAGAAATGAGTTTGCCAGGAAGATGGAAACCAAAAATGATAGGGGGAATTGGAGGTTTTATCAAAGTAAGACAGTATGATCAGATACTCATAGAAATCTGTGGACATAAAGCTATAGGTACAGTATTAGTAGGACCTACACCTGTCAACATAATTGGAAGAAATCTGTTGACTCAGATTGGTTGCACTTTAAATTTTCCCATTAGCCCTATTGAGACTGTACCAGTAAAATTAAAGCCAGGAATGGATGGCCCAAAAGTTAAACAATGGCCATTGACAGAAGAAAAAATAAAAGCATTAGTAGAAATTTGTACAGAGATGGAAAAGGAAGGGAAAATTTCAAAAATTGGGCCTGAAAATCCATACAATACTCCAGTATTTGCCATAAAGAAAAAAGACAGTACTAAATGGAGAAAATTAGTAGATTTCAGAGAACTTAATAAGAGAACTCAAGACTTCTGGGAAGTTCAATTAGGAATACCACATCCCGCAGGGTTAAAAAAGAAAAAATCAGTAACAGTACTGGATGTGGGTGATGCATATTTTTCAGTTCCCTTAGATGAAGACTTCAGGAAGTATACTGCATTTACCATACCTAGTATAAACAATGAGACACCAGGGATTAGATATCAGTACAATGTGCTTCCACAGGGATGGAAAGGATCACCAGCAATATTCCAAAGTAGCATGACAAAAATCTTAGAGCCTTTTAGAAAACAAAATCCAGACATAGTTATCTATCAATACATGGATGATTTGTATGTAGGATCTGACTTAGAAATAGGGCAGCATAGAACAAAAATAGAGGAGCTGAGACAACATCTGTTGAGGTGGGGACTTACCACACCAGACAAAAAACATCAGAAAGAACCTCCATTCCTTTGGATGGGTTATGAACTCCATCCTGATAAATGGACAGTACAGCCTATAGTGCTGCCAGAAAAAGACAGCTGGACTGTCAATGACATACAGAAGTTAGTGGGGAAATTGAATTGGGCAAGTCAGATTTACCCAGGGATTAAAGTAAGGCAATTATGTAAACTCCTTAGAGGAACCAAAGCACTAACAGAAGTAATACCACTAACAGAAGAAGCAGAGCTAGAACTGGCAGAAAACAGAGAGATTCTAAAAGAACCAGTACATGGAGTGTATTATGACCCATCAAAAGACTTAATAGCAGAAATACAGAAGCAGGGGCAAGGCCAATGGACATATCAAATTTATCAAGAGCCATTTAAAAATCTGAAAACAGGAAAATATGCAAGAATGAGGGGTGCCCACACTAATGATGTAAAACAATTAACAGAGGCAGTGCAAAAAATAACCACAGAAAGCATAGTAATATGGGGAAAGACTCCTAAATTTAAACTGCCCATACAAAAGGAAACATGGGAAACATGGTGGACAGAGTATTGGCAAGCCACCTGGATTCCTGAGTGGGAGTTTGTTAATACCCCTCCCTTAGTGAAATTATGGTACCAGTTAGAGAAAGAACCCATAGTAGGAGCAGAAACCTTC"
-        }; */
-
-        /*
-        this.sessionSkeleton = {
-            data: this.dataSkeleton(),
-            files: [],
-            layout: {
-                content: [
-                    {
-                        type: "files"
-                    }
-                ],
-                type: "stack"
-            },
-            messages: [],
-            meta: {
-                loadTime: 0,
-                readyTime: Date.now(),
-                startTime: 0,
-                anySequences: false
-            },
-            network: {
-                allPinned: false,
-                nodes: []
-            },
-            state: {
-                timeStart: 0,
-                timeEnd: Date.now()
-            },
-            style: {
-                linkAlphas: [1],
-                linkColors: d3.schemePaired,
-                linkValueNames: {},
-                nodeAlphas: [1],
-                nodeColors: [d3.schemeCategory10[0]].concat(d3.schemeCategory10.slice(2)),
-                nodeSymbols: [
-                    "symbolCircle",
-                    "symbolCross",
-                    "symbolDiamond",
-                    "symbolSquare",
-                    "symbolStar",
-                    "symbolTriangle",
-                    "symbolWye",
-                    "symbolTriangleDown",
-                    "symbolTriangleLeft",
-                    "symbolTriangleRight",
-                    "symbolDiamondAlt",
-                    "symbolDiamondSquare",
-                    "symbolPentagon",
-                    "symbolHexagon",
-                    "symbolHexagonAlt",
-                    "symbolOctagon",
-                    "symbolOctagonAlt",
-                    "symbolX"
-                ],
-                nodeValueNames: {},
-                widgets: { ...this.defaultWidgets}
-            },
-            warnings: []
-        };
-*/
         window.context.commonService.session = window.context.commonService.sessionSkeleton();
-
-        /*
-        window.context.commonService.tempSkeleton = {
-            componentCache: {},
-            mapData: {},
-            matrix: {},
-            messageTimeout: null,
-            style: {
-                linkAlphaMap: () => 1 - window.context.commonService.session.style.widgets["link-opacity"],
-                linkColorMap: () => window.context.commonService.session.style.widgets["link-color"],
-                nodeAlphaMap: () => 1,
-                nodeColorMap: () => window.context.commonService.session.style.widgets["node-color"],
-                nodeSymbolMap: () => window.context.commonService.session.style.widgets["node-symbol"]
-            },
-            trees: {}
-        };*/
 
         window.context.commonService.temp = window.context.commonService.tempSkeleton();
 
@@ -588,8 +475,8 @@ export class CommonService extends AppComponentBase implements OnInit {
 
 
     includes(container: any, value: any) {
-        var returnValue = false;
-        var pos = container.indexOf(value);
+        let returnValue = false;
+        const pos = container.indexOf(value);
         if (pos >= 0) {
             returnValue = true;
         }

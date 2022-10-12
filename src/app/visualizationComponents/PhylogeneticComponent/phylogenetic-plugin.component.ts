@@ -16,6 +16,7 @@ import { CustomShapes } from '@app/helperClasses/customShapes';
 import TidyTree from './tidytree';
 import AuspiceHandler from '@app/helperClasses/auspiceHandler';
 import * as d3 from 'd3';
+import auspiceJson from '@app/helperClasses/auspice_example_formatted.json';
 
 
 /**
@@ -156,12 +157,13 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
       const tree = this.buildTree(x);
       this.tree = tree;
       this.commonService.visuals.phylogenetic.tree = tree;
+      const ausHand = new AuspiceHandler(this.commonService);
+      const treeStr = ausHand.run(auspiceJson);
+      console.log(treeStr);
+      this.tree.setTree(treeStr);
       this.hideTooltip();
       this.styleTree();
     });
-    const ausHand = new AuspiceHandler();
-    console.log(ausHand);
-    ausHand.testHandler('../../helperClasses/auspice_example_formatted.json');
 
   }
 
