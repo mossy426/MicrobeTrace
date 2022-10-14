@@ -34,6 +34,7 @@ export default class AuspiceHandler {
     node.data = {};
     node.data.name = tree.name;
     if (tree.hasOwnProperty('branch_attrs') && tree.branch_attrs.hasOwnProperty('mutations') && tree.branch_attrs.hasOwnProperty('nuc'))  {
+      console.log('We have mutations!');
       node.data.mutations = tree.branch_attrs.mutations.nuc;
     }
     for (const attribute of Object.keys(tree.node_attrs)) {
@@ -43,6 +44,7 @@ export default class AuspiceHandler {
         node.data[attribute] = tree.node_attrs[attribute];
       }
     }
+    console.log(node.data);
     return node;
   }
 
@@ -53,9 +55,10 @@ export default class AuspiceHandler {
       for (let ancestor of leaf.getAncestors()) {
         mutHolder += ancestor.data.mutations;
       }
+      console.log(
       leaf.data.mutations = mutHolder;
     }
-    return tree; 
+    return tree;
   }
 
   public parseAuspice = (auspiceTree) => {
@@ -131,9 +134,10 @@ export default class AuspiceHandler {
     const newickString =  this.treeToNewick(jsonObj.tree, true, true);
     console.log(newickString);
     const fullTree = this.parseAuspice(jsonObj);
-    updated_tree = this.combineMutations(fullTree);
+    const updatedTree = this.combineMutations(fullTree);
     console.log(fullTree);
-    console.log(fullTree.toMatrix());
+    console.log(updatedTree);
+    console.log(updatedTree.toNewick());
     return newickString;
   }
 }
