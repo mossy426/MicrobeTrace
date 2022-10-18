@@ -14,6 +14,7 @@ import { LocalStorageService } from '@shared/utils/local-storage.service';
 //import landJson from '../data/land.json';
 //import starsJson from '../data/stars.json';
 
+import AuspiceHandler from '@app/helperClasses/auspiceHandler';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { StashObjects, StashObject } from '../helperClasses/interfaces';
 import { MicrobeTraceNextVisuals } from '../microbe-trace-next-plugin-visuals';
@@ -75,6 +76,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             nodeTableColumns: [],
             linkTableColumns: [],
             clusterTableColumns: [],
+            treeObj: '',
             reference:
                 "CCTCAGGTCACTCTTTGGCAACGACCCCTCGTCACAATAAAGATAGGGGGGCAACTAAAGGAAGCTCTATTAGATACAGGAGCAGATGATACAGTATTAGAAGAAATGAGTTTGCCAGGAAGATGGAAACCAAAAATGATAGGGGGAATTGGAGGTTTTATCAAAGTAAGACAGTATGATCAGATACTCATAGAAATCTGTGGACATAAAGCTATAGGTACAGTATTAGTAGGACCTACACCTGTCAACATAATTGGAAGAAATCTGTTGACTCAGATTGGTTGCACTTTAAATTTTCCCATTAGCCCTATTGAGACTGTACCAGTAAAATTAAAGCCAGGAATGGATGGCCCAAAAGTTAAACAATGGCCATTGACAGAAGAAAAAATAAAAGCATTAGTAGAAATTTGTACAGAGATGGAAAAGGAAGGGAAAATTTCAAAAATTGGGCCTGAAAATCCATACAATACTCCAGTATTTGCCATAAAGAAAAAAGACAGTACTAAATGGAGAAAATTAGTAGATTTCAGAGAACTTAATAAGAGAACTCAAGACTTCTGGGAAGTTCAATTAGGAATACCACATCCCGCAGGGTTAAAAAAGAAAAAATCAGTAACAGTACTGGATGTGGGTGATGCATATTTTTCAGTTCCCTTAGATGAAGACTTCAGGAAGTATACTGCATTTACCATACCTAGTATAAACAATGAGACACCAGGGATTAGATATCAGTACAATGTGCTTCCACAGGGATGGAAAGGATCACCAGCAATATTCCAAAGTAGCATGACAAAAATCTTAGAGCCTTTTAGAAAACAAAATCCAGACATAGTTATCTATCAATACATGGATGATTTGTATGTAGGATCTGACTTAGAAATAGGGCAGCATAGAACAAAAATAGAGGAGCTGAGACAACATCTGTTGAGGTGGGGACTTACCACACCAGACAAAAAACATCAGAAAGAACCTCCATTCCTTTGGATGGGTTATGAACTCCATCCTGATAAATGGACAGTACAGCCTATAGTGCTGCCAGAAAAAGACAGCTGGACTGTCAATGACATACAGAAGTTAGTGGGGAAATTGAATTGGGCAAGTCAGATTTACCCAGGGATTAAAGTAAGGCAATTATGTAAACTCCTTAGAGGAACCAAAGCACTAACAGAAGTAATACCACTAACAGAAGAAGCAGAGCTAGAACTGGCAGAAAACAGAGAGATTCTAAAAGAACCAGTACATGGAGTGTATTATGACCCATCAAAAGACTTAATAGCAGAAATACAGAAGCAGGGGCAAGGCCAATGGACATATCAAATTTATCAAGAGCCATTTAAAAATCTGAAAACAGGAAAATATGCAAGAATGAGGGGTGCCCACACTAATGATGTAAAACAATTAACAGAGGCAGTGCAAAAAATAACCACAGAAAGCATAGTAATATGGGGAAAGACTCCTAAATTTAAACTGCCCATACAAAAGGAAACATGGGAAACATGGTGGACAGAGTATTGGCAAGCCACCTGGATTCCTGAGTGGGAGTTTGTTAATACCCCTCCCTTAGTGAAATTATGGTACCAGTTAGAGAAAGAACCCATAGTAGGAGCAGAAACCTTC"
         };
@@ -745,11 +747,16 @@ export class CommonService extends AppComponentBase implements OnInit {
 
             window.context.commonService.applySession(data);
         } else {
-            if (data.version) {
-                window.context.commonService.applyGHOST(data);
+            if (data.meta && data.tree) {
+              console.log('Process auspice file');
+              window.context.commonService.applyAuspice(data);
             } else {
-                window.context.commonService.applyHIVTrace(data);
-            }
+              if (data.version) {
+                  window.context.commonService.applyGHOST(data);
+              } else {
+                  window.context.commonService.applyHIVTrace(data);
+              }
+           }
         }
 
     };
@@ -922,6 +929,17 @@ export class CommonService extends AppComponentBase implements OnInit {
                 window.context.commonService.session.data.linkFields.push(key);
         });
         window.context.commonService.runHamsters();
+    };
+
+    applyAuspice(auspice) {
+      window.context.commonService.session = window.context.commonService.sessionSkeleton();
+      window.context.commonService.session.meta.startTime = Date.now();
+      const auspiceHandler = new AuspiceHandler(window.context.commonService);
+      const auspiceData = auspiceHandler.run(auspice);
+      auspiceData.nodes.forEach(node => {
+        window.context.commonService.addNode(node, false);
+      });
+      window.context.commonService.runHamsters();
     };
 
     decode(x) {
@@ -1359,6 +1377,9 @@ export class CommonService extends AppComponentBase implements OnInit {
     computeTree(): Promise<any> {
         return new Promise(resolve => {
 
+          if (window.context.commonService.treeObj) {
+            resolve(window.context.commonService.treeObj.toNewick());
+          } else {
             let computer: WorkerModule = new WorkerModule();
             window.context.commonService.getDM().then(dm => {
 
@@ -1378,7 +1399,7 @@ export class CommonService extends AppComponentBase implements OnInit {
               });
 
             });
-
+          }
         })
     };
 
