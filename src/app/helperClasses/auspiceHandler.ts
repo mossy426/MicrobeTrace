@@ -6,6 +6,7 @@ export default class AuspiceHandler {
   private strainSymbol = Symbol('strain');
   private NODE_VISIBLE = 2;              // included on tree and map
   private invalidStrings = ['unknown', '?', 'nan', 'na', 'n/a', '', 'unassigned'];
+  private nodeList = [];
 
   constructor(public commonService: CommonService) {
     this.commonService = commonService;
@@ -14,11 +15,13 @@ export default class AuspiceHandler {
   public recurseChildren = (tree) => {
     if (!tree.children) {
       const node = this.makeNode(tree);
-      this.commonService.addNode(node);
+      this.nodeList.push(node);
       const branch = new patristic.Branch(node);
       return branch;
     } else {
-      const newTree = new patristic.Branch({});
+      const rootNode = this.makeNode(tree);
+      this.nodeList.push(rootNode);
+      const newTree = new patristic.Branch(rootNode);
       for (const child of tree.children) {
         const node = this.recurseChildren(child);
         newTree.addChild(node);
@@ -33,8 +36,9 @@ export default class AuspiceHandler {
     node._id = tree.name;
     node.data = {};
     node.data.name = tree.name;
-    if (tree.hasOwnProperty('branch_attrs') && tree.branch_attrs.hasOwnProperty('mutations') && tree.branch_attrs.hasOwnProperty('nuc'))  {
-      console.log('We have mutations!');
+    if (tree.hasOwnProperty('branch_attrs') &&
+        tree.branch_attrs.hasOwnProperty('mutations') &&
+        tree.branch_attrs.mutations.hasOwnProperty('nuc'))  {
       node.data.mutations = tree.branch_attrs.mutations.nuc;
     }
     for (const attribute of Object.keys(tree.node_attrs)) {
@@ -44,25 +48,26 @@ export default class AuspiceHandler {
         node.data[attribute] = tree.node_attrs[attribute];
       }
     }
-    console.log(node.data);
     return node;
   }
 
   public combineMutations = (tree) => {
-    let mutHolder = [];
     const leaves = tree.getLeaves();
-    for (let leaf of leaves) {
-      for (let ancestor of leaf.getAncestors()) {
-        mutHolder += ancestor.data.mutations;
+    for (const leaf of leaves) {
+      let mutHolder = [];
+      for (const ancestor of leaf.getAncestors(true)) {
+        const nodeIndex = this.nodeList.findIndex( x => x.id === ancestor.id);
+        const nodeHolder = this.nodeList[nodeIndex];
+        if (nodeHolder.hasOwnProperty('data') && nodeHolder.data.hasOwnProperty('mutations')) {
+          mutHolder = mutHolder.concat(nodeHolder.data.mutations);
+        }
       }
-      console.log(
-      leaf.data.mutations = mutHolder;
+      leaf.data.data.mutations = mutHolder;
     }
     return tree;
   }
 
   public parseAuspice = (auspiceTree) => {
-    const rootObj = new patristic.Branch({});
     return this.recurseChildren(auspiceTree.tree);
   }
 
@@ -131,13 +136,12 @@ export default class AuspiceHandler {
   }
 
   public run = (jsonObj) => {
-    const newickString =  this.treeToNewick(jsonObj.tree, true, true);
-    console.log(newickString);
+    const newickString =  this.treeToNewick(jsonObj.tree, false, true);
     const fullTree = this.parseAuspice(jsonObj);
+    console.log(this.nodeList);
     const updatedTree = this.combineMutations(fullTree);
-    console.log(fullTree);
     console.log(updatedTree);
     console.log(updatedTree.toNewick());
-    return newickString;
+    return { nodes: this.nodeList, tree: newickString};
   }
 }
