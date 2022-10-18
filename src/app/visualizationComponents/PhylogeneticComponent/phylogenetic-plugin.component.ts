@@ -152,19 +152,27 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   }
 
   openTree = () => {
-    const newickString = this.commonService.computeTree();
-    newickString.then((x) => {
-      const tree = this.buildTree(x);
-      this.tree = tree;
-      this.commonService.visuals.phylogenetic.tree = tree;
-      const ausHand = new AuspiceHandler(this.commonService);
-      const treeStr = ausHand.run(auspiceJson);
-      console.log(treeStr);
-      this.tree.setTree(treeStr);
+    if (! this.visuals.phylogenetic.commonService.session.data.tree === {}) {
+      this.tree = new TidyTree(this.visuals.phylogenetic.commonService.session.data.tree,
+                               this.getTreeOptions(),
+                               this.getTreeHandlers());
+      console.log(this.tree);
       this.hideTooltip();
       this.styleTree();
-    });
-
+    } else {
+      const newickString = this.commonService.computeTree();
+      newickString.then((x) => {
+        const tree = this.buildTree(x);
+        this.tree = tree;
+        this.commonService.visuals.phylogenetic.tree = tree;
+        // const ausHand = new AuspiceHandler(this.commonService);
+        // const treeStr = ausHand.run(auspiceJson);
+        // console.log(treeStr);
+        // this.tree.setData(treeStr.tree);
+        this.hideTooltip();
+        this.styleTree();
+      });
+    }
   }
 
   styleTree = () => {
@@ -239,29 +247,38 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   buildTree = (newick) => {
     const tree = new TidyTree(
       newick ? newick : this.tree.data.clone(),
-      {
-        parent: '#phylocanvas',
-        layout: this.SelectedTreeLayoutVariable,  // d3.select('#layout').node().value,
-        mode: this.SelectedTreeModeVariable,  // d3.select('#mode').node().value,
-        type: this.SelectedTreeTypeVariable, // d3.select('#type').node().value,
-        leafNodes: this.SelectedLeafNodeShowVariable,
-        branchNodes:  this.SelectedBranchNodeSizeVariable,  // range 0.5-10 in 0.5 steps
-        leafLabels: this.SelectedLeafLabelSizeVariable,  // range 1-32
-        branchLabels: this.SelectedBranchLabelSizeVariable, // range 1-32
-        branchDistances: this.SelectedBranchDistanceSizeVariable, // range 1-32
-        ruler: true,
-        animation: parseFloat('0'),  // range 0-2000 in steps of 10
-        margin: [10, 10, 70, 30]
-      },
-      {
-        contextmenu: this.showContextMenu,
-        showtooltip: this.showTooltip,
-        hidetooltip: this.hideTooltip
-      }
+      this.getTreeOptions(),
+      this.getTreeHandlers(),
     );
     return tree;
   }
 
+  getTreeOptions = () => {
+    const treeOpts = {
+      parent: '#phylocanvas',
+      layout: this.SelectedTreeLayoutVariable,
+      mode: this.SelectedTreeModeVariable,
+      type: this.SelectedTreeTypeVariable,
+      leafNodes: this.SelectedLeafNodeShowVariable,
+      branchNodes:  this.SelectedBranchNodeSizeVariable,
+      leafLabels: this.SelectedLeafLabelSizeVariable,
+      branchLabels: this.SelectedBranchLabelSizeVariable,
+      branchDistances: this.SelectedBranchDistanceSizeVariable,
+      ruler: true,
+      animation: parseFloat('0'),  // range 0-2000 in steps of 10
+      margin: [10, 10, 70, 30]
+    };
+    return treeOpts;
+  }
+
+  getTreeHandlers = () => {
+    const handlers = {
+      contextmenu: this.showContextMenu,
+      showtooltip: this.showTooltip,
+      hidetooltip: this.hideTooltip
+    };
+    return handlers;
+  }
 
   ngOnInit() {
     this.openTree();
