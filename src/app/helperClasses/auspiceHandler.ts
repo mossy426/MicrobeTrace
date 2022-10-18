@@ -7,6 +7,7 @@ export default class AuspiceHandler {
   private NODE_VISIBLE = 2;              // included on tree and map
   private invalidStrings = ['unknown', '?', 'nan', 'na', 'n/a', '', 'unassigned'];
   private nodeList = [];
+  private linkList = [];
 
   constructor(public commonService: CommonService) {
     this.commonService = commonService;
@@ -135,13 +136,30 @@ export default class AuspiceHandler {
     return true;
   }
 
+  public makeLinksFromMatrix = (matrix) => {
+    const linkList = [];
+    for (let i = 0; i < matrix.ids.length - 1; i++) {
+      for (let j = i + 1; j < matrix.ids.length; j++) {
+        const link = {
+          source: matrix.ids[i],
+          target: matrix.ids[j],
+          distance: matrix.matrix[i][j],
+          origin: []
+        };
+        linkList.push(link);
+      }
+    }
+    this.linkList = linkList;
+  }
+
+
+
   public run = (jsonObj) => {
     const newickString =  this.treeToNewick(jsonObj.tree, false, true);
     const fullTree = this.parseAuspice(jsonObj);
-    console.log(this.nodeList);
+    const distanceMatrix = patristic.parseNewick(newickString).toMatrix();
     const updatedTree = this.combineMutations(fullTree);
-    console.log(updatedTree);
-    console.log(updatedTree.toNewick());
-    return { nodes: this.nodeList, tree: newickString};
+    this.makeLinksFromMatrix(distanceMatrix);
+    return { nodes: this.nodeList, links: this.linkList, tree: updatedTree, newick: newickString};
   }
 }
