@@ -509,11 +509,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
   }
 
   launchClick() {
-    console.log(`${JSON.stringify(this.commonService.session.files)}`);
-
     this.commonService.resetData();
-
-    console.log(`${JSON.stringify(this.commonService.session.files)}`);
 
     this.commonService.session.messages = [];
     this.messages = [];
@@ -530,7 +526,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
 
   creatLaunchSequences() {
-
+    console.log('Launched');
     this.commonService.session.meta.startTime = Date.now();
     $('#launch').prop('disabled', true);
 
@@ -544,7 +540,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
     const nFiles = this.commonService.session.files.length - 1;
     const check = nFiles > 0;
 
-    const hierarchy = ['newick', 'matrix', 'link', 'node', 'fasta', 'auspice'];
+    const hierarchy = ['auspice', 'newick', 'matrix', 'link', 'node', 'fasta'];
     this.commonService.session.files.sort((a, b) => hierarchy.indexOf(a.format) - hierarchy.indexOf(b.format));
 
 
@@ -556,6 +552,11 @@ export class FilesComponent extends AppComponentBase implements OnInit {
       if (file.format === 'auspice') {
         this.showMessage(`Parsing ${file.name} as Auspice...`);
         let newNodes = 0;
+        this.commonService.localStorageService.setItem('default-view', 'phylogenetic-tree');
+        this.commonService.localStorageService.setItem('default-distance-metric', 'snps');
+        this.commonService.session.style.widgets['default-distance-metric'] = 'snps';
+        $('#default-distance-metric').val('snps').trigger('change');
+        this.commonService.session.style.widgets['link-threshold'] = 16;
         this.commonService.applyAuspice(file.contents);
       } else if (file.format === 'fasta') {
 
@@ -1053,8 +1054,19 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             return;
         }
         if (extension === 'json') {
+            const fileName = this.commonService.filterXSS(rawfile.name);
             let reader = new FileReader();
-            reader.onloadend = out => this.commonService.processJSON(out.target, extension);
+            reader.onloadend = (out) => {
+              const output = JSON.parse(out.target.result);
+              if (output.meta && output.tree) {
+                const auspiceFile = { contents: output, name: fileName, extension: extension};
+                this.commonService.session.files.push(auspiceFile);
+                this.addToTable(auspiceFile);
+                // this.commonService.temp.auspiceOutput = output;
+              } else {
+                this.commonService.processJSON(out.target, extension);
+              }
+            };
             reader.readAsText(rawfile, 'UTF-8');
             return;
         }
@@ -1081,6 +1093,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
     }
 
     addToTable(file) {
+      console.log(file);
 
       //debugger;
         const extension = file.extension ? file.extension : this.commonService.filterXSS(file.name).split('.').pop().toLowerCase();
@@ -1103,7 +1116,14 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             addTableTile(headers, this);
         } else
             if (isJSON) {
-                const data = JSON.parse(file.contents);
+              let data = [];
+              console.log('This is a JSON file');
+              if ( (typeof file.contents) === 'string') {
+                data = JSON.parse(file.contents);
+              } else {
+                console.log(file);
+                data = [file.contents];
+              }
 
                 addTableTile(Object.keys(data[0]).map(this.commonService.filterXSS), this);
 
@@ -1138,6 +1158,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
   //For the love of all that's good...
   //TODO: Rewrite this as a [Web Component](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements) or [something](https://reactjs.org/docs/react-component.html) or something.
         function addTableTile(headers, context) {
+          console.log(headers);
 
             let parentContext = context;
             let root = $('<div class="file-table-row"></div>').data('filename', file.name);
@@ -1154,7 +1175,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                 .append('<span class="p-1">' + file.name + '</span>')
                 .append(`
                     <div class="btn-group btn-group-toggle btn-group-sm float-right" data-toggle="buttons">
-                      <label class="btn btn-light${!isFasta && !isNewick && !isNode ? ' active' : ''}">
+                      <label class="btn btn-light${!isFasta && !isNewick && !isNode && !isAuspice ? ' active' : ''}">
                         <input type="radio" name="options-${file.name}" data-type="link" autocomplete="off"${!isFasta && !isNewick && !isNode ? ' checked' : ''}>Link
                       </label>
                       <label class="btn btn-light${!isFasta && !isNewick && isNode ? ' active' : ''}">

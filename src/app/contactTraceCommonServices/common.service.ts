@@ -77,6 +77,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             linkTableColumns: [],
             clusterTableColumns: [],
             tree: {},
+            newickString: '',
             reference:
                 "CCTCAGGTCACTCTTTGGCAACGACCCCTCGTCACAATAAAGATAGGGGGGCAACTAAAGGAAGCTCTATTAGATACAGGAGCAGATGATACAGTATTAGAAGAAATGAGTTTGCCAGGAAGATGGAAACCAAAAATGATAGGGGGAATTGGAGGTTTTATCAAAGTAAGACAGTATGATCAGATACTCATAGAAATCTGTGGACATAAAGCTATAGGTACAGTATTAGTAGGACCTACACCTGTCAACATAATTGGAAGAAATCTGTTGACTCAGATTGGTTGCACTTTAAATTTTCCCATTAGCCCTATTGAGACTGTACCAGTAAAATTAAAGCCAGGAATGGATGGCCCAAAAGTTAAACAATGGCCATTGACAGAAGAAAAAATAAAAGCATTAGTAGAAATTTGTACAGAGATGGAAAAGGAAGGGAAAATTTCAAAAATTGGGCCTGAAAATCCATACAATACTCCAGTATTTGCCATAAAGAAAAAAGACAGTACTAAATGGAGAAAATTAGTAGATTTCAGAGAACTTAATAAGAGAACTCAAGACTTCTGGGAAGTTCAATTAGGAATACCACATCCCGCAGGGTTAAAAAAGAAAAAATCAGTAACAGTACTGGATGTGGGTGATGCATATTTTTCAGTTCCCTTAGATGAAGACTTCAGGAAGTATACTGCATTTACCATACCTAGTATAAACAATGAGACACCAGGGATTAGATATCAGTACAATGTGCTTCCACAGGGATGGAAAGGATCACCAGCAATATTCCAAAGTAGCATGACAAAAATCTTAGAGCCTTTTAGAAAACAAAATCCAGACATAGTTATCTATCAATACATGGATGATTTGTATGTAGGATCTGACTTAGAAATAGGGCAGCATAGAACAAAAATAGAGGAGCTGAGACAACATCTGTTGAGGTGGGGACTTACCACACCAGACAAAAAACATCAGAAAGAACCTCCATTCCTTTGGATGGGTTATGAACTCCATCCTGATAAATGGACAGTACAGCCTATAGTGCTGCCAGAAAAAGACAGCTGGACTGTCAATGACATACAGAAGTTAGTGGGGAAATTGAATTGGGCAAGTCAGATTTACCCAGGGATTAAAGTAAGGCAATTATGTAAACTCCTTAGAGGAACCAAAGCACTAACAGAAGTAATACCACTAACAGAAGAAGCAGAGCTAGAACTGGCAGAAAACAGAGAGATTCTAAAAGAACCAGTACATGGAGTGTATTATGACCCATCAAAAGACTTAATAGCAGAAATACAGAAGCAGGGGCAAGGCCAATGGACATATCAAATTTATCAAGAGCCATTTAAAAATCTGAAAACAGGAAAATATGCAAGAATGAGGGGTGCCCACACTAATGATGTAAAACAATTAACAGAGGCAGTGCAAAAAATAACCACAGAAAGCATAGTAATATGGGGAAAGACTCCTAAATTTAAACTGCCCATACAAAAGGAAACATGGGAAACATGGTGGACAGAGTATTGGCAAGCCACCTGGATTCCTGAGTGGGAGTTTGTTAATACCCCTCCCTTAGTGAAATTATGGTACCAGTTAGAGAAAGAACCCATAGTAGGAGCAGAAACCTTC"
         };
@@ -466,6 +467,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             cluster: 1,
             visible: true,
             degree: 0,
+            data: {},
             origin: []
         }
     };
@@ -553,8 +555,13 @@ export class CommonService extends AppComponentBase implements OnInit {
             }
         }
 
+
+
         let newElement = Object.assign(window.context.commonService.defaultNode(), newNode);
 
+        if (newNode.hasOwnProperty('data') && newNode.data.hasOwnProperty('data')) {
+          newElement.data = newNode.data.data;
+        }
         window.context.commonService.session.data.nodes.push(newElement);
 
         return 1;
@@ -748,8 +755,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             window.context.commonService.applySession(data);
         } else {
             if (data.meta && data.tree) {
-              console.log('Process auspice file');
-              window.context.commonService.applyAuspice(data);
+              console.log('Found auspice file - dont process it here');
+              // window.context.commonService.applyAuspice(data);
             } else {
               if (data.version) {
                   window.context.commonService.applyGHOST(data);
@@ -939,14 +946,29 @@ export class CommonService extends AppComponentBase implements OnInit {
       const auspiceData = auspiceHandler.run(auspice);
       auspiceData.nodes.forEach(node => {
         if (!/NODE0*/.exec(node.id)) {
-          window.context.commonService.addNode(node, false);
+          console.log(node);
+          const nodeKeys = Object.keys(node);
+          nodeKeys.forEach( key => {
+          if (window.context.commonService.session.data.nodeFields.indexOf(key) === -1) {
+            console.log(`Adding ${key} to node field list`);
+              window.context.commonService.session.data.nodeFields.push(key);
+          }
+          if (! node.hasOwnProperty('origin') ) {
+            node.origin = [];
+          }
+          window.context.commonService.addNode(node, true);
+          });
         }
       });
       auspiceData.links.forEach(link => {
-        window.context.commonService.addLink(link, false);
+        window.context.commonService.addLink(link, true);
       });
       window.context.commonService.session.data.tree = auspiceData.tree;
+      window.context.commonService.session.data.newickString = auspiceData.newick;
       window.context.commonService.runHamsters();
+      window.context.commonService.session.network.nodes = window.context.commonService.session.data.nodes;
+      console.log(window.context.commonService.session.data);
+      this.updateNetwork();
     }
 
     decode(x) {
@@ -1777,7 +1799,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             cluster.visible = cluster.nodes >= min;
         }
         if (!silent) $(document).trigger("cluster-visibility");//$window.trigger("cluster-visibility");
-        console.log("Cluster Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
+        // console.log("Cluster Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
     };
 
     getVisibleNodes(copy: any = false) {
@@ -1845,9 +1867,9 @@ export class CommonService extends AppComponentBase implements OnInit {
         let clusterCount = 0;
         if (window.context.commonService.session.style.widgets["timeline-date-field"] == 'None') {
             linkCount = vlinks.length;
-            console.log('clusterss: ', window.context.commonService.session.data.clusters);
+            // console.log('clusterss: ', window.context.commonService.session.data.clusters);
             clusterCount = window.context.commonService.session.data.clusters.filter(cluster => cluster.visible && cluster.nodes > 1).length;
-            console.log('cluster count 1: ', clusterCount);
+            // console.log('cluster count 1: ', clusterCount);
         } else {
             let n = vlinks.length;
             for (let i = 0; i < n; i++) {
@@ -2777,7 +2799,7 @@ export class CommonService extends AppComponentBase implements OnInit {
                     if (s && t) break;
                 }
             }
-            console.log('clustersssss: ' , clusters);
+            // console.log('clustersssss: ' , clusters);
             clusters.forEach(c => {
                 c.links = c.links / 2;
                 c.links_per_node = c.links / c.nodes;
@@ -2811,7 +2833,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         }
         if (!silent) $(document).trigger("node-visibility");
        
-        console.log("Node Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
+        // console.log("Node Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
     };
 
     updatePinNodes(copy) {
@@ -2869,7 +2891,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         }
         if (!silent) $(document).trigger("link-visibility");
-        console.log("Link Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
+        // console.log("Link Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
     };
 
     updateNetwork() {

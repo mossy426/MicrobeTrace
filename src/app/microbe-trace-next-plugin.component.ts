@@ -1970,7 +1970,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             const tabWithoutComponentRef: HomePageTabItem | undefined = this.homepageTabs.find(x => x.label == viewName && x.componentRef != undefined);
 
             if (!tabWithoutComponentRef) {
-                /*
+               /* 
                 setTimeout(() => {
 
                     let _type: any = this.GetComponentTypeByName(viewName);
