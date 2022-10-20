@@ -152,27 +152,26 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   }
 
   openTree = () => {
-    if (! this.visuals.phylogenetic.commonService.session.data.tree === {}) {
+    /*
+    if (this.visuals.phylogenetic.commonService.session.data.newickString) {
       this.tree = new TidyTree(this.visuals.phylogenetic.commonService.session.data.tree,
                                this.getTreeOptions(),
                                this.getTreeHandlers());
+      console.log(this.visuals.phylogenetic.commonService.session.data.tree);
       console.log(this.tree);
       this.hideTooltip();
       this.styleTree();
     } else {
+    */
       const newickString = this.commonService.computeTree();
       newickString.then((x) => {
         const tree = this.buildTree(x);
         this.tree = tree;
         this.commonService.visuals.phylogenetic.tree = tree;
-        // const ausHand = new AuspiceHandler(this.commonService);
-        // const treeStr = ausHand.run(auspiceJson);
-        // console.log(treeStr);
-        // this.tree.setData(treeStr.tree);
         this.hideTooltip();
         this.styleTree();
       });
-    }
+   // }
   }
 
   styleTree = () => {

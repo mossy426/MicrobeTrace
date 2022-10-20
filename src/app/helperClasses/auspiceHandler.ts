@@ -35,18 +35,16 @@ export default class AuspiceHandler {
     const node: any = {};
     node.id = tree.name;
     node._id = tree.name;
-    node.data = {};
-    node.data.name = tree.name;
     if (tree.hasOwnProperty('branch_attrs') &&
         tree.branch_attrs.hasOwnProperty('mutations') &&
         tree.branch_attrs.mutations.hasOwnProperty('nuc'))  {
-      node.data.mutations = tree.branch_attrs.mutations.nuc;
+      node.mutations = tree.branch_attrs.mutations.nuc;
     }
     for (const attribute of Object.keys(tree.node_attrs)) {
       if (attribute !== 'div') {
-        node.data[attribute] = tree.node_attrs[attribute].value;
+        node[attribute] = tree.node_attrs[attribute].value;
       } else {
-        node.data[attribute] = tree.node_attrs[attribute];
+        node[attribute] = tree.node_attrs[attribute];
       }
     }
     return node;
@@ -59,11 +57,11 @@ export default class AuspiceHandler {
       for (const ancestor of leaf.getAncestors(true)) {
         const nodeIndex = this.nodeList.findIndex( x => x.id === ancestor.id);
         const nodeHolder = this.nodeList[nodeIndex];
-        if (nodeHolder.hasOwnProperty('data') && nodeHolder.data.hasOwnProperty('mutations')) {
-          mutHolder = mutHolder.concat(nodeHolder.data.mutations);
+        if (nodeHolder.hasOwnProperty('mutations')) {
+          mutHolder = mutHolder.concat(nodeHolder.mutations);
         }
       }
-      leaf.data.data.mutations = mutHolder;
+      leaf.data.mutations = mutHolder;
     }
     return tree;
   }
@@ -152,6 +150,20 @@ export default class AuspiceHandler {
     this.linkList = linkList;
   }
 
+  public addLatLong = (nodes, metadata) => {
+    const newNodes = [];
+    for (const node of nodes) {
+      for (let i=0; i<metadata.geo_resolutions.length; i++) {
+        console.log(metadata.geo_resolutions[i].key);
+        const deme = node[metadata.geo_resolutions[i].key];
+        console.log(deme);
+        node.latitude = metadata.geo_resolutions[i].demes[deme].latitude;
+        node.longtude = metadata.geo_resolutions[i].demes[deme].longitude;
+      }
+      newNodes.push(node);
+    }
+    return newNodes;
+  }
 
 
   public run = (jsonObj) => {
@@ -160,6 +172,8 @@ export default class AuspiceHandler {
     const distanceMatrix = patristic.parseNewick(newickString).toMatrix();
     const updatedTree = this.combineMutations(fullTree);
     this.makeLinksFromMatrix(distanceMatrix);
-    return { nodes: this.nodeList, links: this.linkList, tree: updatedTree, newick: newickString};
+    const bareNewickString =  this.treeToNewick(jsonObj.tree, false, false);
+    this.nodeList = this.addLatLong(this.nodeList, jsonObj.meta);
+    return { nodes: this.nodeList, links: this.linkList, tree: updatedTree, newick: bareNewickString};
   }
 }

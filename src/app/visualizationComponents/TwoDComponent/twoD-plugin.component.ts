@@ -173,9 +173,10 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
     InitView() {
 
-        this.visuals.twoD.IsDataAvailable = (this.visuals.twoD.commonService.session.data.nodes.length == 0 ? false : true);
+        this.visuals.twoD.IsDataAvailable = (this.visuals.twoD.commonService.session.data.nodes.length === 0 ? false : true);
 
-        if (this.visuals.twoD.IsDataAvailable == true && this.visuals.twoD.zoom == null) {
+        if (this.visuals.twoD.IsDataAvailable === true && this.visuals.twoD.zoom === null) {
+          console.log(this.visuals.twoD.commonService.session.network);
 
             d3.select('svg#network').exit().remove();
             this.visuals.twoD.svg = d3.select('svg#network').append('g');
