@@ -176,7 +176,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         this.visuals.twoD.IsDataAvailable = (this.visuals.twoD.commonService.session.data.nodes.length === 0 ? false : true);
 
         if (this.visuals.twoD.IsDataAvailable === true && this.visuals.twoD.zoom === null) {
-          console.log(this.visuals.twoD.commonService.session.network);
+          console.log(this.visuals.twoD.commonService.session.style.widgets['link-threshold']);
 
             d3.select('svg#network').exit().remove();
             this.visuals.twoD.svg = d3.select('svg#network').append('g');
@@ -257,7 +257,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
                     });
 
 
-                    this.visuals.twoD.render();
+                    this.visuals.twoD.render(true);
                     $(document).trigger('node-selected');
                 });
 
@@ -605,7 +605,6 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
 
         this.visuals.twoD.redrawNodes();
-        console.log('redrawing');
         this.visuals.twoD.updateNodeColors();
         this.visuals.twoD.redrawLabels();
         this.visuals.twoD.redrawNodeBorder();
@@ -775,7 +774,6 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         this.visuals.twoD.ShowStatistics = showStatistics;
         this.visuals.twoD.cdref.detectChanges();
 
-        console.log("Network render time:", (Date.now() - start).toLocaleString(), 'ms');
     };
 
     polygonLabelDragStarted(d) {

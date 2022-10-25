@@ -302,7 +302,8 @@ export class FilesComponent extends AppComponentBase implements OnInit {
       const lsv = e.data; //this.value;
       this.commonService.localStorageService.setItem('default-distance-metric', lsv);
       $('#default-distance-metric').val(lsv);
-      if (lsv === 'snps') {
+      console.log(lsv);
+      if (lsv === 'SNPs') {
         $('#ambiguities-row').slideUp();
         $('#default-distance-threshold, #link-threshold')
           .attr('step', 1)
@@ -316,6 +317,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         this.commonService.session.style.widgets["link-threshold"] = 0.015;
       }
       this.commonService.session.style.widgets['default-distance-metric'] = lsv;
+      console.log(this.commonService.session.style.widgets['link-threshold']);
     });
 
     let cachedLSV = "";
@@ -551,13 +553,51 @@ export class FilesComponent extends AppComponentBase implements OnInit {
       const origin = [file.name];
       if (file.format === 'auspice') {
         this.showMessage(`Parsing ${file.name} as Auspice...`);
-        let newNodes = 0;
         this.commonService.localStorageService.setItem('default-view', 'phylogenetic-tree');
-        this.commonService.localStorageService.setItem('default-distance-metric', 'snps');
-        this.commonService.session.style.widgets['default-distance-metric'] = 'snps';
-        $('#default-distance-metric').val('snps').trigger('change');
+        this.commonService.localStorageService.setItem('default-distance-metric', 'SNPs');
+        this.commonService.session.style.widgets['default-distance-metric'] = 'SNPs';
+        this.SelectedDefaultDistanceMetricVariable = 'SNPs';
+        this.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable ='SNPs';
+        $('#default-distance-metric').val('SNPs').trigger('change');
+        $('#default-distance-threshold').attr('step', 1).val(16).trigger('change');
         this.commonService.session.style.widgets['link-threshold'] = 16;
-        this.commonService.applyAuspice(file.contents);
+        this.SelectedDefaultDistanceThresholdVariable = 16;
+        this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 16;
+        this.commonService.applyAuspice(file.contents).then(auspiceData => {
+          this.commonService.clearData();
+          this.commonService.session = this.commonService.sessionSkeleton();
+          this.commonService.session.meta.startTime = Date.now();
+          this.commonService.session.data.tree = auspiceData['tree'];
+          this.commonService.session.data.newickString = auspiceData['newick'];
+          let nodeCount = 0;
+          auspiceData['nodes'].forEach(node => {
+            if (!/NODE0*/.exec(node.id)) {
+              console.log(node);
+              const nodeKeys = Object.keys(node);
+              nodeKeys.forEach( key => {
+              if (this.commonService.session.data.nodeFields.indexOf(key) === -1) {
+                console.log(`Adding ${key} to node field list`);
+                 this.commonService.session.data.nodeFields.push(key);
+              }
+              if (! node.hasOwnProperty('origin') ) {
+                node.origin = [];
+              }
+              nodeCount += this.commonService.addNode(node, true);
+              });
+            }
+          });
+          let linkCount = 0;
+          auspiceData['links'].forEach(link => {
+            linkCount += this.commonService.addLink(link, true);
+          });
+          this.commonService.runHamsters();
+          this.showMessage(` - Parsed ${nodeCount} New Nodes and ${linkCount} new Links from Auspice file.`);
+          if (fileNum === nFiles) this.processData();
+          return nodeCount;
+        });
+        console.log(this.commonService.session.data);
+        this.commonService.updateNetwork();
+        this.commonService.updateStatistics();
       } else if (file.format === 'fasta') {
 
         this.showMessage(`Parsing ${file.name} as FASTA...`);
@@ -1056,7 +1096,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             const fileName = this.commonService.filterXSS(rawfile.name);
             let reader = new FileReader();
             reader.onloadend = (out) => {
-              const output = JSON.parse(out.target.result);
+              const output = JSON.parse(out.target['result']);
               if (output.meta && output.tree) {
                 const auspiceFile = { contents: output, name: fileName, extension: extension};
                 this.commonService.session.files.push(auspiceFile);

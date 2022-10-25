@@ -154,9 +154,7 @@ export default class AuspiceHandler {
     const newNodes = [];
     for (const node of nodes) {
       for (let i=0; i<metadata.geo_resolutions.length; i++) {
-        console.log(metadata.geo_resolutions[i].key);
         const deme = node[metadata.geo_resolutions[i].key];
-        console.log(deme);
         node.latitude = metadata.geo_resolutions[i].demes[deme].latitude;
         node.longtude = metadata.geo_resolutions[i].demes[deme].longitude;
       }

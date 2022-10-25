@@ -926,36 +926,11 @@ export class CommonService extends AppComponentBase implements OnInit {
     };
 
     applyAuspice(auspice) {
-      this.clearData();
-      window.context.commonService.session = window.context.commonService.sessionSkeleton();
-      window.context.commonService.session.meta.startTime = Date.now();
-      const auspiceHandler = new AuspiceHandler(window.context.commonService);
-      const auspiceData = auspiceHandler.run(auspice);
-      auspiceData.nodes.forEach(node => {
-        if (!/NODE0*/.exec(node.id)) {
-          console.log(node);
-          const nodeKeys = Object.keys(node);
-          nodeKeys.forEach( key => {
-          if (window.context.commonService.session.data.nodeFields.indexOf(key) === -1) {
-            console.log(`Adding ${key} to node field list`);
-              window.context.commonService.session.data.nodeFields.push(key);
-          }
-          if (! node.hasOwnProperty('origin') ) {
-            node.origin = [];
-          }
-          window.context.commonService.addNode(node, true);
-          });
-        }
+      return new Promise(resolve => {
+        const auspiceHandler = new AuspiceHandler(window.context.commonService);
+        const auspiceData = auspiceHandler.run(auspice);
+        resolve(auspiceData);
       });
-      auspiceData.links.forEach(link => {
-        window.context.commonService.addLink(link, true);
-      });
-      window.context.commonService.session.data.tree = auspiceData.tree;
-      window.context.commonService.session.data.newickString = auspiceData.newick;
-      window.context.commonService.runHamsters();
-      window.context.commonService.session.network.nodes = window.context.commonService.session.data.nodes;
-      console.log(window.context.commonService.session.data);
-      this.updateNetwork();
     }
 
     decode(x) {
