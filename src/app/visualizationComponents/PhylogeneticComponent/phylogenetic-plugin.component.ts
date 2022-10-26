@@ -371,6 +371,10 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     this.SelectedBranchTooltipShowVariable = event;
   }
 
+  onLeafLabelTooltipShowChange(event) {
+    this.SelectedLeafTooltipShowVariable = event;
+  }
+
   onLeafLabelShowChange(event) {
     this.SelectedLeafLabelShowVariable = event;
     this.tree.setLeafLabels(event);

@@ -67,7 +67,7 @@
                           <div class="form-group row leaf-tooltip-visibility-row" title="Show leaf tooltips?">
                               <div class="col-4">Show Leaf Tooltips</div>
                               <div class="col-8">
-                                  <p-selectButton id="leaf-tooltip-visibility" [options]="hideShowOptions" [(ngModel)]="SelectedLeafTooltipShowVariable" (ngModelChange)="onLeafTooltipShowChange($event)"></p-selectButton>
+                                  <p-selectButton id="leaf-tooltip-visibility" [options]="hideShowOptions" [(ngModel)]="SelectedLeafTooltipShowVariable" (ngModelChange)="onLeafLabelTooltipShowChange($event)"></p-selectButton>
                               </div>
                           </div>
                       </div>
@@ -80,7 +80,7 @@
                           </div>-->
                           <div class="form-group row leaf-size-row" title="How big should leaves be?">
                               <div class="col-4"><label for="leaf-size">Leaf Size</label></div>
-                              <input type="range" class="custom-range" id="leaf-size" min="0.5" value="{{ SelectedLeafNodeSizeVariable }}" step="0.5" max="10" [(ngModel)]="SelectedLeafSizeVariable" (ngModelChange)="onLeafSizeChange($event)">
+                              <input type="range" class="custom-range" id="leaf-size" min="0.5" value="{{ SelectedLeafNodeSizeVariable }}" step="0.5" max="10" [(ngModel)]="SelectedLeafNodeSizeVariable" (ngModelChange)="onLeafSizeChange($event)">
                           </div>
                       </div>
                   </p-accordionTab>
