@@ -168,15 +168,22 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     }
 
     ngOnInit() {
-        this.commonService.updateNetwork();
+        this.visuals.twoD.commonService.updateNetwork();
     }
 
     InitView() {
 
         this.visuals.twoD.IsDataAvailable = (this.visuals.twoD.commonService.session.data.nodes.length === 0 ? false : true);
+        if (!this.visuals.twoD.commonService.session.style.widgets['default-distance-metric']) {
+          this.visuals.twoD.commonService.session.style.widgets['default-distance-metric'] = this.visuals.microbeTrace.metric;
+          this.visuals.twoD.commonService.session.style.widgets['link-threshold'] = parseFloat(this.visuals.microbeTrace.threshold);
+          console.log(this.visuals.twoD.commonService.session.style.widgets['default-distance-metric']);
+          console.log(this.visuals.twoD.commonService.session.style.widgets['link-threshold']);
+        }
+          console.log(this.visuals.twoD.commonService.session.style.widgets['default-distance-metric']);
+          console.log(this.visuals.twoD.commonService.session.style.widgets['link-threshold']);
 
         if (this.visuals.twoD.IsDataAvailable === true && this.visuals.twoD.zoom === null) {
-          console.log(this.visuals.twoD.commonService.session.style.widgets['link-threshold']);
 
             d3.select('svg#network').exit().remove();
             this.visuals.twoD.svg = d3.select('svg#network').append('g');
