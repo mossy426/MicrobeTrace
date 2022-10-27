@@ -369,24 +369,25 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     temp: any = this.tempSkeleton();
 
-    GlobalSettingsModel: any = {
-        SelectedColorNodesByVariable: "None",
-        SelectedColorLinksByVariable: "None",
-        SelectedNodeColorVariable: "None",
-        SelectedLinkColorVariable: "#a6cee3",
-        SelectedPruneWityTypesVariable: "None",
-        SelectedStatisticsTypesVariable: "Hide",
-        SelectedClusterMinimumSizeVariable: 0,
-        SelectedLinkSortVariable: "Distance",
-        SelectedLinkThresholdVariable: 0,
-        SelectedLinkColorTableTypesVariable: "Hide",
-        SelectedNodeColorTableTypesVariable: "Hide",
+  GlobalSettingsModel: any = {
+    SelectedColorNodesByVariable: 'None',
+    SelectedColorLinksByVariable: 'None',
+    SelectedNodeColorVariable: 'None',
+    SelectedLinkColorVariable: '#a6cee3',
+    SelectedPruneWityTypesVariable: 'None',
+    SelectedStatisticsTypesVariable: 'Hide',
+    SelectedClusterMinimumSizeVariable: 0,
+    SelectedLinkSortVariable: 'Distance',
+    SelectedLinkThresholdVariable: 0,
+    SelectedDistanceMetricVariable: 'TN93',
+    SelectedLinkColorTableTypesVariable: 'Hide',
+    SelectedNodeColorTableTypesVariable: 'Hide',
 
-        SelectedColorVariable: "#ff8300",
-        SelectedBackgroundColorVariable: "#ffffff",
-        SelectedApplyStyleVariable: "",
-        SelectedRevealTypesVariable: "Everything"
-    };
+    SelectedColorVariable: '#ff8300',
+    SelectedBackgroundColorVariable: '#ffffff',
+    SelectedApplyStyleVariable: '',
+    SelectedRevealTypesVariable: 'Everything'
+  };
 
 
     //table = new Tabulator("#recall-stashes-available", {
@@ -2943,6 +2944,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             $("#link-threshold").val(parseFloat(window.context.commonService.session.style.widgets["link-threshold"].toLocaleString()));
 
             window.context.microbeTrace.SelectedLinkThresholdVariable = parseFloat(window.context.commonService.session.style.widgets["link-threshold"].toLocaleString());
+          console.log("UpdateThreshold in common.service.ts");
             window.context.microbeTrace.onLinkThresholdChanged();
         }
 
