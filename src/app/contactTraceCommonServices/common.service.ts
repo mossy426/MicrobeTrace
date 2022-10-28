@@ -378,7 +378,7 @@ export class CommonService extends AppComponentBase implements OnInit {
     SelectedStatisticsTypesVariable: 'Hide',
     SelectedClusterMinimumSizeVariable: 0,
     SelectedLinkSortVariable: 'Distance',
-    SelectedLinkThresholdVariable: 0,
+    SelectedLinkThresholdVariable: 0.015,
     SelectedDistanceMetricVariable: 'TN93',
     SelectedLinkColorTableTypesVariable: 'Hide',
     SelectedNodeColorTableTypesVariable: 'Hide',

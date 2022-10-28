@@ -175,13 +175,11 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
         this.visuals.twoD.IsDataAvailable = (this.visuals.twoD.commonService.session.data.nodes.length === 0 ? false : true);
         if (!this.visuals.twoD.commonService.session.style.widgets['default-distance-metric']) {
-          this.visuals.twoD.commonService.session.style.widgets['default-distance-metric'] = this.visuals.microbeTrace.metric;
-          this.visuals.twoD.commonService.session.style.widgets['link-threshold'] = parseFloat(this.visuals.microbeTrace.threshold);
-          console.log(this.visuals.twoD.commonService.session.style.widgets['default-distance-metric']);
-          console.log(this.visuals.twoD.commonService.session.style.widgets['link-threshold']);
+          this.visuals.twoD.commonService.session.style.widgets['default-distance-metric'] = 
+            this.visuals.twoD.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable;
+          this.visuals.twoD.commonService.session.style.widgets['link-threshold'] = 
+            this.visuals.twoD.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable;
         }
-          console.log(this.visuals.twoD.commonService.session.style.widgets['default-distance-metric']);
-          console.log(this.visuals.twoD.commonService.session.style.widgets['link-threshold']);
 
         if (this.visuals.twoD.IsDataAvailable === true && this.visuals.twoD.zoom === null) {
 
