@@ -113,7 +113,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     SelectedClusterMinimumSizeVariable: any = 0;
     SelectedLinkSortVariable: string = "Distance";
     SelectedLinkThresholdVariable: any = parseFloat(this.threshold);
-    SelectedDistanceMetricVariable = 'TN93';
+    SelectedDistanceMetricVariable = this.metric;
 
     RevealTypes: any = [
         { label: 'Everything', value: 'Everything' }
@@ -283,8 +283,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.SelectedLinkColorTableTypesVariable = this.commonService.GlobalSettingsModel.SelectedLinkColorTableTypesVariable;
         this.SelectedApplyStyleVariable = this.commonService.GlobalSettingsModel.SelectedApplyStyleVariable;
 
-        this.SelectedLinkThresholdVariable = this.commonService.session.style.widgets['link-threshold'];
-
         this.commonService.updateThresholdHistogram();
 
         console.log("global settings: ", this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable);
@@ -318,21 +316,16 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 if (cachedLSV === 'SNPs') {
                    this.metric = 'SNPs';
                    this.threshold = '7';
-                   this.SelectedLinkThresholdVariable = parseFloat(this.threshold);
-                   this.commonService.session.style.widgets['default-distance-metric'] = this.metric;
-                   this.commonService.session.style.widgets['link-threshold'] = parseFloat(this.threshold);
-                  console.log('ngOnInit microbetrace.component.ts snps');
-                   this.onLinkThresholdChanged();
                    $('#ambiguities-menu').hide();
                 } else {
                    this.metric = 'TN93';
                    this.threshold = '0.015';
-                   this.SelectedLinkThresholdVariable = parseFloat(this.threshold);
-                   this.commonService.session.style.widgets['default-distance-metric'] = this.metric;
-                   this.commonService.session.style.widgets['link-threshold'] = parseFloat(this.threshold);
-                  console.log('ngOnInit microbetrace.component.ts tn93');
-                   this.onLinkThresholdChanged();
                 }
+               this.SelectedLinkThresholdVariable = parseFloat(this.threshold);
+               this.SelectedDistanceMetricVariable = this.metric;
+               this.commonService.session.style.widgets['default-distance-metric'] = this.metric;
+               this.commonService.session.style.widgets['link-threshold'] = parseFloat(this.threshold);
+               this.onLinkThresholdChanged();
             }
 
             if (cachedView) {
@@ -1196,8 +1189,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         //debugger;
 
-        console.log("changed: ", this.SelectedLinkThresholdVariable);
-        console.log("is this?: ", this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold']);
+        this.SelectedLinkThresholdVariable = this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'];
         this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = this.SelectedLinkThresholdVariable;
 
         this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"] = parseFloat(this.SelectedLinkThresholdVariable);
