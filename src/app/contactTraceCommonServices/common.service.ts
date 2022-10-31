@@ -893,6 +893,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         console.log('sessions: ', stashObject.session);
      
         const oldSession = stashObject.session;
+        window.context.commonService.temp.matrix = [];
         window.context.commonService.session.files = oldSession.files;
         window.context.commonService.session.state = oldSession.state;
         window.context.commonService.session.style = oldSession.style;
@@ -2823,7 +2824,6 @@ export class CommonService extends AppComponentBase implements OnInit {
                 let d = nodes[k];
                 d.degree = 0;
                 let id = d.id;
-                console.log('node: ', id);
                 if (tempnodes.indexOf(id) == -1) {
                     let cluster = {
                         id: clusters.length,
