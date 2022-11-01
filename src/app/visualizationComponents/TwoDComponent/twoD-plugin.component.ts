@@ -553,7 +553,15 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         if (newNodes.length === 0 && this.visuals.twoD.commonService.session.style.widgets["timeline-date-field"] == 'None') return;
 
         newNodes.forEach((d, i) => {
-            let match = oldNodes.find(d2 => d2.id == d.id);
+            let match = oldNodes.find(d2 =>  {
+                if(!d2.id) {
+                    d2.id = d2._id;
+                }
+                if(!d.id){
+                    d.id = d._id;
+                }
+                return d2.id == d.id
+            });            
             if (match) {
                 ['x', 'y', 'fx', 'fy', 'vx', 'vy', 'fixed'].forEach(v => {
                     
