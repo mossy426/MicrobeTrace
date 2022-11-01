@@ -264,6 +264,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             this.GlobalSettingsNodeColorDialogSettings = new DialogSettings('#global-settings-node-color-table', false);
         }
 
+        console.log(this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable);
         this.SelectedPruneWityTypesVariable = this.commonService.GlobalSettingsModel.SelectedPruneWityTypesVariable;
 
         //debugger;
@@ -1189,9 +1190,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         //debugger;
 
-        this.SelectedLinkThresholdVariable = this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'];
         this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = this.SelectedLinkThresholdVariable;
-
         this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"] = parseFloat(this.SelectedLinkThresholdVariable);
 
         this.visuals.microbeTrace.commonService.setLinkVisibility(true);

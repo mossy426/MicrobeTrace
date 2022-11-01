@@ -304,7 +304,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
       this.visuals.microbeTrace.commonService.localStorageService.setItem('default-distance-metric', lsv);
       $('#default-distance-metric').val(lsv);
       console.log(lsv);
-      if (lsv.toLower() === 'snps') {
+      if (lsv.toLocaleLower() === 'snps') {
         $('#ambiguities-row').slideUp();
         $('#default-distance-threshold, #link-threshold')
           .attr('step', 1)

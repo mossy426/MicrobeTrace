@@ -741,7 +741,6 @@ export class CommonService extends AppComponentBase implements OnInit {
             window.context.commonService.applySession(data);
         } else {
             if (data.meta && data.tree) {
-              console.log('Found auspice file - dont process it here');
               // window.context.commonService.applyAuspice(data);
             } else {
               if (data.version) {
@@ -2837,6 +2836,7 @@ export class CommonService extends AppComponentBase implements OnInit {
                 continue;
             } else {
                 visible = link[metric] <= threshold;
+              // console.log(`${threshold} ${visible} ${JSON.stringify(link)}`);  // ${link[metric]} ${link["source"]} ${link["target"]} ${link["snps"]}`);
             }
             if (showNN) {
                 visible = visible && link.nn;
@@ -2927,7 +2927,6 @@ export class CommonService extends AppComponentBase implements OnInit {
             $("#link-threshold").val(parseFloat(window.context.commonService.session.style.widgets["link-threshold"].toLocaleString()));
 
             window.context.microbeTrace.SelectedLinkThresholdVariable = parseFloat(window.context.commonService.session.style.widgets["link-threshold"].toLocaleString());
-          console.log("UpdateThreshold in common.service.ts");
             window.context.microbeTrace.onLinkThresholdChanged();
         }
 

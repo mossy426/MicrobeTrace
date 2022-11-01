@@ -173,6 +173,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
     InitView() {
 
+      console.log(this.visuals.twoD.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable);
         this.visuals.twoD.IsDataAvailable = (this.visuals.twoD.commonService.session.data.nodes.length === 0 ? false : true);
         if (!this.visuals.twoD.commonService.session.style.widgets['default-distance-metric']) {
           this.visuals.twoD.commonService.session.style.widgets['default-distance-metric'] = 
@@ -389,6 +390,8 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
             if (this.visuals.twoD.commonService.session.files.length > 1) $('#link-color-variable').val('origin').change();
             if (this.visuals.twoD.commonService.session.style.widgets['background-color']) $('#network').css('background-color', this.visuals.twoD.commonService.session.style.widgets['background-color']);
+            this.visuals.microbeTrace.SelectedStatisticsTypesVariable = 'Show';
+            this.visuals.microbeTrace.onShowStatisticsChanged();
             this.visuals.twoD.render();
 
             //For some mysterious reason, this really needed a delay...
