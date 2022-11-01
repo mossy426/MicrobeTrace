@@ -26,7 +26,8 @@
               "src/favicon.ico",
               "src/assets",
               "src/assets/common/data",
-              "src/assets/images/Logo.svg",
+              "src/assets/images/Logo.png",
+              "src/Logo.png",
               "src/default.microbetrace",
               "src/map.microbetrace",
               "src/outbreak.microbetrace"
