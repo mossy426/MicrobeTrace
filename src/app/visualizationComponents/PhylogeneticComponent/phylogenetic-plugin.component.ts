@@ -73,7 +73,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
     { label: 'Unweighted (Tree)', value: 'tree' },
     { label: 'Dendrogram', value: 'dendrogram' },
   ];
-  SelectedTreeTypeVariable = 'tree';  // 'weighted';
+  SelectedTreeTypeVariable = 'weighted';
 
 
   // Leaves Tab
@@ -90,7 +90,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   SelectedSelectedLeafNodeColorVariable = this.settings['selected-color'];
 
   // Branch Tab
-  SelectedBranchNodeShowVariable = true;
+  SelectedBranchNodeShowVariable = false;
   SelectedBranchNodeSizeVariable = 5;
   SelectedBranchNodeColorVariable = this.settings['node-color'];
   SelectedBranchSizeVariable = 3;
