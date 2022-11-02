@@ -1195,7 +1195,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
             });
         }
  
-        this.visuals.twoD.render(false);
+        // this.visuals.twoD.render(false);
 
         $(document).trigger('node-selected');
     };
@@ -2320,6 +2320,7 @@ onPolygonColorTableChange(e) {
     }
 
     updateVisualization() {
+      this.render();
     }
 
     ngOnDestroy(): void {
