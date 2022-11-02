@@ -27,7 +27,7 @@
                                             </label>
                                         </div>
                                         <div class="col-7">
-                                            <select id="default-distance-metric" class="form-control form-control-sm mr-5" [(ngModel)]="SelectedDefaultDistanceMetricVariable">
+                                            <select id="default-distance-metric" class="form-control form-control-sm mr-5" [(ngModel)]="SelectedDefaultDistanceMetricVariable" (ngModelChange)="onDistanceMetricChanged()">
                                                 <option value="tn93" selected>TN93</option>
                                                 <option value="snps">SNPs</option>
                                             </select>
@@ -40,7 +40,7 @@
                                             </label>
                                         </div>
                                         <div class="col-7">
-                                            <select id="ambiguity-resolution-strategy" class="form-control form-control-sm mr-5" [(ngModel)]="SelectedAmbiguityResolutionStrategyVariable">
+                                            <select id="ambiguity-resolution-strategy" class="form-control form-control-sm mr-5" [(ngModel)]="SelectedAmbiguityResolutionStrategyVariable" (ngModelChange)="onAmbiguityResolutionChanged()">
                                                 <option value="AVERAGE">Average</option>
                                                 <option value="RESOLVE">Resolve</option>
                                                 <option value="SKIP">Skip</option>
@@ -49,14 +49,14 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div id="ambiguity-threshold-row" class="form-group row">
+                                    <div id="ambiguity-threshold-row" class="form-group row" *ngIf="SelectedAmbiguityResolutionStrategyVariable == 'RESOLVE' || SelectedAmbiguityResolutionStrategyVariable == 'HIVTRACE-G'">
                                         <div class="col-5">
-                                            <label style="padding-left: 10px;" for="ambiguity-threshold" class="mr-2" title="What's the maximum genetic distance you wish to consider linked? Please note that this can be changed later.">
+                                            <label style="padding-left: 10px;" for="ambiguity-threshold" class="mr-2" title="What's the maximum fraction of ambiguities you want to resolve? Please note that this can be changed later.">
                                                 {{"Ambiguity Threshold" | localize}}
                                             </label>
                                         </div>
                                         <div class="col-7">
-                                            <input type="number" id="ambiguity-threshold" class="form-control form-control-sm" min="0" value="0.015" step="0.001" [(ngModel)]="SelectedAmbiguityThresholdVariable">
+                                            <input type="number" id="ambiguity-threshold" class="form-control form-control-sm" min="0" value="0.015" step="0.001" [(ngModel)]="SelectedAmbiguityThresholdVariable" (ngModelChange)="onAmbiguityThresholdChanged()">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -66,7 +66,7 @@
                                             </label>
                                         </div>
                                         <div class="col-7">
-                                            <input type="number" id="default-distance-threshold" class="form-control form-control-sm" min="0" value="0.015" step="0.001" [(ngModel)]="SelectedDefaultDistanceThresholdVariable">
+                                            <input type="number" id="default-distance-threshold" class="form-control form-control-sm" min="0" value="0.015" step="0.001" [(ngModel)]="SelectedDefaultDistanceThresholdVariable" (ngModelChange)="onLinkThresholdChanged()">
                                         </div>
                                     </div>
                                     <div class="form-group row">

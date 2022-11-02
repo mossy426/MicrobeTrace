@@ -441,6 +441,40 @@ export class FilesComponent extends AppComponentBase implements OnInit {
     }
 
 
+    onLinkThresholdChanged = () => {
+      this.visuals.microbeTrace.SelectedLinkThresholdVariable = this.SelectedDefaultDistanceThresholdVariable;
+      this.visuals.microbeTrace.threshold = this.SelectedDefaultDistanceThresholdVariable;
+      this.visuals.microbeTrace.onLinkThresholdChanged();
+    }
+
+    onDistanceMetricChanged = () => {
+      if (this.SelectedDefaultDistanceMetricVariable === 'snps') {
+        $('#ambiguities-row').slideUp();
+        $('#default-distance-threshold, #link-threshold')
+            .attr('step', 1)
+            .val(16);
+        this.visuals.microbeTrace.SelectedLinkThresholdVariable = 16;
+        this.visuals.microbeTrace.threshold = '16';
+        this.visuals.microbeTrace.onLinkThresholdChanged();
+      } else {
+        $('#ambiguities-row').slideDown();
+        $('#default-distance-threshold, #link-threshold')
+            .attr('step', 0.001)
+            .val(0.015);
+        this.visuals.microbeTrace.SelectedLinkThresholdVariable = 0.015
+        this.visuals.microbeTrace.threshold = '0.015';
+        this.visuals.microbeTrace.onLinkThresholdChanged();
+      }
+    }
+
+    onAmbiguityResolutionChanged = () => {
+      this.visuals.microbeTrace.updateAmbiguity(this.SelectedAmbiguityResolutionStrategyVariable);
+    }
+
+    onAmbiguityThresholdChanged = () => {
+      console.log("a");
+    }
+
     InitView() {
         this.IsDataAvailable = (this.commonService.session.data.nodes.length == 0 ? false : true);
     }
@@ -508,11 +542,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
     }
 
     launchClick() {
-        console.log(`${JSON.stringify(this.commonService.session.files)}`);
-
         this.commonService.resetData();
-
-        console.log(`${JSON.stringify(this.commonService.session.files)}`);
 
         this.commonService.session.messages = [];
         this.messages = [];
