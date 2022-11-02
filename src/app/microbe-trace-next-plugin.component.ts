@@ -2063,6 +2063,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 // })
                 break;
             }
+          case "Settings": {
+            this.DisplayGlobalSettingsDialog("Filtering");
+          }
         }
     }
 

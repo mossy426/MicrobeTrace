@@ -442,7 +442,6 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
 
     onLinkThresholdChanged = () => {
-      console.log("a");
       this.visuals.microbeTrace.SelectedLinkThresholdVariable = this.SelectedDefaultDistanceThresholdVariable;
       this.visuals.microbeTrace.threshold = this.SelectedDefaultDistanceThresholdVariable;
       this.visuals.microbeTrace.onLinkThresholdChanged();
@@ -454,11 +453,17 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         $('#default-distance-threshold, #link-threshold')
             .attr('step', 1)
             .val(16);
+        this.visuals.microbeTrace.SelectedLinkThresholdVariable = 16;
+        this.visuals.microbeTrace.threshold = '16';
+        this.visuals.microbeTrace.onLinkThresholdChanged();
       } else {
         $('#ambiguities-row').slideDown();
         $('#default-distance-threshold, #link-threshold')
             .attr('step', 0.001)
             .val(0.015);
+        this.visuals.microbeTrace.SelectedLinkThresholdVariable = 0.015
+        this.visuals.microbeTrace.threshold = '0.015';
+        this.visuals.microbeTrace.onLinkThresholdChanged();
       }
     }
 
