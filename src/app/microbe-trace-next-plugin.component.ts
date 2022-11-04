@@ -124,7 +124,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         { label: 'Show', value: 'Show' }
         ,{ label: 'Hide', value: 'Hide' }
     ];
-    SelectedStatisticsTypesVariable: string = "Hide";
+    SelectedStatisticsTypesVariable: string = "Show";
 
     SelectedColorNodesByVariable: string = "None";
     SelectedNodeColorVariable: string = "#1f77b4";

@@ -32,7 +32,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     private customShapes : CustomShapes = new CustomShapes();
 
     ShowNetworkAttributes: boolean = false;
-    ShowStatistics: boolean = false;
+    ShowStatistics: boolean = true;
     Show2DExportPane: boolean = false;
     Show2DSettingsPane: boolean = false;
     IsDataAvailable: boolean = false;

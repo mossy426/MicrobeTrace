@@ -2675,7 +2675,7 @@ export class WorkerModule implements OnInit {
         }
 
         onmessage = (evt) => {
-            compute_parse_fasta(evt.data);
+            compute_parse_fasta(evt);
         }
 
     });

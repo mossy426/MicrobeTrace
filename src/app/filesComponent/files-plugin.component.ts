@@ -202,11 +202,11 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             const file = this.commonService.session.files[0];   //this.files[0];
             let reader = new FileReader();
             reader.onloadend = (e: any) => {
-                if (e.target.readyState == FileReader.DONE) {
+                if (e.target.readyState === FileReader.DONE) {
                     this.commonService.parseFASTA(e.target.result).then(nodes => {
                         $('#refSeqID')
                             .html(nodes.map((d, i) => `
-                                <option value="${this.commonService.filterXSS(d.seq)}" ${i == 0 ? "selected" : ""}>${this.commonService.filterXSS(d.id)}</option>
+                                <option value="${this.commonService.filterXSS(d.seq)}" ${i === 0 ? "selected" : ""}>${this.commonService.filterXSS(d.id)}</option>
                               `))
                             .trigger('change');
                     });
@@ -248,7 +248,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             let button = $(`<button class="btn btn-warning btn-sm audit-exclude" data-id="${id}">Exclude</button>`).on('click', function () {
                 let thi$ = $(this);
                 const id = thi$.data('id');
-                if (thi$.text() == 'Exclude') {
+                if (thi$.text() === 'Exclude') {
                     parentContext.commonService.session.data.nodeExclusions.push(id);
                     thi$.removeClass('btn-warning').addClass('btn-success').text('Include');
                 } else {
@@ -279,7 +279,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                 let any = false;
                 data.forEach(d => {
                     const seq = d.seq, id = d.id;
-                    if (checkEmpty && seq == '') logAudit(this, id, 'empty');
+                    if (checkEmpty && seq === '') logAudit(this, id, 'empty');
                     if (checkGaps && isGaps.test(seq)) logAudit(this, id, 'all gaps')
                     if (checkRNA && isRNA.test(seq) && !isGaps.test(seq)) logAudit(this, id, 'RNA');
                     if (checkAA && isAA.test(seq) && !isDNA.test(seq)) logAudit(this, id, 'amino acids');
@@ -301,7 +301,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             const lsv = e.data; //this.value;
             this.commonService.localStorageService.setItem('default-distance-metric', lsv);
             $('#default-distance-metric').val(lsv);
-            if (lsv == 'snps') {
+            if (lsv === 'snps') {
                 $('#ambiguities-row').slideUp();
                 $('#default-distance-threshold, #link-threshold')
                     .attr('step', 1)
@@ -334,7 +334,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
             const v = e.data; //this.value;
             this.commonService.session.style.widgets['ambiguity-resolution-strategy'] = v;
-            if (v == 'HIVTRACE-G') {
+            if (v === 'HIVTRACE-G') {
                 $('#ambiguity-threshold-row').slideDown();
             } else {
                 $('#ambiguity-threshold-row').slideUp();
@@ -408,7 +408,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             this.commonService.localStorageService.setItem('stash-auto', 'true');
         });
 
-        if (localStorage.getItem('stash-auto') == 'true') {
+        if (localStorage.getItem('stash-auto') === 'true') {
             $('#stash-auto-yes').parent().trigger('click');
         }
 
@@ -472,11 +472,10 @@ export class FilesComponent extends AppComponentBase implements OnInit {
     }
 
     onAmbiguityThresholdChanged = () => {
-      console.log("a");
     }
 
     InitView() {
-        this.IsDataAvailable = (this.commonService.session.data.nodes.length == 0 ? false : true);
+        this.IsDataAvailable = (this.commonService.session.data.nodes.length === 0 ? false : true);
     }
 
 
@@ -579,17 +578,19 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         this.commonService.session.files.sort((a, b) => hierarchy.indexOf(a.format) - hierarchy.indexOf(b.format));
 
 
-        this.commonService.session.meta.anySequences = this.commonService.session.files.some(file => (file.format == "fasta") || (file.format == "node" && file.field2 !== "None"));
+        this.commonService.session.meta.anySequences = this.commonService.session.files.some(
+          file => (file.format === 'fasta') || (file.format == 'node' && file.field2 !== 'None'));
 
         this.commonService.session.files.forEach((file, fileNum) => {
             const start = Date.now();
             const origin = [file.name];
-            if (file.format == 'fasta') {
+            if (file.format === 'fasta') {
 
                 this.showMessage(`Parsing ${file.name} as FASTA...`);
                 let newNodes = 0;
                 this.commonService.parseFASTA(file.contents).then(seqs => {
                     const n = seqs.length;
+                  console.log(`${n} sequences found`);
                     for (let i = 0; i < n; i++) {
                         let node = seqs[i];
                         if (!node) continue;
@@ -602,10 +603,10 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
                     console.log('FASTA Merge time:', (Date.now() - start).toLocaleString(), 'ms');
                     this.showMessage(` - Parsed ${newNodes} New, ${seqs.length} Total Nodes from FASTA.`);
-                    if (fileNum == nFiles) this.processData();
+                    if (fileNum === nFiles) this.processData();
                 });
 
-            } else if (file.format == 'link') {
+            } else if (file.format === 'link') {
 
                 console.log('linkkkk')
 
@@ -628,11 +629,11 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                         target: '' + safeLink[file.field2],
                         origin: origin,
                         visible: true,
-                        distance: file.field3 == 'None' ? 0 : parseFloat(safeLink[file.field3])
+                        distance: file.field3 === 'None' ? 0 : parseFloat(safeLink[file.field3])
                     }, safeLink), check);
                 };
 
-                if (file.extension == 'xls' || file.extension == 'xlsx') {
+                if (file.extension === 'xls' || file.extension == 'xlsx') {
 
                     let workbook = XLSX.read(file.contents, { type: 'array' });
                     let data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
@@ -644,7 +645,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                     for (let i = 0; i < k; i++) {
                         const l = data[i];
                         const f1 = l[file.field1];
-                        if (nodeIDs.indexOf(f1) == -1) {
+                        if (nodeIDs.indexOf(f1) === -1) {
                             t++;
                             nodeIDs.push(f1);
                             n += this.commonService.addNode({
@@ -653,7 +654,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                             }, true);
                         }
                         const f2 = l[file.field2];
-                        if (nodeIDs.indexOf(f2) == -1) {
+                        if (nodeIDs.indexOf(f2) === -1) {
                             t++;
                             nodeIDs.push(f2);
                             n += this.commonService.addNode({
@@ -665,12 +666,12 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
                     console.log('Link Excel Parse time:', (Date.now() - start).toLocaleString(), 'ms');
                     this.showMessage(` - Parsed ${n} New, ${t} Total Nodes from Link Excel Table.`);
-                    if (fileNum == nFiles) this.processData();
+                    if (fileNum === nFiles) this.processData();
 
                 } else
-                    if (file.extension == 'json') {
+                    if (file.extension === 'json') {
                         const results = JSON.parse(file.contents);
-                        if (!results || results.length == 0) return;
+                        if (!results || results.length === 0) return;
 
                         let data = results;
                         data.map(forEachLink);
@@ -690,7 +691,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
                             const l = data[i];
                             const f1 = l[file.field1];
-                            if (nodeIDs.indexOf(f1) == -1) {
+                            if (nodeIDs.indexOf(f1) === -1) {
                                 totalNodes++;
                                 newNodes += this.commonService.addNode({
                                     _id: '' + f1,
@@ -698,7 +699,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                                 }, true);
                             }
                             const f2 = l[file.field2];
-                            if (nodeIDs.indexOf(f2) == -1) {
+                            if (nodeIDs.indexOf(f2) === -1) {
                                 totalNodes++;
                                 newNodes += this.commonService.addNode({
                                     _id: '' + f2,
@@ -709,7 +710,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
                         console.log('Link JSON Parse time:', (Date.now() - start).toLocaleString(), 'ms');
                         this.showMessage(` - Parsed ${newNodes} New, ${totalNodes} Total Nodes from Link JSON.`);
-                        if (fileNum == nFiles) this.processData();
+                        if (fileNum === nFiles) this.processData();
                     } else {
 
                         Papa.parse(file.contents, {
@@ -734,7 +735,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
                                     const l = data[i];
                                     const f1 = l[file.field1];
-                                    if (nodeIDs.indexOf(f1) == -1) {
+                                    if (nodeIDs.indexOf(f1) === -1) {
                                         totalNodes++;
                                         newNodes += this.commonService.addNode({
                                             _id: '' + f1,
@@ -742,7 +743,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                                         }, true);
                                     }
                                     const f2 = l[file.field2];
-                                    if (nodeIDs.indexOf(f2) == -1) {
+                                    if (nodeIDs.indexOf(f2) === -1) {
                                         totalNodes++;
                                         newNodes += this.commonService.addNode({
                                             _id: '' + f2,
@@ -753,24 +754,24 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
                                 console.log('Link CSV Parse time:', (Date.now() - start).toLocaleString(), 'ms');
                                 this.showMessage(` - Parsed ${newNodes} New, ${totalNodes} Total Nodes from Link CSV.`);
-                                if (fileNum == nFiles) this.processData();
+                                if (fileNum === nFiles) this.processData();
                             }
                         });
                     }
-            } else if (file.format == 'node') {
+            } else if (file.format === 'node') {
 
                 this.showMessage(`Parsing ${file.name} as Node List...`);
 
                 let m = 0, n = 0;
 
-                if (file.extension == 'xls' || file.extension == 'xlsx') {
+                if (file.extension === 'xls' || file.extension == 'xlsx') {
 
                     let workbook = XLSX.read(file.contents, { type: 'array' });
                     let data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
                     data.forEach(node => {
                         let safeNode = {
                             _id: this.commonService.filterXSS('' + node[file.field1]),
-                            seq: (file.field2 == 'None') ? '' : this.commonService.filterXSS(node[file.field2]),
+                            seq: (file.field2 === 'None') ? '' : this.commonService.filterXSS(node[file.field2]),
                             origin: origin
                         };
                         Object.keys(node).forEach(key => {
@@ -785,12 +786,12 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
                     console.log('Node Excel Parse time:', (Date.now() - start).toLocaleString(), 'ms');
                     this.showMessage(` - Parsed ${m} New, ${n} Total Nodes from Node Excel Table.`);
-                    if (fileNum == nFiles) this.processData();
+                    if (fileNum === nFiles) this.processData();
 
                 } else
-                    if (file.extension == 'json') {
+                    if (file.extension === 'json') {
                         const results = JSON.parse(file.contents);
-                        if (!results || results.length == 0) return;
+                        if (!results || results.length === 0) return;
                         results.forEach(data => {
 
                             let node = data;//data[0]             
@@ -799,7 +800,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
                                 let safeNode = {
                                     _id: this.commonService.filterXSS('' + node[file.field1]),
-                                    seq: (file.field2 == 'None') ? '' : this.commonService.filterXSS(node[file.field2]),
+                                    seq: (file.field2 === 'None') ? '' : this.commonService.filterXSS(node[file.field2]),
                                     origin: origin
                                 };
 
@@ -817,7 +818,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                         console.log('Node JSON Parse time:', (Date.now() - start).toLocaleString(), 'ms');
                         this.showMessage(` - Parsed ${m} New, ${n} Total Nodes from Node JSON.`);
 
-                        if (fileNum == nFiles) this.processData();
+                        if (fileNum === nFiles) this.processData();
 
                     } else {
 
@@ -833,7 +834,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
                                     let safeNode = {
                                         _id: this.commonService.filterXSS('' + node[file.field1]),
-                                        seq: (file.field2 == 'None') ? '' : this.commonService.filterXSS(node[file.field2]),
+                                        seq: (file.field2 === 'None') ? '' : this.commonService.filterXSS(node[file.field2]),
                                         origin: origin
                                     };
 
@@ -852,22 +853,22 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                                 console.log('Node CSV Parse time:', (Date.now() - start).toLocaleString(), 'ms');
                                 this.showMessage(` - Parsed ${m} New, ${n} Total Nodes from Node CSV.`);
 
-                                if (fileNum == nFiles) this.processData();
+                                if (fileNum === nFiles) this.processData();
                             }
                         });
                     }
 
-            } else if (file.format == 'matrix') {
+            } else if (file.format === 'matrix') {
 
                 this.showMessage(`Parsing ${file.name} as Distance Matrix...`);
 
-                if (file.extension == 'xls' || file.extension == 'xlsx') {
+                if (file.extension === 'xls' || file.extension == 'xlsx') {
 
                     let workbook = XLSX.read(file.contents, { type: 'array' });
                     let data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { header: 1 });
                     let nodeIDs = [], nn = 0, nl = 0;
                     data.forEach((row: any, i) => {
-                        if (i == 0) {
+                        if (i === 0) {
                             nodeIDs = row;
                             nodeIDs.forEach((cell, k) => {
                                 if (k > 0) {
@@ -880,9 +881,9 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                         } else {
                             const source = this.commonService.filterXSS('' + row[0]);
                             row.forEach((cell, j) => {
-                                if (j == 0) return;
+                                if (j === 0) return;
                                 const target = this.commonService.filterXSS('' + nodeIDs[j]);
-                                if (source == target) return;
+                                if (source === target) return;
                                 nl += this.commonService.addLink({
                                     source: source,
                                     target: target,
@@ -896,18 +897,18 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                     console.log('Distance Matrix Excel Parse time:', (Date.now() - start).toLocaleString(), 'ms');
                     this.showMessage(` - Parsed ${nn} New, ${data.length - 1} Total Nodes from Excel Distance Matrix.`);
                     this.showMessage(` - Parsed ${nl} New, ${((data.length - 1) ** 2 - (data.length - 1)) / 2} Total Links from Excel Distance Matrix.`);
-                    if (fileNum == nFiles) this.processData();
+                    if (fileNum === nFiles) this.processData();
 
                 } else {
 
                     this.commonService.parseCSVMatrix(file).then((o: any) => {
                         this.showMessage(` - Parsed ${o.nn} New, ${o.tn} Total Nodes from Distance Matrix.`);
                         this.showMessage(` - Parsed ${o.nl} New, ${o.tl} Total Links from Distance Matrix.`);
-                        if (fileNum == nFiles) this.processData();
+                        if (fileNum === nFiles) this.processData();
                     });
                 }
 
-            } else { // if(file.format == 'newick'){
+            } else { // if(file.format === 'newick'){
 
                 let links = 0;
                 let newLinks = 0;
@@ -935,7 +936,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                 console.log('Newick Tree Parse time:', (Date.now() - start).toLocaleString(), 'ms');
                 this.showMessage(` - Parsed ${newNodes} New, ${n} Total Nodes from Newick Tree.`);
                 this.showMessage(` - Parsed ${newLinks} New, ${links} Total Links from Newick Tree.`);
-                if (fileNum == nFiles) this.processData();
+                if (fileNum === nFiles) this.processData();
             }
         });
 
@@ -1050,7 +1051,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         $('#loading-information').html('');
 
         const extension = rawfile.name.split('.').pop().toLowerCase();
-        if (extension == 'zip') {
+        if (extension === 'zip') {
             //debugger;
             // let new_zip = new JSZip();
             // new_zip
@@ -1065,14 +1066,14 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             return;
         }
 
-        if (extension == 'microbetrace' || extension == 'hivtrace') {
+        if (extension === 'microbetrace' || extension == 'hivtrace') {
             //debugger;
             let reader = new FileReader();
             reader.onloadend = out => this.commonService.processJSON(out.target, extension);
             reader.readAsText(rawfile, 'UTF-8');
             return;
         }
-        if (extension == 'svg') {
+        if (extension === 'svg') {
             //debugger;
             let reader = new FileReader();
             reader.onloadend = out => this.commonService.processSVG(out.target);
@@ -1081,7 +1082,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         }
 
         console.log('1');
-        fileto.promise(rawfile, (extension == 'xlsx' || extension == 'xls') ? 'ArrayBuffer' : 'Text').then(file => {
+        fileto.promise(rawfile, (extension === 'xlsx' || extension == 'xls') ? 'ArrayBuffer' : 'Text').then(file => {
             //debugger;
             file.name = this.commonService.filterXSS(file.name);
             file.extension = file.name.split('.').pop().toLowerCase();
@@ -1107,8 +1108,8 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         const extension = file.extension ? file.extension : this.commonService.filterXSS(file.name).split('.').pop().toLowerCase();
         const isFasta = extension.indexOf('fas') > -1;
         const isNewick = extension.indexOf('nwk') > -1 || extension.indexOf('newick') > -1;
-        const isXL = (extension == 'xlsx' || extension == 'xls');
-        const isJSON = (extension == 'json');
+        const isXL = (extension === 'xlsx' || extension == 'xls');
+        const isJSON = (extension === 'json');
         const isNode = this.commonService.includes(file.name.toLowerCase(), 'node');
         if (isXL) {
             let workbook = XLSX.read(file.contents, { type: 'array' });
@@ -1164,7 +1165,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             let fnamerow = $('<div class="row w-100"></div>');
             $('<div class="file-name col"></div>')
                 .append($('<a href="javascript:void(0);" class="far flaticon-delete-1 align-middle p-1" title="Remove this file"></a>').on('click', () => {
-                    parentContext.commonService.session.files.splice(parentContext.commonService.session.files.findIndex(f => f.name == file.name), 1);
+                    parentContext.commonService.session.files.splice(parentContext.commonService.session.files.findIndex(f => f.name === file.name), 1);
                     context.visuals.filesPlugin.removeFile(file.name);
                     root.slideUp(() => root.remove());
                 }))
@@ -1213,17 +1214,17 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             function matchHeaders(type) {
 
                 const these = $(`[data-file='${file.name}'] select`);
-                const a = type == 'node' ? ['ID', 'Id', 'id'] : ['SOURCE', 'Source', 'source'],
-                    b = type == 'node' ? ['SEQUENCE', 'SEQ', 'Sequence', 'sequence', 'seq'] : ['TARGET', 'Target', 'target'],
+                const a = type === 'node' ? ['ID', 'Id', 'id'] : ['SOURCE', 'Source', 'source'],
+                    b = type === 'node' ? ['SEQUENCE', 'SEQ', 'Sequence', 'sequence', 'seq'] : ['TARGET', 'Target', 'target'],
                     c = ['length', 'Length', 'distance', 'Distance', 'snps', 'SNPs', 'tn93', 'TN93'];
                 [a, b, c].forEach((list, i) => {
                     $(these.get(i)).val("None");
                     list.forEach(title => {
                         if (parentContext.commonService.includes(headers, title)) $(these.get(i)).val(title);
                     });
-                    if ($(these.get(i)).val() == 'None' &&
-                        !(i == 1 && type == 'node') && //If Node Sequence...
-                        !(i == 2 && type == 'link')) { //...or Link distance...
+                    if ($(these.get(i)).val() === 'None' &&
+                        !(i === 1 && type == 'node') && //If Node Sequence...
+                        !(i === 2 && type == 'link')) { //...or Link distance...
                         //...don't match to a variable in the dataset, leave them as "None".
                         $(these.get(i)).val(headers[i]);
                         //Everything else, just guess the next ordinal column.
@@ -1240,12 +1241,12 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                     first = $(these.get(0)),
                     second = $(these.get(1)),
                     third = $(these.get(2));
-                if (type == 'node') {
+                if (type === 'node') {
                     first.slideDown().find('label').text('ID');
                     second.slideDown().find('label').text('Sequence');
                     third.slideUp();
                     matchHeaders(type);
-                } else if (type == 'link') {
+                } else if (type === 'link') {
                     first.slideDown().find('label').text('Source');
                     second.slideDown().find('label').text('Target');
                     third.slideDown();
@@ -1271,7 +1272,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             const $el = $(el);
             const fname = $el.data('filename');
             const selects = $el.find('select');
-            const f = this.commonService.session.files.find(file => file.name == fname);
+            const f = this.commonService.session.files.find(file => file.name === fname);
             f.format = $el.find('input[type="radio"]:checked').data('type');
             f.field1 = selects.get(0).value;
             f.field2 = selects.get(1).value;
@@ -1380,8 +1381,8 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
     async readFastas() {
         const fastas = this.commonService.session.files.filter(f => this.commonService.includes(f.extension, 'fas'));
-        const nodeCSVsWithSeqs = this.commonService.session.files.filter(f => f.format == "node" && f.field2 != "None" && f.field2 != "");
-        if (fastas.length == 0 && nodeCSVsWithSeqs.length == 0) return [];
+        const nodeCSVsWithSeqs = this.commonService.session.files.filter(f => f.format === "node" && f.field2 != "None" && f.field2 != "");
+        if (fastas.length === 0 && nodeCSVsWithSeqs.length == 0) return [];
         let data = [];
         for (let i = 0; i < fastas.length; i++) {
             let fasta = fastas[i];
