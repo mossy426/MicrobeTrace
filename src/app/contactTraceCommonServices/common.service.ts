@@ -32,8 +32,6 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     decoder: any = new TextDecoder('utf-8');
     r01: any = Math.random;
-    temp: any = this.tempSkeleton();
-    session = this.sessionSkeleton();
 
     GlobalSettingsModel: any = {
         SelectedColorNodesByVariable: 'None',
@@ -44,7 +42,8 @@ export class CommonService extends AppComponentBase implements OnInit {
         SelectedStatisticsTypesVariable: 'Hide',
         SelectedClusterMinimumSizeVariable: 0,
         SelectedLinkSortVariable: 'Distance',
-        SelectedLinkThresholdVariable: 0,
+        SelectedLinkThresholdVariable: 0.015,
+        SelectedDistanceMetricVariable: 'TN93',
         SelectedLinkColorTableTypesVariable: 'Hide',
         SelectedNodeColorTableTypesVariable: 'Hide',
 
@@ -388,6 +387,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             trees: {}
         };
     }
+    temp: any = this.tempSkeleton();
+    session = this.sessionSkeleton();
 
 
     //table = new Tabulator("#recall-stashes-available", {
@@ -2717,7 +2718,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             for (let k = 0; k < numNodes; k++) {
                 let d = nodes[k];
                 d.degree = 0;
-                let id = d.id;
+                let id = d._id;
                 if (tempnodes.indexOf(id) == -1) {
                     let cluster = {
                         id: clusters.length > 0 ? clusters.length : 1,

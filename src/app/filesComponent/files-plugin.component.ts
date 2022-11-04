@@ -304,7 +304,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
       this.visuals.microbeTrace.commonService.localStorageService.setItem('default-distance-metric', lsv);
       $('#default-distance-metric').val(lsv);
       console.log(lsv);
-      if (lsv.toLocaleLower() === 'snps') {
+      if (lsv.toLower() === 'snps') {
         $('#ambiguities-row').slideUp();
         $('#default-distance-threshold, #link-threshold')
           .attr('step', 1)
@@ -563,10 +563,10 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         this.showMessage(`Parsing ${file.name} as Auspice...`);
         // this.visuals.microbeTrace.commonService.localStorageService.setItem('default-view', 'phylogenetic-tree');
         this.visuals.microbeTrace.commonService.localStorageService.setItem('default-distance-metric', 'SNPs');
-        this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'SNPs';
-        this.visuals.microbeTrace.metric = 'SNPs';
-        this.SelectedDefaultDistanceMetricVariable = 'SNPs';
-        this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable = 'SNPs';
+        this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
+        this.visuals.microbeTrace.metric = 'snps';
+        this.SelectedDefaultDistanceMetricVariable = 'snps';
+        this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable = 'snps';
         $('#default-distance-metric').val('SNPs').trigger('change');
         $('#default-distance-threshold').attr('step', 1).val(7).trigger('change');
         this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = 7;
@@ -1464,7 +1464,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
 
   onLinkThresholdChange = (e) => {
-    this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = parseFloat(e);
+    this.visuals.microbeTrace.SelectedLinkThresholdVariable = parseFloat(e);
     // this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = this.SelectedDefaultDistanceThresholdVariable;
     console.log("onLinkThresholdChange file.plugin.component.ts");
     this.visuals.microbeTrace.onLinkThresholdChanged();
@@ -1476,7 +1476,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
       $('#default-distance-threshold, #link-threshold')
         .attr('step', 1)
         .val(7);
-      this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'SNPs';
+      this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
     } else {
       $('#default-distance-threshold, #link-threshold')
         .attr('step', 0.001)

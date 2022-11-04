@@ -314,8 +314,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         setTimeout(() => {
             if (cachedLSV) {
                 console.log('cacheL 2: ', cachedLSV);
-                if (cachedLSV === 'SNPs') {
-                   this.metric = 'SNPs';
+                if (cachedLSV === 'snps') {
+                   this.metric = 'snps';
                    this.threshold = '7';
                    $('#ambiguities-menu').hide();
                 } else {
@@ -1191,23 +1191,24 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         //debugger;
 
         this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = this.SelectedLinkThresholdVariable;
-        this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"] = parseFloat(this.SelectedLinkThresholdVariable);
+        this.commonService.session.style.widgets["link-threshold"] = parseFloat(this.SelectedLinkThresholdVariable);
 
-        this.visuals.microbeTrace.commonService.setLinkVisibility(true);
-        this.visuals.microbeTrace.commonService.tagClusters().then(() => {
+        this.commonService.setLinkVisibility(true);
+        this.commonService.tagClusters().then(() => {
             this.visuals.microbeTrace.commonService.setClusterVisibility(true);
             //To catch links that should be filtered out based on cluster size:
-            this.visuals.microbeTrace.commonService.setLinkVisibility(true);
-            this.visuals.microbeTrace.commonService.setNodeVisibility(true);
+            this.commonService.setLinkVisibility(true);
+            this.commonService.setNodeVisibility(true);
             //Because the network isn't robust to the order in which these operations
             //take place, we just do them all silently and then react as though we did
             //them each after all of them are already done.
 
-            this.visuals.microbeTrace.updatedVisualization();
+            this.updatedVisualization();
 
-            this.visuals.microbeTrace.commonService.updateStatistics();
+            this.commonService.updateStatistics();
 
         });
+      this.threshold = this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable;
 
     }
 
@@ -2016,15 +2017,16 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         const foundTab = this.homepageTabs.find(x => x.label == viewName);
         console.log(`${this.metric} ${this.threshold}`);
+        console.log(this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable);
 
         if (foundTab && foundTab.componentRef &&
             foundTab.componentRef.instance.loadSettings) {
               console.log('viewClick foundTab microbetrace.component.ts')
             foundTab.componentRef.instance.loadSettings();
           console.log(typeof this.threshold);
-          if (this.metric === 'SNPs'){
-            this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'SNPs';
-            this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = parseInt(this.threshold);
+          if (this.metric === 'snps'){
+            this.commonService.session.style.widgets['default-distance-metric'] = 'snps';
+            this.commonService.session.style.widgets['link-threshold'] = parseInt(this.threshold);
             this.onLinkThresholdChanged();
           }
         }
