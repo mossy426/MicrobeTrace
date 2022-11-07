@@ -31,8 +31,6 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     decoder: any = new TextDecoder('utf-8');
     r01: any = Math.random;
-    temp: any = this.tempSkeleton();
-    session = this.sessionSkeleton();
 
     GlobalSettingsModel: any = {
         SelectedColorNodesByVariable: 'None',
@@ -386,6 +384,8 @@ export class CommonService extends AppComponentBase implements OnInit {
         };
     }
 
+    temp: any = this.tempSkeleton();
+    session = this.sessionSkeleton();
 
     //table = new Tabulator("#recall-stashes-available", {
     //    height: "100%",
