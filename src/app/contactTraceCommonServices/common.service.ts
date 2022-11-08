@@ -43,7 +43,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         SelectedClusterMinimumSizeVariable: 0,
         SelectedLinkSortVariable: 'Distance',
         SelectedLinkThresholdVariable: 0.015,
-        SelectedDistanceMetricVariable: 'TN93',
+        SelectedDistanceMetricVariable: 'tn93',
         SelectedLinkColorTableTypesVariable: 'Hide',
         SelectedNodeColorTableTypesVariable: 'Hide',
 
@@ -146,7 +146,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             'choropleth-transparency': 0.3,
             'cluster-minimum-size': 1,
             'default-view': '2D Network', // 'Phylogenetic Tree'
-            'default-distance-metric': 'TN93',
+            'default-distance-metric': 'tn93',
             'filtering-epsilon': -8,
             'flow-showNodes': 'selected',
             'gantt-date-list': '',
@@ -2176,6 +2176,12 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         window.context.commonService.session.files = files;
         window.context.commonService.session.meta = meta;
+        if (window.context.commonService.session.style.widgets['default-distance-metric'] !== 'snps' &&
+          window.context.commonService.session.style.widgets['link-threshold'] >= 1) {
+          window.context.commonService.session.style.widgets = this.defaultWidgets();
+          window.context.commonService.visuals.microbeTrace.SelectedLinkThresholdVariable = window.context.commonService.session.style.widgets['link-threshold'];
+          window.context.commonService.visuals.microbeTrace.onLinkThresholdChanged();
+        }
     };
 
     getJurisdictions(): Promise<JurisdictionItem[]>{

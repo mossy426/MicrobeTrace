@@ -308,9 +308,9 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         $('#ambiguities-row').slideUp();
         $('#default-distance-threshold, #link-threshold')
           .attr('step', 1)
-          .val(7);
-        this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"] = 7;
-        this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 7;
+          .val(16);
+        this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"] = 16;
+        this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 16;
         console.log('default-distance-metric change file-plugin.component.ts snps');
         this.visuals.microbeTrace.onLinkThresholdChanged();
       } else {
@@ -568,11 +568,11 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         this.SelectedDefaultDistanceMetricVariable = 'snps';
         this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable = 'snps';
         $('#default-distance-metric').val('SNPs').trigger('change');
-        $('#default-distance-threshold').attr('step', 1).val(7).trigger('change');
-        this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = 7;
-        this.SelectedDefaultDistanceThresholdVariable = '7';
-        this.visuals.microbeTrace.threshold = '7';
-        this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 7;
+        $('#default-distance-threshold').attr('step', 1).val(16).trigger('change');
+        this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = 16;
+        this.SelectedDefaultDistanceThresholdVariable = '16';
+        this.visuals.microbeTrace.threshold = '16';
+        this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 16;
         this.visuals.microbeTrace.commonService.applyAuspice(file.contents).then(auspiceData => {
           this.visuals.microbeTrace.commonService.clearData();
           this.visuals.microbeTrace.commonService.session = this.visuals.microbeTrace.commonService.sessionSkeleton();
