@@ -1469,7 +1469,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
   onLinkThresholdChange = (e) => {
     this.visuals.microbeTrace.SelectedLinkThresholdVariable = parseFloat(e);
-    // this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = this.SelectedDefaultDistanceThresholdVariable;
+    this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = parseFloat(e);
     this.visuals.microbeTrace.onLinkThresholdChanged();
   }
 

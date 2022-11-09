@@ -2935,6 +2935,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             $("#link-threshold").val(parseFloat(window.context.commonService.session.style.widgets["link-threshold"].toLocaleString()));
 
             window.context.microbeTrace.SelectedLinkThresholdVariable = parseFloat(window.context.commonService.session.style.widgets["link-threshold"].toLocaleString());
+          console.log("UpdateThreshold in common.service.ts");
             window.context.microbeTrace.onLinkThresholdChanged();
         }
 

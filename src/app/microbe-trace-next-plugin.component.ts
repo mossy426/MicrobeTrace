@@ -410,8 +410,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         if (this.metric === "SNPs") {
             //Hide Ambiguities
             $('#ambiguities-menu').hide();
-            this.threshold = "16";
-            this.commonService.session.style.widgets["link-threshold"] = 16;
+            this.threshold = "7";
+            this.commonService.session.style.widgets["link-threshold"] = 7;
         } else {
 
             $('#ambiguities-menu').show();
@@ -2033,6 +2033,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         if (foundTab && foundTab.componentRef &&
             foundTab.componentRef.instance.loadSettings) {
+              console.log('viewClick foundTab microbetrace.component.ts')
             foundTab.componentRef.instance.loadSettings();
             if (this.metric === 'snps'){
               this.commonService.session.style.widgets['default-distance-metric'] = 'snps';
@@ -2445,7 +2446,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         //Filtering|Filtering Threshold
         this.SelectedLinkThresholdVariable = this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"];
-      console.log('loadsettings microbetrace.component.ts');
         this.onLinkThresholdChanged();
 
 

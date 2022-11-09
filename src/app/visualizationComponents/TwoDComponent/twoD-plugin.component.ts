@@ -173,7 +173,6 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
     InitView() {
 
-      console.log(this.visuals.twoD.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable);
         this.visuals.twoD.IsDataAvailable = (this.visuals.twoD.commonService.session.data.nodes.length === 0 ? false : true);
         if (!this.visuals.twoD.commonService.session.style.widgets['default-distance-metric']) {
           this.visuals.twoD.commonService.session.style.widgets['default-distance-metric'] = 
