@@ -580,12 +580,13 @@ export class CommonService extends AppComponentBase implements OnInit {
                 index: sdlinks.length,
                 source: "",
                 target: "",
-                visible: false,
+                visible: true,
                 cluster: 1,
                 origin: []
             }, newLink);
             window.context.commonService.temp.matrix[newLink.source][newLink.target] = newLink;
             window.context.commonService.temp.matrix[newLink.target][newLink.source] = newLink;
+          console.log(newLink);
             sdlinks.push(newLink);
             linkIsNew = 1;
         }

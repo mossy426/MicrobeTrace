@@ -562,17 +562,20 @@ export class FilesComponent extends AppComponentBase implements OnInit {
       if (file.format === 'auspice') {
         this.showMessage(`Parsing ${file.name} as Auspice...`);
         // this.visuals.microbeTrace.commonService.localStorageService.setItem('default-view', 'phylogenetic-tree');
-        this.visuals.microbeTrace.commonService.localStorageService.setItem('default-distance-metric', 'SNPs');
-        this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
-        this.visuals.microbeTrace.metric = 'snps';
+        // this.visuals.microbeTrace.commonService.localStorageService.setItem('default-distance-metric', 'SNPs');
+        // this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
+        // this.visuals.microbeTrace.metric = 'snps';
         this.SelectedDefaultDistanceMetricVariable = 'snps';
-        this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable = 'snps';
+        this.onDistanceMetricChange('snps');
+        // this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'snps';
+        // this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable = 'snps';
         $('#default-distance-metric').val('SNPs').trigger('change');
         $('#default-distance-threshold').attr('step', 1).val(16).trigger('change');
-        this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = 16;
+        // this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = 16;
         this.SelectedDefaultDistanceThresholdVariable = '16';
-        this.visuals.microbeTrace.threshold = '16';
-        this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 16;
+        this.onLinkThresholdChange('16');
+        // this.visuals.microbeTrace.threshold = '16';
+        // this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 16;
         this.visuals.microbeTrace.commonService.applyAuspice(file.contents).then(auspiceData => {
           this.visuals.microbeTrace.commonService.clearData();
           this.visuals.microbeTrace.commonService.session = this.visuals.microbeTrace.commonService.sessionSkeleton();
@@ -605,6 +608,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         });
         this.visuals.microbeTrace.commonService.updateNetwork();
         this.visuals.microbeTrace.commonService.updateStatistics();
+        console.log(this.visuals.microbeTrace.commonService.session);
       } else if (file.format === 'fasta') {
 
         this.showMessage(`Parsing ${file.name} as FASTA...`);
@@ -1466,7 +1470,6 @@ export class FilesComponent extends AppComponentBase implements OnInit {
   onLinkThresholdChange = (e) => {
     this.visuals.microbeTrace.SelectedLinkThresholdVariable = parseFloat(e);
     // this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = this.SelectedDefaultDistanceThresholdVariable;
-    console.log("onLinkThresholdChange file.plugin.component.ts");
     this.visuals.microbeTrace.onLinkThresholdChanged();
   }
 
@@ -1475,13 +1478,19 @@ export class FilesComponent extends AppComponentBase implements OnInit {
     if (e.toLowerCase() === 'snps') {
       $('#default-distance-threshold, #link-threshold')
         .attr('step', 1)
-        .val(7);
+        .val(16);
       this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
+      this.visuals.microbeTrace.SelectedLinkThresholdVariable = '16';
+      this.visuals.microbeTrace.onDistanceMetricChanged();
+      this.onLinkThresholdChange();
     } else {
       $('#default-distance-threshold, #link-threshold')
         .attr('step', 0.001)
         .val(0.015);
       this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'TN93';
+      this.visuals.microbeTrace.SelectedLinkThresholdVariable = '0.015';
+      this.visuals.microbeTrace.onDistanceMetricChanged();
+      this.onLinkThresholdChange();
     }
   }
 
