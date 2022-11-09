@@ -1468,6 +1468,8 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
 
   onLinkThresholdChange = (e) => {
+    console.log('changing link threshold');
+    this.SelectedDefaultDistanceThresholdVariable = parseFloat(e);
     this.visuals.microbeTrace.SelectedLinkThresholdVariable = parseFloat(e);
     this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = parseFloat(e);
     this.visuals.microbeTrace.onLinkThresholdChanged();
@@ -1475,22 +1477,26 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
   onDistanceMetricChange = (e) => {
     console.log(e);
+    this.SelectedDistanceMetricVariable = e;
     if (e.toLowerCase() === 'snps') {
+      console.log("saw snps");
       $('#default-distance-threshold, #link-threshold')
         .attr('step', 1)
         .val(16);
+      this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'snps';
       this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
       this.visuals.microbeTrace.SelectedLinkThresholdVariable = '16';
       this.visuals.microbeTrace.onDistanceMetricChanged();
-      this.onLinkThresholdChange();
+      this.onLinkThresholdChange('16');
     } else {
       $('#default-distance-threshold, #link-threshold')
         .attr('step', 0.001)
         .val(0.015);
       this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'TN93';
+      this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'tn93';
       this.visuals.microbeTrace.SelectedLinkThresholdVariable = '0.015';
       this.visuals.microbeTrace.onDistanceMetricChanged();
-      this.onLinkThresholdChange();
+      this.onLinkThresholdChange('0.015');
     }
   }
 
