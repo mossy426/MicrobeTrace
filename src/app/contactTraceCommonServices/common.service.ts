@@ -586,7 +586,6 @@ export class CommonService extends AppComponentBase implements OnInit {
             }, newLink);
             window.context.commonService.temp.matrix[newLink.source][newLink.target] = newLink;
             window.context.commonService.temp.matrix[newLink.target][newLink.source] = newLink;
-          console.log(newLink);
             sdlinks.push(newLink);
             linkIsNew = 1;
         }
@@ -2844,7 +2843,6 @@ export class CommonService extends AppComponentBase implements OnInit {
                 continue;
             } else {
                 visible = link[metric] <= threshold;
-              // console.log(`${threshold} ${visible} ${JSON.stringify(link)}`);  // ${link[metric]} ${link["source"]} ${link["target"]} ${link["snps"]}`);
             }
             if (showNN) {
                 visible = visible && link.nn;
@@ -2935,7 +2933,6 @@ export class CommonService extends AppComponentBase implements OnInit {
             $("#link-threshold").val(parseFloat(window.context.commonService.session.style.widgets["link-threshold"].toLocaleString()));
 
             window.context.microbeTrace.SelectedLinkThresholdVariable = parseFloat(window.context.commonService.session.style.widgets["link-threshold"].toLocaleString());
-          console.log("UpdateThreshold in common.service.ts");
             window.context.microbeTrace.onLinkThresholdChanged();
         }
 

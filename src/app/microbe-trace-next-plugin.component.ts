@@ -1190,13 +1190,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     onLinkThresholdChanged() {
-      console.log(`Triggered threshold change, what do we have? ${this.SelectedLinkThresholdVariable} ${this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable}`);
-      if (this.commonService.session.style) {
-        console.log(this.commonService.session.style.widgets['link-threshold']);
-      } else {
-        console.log('session style doesn\'t exist yet, somehow');
-      }
-
         //debugger;
 
         this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = this.SelectedLinkThresholdVariable;
@@ -1861,7 +1854,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         let rows = [];
         this.commonService.localStorageService.keys().then(keys => {
           keys.forEach(k => {
-            console.log('k is: ', k);
             if (k.substring(0, 5) !== "stash") return;
             rows.push({
               fullname: k,
@@ -2019,27 +2011,21 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 console.log('activeee');
 
                 this.setActiveTabProperties();
-              console.log('viewClick microbetrace.component.ts')
             //    this.loadSettings();
 
             }
         }
 
         const foundTab = this.homepageTabs.find(x => x.label == viewName);
-        console.log(`${this.metric} ${this.threshold}`);
-        console.log(this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable);
-        console.log(this.commonService.session.style.widgets['link-threshold']);
-        console.log(this.commonService.session);
 
         if (foundTab && foundTab.componentRef &&
             foundTab.componentRef.instance.loadSettings) {
-              console.log('viewClick foundTab microbetrace.component.ts')
-            foundTab.componentRef.instance.loadSettings();
-            if (this.metric === 'snps'){
-              this.commonService.session.style.widgets['default-distance-metric'] = 'snps';
-              this.commonService.session.style.widgets['link-threshold'] = parseInt(this.threshold);
-              this.onLinkThresholdChanged();
-            }
+              foundTab.componentRef.instance.loadSettings();
+              if (this.metric === 'snps'){
+                this.commonService.session.style.widgets['default-distance-metric'] = 'snps';
+                this.commonService.session.style.widgets['link-threshold'] = parseInt(this.threshold);
+                this.onLinkThresholdChanged();
+              }
         }
 
 
@@ -2503,14 +2489,16 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     if (this.SelectedDistanceMetricVariable.toLowerCase() === 'snps') {
       $('#default-distance-threshold, #link-threshold')
         .attr('step', 1)
-        .val(16);
+        .val(16)
+        .trigger('change');
       this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
       this.SelectedLinkThresholdVariable = '16';
       this.onLinkThresholdChanged();
     } else {
       $('#default-distance-threshold, #link-threshold')
         .attr('step', 0.001)
-        .val(0.015);
+        .val(0.015)
+        .trigger('change');
       this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'TN93';
       this.SelectedLinkThresholdVariable = '0.015';
       this.onLinkThresholdChanged();

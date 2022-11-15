@@ -1083,6 +1083,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
     }
 
+
     getVLinks() {
         let vlinks = this.visuals.twoD.commonService.getVisibleLinks(true);
         let output = [];
@@ -1090,37 +1091,50 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         let nodes = this.visuals.twoD.commonService.session.network.nodes;
         for (let i = 0; i < n; i++) {
             if (vlinks[i].origin) {
-                if (typeof vlinks[i].origin == 'object') {
-                    vlinks[i].origin.forEach((o, j, l) => {
-                        output.push(Object.assign({}, vlinks[i], {
-                            origin: o,
-                            oNum: j,
-                            origins: l.length,
-                            source: nodes.find(d => d._id == vlinks[i].source || d.id == vlinks[i].source),
-                            target: nodes.find(d => d._id == vlinks[i].target || d.id == vlinks[i].target)
-                        }));
-                    });
-                } else {
-                    output.push(Object.assign({}, vlinks[i], {
+                if (typeof vlinks[i].origin === 'object') {
+                    if (vlinks[i].origin.length > 0) {
+                      vlinks[i].origin.forEach((o, j, l) => {
+                          const holder = Object.assign({}, vlinks[i], {
+                              origin: o,
+                              oNum: j,
+                              origins: l.length,
+                              source: nodes.find(d => d._id === vlinks[i].source || d.id === vlinks[i].source),
+                              target: nodes.find(d => d._id === vlinks[i].target || d.id === vlinks[i].target)
+                          });
+                          output.push(holder);
+                      });
+                  } else {
+                    const holder = Object.assign({}, vlinks[i], {
                         oNum: 0,
                         origins: 1,
-                        source: nodes.find(d => d._id == vlinks[i].source || d.id == vlinks[i].source),
-                        target: nodes.find(d => d._id == vlinks[i].target || d.id == vlinks[i].target)
-                    }));
+                        source: nodes.find(d => d._id === vlinks[i].source || d.id === vlinks[i].source),
+                        target: nodes.find(d => d._id === vlinks[i].target || d.id === vlinks[i].target)
+                    });
+                      output.push(holder);
+                  }
+                } else {
+                    const holder = Object.assign({}, vlinks[i], {
+                        oNum: 0,
+                        origins: 1,
+                        source: nodes.find(d => d._id === vlinks[i].source || d.id === vlinks[i].source),
+                        target: nodes.find(d => d._id === vlinks[i].target || d.id === vlinks[i].target)
+                    });
+                      console.log(holder);
+                      output.push(holder);
                 }
             } else {
-                output.push(Object.assign({}, vlinks[i], {
+                const holder = Object.assign({}, vlinks[i], {
                     origin: 'Unknown',
                     oNum: 0,
                     origins: 1,
-                    source: nodes.find(d => d._id == vlinks[i].source || d.id == vlinks[i].source),
-                    target: nodes.find(d => d._id == vlinks[i].target || d.id == vlinks[i].target)
-                }));
+                    source: nodes.find(d => d._id === vlinks[i].source || d.id === vlinks[i].source),
+                    target: nodes.find(d => d._id === vlinks[i].target || d.id === vlinks[i].target)
+                });
+                    output.push(holder);
             }
         }
 
         output =  output.filter(x=>x.source != undefined && x.target != undefined);
-
         return output;
     };
 
