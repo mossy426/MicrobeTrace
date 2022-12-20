@@ -221,6 +221,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             'node-opacity' : 0,
             'node-radius': 250,
             'node-radius-variable': 'None',
+            "node-radius-min": 250,
+            "node-radius-max": 4500,
             'node-symbol': 'symbolCircle',
             'node-symbol-table-counts': true,
             'node-symbol-table-frequencies': false,
