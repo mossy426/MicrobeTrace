@@ -167,6 +167,18 @@
                                     <p-dropdown id="node-radius-variable" [options]="FieldList" appendTo="body" [(ngModel)]="SelectedNodeRadiusVariable" (ngModelChange)="onNodeRadiusVariableChange($event)"></p-dropdown>
                                 </div>
                             </div>
+                            <div id="node-max-radius-row" class="form-group row" title="Should node max radius to this variable?">
+                                <div class="col-4"><label for="node-radius-max">Max Size</label></div>
+                                <div class="col-8">
+                                    <input type="range" class="custom-range" id="node-radius-max" min="100" value="4500" step="1" max="5000" [(ngModel)]="SelectedNodeRadiusSizeMaxVariable" (ngModelChange)="onNodeRadiusMaxChange($event)">
+                                </div>
+                              </div>
+                              <div id="node-min-radius-row" class="form-group row" title="Should node min radius to this variable?">
+                                <div class="col-4"><label for="node-radius-min">Min Size</label></div>
+                                <div class="col-8">
+                                    <input type="range" class="custom-range" id="node-radius-min" min="100" value="250" step="1" max="5000" [(ngModel)]="SelectedNodeRadiusSizeMinVariable" (ngModelChange)="onNodeRadiusMinChange($event)">
+                                </div>
+                            </div>
                             <div class="form-group row" title="How big should the nodes be?">
                                 <div class="col-4"><label for="node-radius">Size</label></div>
                                 <div class="col-8">
@@ -352,7 +364,9 @@
                               </div>
                               <div class="form-group row polygons-label-row" title="How big should polygon labels be?">
                                 <div class="col-4"><label for="polygons-label-size">Label Size</label></div>
-                                <input type="range" class="custom-range" id="polygons-label-size" min="6" value="16" step="1" max="72" [(ngModel)]="SelectedPolygonLabelSizeVariable" (ngModelChange)="onPolygonLabelSizeChange($event)">
+                                <div class="col-8">
+                                    <input type="range" class="custom-range" id="polygons-label-size" min="6" value="16" step="1" max="72" [(ngModel)]="SelectedPolygonLabelSizeVariable" (ngModelChange)="onPolygonLabelSizeChange($event)">
+                                </div>
                               </div>
                               <div class="form-group row polygons-label-row" title="How should the labels be oriented relative to center of polygon?">
                                 <div class="col-4"><label for="polygons-label-orientation">Orientation</label></div>
@@ -383,7 +397,7 @@
                         <p-accordionTab style="color:#495057" header="Colors" id="polygons-controls-accordion">  
                           <div id="polygons-controls-colors" data-parent="#polygons-controls-accordion">
                             <div class="card-body">
-                              <div class="form-group row" title="Show polygons colored?">
+                              <div id="color-polygons" class="form-group row" title="Show polygons colored?">
                                 <div class="col-4">Color Polygons</div>
                                 <div class="col-8">
                                     <p-selectButton id="colorPolygons" [options]="hideShowOptions" [(ngModel)]="SelectedPolygonColorShowVariable" (ngModelChange)="polygonColorsToggle($event)"></p-selectButton>

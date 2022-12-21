@@ -383,6 +383,10 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
             that.visuals.twoD.render(false);
             });
 
+            $( document ).on( "node-selected", function( ) {
+                that.visuals.twoD.render(false);
+            });
+
             this.visuals.twoD.eventManager.addGlobalEventListener('window', "node-selected", () => {
                 this.visuals.twoD.render(false);
             });
@@ -1036,13 +1040,15 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
         this.visuals.twoD.commonService.session.data.nodes.forEach(sessionNode => {
 
-            let tempAry = n.values.filter(node => node._id == sessionNode._id);
+            let tempAry = n.values.filter(node => {
+                return node._id == sessionNode._id;
+            });
 
             if (tempAry.length > 0) {
-                sessionNode.selected = true;
                 if(!this.polygonNodeSelected) {
                     this.polygonNodeSelected = sessionNode;
                 }
+                sessionNode.selected = true;
             } else {
                 sessionNode.selected = false
             }
@@ -1566,6 +1572,14 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
           $("#polygon-color-table").empty();
           this.visuals.twoD.updatePolygonColors();
         }
+        
+        if (e == 'None') {
+            $('#color-polygons').slideDown();
+            $('#polygon-color-value-row').slideDown();
+          } else {
+            $('#color-polygons').css('display', 'flex');
+            $('#polygon-color-value-row').slideUp();
+          }
 
     }
 
@@ -1898,10 +1912,30 @@ onPolygonColorTableChange(e) {
 
     onNodeRadiusVariableChange(e) {
 
+        if (e == 'None') {
+            $('#node-max-radius-row').slideUp();
+            $('#node-min-radius-row').slideUp();
+            $('#node-radius-row').slideDown();
+          } else {
+            $('#node-max-radius-row').css('display', 'flex');
+            $('#node-min-radius-row').css('display', 'flex');
+            $('#node-radius-row').slideUp();
+          }
+
         this.visuals.twoD.commonService.session.style.widgets['node-radius-variable'] = e;
         this.visuals.twoD.redrawNodes();
 
     }
+
+   onNodeRadiusMaxChange(e) {
+    this.visuals.twoD.commonService.session.style.widgets['node-radius-max'] = e;
+    this.visuals.twoD.redrawNodes();
+   }
+
+   onNodeRadiusMinChange(e) {
+    this.visuals.twoD.commonService.session.style.widgets['node-radius-min'] = e;
+    this.visuals.twoD.redrawNodes();
+   }
 
     onNodeBorderWidthChange(e) {
         this.visuals.twoD.commonService.session.style.widgets['node-border-width'] = e;
