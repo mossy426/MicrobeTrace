@@ -393,9 +393,6 @@ export class CommonService extends AppComponentBase implements OnInit {
     temp: any = this.tempSkeleton();
     session = this.sessionSkeleton();
 
-    temp: any = this.tempSkeleton();
-    session = this.sessionSkeleton();
-
     //table = new Tabulator("#recall-stashes-available", {
     //    height: "100%",
     //    layout: "fitColumns",

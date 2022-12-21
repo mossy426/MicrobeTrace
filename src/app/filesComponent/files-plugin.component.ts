@@ -300,11 +300,11 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
       //debugger;
 
-      const lsv = e.data; //this.value;
+      const lsv = e.data ? e.data : 'TN93';
       this.visuals.microbeTrace.commonService.localStorageService.setItem('default-distance-metric', lsv);
       $('#default-distance-metric').val(lsv);
       console.log(lsv);
-      if (lsv.toLower() === 'snps') {
+      if (lsv.toLowerCase() === 'snps') {
         $('#ambiguities-row').slideUp();
         $('#default-distance-threshold, #link-threshold')
           .attr('step', 1)

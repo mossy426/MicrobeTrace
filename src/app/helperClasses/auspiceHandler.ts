@@ -175,37 +175,4 @@ export default class AuspiceHandler {
     return { nodes: this.nodeList, links: this.linkList, tree: updatedTree, newick: bareNewickString};
   }
 
-  public exportAuspice = (tree) => {
-    const treeJson = makeJson(tree);
-    return tree;
-  }
-
-  public makeJson = (tree) => {
-    const rootNode = makeNode(tree);
-    if (tree) {
-
-    }
-  }
-
-  private makeNode = (rootNode) => {
-    const newNode = {}
-    newNode.name = rootNode.id;
-    newNode.node_attrs = this.makeNodeAttr(rootNode.data);
-    return newNode;
-  }
-
-  private makeNodeAttr = (data) => {
-    const node_attr = {};
-    Object.getOwnPropertyNames(data).forEach( (d) => {
-      if (d !== 'children') {
-        if (d !== 'div') {
-          node_attr[d] = { value: data[d] };
-        } else {
-          node_attr[d] = data[d];
-        }
-      }
-    };
-    return node_attr;
-
-
 }
