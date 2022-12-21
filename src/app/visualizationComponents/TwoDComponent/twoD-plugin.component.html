@@ -364,7 +364,9 @@
                               </div>
                               <div class="form-group row polygons-label-row" title="How big should polygon labels be?">
                                 <div class="col-4"><label for="polygons-label-size">Label Size</label></div>
-                                <input type="range" class="custom-range" id="polygons-label-size" min="6" value="16" step="1" max="72" [(ngModel)]="SelectedPolygonLabelSizeVariable" (ngModelChange)="onPolygonLabelSizeChange($event)">
+                                <div class="col-8">
+                                    <input type="range" class="custom-range" id="polygons-label-size" min="6" value="16" step="1" max="72" [(ngModel)]="SelectedPolygonLabelSizeVariable" (ngModelChange)="onPolygonLabelSizeChange($event)">
+                                </div>
                               </div>
                               <div class="form-group row polygons-label-row" title="How should the labels be oriented relative to center of polygon?">
                                 <div class="col-4"><label for="polygons-label-orientation">Orientation</label></div>
@@ -395,7 +397,7 @@
                         <p-accordionTab style="color:#495057" header="Colors" id="polygons-controls-accordion">  
                           <div id="polygons-controls-colors" data-parent="#polygons-controls-accordion">
                             <div class="card-body">
-                              <div class="form-group row" title="Show polygons colored?">
+                              <div id="color-polygons" class="form-group row" title="Show polygons colored?">
                                 <div class="col-4">Color Polygons</div>
                                 <div class="col-8">
                                     <p-selectButton id="colorPolygons" [options]="hideShowOptions" [(ngModel)]="SelectedPolygonColorShowVariable" (ngModelChange)="polygonColorsToggle($event)"></p-selectButton>

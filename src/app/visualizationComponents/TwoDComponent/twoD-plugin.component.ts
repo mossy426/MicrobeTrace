@@ -1552,6 +1552,14 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
           $("#polygon-color-table").empty();
           this.visuals.twoD.updatePolygonColors();
         }
+        
+        if (e == 'None') {
+            $('#color-polygons').slideDown();
+            $('#polygon-color-value-row').slideDown();
+          } else {
+            $('#color-polygons').css('display', 'flex');
+            $('#polygon-color-value-row').slideUp();
+          }
 
     }
 

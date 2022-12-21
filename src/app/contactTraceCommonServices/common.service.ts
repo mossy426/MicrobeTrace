@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 import * as patristic from 'patristic';
 import * as GoldenLayout from 'golden-layout';
 import * as Papa from 'papaparse';
+import * as _ from 'lodash';
 import { window } from 'ngx-bootstrap';
 import moment from 'moment';
 import { WorkerModule } from '../workers/workModule';
@@ -595,7 +596,11 @@ export class CommonService extends AppComponentBase implements OnInit {
     
         let aggregates = {};
         let groups = window.context.commonService.temp.polygonGroups;
-        groups.forEach(d => aggregates[d.key] = d.values.length);
+
+        groups.forEach(d => {
+            aggregates[d.key] = d.values.length;
+        });
+
         let values = Object.keys(aggregates);
     
         if (window.context.commonService.session.style.widgets['polygon-color-table-counts-sort'] == 'ASC')
@@ -766,20 +771,20 @@ export class CommonService extends AppComponentBase implements OnInit {
             }
         }
 
-        console.log('sessions: ', stashObject.session);
-     
+        console.log('stashObject: ', stashObject.session);
+
         const oldSession = stashObject.session;
         window.context.commonService.temp.matrix = [];
         window.context.commonService.session.files = oldSession.files;
         window.context.commonService.session.state = oldSession.state;
-        window.context.commonService.session.style = oldSession.style;
+        window.context.commonService.session.style = _.assign(window.context.commonService.session.style, oldSession.style);
         window.context.commonService.session.meta.startTime = Date.now();
         const nodes = oldSession.data.nodes,
             links = oldSession.data.links,
             n = nodes.length,
             m = links.length;
 
-            console.log('nodes: ', oldSession.data.nodes);
+        console.log('nodes: ', oldSession.data.nodes);
         for (let i = 0; i < n; i++) window.context.commonService.addNode(nodes[i]);
         for (let j = 0; j < m; j++) window.context.commonService.addLink(links[j]);
         ['nodeFields', 'linkFields', 'clusterFields', 'nodeExclusions'].forEach(v => {
