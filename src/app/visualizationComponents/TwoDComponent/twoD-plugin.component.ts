@@ -71,6 +71,8 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     SelectedNodeShapeVariable: string = "symbolCircle";
     SelectedNodeRadiusVariable: string = "None";
     SelectedNodeRadiusSizeVariable: string = "None";
+    SelectedNodeRadiusSizeMaxVariable: string = "None";
+    SelectedNodeRadiusSizeMinVariable: string = "None";
     TableTypes: any = [
         { label: 'Show', value: 'Show' },
         { label: 'Hide', value: 'Hide' }
