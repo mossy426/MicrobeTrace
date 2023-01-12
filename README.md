@@ -15,7 +15,6 @@ Angular: 7.2.16<br />
 
 Package                           Version
 ----------------------------------------------------------- 
-<br />
 @angular-devkit/architect         0.13.10<br />
 @angular-devkit/build-angular     0.13.10<br />
 @angular-devkit/build-optimizer   0.13.10<br />
