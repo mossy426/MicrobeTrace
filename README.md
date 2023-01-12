@@ -4,31 +4,31 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Development Environment
 
-Angular CLI: 7.3.10
-Node: 12.22.12
-Npm: 6.14.16
-OS: darwin x64
-Angular: 7.2.16
-... animations, common, compiler, compiler-cli, core, forms
-... language-service, platform-browser, platform-browser-dynamic
-... router
+Angular CLI: 7.3.10__
+Node: 12.22.12__
+Npm: 6.14.16__
+OS: darwin x64__
+Angular: 7.2.16__
+... animations, common, compiler, compiler-cli, core, forms__
+... language-service, platform-browser, platform-browser-dynamic__
+... router__
 
-Package                           Version
------------------------------------------------------------
-@angular-devkit/architect         0.13.10
-@angular-devkit/build-angular     0.13.10
-@angular-devkit/build-optimizer   0.13.10
-@angular-devkit/build-webpack     0.13.10
-@angular-devkit/core              7.3.10
-@angular-devkit/schematics        7.3.10
-@angular/cdk                      7.3.2
-@angular/cli                      7.3.10
-@angular/material                 7.3.2
-@ngtools/webpack                  7.3.10
-@schematics/angular               7.3.10
-@schematics/update                0.13.10
-rxjs                              6.3.3
-typescript                        3.2.4
+Package                           Version__
+-----------------------------------------------------------__
+@angular-devkit/architect         0.13.10__
+@angular-devkit/build-angular     0.13.10__
+@angular-devkit/build-optimizer   0.13.10__
+@angular-devkit/build-webpack     0.13.10__
+@angular-devkit/core              7.3.10__
+@angular-devkit/schematics        7.3.10__
+@angular/cdk                      7.3.2__
+@angular/cli                      7.3.10__
+@angular/material                 7.3.2__
+@ngtools/webpack                  7.3.10__
+@schematics/angular               7.3.10__
+@schematics/update                0.13.10__
+rxjs                              6.3.3__
+typescript                        3.2.4__
 webpack                           4.29.0
 
 
