@@ -69,9 +69,9 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 6. Run npx ngh --dir dist/Microbetrace
 7. Updates will be visible in 5-10 minutes.
 
-IMPORTANT before building dist folder - If adding new assets that are loaded via filepath in the app (.ie src="img/img.png"), follow these steps:
-1. Add the asset filepath to the assets array in the angular.json file starting from the root.
-2. Change the filepaths used within the application to just be the filenames since files added to the assets array will be located in the root source upon building.
+IMPORTANT before building dist folder - If adding new assets that are loaded via filepath in the app (.ie src="assets/images/Logo.png"), follow these steps:
+1. Add the asset filepath to the "assets" array in the angular.json file.
+2. When referencing the asset in the code, modify the filepath to use the appRootUrl() function, which depending on whether the app is running locally or online, generates the correct path to the root where the asset is located. For example, when loading a newly imported image, I should make the "src" value [src]="appRootUrl() + 'assets/images/Logo.png'", instead of src="assets/images/Logo.png".
 
 ## Further help
 
