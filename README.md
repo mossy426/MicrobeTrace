@@ -71,7 +71,7 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 IMPORTANT before building dist folder - If adding new assets that are loaded via filepath in the app (.ie src="assets/images/Logo.png"), follow these steps:
 1. Add the asset filepath to the "assets" array in the angular.json file.
-2. When referencing the asset in the code, modify the filepath to use the appRootUrl() function, which depending on whether the app is running locally or online, generates the correct path to the root where the asset is located. For example, when loading a newly imported image, I should make the "src" value [src]="appRootUrl() + 'assets/images/Logo.png'", instead of src="assets/images/Logo.png".
+2. When referencing the asset in the code, modify the filepath to use the appRootUrl() function, which depending on whether the app is running locally or online, generates the correct path to the root where the assets are located. For example, when loading a newly imported image, I should make the "src" value [src]="appRootUrl() + 'assets/images/Logo.png'", instead of src="assets/images/Logo.png".
 
 ## Further help
 
