@@ -36,6 +36,13 @@ import { EventEmitterService } from '@shared/utils/event-emitter.service';
 // import * as moment from 'moment';
 import moment from 'moment';
 
+import {
+    GoldenLayoutModule,
+    GoldenLayoutService,
+    GoldenLayoutConfiguration,
+    MultiWindowService,
+  } from '@embedded-enterprises/ng6-golden-layout';
+
 import { Tabulator } from 'tabulator-tables';
 
 
@@ -227,7 +234,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         private cdref: ChangeDetectorRef,
         private eventEmitterService: EventEmitterService,
         // private bpaasLedgerPluginServiceProxy: BpaasLedgerPluginServiceProxy,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private srv: GoldenLayoutService
     ) {
 
 
@@ -246,6 +254,14 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.dataSetView.push({ label: 'Clusters', value: 'Cluster' });
 
         this.dataSetViewSelected = "Node";
+
+        // setTimeout(() => {
+        //     srv.createNewComponent(srv.getRegisteredComponents()[0]);
+        //   }, 1000);
+
+          setTimeout(() => {
+            srv.createNewComponent(srv.getRegisteredComponents()[0]);
+          }, 10000);
     }
 
     ngOnInit() {
@@ -332,7 +348,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             }
 
             if (cachedView) {
-                this.updateLaunchView(cachedView);
+                // this.updateLaunchView(cachedView);
             }
 
             $("#welcome-title").animate({
@@ -1373,18 +1389,18 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     ngAfterViewInit() {
 
-        let factory = this.cfr.resolveComponentFactory(FilesComponent);
-        this.cmpRef = this.targets.first.createComponent(factory);
+        // let factory = this.cfr.resolveComponentFactory(FilesComponent);
+        // this.cmpRef = this.targets.first.createComponent(factory);
 
-        this.homepageTabs[0].componentRef = this.cmpRef;
+        // this.homepageTabs[0].componentRef = this.cmpRef;
 
-        this.cmpRef.instance.LoadDefaultVisualizationEvent.subscribe((v) => {
-            console.log('init: ', v);
-            this.loadDefaultVisualization(v);
-            this.publishLoadNewData();
-        });
+        // this.cmpRef.instance.LoadDefaultVisualizationEvent.subscribe((v) => {
+        //     console.log('init: ', v);
+        //     this.loadDefaultVisualization(v);
+        //     this.publishLoadNewData();
+        // });
 
-        this.setActiveTabProperties();
+        // this.setActiveTabProperties();
 
         this.cdref.detectChanges();
     }

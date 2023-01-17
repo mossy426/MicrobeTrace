@@ -48,8 +48,8 @@
             <div class="kt-portlet kt-portlet--mobile" style="height:100%">
                 <div class="kt-portlet__head kt-portlet__head--lg" style="height:100%">
                     <div class="m-portlet__body" style="flex: 1 100%; max-width:100%; height:100%">
-
-                        <p-tabView id="main-tabset" (onClose)="removeTab($event)" (click)="setActiveTabProperties()">
+                        <golden-layout-root></golden-layout-root>
+                        <!-- <p-tabView id="main-tabset" (onClose)="removeTab($event)" (click)="setActiveTabProperties()">
                                 <p-tabPanel id="homepageTabs{{i}}" *ngFor="let tab of homepageTabs; let i = index" [closable]="i > 0" header={{tab.label}} [selected]="tab.isActive" style="height:100%">
 
                                 <div id="tool-btn-container" class="m-portlet">
@@ -80,7 +80,7 @@
                                 </div>
 
                             </p-tabPanel> 
-                        </p-tabView>
+                        </p-tabView> -->
 
                     </div>
                 </div>
