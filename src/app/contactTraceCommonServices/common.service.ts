@@ -21,6 +21,7 @@ import { StashObjects, StashObject } from '../helperClasses/interfaces';
 import { MicrobeTraceNextVisuals } from '../microbe-trace-next-plugin-visuals';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { GoldenLayoutService } from '@embedded-enterprises/ng6-golden-layout';
 // import { ConsoleReporter } from 'jasmine';
 
 
@@ -407,7 +408,8 @@ export class CommonService extends AppComponentBase implements OnInit {
     constructor(injector: Injector,
         public localStorageService: LocalStorageService,
         public visuals: MicrobeTraceNextVisuals,
-        private http: HttpClient
+        private http: HttpClient,
+        private srv: GoldenLayoutService
     ) {
 
         super(injector);
@@ -768,6 +770,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         $(document).trigger("stop-force-simulation"); // stop previous network ticks so previous polygon won't show up
         $(document).off('.2d');
 
+        console.log('applying session:');
         if(stashObject.session) {
 
         } else {
@@ -2324,22 +2327,22 @@ export class CommonService extends AppComponentBase implements OnInit {
     launchView(view, callback: any = null) {
 
 
+        if (!this.temp.componentCache[view]) {
+           $.get("components/" + view + ".html", response => {
+               this.temp.componentCache[view] = response;
+               //This MUST NOT be replace by an arrow function!
+            //    this.srv.registerComponent(view, function (container, state) {
+            //        container.getElement().html(state.text);
+            //    });
+            //    this.srv.createNewComponent(this.srv.getRegisteredComponents()[2]);
 
-
-        //if (!this.temp.componentCache[view]) {
-        //    $.get("components/" + view + ".html", response => {
-        //        this.temp.componentCache[view] = response;
-        //        //This MUST NOT be replace by an arrow function!
-        //        this.layout.registerComponent(view, function (container, state) {
-        //            container.getElement().html(state.text);
-        //        });
-        //        if (callback) {
-        //            this.launchView(view, callback);
-        //        } else {
-        //            return this.launchView(view);
-        //        }
-        //    });
-        //} else {
+               if (callback) {
+                   this.launchView(view, callback);
+               } else {
+                   return this.launchView(view);
+               }
+           });
+        } else {
         //    let contentItem = this.layout.contentItems.find(item => item.componentName == view);
         //    if (contentItem) {
         //        contentItem.parent.setActiveContentItem(contentItem);
@@ -2404,7 +2407,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         //    } else {
         //        return contentItem;
         //    }
-        //}
+        }
 
 
         window.context.commonService.LoadViewEvent.emit(view);

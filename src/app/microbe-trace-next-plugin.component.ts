@@ -259,9 +259,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         //     srv.createNewComponent(srv.getRegisteredComponents()[0]);
         //   }, 1000);
 
-          setTimeout(() => {
-            srv.createNewComponent(srv.getRegisteredComponents()[0]);
-          }, 10000);
+        //   setTimeout(() => {
+        //     srv.createNewComponent(srv.getRegisteredComponents()[0]);
+        //   }, 10000);
     }
 
     ngOnInit() {
@@ -361,6 +361,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 marginTop: '0px',
                 opacity: '1'
             }, 1000);
+            this.Viewclick('2D Network');
         }, 3000);
         setTimeout(() => {
             $('#visualwrapper').fadeTo("slow", 1);
@@ -1972,6 +1973,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
             
             this.addTab(viewName, viewName + this.activeTabIndex, this.activeTabIndex);
+            this.srv.createNewComponent(this.srv.getRegisteredComponents()[2]);
+            console.log('get state: ', this.srv.getState());
 
             setTimeout(() => {
           
@@ -1979,7 +1982,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 let _type: any = this.GetComponentTypeByName(viewName);
 
                 let factory = this.cfr.resolveComponentFactory(_type);
-                this.cmpRef = this.targets.last.createComponent(factory)
+                this.cmpRef = this.targets.last.createComponent(factory);
 
                 tabNdx = this.homepageTabs.findIndex(x => x.label == viewName);
                 console.log('tab ind: ', tabNdx);
@@ -2395,7 +2398,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     addTab(tabLabel: any, tabTitle: any, tabPosition: any, activate: boolean = true): void {
 
-        console.log('adding tab: ', tabLabel, tabTitle, activate);
         /*/
          * Ensure that all tabs are not selected before we set the next new tab.
          * This will ensure that the newly created component appears on the currently selected tab, 
@@ -2406,10 +2408,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             x.isActive = false;
         });
 
-        this.tabView.tabs.map(x => {
+        // this.tabView.tabs.map(x => {
 
-            x.selected = false;
-        });
+        //     x.selected = false;
+        // });
 
         this.activeTabIndex = tabPosition;
         this.homepageTabs.splice(tabPosition, 0, {

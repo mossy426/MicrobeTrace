@@ -170,11 +170,17 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     }
 
     ngOnInit() {
+        console.log('InitView2d1: ', this.visuals.twoD.commonService.session.data.nodes.length);
+
         this.visuals.twoD.commonService.updateNetwork();
+        this.InitView();
+        console.log('InitView2d2: ', this.visuals.twoD.commonService.session.data.nodes.length);
+
     }
 
     InitView() {
 
+        console.log('InitView2d3: ', this.visuals.twoD.commonService.session.data.nodes.length);
         this.visuals.twoD.IsDataAvailable = (this.visuals.twoD.commonService.session.data.nodes.length === 0 ? false : true);
         if (!this.visuals.twoD.commonService.session.style.widgets['default-distance-metric']) {
           this.visuals.twoD.commonService.session.style.widgets['default-distance-metric'] = 
@@ -182,6 +188,8 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
           this.visuals.twoD.commonService.session.style.widgets['link-threshold'] = 
             this.visuals.twoD.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable;
         }
+
+        console.log('InitView2d4: ', this.visuals.twoD.IsDataAvailable);
 
         if (this.visuals.twoD.IsDataAvailable === true && this.visuals.twoD.zoom === null) {
 
