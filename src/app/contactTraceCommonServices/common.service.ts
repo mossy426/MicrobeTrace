@@ -571,7 +571,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             let origin = window.context.commonService.uniq(newLink.origin.concat(oldLink.origin));
             Object.assign(oldLink, newLink, { origin: origin });
             linkIsNew = 0;
-        } else if (this.temp.matrix[newLink.target][newLink.source]) {
+        } else if (window.context.commonService.temp.matrix[newLink.target][newLink.source]) {
             console.warn("This scope should be unreachable. If you're using this code, something's wrong.");
             let oldLink = window.context.commonService.temp.matrix[newLink.target][newLink.source];
             let origin = window.context.commonService.uniq(newLink.origin.concat(oldLink.origin));
@@ -2170,7 +2170,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         const newTempSkeleton = this.tempSkeleton();
 
-        this.temp.matrix = newTempSkeleton.matrix;
+        window.context.commonService.temp.matrix = newTempSkeleton.matrix;
         this.temp.trees = newTempSkeleton.trees;
 
         const files = window.context.commonService.session.files.filter( obj => obj.name !== 'Demo_outbreak_NodeList.csv');
@@ -2712,7 +2712,7 @@ export class CommonService extends AppComponentBase implements OnInit {
                 let clusterID = cluster.id;
                 node.cluster = clusterID;
                 cluster.nodes++;
-                let row = this.temp.matrix[id];
+                let row = window.context.commonService.temp.matrix[id];
                 if (!row) return;
                 for (let j = 0; j < numNodes; j++) {
                     let l = row[labels[j]];

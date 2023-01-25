@@ -1813,6 +1813,23 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             }
             case "Add Data": {
                 // this.commonService.launchView("files");
+                // this.activeTabIndex = 0;
+
+                // this.homepageTabs.map(x => {
+
+                //     x.isActive = (x.tabTitle == "Files") ? true :false;
+                // });
+        
+                // this.tabView.tabs.map(x => {
+        
+                //     x.selected = false;
+                // });
+
+                // this.tabView.tabs[0].selected = true;
+
+                // this.setActiveTabProperties();
+
+                // this.setActiveTabProperties();
                 // this.DisplayLedgerLoaderDialog();
                 break;
             }

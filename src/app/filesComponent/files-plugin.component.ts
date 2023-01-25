@@ -459,6 +459,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
   changeDefaultView(e) {
 
+    console.log('change default view');
     const v = e.target.selectedOptions[0].innerText;
     this.visuals.microbeTrace.commonService.localStorageService.setItem('default-view', v);
     this.visuals.microbeTrace.commonService.session.style.widgets['default-view'] = v;
@@ -544,7 +545,8 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
     this.visuals.microbeTrace.commonService.temp.messageTimeout = setTimeout(() => {
       $('#loadCancelButton').slideDown();
-      abp.notify.warn('If you stare long enough, you can reverse the DNA Molecule\'s spin direction');
+      console.log('need to cancel');
+      // abp.notify.warn('If you stare long enough, you can reverse the DNA Molecule\'s spin direction');
     }, 20000);
 
     const nFiles = this.visuals.microbeTrace.commonService.session.files.length - 1;
@@ -632,8 +634,6 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
       } else if (file.format === 'link') {
 
-        console.log('linkkkk')
-
         this.showMessage(`Parsing ${file.name} as Link List...`);
         let l = 0;
 
@@ -692,8 +692,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
           this.showMessage(` - Parsed ${n} New, ${t} Total Nodes from Link Excel Table.`);
           if (fileNum === nFiles) this.processData();
 
-        } else
-          if (file.extension === 'json') {
+        } else if (file.extension === 'json') {
             const results = JSON.parse(file.contents);
             if (!results || results.length === 0) return;
 
@@ -977,7 +976,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         visible: true,
         distance: 0,
       }, 'generated'));
-    })
+    });
 
     this.processSequence()
   }
@@ -1422,8 +1421,8 @@ export class FilesComponent extends AppComponentBase implements OnInit {
     }));
     allEdgeListNodes = _.uniq(allEdgeListNodes);
 
-    this.uniqueNodes = allNodesListNodes.filter(x => x && !allEdgeListNodes.some(y=>y==x));
     this.uniqueEdgeNodes = allEdgeListNodes.filter(x => x && !allNodesListNodes.some(y=>y==x));
+    this.uniqueNodes = allNodesListNodes.filter(x => x && !this.uniqueEdgeNodes.some(y=>y==x));
   }
 
   removeFile(fileName) {
