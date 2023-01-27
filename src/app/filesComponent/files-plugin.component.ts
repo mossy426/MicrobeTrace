@@ -637,6 +637,9 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         this.showMessage(`Parsing ${file.name} as Link List...`);
         let l = 0;
 
+        let sources = [];
+        let targets = [];
+
         let forEachLink = link => {
           const keys = Object.keys(link);
           const n = keys.length;
@@ -648,13 +651,63 @@ export class FilesComponent extends AppComponentBase implements OnInit {
               this.visuals.microbeTrace.commonService.session.data.linkFields.push(key);
             }
           }
-          l += this.visuals.microbeTrace.commonService.addLink(Object.assign({
-            source: '' + safeLink[file.field1],
-            target: '' + safeLink[file.field2],
-            origin: origin,
-            visible: true,
-            distance: file.field3 === 'None' ? 0 : parseFloat(safeLink[file.field3])
-          }, safeLink), check);
+
+          let src = '' + safeLink[file.field1];
+          let tgt = '' + safeLink[file.field2];
+
+          sources.push(src);
+          targets.push(tgt);
+
+          let srcIndex = targets.findIndex(t => t == src);
+          let tgtIndex = sources.findIndex(s => s == tgt);
+
+          // Link is the same -> bidirectional
+          if(srcIndex != -1 && tgtIndex != -1) {
+              
+            console.log('link same');
+            // Set distance if distance set (field 3)
+            l += this.visuals.microbeTrace.commonService.addLink(Object.assign({
+               source: '' + safeLink[file.field1],
+               target: '' + safeLink[file.field2],
+               origin: origin,
+               visible: true,
+               directed : file.field3 != 'distance' ? true : false,
+               bidirectional: file.field3 != 'distance' ? true : false,
+               distance: file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]),
+               hasDistance : file.field3 != 'distance' ? false : true,
+               distanceOrigin: file.field3 != 'distance' ? '' : file.name
+             }, safeLink), check);
+
+         } else {
+
+          // TODO uncomment when testing adding new link
+           console.log('adding 2: ', _.cloneDeep(Object.assign({
+                  source: '' + safeLink[file.field1],
+                  target: '' + safeLink[file.field2],
+                  origin: origin,
+                  visible: true,
+                  directed : file.field3 != 'distance' ? true : false,
+                  bidirectional: file.field3 != 'distance' ? true : false,
+                  distance: file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]),
+                  hasDistance : file.field3 != 'distance' ? false : true,
+                  distanceOrigin: file.field3 != 'distance' ? '' : file.name
+                }, safeLink)));
+
+           l += this.visuals.microbeTrace.commonService.addLink(Object.assign({
+               source: '' + safeLink[file.field1],
+               target: '' + safeLink[file.field2],
+               origin: origin,
+               visible: true,
+               directed : file.field3 != 'distance' ? true : false,
+               distance: file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]),
+               hasDistance : file.field3 != 'distance' ? false : true,
+               distanceOrigin: file.field3 != 'distance' ? '' : file.name
+             }, safeLink), check);
+         }  
+
+         console.log('matrixx1: ',  JSON.stringify(window.context.commonService.temp.matrix));
+
+
         };
 
         if (file.extension === 'xls' || file.extension === 'xlsx') {
@@ -910,7 +963,10 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                   source: source,
                   target: target,
                   origin: origin,
-                  distance: parseFloat(cell)
+                  distance: parseFloat(cell),
+                  directed: false,
+                  hasDistance: true,
+                  distanceOrigin: file.name
                 }, check);
               });
             }
@@ -948,7 +1004,9 @@ export class FilesComponent extends AppComponentBase implements OnInit {
               source: source,
               target: labels[j],
               origin: origin,
-              distance: parseFloat(matrix[i][j])
+              distance: parseFloat(matrix[i][j]),
+              distanceOrigin: file.name,
+              hasDistance: true
             }, check);
             links++;
           }

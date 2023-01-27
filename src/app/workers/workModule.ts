@@ -827,17 +827,33 @@ export class WorkerModule implements OnInit {
                         if (that.rowSums[i] > that.rowSumMax) that.rowSumMax = that.rowSums[i];
                     }
 
+
                     while (that.cN > 2) {
                         //if (that.cN % 100 == 0 ) console.log(that.cN);
+                        console.log('minI: ', minI);
+                        console.log('minJ: ', minJ);
+
+
                         ({ minI, minJ } = this.search(that));
 
+                        console.log('minI: ', minI);
+                        console.log('minJ: ', minJ);
+
+                        console.log('parsing matrix 7: ', JSON.stringify(that.D));
+
+
+                        console.log('that.D[minI][minJ]: ', that.D[minI][minJ]);
                         d1 =
                             0.5 * that.D[minI][minJ] +
                             (that.rowSums[minI] - that.rowSums[minJ]) / (2 * that.cN - 4);
                         d2 = that.D[minI][minJ] - d1;
 
+                        console.log('parsing matrix 8');
+
                         l1 = that.currIndexToLabel[minI];
                         l2 = that.currIndexToLabel[minJ];
+
+                        console.log('parsing matrix 9');
 
                         node1 = setUpNode(l1, d1);
                         node2 = setUpNode(l2, d2);
@@ -855,6 +871,8 @@ export class WorkerModule implements OnInit {
                         that.currIndexToLabel[minJ] = that.nextIndex++;
                     }
 
+
+
                     let left = that.indicesLeft.values();
                     minI = left.next().value;
                     minJ = left.next().value;
@@ -867,6 +885,8 @@ export class WorkerModule implements OnInit {
                     node2 = setUpNode(l2, d2);
                     
                     let tree = new Branch({ children: [node1, node2] });
+                    console.log('parsing matrix 7');
+
                     tree.fixParenthood();
                     return tree.fixDistances();
                 };
@@ -1612,6 +1632,7 @@ export class WorkerModule implements OnInit {
             const matrix = e.matrix;
             let patristic = new Patristic();
             
+            console.log('parsingggg');
             const RNJ = patristic.parseMatrix(matrix, e.labels);
             console.log('Tree Compute time: ', (Date.now() - start).toLocaleString(), 'ms');
             start = Date.now();

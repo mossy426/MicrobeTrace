@@ -457,7 +457,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             visible: true,
             degree: 0,
             data: {},
-            origin: []
+            origin: [],
+            hasDistance: false
         }
     }
 
@@ -557,38 +558,102 @@ export class CommonService extends AppComponentBase implements OnInit {
     };
 
     addLink(newLink: any, check: any = true) {
-        if (!window.context.commonService.temp.matrix[newLink.source]) {
-            window.context.commonService.temp.matrix[newLink.source] = {};
+
+        let matrix = window.context.commonService.temp.matrix;
+
+        if (!matrix[newLink.source]) {
+            matrix[newLink.source] = {};
         }
-        if (!window.context.commonService.temp.matrix[newLink.target]) {
-            window.context.commonService.temp.matrix[newLink.target] = {};
+        if (!matrix[newLink.target]) {
+            matrix[newLink.target] = {};
         }
         if (newLink.source == newLink.target) return 0;
         let linkIsNew = 1;
         let sdlinks = window.context.commonService.session.data.links;
-        if (window.context.commonService.temp.matrix[newLink.source][newLink.target]) {
-            let oldLink = window.context.commonService.temp.matrix[newLink.source][newLink.target];
-            let origin = window.context.commonService.uniq(newLink.origin.concat(oldLink.origin));
-            Object.assign(oldLink, newLink, { origin: origin });
+        if (matrix[newLink.source][newLink.target]) {
+            let oldLink = matrix[newLink.source][newLink.target];
+            let myorigin = this.uniq(newLink.origin.concat(oldLink.origin));
+            console.log(JSON.stringify(myorigin));
+
+            // Ensure no empty origins
+            myorigin = myorigin.filter(origin => origin != '');
+
+            // if("" + newLink.source == "3003" && "" + newLink.target == "1703") {
+            //   console.log("add new: ", _.cloneDeep(newLink));
+            //   console.log("add old: ", _.cloneDeep(oldLink));
+            // }
+
+            // Ensure new link keeps distance if already defined previously
+            if (oldLink.hasDistance) {
+                newLink.hasDistance = true;
+                newLink['distance'] = oldLink['distance'];
+                newLink.distanceOrigin = oldLink.distanceOrigin;
+            }
+
+            oldLink["origin"] = myorigin;
+            newLink["origin"] = myorigin;
+            console.log("old link isL " + `${JSON.stringify(oldLink)} ${JSON.stringify(newLink)}`);
+
+            // Only override if new isn't directed and old may be, and ensure its in the right direction
+            if(oldLink.directed) {
+                newLink.directed = true;
+                newLink.source = oldLink.source;
+                newLink.target = oldLink.target;
+            }
+            
+
+            _.merge(oldLink, newLink);
+
+            // TODO remove when confident this function never causes issues - used to debug easier
+            // Object.assign(oldLink, newLink);
+            // Object.assign(newLink, oldLink);
+
+            // if("" + newLink.source == "3003" && "" + newLink.target == "1703") {
+            //   console.log("add new2: ", _.cloneDeep(newLink));
+            //   console.log("add old2: ", _.cloneDeep(oldLink));
+            // }
+
+            if(newLink["bidirectional"]){
+                oldLink["bidirectional"] = true;
+            }
+
             linkIsNew = 0;
         } else if (window.context.commonService.temp.matrix[newLink.target][newLink.source]) {
             console.warn("This scope should be unreachable. If you're using this code, something's wrong.");
-            let oldLink = window.context.commonService.temp.matrix[newLink.target][newLink.source];
-            let origin = window.context.commonService.uniq(newLink.origin.concat(oldLink.origin));
+            let oldLink = matrix[newLink.target][newLink.source];
+            let origin = this.uniq(newLink.origin.concat(oldLink.origin));
             Object.assign(oldLink, newLink, { origin: origin });
             linkIsNew = 0;
         } else {
-            newLink = Object.assign({
+
+             if (newLink.hasDistance) {
+                console.log('has distance is true');
+                newLink = Object.assign({
                 index: sdlinks.length,
                 source: "",
                 target: "",
-                visible: true,
+                visible: false,
                 cluster: 1,
-                origin: []
-            }, newLink);
-            window.context.commonService.temp.matrix[newLink.source][newLink.target] = newLink;
-            window.context.commonService.temp.matrix[newLink.target][newLink.source] = newLink;
+                origin: [],
+                hasDistance: true
+                }, newLink);
+            } else {
+                newLink = Object.assign({
+                index: sdlinks.length,
+                source: "",
+                target: "",
+                visible: false,
+                cluster: 1,
+                origin: [],
+                hasDistance: false
+                }, newLink);
+            }
+
+            matrix[newLink.source][newLink.target] = newLink;
+            matrix[newLink.target][newLink.source] = newLink;
             sdlinks.push(newLink);
+
+            console.log('new Link pushed: ', newLink);
             linkIsNew = 1;
         }
 
@@ -791,6 +856,13 @@ export class CommonService extends AppComponentBase implements OnInit {
         window.context.commonService.session.state = oldSession.state;
         window.context.commonService.session.style = _.assign(window.context.commonService.session.style, oldSession.style);
         window.context.commonService.session.meta.startTime = Date.now();
+
+        if(oldSession.layout) {
+            window.context.commonService.session.layout = oldSession.layout;
+        }
+
+        // layout.root.removeChild(layout.root.contentItems[0]);
+
         const nodes = oldSession.data.nodes,
             links = oldSession.data.links,
             n = nodes.length,
@@ -798,27 +870,51 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         console.log('nodes: ', oldSession.data.nodes);
         for (let i = 0; i < n; i++) window.context.commonService.addNode(nodes[i]);
-        for (let j = 0; j < m; j++) window.context.commonService.addLink(links[j]);
+        for (let j = 0; j < m; j++) {
+            // Add distance property for files saved prior to distance visibility fix
+            if ((links[j].origin).includes('Genetic Distance')) {
+                links[j].hasDistance = true;
+                links[j].distanceOrigin = 'Genetic Distance';
+            } else if (links[j].distance && links[j].distance > 0) {
+                links[j].hasDistance = true;
+            }
+            window.context.commonService.addLink(links[j]);
+        }
+        // for (let j = 0; j < m; j++) window.context.commonService.addLink(links[j]);
         ['nodeFields', 'linkFields', 'clusterFields', 'nodeExclusions'].forEach(v => {
             if (oldSession.data[v]) window.context.commonService.session.data[v] = window.context.commonService.uniq(window.context.commonService.session.data[v].concat(oldSession.data[v]));
         });
+        // TODO: See about this process data functionality
         window.context.commonService.processData();
+
+
         if (oldSession.network) window.context.commonService.session.network = oldSession.network;
-        window.context.commonService.applyStyle(window.context.commonService.session.style);
-        if (!links[0]['distance']) {
-            if (links[0]['tn93']) {
-                window.context.commonService.session.style.widgets['link-sort-variable'] = 'tn93';
-            } else {
-                window.context.commonService.session.style.widgets['link-sort-variable'] = 'snps';
-            }
+         if (oldSession.data.geoJSONLayerName !== "") {
+            window.context.commonService.session.data.geoJSON = oldSession.data.geoJSON;
+            window.context.commonService.session.data.geoJSONLayerName = oldSession.data.geoJSONLayerName;
         }
+        // TODO see if this is needed
+        // sessionApplied = true;
+
+        window.context.commonService.applyStyle(window.context.commonService.session.style);
+
+        // TODO: See if this is needed
+        // if (!links[0]['distance']) {
+        //     if (links[0]['tn93']) {
+        //         window.context.commonService.session.style.widgets['link-sort-variable'] = 'tn93';
+        //     } else {
+        //         window.context.commonService.session.style.widgets['link-sort-variable'] = 'snps';
+        //     }
+        // }
         window.context.commonService.finishUp();
 
+        // TODO: implement this later
+        // $("#network-statistics-show").parent().trigger("click");
     };
 
     processData() {
         let nodes = this.session.data.nodes;
-        this.session.data.nodeFilteredValues = nodes;
+        window.context.commonService.session.data.nodeFilteredValues = nodes;
         //Add links for nodes with no edges
         // this.uniqueNodes.forEach(x => {
         //     this.commonService.addLink(Object.assign({
@@ -854,6 +950,24 @@ export class CommonService extends AppComponentBase implements OnInit {
                 }
             }
         }
+
+        // TODO: See if this is needed
+        // Need session applied variable since this will break restoring full microbe trace file vs loading a style file
+        // if (!sessionApplied) {
+        // // Trigger global style updates
+        // $("#node-color-variable").trigger("change");
+        // $("#node-color-border").trigger("change");
+        // $("#link-color-variable").trigger("change");
+        // $("#selected-color").trigger("change");
+        // $("#background-color").trigger("change");
+
+        // // 2d Network Specific
+        // $('#node-radius-variable').trigger("change");
+        // $('#node-symbol-variable').trigger("change");
+        // $('#node-label-variable').trigger("change");
+        // } else {
+        // sessionApplied = false;
+        // }
     };
 
     applyHIVTrace(hivtrace) {
@@ -986,7 +1100,8 @@ export class CommonService extends AppComponentBase implements OnInit {
                 const links = data.links;
                 const tl = links.length;
                 for (let j = 0; j < tl; j++) {
-                    nl += window.context.commonService.addLink(Object.assign(links[j], { origin: origin }), check);
+                    console.log('has distance is true: ', JSON.stringify(links[j]));
+                    nl += window.context.commonService.addLink(Object.assign(links[j], { origin: origin, hasDistance: true, distanceOrigin: origin }), check);
                 }
                 console.log("CSV Matrix Merge time: ", (Date.now() - start).toLocaleString(), "ms");
                 resolve({ nn, nl, tn, tl });
@@ -1323,7 +1438,10 @@ export class CommonService extends AppComponentBase implements OnInit {
                             source: sourceID,
                             target: targetID,
                             distance: dists[l++],
-                            origin: ['Genetic Distance']
+                            origin: ['Genetic Distance'],
+                            distanceOrigin: 'Genetic Distance',
+                            hasDistance: true,
+                            directed: false
                         }, check);
                     }
                 }
@@ -1362,30 +1480,43 @@ export class CommonService extends AppComponentBase implements OnInit {
                 }
             }
 
+            console.log('matrixx: ',  JSON.stringify(window.context.commonService.temp.matrix));
+
             console.log("DM Compute time: ", (Date.now() - start).toLocaleString(), "ms");
             resolve(dm);
         });
     };
 
     computeTree(): Promise<any> {
+
+        console.log('computing tree')
         return new Promise(resolve => {
 
           if (window.context.commonService.treeObj) {
             resolve(window.context.commonService.treeObj.toNewick());
           } else {
             let computer: WorkerModule = new WorkerModule();
+            console.log('getting dm');
             window.context.commonService.getDM().then(dm => {
 
+                console.log('got dm');
                 computer.compute_treeWorker.postMessage({
                     labels: Object.keys(window.context.commonService.temp.matrix),
                     matrix: dm,
                     round: window.context.commonService.session.style.widgets["tree-round"]
                 });
 
+                console.log('got dm2');
+
                 computer.compute_treeWorker.onmessage().subscribe((response) => {
+                    console.log('successfully decoded tree');
+
                   const treeObj = window.context.commonService.decode(new Uint8Array(response.data.tree));
 
+                  console.log('successfully decoded tree1');
                   const treeString = patristic.parseJSON(treeObj).toNewick();
+                  console.log('successfully decoded tree 2');
+
                   console.log('Tree Transit time: ', (Date.now() - response.data.start).toLocaleString(), 'ms');
                   resolve(treeString);
 
@@ -1441,6 +1572,7 @@ export class CommonService extends AppComponentBase implements OnInit {
                 metric: window.context.commonService.session.style.widgets['link-sort-variable']
             });
 
+            console.log('computing nn');
             computer.compute_nnWorker.onmessage().subscribe((response) => {
 
                 if (response.data == "Error") {
@@ -1504,9 +1636,14 @@ export class CommonService extends AppComponentBase implements OnInit {
     async runHamsters() {
 
         if (!window.context.commonService.session.style.widgets['triangulate-false']) window.context.commonService.computeTriangulation();
+        console.log('running hamseters');
         window.context.commonService.computeNN();
 
+        console.log('running hamseters 2');
+
         await window.context.commonService.computeTree();
+
+        console.log('running hamseters 3');
 
         if (!window.context.commonService.session.style.widgets['infer-directionality-false']) window.context.commonService.computeDirectionality();
 
@@ -2844,19 +2981,69 @@ export class CommonService extends AppComponentBase implements OnInit {
         for (let i = 0; i < n; i++) {
             let link = links[i];
             let visible = true;
+            let overrideNN = false;
+
+            if (link.hasDistance && !link.origin.includes(link.distanceOrigin)) {
+                link.origin.push(link.distanceOrigin);
+            }
+
+            // No distance value
             if (link[metric] == null) {
-                link.visible = true;
+
+                // If origin file exists for link outside of distance, keep visible
+                if (link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0) {
+                // Set visible and origin to only show the from the file outside of Distance
+                link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
+                overrideNN = true;
+                visible = true;
+                } else {
+                link.visible = false;
                 continue;
+                }
+
             } else {
+
+                if (link.hasDistance) {
+
                 visible = link[metric] <= threshold;
+
+                if (!visible) {
+
+                    // Only need to get distance origin and override if there are other files using a distance metric, otherwise the else code block below would be exectued since the link would not have distance
+                    if (link.origin.length > 1 && link.origin.filter(fileName =>{
+                        // console.log(fileName);
+                        fileName && (/[Aa]uspice/.test(fileName) || !fileName.includes(link.distanceOrigin))}).length > 0) {
+                        // Set visible and origin to only show the from the file outside of Distance
+                        link.origin = link.origin.filter(fileName => fileName && (/[Aa]uspice/.test(fileName) || !fileName.includes(link.distanceOrigin)));
+                        overrideNN = true;
+                        visible = true;
+                    }
+                }
+
+                } else {
+
+                    // If has no distance, then link should be visible and unnaffected by NN
+                    overrideNN = true;
+                    visible = true;
+
+                }
+
             }
-            if (showNN) {
+
+            if (visible && showNN && !overrideNN) {
                 visible = visible && link.nn;
+                // Keep link visible of not nearest neighbor, but still connected via an edge list
+                if (!visible && link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0) {
+                link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
+                visible = true;
+                }
             }
+
             let cluster = clusters[link.cluster];
             if (cluster) {
                 visible = visible && cluster.visible;
             }
+
             link.visible = visible;
 
 

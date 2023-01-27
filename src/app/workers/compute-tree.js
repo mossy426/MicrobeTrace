@@ -3,6 +3,7 @@ importScripts('../vendor/patristic.min.js');
 onmessage = function(e){
   let start = Date.now();
   const matrix = e.data.matrix;
+  console.log('Treeee Parse time: ', (Date.now()-start).toLocaleString(), 'ms');
   const RNJ = patristic.parseMatrix(matrix, e.data.labels);
   console.log('Tree Compute time: ', (Date.now()-start).toLocaleString(), 'ms');
   start = Date.now();
