@@ -9,6 +9,14 @@
 /node_modules
 /node_modules_dev
 
+# Temp files to help troubleshoot what sessions are expected from the numbers files for testing
+/src/app/contactTraceCommonServices/DistanceDev.json
+/src/app/contactTraceCommonServices/DistanceEdge.json
+/src/app/contactTraceCommonServices/Node.json
+/src/app/contactTraceCommonServices/sample.json
+/src/app/contactTraceCommonServices/sampleAll.json
+
+
 # IDEs and editors
 /.idea
 .project

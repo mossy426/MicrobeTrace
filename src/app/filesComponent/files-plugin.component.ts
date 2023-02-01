@@ -646,7 +646,17 @@ export class FilesComponent extends AppComponentBase implements OnInit {
           let safeLink = {};
           for (let i = 0; i < n; i++) {
             let key = this.visuals.microbeTrace.commonService.filterXSS(keys[i]);
-            safeLink[key] = this.visuals.microbeTrace.commonService.filterXSS(link[key]);
+            console.log('key is: ',key);
+
+            if(key === "distance") {
+              console.log('key is distance');
+              link[key] = parseFloat(link[key]);
+            }
+            
+            safeLink[key] = link[key];
+            console.log('safelink key is: ',safeLink[key]);
+            console.log('safelink is: x',safeLink);
+
             if (!this.visuals.microbeTrace.commonService.includes(this.visuals.microbeTrace.commonService.session.data.linkFields, key)) {
               this.visuals.microbeTrace.commonService.session.data.linkFields.push(key);
             }
@@ -660,6 +670,8 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
           let srcIndex = targets.findIndex(t => t == src);
           let tgtIndex = sources.findIndex(s => s == tgt);
+
+          console.log("safe link is: ",safeLink);
 
           // Link is the same -> bidirectional
           if(srcIndex != -1 && tgtIndex != -1) {
@@ -680,6 +692,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
          } else {
 
+          console.log("distance is: ", file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]))
           // TODO uncomment when testing adding new link
            console.log('adding 2: ', _.cloneDeep(Object.assign({
                   source: '' + safeLink[file.field1],

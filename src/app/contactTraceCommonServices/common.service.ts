@@ -653,7 +653,6 @@ export class CommonService extends AppComponentBase implements OnInit {
             matrix[newLink.target][newLink.source] = newLink;
             sdlinks.push(newLink);
 
-            console.log('new Link pushed: ', newLink);
             linkIsNew = 1;
         }
 
@@ -2159,7 +2158,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         let i = 0,
             n = links.length,
             l;
-        if (variable == "origin") {
+        if (variable == "origin" || variable == "Origin") {
             while (i < n) {
                 l = links[i++];
                 if (!l.visible) continue;

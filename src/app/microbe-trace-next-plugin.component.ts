@@ -130,7 +130,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     SelectedColorNodesByVariable: string = "None";
     SelectedNodeColorVariable: string = "#1f77b4";
     SelectedLinkColorVariable: string = "#1f77b4";
-    SelectedColorLinksByVariable: string = "None";
+    SelectedColorLinksByVariable: string = "origin";
 
     SelectedTimelineVariable : string = "None";
 
@@ -264,7 +264,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             this.GlobalSettingsNodeColorDialogSettings = new DialogSettings('#global-settings-node-color-table', false);
         }
 
-        console.log(this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable);
+        // console.log(this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable);
         this.SelectedPruneWityTypesVariable = this.commonService.GlobalSettingsModel.SelectedPruneWityTypesVariable;
 
         //debugger;
@@ -645,7 +645,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     public onLinkColorChanged() : void {
 
-        console.log('link color var: ', this.SelectedLinkColorVariable);
         this.commonService.session.style.widgets["link-color"] = this.SelectedLinkColorVariable;
 
         this.publishUpdateLinkColor();
@@ -1991,6 +1990,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 this.cmpRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
 
                 this.setActiveTabProperties();
+                this.loadSettings();
             });
         }
         else {
@@ -2028,7 +2028,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 console.log('activeee');
 
                 this.setActiveTabProperties();
-            //    this.loadSettings();
+               this.loadSettings();
 
             }
         }
@@ -2461,6 +2461,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.onNodeColorChanged();
 
         //Styling|Color Links By
+        if (this.visuals.microbeTrace.commonService.session.style.widgets['link-color-variable'] === "None") {
+            this.visuals.microbeTrace.commonService.session.style.widgets['link-color-variable'] = "origin";
+        }
+
         this.SelectedColorLinksByVariable = this.visuals.microbeTrace.commonService.session.style.widgets['link-color-variable'];
         this.onColorLinksByChanged();
 
