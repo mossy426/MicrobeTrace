@@ -1,0 +1,802 @@
+{
+    "A4": {
+      "A3": {
+        "index": 0,
+        "source": "A4",
+        "target": "A3",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A5": {
+        "index": 2,
+        "source": "A5",
+        "target": "A4",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A6": {
+        "index": 4,
+        "source": "A6",
+        "target": "A4",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A7": {
+        "index": 7,
+        "source": "A7",
+        "target": "A4",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A10": {
+        "index": 11,
+        "source": "A10",
+        "target": "A4",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A2": {
+        "index": 16,
+        "source": "A2",
+        "target": "A4",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.041360326,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A1": {
+        "index": 22,
+        "source": "A1",
+        "target": "A4",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.062314067,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      }
+    },
+    "A3": {
+      "A4": {
+        "index": 0,
+        "source": "A4",
+        "target": "A3",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A5": {
+        "index": 1,
+        "source": "A5",
+        "target": "A3",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A6": {
+        "index": 3,
+        "source": "A6",
+        "target": "A3",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A7": {
+        "index": 6,
+        "source": "A7",
+        "target": "A3",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A10": {
+        "index": 10,
+        "source": "A10",
+        "target": "A3",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A2": {
+        "index": 15,
+        "source": "A2",
+        "target": "A3",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.041360326,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A1": {
+        "index": 21,
+        "source": "A1",
+        "target": "A3",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.062314067,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      }
+    },
+    "A5": {
+      "A3": {
+        "index": 1,
+        "source": "A5",
+        "target": "A3",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A4": {
+        "index": 2,
+        "source": "A5",
+        "target": "A4",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A6": {
+        "index": 5,
+        "source": "A6",
+        "target": "A5",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A7": {
+        "index": 8,
+        "source": "A7",
+        "target": "A5",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A10": {
+        "index": 12,
+        "source": "A10",
+        "target": "A5",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A2": {
+        "index": 17,
+        "source": "A2",
+        "target": "A5",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.041360326,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A1": {
+        "index": 23,
+        "source": "A1",
+        "target": "A5",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.062314067,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      }
+    },
+    "A6": {
+      "A3": {
+        "index": 3,
+        "source": "A6",
+        "target": "A3",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A4": {
+        "index": 4,
+        "source": "A6",
+        "target": "A4",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A5": {
+        "index": 5,
+        "source": "A6",
+        "target": "A5",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A7": {
+        "index": 9,
+        "source": "A7",
+        "target": "A6",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A10": {
+        "index": 13,
+        "source": "A10",
+        "target": "A6",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A2": {
+        "index": 18,
+        "source": "A2",
+        "target": "A6",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.041360326,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A1": {
+        "index": 24,
+        "source": "A1",
+        "target": "A6",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.062314067,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      }
+    },
+    "A7": {
+      "A3": {
+        "index": 6,
+        "source": "A7",
+        "target": "A3",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A4": {
+        "index": 7,
+        "source": "A7",
+        "target": "A4",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A5": {
+        "index": 8,
+        "source": "A7",
+        "target": "A5",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A6": {
+        "index": 9,
+        "source": "A7",
+        "target": "A6",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A10": {
+        "index": 14,
+        "source": "A10",
+        "target": "A7",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A2": {
+        "index": 19,
+        "source": "A2",
+        "target": "A7",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.041360326,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A1": {
+        "index": 25,
+        "source": "A1",
+        "target": "A7",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.062314067,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      }
+    },
+    "A10": {
+      "A3": {
+        "index": 10,
+        "source": "A10",
+        "target": "A3",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A4": {
+        "index": 11,
+        "source": "A10",
+        "target": "A4",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A5": {
+        "index": 12,
+        "source": "A10",
+        "target": "A5",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A6": {
+        "index": 13,
+        "source": "A10",
+        "target": "A6",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A7": {
+        "index": 14,
+        "source": "A10",
+        "target": "A7",
+        "visible": true,
+        "cluster": 2,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A2": {
+        "index": 20,
+        "source": "A2",
+        "target": "A10",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.041360326,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A1": {
+        "index": 26,
+        "source": "A1",
+        "target": "A10",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.062314067,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      }
+    },
+    "A2": {
+      "A3": {
+        "index": 15,
+        "source": "A2",
+        "target": "A3",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.041360326,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A4": {
+        "index": 16,
+        "source": "A2",
+        "target": "A4",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.041360326,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A5": {
+        "index": 17,
+        "source": "A2",
+        "target": "A5",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.041360326,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A6": {
+        "index": 18,
+        "source": "A2",
+        "target": "A6",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.041360326,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A7": {
+        "index": 19,
+        "source": "A2",
+        "target": "A7",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.041360326,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A10": {
+        "index": 20,
+        "source": "A2",
+        "target": "A10",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.041360326,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A1": {
+        "index": 27,
+        "source": "A1",
+        "target": "A2",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.065510899,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      }
+    },
+    "A1": {
+      "A3": {
+        "index": 21,
+        "source": "A1",
+        "target": "A3",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.062314067,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A4": {
+        "index": 22,
+        "source": "A1",
+        "target": "A4",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.062314067,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A5": {
+        "index": 23,
+        "source": "A1",
+        "target": "A5",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.062314067,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A6": {
+        "index": 24,
+        "source": "A1",
+        "target": "A6",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.062314067,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A7": {
+        "index": 25,
+        "source": "A1",
+        "target": "A7",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.062314067,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A10": {
+        "index": 26,
+        "source": "A1",
+        "target": "A10",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.062314067,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      },
+      "A2": {
+        "index": 27,
+        "source": "A1",
+        "target": "A2",
+        "visible": true,
+        "cluster": 1,
+        "origin": [
+          "Numbers_Distance-edge.csv"
+        ],
+        "hasDistance": true,
+        "directed": false,
+        "distance": 0.065510899,
+        "distanceOrigin": "Numbers_Distance-edge.csv"
+      }
+    }
+  }

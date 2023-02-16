@@ -61,10 +61,6 @@ export class TestedComponent {
 const config: GoldenLayoutConfiguration = {
   components: [
     {
-      componentName: "TestedComponent",
-      component: TestedComponent
-    },
-    {
       componentName: "FilesComponent",
       component: FilesComponent
     },

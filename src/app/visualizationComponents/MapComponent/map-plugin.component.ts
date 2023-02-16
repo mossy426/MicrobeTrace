@@ -244,6 +244,25 @@ export class MapComponent extends AppComponentBase implements OnInit, MicobeTrac
 
     ngOnInit() {
 
+        if (!this.NodeMapSettingsExportDialogSettings) {
+            this.NodeMapSettingsExportDialogSettings = new DialogSettings('#map-settings-pane', false);
+        }
+
+        this.IsDataAvailable = (this.commonService.session.data.nodes.length == 0 ? false : true);
+
+        this.FieldList = [];
+
+        this.FieldList.push({ label: "None", value: "None" });
+        this.commonService.session.data['nodeFields'].map((d, i) => {
+
+            this.FieldList.push(
+                {
+                    label: this.commonService.capitalize(d.replace("_", "")),
+                    value: d
+                });
+
+        });
+
         //this.geocoder = new google.maps.Geocoder();
         this.initializeMap("US");
 
@@ -264,6 +283,8 @@ export class MapComponent extends AppComponentBase implements OnInit, MicobeTrac
     onMapReady(map: Map) {
         //get the leaflet map
         this.lmap = map;
+        this.lmap.zoomControl.setPosition('bottomleft');
+
 
         setTimeout(() => {
             this.loadSettings();
@@ -288,26 +309,26 @@ export class MapComponent extends AppComponentBase implements OnInit, MicobeTrac
     }
 
 
-    InitView() {
-        if (!this.NodeMapSettingsExportDialogSettings) {
-            this.NodeMapSettingsExportDialogSettings = new DialogSettings('#map-settings-pane', false);
-        }
+    // InitView() {
+    //     if (!this.NodeMapSettingsExportDialogSettings) {
+    //         this.NodeMapSettingsExportDialogSettings = new DialogSettings('#map-settings-pane', false);
+    //     }
 
-        this.IsDataAvailable = (this.commonService.session.data.nodes.length == 0 ? false : true);
+    //     this.IsDataAvailable = (this.commonService.session.data.nodes.length == 0 ? false : true);
 
-        this.FieldList = [];
+    //     this.FieldList = [];
 
-        this.FieldList.push({ label: "None", value: "None" });
-        this.commonService.session.data['nodeFields'].map((d, i) => {
+    //     this.FieldList.push({ label: "None", value: "None" });
+    //     this.commonService.session.data['nodeFields'].map((d, i) => {
 
-            this.FieldList.push(
-                {
-                    label: this.commonService.capitalize(d.replace("_", "")),
-                    value: d
-                });
+    //         this.FieldList.push(
+    //             {
+    //                 label: this.commonService.capitalize(d.replace("_", "")),
+    //                 value: d
+    //             });
 
-        });
-    }
+    //     });
+    // }
 
     setDefaultAddressFields() {
         const foundExposureAddressColName = this.commonService.session.data['nodeFields'].find(x => x === 'ExposureLocation');
@@ -756,7 +777,7 @@ export class MapComponent extends AppComponentBase implements OnInit, MicobeTrac
 
     initializeMap(address: string) {
 
-        this.codeAddress([address]).then((result: any[]) => {
+        this.codeAddress(["US"]).then((result: any[]) => {
 
             if (result.length > 0) {
                 let latitude = result[0].Latitude;
@@ -774,8 +795,10 @@ export class MapComponent extends AppComponentBase implements OnInit, MicobeTrac
         this.layers.basemap = tileLayer(`https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=${mapTokenKey}`);
         this.layers.satellite = tileLayer(`https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v9/tiles/256/{z}/{x}/{y}?access_token=${mapTokenKey}`);
 
+        console.log('latitude: ' + latitude + ' longitude: ' + longitude + '')
         this.leafletInitialOptions = {
-            zoom: 3,
+            zoom: 4,
+            zoomControl: true,
             maxZoom: 15,
             preferCanvas: true,
             center: latLng([latitude, longitude]),
