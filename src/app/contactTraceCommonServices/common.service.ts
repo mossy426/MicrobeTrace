@@ -1050,7 +1050,26 @@ export class CommonService extends AppComponentBase implements OnInit {
         const auspiceData = auspiceHandler.run(auspice);
         resolve(auspiceData);
       });
-    }
+    };
+
+    openAuspiceUrl(url) {
+      
+      new Promise(resolve => {
+        let auspiceDataHolder = {};
+        this.http.get(url).subscribe((data: Object) => {
+          auspiceDataHolder = {
+            tree: data["tree"],
+            meta: data["meta"],
+            version: data["version"],
+          };
+          const auspiceHandler = new AuspiceHandler(window.context.commonService);
+          const auspiceData = auspiceHandler.run(auspiceDataHolder);
+          resolve(auspiceData);
+        });
+      }).then(this.auspiceCallBack);
+      window.context.commonService.updateNetwork();
+      window.context.commonService.updateStatistics();
+    };
 
     decode(x) {
         return window.context.commonService.decoder.decode(x);
@@ -1109,6 +1128,36 @@ export class CommonService extends AppComponentBase implements OnInit {
         });
     };
 
+      auspiceCallBack(auspiceData) {
+        window.context.commonService.clearData();
+        window.context.commonService.session = window.context.commonService.sessionSkeleton();
+        window.context.commonService.session.meta.startTime = Date.now();
+        window.context.commonService.session.data.tree = auspiceData['tree'];
+        window.context.commonService.session.data.newickString = auspiceData['newick'];
+        let nodeCount = 0;
+        auspiceData['nodes'].forEach(node => {
+          if (!/NODE0*/.exec(node.id)) {
+            const nodeKeys = Object.keys(node);
+            nodeKeys.forEach( key => {
+              if (window.context.commonService.session.data.nodeFields.indexOf(key) === -1) {
+                window.context.commonService.session.data.nodeFields.push(key);
+              }
+              if (! node.hasOwnProperty('origin') ) {
+                node.origin = [];
+              }
+              nodeCount += window.context.commonService.addNode(node, true);
+            });
+          }
+        });
+        let linkCount = 0;
+        auspiceData['links'].forEach(link => {
+          linkCount += window.context.commonService.addLink(link, true);
+        });
+        window.context.commonService.runHamsters();
+        // this.showMessage(` - Parsed ${nodeCount} New Nodes and ${linkCount} new Links from Auspice file.`);
+        this.processData();
+        return nodeCount;
+      };
 
 
     // ported from https://github.com/CDCgov/SeqSpawnR/blob/91d5857dbda5998839a002fbecae0f494dca960a/R/SequenceSpawner.R

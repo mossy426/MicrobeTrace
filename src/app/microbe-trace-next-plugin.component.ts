@@ -82,9 +82,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     displayHelp: boolean = false;
     displayAbout: boolean = false;
     displayStashDialog: boolean = false;
+    displayUrlDialog: boolean = false;
     displayRecallStashDialog: boolean = false;
     displayLedgerLoaderDialog: boolean = false;
     version: string = "0.6.1";
+    auspiceUrlVal: string = '';
 
     saveFileName: string = '';
 
@@ -1671,6 +1673,21 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.displayStashDialog = !this.displayStashDialog;
     }
 
+    DisplayUrlDialog(saveUrl: string) {
+      switch(saveUrl) {
+        case "Open": {
+          const auspiceUrl = this.auspiceUrlVal;
+          this.commonService.openAuspiceUrl(auspiceUrl);
+          break;
+        }
+        case "Cancel": {
+            break;
+        }
+      }
+      this.displayUrlDialog = !this.displayUrlDialog;
+    }
+
+
     ResetTabs() {
         const home = this.homepageTabs.find(x => x.tabTitle === "Files");
         home.isActive = true;
@@ -1809,6 +1826,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             case "Save Session": {
                 this.DisplayStashDialog("Cancel");
                 break;
+            }
+            case "Open URL": {
+              this.DisplayUrlDialog("Cancel");
+              break;
             }
             case "Add Data": {
                 // this.commonService.launchView("files");
