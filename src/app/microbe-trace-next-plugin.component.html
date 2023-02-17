@@ -450,11 +450,11 @@
           </div>
 
        
-        <p-dialog id="global-settings-link-color-table" 
+        <p-dialog class="table-z-index" id="global-settings-link-color-table" 
                     [positionLeft]="GlobalSettingsLinkColorDialogSettings.left" 
                     [positionTop]="GlobalSettingsLinkColorDialogSettings.top" 
                     [(visible)]="GlobalSettingsLinkColorDialogSettings.isVisible"  
-                    header="Link Color Table" [style]="{width: '25vw'}"
+                    header="Link Color Table" [style]="{'z-index': '1'}"
                     (onShow)="SelectedLinkColorTableTypesVariable='Show'"
                     (onHide)="SelectedLinkColorTableTypesVariable='Hide'"
                     >

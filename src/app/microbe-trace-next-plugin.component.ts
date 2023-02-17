@@ -313,8 +313,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
          let cachedLSV = "";
          let cachedView = "";
 
-         console.log('initVariable1 ', this.commonService.session.style.widgets['link-color-variable']);
-
         this.commonService.localStorageService.getItem('default-distance-metric', (err, result) => {
             // Run this code once the value has been
             // loaded from the offline store.

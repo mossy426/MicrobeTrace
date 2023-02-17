@@ -278,7 +278,7 @@ body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active, body .ui-tab
     right: 0;
     bottom: 0;
     backdrop-filter: blur(8px);
-    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    z-index: 4; /* Specify a stack order in case you're using a different order for other elements */
 
     .dnd-input {
         opacity: 0;
@@ -495,3 +495,11 @@ body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active, body .ui-tab
 .custom-file-label::after {
     cursor: pointer;
 }
+
+#global-settings-link-color-table {
+    z-index: 1 !important;
+}
+
+.ui-dialog-draggable {
+    z-index : 2 !important;
+    }
