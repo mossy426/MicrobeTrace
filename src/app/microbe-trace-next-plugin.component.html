@@ -45,12 +45,34 @@
             </div>
           </mat-toolbar>
 
-        <div id="visualwrapper" class="kt-container  kt-grid__item kt-grid__item--fluid " style="height:100%">
+        <div id="visualwrapper" class="kt-container  kt-grid__item kt-grid__item--fluid " style="height:100%; margin: 16px 16px 0 16px;">
             <div class="kt-portlet kt-portlet--mobile" style="height:100%">
                 <div class="kt-portlet__head kt-portlet__head--lg" style="height:100%">
                     <div class="m-portlet__body" style="flex: 1 100%; max-width:100%; height:100%">
-
-                        <p-tabView id="main-tabset" (onClose)="removeTab($event)" (click)="setActiveTabProperties()">
+                        <!-- <div id="tool-btn-container" class="m-portlet">
+                            <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showSettings == true">
+                                <a title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings(i)"><i class="flaticon-settings primary"></i></a>
+                            </span>
+                            <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showExport == true">
+                                <a title="Export Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openExport(i)"><i class="flaticon-download primary"></i></a>
+                            </span>
+                            <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showCenter == true">
+                                <a title="Center Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openCenter(i)"><i class="flaticon-eye primary"></i></a>
+                            </span>
+                            <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showPinAllNodes == true">
+                                <a #pinbutton title="Pin All Nodes" id="pinbutton" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openPinAllNodes(i)"
+                                    [style.background]="commonService.session.network.allPinned ? 'lightblue': 'transparent'"
+                                ><i class="flaticon-pin primary"></i></a>
+                            </span>
+                            <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showRefresh == true">
+                                <a title="Refresh Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openRefreshScreen(i)"><i class="flaticon-refresh primary"></i></a>
+                            </span>
+                            <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showButtonGroup == true">
+                                <p-selectButton #dataSet [options]="dataSetView" [(ngModel)]="dataSetViewSelected" (onOptionClick)="openSelectDataSetScreen(i,$event)"></p-selectButton>
+                            </span>
+                        </div> -->
+                        <golden-layout-root></golden-layout-root>
+                        <!-- <p-tabView id="main-tabset" (onClose)="removeTab($event)" (click)="setActiveTabProperties()">
                                 <p-tabPanel id="homepageTabs{{i}}" *ngFor="let tab of homepageTabs; let i = index" [closable]="i > 0" header={{tab.label}} [selected]="tab.isActive" style="height:100%">
 
                                 <div id="tool-btn-container" class="m-portlet">
@@ -81,7 +103,7 @@
                                 </div>
 
                             </p-tabPanel> 
-                        </p-tabView>
+                        </p-tabView> -->
 
                     </div>
                 </div>

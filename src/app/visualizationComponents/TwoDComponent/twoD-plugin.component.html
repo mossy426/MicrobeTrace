@@ -2,7 +2,24 @@
 
 <span id="tooltip"></span>
 
-<svg id="network" [ngStyle]="svgStyle" (click)="networkWhitespaceClicked()"></svg>
+<div id="tool-btn-container" class="m-portlet">
+    <span style="overflow: visible; position: relative; width: 110px;">
+        <a title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings(i)"><i class="flaticon-settings primary"></i></a>
+    </span>
+    <span style="overflow: visible; position: relative; width: 110px;">
+        <a title="Export Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openExport(i)"><i class="flaticon-download primary"></i></a>
+    </span>
+    <span style="overflow: visible; position: relative; width: 110px;">
+        <a title="Center Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openCenter(i)"><i class="flaticon-eye primary"></i></a>
+    </span>
+    <span style="overflow: visible; position: relative; width: 110px;">
+        <a #pinbutton title="Pin All Nodes" id="pinbutton" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openPinAllNodes(i)"
+            [style.background]="commonService.session.network.allPinned ? 'lightblue': 'transparent'"
+        ><i class="flaticon-pin primary"></i></a>
+    </span>
+</div>
+
+<svg id="network" class="network" [ngStyle]="svgStyle" (click)="networkWhitespaceClicked()"></svg>
 
 <div class="row">
     <div class="col-md-4">

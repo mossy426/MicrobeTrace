@@ -1,7 +1,18 @@
 ﻿<div class="m-content">
+    <div id="tool-btn-container" class="m-portlet">
+        <span style="overflow: visible; position: relative; width: 110px;">
+            <a title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings(i)"><i class="flaticon-settings primary"></i></a>
+        </span>
+        <span style="overflow: visible; position: relative; width: 110px;">
+            <a title="Export Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openExport(i)"><i class="flaticon-download primary"></i></a>
+        </span>
+        <span style="overflow: visible; position: relative; width: 110px;">
+            <a title="Center Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openCenter(i)"><i class="flaticon-eye primary"></i></a>
+        </span>
+    </div>
     <div class="m-portlet__body" style="height: 100%;">
         <br />
-        <div className="phylocanvas" id="phylocanvas" style="height: 700px;"></div>
+        <div className="phylocanvas" id="phylocanvas" style="height: 800px; cursor: grab;"></div>
         <div id="phyloTooltip"></div>
     </div>
 </div>

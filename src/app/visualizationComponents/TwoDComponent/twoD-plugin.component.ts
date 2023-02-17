@@ -171,6 +171,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
     ngOnInit() {
         this.visuals.twoD.commonService.updateNetwork();
+        this.InitView();
     }
 
     InitView() {
