@@ -4,16 +4,16 @@
 
 <div id="tool-btn-container" class="m-portlet">
     <span style="overflow: visible; position: relative; width: 110px;">
-        <a title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings(i)"><i class="flaticon-settings primary"></i></a>
+        <a title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings()"><i class="flaticon-settings primary"></i></a>
     </span>
     <span style="overflow: visible; position: relative; width: 110px;">
-        <a title="Export Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openExport(i)"><i class="flaticon-download primary"></i></a>
+        <a title="Export Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openExport()"><i class="flaticon-download primary"></i></a>
     </span>
     <span style="overflow: visible; position: relative; width: 110px;">
-        <a title="Center Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openCenter(i)"><i class="flaticon-eye primary"></i></a>
+        <a title="Center Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openCenter()"><i class="flaticon-eye primary"></i></a>
     </span>
     <span style="overflow: visible; position: relative; width: 110px;">
-        <a #pinbutton title="Pin All Nodes" id="pinbutton" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openPinAllNodes(i)"
+        <a #pinbutton title="Pin All Nodes" id="pinbutton" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openPinAllNodes()"
             [style.background]="commonService.session.network.allPinned ? 'lightblue': 'transparent'"
         ><i class="flaticon-pin primary"></i></a>
     </span>
