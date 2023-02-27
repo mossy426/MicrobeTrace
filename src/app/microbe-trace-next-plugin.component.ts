@@ -57,6 +57,7 @@ import { Tabulator } from 'tabulator-tables';
 export class MicrobeTraceNextHomeComponent extends AppComponentBase implements AfterViewInit, OnInit, OnDestroy {
 
 
+    // recommit original code
     @ViewChild('stashes') stashes: ElementRef;
 
     public metric: string = "tn93";
