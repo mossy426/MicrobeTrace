@@ -578,36 +578,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         this.onLinkThresholdChange('16');
         this.visuals.microbeTrace.SelectedLinkThresholdVariable = '16';
         this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 16;
-        this.visuals.microbeTrace.commonService.applyAuspice(file.contents).then(auspiceData => {
-          this.visuals.microbeTrace.commonService.clearData();
-          this.visuals.microbeTrace.commonService.session = this.visuals.microbeTrace.commonService.sessionSkeleton();
-          this.visuals.microbeTrace.commonService.session.meta.startTime = Date.now();
-          this.visuals.microbeTrace.commonService.session.data.tree = auspiceData['tree'];
-          this.visuals.microbeTrace.commonService.session.data.newickString = auspiceData['newick'];
-          let nodeCount = 0;
-          auspiceData['nodes'].forEach(node => {
-            if (!/NODE0*/.exec(node.id)) {
-              const nodeKeys = Object.keys(node);
-              nodeKeys.forEach( key => {
-                if (this.visuals.microbeTrace.commonService.session.data.nodeFields.indexOf(key) === -1) {
-                  this.visuals.microbeTrace.commonService.session.data.nodeFields.push(key);
-                }
-                if (! node.hasOwnProperty('origin') ) {
-                  node.origin = [];
-                }
-                nodeCount += this.visuals.microbeTrace.commonService.addNode(node, true);
-              });
-            }
-          });
-          let linkCount = 0;
-          auspiceData['links'].forEach(link => {
-            linkCount += this.visuals.microbeTrace.commonService.addLink(link, true);
-          });
-          this.visuals.microbeTrace.commonService.runHamsters();
-          this.showMessage(` - Parsed ${nodeCount} New Nodes and ${linkCount} new Links from Auspice file.`);
-          if (fileNum === nFiles) this.processData();
-          return nodeCount;
-        });
+        this.visuals.microbeTrace.commonService.applyAuspice(file.contents).then(this.visuals.microbeTrace.commonService.auspiceCallBack);
         this.visuals.microbeTrace.commonService.updateNetwork();
         this.visuals.microbeTrace.commonService.updateStatistics();
         console.log(this.visuals.microbeTrace.commonService.session);
@@ -637,24 +608,90 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         this.showMessage(`Parsing ${file.name} as Link List...`);
         let l = 0;
 
+        let sources = [];
+        let targets = [];
+
         let forEachLink = link => {
           const keys = Object.keys(link);
           const n = keys.length;
           let safeLink = {};
           for (let i = 0; i < n; i++) {
             let key = this.visuals.microbeTrace.commonService.filterXSS(keys[i]);
-            safeLink[key] = this.visuals.microbeTrace.commonService.filterXSS(link[key]);
+            console.log('key is: ',key);
+
+            if(key === "distance") {
+              console.log('key is distance');
+              link[key] = parseFloat(link[key]);
+            }
+            
+            safeLink[key] = link[key];
+            console.log('safelink key is: ',safeLink[key]);
+            console.log('safelink is: x',safeLink);
+
             if (!this.visuals.microbeTrace.commonService.includes(this.visuals.microbeTrace.commonService.session.data.linkFields, key)) {
               this.visuals.microbeTrace.commonService.session.data.linkFields.push(key);
             }
           }
-          l += this.visuals.microbeTrace.commonService.addLink(Object.assign({
-            source: '' + safeLink[file.field1],
-            target: '' + safeLink[file.field2],
-            origin: origin,
-            visible: true,
-            distance: file.field3 === 'None' ? 0 : parseFloat(safeLink[file.field3])
-          }, safeLink), check);
+
+          let src = '' + safeLink[file.field1];
+          let tgt = '' + safeLink[file.field2];
+
+          sources.push(src);
+          targets.push(tgt);
+
+          let srcIndex = targets.findIndex(t => t == src);
+          let tgtIndex = sources.findIndex(s => s == tgt);
+
+          console.log("safe link is: ",safeLink);
+
+          // Link is the same -> bidirectional
+          if(srcIndex != -1 && tgtIndex != -1) {
+              
+            console.log('link same');
+            // Set distance if distance set (field 3)
+            l += this.visuals.microbeTrace.commonService.addLink(Object.assign({
+               source: '' + safeLink[file.field1],
+               target: '' + safeLink[file.field2],
+               origin: origin,
+               visible: true,
+               directed : file.field3 != 'distance' ? true : false,
+               bidirectional: file.field3 != 'distance' ? true : false,
+               distance: file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]),
+               hasDistance : file.field3 != 'distance' ? false : true,
+               distanceOrigin: file.field3 != 'distance' ? '' : file.name
+             }, safeLink), check);
+
+         } else {
+
+          console.log("distance is: ", file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]))
+          // TODO uncomment when testing adding new link
+           console.log('adding 2: ', _.cloneDeep(Object.assign({
+                  source: '' + safeLink[file.field1],
+                  target: '' + safeLink[file.field2],
+                  origin: origin,
+                  visible: true,
+                  directed : file.field3 != 'distance' ? true : false,
+                  bidirectional: file.field3 != 'distance' ? true : false,
+                  distance: file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]),
+                  hasDistance : file.field3 != 'distance' ? false : true,
+                  distanceOrigin: file.field3 != 'distance' ? '' : file.name
+                }, safeLink)));
+
+           l += this.visuals.microbeTrace.commonService.addLink(Object.assign({
+               source: '' + safeLink[file.field1],
+               target: '' + safeLink[file.field2],
+               origin: origin,
+               visible: true,
+               directed : file.field3 != 'distance' ? true : false,
+               distance: file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]),
+               hasDistance : file.field3 != 'distance' ? false : true,
+               distanceOrigin: file.field3 != 'distance' ? '' : file.name
+             }, safeLink), check);
+         }  
+
+         console.log('matrixx1: ',  JSON.stringify(window.context.commonService.temp.matrix));
+
+
         };
 
         if (file.extension === 'xls' || file.extension === 'xlsx') {
@@ -910,7 +947,10 @@ export class FilesComponent extends AppComponentBase implements OnInit {
                   source: source,
                   target: target,
                   origin: origin,
-                  distance: parseFloat(cell)
+                  distance: parseFloat(cell),
+                  directed: false,
+                  hasDistance: true,
+                  distanceOrigin: file.name
                 }, check);
               });
             }
@@ -948,7 +988,9 @@ export class FilesComponent extends AppComponentBase implements OnInit {
               source: source,
               target: labels[j],
               origin: origin,
-              distance: parseFloat(matrix[i][j])
+              distance: parseFloat(matrix[i][j]),
+              distanceOrigin: file.name,
+              hasDistance: true
             }, check);
             links++;
           }

@@ -142,7 +142,8 @@ export default class AuspiceHandler {
           source: matrix.ids[i],
           target: matrix.ids[j],
           distance: matrix.matrix[i][j],
-          origin: []
+          hasDistance: true,
+          distanceOrigin: 'Auspice',
         };
         linkList.push(link);
       }

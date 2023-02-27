@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -43,6 +43,57 @@ import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluste
 import { MatButtonModule, MatInputModule, MatMenuModule, MatToolbarModule, MatSliderModule } from '@angular/material';
 import { DndDirective } from '@shared/dnd.directive';
 
+import { GoldenLayoutModule, GoldenLayoutService, GoldenLayoutConfiguration } from '@embedded-enterprises/ng6-golden-layout';
+import GoldenLayout from 'golden-layout';
+
+// It is required to have JQuery as global in the window object.
+window['$'] = $;
+
+@Component({
+  template: `<h1>Test2</h1>`,
+  selector: `app-tested`,
+})
+export class TestedComponent {
+  constructor() { }
+
+}
+
+const config: GoldenLayoutConfiguration = {
+  components: [
+    {
+      componentName: "FilesComponent",
+      component: FilesComponent
+    },
+    {
+      componentName: "TwoDComponent",
+      component: TwoDComponent
+    },
+    {
+      componentName: "TableComponent",
+      component: TableComponent
+    },
+    {
+      componentName: "MapComponent",
+      component: MapComponent
+    },
+    {
+      componentName: "PhylogeneticComponent",
+      component: PhylogeneticComponent
+    },
+  ],
+  defaultLayout: {
+    content: [{
+        type: 'stack',
+        content:[
+          {
+            type: 'component',
+            componentName: 'FilesComponent',
+            componentState: { label: 'A' }
+           }
+          ]
+    }]
+  }
+};
 
 @NgModule({
   declarations: [
@@ -61,6 +112,7 @@ import { DndDirective } from '@shared/dnd.directive';
     MapComponent,
     GanttComponent,
     TimelineComponent,
+    TestedComponent,
     HeatMapComponent,
     DndDirective,
     PhylogeneticComponent
@@ -71,6 +123,7 @@ import { DndDirective } from '@shared/dnd.directive';
     AppRoutingModule,
     //ngCommon.CommonModule,
     FormsModule,
+    GoldenLayoutModule.forRoot(config),
     HttpClientModule,
     MatButtonModule,
     MatInputModule,
@@ -120,6 +173,7 @@ import { DndDirective } from '@shared/dnd.directive';
     HistogramComponent,
     ThreeDComponent,
     TableComponent,
+    TestedComponent,
     AggregationComponent,
     BubblesComponent,
     FlowDiagramComponent,
