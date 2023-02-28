@@ -41,6 +41,7 @@ import {
     GoldenLayoutService,
     GoldenLayoutConfiguration,
     MultiWindowService,
+    GoldenLayoutComponent,
   } from '@embedded-enterprises/ng6-golden-layout';
 
 import { Tabulator } from 'tabulator-tables';
@@ -59,6 +60,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     // recommit original code
     @ViewChild('stashes') stashes: ElementRef;
+
+    @ViewChild('goldenLayout')
+  goldenLayout: GoldenLayoutComponent;
 
     public metric: string = "tn93";
     public ambiguity: string = "Average";
@@ -369,6 +373,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             $('#add-data-container').fadeTo("slow", 1);
             $('#onload-container').fadeTo("slow", 1);
             $('#tool-btn-container').fadeTo("slow", 1);
+            console.log('instances: ',this.goldenLayout.componentInstances);
         }, 5000);
         
        
@@ -396,10 +401,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
           this.commonService.session.style.widgets = this.commonService.defaultWidgets();
       }
 
-      console.log(this.commonService.session.style.widgets['link-threshold']);
+        console.log('threshold: ', this.commonService.session.style.widgets['link-threshold']);
         this.loadSettings();
  
-        this.homepageTabs[1].isActive = false;
+        // this.homepageTabs[1].isActive = false;
         this.homepageTabs[0].isActive = true;
         $('#overlay').fadeOut();
         $('.ui-tabview-nav').fadeTo("slow", 1);
@@ -524,6 +529,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.visuals.microbeTrace.commonService.setLinkVisibility(true);
         this.visuals.microbeTrace.commonService.setNodeVisibility(true);
 
+        console.log('cluster size changed');
         this.visuals.microbeTrace.updatedVisualization();
 
         this.visuals.microbeTrace.commonService.updateStatistics();
@@ -1295,15 +1301,17 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         this.visuals.microbeTrace.publishUpdateVisualization();
 
-        if (!this.homepageTabs[this.activeTabNdx]) return;
+        console.log('active tab ind: ', this.activeTabIndex,this.homepageTabs[1], this.homepageTabs[this.activeTabIndex]);
+        if (!this.homepageTabs[this.activeTabIndex]) return;
 
-        switch (this.homepageTabs[this.activeTabNdx].label) {
+        console.log('active tab ind2: ', this.homepageTabs[this.activeTabIndex]);
+
+
+        switch (this.homepageTabs[this.activeTabIndex].label) {
             case "2D Network":
 
-                if (this.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef &&
-                    this.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef.instance) {
-                    this.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef.instance.render(false);
-                }
+                this.goldenLayout.componentInstances[1].render(false);
+                console.log('---rendering');
                 break;
 
             case "3D Network":
@@ -1595,13 +1603,18 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     public getfileContent(fileList: FileList) {
 
-        this.homepageTabs.map(x => {
-            if (x.tabTitle === "Files") {
-                if (x.componentRef != null) {
-                    x.componentRef.instance.processFiles(fileList);
-                }
-            }
-        });
+        console.log('process files::');
+        console.log(this.srv.getState());
+        this.srv.removeTab(0,1);
+        this.goldenLayout.componentInstances[0].processFiles(fileList)
+
+        // this.homepageTabs.map(x => {
+        //     // if (x.tabTitle === "Files") {
+        //     //     if (x.componentRef != null) {
+        //     //         x.componentRef.instance.processFiles(fileList);
+        //     //     }
+        //     // }
+        // });
     }
 
     public getSinglefileContent(file: File) {

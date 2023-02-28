@@ -2594,6 +2594,8 @@ export class CommonService extends AppComponentBase implements OnInit {
         // //    }
         // }
 
+        console.log('creating compo')
+        // this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
 
         window.context.commonService.LoadViewEvent.emit(view);
     };

@@ -71,7 +71,10 @@
                                 <p-selectButton #dataSet [options]="dataSetView" [(ngModel)]="dataSetViewSelected" (onOptionClick)="openSelectDataSetScreen(i,$event)"></p-selectButton>
                             </span>
                         </div> -->
-                        <golden-layout-root></golden-layout-root>
+                        <span style="overflow: visible; position: relative; width: 110px;" *ngIf="showButtonGroup == true">
+                            <p-selectButton #dataSet [options]="dataSetView" [(ngModel)]="dataSetViewSelected" (onOptionClick)="openSelectDataSetScreen(i,$event)"></p-selectButton>
+                        </span>
+                        <golden-layout-root #goldenLayout></golden-layout-root>
                         <!-- <p-tabView id="main-tabset" (onClose)="removeTab($event)" (click)="setActiveTabProperties()">
                                 <p-tabPanel id="homepageTabs{{i}}" *ngFor="let tab of homepageTabs; let i = index" [closable]="i > 0" header={{tab.label}} [selected]="tab.isActive" style="height:100%">
 
