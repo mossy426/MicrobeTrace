@@ -578,7 +578,36 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         this.onLinkThresholdChange('16');
         this.visuals.microbeTrace.SelectedLinkThresholdVariable = '16';
         this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 16;
-        this.visuals.microbeTrace.commonService.applyAuspice(file.contents).then(this.visuals.microbeTrace.commonService.auspiceCallBack);
+        this.visuals.microbeTrace.commonService.applyAuspice(file.contents).then(auspiceData => {
+          this.visuals.microbeTrace.commonService.clearData();
+          this.visuals.microbeTrace.commonService.session = this.visuals.microbeTrace.commonService.sessionSkeleton();
+          this.visuals.microbeTrace.commonService.session.meta.startTime = Date.now();
+          this.visuals.microbeTrace.commonService.session.data.tree = auspiceData['tree'];
+          this.visuals.microbeTrace.commonService.session.data.newickString = auspiceData['newick'];
+          let nodeCount = 0;
+          auspiceData['nodes'].forEach(node => {
+            if (!/NODE0*/.exec(node.id)) {
+              const nodeKeys = Object.keys(node);
+              nodeKeys.forEach( key => {
+                if (this.visuals.microbeTrace.commonService.session.data.nodeFields.indexOf(key) === -1) {
+                  this.visuals.microbeTrace.commonService.session.data.nodeFields.push(key);
+                }
+                if (! node.hasOwnProperty('origin') ) {
+                  node.origin = [];
+                }
+                nodeCount += this.visuals.microbeTrace.commonService.addNode(node, true);
+              });
+            }
+          });
+          let linkCount = 0;
+          auspiceData['links'].forEach(link => {
+            linkCount += this.visuals.microbeTrace.commonService.addLink(link, true);
+          });
+          this.visuals.microbeTrace.commonService.runHamsters();
+          this.showMessage(` - Parsed ${nodeCount} New Nodes and ${linkCount} new Links from Auspice file.`);
+          if (fileNum === nFiles) this.processData();
+          return nodeCount;
+        });
         this.visuals.microbeTrace.commonService.updateNetwork();
         this.visuals.microbeTrace.commonService.updateStatistics();
         console.log(this.visuals.microbeTrace.commonService.session);

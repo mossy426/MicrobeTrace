@@ -21,7 +21,6 @@ import { window, TabsetComponent } from 'ngx-bootstrap';
 import { TabView, TabPanel, Button } from 'primeng/primeng';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { SelectItem, TreeNode } from 'primeng/api';
-// import { BpaasLedgerPluginServiceProxy, BlockchainProofHashDto, GetAllBlockByBlockchainLedgerIDDto, OutputblockchainaccessDto, DeleteBlockdetailsDto, LockblockchainledgerDto, OutputlockblockchainledgerDto, DownloadBlockDto, OutputDeleteblockDto, LeidosPluginServiceProxy, Auth, UserServiceProxy, UserRoleDto, UserEditDto, Blockdata, DownloadFilteredBlockDto, OutputGetJurisdictionDtoItem, MarkAllUnreadMessagesOfUserAsReadInput, OutputDownloadFilteredBlock } from '@shared/service-proxies/service-proxies';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AppSessionService } from '@shared/common/session/app-session.service';
 import { DialogSettings } from './helperClasses/dialogSettings';
@@ -52,12 +51,12 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     @ViewChild('stashes') stashes: ElementRef;
 
-    public metric: string = "tn93";
-    public ambiguity: string = "Average";
-    public launchView: string = "2D Network";
-    public threshold: string = "0.015";
+    public metric: string = 'tn93';
+    public ambiguity: string = 'Average';
+    public launchView: string = '2D Network';
+    public threshold: string = '0.015';
 
-    elem : any;
+    elem: any;
     showSettings: boolean = false;
     showExport: boolean = false;
     showCenter: boolean = false;
@@ -85,7 +84,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     displayUrlDialog: boolean = false;
     displayRecallStashDialog: boolean = false;
     displayLedgerLoaderDialog: boolean = false;
-    version: string = "0.6.1";
+    version: string = '0.6.1';
     auspiceUrlVal: string = '';
 
     saveFileName: string = '';
@@ -109,50 +108,50 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         { label: 'None', value: 'None' },
         { label: 'Nearest Neighbor', value: 'Nearest Neighbor' }
     ];
-    SelectedPruneWityTypesVariable: string = "None";
+    SelectedPruneWityTypesVariable: string = 'None';
 
 
     SelectedClusterMinimumSizeVariable: any = 0;
-    SelectedLinkSortVariable: string = "Distance";
+    SelectedLinkSortVariable: string = 'Distance';
     SelectedLinkThresholdVariable: any = parseFloat(this.threshold);
     SelectedDistanceMetricVariable = this.metric;
 
     RevealTypes: any = [
         { label: 'Everything', value: 'Everything' }
     ];
-    SelectedRevealTypesVariable: string = "Everything";
+    SelectedRevealTypesVariable: string = 'Everything';
 
 
     StatisticsTypes: any = [
-        { label: 'Show', value: 'Show' }
-        ,{ label: 'Hide', value: 'Hide' }
+        { label: 'Show', value: 'Show' }, 
+      { label: 'Hide', value: 'Hide' }
     ];
-    SelectedStatisticsTypesVariable: string = "Show";
+    SelectedStatisticsTypesVariable: string = 'Show';
 
-    SelectedColorNodesByVariable: string = "None";
-    SelectedNodeColorVariable: string = "#1f77b4";
-    SelectedLinkColorVariable: string = "#1f77b4";
-    SelectedColorLinksByVariable: string = "origin";
+    SelectedColorNodesByVariable: string = 'None';
+    SelectedNodeColorVariable: string = '#1f77b4';
+    SelectedLinkColorVariable: string = '#1f77b4';
+    SelectedColorLinksByVariable: string = 'origin';
 
-    SelectedTimelineVariable : string = "None";
+    SelectedTimelineVariable: string = 'None';
 
 
     LinkColorTableTypes: any = [
         { label: 'Show', value: 'Show' },
         { label: 'Hide', value: 'Hide' }
     ];
-    SelectedLinkColorTableTypesVariable: string = "Hide";
+    SelectedLinkColorTableTypesVariable: string = 'Hide';
 
     NodeColorTableTypes: any = [
         { label: 'Show', value: 'Show' },
         { label: 'Hide', value: 'Hide' }
     ];
-    SelectedNodeColorTableTypesVariable: string = "Hide";
+    SelectedNodeColorTableTypesVariable: string = 'Hide';
 
 
-    SelectedColorVariable: string = "#ff8300";
-    SelectedBackgroundColorVariable: string = "#ffffff";
-    SelectedApplyStyleVariable: string = "";
+    SelectedColorVariable: string = '#ff8300';
+    SelectedBackgroundColorVariable: string = '#ffffff';
+    SelectedApplyStyleVariable: string = '';
 
 
     activeTabNdx = null;
@@ -407,7 +406,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
      public updateMetric( value: string ) : void {
         this.metric = value;
         console.log('metric updating');
-        console.log('updaating metric: ', this.metric);
+        console.log('updating metric: ', this.metric);
 
         if (this.metric === "SNPs") {
             //Hide Ambiguities
@@ -1673,14 +1672,34 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.displayStashDialog = !this.displayStashDialog;
     }
 
+    getAuspiceName(url: string) {
+      const split = url.split('=');
+      const nameParts = split[1].split('/');
+      return nameParts.join('_');
+      return 'auspice_import_via_url';
+    }
+
     DisplayUrlDialog(saveUrl: string) {
-      switch(saveUrl) {
-        case "Open": {
+      switch (saveUrl) {
+        case 'Open': {
           const auspiceUrl = this.auspiceUrlVal;
-          this.commonService.openAuspiceUrl(auspiceUrl);
+          this.commonService.openAuspiceUrl(auspiceUrl)
+          .then( (out) => {
+            console.log(out);
+            if (out.meta && out.tree) {
+              const auspiceFile = { contents: out, name: this.getAuspiceName(auspiceUrl), extension: 'json'};
+              this.visuals.microbeTrace.commonService.session.files.push(auspiceFile);
+              console.log(this.homepageTabs[0].componentRef);
+              this.homepageTabs[0].componentRef.instance.addToTable(auspiceFile);
+              this.homepageTabs[0].isActive = true;
+              $('#overlay').fadeOut();
+              $('.ui-tabview-nav').fadeTo("slow", 1);
+              $('.m-portlet').fadeTo("slow", 1);
+            }
+          });
           break;
         }
-        case "Cancel": {
+        case 'Cancel': {
             break;
         }
       }
