@@ -9,9 +9,18 @@
     <p-slider [(ngModel)]="dateFilterRangeValues" [style]="{'width':'100%'}" [range]="true" [min]="0" [max]="dateFilterRangeMax" (onSlideEnd)="onDateFilterChange($event)"></p-slider>
 </ng-container>
 
-<br/>
-
-<div #mapContainer>
+<div id="tool-btn-container" class="m-portlet">
+    <span style="overflow: visible; position: relative; width: 110px;">
+        <a title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings()"><i class="flaticon-settings primary"></i></a>
+    </span>
+    <span style="overflow: visible; position: relative; width: 110px;">
+        <a title="Export Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openExport()"><i class="flaticon-download primary"></i></a>
+    </span>
+    <span style="overflow: visible; position: relative; width: 110px;">
+        <a title="Center Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openCenter()"><i class="flaticon-eye primary"></i></a>
+    </span>
+</div>
+<div #mapContainer class="map-container">
     <!-- <div #gmap style="width:100%;height:600px"></div> -->
     <ng-container *ngIf="leafletInitialOptions">
         <div class="mapStyle" leaflet [leafletOptions]="leafletInitialOptions" (leafletMapReady)="onMapReady($event)"

@@ -71,14 +71,8 @@ export class TableComponent extends AppComponentBase implements OnInit, OnDestro
     }
 
     ngOnInit() {
-        this.visuals.tableComp.eventManager.addGlobalEventListener('window', 'node-selected', () => {
-            if (!this.visuals.microbeTrace.homepageTabs.find(x => x.isActive && x.label === 'Table')) {
-                this.visuals.tableComp.setSelectedNodes();
-            }
-        });
-    }
+        // this.InitView();
 
-    InitView() {
         this.visuals.tableComp.IsDataAvailable = (this.visuals.tableComp.commonService.session.data.nodes.length == 0 ? false : true);
 
         if (this.visuals.tableComp.IsDataAvailable == true) {
@@ -86,6 +80,12 @@ export class TableComponent extends AppComponentBase implements OnInit, OnDestro
                 this.visuals.tableComp.createTable(this.visuals.microbeTrace.dataSetViewSelected);
             }
         }
+
+        this.visuals.tableComp.eventManager.addGlobalEventListener('window', 'node-selected', () => {
+            if (!this.visuals.microbeTrace.homepageTabs.find(x => x.isActive && x.label === 'Table')) {
+                this.visuals.tableComp.setSelectedNodes();
+            }
+        });
     }
 
     exportVisualization(event) {

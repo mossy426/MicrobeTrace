@@ -21,6 +21,7 @@ import { StashObjects, StashObject } from '../helperClasses/interfaces';
 import { MicrobeTraceNextVisuals } from '../microbe-trace-next-plugin-visuals';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { GoldenLayoutService } from '@embedded-enterprises/ng6-golden-layout';
 // import { ConsoleReporter } from 'jasmine';
 
 
@@ -407,7 +408,8 @@ export class CommonService extends AppComponentBase implements OnInit {
     constructor(injector: Injector,
         public localStorageService: LocalStorageService,
         public visuals: MicrobeTraceNextVisuals,
-        private http: HttpClient
+        private http: HttpClient,
+        private srv: GoldenLayoutService
     ) {
 
         super(injector);
@@ -832,6 +834,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         $(document).trigger("stop-force-simulation"); // stop previous network ticks so previous polygon won't show up
         $(document).off('.2d');
 
+        console.log('applying session:');
         if(stashObject.session) {
 
         } else {
@@ -2509,88 +2512,90 @@ export class CommonService extends AppComponentBase implements OnInit {
     launchView(view, callback: any = null) {
 
 
-
-
-        //if (!this.temp.componentCache[view]) {
+        // if (!this.temp.componentCache[view]) {
         //    $.get("components/" + view + ".html", response => {
         //        this.temp.componentCache[view] = response;
         //        //This MUST NOT be replace by an arrow function!
-        //        this.layout.registerComponent(view, function (container, state) {
-        //            container.getElement().html(state.text);
-        //        });
+        //     //    this.srv.registerComponent(view, function (container, state) {
+        //     //        container.getElement().html(state.text);
+        //     //    });
+        //     //    this.srv.createNewComponent(this.srv.getRegisteredComponents()[2]);
+
         //        if (callback) {
         //            this.launchView(view, callback);
         //        } else {
         //            return this.launchView(view);
         //        }
         //    });
-        //} else {
-        //    let contentItem = this.layout.contentItems.find(item => item.componentName == view);
-        //    if (contentItem) {
-        //        contentItem.parent.setActiveContentItem(contentItem);
-        //    } else {
-        //        let lastStack = this.peek(this.layout.root.contentItems[0].getItemsByType("stack"));
-        //        if (!lastStack) lastStack = this.layout.root.contentItems[0];
-        //        lastStack.addChild({
-        //            componentName: view,
-        //            componentState: { text: this.temp.componentCache[view] },
-        //            title: this.titleize(view),
-        //            type: "component"
-        //        });
-        //        contentItem = this.peek(lastStack.contentItems);
-        //        contentItem.on("itemDestroyed", () => this.layout.contentItems.splice(this.layout.contentItems.findIndex(item => item === contentItem), 1));
-        //        this.layout.contentItems.push(contentItem);
-        //    }
+        // } else {
+        // //    let contentItem = this.layout.contentItems.find(item => item.componentName == view);
+        // //    if (contentItem) {
+        // //        contentItem.parent.setActiveContentItem(contentItem);
+        // //    } else {
+        // //        let lastStack = this.peek(this.layout.root.contentItems[0].getItemsByType("stack"));
+        // //        if (!lastStack) lastStack = this.layout.root.contentItems[0];
+        // //        lastStack.addChild({
+        // //            componentName: view,
+        // //            componentState: { text: this.temp.componentCache[view] },
+        // //            title: this.titleize(view),
+        // //            type: "component"
+        // //        });
+        // //        contentItem = this.peek(lastStack.contentItems);
+        // //        contentItem.on("itemDestroyed", () => this.layout.contentItems.splice(this.layout.contentItems.findIndex(item => item === contentItem), 1));
+        // //        this.layout.contentItems.push(contentItem);
+        // //    }
 
-        //    contentItem.element.find("select.nodeVariables").html(
-        //        "<option>None</option>" +
-        //        this.session.data.nodeFields.map(field => '<option value="' + field + '">' + this.titleize(field) + "</option>").join("\n")
-        //    );
-        //    contentItem.element.find("select.linkVariables").html(
-        //        "<option>None</option>" +
-        //        this.session.data.linkFields.map(field => '<option value="' + field + '">' + this.titleize(field) + "</option>").join("\n")
-        //    );
-        //    contentItem.element.find("select.mixedVariables").html(
-        //        "<option>None</option>" +
-        //        this.session.data.linkFields.map(field => '<option value="links-' + field + '">Links ' + this.titleize(field) + "</option>").join("\n") +
-        //        this.session.data.nodeFields.map(field => '<option value="nodes-' + field + '">Nodes ' + this.titleize(field) + "</option>").join("\n")
-        //    );
-        //    contentItem.element.find("select.branch-variables").html(
-        //        "<option>None</option>" +
-        //        ["id", "depth", "height", "length", "value"].map(field => '<option value="' + field + '">' + this.titleize(field) + "</option>").join("\n")
-        //    );
-        //    contentItem.element.find(".launch-color-options").click(() => {
-        //        $("#style-tab").show();
-        //        setTimeout(() => $("#global-settings-modal").show(), 250);
-        //    });
-        //    contentItem.element.find(".modal-header").on("mousedown", function () {
-        //        let body = $("body");
-        //        let parent = $(this).parent().parent().parent();
-        //        body.on("mousemove", e => {
-        //            parent
-        //                .css("top", parseFloat(parent.css("top")) + e.originalEvent.movementY + "px")
-        //                .css("left", parseFloat(parent.css("left")) + e.originalEvent.movementX + "px");
-        //        });
-        //        body.one("mouseup", () => body.off("mousemove"));
-        //    });
-        //    if (navigator.onLine) contentItem.element.find(".ifOnline").show();
-        //    for (let id in this.session.style.widgets) {
-        //        let $id = $("#" + id);
-        //        if ($id.length > 0) {
-        //            if (this.includes(["radio", "checkbox"], $id[0].tagName)) {
-        //                if (this.session.style.widgets[id]) $id.click();
-        //            } else {
-        //                $id.val(this.session.style.widgets[id]);
-        //            }
-        //        }
-        //    }
-        //    if (callback) {
-        //        callback(contentItem);
-        //    } else {
-        //        return contentItem;
-        //    }
-        //}
+        // //    contentItem.element.find("select.nodeVariables").html(
+        // //        "<option>None</option>" +
+        // //        this.session.data.nodeFields.map(field => '<option value="' + field + '">' + this.titleize(field) + "</option>").join("\n")
+        // //    );
+        // //    contentItem.element.find("select.linkVariables").html(
+        // //        "<option>None</option>" +
+        // //        this.session.data.linkFields.map(field => '<option value="' + field + '">' + this.titleize(field) + "</option>").join("\n")
+        // //    );
+        // //    contentItem.element.find("select.mixedVariables").html(
+        // //        "<option>None</option>" +
+        // //        this.session.data.linkFields.map(field => '<option value="links-' + field + '">Links ' + this.titleize(field) + "</option>").join("\n") +
+        // //        this.session.data.nodeFields.map(field => '<option value="nodes-' + field + '">Nodes ' + this.titleize(field) + "</option>").join("\n")
+        // //    );
+        // //    contentItem.element.find("select.branch-variables").html(
+        // //        "<option>None</option>" +
+        // //        ["id", "depth", "height", "length", "value"].map(field => '<option value="' + field + '">' + this.titleize(field) + "</option>").join("\n")
+        // //    );
+        // //    contentItem.element.find(".launch-color-options").click(() => {
+        // //        $("#style-tab").show();
+        // //        setTimeout(() => $("#global-settings-modal").show(), 250);
+        // //    });
+        // //    contentItem.element.find(".modal-header").on("mousedown", function () {
+        // //        let body = $("body");
+        // //        let parent = $(this).parent().parent().parent();
+        // //        body.on("mousemove", e => {
+        // //            parent
+        // //                .css("top", parseFloat(parent.css("top")) + e.originalEvent.movementY + "px")
+        // //                .css("left", parseFloat(parent.css("left")) + e.originalEvent.movementX + "px");
+        // //        });
+        // //        body.one("mouseup", () => body.off("mousemove"));
+        // //    });
+        // //    if (navigator.onLine) contentItem.element.find(".ifOnline").show();
+        // //    for (let id in this.session.style.widgets) {
+        // //        let $id = $("#" + id);
+        // //        if ($id.length > 0) {
+        // //            if (this.includes(["radio", "checkbox"], $id[0].tagName)) {
+        // //                if (this.session.style.widgets[id]) $id.click();
+        // //            } else {
+        // //                $id.val(this.session.style.widgets[id]);
+        // //            }
+        // //        }
+        // //    }
+        // //    if (callback) {
+        // //        callback(contentItem);
+        // //    } else {
+        // //        return contentItem;
+        // //    }
+        // }
 
+        console.log('creating compo')
+        // this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
 
         window.context.commonService.LoadViewEvent.emit(view);
     };

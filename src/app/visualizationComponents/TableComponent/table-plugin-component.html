@@ -1,4 +1,13 @@
-﻿<p-multiSelect [options]="SelectedTableData.availableColumns" [(ngModel)]="SelectedTableData.tableColumns"
+﻿<div class="table-wrapper">
+    <div id="tool-btn-container" class="m-portlet">
+        <span style="overflow: visible; position: relative; width: 110px;">
+            <a title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings()"><i class="flaticon-settings primary"></i></a>
+        </span>
+        <span style="overflow: visible; position: relative; width: 110px;">
+            <a title="Export Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openExport()"><i class="flaticon-download primary"></i></a>
+        </span>
+    </div>
+<p-multiSelect [options]="SelectedTableData.availableColumns" [(ngModel)]="SelectedTableData.tableColumns"
     [showToggleAll]=false></p-multiSelect>
 
                 <div class="row align-items-center">
@@ -127,3 +136,4 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </p-dialog><!-- /.modal -->
+</div>

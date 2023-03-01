@@ -1,4 +1,4 @@
-﻿import { ChangeDetectionStrategy, Component, OnInit, Injector, ViewChild, ViewChildren, AfterViewInit, Compiler, TemplateRef, ComponentRef, ViewContainerRef, QueryList, ElementRef, Output, EventEmitter, ChangeDetectorRef, OnDestroy, ViewEncapsulation } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, OnInit, Injector, ViewChild, ViewChildren, AfterViewInit, Compiler, TemplateRef, ComponentRef, ViewContainerRef, QueryList, ElementRef, Output, EventEmitter, ChangeDetectorRef, OnDestroy, ViewEncapsulation, Renderer2 } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
 import { CommonService } from './contactTraceCommonServices/common.service';
 import { FilesComponent } from './filesComponent/files-plugin.component';
@@ -35,6 +35,14 @@ import { EventEmitterService } from '@shared/utils/event-emitter.service';
 // import * as moment from 'moment';
 import moment from 'moment';
 
+import {
+    GoldenLayoutModule,
+    GoldenLayoutService,
+    GoldenLayoutConfiguration,
+    MultiWindowService,
+    GoldenLayoutComponent,
+  } from '@embedded-enterprises/ng6-golden-layout';
+
 import { Tabulator } from 'tabulator-tables';
 
 
@@ -49,12 +57,16 @@ import { Tabulator } from 'tabulator-tables';
 export class MicrobeTraceNextHomeComponent extends AppComponentBase implements AfterViewInit, OnInit, OnDestroy {
 
 
+    // recommit original code
     @ViewChild('stashes') stashes: ElementRef;
 
-    public metric: string = 'tn93';
-    public ambiguity: string = 'Average';
-    public launchView: string = '2D Network';
-    public threshold: string = '0.015';
+    @ViewChild('goldenLayout')
+  goldenLayout: GoldenLayoutComponent;
+
+    public metric: string = "tn93";
+    public ambiguity: string = "Average";
+    public launchView: string = "2D Network";
+    public threshold: string = "0.015";
 
     elem: any;
     showSettings: boolean = false;
@@ -193,7 +205,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
 
-    @ViewChild(TabView) tabView: TabView;
+    // @ViewChild(TabView) tabView: TabView;
     @ViewChild('dataSet') dataSet: Selection;
     @ViewChildren('placeholder', { read: ViewContainerRef }) targets: QueryList<ViewContainerRef>
     @ViewChild('ledgerloader') spinnerElement: ElementRef;
@@ -228,7 +240,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         private cdref: ChangeDetectorRef,
         private eventEmitterService: EventEmitterService,
         // private bpaasLedgerPluginServiceProxy: BpaasLedgerPluginServiceProxy,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private srv: GoldenLayoutService
     ) {
 
 
@@ -247,6 +260,14 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.dataSetView.push({ label: 'Clusters', value: 'Cluster' });
 
         this.dataSetViewSelected = "Node";
+
+        // setTimeout(() => {
+        //     srv.createNewComponent(srv.getRegisteredComponents()[0]);
+        //   }, 1000);
+
+        //   setTimeout(() => {
+        //     srv.createNewComponent(srv.getRegisteredComponents()[0]);
+        //   }, 10000);
     }
 
     ngOnInit() {
@@ -296,8 +317,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
          let cachedLSV = "";
          let cachedView = "";
 
-         console.log('initVariable1 ', this.commonService.session.style.widgets['link-color-variable']);
-
         this.commonService.localStorageService.getItem('default-distance-metric', (err, result) => {
             // Run this code once the value has been
             // loaded from the offline store.
@@ -333,7 +352,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             }
 
             if (cachedView) {
-                this.updateLaunchView(cachedView);
+                // this.updateLaunchView(cachedView);
             }
 
             $("#welcome-title").animate({
@@ -346,11 +365,14 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 marginTop: '0px',
                 opacity: '1'
             }, 1000);
+            this.Viewclick('2D Network');
         }, 3000);
         setTimeout(() => {
             $('#visualwrapper').fadeTo("slow", 1);
             $('#add-data-container').fadeTo("slow", 1);
             $('#onload-container').fadeTo("slow", 1);
+            $('#tool-btn-container').fadeTo("slow", 1);
+            console.log('instances: ',this.goldenLayout.componentInstances);
         }, 5000);
         
        
@@ -378,10 +400,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
           this.commonService.session.style.widgets = this.commonService.defaultWidgets();
       }
 
-      console.log(this.commonService.session.style.widgets['link-threshold']);
+        console.log('threshold: ', this.commonService.session.style.widgets['link-threshold']);
         this.loadSettings();
  
-        this.homepageTabs[1].isActive = false;
+        // this.homepageTabs[1].isActive = false;
         this.homepageTabs[0].isActive = true;
         $('#overlay').fadeOut();
         $('.ui-tabview-nav').fadeTo("slow", 1);
@@ -506,6 +528,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.visuals.microbeTrace.commonService.setLinkVisibility(true);
         this.visuals.microbeTrace.commonService.setNodeVisibility(true);
 
+        console.log('cluster size changed');
         this.visuals.microbeTrace.updatedVisualization();
 
         this.visuals.microbeTrace.commonService.updateStatistics();
@@ -1277,15 +1300,17 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         this.visuals.microbeTrace.publishUpdateVisualization();
 
-        if (!this.homepageTabs[this.activeTabNdx]) return;
+        console.log('active tab ind: ', this.activeTabIndex,this.homepageTabs[1], this.homepageTabs[this.activeTabIndex]);
+        if (!this.homepageTabs[this.activeTabIndex]) return;
 
-        switch (this.homepageTabs[this.activeTabNdx].label) {
+        console.log('active tab ind2: ', this.homepageTabs[this.activeTabIndex]);
+
+
+        switch (this.homepageTabs[this.activeTabIndex].label) {
             case "2D Network":
 
-                if (this.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef &&
-                    this.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef.instance) {
-                    this.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef.instance.render(false);
-                }
+                this.goldenLayout.componentInstances[1].render(false);
+                console.log('---rendering');
                 break;
 
             case "3D Network":
@@ -1373,18 +1398,18 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     ngAfterViewInit() {
 
-        let factory = this.cfr.resolveComponentFactory(FilesComponent);
-        this.cmpRef = this.targets.first.createComponent(factory);
+        // let factory = this.cfr.resolveComponentFactory(FilesComponent);
+        // this.cmpRef = this.targets.first.createComponent(factory);
 
-        this.homepageTabs[0].componentRef = this.cmpRef;
+        // this.homepageTabs[0].componentRef = this.cmpRef;
 
-        this.cmpRef.instance.LoadDefaultVisualizationEvent.subscribe((v) => {
-            console.log('init: ', v);
-            this.loadDefaultVisualization(v);
-            this.publishLoadNewData();
-        });
+        // this.cmpRef.instance.LoadDefaultVisualizationEvent.subscribe((v) => {
+        //     console.log('init: ', v);
+        //     this.loadDefaultVisualization(v);
+        //     this.publishLoadNewData();
+        // });
 
-        this.setActiveTabProperties();
+        // this.setActiveTabProperties();
 
         this.cdref.detectChanges();
     }
@@ -1577,13 +1602,18 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     public getfileContent(fileList: FileList) {
 
-        this.homepageTabs.map(x => {
-            if (x.tabTitle === "Files") {
-                if (x.componentRef != null) {
-                    x.componentRef.instance.processFiles(fileList);
-                }
-            }
-        });
+        console.log('process files::');
+        console.log(this.srv.getState());
+        this.srv.removeTab(0,1);
+        this.goldenLayout.componentInstances[0].processFiles(fileList)
+
+        // this.homepageTabs.map(x => {
+        //     // if (x.tabTitle === "Files") {
+        //     //     if (x.componentRef != null) {
+        //     //         x.componentRef.instance.processFiles(fileList);
+        //     //     }
+        //     // }
+        // });
     }
 
     public getSinglefileContent(file: File) {
@@ -1999,6 +2029,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         console.log('viewClick: ', viewName);
         console.log(this.commonService.session.style.widgets['link-threshold']);
+        console.log('homepage tabs1: ' , this.homepageTabs);
+
         let tabNdx = this.homepageTabs.findIndex(x => x.label == viewName);
         if (viewName == "2d network") {
             viewName = "2D Network";
@@ -2010,24 +2042,48 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
             this.activeTabIndex = this.activeTabIndex + 1;
 
+            switch(viewName) {
+                case "2D Network": 
+                    this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
+                break;
+                case "Table":
+                this.srv.createNewComponent(this.srv.getRegisteredComponents()[2]);
+                break;
+                case "Map":
+                this.srv.createNewComponent(this.srv.getRegisteredComponents()[3]);
+                break;
+                case "Phylogenetic Tree":
+                this.srv.createNewComponent(this.srv.getRegisteredComponents()[4]);
+                break;
+                default:
+                    this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
+
+            }
             
+            // console.log('tabview: ', this.tabView);
             this.addTab(viewName, viewName + this.activeTabIndex, this.activeTabIndex);
+
+            // this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
+
+            // this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
+            console.log('homepage tabs: ' , this.homepageTabs);
+            console.log('get state: ', JSON.stringify(this.srv.getState()['__zone_symbol__value']));
 
             setTimeout(() => {
           
                 console.log('view name: ', viewName);
-                let _type: any = this.GetComponentTypeByName(viewName);
+                // let _type: any = this.GetComponentTypeByName(viewName);
 
-                let factory = this.cfr.resolveComponentFactory(_type);
-                this.cmpRef = this.targets.last.createComponent(factory)
+                // let factory = this.cfr.resolveComponentFactory(_type);
+                // this.cmpRef = this.targets.last.createComponent(factory);
 
-                tabNdx = this.homepageTabs.findIndex(x => x.label == viewName);
-                console.log('tab ind: ', tabNdx);
-                console.log('homepage: ', this.homepageTabs);
-                this.homepageTabs[tabNdx].componentRef = this.cmpRef;
-                this.tabView.tabs[tabNdx].selected = true;
+                // tabNdx = this.homepageTabs.findIndex(x => x.label == viewName);
+                // console.log('tab ind: ', tabNdx);
+                // console.log('homepage: ', this.homepageTabs);
+                // this.homepageTabs[tabNdx].componentRef = this.cmpRef;
+                // this.tabView.tabs[tabNdx].selected = true;
 
-                this.cmpRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
+                // this.cmpRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
 
                 this.setActiveTabProperties();
                 this.loadSettings();
@@ -2056,14 +2112,22 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 */
             }
             else {
-                this.tabView.tabs.map(x => {
 
-                    x.selected = false;
-                    if (x.header.includes(viewName, 0) == true) {
-                        x.selected = true;
+                this.homepageTabs.map(x => {
+                    x.isActive = false;
+                    if (x.label.toLocaleLowerCase().includes(viewName.toLocaleLowerCase(), 0) == true) {
+                        x.isActive = true;
                     }
-
                 });
+
+                // this.tabView.tabs.map(x => {
+
+                //     x.selected = false;
+                //     if (x.header.includes(viewName, 0) == true) {
+                //         x.selected = true;
+                //     }
+
+                // });
 
                 console.log('activeee');
 
@@ -2075,6 +2139,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         const foundTab = this.homepageTabs.find(x => x.label == viewName);
 
+        console.log('found tab: ', foundTab);
         if (foundTab && foundTab.componentRef &&
             foundTab.componentRef.instance.loadSettings) {
               foundTab.componentRef.instance.loadSettings();
@@ -2160,13 +2225,14 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     setActiveTabProperties(tabNdx: number = -1) {
 
-        if (tabNdx === -1) tabNdx = this.tabView.tabs.findIndex(x => x.selected == true);
+
+        if (tabNdx === -1) tabNdx = this.homepageTabs.findIndex(x => x.isActive == true);
 
         let activeComponentName: string = this.homepageTabs[tabNdx].label;
 
-        this.homepageTabs.forEach((item: HomePageTabItem) => {
-            item.isActive = item.label === activeComponentName;
-        });
+        // this.homepageTabs.forEach((item: HomePageTabItem) => {
+        //     item.isActive = item.label === activeComponentName;
+        // });
 
 
 
@@ -2359,25 +2425,27 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         if (!this.homepageTabs[tabNdx].componentRef) {
             setTimeout(() => {
 
-                let _type: any = this.GetComponentTypeByName(activeComponentName);
+                // let _type: any = this.GetComponentTypeByName(activeComponentName);
 
-                let factory = this.cfr.resolveComponentFactory(_type);
+                // let factory = this.cfr.resolveComponentFactory(_type);
 
-                const viewContainerRef = this.targets.filter((element, index) => index === tabNdx);
+                // const viewContainerRef = this.targets.filter((element, index) => index === tabNdx);
 
-                if (viewContainerRef.length > 0) {
+                // if (viewContainerRef.length > 0) {
 
-                    this.cmpRef = viewContainerRef[0].createComponent(factory);
-                }
+                //     this.cmpRef = viewContainerRef[0].createComponent(factory);
+                // }
 
                 tabNdx = this.homepageTabs.findIndex(x => x.label == activeComponentName);
-                this.homepageTabs[tabNdx].componentRef = this.cmpRef;
-                this.tabView.tabs[tabNdx].selected = true;
+                // this.homepageTabs[tabNdx].componentRef = this.cmpRef;
+                // this.tabView.tabs[tabNdx].selected = true;
 
-                this.cmpRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
+                console.log('this cmpRef: ', this.homepageTabs[tabNdx]);
+                // this.cmpRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
 
-                this.homepageTabs[tabNdx].componentRef.instance.InitView();
-                this.homepageTabs[tabNdx].componentRef.instance.onRecallSession();
+                // this.homepageTabs[tabNdx].componentRef.instance.InitView();
+                // this.homepageTabs[tabNdx].componentRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
+                // this.homepageTabs[tabNdx].componentRef.instance.onRecallSession();
 
             });
         } else {
@@ -2420,23 +2488,23 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
 
     removeTab(e: any) {
-        if (e.index > 0) {
+        console.log('remove tabs: ');
+        // if (e.index > 0) {
 
-            this.homepageTabs.splice(e.index, 1);
+        //     this.homepageTabs.splice(e.index, 1);
 
-            if (e.index == this.homepageTabs.length - 1) {
-                this.tabView.activeIndex = this.homepageTabs.length;
-            } else {
-                this.tabView.activeIndex = this.homepageTabs.length - 1;
-            }
+        //     if (e.index == this.homepageTabs.length - 1) {
+        //         this.tabView.activeIndex = this.homepageTabs.length;
+        //     } else {
+        //         this.tabView.activeIndex = this.homepageTabs.length - 1;
+        //     }
 
-            this.setActiveTabProperties();
-        }
+        //     this.setActiveTabProperties();
+        // }
     }
 
     addTab(tabLabel: any, tabTitle: any, tabPosition: any, activate: boolean = true): void {
 
-        console.log('adding tab: ', tabLabel, tabTitle, activate);
         /*/
          * Ensure that all tabs are not selected before we set the next new tab.
          * This will ensure that the newly created component appears on the currently selected tab, 
@@ -2447,10 +2515,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             x.isActive = false;
         });
 
-        this.tabView.tabs.map(x => {
+        // this.tabView.tabs.map(x => {
 
-            x.selected = false;
-        });
+        //     x.selected = false;
+        // });
 
         this.activeTabIndex = tabPosition;
         this.homepageTabs.splice(tabPosition, 0, {
