@@ -1057,7 +1057,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     openAuspiceUrl(url) {
       
-      new Promise(resolve => {
+      return new Promise(resolve => {
         let auspiceDataHolder = {};
         this.http.get(url).subscribe((data: Object) => {
           auspiceDataHolder = {
@@ -1065,11 +1065,11 @@ export class CommonService extends AppComponentBase implements OnInit {
             meta: data["meta"],
             version: data["version"],
           };
-          const auspiceHandler = new AuspiceHandler(window.context.commonService);
-          const auspiceData = auspiceHandler.run(auspiceDataHolder);
-          resolve(auspiceData);
+          // const auspiceHandler = new AuspiceHandler(window.context.commonService);
+          // const auspiceData = auspiceHandler.run(auspiceDataHolder);
+          resolve(auspiceDataHolder);
         });
-      }).then(this.auspiceCallBack);
+      });
       window.context.commonService.updateNetwork();
       window.context.commonService.updateStatistics();
     };
