@@ -433,7 +433,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
     // $.getJSON("../assets/outbreak.microbetrace", window.context.commonService.applySession);
     // Use this when building production (.ie gh-pages branch)
-    $.getJSON("outbreak.microbetrace", window.context.commonService.applySession);        
+    $.getJSON("outbreaknorm.microbetrace", window.context.commonService.applySession);        
   }
 
 

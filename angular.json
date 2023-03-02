@@ -30,7 +30,9 @@
               "src/Logo.png",
               "src/default.microbetrace",
               "src/map.microbetrace",
-              "src/outbreak.microbetrace"
+              "src/outbreak.microbetrace",
+              "src/outbreaknorm.microbetrace",
+              "src/outbreakover.microbetrace"
             ],
             "styles": [
               {
