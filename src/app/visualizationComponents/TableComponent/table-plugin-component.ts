@@ -6,6 +6,7 @@ import { window } from 'ngx-bootstrap';
 import { Table } from 'primeng/table';
 import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
 import { MicrobeTraceNextVisuals } from '../../microbe-trace-next-plugin-visuals';
+import { SelectItem } from 'primeng/api';
 
 
 
@@ -27,6 +28,10 @@ export class TableComponent extends AppComponentBase implements OnInit, OnDestro
     NetworkExportFileTypeList: any = [
         { label: 'xlsx', value: 'xlsx' },
     ];
+
+    dataSetView: SelectItem[];
+    dataSetViewSelected: string;
+    
     SelectedNetworkExportFileTypeListVariable: string = "png";
 
     SelectedTextSizeVariable: any = 14;
@@ -72,6 +77,13 @@ export class TableComponent extends AppComponentBase implements OnInit, OnDestro
 
     ngOnInit() {
         // this.InitView();
+
+        this.dataSetView = [];
+        this.dataSetView.push({ label: 'Nodes', value: 'Node' });
+        this.dataSetView.push({ label: 'Links', value: 'Link' });
+        this.dataSetView.push({ label: 'Clusters', value: 'Cluster' });
+
+        this.dataSetViewSelected = "Node";
 
         this.visuals.tableComp.IsDataAvailable = (this.visuals.tableComp.commonService.session.data.nodes.length == 0 ? false : true);
 

@@ -290,7 +290,8 @@ export class MapComponent extends AppComponentBase implements OnInit, MicobeTrac
             this.loadSettings();
             this.setDefaultAddressFields();
             this.setDateRangeFilterValues();
-        });
+            this.onDataChange(undefined);
+        }, 600);
     }
 
     onMarkerClusterReady(markerCluster: MarkerClusterGroup) {
@@ -397,7 +398,6 @@ export class MapComponent extends AppComponentBase implements OnInit, MicobeTrac
 
                 if (this.commonService.temp.mapData && this.commonService.temp.mapData.zipcodes) {
                     let locationData = this.commonService.temp.mapData.zipcodes.find(x => x.zipcode == n[this.SelectedZipCode]);
-
                     if (locationData != undefined && n[this.SelectedZipCode] != undefined && n[this.SelectedZipCode] != '') {
 
                         dataFound = true;

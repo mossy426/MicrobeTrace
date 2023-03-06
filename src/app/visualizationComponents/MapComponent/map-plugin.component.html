@@ -1,13 +1,13 @@
 ﻿<!--<div id="map" [ngStyle]="svgStyle"></div>-->
 <!--<p-gmap #gmap [options]="options" [overlays]="overlays"  [style]="{'width':'100%','height':'600px'}" (onMapReady)="setMap($event)"></p-gmap>-->
 
-<ng-container *ngIf="SelectedGeospatialTypeVariable === 'On'">
-    <br/>
+<!-- <ng-container *ngIf="SelectedGeospatialTypeVariable === 'On'">
+    <br/> -->
     <!-- <h4>Range <p-calendar [(ngModel)]="dateFilterRangeDates" selectionMode="range" [readonlyInput]="true"></p-calendar></h4> -->
-    <h4>Range: {{dateFilterRangeDates[0] | date: 'shortDate'}} - {{dateFilterRangeDates[1] | date: 'shortDate'}}</h4>
+    <!--<h4>Range: {{dateFilterRangeDates[0] | date: 'shortDate'}} - {{dateFilterRangeDates[1] | date: 'shortDate'}}</h4> -->
     <!-- <h4>Range: {{dateFilterRangeValues[0] + ' - ' + dateFilterRangeValues[1]}}</h4> -->
-    <p-slider [(ngModel)]="dateFilterRangeValues" [style]="{'width':'100%'}" [range]="true" [min]="0" [max]="dateFilterRangeMax" (onSlideEnd)="onDateFilterChange($event)"></p-slider>
-</ng-container>
+    <!--<p-slider [(ngModel)]="dateFilterRangeValues" [style]="{'width':'100%'}" [range]="true" [min]="0" [max]="dateFilterRangeMax" (onSlideEnd)="onDateFilterChange($event)"></p-slider>
+</ng-container> -->
 
 <div id="tool-btn-container" class="m-portlet">
     <span style="overflow: visible; position: relative; width: 110px;">

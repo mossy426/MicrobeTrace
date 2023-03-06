@@ -641,33 +641,44 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     publishUpdateNodeColors() {
-        this.homepageTabs.forEach(tab => {
-            if (tab.componentRef &&
-                tab.componentRef.instance.updateNodeColors) {
-                tab.componentRef.instance.updateNodeColors();
-            }
-        })
+        if(this.goldenLayout.componentInstances[1]) {
+            this.goldenLayout.componentInstances[1].updateNodeColors();
+        }
+        // this.homepageTabs.forEach(tab => {
+        //     if (tab.componentRef &&
+        //         tab.componentRef.instance.updateNodeColors) {
+        //         tab.componentRef.instance.updateNodeColors();
+        //     }
+        // })
     }
 
     publishUpdateVisualization() {
-        this.homepageTabs.forEach(tab => {
-            if (tab.componentRef &&
-                tab.componentRef.instance.updateVisualization) {
-                tab.componentRef.instance.updateVisualization();
-            }
-        })
+        if(this.goldenLayout.componentInstances[1]) {
+            this.goldenLayout.componentInstances[1].updateVisualization();
+        }
+        // this.homepageTabs.forEach(tab => {
+        //     if (tab.componentRef &&
+        //         tab.componentRef.instance.updateVisualization) {
+        //         tab.componentRef.instance.updateVisualization();
+        //     }
+        // })
     }
 
     publishUpdateLinkColor() {
-        this.homepageTabs.forEach(tab => {
-            if (tab.componentRef &&
-                tab.componentRef.instance.updateLinkColor) {
-                tab.componentRef.instance.updateLinkColor();
-            }
-        })
+
+        this.goldenLayout.componentInstances[1].updateLinkColor();
+
+        // this.homepageTabs.forEach(tab => {
+        //     if (tab.componentRef &&
+        //         tab.componentRef.instance.updateLinkColor) {
+        //         tab.componentRef.instance.updateLinkColor();
+        //     }
+        // })
     }
 
     public onLinkColorChanged() : void {
+
+        console.log('color change');
 
         this.commonService.session.style.widgets["link-color"] = this.SelectedLinkColorVariable;
 
@@ -764,7 +775,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
 
                     // Call the updateLinkColor method in the active tab
-                    this.visuals.microbeTrace.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef.instance.updateLinkColor();
+                    this.goldenLayout.componentInstances[1].updateLinkColor();
+                    // this.visuals.microbeTrace.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef.instance.updateLinkColor();
 
                 });
 
@@ -789,7 +801,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                                 .domain(aggregateValues);
                             $("#color-transparency-wrapper").fadeOut();
 
-                            this.visuals.microbeTrace.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef.instance.updateLinkColor();
+                            // this.visuals.microbeTrace.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef.instance.updateLinkColor();
+                            this.goldenLayout.componentInstances[1].updateLinkColor();
 
                         });
                 });
@@ -1313,17 +1326,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 console.log('---rendering');
                 break;
 
-            case "3D Network":
 
-                if (this.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef &&
-                    this.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef.instance) {
-                    this.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef.instance.updateData();
-                    this.visuals.microbeTrace.publishUpdateNodeColors();
-                    this.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef.instance.updateLinkColors();
-                }
-                break;
-
-            case "Histogram":
+            case "PhylogeneticTree":
 
 
                 break;
@@ -1618,13 +1622,15 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     public getSinglefileContent(file: File) {
 
-        this.homepageTabs.map(x => {
-            if (x.tabTitle === "Files") {
-                if (x.componentRef != null) {
-                    x.componentRef.instance.processFile(file);
-                }
-            }
-        });
+        this.goldenLayout.componentInstances[0].processFile(file);
+
+        // this.homepageTabs.map(x => {
+        //     if (x.tabTitle === "Files") {
+        //         if (x.componentRef != null) {
+        //             x.componentRef.instance.processFile(file);
+        //         }
+        //     }
+        // });
     }
 
     public onPanelHide($event) {
@@ -1716,12 +1722,13 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
           this.commonService.openAuspiceUrl(auspiceUrl)
           .then( (out) => {
             console.log(out);
-            if (out.meta && out.tree) {
+            if (out['meta'] && out['tree']) {
               const auspiceFile = { contents: out, name: this.getAuspiceName(auspiceUrl), extension: 'json'};
               this.visuals.microbeTrace.commonService.session.files.push(auspiceFile);
-              console.log(this.homepageTabs[0].componentRef);
-              this.homepageTabs[0].componentRef.instance.addToTable(auspiceFile);
-              this.homepageTabs[0].isActive = true;
+            //   console.log(this.homepageTabs[0].componentRef);
+                this.goldenLayout.componentInstances[0].addToTable(auspiceFile);
+            //   this.homepageTabs[0].componentRef.instance.addToTable(auspiceFile);
+            //   this.homepageTabs[0].isActive = true;
               $('#overlay').fadeOut();
               $('.ui-tabview-nav').fadeTo("slow", 1);
               $('.m-portlet').fadeTo("slow", 1);
@@ -2139,6 +2146,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         const foundTab = this.homepageTabs.find(x => x.label == viewName);
 
+        //TODO: CHange Component Ref
         console.log('found tab: ', foundTab);
         if (foundTab && foundTab.componentRef &&
             foundTab.componentRef.instance.loadSettings) {
@@ -2192,6 +2200,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
                 window.location.reload()
 
+                
                 // this.homepageTabs.forEach(tab => {
                 //     if (tab.componentRef &&
                 //         tab.componentRef.instance.openRefreshScreen) {
@@ -2455,35 +2464,35 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.previousTab = activeComponentName;
     }
 
-    openSettings(tabNdx: any): void {
+    // openSettings(tabNdx: any): void {
 
-        this.activeTabNdx = tabNdx;
-        this.homepageTabs[tabNdx].componentRef.instance.openSettings();
+    //     this.activeTabNdx = tabNdx;
+    //     this.homepageTabs[tabNdx].componentRef.instance.openSettings();
 
-    }
+    // }
 
-    openExport(tabNdx: any): void {
-        this.homepageTabs[tabNdx].componentRef.instance.openExport();
-    }
+    // openExport(tabNdx: any): void {
+    //     this.homepageTabs[tabNdx].componentRef.instance.openExport();
+    // }
 
-    openCenter(tabNdx: any): void {
+    // openCenter(tabNdx: any): void {
 
-        this.homepageTabs[tabNdx].componentRef.instance.openCenter();
+    //     this.homepageTabs[tabNdx].componentRef.instance.openCenter();
 
-    }
+    // }
 
     openPinAllNodes(tabNdx: any): void {
         console.log('open : ', tabNdx);
         this.homepageTabs[tabNdx].componentRef.instance.openPinAllNodes();
     }
 
-    openRefreshScreen(tabNdx: any): void {
-        this.homepageTabs[tabNdx].componentRef.instance.openRefreshScreen();
-    }
+    // openRefreshScreen(tabNdx: any): void {
+    //     this.homepageTabs[tabNdx].componentRef.instance.openRefreshScreen();
+    // }
 
-    openSelectDataSetScreen(tabNdx: any, e: any): void {
-        this.homepageTabs[tabNdx].componentRef.instance.openSelectDataSetScreen(e.option.value.toString().toLowerCase());
-    }
+    // openSelectDataSetScreen(tabNdx: any, e: any): void {
+    //     this.homepageTabs[tabNdx].componentRef.instance.openSelectDataSetScreen(e.option.value.toString().toLowerCase());
+    // }
 
 
 
@@ -2593,21 +2602,25 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     publishLoadNewData() {
-        this.homepageTabs.forEach(tab => {
-            if (tab.componentRef &&
-                tab.componentRef.instance.onLoadNewData) {
-                tab.componentRef.instance.onLoadNewData();
-            }
-        })
+
+        this.goldenLayout.componentInstances[1].onLoadNewData();
+        // this.homepageTabs.forEach(tab => {
+        //     if (tab.componentRef &&
+        //         tab.componentRef.instance.onLoadNewData) {
+        //         tab.componentRef.instance.onLoadNewData();
+        //     }
+        // })
     }
 
     publishFilterDataChange() {
-        this.homepageTabs.forEach(tab => {
-            if (tab.componentRef &&
-                tab.componentRef.instance.onFilterDataChange) {
-                tab.componentRef.instance.onFilterDataChange();
-            }
-        })
+
+        this.goldenLayout.componentInstances[1].onFilterDataChange();
+        // this.homepageTabs.forEach(tab => {
+        //     if (tab.componentRef &&
+        //         tab.componentRef.instance.onFilterDataChange) {
+        //         tab.componentRef.instance.onFilterDataChange();
+        //     }
+        // })
     }
 
     ngOnDestroy(): void {
