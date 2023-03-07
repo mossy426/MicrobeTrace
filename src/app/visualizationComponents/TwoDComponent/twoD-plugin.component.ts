@@ -679,7 +679,6 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         if (this.visuals.twoD.commonService.session.style.widgets['polygons-color-show']) {
             fill = d => this.visuals.twoD.commonService.temp.style.polygonColorMap(d.key);
             opacity = (d) => this.visuals.twoD.commonService.temp.style.polygonAlphaMap(d.key);
-            console.log('fill: ', fill);
         } else {
             opacity = 0.4;
         }

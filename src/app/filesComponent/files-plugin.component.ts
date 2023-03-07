@@ -498,6 +498,8 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
   loadDefaultVisualization(e: string) {
 
+    console.log('loading default visualization');
+
     setTimeout(() => {
 
       this.visuals.microbeTrace.commonService.session.messages = [];
@@ -671,12 +673,12 @@ export class FilesComponent extends AppComponentBase implements OnInit {
           let srcIndex = targets.findIndex(t => t == src);
           let tgtIndex = sources.findIndex(s => s == tgt);
 
-          console.log("safe link is: ",safeLink);
+          // console.log("safe link is: ",safeLink);
 
           // Link is the same -> bidirectional
           if(srcIndex != -1 && tgtIndex != -1) {
               
-            console.log('link same');
+            // console.log('link same');
             // Set distance if distance set (field 3)
             l += this.visuals.microbeTrace.commonService.addLink(Object.assign({
                source: '' + safeLink[file.field1],
@@ -692,19 +694,19 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
          } else {
 
-          console.log("distance is: ", file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]))
+          // console.log("distance is: ", file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]))
           // TODO uncomment when testing adding new link
-           console.log('adding 2: ', _.cloneDeep(Object.assign({
-                  source: '' + safeLink[file.field1],
-                  target: '' + safeLink[file.field2],
-                  origin: origin,
-                  visible: true,
-                  directed : file.field3 != 'distance' ? true : false,
-                  bidirectional: file.field3 != 'distance' ? true : false,
-                  distance: file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]),
-                  hasDistance : file.field3 != 'distance' ? false : true,
-                  distanceOrigin: file.field3 != 'distance' ? '' : file.name
-                }, safeLink)));
+          //  console.log('adding 2: ', _.cloneDeep(Object.assign({
+          //         source: '' + safeLink[file.field1],
+          //         target: '' + safeLink[file.field2],
+          //         origin: origin,
+          //         visible: true,
+          //         directed : file.field3 != 'distance' ? true : false,
+          //         bidirectional: file.field3 != 'distance' ? true : false,
+          //         distance: file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]),
+          //         hasDistance : file.field3 != 'distance' ? false : true,
+          //         distanceOrigin: file.field3 != 'distance' ? '' : file.name
+          //       }, safeLink)));
 
            l += this.visuals.microbeTrace.commonService.addLink(Object.assign({
                source: '' + safeLink[file.field1],
@@ -718,7 +720,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
              }, safeLink), check);
          }  
 
-         console.log('matrixx1: ',  JSON.stringify(window.context.commonService.temp.matrix));
+        //  console.log('matrixx1: ',  JSON.stringify(window.context.commonService.temp.matrix));
 
 
         };
