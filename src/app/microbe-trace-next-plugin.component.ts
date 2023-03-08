@@ -1642,6 +1642,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     public getfileContent(fileList: FileList) {
 
+        this.GlobalSettingsDialogSettings.setVisibility(false);
+        this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
+        this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
+
         console.log('process files::');
         this.srv.removeTab(0,1);
         //remove last homepage tab
