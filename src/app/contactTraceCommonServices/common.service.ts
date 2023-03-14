@@ -2020,9 +2020,9 @@ export class CommonService extends AppComponentBase implements OnInit {
         let clusterCount = 0;
         if (window.context.commonService.session.style.widgets["timeline-date-field"] == 'None') {
             linkCount = vlinks.length;
-            const minSize = window.context.commonService.session.style.widgets['cluster-minimum-size'];
+            // const minSize = window.context.commonService.session.style.widgets['cluster-minimum-size'];
             clusterCount = window.context.commonService.session.data.clusters.filter(
-              cluster => cluster.visible && cluster.nodes >= minSize).length;
+              cluster => cluster.visible && cluster.nodes > 1).length;
             console.log('cluster count 1: ', clusterCount);
         } else {
             let n = vlinks.length;
@@ -2043,6 +2043,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             console.log('cluster count 2: ', clusterCount);
 
         }
+        console.log('vnodes: ', vnodes);
         let singletons = vnodes.filter(d => d.degree == 0).length;
         $("#numberOfSelectedNodes").text(vnodes.filter(d => d.selected).length.toLocaleString());
         $("#numberOfNodes").text(vnodes.length.toLocaleString());
@@ -2952,11 +2953,11 @@ export class CommonService extends AppComponentBase implements OnInit {
                     t = false;
                 for (let n = 0; n < numNodes; n++) {
                     let node = nodes[n];
-                    if (l.source == node.id) {
+                    if (l.source == node._id) {
                         s = true;
                         node.degree++;
                     }
-                    if (l.target == node.id) {
+                    if (l.target == node._id) {
                         t = true;
                         node.degree++;
                     }
