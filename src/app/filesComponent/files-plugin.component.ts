@@ -498,8 +498,6 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
   loadDefaultVisualization(e: string) {
 
-    console.log('loading default visualization');
-
     setTimeout(() => {
 
       this.visuals.microbeTrace.commonService.session.messages = [];
@@ -648,7 +646,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
           let safeLink = {};
           for (let i = 0; i < n; i++) {
             let key = this.visuals.microbeTrace.commonService.filterXSS(keys[i]);
-            console.log('key is: ',key);
+            // console.log('key is: ',key);
 
             if(key === "distance") {
               console.log('key is distance');
@@ -656,8 +654,8 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             }
             
             safeLink[key] = link[key];
-            console.log('safelink key is: ',safeLink[key]);
-            console.log('safelink is: x',safeLink);
+            // console.log('safelink key is: ',safeLink[key]);
+            // console.log('safelink is: x',safeLink);
 
             if (!this.visuals.microbeTrace.commonService.includes(this.visuals.microbeTrace.commonService.session.data.linkFields, key)) {
               this.visuals.microbeTrace.commonService.session.data.linkFields.push(key);

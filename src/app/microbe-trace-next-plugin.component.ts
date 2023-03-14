@@ -45,6 +45,8 @@ import {
 
 import { Tabulator } from 'tabulator-tables';
 
+import { Subscription } from 'rxjs';
+
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Default,
@@ -100,6 +102,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     auspiceUrlVal: string = '';
 
     saveFileName: string = '';
+
+    private subscription: Subscription;
 
 
     // posts: BlockchainProofHashDto[] = new Array<BlockchainProofHashDto>();
@@ -333,7 +337,15 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         setTimeout(() => {
             $('#top-toolbar').fadeTo("slow", 1);
-            console.log('initVariable3 ', this.commonService.session.style.widgets['link-color-variable']);
+            this.homepageTabs[0].componentRef = this.goldenLayout.componentInstances[0];
+
+
+            this.subscription = this.homepageTabs[0].componentRef.LoadDefaultVisualizationEvent.subscribe((v) => {
+                console.log('loading default: ', v);
+                this.loadDefaultVisualization(v);
+                this.publishLoadNewData();
+            });
+            
         }, 1000);
         setTimeout(() => {
             if (cachedLSV) {
@@ -346,8 +358,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                    this.metric = 'tn93';
                    this.threshold = '0.015';
                 }
-
-                console.log('homepage: ',  this.homepageTabs);
 
                this.SelectedLinkThresholdVariable = parseFloat(this.threshold);
                this.SelectedDistanceMetricVariable = this.metric;
@@ -365,15 +375,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 opacity: '1'
             }, 1000);
 
-            console.log('instanceeee: ', this.goldenLayout.componentInstances);
-
-            this.homepageTabs[0].componentRef = this.goldenLayout.componentInstances[0];
-
-            this.homepageTabs[0].componentRef.LoadDefaultVisualizationEvent.subscribe((v) => {
-                console.log('loading default: ', v);
-                this.loadDefaultVisualization(v);
-                this.publishLoadNewData();
-            });
         }, 2000);
         setTimeout(() => {
             $("#welcome-description").animate({
@@ -381,7 +382,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 opacity: '1'
             }, 1000);
 
-            this.Viewclick('2D Network');
 
         }, 3000);
         setTimeout(() => {
@@ -418,7 +418,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
       }
 
         console.log('threshold: ', this.commonService.session.style.widgets['link-threshold']);
-        this.loadSettings();
+        // this.loadSettings();
  
         // this.homepageTabs[1].isActive = false;
         this.homepageTabs[0].isActive = true;
@@ -1352,7 +1352,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         switch (this.homepageTabs[this.activeTabIndex].label) {
             case "2D Network":
 
-                this.goldenLayout.componentInstances[1].render(false);
+                this.goldenLayout.componentInstances[this.activeTabIndex].render(false);
                 console.log('---rendering');
                 break;
 
@@ -1656,7 +1656,15 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.homepageTabs.map(x => {
             if (x.tabTitle === "Files") {
                 if (x.componentRef != null) {
-                    console.log('in iles');
+                    console.log('in iles: ', this.subscription);
+                    this.subscription.unsubscribe();
+                    // console.log('unsubscribed');
+                    this.subscription = this.homepageTabs[0].componentRef.LoadDefaultVisualizationEvent.subscribe((v) => {
+                        console.log('loading default: ', v);
+                        // this.loadSettings();
+                        this.loadDefaultVisualization(v);
+                        this.publishLoadNewData();
+                    });
                     x.componentRef.processFiles(fileList);
                 }
             }
@@ -2610,7 +2618,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.SelectedLinkThresholdVariable = this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"];
         this.onLinkThresholdChanged();
 
-
+        console.log('loading settings node color variable: ', this.visuals.microbeTrace.commonService.session.style.widgets["node-color-variable"]);
         //Styling|Color Nodes By
         this.SelectedColorNodesByVariable = this.visuals.microbeTrace.commonService.session.style.widgets["node-color-variable"];
         this.onColorNodesByChanged();

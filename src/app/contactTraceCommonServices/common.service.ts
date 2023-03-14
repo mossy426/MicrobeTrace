@@ -1782,12 +1782,6 @@ export class CommonService extends AppComponentBase implements OnInit {
         window.context.commonService.session.meta.loadTime = Date.now() - window.context.commonService.session.meta.startTime;
         console.log("Total load time:", window.context.commonService.session.meta.loadTime.toLocaleString(), "ms");
 
-        setTimeout(() => {
-            console.log('launching view: ',window.context.commonService.session.style.widgets['default-view']);
-            window.context.commonService.launchView(window.context.commonService.session.style.widgets['default-view']);
-
-        }, 1000);
-
         this.tagClusters().then(() => {
             window.context.commonService.setClusterVisibility(true);
             window.context.commonService.setLinkVisibility(true);
@@ -1797,6 +1791,13 @@ export class CommonService extends AppComponentBase implements OnInit {
             $("#network-statistics-wrapper").fadeIn();
             // console.log
         });
+
+        setTimeout(() => {
+            console.log('launching view: ',window.context.commonService.session.style.widgets['default-view']);
+            window.context.commonService.launchView(window.context.commonService.session.style.widgets['default-view']);
+
+        }, 1000);
+        
         /*if (localStorage.getItem("stash-auto") == "true") {
             this.temp.autostash = {
                 time: Date.now(),
@@ -2370,9 +2371,10 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         window.context.commonService.session.files = files;
         window.context.commonService.session.meta = meta;
+        window.context.commonService.session.style.widgets = this.defaultWidgets();
+
         if (window.context.commonService.session.style.widgets['default-distance-metric'] !== 'snps' &&
           window.context.commonService.session.style.widgets['link-threshold'] >= 1) {
-          window.context.commonService.session.style.widgets = this.defaultWidgets();
           window.context.commonService.visuals.microbeTrace.SelectedLinkThresholdVariable = window.context.commonService.session.style.widgets['link-threshold'];
           window.context.commonService.visuals.microbeTrace.onLinkThresholdChanged();
         }
@@ -2511,6 +2513,11 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     launchView(view, callback: any = null) {
 
+        console.log('creating compo')
+        // this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
+
+        window.context.commonService.LoadViewEvent.emit(view);
+
 
         // if (!this.temp.componentCache[view]) {
         //    $.get("components/" + view + ".html", response => {
@@ -2594,10 +2601,6 @@ export class CommonService extends AppComponentBase implements OnInit {
         // //    }
         // }
 
-        console.log('creating compo')
-        // this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
-
-        window.context.commonService.LoadViewEvent.emit(view);
     };
 
 
