@@ -1949,6 +1949,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         let n = clusters.length;
         for (let i = 0; i < n; i++) {
             let cluster = clusters[i];
+            // console.log('cluster nodes ', cluster);
             cluster.visible = cluster.nodes >= min;
         }
         if (!silent) $(document).trigger("cluster-visibility");//$window.trigger("cluster-visibility");
@@ -2898,7 +2899,10 @@ export class CommonService extends AppComponentBase implements OnInit {
                 let node: any = {};
                 for (let i = 0; i < numNodes; i++) {
                     let d = nodes[i];
-                    if (d.id == id) {
+                    if (!d._id) {
+                        d._id = d.id;
+                    }
+                    if (d._id == id) {
                         node = d;
                         break;
                     }
@@ -2927,7 +2931,7 @@ export class CommonService extends AppComponentBase implements OnInit {
                 let id = d._id;
                 if (tempnodes.indexOf(id) == -1) {
                     let cluster = {
-                        id: clusters.length > 0 ? clusters.length : 1,
+                        id: clusters.length > 0 ? clusters.length : 0,
                         nodes: 0,
                         links: 0,
                         sum_distances: 0,
@@ -2940,7 +2944,7 @@ export class CommonService extends AppComponentBase implements OnInit {
                     if (tempnodes.length == numNodes) break;
                 }
             }
-
+            
             console.log("Cluster Tagging time:", (Date.now() - start).toLocaleString(), "ms");
 
             start = Date.now();
@@ -2984,9 +2988,14 @@ export class CommonService extends AppComponentBase implements OnInit {
         for (let i = 0; i < n; i++) {
             let node = nodes[i];
             node.visible = true;
+            console.log('node cluster: ', node.cluster);
             let cluster = clusters[node.cluster];
+            console.log('setting clus: ', cluster);
             if (cluster) {
-                cluster.visible = true;
+                // TODO: uncomment if something breaks since this was defaulted to visible
+                // cluster.visible = true;
+                console.log('setting cluster vis: ', cluster);
+                console.log('setting node vis: ', node.visible);
                 node.visible = node.visible && cluster.visible;
             }
             if (dateField != "None") {
@@ -3034,6 +3043,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         let links = window.context.commonService.session.data.links;
         let clusters = window.context.commonService.session.data.clusters;
         let n = links.length;
+        console.log(`Setting Link Visibility with ${metric} ${threshold} ${showNN}`);
 
         for (let i = 0; i < n; i++) {
             let link = links[i];
