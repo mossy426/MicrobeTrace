@@ -520,7 +520,18 @@ export class FilesComponent extends AppComponentBase implements OnInit {
   }
 
   launchClick() {
+
+    const thresholdOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"];
+    const metricOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["default-distance-metric"];
+    const ambiguityOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["ambiguity-resolution-strategy"];
+    const viewOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["default-view"];
+
     this.visuals.microbeTrace.commonService.resetData();
+
+    this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"] = thresholdOnLaunch;
+    this.visuals.microbeTrace.commonService.session.style.widgets["default-distance-metric"] = metricOnLaunch;
+    this.visuals.microbeTrace.commonService.session.style.widgets["ambiguity-resolution-strategy"] = ambiguityOnLaunch;
+    this.visuals.microbeTrace.commonService.session.style.widgets["default-view"] = viewOnLaunch;
 
     this.visuals.microbeTrace.commonService.session.messages = [];
     this.messages = [];
@@ -649,7 +660,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
             // console.log('key is: ',key);
 
             if(key === "distance") {
-              console.log('key is distance');
+              // console.log('key is distance');
               link[key] = parseFloat(link[key]);
             }
             

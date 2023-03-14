@@ -593,7 +593,14 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         }
         else {
             this.visuals.microbeTrace.commonService.session.style.widgets["link-show-nn"] = true;
-            this.visuals.microbeTrace.commonService.updateNetwork();
+
+            if(!this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]) {
+                this.visuals.microbeTrace.commonService.computeMST().then(this.visuals.microbeTrace.commonService.updateNetwork);
+                this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"] = true;
+              } else {
+                this.visuals.microbeTrace.commonService.updateNetwork();
+
+              }
 
             this.visuals.microbeTrace.updatedVisualization();
         }
@@ -1260,6 +1267,19 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = this.SelectedLinkThresholdVariable;
         this.commonService.session.style.widgets["link-threshold"] = parseFloat(this.SelectedLinkThresholdVariable);
         this.threshold = this.SelectedLinkThresholdVariable;
+
+        let minClust = $("#cluster-minimum-size").val();
+        
+
+        // Unset MST construction since links might have been changed
+        this.commonService.session.style.widgets["mst-computed"] = false;
+
+        if (minClust !== "1" ){
+            $("#cluster-minimum-size").val("1");
+            $("#cluster-minimum-size").trigger("change");
+            $("#cluster-minimum-size").val(minClust);
+            $("#cluster-minimum-size").trigger("change");
+        } 
 
         this.commonService.setLinkVisibility(true);
         this.commonService.tagClusters().then(() => {

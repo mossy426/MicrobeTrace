@@ -211,6 +211,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             'map-node-transparency': 0,
             'map-satellite-show': false,
             'map-states-show': true,
+            "mst-computed": false,
             'network-friction': 0.4,
             'network-gravity': 0.05,
             'network-link-strength': 0.124,
@@ -629,7 +630,6 @@ export class CommonService extends AppComponentBase implements OnInit {
         } else {
 
              if (newLink.hasDistance) {
-                console.log('has distance is true');
                 newLink = Object.assign({
                 index: sdlinks.length,
                 source: "",
@@ -1531,7 +1531,7 @@ export class CommonService extends AppComponentBase implements OnInit {
                 }
             }
 
-            console.log('matrixx: ',  JSON.stringify(window.context.commonService.temp.matrix));
+            // console.log('matrixx: ',  JSON.stringify(window.context.commonService.temp.matrix));
 
             console.log("DM Compute time: ", (Date.now() - start).toLocaleString(), "ms");
             resolve(dm);
@@ -1610,6 +1610,35 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         });
     };
+
+    computeMST(): Promise<any> {
+        return new Promise((resolve, reject) => {
+
+            let computer: WorkerModule = new WorkerModule();
+            computer.compute_mstWorker.postMessage({
+                links: window.context.commonService.session.data.links,
+                matrix: window.context.commonService.temp.matrix,
+                epsilon: window.context.commonService.session.style.widgets["filtering-epsilon"],
+                metric: window.context.commonService.session.style.widgets['link-sort-variable']
+            });
+
+            computer.compute_mstWorker.onmessage().subscribe((response) => {
+            if (response.data == "Error") {
+              return reject("MST washed out");
+            }
+            let output = new Uint8Array(response.data.links);
+            console.log("MST Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
+            const start = Date.now();
+            let links = window.context.commonService.session.data.links;
+            const numLinks = links.length;
+            for (let i = 0; i < numLinks; i++) {
+              links[i].nn = output[i] ? true : false;
+            }
+            console.log("MST Merge time: ", (Date.now() - start).toLocaleString(), "ms");
+            resolve();
+          });
+        });
+      };
 
 
     computeNN(): Promise<any> {
@@ -1974,7 +2003,7 @@ export class CommonService extends AppComponentBase implements OnInit {
     };
 
     getVisibleLinks(copy: any = false) {
-        let links = window.context.commonService.session.data.linkFilteredValues;
+        let links = window.context.commonService.session.data.links;
         let n = links.length;
         let out = [],
             link = null;
@@ -2988,14 +3017,14 @@ export class CommonService extends AppComponentBase implements OnInit {
         for (let i = 0; i < n; i++) {
             let node = nodes[i];
             node.visible = true;
-            console.log('node cluster: ', node.cluster);
+            // console.log('node cluster: ', node.cluster);
             let cluster = clusters[node.cluster];
-            console.log('setting clus: ', cluster);
+            // console.log('setting clus: ', cluster);
             if (cluster) {
                 // TODO: uncomment if something breaks since this was defaulted to visible
                 // cluster.visible = true;
-                console.log('setting cluster vis: ', cluster);
-                console.log('setting node vis: ', node.visible);
+                // console.log('setting cluster vis: ', cluster);
+                // console.log('setting node vis: ', node.visible);
                 node.visible = node.visible && cluster.visible;
             }
             if (dateField != "None") {
