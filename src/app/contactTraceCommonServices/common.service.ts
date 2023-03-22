@@ -2053,7 +2053,6 @@ export class CommonService extends AppComponentBase implements OnInit {
             // const minSize = window.context.commonService.session.style.widgets['cluster-minimum-size'];
             clusterCount = window.context.commonService.session.data.clusters.filter(
               cluster => cluster.visible && cluster.nodes > 1).length;
-            console.log('cluster count 1: ', clusterCount);
         } else {
             let n = vlinks.length;
             for (let i = 0; i < n; i++) {
@@ -2073,7 +2072,6 @@ export class CommonService extends AppComponentBase implements OnInit {
             console.log('cluster count 2: ', clusterCount);
 
         }
-        console.log('vnodes: ', vnodes);
         let singletons = vnodes.filter(d => d.degree == 0).length;
         $("#numberOfSelectedNodes").text(vnodes.filter(d => d.selected).length.toLocaleString());
         $("#numberOfNodes").text(vnodes.length.toLocaleString());

@@ -548,7 +548,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.visuals.microbeTrace.commonService.setLinkVisibility(true);
         this.visuals.microbeTrace.commonService.setNodeVisibility(true);
 
-        console.log('cluster size changed');
         this.visuals.microbeTrace.updatedVisualization();
 
         this.visuals.microbeTrace.commonService.updateStatistics();
@@ -1312,6 +1311,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         //Because the network isn't robust to the order in which these operations
         //take place, we just do them all silently and then react as though we did
         //them each after all of them are already done.
+
+        this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.isVisible = true;
+        this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.isVisible = true;
 
         this.visuals.microbeTrace.updatedVisualization();
 
@@ -2149,16 +2151,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             setTimeout(() => {
           
                 console.log('view name: ', viewName);
-                // let _type: any = this.GetComponentTypeByName(viewName);
-
-                // let factory = this.cfr.resolveComponentFactory(_type);
-                // this.cmpRef = this.targets.last.createComponent(factory);
-
-                // tabNdx = this.homepageTabs.findIndex(x => x.label == viewName);
-                // console.log('tab ind: ', tabNdx);
-                // console.log('homepage: ', this.homepageTabs);
-                // this.homepageTabs[tabNdx].componentRef = this.cmpRef;
-                // this.tabView.tabs[tabNdx].selected = true;
 
                 this.goldenLayout.componentInstances[this.goldenLayout.componentInstances.length - 1].DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
 
@@ -2208,7 +2200,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
                 console.log('activeee');
 
-            this.setActiveTabProperties();
+               this.setActiveTabProperties();
                this.loadSettings();
 
             }
@@ -2219,7 +2211,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         //TODO: CHange Component Ref
         console.log('found tab: ', foundTab);
         if (foundTab && foundTab.componentRef &&
-            foundTab.componentRef.loadSettings) {
+            foundTab.componentRef.loadSettings) {                
               foundTab.componentRef.loadSettings();
               if (this.metric === 'snps'){
                 this.commonService.session.style.widgets['default-distance-metric'] = 'snps';
@@ -2638,7 +2630,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.SelectedLinkThresholdVariable = this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"];
         this.onLinkThresholdChanged();
 
-        console.log('loading settings node color variable: ', this.visuals.microbeTrace.commonService.session.style.widgets["node-color-variable"]);
         //Styling|Color Nodes By
         this.SelectedColorNodesByVariable = this.visuals.microbeTrace.commonService.session.style.widgets["node-color-variable"];
         this.onColorNodesByChanged();
