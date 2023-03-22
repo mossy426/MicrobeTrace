@@ -7,7 +7,7 @@
             <a title="Export Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openExport()"><i class="flaticon-download primary"></i></a>
         </span>
         <span id="dataType" style="overflow: visible; position: relative; width: 110px; display: inline;">
-            <p-selectButton #dataSet [options]="dataSetView" [(ngModel)]="dataSetViewSelected" (onOptionClick)="openSelectDataSetScreen(i,$event)"></p-selectButton>
+            <p-selectButton #dataSet [options]="dataSetView" [(ngModel)]="dataSetViewSelected" (onOptionClick)="openSelectDataSetScreen($event)"></p-selectButton>
         </span>
         <p-multiSelect [options]="SelectedTableData.availableColumns" [(ngModel)]="SelectedTableData.tableColumns"[showToggleAll]=false></p-multiSelect>
     </div>
