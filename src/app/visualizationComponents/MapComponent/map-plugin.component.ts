@@ -770,7 +770,7 @@ export class MapComponent extends AppComponentBase implements OnInit, MicobeTrac
         //TODO: put this in a config?
         const mapTokenKey: string = 'sk.eyJ1IjoicndhdHR5IiwiYSI6ImNrY2RuMWlzcDAwMmUyc3A5ejl3ODEzMXoifQ.qpXOouVsI6P8-HOHUWofuQ'
 
-        this.layers.basemap = tileLayer(`https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=${mapTokenKey}`);
+        this.layers.basemap = tileLayer(`http://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png`);
         this.layers.satellite = tileLayer(`https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v9/tiles/256/{z}/{x}/{y}?access_token=${mapTokenKey}`);
 
         this.leafletInitialOptions = {

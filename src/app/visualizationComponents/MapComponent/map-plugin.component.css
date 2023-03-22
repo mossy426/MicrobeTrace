@@ -29,3 +29,16 @@
   .bottom-table{
     font-size: calc((.5vmax));   
 }
+
+.OSM-credit {
+  position: absolute;
+  bottom: 7px;
+  left: 50px;
+  z-index: 2;
+}
+
+.OSM-credit a {
+  color: #4e8bb7 !important;
+  text-decoration: underline !important;
+  cursor: pointer !important;
+}
