@@ -1305,13 +1305,12 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         //let htmlValue: any = $('#node-tooltip-variable').val();
         let htmlValue: any = this.visuals.twoD.SelectedNodeTooltipVariable;
 
-
-        $('#tooltip').css({ top: d3.event.pageY - 28, left: d3.event.pageX + 8, position: 'absolute' });
+        $('#tooltip').css({ top: d3.event.pageY, left: d3.event.pageX, position: 'absolute' });
 
         d3.select('#tooltip')
             .html(d[htmlValue])
-            .style('left', (d3.event.pageX) + 8 + 'px')
-            .style('top', (d3.event.pageY) - 28 + 'px')
+            .style('left', (d3.event.pageX) + 'px')
+            .style('top', (d3.event.pageY) - 120 + 'px')
             .style('z-index', 1000)
             .transition().duration(100)
             .style('opacity', 1)
@@ -1356,13 +1355,13 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         let v: any = this.visuals.twoD.SelectedLinkTooltipVariable;
         if (v == 'None') return;
 
-        $('#tooltip').css({ top: d3.event.pageY - 28, left: d3.event.pageX + 8, position: 'absolute' });
+        $('#tooltip').css({ top: d3.event.pageY, left: d3.event.pageX, position: 'absolute' });
 
 
         d3.select('#tooltip')
             .html((v == 'source' || v == 'target') ? d[v]._id : d[v])
-            .style('left', (d3.event.pageX + 8) + 'px')
-            .style('top', (d3.event.pageY - 28) + 'px')
+            .style('left', (d3.event.pageX) + 'px')
+            .style('top', (d3.event.pageY - 120) + 'px')
             .style('z-index', 1000)
             .transition().duration(100)
             .style('opacity', 1);
