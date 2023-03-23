@@ -1,4 +1,4 @@
-importScripts("assets/papaparse.min.js");
+importScripts("papaparse.min.js");
 
 onmessage = function(e) {
   let start = Date.now();
