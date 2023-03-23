@@ -576,7 +576,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         if (matrix[newLink.source][newLink.target]) {
             let oldLink = matrix[newLink.source][newLink.target];
             let myorigin = this.uniq(newLink.origin.concat(oldLink.origin));
-            console.log(JSON.stringify(myorigin));
+            // console.log(JSON.stringify(myorigin));
 
             // Ensure no empty origins
             myorigin = myorigin.filter(origin => origin != '');
@@ -595,7 +595,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
             oldLink["origin"] = myorigin;
             newLink["origin"] = myorigin;
-            console.log("old link isL " + `${JSON.stringify(oldLink)} ${JSON.stringify(newLink)}`);
+            // console.log("old link isL " + `${JSON.stringify(oldLink)} ${JSON.stringify(newLink)}`);
 
             // Only override if new isn't directed and old may be, and ensure its in the right direction
             if(oldLink.directed) {
@@ -1125,7 +1125,7 @@ export class CommonService extends AppComponentBase implements OnInit {
               const links = data.links;
               const tl = links.length;
               for (let j = 0; j < tl; j++) {
-                console.log('has distance is true: ', JSON.stringify(links[j]));
+                // console.log('has distance is true: ', JSON.stringify(links[j]));
                 nl += window.context.commonService.addLink(
                   Object.assign(links[j], {
                     origin: origin,
