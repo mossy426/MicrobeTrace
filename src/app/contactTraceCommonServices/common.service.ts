@@ -1093,42 +1093,56 @@ export class CommonService extends AppComponentBase implements OnInit {
     };
 
     parseCSVMatrix(file) {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             let check = window.context.commonService.session.files.length > 1;
             const origin = [file.name];
             let nn = 0,
-                nl = 0;
-
-
-
+              nl = 0;        
             let computer: WorkerModule = new WorkerModule();
-            let response = computer.compute_parse_csv_matrixWorker.postMessage(file.contents);
-
-
-            computer.compute_parse_csv_matrixWorker.onmessage().subscribe((response) => {
-
-                const data = JSON.parse(window.context.commonService.decode(new Uint8Array(response.data.data)));
-                console.log("CSV Matrix Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
-                const start = Date.now();
-                const nodes = data.nodes;
-                const tn = nodes.length;
-                for (let i = 0; i < tn; i++) {
-                    nn += window.context.commonService.addNode({
-                        _id: window.context.commonService.filterXSS(nodes[i]),
-                        origin: origin
-                    }, check);
-                }
-                const links = data.links;
-                const tl = links.length;
-                for (let j = 0; j < tl; j++) {
-                    console.log('has distance is true: ', JSON.stringify(links[j]));
-                    nl += window.context.commonService.addLink(Object.assign(links[j], { origin: origin, hasDistance: true, distanceOrigin: origin }), check);
-                }
-                console.log("CSV Matrix Merge time: ", (Date.now() - start).toLocaleString(), "ms");
-                resolve({ nn, nl, tn, tl });
-
-            });
-        });
+            computer.compute_parse_csv_matrixWorker.postMessage(file.contents);
+        
+            computer.compute_parse_csv_matrixWorker.onmessage = (response) => {
+              const data = JSON.parse(
+                window.context.commonService.decode(new Uint8Array(response.data.data))
+              );
+              console.log(
+                'CSV Matrix Transit time: ',
+                (Date.now() - response.data.start).toLocaleString(),
+                'ms'
+              );
+              const start = Date.now();
+              const nodes = data.nodes;
+              const tn = nodes.length;
+              for (let i = 0; i < tn; i++) {
+                nn += window.context.commonService.addNode(
+                  {
+                    _id: window.context.commonService.filterXSS(nodes[i]),
+                    origin: origin,
+                  },
+                  check
+                );
+              }
+              const links = data.links;
+              const tl = links.length;
+              for (let j = 0; j < tl; j++) {
+                console.log('has distance is true: ', JSON.stringify(links[j]));
+                nl += window.context.commonService.addLink(
+                  Object.assign(links[j], {
+                    origin: origin,
+                    hasDistance: true,
+                    distanceOrigin: origin,
+                  }),
+                  check
+                );
+              }
+              console.log(
+                'CSV Matrix Merge time: ',
+                (Date.now() - start).toLocaleString(),
+                'ms'
+              );
+              resolve({ nn, nl, tn, tl });
+            };
+          });
     };
 
       auspiceCallBack(auspiceData) {

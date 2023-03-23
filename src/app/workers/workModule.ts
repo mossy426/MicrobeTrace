@@ -1,18 +1,18 @@
 ﻿import { Injectable, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { InlineWorker } from '../helperClasses/inlineWorker';
-import * as Papa from 'papaparse';
+import Papa from 'papaparse';
 import * as bioseq from 'bioseq';
-
-
-
 
 
 export class WorkerModule implements OnInit {
 
+    public compute_parse_csv_matrixWorker: Worker;
+
     constructor() {
 
-
+        this.compute_parse_csv_matrixWorker = new Worker('assets/parse-csv-matrix.js');
+          
     }
 
     ngOnInit() {
@@ -2849,63 +2849,7 @@ export class WorkerModule implements OnInit {
 
     });
 
-    public compute_parse_csv_matrixWorker = new InlineWorker(() => {
-
-        const compute_parse_csv_matrix = (e): any => {
-
-            let start = Date.now();
-            const text = e.data;
-            let nodeIDs, n;
-            let links = [];
-            Papa.parse(text, {
-                skipEmptyLines: "greedy",
-                fastMode: true,
-                chunk: function (result) {
-                    const rowsInChunk = result.data.length;
-                    for (let rowInChunk = 0; rowInChunk < rowsInChunk; rowInChunk++) {
-                        const row = result.data[rowInChunk];
-                        if (nodeIDs) {
-                            const source = "" + row[0];
-                            for (let j = 1; j < n; j++) {
-                                const target = "" + nodeIDs[j];
-                                if (source == target) continue;
-                                links.push({
-                                    source: source,
-                                    target: target,
-                                    distance: parseFloat(row[j])
-                                });
-                            }
-                        } else {
-                            nodeIDs = row;
-                            n = nodeIDs.length;
-                        }
-                    }
-                },
-                complete: function () {
-                    console.log("CSV Matrix Parse time: ", (Date.now() - start).toLocaleString(), "ms");
-                    start = Date.now();
-                    const encoder = new TextEncoder();
-                    const output = encoder.encode(
-                        JSON.stringify({
-                            links: links,
-                            nodes: nodeIDs.slice(1)
-                        })
-                    ).buffer;
-
-                    let response = {};
-                    response = { data: output, start: start };
-
-                    postMessage(response, null, null);
-                }
-            });
-
-        }
-
-        onmessage = (evt) => {
-            compute_parse_csv_matrix(evt.data);
-        }
-
-    });
+    // public compute_parse_csv_matrixWorker = new Worker('parse-csv-matrix.worker.js');
 
     public compute_align_swWorker = new InlineWorker(() => {
 

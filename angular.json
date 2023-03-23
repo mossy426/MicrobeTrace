@@ -32,7 +32,9 @@
               "src/map.microbetrace",
               "src/outbreak.microbetrace",
               "src/outbreaknorm.microbetrace",
-              "src/outbreakover.microbetrace"
+              "src/outbreakover.microbetrace",
+              "src/assets/parse-csv-matrix.js",
+              "src/assets/papaparse.min.js"
             ],
             "styles": [
               {
