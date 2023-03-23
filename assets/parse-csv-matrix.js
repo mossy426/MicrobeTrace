@@ -1,4 +1,4 @@
-importScripts("/assets/papaparse.min.js");
+importScripts("/MicrobeTrace/assets/papaparse.min.js");
 
 onmessage = function(e) {
   let start = Date.now();
