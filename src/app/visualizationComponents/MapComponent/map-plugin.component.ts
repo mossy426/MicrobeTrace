@@ -390,74 +390,99 @@ export class MapComponent extends AppComponentBase implements OnInit, MicobeTrac
         let cnt: any = 0;
         let dataFound: boolean = false;
 
-        if (this.SelectedZipCode) {
+        let that = this;
+            this.matchCoordinates(function () {
+                that.rerollNodes();
+                that.drawLinks();
+                that.drawNodes();
+                that.resetStack();
+                // that.visuals.gisMap.lmap.flyToBounds(that.layers.nodes().getBounds());
+              }, false);
 
-            this.nodes.forEach(n => {
+        // if (this.SelectedZipCode) {
 
-                cnt = cnt + 1;
+        //     console.log('in zip');
 
-                if (this.commonService.temp.mapData && this.commonService.temp.mapData.zipcodes) {
-                    let locationData = this.commonService.temp.mapData.zipcodes.find(x => x.zipcode == n[this.SelectedZipCode]);
-                    if (locationData != undefined && n[this.SelectedZipCode] != undefined && n[this.SelectedZipCode] != '') {
+        //     this.nodes.forEach(n => {
 
-                        dataFound = true;
+        //         cnt = cnt + 1;
 
-                        n._lat = locationData._lat;
-                        n._lon = locationData._lon;
+        //         if (this.commonService.temp.mapData && this.commonService.temp.mapData.zipcodes) {
+        //             let locationData = this.commonService.temp.mapData.zipcodes.find(x => x.zipcode == n[this.SelectedZipCode]);
+        //             if (locationData != undefined && n[this.SelectedZipCode] != undefined && n[this.SelectedZipCode] != '') {
 
-                        const newLeafletMarker = this.getMarker(locationData._lat, locationData._lon);
-                        this.leafletMarkers.push(newLeafletMarker);
+        //                 dataFound = true;
 
-                    }
-                }
+        //                 n._lat = locationData._lat;
+        //                 n._lon = locationData._lon;
 
-                if (dataFound == true && cnt >= this.nodes.length) {
+        //                 const newLeafletMarker = this.getMarker(locationData._lat, locationData._lon);
+        //                 this.leafletMarkers.push(newLeafletMarker);
 
-                    this.rerollNodes();
-                    this.drawNodes();
-                    this.drawLinks();
-                    this.resetStack();
-                }
-            });
+        //             }
+        //         }
 
-        }
+        //         if (dataFound == true && cnt >= this.nodes.length) {
 
+        //             this.rerollNodes();
+        //             this.drawNodes();
+        //             this.drawLinks();
+        //             this.resetStack();
+        //         }
+        //     });
 
-        if (this.SelectedLatitude != "None" && this.SelectedLongitude != "None") {
-
-
-            var lat = this.SelectedLatitude,
-                lon = this.SelectedLongitude;
-
-            this.nodes.forEach(n => {
-
-                debugger;
-
-                if (typeof n[lat] == 'string') {
-                    n._lat = (this.commonService.includes(n[lat], 'S') ? -1 : 1) * parseFloat(n[lat]);
-                } else {
-                    n._lat = n[lat];
-                }
-                if (typeof n[lon] == 'string') {
-                    n._lon = (this.commonService.includes(n[lon], 'W') ? -1 : 1) * parseFloat(n[lon]);
-                } else {
-                    n._lon = n[lon];
-                }
-            });
-
-            this.rerollNodes();
-            this.drawNodes();
-            this.drawLinks();
-            this.showAllVisibleMarkers();
+        // }
 
 
-        }
+        // if (this.SelectedLatitude != "None" && this.SelectedLongitude != "None") {
 
-        if (this.SelectedGeospatialTypeVariable === 'On') {
-            this.rerollNodes();
-            this.drawNodes();
-            this.drawLinks();
-        }
+
+        //     console.log('in lat');
+
+        //     var lat = this.SelectedLatitude,
+        //         lon = this.SelectedLongitude;
+
+        //     this.nodes.forEach(n => {
+
+        //         debugger;
+
+        //         if (typeof n[lat] == 'string') {
+        //             n._lat = (this.commonService.includes(n[lat], 'S') ? -1 : 1) * parseFloat(n[lat]);
+        //         } else {
+        //             n._lat = n[lat];
+        //         }
+        //         if (typeof n[lon] == 'string') {
+        //             n._lon = (this.commonService.includes(n[lon], 'W') ? -1 : 1) * parseFloat(n[lon]);
+        //         } else {
+        //             n._lon = n[lon];
+        //         }
+        //     });
+
+        //     this.rerollNodes();
+        //     this.drawNodes();
+        //     this.drawLinks();
+        //     this.showAllVisibleMarkers();
+
+
+        // } if (this.SelectedCountry != "None") {
+
+        //     console.log('seelcted country');
+        //     let that = this;
+        //     this.matchCoordinates(function () {
+        //         that.rerollNodes();
+        //         that.drawLinks();
+        //         that.drawNodes();
+        //         that.resetStack();
+        //         // that.visuals.gisMap.lmap.flyToBounds(that.layers.nodes().getBounds());
+        //       }, false);
+
+        // }
+
+        // if (this.SelectedGeospatialTypeVariable === 'On') {
+        //     this.rerollNodes();
+        //     this.drawNodes();
+        //     this.drawLinks();
+        // }
 
     }
 
@@ -958,7 +983,7 @@ export class MapComponent extends AppComponentBase implements OnInit, MicobeTrac
             });
         }
 
-        debugger;
+        // debugger;
 
         if (this.commonService.session.style.widgets['map-field-lat'] !== 'None' && this.commonService.session.style.widgets['map-field-lon'] !== 'None') {
             var lat = this.commonService.session.style.widgets['map-field-lat'],
