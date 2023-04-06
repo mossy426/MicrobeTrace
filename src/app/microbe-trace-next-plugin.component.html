@@ -46,6 +46,24 @@
           </mat-toolbar>
 
         <div id="visualwrapper" class="kt-container  kt-grid__item kt-grid__item--fluid " style="height:100%; margin: 16px 16px 0 16px;">
+            <div id="search-form" class="form-inline navbar-form">
+                <label for="search">Search</label>
+                <div class="autocomplete-wrapper">
+                  <input type="search" id="search" class="form-control form-control-sm" (input)="onSearch()" [(ngModel)]="searchText" placeholder="Nodes">
+                  <ul id="search-results"></ul>
+                </div>
+              <!-- #298 -->
+              <button id="casesensitivebutton" (click)="onCaseSensitiveChange()" type="button" class="btn btn-light btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off" title="Match Case">
+                <span>C</span>
+              </button>     
+              <button id="wholewordbutton" type="button" (click)="onWholeWordChange()" class="btn btn-light btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off" title="Match Whole Word">
+                <span>W</span>
+              </button>      
+        
+              <select [(ngModel)]="searchField" (ngModelChange)="onSearchFieldChange($event)" id="search-field"  class="form-control form-control-sm nodeValues">
+                <option val="id">ID</option>
+              </select>
+            </div>
             <div class="kt-portlet kt-portlet--mobile" style="height:100%">
                 <div class="kt-portlet__head kt-portlet__head--lg" style="height:100%">
                     <div class="m-portlet__body" style="flex: 1 100%; max-width:100%; height:100%">
