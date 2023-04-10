@@ -1522,6 +1522,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         return new Promise(resolve => {
 
             let labels = window.context.commonService.session.data.nodes.map(d => d._id);
+            labels = labels.sort();
             let metric = window.context.commonService.session.style.widgets['link-sort-variable'];
             const n = labels.length;
             let dm = new Array(n);
@@ -1566,7 +1567,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
                 console.log('got dm');
                 computer.compute_treeWorker.postMessage({
-                    labels: Object.keys(window.context.commonService.temp.matrix),
+                    labels: Object.keys(window.context.commonService.temp.matrix).sort(),
                     matrix: dm,
                     round: window.context.commonService.session.style.widgets["tree-round"]
                 });

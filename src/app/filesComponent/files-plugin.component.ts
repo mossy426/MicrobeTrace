@@ -860,6 +860,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
       } else if (file.format === 'node') {
 
         this.showMessage(`Parsing ${file.name} as Node List...`);
+        console.log(file.field1);
 
         let m = 0, n = 0;
 
@@ -1048,6 +1049,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
   processData() {
     let nodes = this.visuals.microbeTrace.commonService.session.data.nodes;
+    console.log(nodes);
     this.visuals.microbeTrace.commonService.session.data.nodeFilteredValues = nodes;
     //Add links for nodes with no edges
     this.uniqueNodes.forEach(x => {
