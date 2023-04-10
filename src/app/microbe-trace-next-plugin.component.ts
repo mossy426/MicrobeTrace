@@ -103,6 +103,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     saveFileName: string = '';
 
+    searchField: string = '';
+    searchText: string = '';
+
     private subscription: Subscription;
 
 
@@ -404,6 +407,127 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     deleteFile(index: number) {
         this.files.splice(index, 1);
     }
+
+    public onSearch() {
+        
+        let nodes = this.visuals.twoD.commonService.session.data.nodes;
+        const n = nodes.length;
+
+        let v = this.searchText;
+        const val = v;
+
+        console.log('text ', v);
+
+        if (v == "") {
+          $('#search-results').html("").hide();
+          for(let i = 0; i < n; i++){
+            nodes[i].selected = false;
+          }
+        } else {
+          $('#search-results').html("").hide();
+          const field = this.commonService.session.style.widgets["search-field"];
+          
+          let dataSet = new Set();
+          for(let i = 0; i < n; i++){
+            let node = nodes[i];
+            if (node[field]) {
+  
+              const encodedField = (node[field]).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+                return '&#'+i.charCodeAt(0)+';';
+             });
+              dataSet.add(`${encodedField}`);
+            }
+          }
+          let dataArray = Array.from(dataSet).sort();
+          //#298
+          if (this.commonService.session.style.widgets["search-whole-word"])  v = '\\b' + v + '\\b';
+          let vre;
+          if (this.commonService.session.style.widgets["search-case-sensitive"])  vre = new RegExp(v);
+          else  vre = new RegExp(v, 'i');
+  
+          dataArray.forEach(element => {
+            if ((element as any).match(vre)) {
+                let $li = $('<li/>')
+                    .html(element as string)
+                    .attr('data-value', element as string);
+                $('#search-results').append($li).show();
+              }
+          });
+
+        let that = this;
+          
+          $('.autocomplete-wrapper li').on('click', function() {
+            let ac_v = $(this).attr('data-value');
+            const ac_val = ac_v;
+            let ac_vre;
+            $('#search').val(ac_v);
+            $('#search-results').html("").hide();
+          
+            if (that.commonService.session.style.widgets["search-whole-word"])  ac_v = '\\b' + ac_v + '\\b';
+            if (that.commonService.session.style.widgets["search-case-sensitive"])  ac_vre = new RegExp(ac_v);
+            else ac_vre = new RegExp(ac_v, 'i');
+  
+            for(let i = 0; i < n; i++){
+
+              let node = nodes[i];
+
+              if (node._id == "30576_KF773420_B90cl28") {
+                console.log('in node: ', _.cloneDeep(node));
+              }
+              if (!node[field]) {
+                node.selected = false;
+              }
+              if (typeof node[field] == "string") {
+                node.selected = ac_vre.test(node[field]);
+              }
+              if (typeof node[field] == "number") {
+                node.selected = (node[field] + "" == ac_val);
+              }
+
+            }
+
+            $(document).trigger("node-selected");
+
+          });
+  
+          for(let i = 0; i < n; i++){
+  
+            let node = nodes[i];
+
+            if (!node[field]) {
+              node.selected = false;
+            }
+            if (typeof node[field] == "string") {
+              node.selected = vre.test(node[field]);
+            }
+            if (typeof node[field] == "number") {
+              node.selected = (node[field] + "" == val);
+            }
+          }
+  
+          if (!nodes.some(node => node.selected)) console.log('no matches');
+        }
+
+        
+        $(document).trigger("node-selected");
+    }
+
+
+    public onSearchFieldChange(ev) {
+        this.commonService.session.style.widgets["search-field"] = ev;
+        this.onSearch();
+    }
+
+    public onWholeWordChange() {
+        this.commonService.session.style.widgets["search-whole-word"] = !this.commonService.session.style.widgets["search-whole-word"];
+        this.onSearch();
+    }
+
+    public onCaseSensitiveChange() {
+        this.commonService.session.style.widgets["search-case-sensitive"] = !this.commonService.session.style.widgets["search-case-sensitive"];
+        this.onSearch();
+    }
+
 
     /**
      * Convert Files list to normal array list

@@ -619,10 +619,9 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
 
 
         this.visuals.twoD.redrawNodes();
-        this.visuals.twoD.updateNodeColors();
         this.visuals.twoD.redrawLabels();
         this.visuals.twoD.redrawNodeBorder();
-
+        this.visuals.twoD.updateNodeColors();
 
         let vlinks = this.visuals.twoD.getVLinks();
         let links = this.visuals.twoD.svg.select('g.links').selectAll('line').data(vlinks)
@@ -1195,7 +1194,6 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
         let that = this;
         function unsetNode(d) {
             if (!d.fixed) {
-                console.log('not fixed');
                 d.fx = null;
                 d.fy = null;
             } else {
@@ -1219,7 +1217,7 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     };
 
     clickHandler(n) {
-        if (d3.event.ctrlKey) {
+        if (d3.event && d3.event.ctrlKey) {
             this.visuals.twoD.commonService.session.data.nodes.find(node => node._id == n._id).selected = !n.selected;
         } else {
             this.visuals.twoD.commonService.session.data.nodes.forEach(node => {
@@ -2160,7 +2158,7 @@ onPolygonColorTableChange(e) {
 
         Array.from(nodes._groups).forEach((x: any)=>{
             x.forEach(y=>{
-                if(!this.visuals.twoD.commonService.session.data.nodeFilteredValues.find(z => y.__data__.index === z.index)){
+                if(!this.visuals.twoD.commonService.session.data.nodes.find(z => y.__data__.index === z.index)){
                     y.style['opacity'] = 0;
                 }
             })
@@ -2199,10 +2197,6 @@ onPolygonColorTableChange(e) {
             });
         }
         else {
-
-            //nodes                
-            //    .attr('stroke', "#FFFFFF")
-            //    .attr('stroke-width', stroke_width)
 
 
             Array.from(nodes._groups).filter(x => {
