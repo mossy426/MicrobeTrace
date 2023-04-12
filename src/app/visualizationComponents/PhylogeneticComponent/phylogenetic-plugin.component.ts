@@ -239,8 +239,29 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   }
 
   styleLeafNode = (node, data) => {
+    let nodes = this.visuals.phylogenetic.commonService.session.data.nodes;
+    const variable = this.visuals.phylogenetic.commonService.session.style.widgets['node-color-variable'];
     d3.select(node).attr('r', this.SelectedLeafNodeSizeVariable);
-    d3.select(node).style('fill', this.SelectedLeafNodeColorVariable);
+    if (variable === 'None') {
+      d3.select(node).style('fill', this.SelectedLeafNodeColorVariable);
+    } else {
+      d3.select(node).style('fill',  d => {
+        const node_values = nodes.filter(m => {
+          if (m._id === d.data.id) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        const node_color = this.visuals.phylogenetic.commonService.temp.style.nodeColorMap(node_values[0][variable]);
+        return node_color;
+      });
+      // d3.select(node).style('opacity', d => this.visuals.phylogenetic.commonService.temp.style.nodeAlphaMap(d[variable]));
+
+        //  this.context.microbeTrace.generateNodeColorTable("#node-color-table-bottom", false);
+    }
+
+
   }
 
   buildTree = (newick) => {
@@ -433,6 +454,7 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   }
 
   updateNodeColors() {
+    let variable = this.visuals.phylogenetic.commonService.session.style.widgets['node-color-variable'];
     const nodeColor = this.visuals.phylogenetic.commonService.session.style.widgets['node-color'];
     this.SelectedLeafNodeColorVariable = nodeColor;
     this.styleTree();
