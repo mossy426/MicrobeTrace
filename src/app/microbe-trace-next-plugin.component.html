@@ -2,47 +2,66 @@
     <div class="m-portlet m-portlet--mobile" style="height:100%;">
 
         <mat-toolbar id="top-toolbar" class="nav-bar">
-            <div class="navbar-logo">
-              <span class="microbe-font">Microbe</span>
-              <span class="trace-font">Trace</span>
-            </div>
-            <div class="menu-items">
-              <button class="navbar-item" mat-button [matMenuTriggerFor]="fileMenu"><i class="far nav-icon flaticon-file-1"></i>File<span class="dropdown-symbol">&#9660;</span></button>
-              <mat-menu #fileMenu="matMenu" overlapTrigger="false">
-                <button mat-menu-item (click)="FileClick('Stash Session')">Stash</button>
-                <button mat-menu-item (click)="FileClick('Recall Session')">Recall</button>
-                <button mat-menu-item (click)="FileClick('Save Session')">Save</button>
-                <button mat-menu-item (click)="FileClick('Open Session')">Open</button>
-                <button mat-menu-item (click)="FileClick('Open URL')">Open URL</button>
-                <button mat-menu-item (click)="FileClick('Add Data')">Add Data</button>
-                <button mat-menu-item (click)="FileClick('New Session')">New</button>
-              </mat-menu>
-              <button class="navbar-item" (click)="DisplayGlobalSettingsDialog()" mat-button><i class="far nav-icon flaticon-cogwheel-2"></i>Settings</button>
-              <button class="navbar-item" mat-button [matMenuTriggerFor]="viewMenu"><i class="far nav-icon flaticon-web"></i>View<span class="dropdown-symbol">&#9660;</span></button>
-              <mat-menu #viewMenu="matMenu" overlapTrigger="false">
-                <button mat-menu-item (click)="Viewclick('2D Network')">2D Network</button>
-                <button mat-menu-item (click)="Viewclick('Table')">Table</button>
-                <button mat-menu-item (click)="Viewclick('Map')">Map</button>
-                <button mat-menu-item (click)="Viewclick('Phylogenetic Tree')">Phylogenetic Tree</button>
-              </mat-menu>
-              <button class="navbar-item" mat-button [matMenuTriggerFor]="windowMenu"><i class="far nav-icon flaticon-web"></i>Window<span class="dropdown-symbol">&#9660;</span></button>
-              <mat-menu #windowMenu="matMenu" overlapTrigger="false">
-                <button mat-menu-item (click)="WindowClick('Reload Screen')">Reload</button>
-                <button mat-menu-item (click)="WindowClick('Fullscreen')">Fullscreen</button>
-                <button mat-menu-item (click)="WindowClick('Settings')">Settings</button>
-              </mat-menu>
-              <button class="navbar-item" mat-button [matMenuTriggerFor]="helpMenu"><i class="far nav-icon flaticon-questions-circular-button"></i>Help<span class="dropdown-symbol">&#9660;</span></button>
-              <mat-menu #helpMenu="matMenu" overlapTrigger="false">
-                <a href="https://github.com/CDCgov/MicrobeTrace/wiki" class="dropdown-item ifOnline" target="_blank" rel="noreferrer noopener" mat-menu-item>Help</a>
-                <a href="https://github.com/CDCgov/MicrobeTrace/issues/new" class="dropdown-item ifOnline" target="_blank" rel="noreferrer noopener" mat-menu-item>Report Bug</a>
-                <button (click)="HelpClick('About')" mat-menu-item>About</button>
-              </mat-menu>
-              <button class="navbar-item" mat-button [matMenuTriggerFor]="langMenu"><i class="far nav-icon flaticon-earth-globe"></i>Language<span class="dropdown-symbol">&#9660;</span></button>
-              <mat-menu #langMenu="matMenu" overlapTrigger="false">
-                <button mat-menu-item >English</button>
-                <button mat-menu-item >Spanish</button>
-              </mat-menu>
-            </div>
+            <!-- <div> -->
+                <div class="navbar-logo">
+                    <span class="microbe-font">Microbe</span>
+                    <span class="trace-font">Trace</span>
+                  </div>
+                  <div class="menu-items">
+                    <button class="navbar-item" mat-button [matMenuTriggerFor]="fileMenu"><i class="far nav-icon flaticon-file-1"></i>File<span class="dropdown-symbol">&#9660;</span></button>
+                    <mat-menu #fileMenu="matMenu" overlapTrigger="false">
+                      <button mat-menu-item (click)="FileClick('Stash Session')">Stash</button>
+                      <button mat-menu-item (click)="FileClick('Recall Session')">Recall</button>
+                      <button mat-menu-item (click)="FileClick('Save Session')">Save</button>
+                      <button mat-menu-item (click)="FileClick('Open Session')">Open</button>
+                      <button mat-menu-item (click)="FileClick('Open URL')">Open URL</button>
+                      <button mat-menu-item (click)="FileClick('Add Data')">Add Data</button>
+                      <button mat-menu-item (click)="FileClick('New Session')">New</button>
+                    </mat-menu>
+                    <button class="navbar-item" (click)="DisplayGlobalSettingsDialog()" mat-button><i class="far nav-icon flaticon-cogwheel-2"></i>Settings</button>
+                    <button class="navbar-item" mat-button [matMenuTriggerFor]="viewMenu"><i class="far nav-icon flaticon-web"></i>View<span class="dropdown-symbol">&#9660;</span></button>
+                    <mat-menu #viewMenu="matMenu" overlapTrigger="false">
+                      <button mat-menu-item (click)="Viewclick('2D Network')">2D Network</button>
+                      <button mat-menu-item (click)="Viewclick('Table')">Table</button>
+                      <button mat-menu-item (click)="Viewclick('Map')">Map</button>
+                      <button mat-menu-item (click)="Viewclick('Phylogenetic Tree')">Phylogenetic Tree</button>
+                    </mat-menu>
+                    <button class="navbar-item" mat-button [matMenuTriggerFor]="windowMenu"><i class="far nav-icon flaticon-web"></i>Window<span class="dropdown-symbol">&#9660;</span></button>
+                    <mat-menu #windowMenu="matMenu" overlapTrigger="false">
+                      <button mat-menu-item (click)="WindowClick('Reload Screen')">Reload</button>
+                      <button mat-menu-item (click)="WindowClick('Fullscreen')">Fullscreen</button>
+                      <button mat-menu-item (click)="WindowClick('Settings')">Settings</button>
+                    </mat-menu>
+                    <button class="navbar-item" mat-button [matMenuTriggerFor]="helpMenu"><i class="far nav-icon flaticon-questions-circular-button"></i>Help<span class="dropdown-symbol">&#9660;</span></button>
+                    <mat-menu #helpMenu="matMenu" overlapTrigger="false">
+                      <a href="https://github.com/CDCgov/MicrobeTrace/wiki" class="dropdown-item ifOnline" target="_blank" rel="noreferrer noopener" mat-menu-item>Help</a>
+                      <a href="https://github.com/CDCgov/MicrobeTrace/issues/new" class="dropdown-item ifOnline" target="_blank" rel="noreferrer noopener" mat-menu-item>Report Bug</a>
+                      <button (click)="HelpClick('About')" mat-menu-item>About</button>
+                    </mat-menu>
+                    <!-- <button class="navbar-item" mat-button [matMenuTriggerFor]="langMenu"><i class="far nav-icon flaticon-earth-globe"></i>Language<span class="dropdown-symbol">&#9660;</span></button>
+                    <mat-menu #langMenu="matMenu" overlapTrigger="false">
+                      <button mat-menu-item >English</button>
+                      <button mat-menu-item >Spanish</button>
+                    </mat-menu> -->
+                  </div>
+            <!-- </div> -->
+            <!-- <div id="search-form" class="form-inline navbar-form">
+                <label for="search">Search</label>
+                <div class="autocomplete-wrapper">
+                  <input type="search" id="search" class="form-control form-control-sm" (input)="onSearch()" [(ngModel)]="searchText" placeholder="Nodes">
+                  <ul id="search-results"></ul>
+                </div>
+              <button id="casesensitivebutton" (click)="onCaseSensitiveChange()" type="button" class="btn btn-light btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off" title="Match Case">
+                <span>C</span>
+              </button>     
+              <button id="wholewordbutton" type="button" (click)="onWholeWordChange()" class="btn btn-light btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off" title="Match Whole Word">
+                <span>W</span>
+              </button>      
+        
+              <select [(ngModel)]="searchField" (ngModelChange)="onSearchFieldChange($event)" id="search-field"  class="form-control form-control-sm nodeValues">
+                <option val="id">ID</option>
+              </select>
+            </div> -->
           </mat-toolbar>
 
         <div id="visualwrapper" class="kt-container  kt-grid__item kt-grid__item--fluid " style="height:100%; margin: 16px 16px 0 16px;">

@@ -280,6 +280,13 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   }
 
   ngOnInit() {
+    let that = this;
+
+    $( document ).on( "node-selected", function( ) {
+
+      that.updateNodeColors();
+
+  });
     this.openTree();
 
   }

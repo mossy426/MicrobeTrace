@@ -93,6 +93,16 @@ export class TableComponent extends AppComponentBase implements OnInit, OnDestro
             }
         }
 
+        let that = this;
+
+        $( document ).on( "node-selected", function( ) {
+
+            if (that.visuals.microbeTrace.homepageTabs.find(x => x.isActive && x.label === 'Table')) {
+                that.visuals.tableComp.setSelectedNodes();
+            }
+
+        });
+
         this.visuals.tableComp.eventManager.addGlobalEventListener('window', 'node-selected', () => {
             if (!this.visuals.microbeTrace.homepageTabs.find(x => x.isActive && x.label === 'Table')) {
                 this.visuals.tableComp.setSelectedNodes();

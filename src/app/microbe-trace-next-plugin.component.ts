@@ -486,6 +486,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
             }
 
+            console.log('node select 1');
+
             $(document).trigger("node-selected");
 
           });
@@ -508,7 +510,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
           if (!nodes.some(node => node.selected)) console.log('no matches');
         }
 
-        
+        console.log('node select 2');
         $(document).trigger("node-selected");
     }
 

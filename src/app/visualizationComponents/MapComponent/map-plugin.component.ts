@@ -274,8 +274,17 @@ export class MapComponent extends AppComponentBase implements OnInit, MicobeTrac
 
         this.hideTooltip();
 
-        this.eventManager.addGlobalEventListener('window', 'node-selected', () => {
-            this.drawNodes();
+        // TODO: remove when not needed
+        // this.eventManager.addGlobalEventListener('window', 'node-selected', () => {
+        //     this.drawNodes();
+        // });
+
+        let that = this;
+
+        $( document ).on( "node-selected", function( ) {
+
+            that.drawNodes();
+
         });
 
     }

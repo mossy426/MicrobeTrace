@@ -12,64 +12,63 @@
         <p-multiSelect [options]="SelectedTableData.availableColumns" [(ngModel)]="SelectedTableData.tableColumns"[showToggleAll]=false></p-multiSelect>
     </div>
 
-                <div class="row align-items-center">
-                    <div class="primeng-datatable-container"
-    [busyIf]="primengTableHelper.isLoading">
-<p-table #dt *ngIf="IsDataAvailable == true && SelectedTableData" 
-    [value]="SelectedTableData.data" 
-    [rowHover]="true"
-    [rows]="10" 
-    [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[10,25,50,75,100]" 
-    [loading]="loading" 
-    [paginator]="true" 
-    [filterDelay]="1000"
-    (onFilter)="onFilter($event)" 
-    selectionMode="{{TableType === 'node' ? 'multiple' : null}}"
-    [(selection)]="SelectedTableData.dataSelection" 
-    (onRowSelect)="onRowSelect($event)"
-    (onRowUnselect)="onRowUnselect($event)" 
-    [scrollable]="true" 
-    ScrollWidth="100%"
-    [resizableColumns]="true" 
-    columnResizeMode="expand"
-    [columns]="SelectedTableData.tableColumns">
-    <!-- [responsive]="true"  -->
-    <!-- [autoLayout]="true" 
-    styleClass="ui-table-responsive"  -->
-    <ng-template pTemplate="colgroup" let-columns>
-        <colgroup>
-            <col *ngFor="let col of SelectedTableData.tableColumns">
-        </colgroup>
-    </ng-template>
-    <ng-template pTemplate="header">
-        <tr [pSelectableRow]="datarow">
-            <th style="width: 150px" pSortableColumn="{{col.field}}" *ngFor="let col of SelectedTableData.tableColumns">
-                {{col.header}}<p-sortIcon field="{{col.field}}"></p-sortIcon>
-            </th>
-        </tr>
-        <tr>
-            <th style="width: 150px"  *ngFor="let col of SelectedTableData.tableColumns">
-                <div class="wrapper">
-                    <select class="filterType" [(ngModel)]="col.filterType" (change)="onTableFilter(col)">
-                        <option *ngFor="let filterType of filterTypes" [ngValue]="filterType.value">{{filterType.label}}
-                        </option>
-                    </select>
-                    <input class="item" pInputText type="text" (input)="onTableFilter(col)"
-                        [(ngModel)]="col.filterValue" class="p-column-filter" style="width:100%;">
-                </div>
-            </th>
-        </tr>
+<div class="row align-items-center">
+    <div class="primeng-datatable-container" [busyIf]="primengTableHelper.isLoading">
+        <p-table #dt *ngIf="IsDataAvailable == true && SelectedTableData" 
+            [value]="SelectedTableData.data" 
+            [rowHover]="true"
+            [rows]="10" 
+            [showCurrentPageReport]="true"
+            [rowsPerPageOptions]="[10,25,50,75,100]" 
+            [loading]="loading" 
+            [paginator]="true" 
+            [filterDelay]="1000"
+            (onFilter)="onFilter($event)" 
+            selectionMode="{{TableType === 'node' ? 'multiple' : null}}"
+            [(selection)]="SelectedTableData.dataSelection" 
+            (onRowSelect)="onRowSelect($event)"
+            (onRowUnselect)="onRowUnselect($event)" 
+            [scrollable]="true" 
+            ScrollWidth="100%"
+            [resizableColumns]="true" 
+            columnResizeMode="expand"
+            [columns]="SelectedTableData.tableColumns">
+            <!-- [responsive]="true"  -->
+            <!-- [autoLayout]="true" 
+            styleClass="ui-table-responsive"  -->
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of SelectedTableData.tableColumns">
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr [pSelectableRow]="datarow">
+                    <th style="width: 150px" pSortableColumn="{{col.field}}" *ngFor="let col of SelectedTableData.tableColumns">
+                        {{col.header}}<p-sortIcon field="{{col.field}}"></p-sortIcon>
+                    </th>
+                </tr>
+                <tr>
+                    <th style="width: 150px"  *ngFor="let col of SelectedTableData.tableColumns">
+                        <div class="wrapper">
+                            <select class="filterType" [(ngModel)]="col.filterType" (change)="onTableFilter(col)">
+                                <option *ngFor="let filterType of filterTypes" [ngValue]="filterType.value">{{filterType.label}}
+                                </option>
+                            </select>
+                            <input class="item" pInputText type="text" (input)="onTableFilter(col)"
+                                [(ngModel)]="col.filterValue" class="p-column-filter" style="width:100%;">
+                        </div>
+                    </th>
+                </tr>
 
-    </ng-template>
-    <ng-template pTemplate="body" let-datarow>
-        <tr class="ui-selectable-row" [pSelectableRow]="datarow">
-            <td style="width: 150px"  *ngFor="let col of SelectedTableData.tableColumns">
-                {{datarow[col.field]}}
-            </td>
-        </tr>
-    </ng-template>
-</p-table>
+            </ng-template>
+            <ng-template pTemplate="body" let-datarow>
+                <tr class="ui-selectable-row" [pSelectableRow]="datarow">
+                    <td style="width: 150px"  *ngFor="let col of SelectedTableData.tableColumns">
+                        {{datarow[col.field]}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
     </div>
 </div>
 
