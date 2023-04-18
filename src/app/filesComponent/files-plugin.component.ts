@@ -1395,10 +1395,17 @@ export class FilesComponent extends AppComponentBase implements OnInit {
         $('#launch').prop('disabled', false).focus();
       };
 
-      $(`#file-${file.name}-field-1`).change(() => parentContext.updateMetadata(file));
-      $(`#file-${file.name}-field-2`).change(() => parentContext.updateMetadata(file));
-      $(`#file-${file.name}-field-3`).change(() => parentContext.updateMetadata(file));
-      $(`[name="options-${file.name}"]`).change(refit);
+      const fileTable = document.getElementById('file-table');
+      const selectElements = fileTable.querySelectorAll('select');
+
+      for (let i = 0; i < selectElements.length; i++) {
+        selectElements[i].addEventListener('change', (event) => {
+          // Handle change event here
+          parentContext.updateMetadata(file);
+        });
+      }
+
+      $(`[name="options-${file.name}"]`).on("change", refit);
       refit();
     }
   };

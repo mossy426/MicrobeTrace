@@ -2919,6 +2919,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         if (small == "3d network") return "3D Network";
         if (small == "geo map") return "Map";
         if (small == "nn") return "Nearest Neighbor";
+        return title;
         return small.replace(/(?:^|\s|-)\S/g, c => c.toUpperCase());
     };
 
