@@ -501,20 +501,6 @@ export class CommonService extends AppComponentBase implements OnInit {
         return typeof a == 'number';
     };
 
-    uniq(a: any) {
-        let seen = {};
-        let out = [];
-        let len = a.length;
-        let j = 0;
-        for (let i = 0; i < len; i++) {
-            let item = a[i];
-            if (seen[item] !== 1) {
-                seen[item] = 1;
-                out[j++] = item;
-            }
-        }
-        return out;
-    }
 
     addNode(newNode: any, check: any = null) {
 
@@ -562,7 +548,8 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     addLink(newLink: any, check: any = true) {
 
-        let matrix = window.context.commonService.temp.matrix;
+        const serv = window.context.commonService;
+        const matrix = serv.temp.matrix;
 
         if (!matrix[newLink.source]) {
             matrix[newLink.source] = {};
@@ -572,7 +559,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         }
         if (newLink.source == newLink.target) return 0;
         let linkIsNew = 1;
-        let sdlinks = window.context.commonService.session.data.links;
+        let sdlinks = serv.session.data.links;
         if (matrix[newLink.source][newLink.target]) {
             let oldLink = matrix[newLink.source][newLink.target];
             let myorigin = this.uniq(newLink.origin.concat(oldLink.origin));
@@ -621,7 +608,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             }
 
             linkIsNew = 0;
-        } else if (window.context.commonService.temp.matrix[newLink.target][newLink.source]) {
+        } else if (serv.temp.matrix[newLink.target][newLink.source]) {
             console.warn("This scope should be unreachable. If you're using this code, something's wrong.");
             let oldLink = matrix[newLink.target][newLink.source];
             let origin = this.uniq(newLink.origin.concat(oldLink.origin));
@@ -658,9 +645,25 @@ export class CommonService extends AppComponentBase implements OnInit {
             linkIsNew = 1;
         }
 
-        window.context.commonService.session.data.linkFilteredValues = [...window.context.commonService.session.data.links];
+        // TODO Remove when not needed
+        // window.context.commonService.session.data.linkFilteredValues = [...window.context.commonService.session.data.links];
         return linkIsNew;
     };
+
+    uniq(a: any) {
+        let seen = {};
+        let out = [];
+        let len = a.length;
+        let j = 0;
+        for (let i = 0; i < len; i++) {
+            let item = a[i];
+            if (seen[item] !== 1) {
+                seen[item] = 1;
+                out[j++] = item;
+            }
+        }
+        return out;
+    }
 
     createPolygonColorMap = () => {
         if (!window.context.commonService.temp.polygonGroups || !window.context.commonService.session.style.widgets['polygons-color-show']) {
