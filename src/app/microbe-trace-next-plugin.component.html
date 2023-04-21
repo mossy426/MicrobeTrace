@@ -491,8 +491,8 @@
 
        
         <p-dialog class="table-z-index" id="global-settings-link-color-table" 
-                    [positionLeft]="GlobalSettingsLinkColorDialogSettings.left" 
-                    [positionTop]="GlobalSettingsLinkColorDialogSettings.top" 
+                    [positionLeft]="GlobalSettingsLinkColorDialogSettings.linkLeft" 
+                    [positionTop]="GlobalSettingsLinkColorDialogSettings.linkTop" 
                     [(visible)]="GlobalSettingsLinkColorDialogSettings.isVisible"  
                     header="Link Color Table" [style]="{'z-index': '1'}"
                     (onShow)="SelectedLinkColorTableTypesVariable='Show'"
@@ -509,8 +509,8 @@
 
 
         <p-dialog id="global-settings-node-color-table" 
-                    [positionLeft]="GlobalSettingsNodeColorDialogSettings.left" 
-                    [positionTop]="GlobalSettingsNodeColorDialogSettings.top" 
+                    [positionLeft]="GlobalSettingsNodeColorDialogSettings.nodeLeft" 
+                    [positionTop]="GlobalSettingsNodeColorDialogSettings.nodeTop" 
                     [(visible)]="GlobalSettingsNodeColorDialogSettings.isVisible"  
                     header="Node Color Table" [style]="{width: '25vw'}"
                     (onShow)="SelectedNodeColorTableTypesVariable='Show'"

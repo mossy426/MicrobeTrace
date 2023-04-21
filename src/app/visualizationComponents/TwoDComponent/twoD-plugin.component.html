@@ -456,8 +456,8 @@
 </div>
 
     <p-dialog id="node-symbol-table-wrapper" 
-                [positionLeft]="NodeSymbolTableWrapperDialogSettings.left" 
-                [positionTop]="NodeSymbolTableWrapperDialogSettings.top" 
+                [positionLeft]="NodeSymbolTableWrapperDialogSettings.shapeLeft" 
+                [positionTop]="NodeSymbolTableWrapperDialogSettings.shapeTop" 
                 [(visible)]="NodeSymbolTableWrapperDialogSettings.isVisible"  
                 header="Node Symbol Selection Table" 
                 [style]="{width: '25vw'}" 
@@ -492,8 +492,8 @@
     </p-dialog>
 
     <p-dialog id="polygon-color-table-wrapper" 
-                [positionLeft]="PolygonColorTableWrapperDialogSettings.left" 
-                [positionTop]="PolygonColorTableWrapperDialogSettings.top" 
+                [positionLeft]="PolygonColorTableWrapperDialogSettings.polygonLeft" 
+                [positionTop]="PolygonColorTableWrapperDialogSettings.polygonTop" 
                 [(visible)]="PolygonColorTableWrapperDialogSettings.isVisible"  
                 header="Polygon Color Selection Table" 
                 [style]="{width: '25vw'}" 

@@ -3,8 +3,24 @@ import { CommonService } from "../contactTraceCommonServices/common.service";
 export class DialogSettings {
     public isVisible: boolean = false;
 
-    public top: number = 0;
-    public left: number = 0;
+    public top: number = 200;
+    public left: number = 450;
+
+    // Link Color
+    public linkTop: number = 200;
+    public linkLeft: number = 40;
+
+    // Node Color
+    public nodeTop: number = 400;
+    public nodeLeft: number = 40;
+
+    // Node Shape
+    public shapeTop: number = 700;
+    public shapeLeft: number = 40;
+
+    // Polygon Color
+    public polygonTop: number = 200;
+    public polygonLeft: number = 950;
 
     private dialogControlId: string;
 
