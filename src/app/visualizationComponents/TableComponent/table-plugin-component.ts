@@ -65,7 +65,7 @@ export class TableComponent extends AppComponentBase implements OnInit, OnDestro
 
     // @ViewChild('dt') dataTable: Table;
 
-    @ViewChild('dt', { static: false }) dataTable: Table;
+    @ViewChild('dt') dataTable: Table;
 
 
     constructor(injector: Injector,

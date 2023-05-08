@@ -61,13 +61,13 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     // recommit original code
     // @ViewChild('stashes') stashes: ElementRef;
-    @ViewChild('stashes', { static: false }) stashes: ElementRef;
+    @ViewChild('stashes') stashes: ElementRef;
 
 
 //     @ViewChild('goldenLayout')
 //   goldenLayout: any;
 
-  @ViewChild('goldenLayout', { static: false }) goldenLayout: any;
+  @ViewChild('goldenLayout') goldenLayout: any;
 
 
     public metric: string = "tn93";
@@ -219,19 +219,19 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     // @ViewChild(TabView) tabView: TabView;
     // @ViewChild('dataSet') dataSet: Selection;
-    @ViewChild('dataSet', { static: false }) dataSet: Selection;
+    @ViewChild('dataSet') dataSet: Selection;
     // @ViewChildren('placeholder', { read: ViewContainerRef, static: false }) targets: QueryList<ViewContainerRef>
     @ViewChildren('placeholder', { read: ViewContainerRef }) targets: QueryList<ViewContainerRef>
     // @ViewChild('ledgerloader') spinnerElement: ElementRef;
-    @ViewChild('ledgerloader', { static: false }) spinnerElement: ElementRef;
+    @ViewChild('ledgerloader') spinnerElement: ElementRef;
     // @ViewChild('ledgerloadDiv') spinnerDivElement: ElementRef;
-    @ViewChild('ledgerloadDiv', { static: false }) spinnerDivElement: ElementRef;
+    @ViewChild('ledgerloadDiv') spinnerDivElement: ElementRef;
     // @ViewChild('globalSettingsTab') globalSettingsTab: TabsetComponent;
-    @ViewChild('globalSettingsTab', { static: false }) globalSettingsTab: TabsetComponent;
+    @ViewChild('globalSettingsTab') globalSettingsTab: TabsetComponent;
 
 
     // @ViewChild('pinbutton') pinBtn: ElementRef<HTMLElement>;
-    @ViewChild('pinbutton', { static: false }) pinBtn: ElementRef<HTMLElement>;
+    @ViewChild('pinbutton') pinBtn: ElementRef<HTMLElement>;
 
 
 
