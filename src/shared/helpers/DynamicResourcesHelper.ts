@@ -25,7 +25,7 @@
 //             });
 //     }
 
-//     static loadStlyes(): Promise<any> {
+//     static loadStlyes(): Promise<void> {
 //         let themeColor = ThemeHelper.getThemeColor();
 
 //         const isRtl = rtlDetect.isRtlLang(abp.localization.currentLanguage.name);

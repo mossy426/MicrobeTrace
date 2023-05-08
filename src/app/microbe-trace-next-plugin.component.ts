@@ -407,7 +407,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             $('#add-data-container').fadeTo("slow", 1);
             $('#onload-container').fadeTo("slow", 1);
             $('#tool-btn-container').fadeTo("slow", 1);
-            console.log('instances: ',this.goldenLayout.componentInstances);
+            // console.log('instances: ',this.goldenLayout.componentInstances);
         }, 5000);
         
        

@@ -1310,7 +1310,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         return seqs;
     };
 
-    align(params): Promise<any> {
+    align(params): Promise<void> {
         return new Promise(resolve => {
             if (params.aligner == "none") {
                 return resolve(params.nodes);
@@ -1384,7 +1384,7 @@ export class CommonService extends AppComponentBase implements OnInit {
     };
 
 
-    computeAmbiguityCounts(): Promise<any> {
+    computeAmbiguityCounts(): Promise<void> {
         return new Promise(resolve => {
             let nodes = window.context.commonService.session.data.nodes;
             let subset = nodes.filter(d => d.seq);
@@ -1426,7 +1426,7 @@ export class CommonService extends AppComponentBase implements OnInit {
     };
 
 
-    computeConsensusDistances(): Promise<any> {
+    computeConsensusDistances(): Promise<void> {
 
         return new Promise(resolve => {
             let start = Date.now();
@@ -1598,7 +1598,7 @@ export class CommonService extends AppComponentBase implements OnInit {
     };
 
 
-    computeDirectionality(): Promise<any> {
+    computeDirectionality(): Promise<void> {
         return new Promise(resolve => {
 
             let computer: WorkerModule = new WorkerModule();
@@ -1630,7 +1630,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         });
     };
 
-    computeMST(): Promise<any> {
+    computeMST(): Promise<void> {
         return new Promise((resolve, reject) => {
 
             let computer: WorkerModule = new WorkerModule();
@@ -1660,7 +1660,7 @@ export class CommonService extends AppComponentBase implements OnInit {
       };
 
 
-    computeNN(): Promise<any> {
+    computeNN(): Promise<void> {
         return new Promise((resolve, reject) => {
 
             let computer: WorkerModule = new WorkerModule();
@@ -1691,7 +1691,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         });
     };
 
-    computeTriangulation(): Promise<any> {
+    computeTriangulation(): Promise<void> {
         return new Promise((resolve, reject) => {
 
             const metric = window.context.commonService.session.style.widgets['link-sort-variable'];
@@ -2927,8 +2927,8 @@ export class CommonService extends AppComponentBase implements OnInit {
         return small.replace(/(?:^|\s|-)\S/g, c => c.toUpperCase());
     };
 
-    tagClusters() {
-        return new Promise(resolve => {
+    tagClusters(): Promise<void> {
+        return new Promise<void>(resolve => {
             let start = Date.now();
             let clusters = window.context.commonService.session.data.clusters = [];
             let nodes = window.context.commonService.session.data.nodes,
