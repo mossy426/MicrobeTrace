@@ -1190,7 +1190,7 @@ export class FilesComponent extends AppComponentBase implements OnInit {
       const fileName = this.visuals.microbeTrace.commonService.filterXSS(rawfile.name);
       let reader = new FileReader();
       reader.onloadend = (out) => {
-        const output = JSON.parse(out.target['result']);
+        const output = JSON.parse(out.target['result'] as string);
         if (output.meta && output.tree) {
           const auspiceFile = { contents: output, name: fileName, extension: extension};
           this.visuals.microbeTrace.commonService.session.files.push(auspiceFile);

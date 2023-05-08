@@ -2,8 +2,9 @@
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { EventManager } from '@angular/platform-browser';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
+import * as d3 from 'd3';
 import * as saveAs from 'file-saver';
-import * as Plotly from 'plotly.js'
+// import * as Plotly from 'plotly.js'
 import * as domToImage from 'dom-to-image-more';
 import { DialogSettings } from '../../helperClasses/dialogSettings';
 import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
@@ -155,7 +156,7 @@ export class HistogramComponent extends AppComponentBase implements OnInit, Mico
     redrawHistogram() {
         let panel = $('#histogram');
         if (!panel.length) return;
-        if (this.visuals.histogram.plot) Plotly.purge('histogram');
+        // if (this.visuals.histogram.plot) Plotly.purge('histogram');
         let varSource, varName, axis = 'x', nonAxis = 'y';
 
         [varSource, ...varName] = this.visuals.histogram.commonService.session.style.widgets['histogram-variable'].split('-');
@@ -252,11 +253,11 @@ export class HistogramComponent extends AppComponentBase implements OnInit, Mico
             type: this.visuals.histogram.commonService.session.style.widgets['histogram-scale-log'] ? 'log' : ''
         };
 
-        this.visuals.histogram.plot = Plotly.newPlot('histogram', this.visuals.histogram.traces, this.visuals.histogram.layout, {
-            displaylogo: false,
-            displayModeBar: false,
-            scrollZoom: true
-        });
+        // this.visuals.histogram.plot = Plotly.newPlot('histogram', this.visuals.histogram.traces, this.visuals.histogram.layout, {
+        //     displaylogo: false,
+        //     displayModeBar: false,
+        //     scrollZoom: true
+        // });
 
         this.visuals.histogram.setBackground();
     }

@@ -349,7 +349,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
 
 
-        console.log('instanceeee: ', this.goldenLayout.componentInstances);
+        // console.log('instanceeee: ', this.goldenLayout.componentInstances);
 
         setTimeout(() => {
             $('#top-toolbar').fadeTo("slow", 1);
