@@ -15,7 +15,7 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "ngx-build-plus:browser",
           "options": {
             "outputPath": "dist/MicrobeTrace",
             "index": "src/index.html",
@@ -57,8 +57,7 @@
             "scripts": [
               "src/assets/metronic/assets/vendors/base/vendors.bundle.js",
               "src/assets/metronic/assets/demo/default/base/scripts.bundle.js"
-            ],
-            "es5BrowserSupport": true
+            ]
           },
           "configurations": {
             "production": {
@@ -88,7 +87,7 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "ngx-build-plus:dev-server",
           "options": {
             "browserTarget": "MicrobeTrace:build"
           },
