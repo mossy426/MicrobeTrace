@@ -1775,12 +1775,12 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         const endLoadBadly = () => {
             this.hideSpinner();
-            abp.notify.warn("Your role(s) do not allow access to a ledger.  See your administrator to grant you roles to access a ledger.");
+            // abp.notify.warn("Your role(s) do not allow access to a ledger.  See your administrator to grant you roles to access a ledger.");
         }
 
         const endLoadNoData = () => {
             this.hideSpinner();
-            abp.notify.warn("No data was loaded");
+            // abp.notify.warn("No data was loaded");
         }
     }
 

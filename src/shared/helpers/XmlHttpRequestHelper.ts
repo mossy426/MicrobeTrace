@@ -9,7 +9,7 @@ export class XmlHttpRequestHelper {
                     let result = JSON.parse(xhr.responseText);
                     success(result);
                 } else if (xhr.status !== 0) {
-                    alert(abp.localization.localize('InternalServerError', 'AbpWeb'));
+                    // alert(abp.localization.localize('InternalServerError', 'AbpWeb'));
                 }
             }
         };

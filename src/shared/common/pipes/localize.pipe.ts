@@ -35,7 +35,8 @@ export class LocalizePipe implements PipeTransform {
         // }
 
         // args.unshift(localizedText);
-        return abp.utils.formatString.apply(this, this.flattenDeep(args));
+        // return this.localizedText;
+        // return abp.utils.formatString.apply(this, this.flattenDeep(args));
     }
 
     transform(key: string, ...args: any[]): string {

@@ -100,7 +100,8 @@ export abstract class AppComponentBase {
     }
 
     s(key: string): string {
-        return abp.setting.get(key);
+        return key;
+        // return abp.setting.get(key);
     }
 
     appRootUrl(): string {

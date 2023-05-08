@@ -8,15 +8,15 @@ export class SignalRHelper {
         let encryptedAuthToken;
 
 
-        abp.signalr = {
-            autoConnect: true,
-            connect: undefined,
-            hubs: undefined,
-            qs: AppConsts.authorization.encrptedAuthTokenName + '=' + encodeURIComponent(encryptedAuthToken),
-            remoteServiceBaseUrl: AppConsts.remoteServiceBaseUrl,
-            startConnection: undefined,
-            url: '/signalr'
-        };
+        // abp.signalr = {
+        //     autoConnect: true,
+        //     connect: undefined,
+        //     hubs: undefined,
+        //     qs: AppConsts.authorization.encrptedAuthTokenName + '=' + encodeURIComponent(encryptedAuthToken),
+        //     remoteServiceBaseUrl: AppConsts.remoteServiceBaseUrl,
+        //     startConnection: undefined,
+        //     url: '/signalr'
+        // };
 
         let script = document.createElement('script');
         script.onload = () => {

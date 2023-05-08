@@ -20,9 +20,9 @@ export class BusyIfDirective {
         }
 
         if (isBusy) {
-            abp.ui.setBusy(this._element.nativeElement);
+            // abp.ui.setBusy(this._element.nativeElement);
         } else {
-            abp.ui.clearBusy(this._element.nativeElement);
+            // abp.ui.clearBusy(this._element.nativeElement);
         }
     }
 }
