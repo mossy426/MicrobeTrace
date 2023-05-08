@@ -21,7 +21,7 @@ import { StashObjects, StashObject } from '../helperClasses/interfaces';
 import { MicrobeTraceNextVisuals } from '../microbe-trace-next-plugin-visuals';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { GoldenLayoutService } from '@embedded-enterprises/ng6-golden-layout';
+// import { GoldenLayoutService } from '@embedded-enterprises/ng6-golden-layout';
 // import { ConsoleReporter } from 'jasmine';
 
 
@@ -410,7 +410,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         public localStorageService: LocalStorageService,
         public visuals: MicrobeTraceNextVisuals,
         private http: HttpClient,
-        private srv: GoldenLayoutService
+        // private srv: GoldenLayoutService
     ) {
 
         super(injector);

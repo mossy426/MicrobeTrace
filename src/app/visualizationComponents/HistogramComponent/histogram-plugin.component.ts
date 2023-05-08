@@ -1,6 +1,6 @@
 ﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { EventManager, DOCUMENT } from '@angular/platform-browser';
+import { EventManager } from '@angular/platform-browser';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
 import * as saveAs from 'file-saver';
 import * as Plotly from 'plotly.js'

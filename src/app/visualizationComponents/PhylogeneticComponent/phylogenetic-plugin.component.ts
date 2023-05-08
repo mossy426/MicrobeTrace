@@ -1,7 +1,7 @@
 ﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit,
   ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { EventManager, DOCUMENT } from '@angular/platform-browser';
+import { EventManager } from '@angular/platform-browser';
 import { MatMenu } from '@angular/material/menu';
 import { CommonService } from '@app/contactTraceCommonServices/common.service';
 import * as ClipboardJS from 'clipboard';

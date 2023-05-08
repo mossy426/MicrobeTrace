@@ -38,12 +38,12 @@ import { ThreeDComponent } from './visualizationComponents/ThreeDComponent/three
 import { TableComponent } from './visualizationComponents/TableComponent/table-plugin-component';
 import { HistogramComponent } from './visualizationComponents/HistogramComponent/histogram-plugin.component';
 import { MapComponent } from './visualizationComponents/MapComponent/map-plugin.component';
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
+// import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+// import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
 import { MatButtonModule, MatInputModule, MatMenuModule, MatToolbarModule, MatSliderModule } from '@angular/material';
 import { DndDirective } from '@shared/dnd.directive';
 
-import { GoldenLayoutModule, GoldenLayoutService, GoldenLayoutConfiguration } from '@embedded-enterprises/ng6-golden-layout';
+// import { GoldenLayoutModule, GoldenLayoutService, GoldenLayoutConfiguration } from '@embedded-enterprises/ng6-golden-layout';
 import GoldenLayout from 'golden-layout';
 
 // It is required to have JQuery as global in the window object.
@@ -58,42 +58,42 @@ export class TestedComponent {
 
 }
 
-const config: GoldenLayoutConfiguration = {
-  components: [
-    {
-      componentName: "FilesComponent",
-      component: FilesComponent
-    },
-    {
-      componentName: "TwoDComponent",
-      component: TwoDComponent
-    },
-    {
-      componentName: "TableComponent",
-      component: TableComponent
-    },
-    {
-      componentName: "MapComponent",
-      component: MapComponent
-    },
-    {
-      componentName: "PhylogeneticComponent",
-      component: PhylogeneticComponent
-    },
-  ],
-  defaultLayout: {
-    content: [{
-        type: 'stack',
-        content:[
-          {
-            type: 'component',
-            componentName: 'FilesComponent',
-            componentState: { label: 'A' }
-           }
-          ]
-    }]
-  }
-};
+// const config: GoldenLayoutConfiguration = {
+//   components: [
+//     {
+//       componentName: "FilesComponent",
+//       component: FilesComponent
+//     },
+//     {
+//       componentName: "TwoDComponent",
+//       component: TwoDComponent
+//     },
+//     {
+//       componentName: "TableComponent",
+//       component: TableComponent
+//     },
+//     {
+//       componentName: "MapComponent",
+//       component: MapComponent
+//     },
+//     {
+//       componentName: "PhylogeneticComponent",
+//       component: PhylogeneticComponent
+//     },
+//   ],
+//   defaultLayout: {
+//     content: [{
+//         type: 'stack',
+//         content:[
+//           {
+//             type: 'component',
+//             componentName: 'FilesComponent',
+//             componentState: { label: 'A' }
+//            }
+//           ]
+//     }]
+//   }
+// };
 
 @NgModule({
   declarations: [
@@ -123,7 +123,7 @@ const config: GoldenLayoutConfiguration = {
     AppRoutingModule,
     //ngCommon.CommonModule,
     FormsModule,
-    GoldenLayoutModule.forRoot(config),
+    // GoldenLayoutModule.forRoot(config),
     HttpClientModule,
     MatButtonModule,
     MatInputModule,
@@ -163,9 +163,9 @@ const config: GoldenLayoutConfiguration = {
     AccordionModule,
     SidebarModule,
     MultiSelectModule,
-    SliderModule,
-    LeafletModule,
-    LeafletMarkerClusterModule
+    SliderModule
+    // LeafletModule,
+    // LeafletMarkerClusterModule
   ],
   entryComponents:[
     FilesComponent,

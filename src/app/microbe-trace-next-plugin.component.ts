@@ -35,13 +35,13 @@ import { EventEmitterService } from '@shared/utils/event-emitter.service';
 // import * as moment from 'moment';
 import moment from 'moment';
 
-import {
-    GoldenLayoutModule,
-    GoldenLayoutService,
-    GoldenLayoutConfiguration,
-    MultiWindowService,
-    GoldenLayoutComponent,
-  } from '@embedded-enterprises/ng6-golden-layout';
+// import {
+//     GoldenLayoutModule,
+//     GoldenLayoutService,
+//     GoldenLayoutConfiguration,
+//     MultiWindowService,
+//     GoldenLayoutComponent,
+//   } from '@embedded-enterprises/ng6-golden-layout';
 
 import { Tabulator } from 'tabulator-tables';
 
@@ -60,10 +60,15 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
 
     // recommit original code
-    @ViewChild('stashes') stashes: ElementRef;
+    // @ViewChild('stashes') stashes: ElementRef;
+    @ViewChild('stashes', { static: false }) stashes: ElementRef;
 
-    @ViewChild('goldenLayout')
-  goldenLayout: GoldenLayoutComponent;
+
+//     @ViewChild('goldenLayout')
+//   goldenLayout: any;
+
+  @ViewChild('goldenLayout', { static: false }) goldenLayout: any;
+
 
     public metric: string = "tn93";
     public ambiguity: string = "Average";
@@ -213,13 +218,21 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
 
     // @ViewChild(TabView) tabView: TabView;
-    @ViewChild('dataSet') dataSet: Selection;
+    // @ViewChild('dataSet') dataSet: Selection;
+    @ViewChild('dataSet', { static: false }) dataSet: Selection;
+    // @ViewChildren('placeholder', { read: ViewContainerRef, static: false }) targets: QueryList<ViewContainerRef>
     @ViewChildren('placeholder', { read: ViewContainerRef }) targets: QueryList<ViewContainerRef>
-    @ViewChild('ledgerloader') spinnerElement: ElementRef;
-    @ViewChild('ledgerloadDiv') spinnerDivElement: ElementRef;
-    @ViewChild('globalSettingsTab') globalSettingsTab: TabsetComponent;
+    // @ViewChild('ledgerloader') spinnerElement: ElementRef;
+    @ViewChild('ledgerloader', { static: false }) spinnerElement: ElementRef;
+    // @ViewChild('ledgerloadDiv') spinnerDivElement: ElementRef;
+    @ViewChild('ledgerloadDiv', { static: false }) spinnerDivElement: ElementRef;
+    // @ViewChild('globalSettingsTab') globalSettingsTab: TabsetComponent;
+    @ViewChild('globalSettingsTab', { static: false }) globalSettingsTab: TabsetComponent;
 
-    @ViewChild('pinbutton') pinBtn: ElementRef<HTMLElement>;
+
+    // @ViewChild('pinbutton') pinBtn: ElementRef<HTMLElement>;
+    @ViewChild('pinbutton', { static: false }) pinBtn: ElementRef<HTMLElement>;
+
 
 
     public HideThisForNow: boolean = false;
@@ -248,7 +261,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         private eventEmitterService: EventEmitterService,
         // private bpaasLedgerPluginServiceProxy: BpaasLedgerPluginServiceProxy,
         private route: ActivatedRoute,
-        private srv: GoldenLayoutService
+        // private srv: GoldenLayoutService
     ) {
 
 
@@ -340,14 +353,16 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         setTimeout(() => {
             $('#top-toolbar').fadeTo("slow", 1);
-            this.homepageTabs[0].componentRef = this.goldenLayout.componentInstances[0];
+            // TODO:: uncommentback when done Subscribe for files subscription
+
+            // this.homepageTabs[0].componentRef = this.goldenLayout.componentInstances[0];
 
 
-            this.subscription = this.homepageTabs[0].componentRef.LoadDefaultVisualizationEvent.subscribe((v) => {
-                console.log('loading default: ', v);
-                this.loadDefaultVisualization(v);
-                this.publishLoadNewData();
-            });
+            // this.subscription = this.homepageTabs[0].componentRef.LoadDefaultVisualizationEvent.subscribe((v) => {
+            //     console.log('loading default: ', v);
+            //     this.loadDefaultVisualization(v);
+            //     this.publishLoadNewData();
+            // });
             
         }, 1000);
         setTimeout(() => {
@@ -1795,7 +1810,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
 
         console.log('process files::');
-        this.srv.removeTab(0,1);
+        // TODO: unccomment back when updated
+        // this.srv.removeTab(0,1);
         //remove last homepage tab
         this.homepageTabs.splice(this.homepageTabs.length - 1, 1);
         // console.log('homepagetabs: ', this.homepageTabs);
@@ -2250,29 +2266,29 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
             switch(viewName) {
                 case "2D Network": 
-                    this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
+                    // this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
                     console.log('2d network: ', this.goldenLayout.componentInstances);
                 break;
                 case "Table":
-                    this.srv.createNewComponent(this.srv.getRegisteredComponents()[2]);
+                    // this.srv.createNewComponent(this.srv.getRegisteredComponents()[2]);
                     console.log('table: ', this.goldenLayout.componentInstances[this.goldenLayout.componentInstances.length - 1]);
 
                 break;
                 case "Map":
-                    this.srv.createNewComponent(this.srv.getRegisteredComponents()[3]);
+                    // this.srv.createNewComponent(this.srv.getRegisteredComponents()[3]);
                 break;
                 case "Phylogenetic Tree":
-                    this.srv.createNewComponent(this.srv.getRegisteredComponents()[4]);
+                    // this.srv.createNewComponent(this.srv.getRegisteredComponents()[4]);
                 break;
                 default:
-                    this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
+                    // this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
 
             }
             
             // console.log('tabview: ', this.tabView);
             this.addTab(viewName, viewName + this.activeTabIndex, this.activeTabIndex);
             console.log('homepage tabs: ' , this.homepageTabs);
-            console.log('get state: ', JSON.stringify(this.srv.getState()['__zone_symbol__value']));
+            // console.log('get state: ', JSON.stringify(this.srv.getState()['__zone_symbol__value']));
 
             setTimeout(() => {
           

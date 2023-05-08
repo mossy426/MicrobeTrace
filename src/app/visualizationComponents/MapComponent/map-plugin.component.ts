@@ -1,5 +1,5 @@
 ﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, NgZone, InjectionToken, ElementRef, ViewChild, ViewContainerRef, ViewChildren, QueryList, Renderer, ChangeDetectorRef } from '@angular/core';
-import { EventManager, DOCUMENT } from '@angular/platform-browser';
+import { EventManager } from '@angular/platform-browser';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
 import * as saveAs from 'file-saver';
