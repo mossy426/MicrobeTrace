@@ -15,7 +15,6 @@
   },
   "private": true,
   "dependencies": {
-    "3d-force-graph": "^1.55.13",
     "@angular/animations": "~9.1.13",
     "@angular/cdk": "^8.2.3",
     "@angular/common": "~9.1.13",
@@ -29,7 +28,8 @@
     "@google/markerclusterer": "^2.0.8",
     "@types/googlemaps": "^3.39.6",
     "@types/leaflet.markercluster": "^1.4.2",
-    "abp-ng2-module": "^4.0.0",
+    "3d-force-graph": "^1.55.13",
+    "abp-ng2-module": "^8.0.0",
     "abp-web-resources": "^3.8.5",
     "chart.js": "^2.9.4",
     "core-js": "^2.5.4",
