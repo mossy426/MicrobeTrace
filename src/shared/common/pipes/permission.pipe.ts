@@ -1,19 +1,20 @@
 import { Injector, Pipe, PipeTransform } from '@angular/core';
-import { PermissionCheckerService } from '@abp/auth/permission-checker.service';
+// import { PermissionCheckerService } from '@abp/auth/permission-checker.service';
 
 @Pipe({
     name: 'permission'
 })
 export class PermissionPipe implements PipeTransform {
 
-    permission: PermissionCheckerService;
+    // permission: PermissionCheckerService;
 
     constructor(injector: Injector) {
-        this.permission = injector.get(PermissionCheckerService);
+        // this.permission = injector.get(PermissionCheckerService);
     }
 
     isGranted(permissionName: string): boolean {
-        return this.permission.isGranted(permissionName);
+        // return this.permission.isGranted(permissionName);
+        return false;
     }
 
     isGrantedAny(...permissions: string[]): boolean {

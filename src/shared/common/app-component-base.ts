@@ -1,10 +1,10 @@
-import { PermissionCheckerService } from '@abp/auth/permission-checker.service';
-import { FeatureCheckerService } from '@abp/features/feature-checker.service';
-import { LocalizationService } from '@abp/localization/localization.service';
-import { MessageService } from '@abp/message/message.service';
-import { AbpMultiTenancyService } from '@abp/multi-tenancy/abp-multi-tenancy.service';
-import { NotifyService } from '@abp/notify/notify.service';
-import { SettingService } from '@abp/settings/setting.service';
+// import { PermissionCheckerService } from '@abp/auth/permission-checker.service';
+// import { FeatureCheckerService } from '@abp/features/feature-checker.service';
+// import { LocalizationService } from '@abp/localization/localization.service';
+// import { MessageService } from '@abp/message/message.service';
+// import { AbpMultiTenancyService } from '@abp/multi-tenancy/abp-multi-tenancy.service';
+// import { NotifyService } from '@abp/notify/notify.service';
+// import { SettingService } from '@abp/settings/setting.service';
 import { Injector } from '@angular/core';
 import { AppConsts } from '@shared/AppConsts';
 import { AppUrlService } from '@shared/common/nav/app-url.service';
@@ -17,13 +17,20 @@ export abstract class AppComponentBase {
 
     localizationSourceName = AppConsts.localization.defaultLocalizationSourceName;
 
-    localization: LocalizationService;
-    permission: PermissionCheckerService;
-    feature: FeatureCheckerService;
-    notify: NotifyService;
-    setting: SettingService;
-    message: MessageService;
-    multiTenancy: AbpMultiTenancyService;
+    // localization: LocalizationService;
+    // permission: PermissionCheckerService;
+    // feature: FeatureCheckerService;
+    // notify: NotifyService;
+    // setting: SettingService;
+    // message: MessageService;
+    // multiTenancy: AbpMultiTenancyService;
+    localization: any;
+    permission: any;
+    feature: any;
+    notify: any;
+    setting: any;
+    message: any;
+    multiTenancy: any;
     appSession: AppSessionService;
     primengTableHelper: PrimengTableHelper;
     ui: AppUiCustomizationService;
@@ -31,13 +38,13 @@ export abstract class AppComponentBase {
 
     constructor(injector: Injector
         ) {
-        this.localization = injector.get(LocalizationService);
-        this.permission = injector.get(PermissionCheckerService);
-        this.feature = injector.get(FeatureCheckerService);
-        this.notify = injector.get(NotifyService);
-        this.setting = injector.get(SettingService);
-        this.message = injector.get(MessageService);
-        this.multiTenancy = injector.get(AbpMultiTenancyService);
+        // this.localization = injector.get(LocalizationService);
+        // this.permission = injector.get(PermissionCheckerService);
+        // this.feature = injector.get(FeatureCheckerService);
+        // this.notify = injector.get(NotifyService);
+        // this.setting = injector.get(SettingService);
+        // this.message = injector.get(MessageService);
+        // this.multiTenancy = injector.get(AbpMultiTenancyService);
         this.appSession = injector.get(AppSessionService);
         this.ui = injector.get(AppUiCustomizationService);
         this.appUrlService = injector.get(AppUrlService);
@@ -70,7 +77,8 @@ export abstract class AppComponentBase {
         }
 
         args.unshift(localizedText);
-        return abp.utils.formatString.apply(this, this.flattenDeep(args));
+        return localizedText;
+        // return abp.utils.formatString.apply(this, this.flattenDeep(args));
     }
 
     isGranted(permissionName: string): boolean {

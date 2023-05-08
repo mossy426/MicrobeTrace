@@ -806,9 +806,9 @@ export class CommonService extends AppComponentBase implements OnInit {
             }
         } catch (error) {
 
-            abp.notify.error(
-                'File Not Recognized! Are you certain this is a MicrobeTrace Session or HIV-TRACE Output File?'
-            );
+            // abp.notify.error(
+            //     'File Not Recognized! Are you certain this is a MicrobeTrace Session or HIV-TRACE Output File?'
+            // );
             console.error(error);
             return;
         }
@@ -1819,7 +1819,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         } catch (error) {
             console.error(error);
             $("#loading-information-modal").hide();
-            abp.notify.error("Something went wrong! Please click here to start a new session and try again.");
+            // abp.notify.error("Something went wrong! Please click here to start a new session and try again.");
             //.delay(0)
             //.ondismiss(() => window.location.reload());
         }

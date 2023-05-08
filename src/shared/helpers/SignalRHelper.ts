@@ -1,10 +1,12 @@
-import { UtilsService } from '@abp/utils/utils.service';
+// import { UtilsService } from '@abp/utils/utils.service';
 import { AppConsts } from '@shared/AppConsts';
 
 export class SignalRHelper {
     static initSignalR(callback: () => void): void {
 
-        let encryptedAuthToken = new UtilsService().getCookieValue(AppConsts.authorization.encrptedAuthTokenName);
+        // let encryptedAuthToken = new UtilsService().getCookieValue(AppConsts.authorization.encrptedAuthTokenName);
+        let encryptedAuthToken;
+
 
         abp.signalr = {
             autoConnect: true,

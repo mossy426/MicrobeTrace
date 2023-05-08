@@ -9,7 +9,7 @@ import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 // import { ServiceProxyModule } from '@shared/service-proxies/service-proxy.module';
 import { UtilsModule } from '@shared/utils/utils.module';
-import { AbpModule } from 'abp-ng2-module/dist/src/abp.module';
+// import { AbpModule } from 'abp-ng2-module/dist/src/abp.module';
 import { ModalModule, TooltipModule, TabsModule, BsDropdownModule, PopoverModule } from 'ngx-bootstrap';
 import { TableModule } from 'primeng/components/table/table';
 import { FileUploadModule, ListboxModule, RadioButtonModule, CalendarModule, PaginatorModule, ProgressBarModule, ConfirmDialogModule, DropdownModule, AccordionModule, SidebarModule, MultiSelect, MultiSelectModule, SliderModule } from 'primeng/primeng';
@@ -40,7 +40,12 @@ import { HistogramComponent } from './visualizationComponents/HistogramComponent
 import { MapComponent } from './visualizationComponents/MapComponent/map-plugin.component';
 // import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 // import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
-import { MatButtonModule, MatInputModule, MatMenuModule, MatToolbarModule, MatSliderModule } from '@angular/material';
+// import { MatButtonModule, MatInputModule, MatMenuModule, MatToolbarModule, MatSliderModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSliderModule } from '@angular/material/slider';
 import { DndDirective } from '@shared/dnd.directive';
 
 // import { GoldenLayoutModule, GoldenLayoutService, GoldenLayoutConfiguration } from '@embedded-enterprises/ng6-golden-layout';
@@ -137,7 +142,7 @@ export class TestedComponent {
     BsDropdownModule.forRoot(),
     PopoverModule.forRoot(),
     FileUploadModule,
-    AbpModule,
+    // AbpModule,
     AppRoutingModule,
     UtilsModule,
     //AppCommonModule.forRoot(),
