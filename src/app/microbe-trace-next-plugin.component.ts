@@ -18,7 +18,9 @@ import { HeatMapComponent } from './visualizationComponents/HeatMapComponent/hea
 import { PhylogeneticComponent } from './visualizationComponents/PhylogeneticComponent/phylogenetic-plugin.component';
 import * as d3 from 'd3';
 import { window, TabsetComponent } from 'ngx-bootstrap';
-import { TabView, TabPanel, Button } from 'primeng/primeng';
+import { TabView } from 'primeng/tabview';
+// import { TabPanel } from 'primeng/tabpanel';
+import { Button } from 'primeng/button';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { SelectItem, TreeNode } from 'primeng/api';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';

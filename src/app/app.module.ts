@@ -11,13 +11,27 @@ import { FormsModule } from '@angular/forms';
 import { UtilsModule } from '@shared/utils/utils.module';
 // import { AbpModule } from 'abp-ng2-module/dist/src/abp.module';
 import { ModalModule, TooltipModule, TabsModule, BsDropdownModule, PopoverModule } from 'ngx-bootstrap';
-import { TableModule } from 'primeng/components/table/table';
-import { FileUploadModule, ListboxModule, RadioButtonModule, CalendarModule, PaginatorModule, ProgressBarModule, ConfirmDialogModule, DropdownModule, AccordionModule, SidebarModule, MultiSelect, MultiSelectModule, SliderModule } from 'primeng/primeng';
+// import { TableModule } from 'primeng/components/table/table';
+// import { FileUploadModule, ListboxModule, RadioButtonModule, CalendarModule, PaginatorModule, ProgressBarModule, ConfirmDialogModule, DropdownModule, AccordionModule, SidebarModule, MultiSelect, MultiSelectModule, SliderModule } from 'primeng/primeng';
+
+import { TableModule } from 'primeng/table';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ListboxModule } from 'primeng/listbox';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { CalendarModule } from 'primeng/calendar';
+import { PaginatorModule } from 'primeng/paginator';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { AccordionModule } from 'primeng/accordion';
+import { SidebarModule } from 'primeng/sidebar';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { SliderModule } from 'primeng/slider';
+import { TabViewModule } from 'primeng/tabview';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { TreeModule } from 'primeng/tree';
+import { DialogModule } from 'primeng/dialog';
 import { MicrobeTraceNextHomeComponent } from './microbe-trace-next-plugin.component';
-import {TabViewModule} from 'primeng/tabview';
-import {SelectButtonModule} from 'primeng/selectbutton';
-import {TreeModule} from 'primeng/tree';
-import {DialogModule} from 'primeng/dialog';
 import { AppSessionService } from '@shared/common/session/app-session.service';
 import { AppUiCustomizationService } from '@shared/common/ui/app-ui-customization.service';
 import { AppUrlService } from '@shared/common/nav/app-url.service';
@@ -120,7 +134,7 @@ export class TestedComponent {
     TestedComponent,
     HeatMapComponent,
     DndDirective,
-    PhylogeneticComponent
+    PhylogeneticComponent,
   ],
   imports: [
     BrowserModule,
@@ -171,6 +185,9 @@ export class TestedComponent {
     SliderModule
     // LeafletModule,
     // LeafletMarkerClusterModule
+  ],
+  exports: [
+    SelectButtonModule
   ],
   providers: [
     AppSessionService,
