@@ -10,7 +10,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2020",
+    "target": "ES2022",
     "skipLibCheck": true,
     "typeRoots": [
       "node_modules/@types",
@@ -20,14 +20,23 @@
       "es6",
       "es7",
       "dom"
-    ], 
-    "paths":{
-      "@shared/*": [ "./src/shared/*" ],
-      "@app/*": [ "./src/app/*" ],
-      "@abp/*": [ "node_modules/abp-ng2-module/dist/src/*" ],
-      "@metronic/*": [ "./src/assets/metronic/*" ]
+    ],
+    "paths": {
+      "@shared/*": [
+        "./src/shared/*"
+      ],
+      "@app/*": [
+        "./src/app/*"
+      ],
+      "@abp/*": [
+        "node_modules/abp-ng2-module/dist/src/*"
+      ],
+      "@metronic/*": [
+        "./src/assets/metronic/*"
+      ]
     },
-    "esModuleInterop": true, 
-    "allowSyntheticDefaultImports": true
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "useDefineForClassFields": false
   }
 }
