@@ -14,6 +14,9 @@ import { ModalModule, TooltipModule, TabsModule, BsDropdownModule, PopoverModule
 // import { TableModule } from 'primeng/components/table/table';
 // import { FileUploadModule, ListboxModule, RadioButtonModule, CalendarModule, PaginatorModule, ProgressBarModule, ConfirmDialogModule, DropdownModule, AccordionModule, SidebarModule, MultiSelect, MultiSelectModule, SliderModule } from 'primeng/primeng';
 
+import { GoldenLayoutComponentService } from './golden-layout-component.service';
+import { GoldenLayoutHostComponent } from './golden-layout-host.component';
+
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ListboxModule } from 'primeng/listbox';
@@ -125,6 +128,7 @@ export class TestedComponent {
     TableComponent,
     AggregationComponent,
     BubblesComponent,
+    GoldenLayoutHostComponent,
     FlowDiagramComponent,
     ScatterPlotComponent,
     WaterfallComponent,
@@ -192,7 +196,8 @@ export class TestedComponent {
   providers: [
     AppSessionService,
     AppUiCustomizationService,
-    AppUrlService
+    AppUrlService,
+    GoldenLayoutComponentService
   ],
   bootstrap: [AppComponent]
 })

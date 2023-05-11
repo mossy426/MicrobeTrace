@@ -48,6 +48,7 @@ import moment from 'moment';
 import { Tabulator } from 'tabulator-tables';
 
 import { Subscription } from 'rxjs';
+import { GoldenLayoutHostComponent } from './golden-layout-host.component';
 
 
 @Component({
@@ -69,8 +70,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 //     @ViewChild('goldenLayout')
 //   goldenLayout: any;
 
-  @ViewChild('goldenLayout') goldenLayout: any;
-
+  @ViewChild('goldenLayoutHost') _goldenLayoutHostComponent: GoldenLayoutHostComponent;
 
     public metric: string = "tn93";
     public ambiguity: string = "Average";
@@ -409,12 +409,19 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             $('#add-data-container').fadeTo("slow", 1);
             $('#onload-container').fadeTo("slow", 1);
             $('#tool-btn-container').fadeTo("slow", 1);
+            this.addComponent();
             // console.log('instances: ',this.goldenLayout.componentInstances);
         }, 5000);
         
        
         // reader.onloadend = out => this.commonService.processJSON(out.target, extension);
     }
+
+    addComponent() {
+        // const componentType = this._selectedRegisteredComponentTypeName;
+        this._goldenLayoutHostComponent.goldenLayout.addComponent('Files');
+        console.log('golden adding Files component');
+      }
 
 
     /**
@@ -579,7 +586,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.removeTab({index : 1})
 
         console.log('homepage tabs1: ', this.homepageTabs);
-        console.log('instances1: ', this.goldenLayout.componentInstances);
+        // console.log('instances1: ', this.goldenLayout.componentInstances);
 
         this.getfileContent($event);
     }
@@ -835,7 +842,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     publishUpdateLinkColor() {
 
-        this.goldenLayout.componentInstances[1].updateLinkColor();
+        // this.goldenLayout.componentInstances[1].updateLinkColor();
 
         // this.homepageTabs.forEach(tab => {
         //     if (tab.componentRef &&
@@ -1517,7 +1524,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         switch (this.homepageTabs[this.activeTabIndex].label) {
             case "2D Network":
 
-                this.goldenLayout.componentInstances[this.activeTabIndex].render(false);
+                // this.goldenLayout.componentInstances[this.activeTabIndex].render(false);
                 console.log('---rendering');
                 break;
 
@@ -1839,7 +1846,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     public getSinglefileContent(file: File) {
 
-        this.goldenLayout.componentInstances[0].processFile(file);
+        // this.goldenLayout.componentInstances[0].processFile(file);
 
         this.homepageTabs.map(x => {
             if (x.tabTitle === "Files") {
@@ -2269,11 +2276,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             switch(viewName) {
                 case "2D Network": 
                     // this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
-                    console.log('2d network: ', this.goldenLayout.componentInstances);
+                    // console.log('2d network: ', this.goldenLayout.componentInstances);
                 break;
                 case "Table":
                     // this.srv.createNewComponent(this.srv.getRegisteredComponents()[2]);
-                    console.log('table: ', this.goldenLayout.componentInstances[this.goldenLayout.componentInstances.length - 1]);
+                    // console.log('table: ', this.goldenLayout.componentInstances[this.goldenLayout.componentInstances.length - 1]);
 
                 break;
                 case "Map":
@@ -2296,7 +2303,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
           
                 console.log('view name: ', viewName);
 
-                this.goldenLayout.componentInstances[this.goldenLayout.componentInstances.length - 1].DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
+                // this.goldenLayout.componentInstances[this.goldenLayout.componentInstances.length - 1].DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
 
                 this.setActiveTabProperties();
                 this.loadSettings();
@@ -2741,7 +2748,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             templateRef: null,
             tabTitle: tabTitle,
             isActive: activate,
-            componentRef: this.goldenLayout.componentInstances[this.goldenLayout.componentInstances.length - 1]
+            componentRef: null
+
+            // componentRef: this.goldenLayout.componentInstances[this.goldenLayout.componentInstances.length - 1]
         });
 
     }

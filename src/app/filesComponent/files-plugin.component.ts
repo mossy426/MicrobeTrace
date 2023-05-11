@@ -1,4 +1,4 @@
-﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit } from '@angular/core';
+﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, Inject, ElementRef } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { AppUiCustomizationService } from '@shared/common/ui/app-ui-customization.service';
@@ -16,6 +16,9 @@ import { window } from 'ngx-bootstrap';
 import * as _ from 'lodash';
 import { MicrobeTraceNextVisuals } from '../microbe-trace-next-plugin-visuals';
 import { EventEmitterService } from '@shared/utils/event-emitter.service';
+import { BaseComponentDirective } from '@app/base-component.directive';
+import { ComponentContainer } from 'golden-layout';
+// import { ComponentContainer } from 'golden-layout';
 // import { ConsoleReporter } from 'jasmine';
 
 
@@ -25,7 +28,7 @@ import { EventEmitterService } from '@shared/utils/event-emitter.service';
   styleUrls: ['./files-plugin.component.less']
 })
 
-export class FilesComponent extends AppComponentBase implements OnInit {
+export class FilesComponent extends BaseComponentDirective implements OnInit {
 
   @Output() LoadDefaultVisualizationEvent = new EventEmitter();
 
@@ -106,12 +109,32 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
   private visuals: MicrobeTraceNextVisuals;
 
+  public title: string;
+  public id: string;
+
   constructor(
-    injector: Injector,
+    @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, elRef: ElementRef,
     private eventEmitterService: EventEmitterService,
     public commonService: CommonService) {
 
-    super(injector);
+    super(elRef.nativeElement);
+
+    // this.title = this.container.title;
+    this.id = this.container.parent.id;
+
+    this.container.stateRequestEvent = () => this.handleContainerStateRequestEvent();
+    
+    const state = this.container.initialState;
+    // let color: string;
+    // if (state === undefined) {
+    //     color = ColorComponent.undefinedColor;
+    // } else {
+    //     if (typeof state !== 'string') {
+    //         color = 'IndianRed';
+    //     } else {
+    //         color = state;
+    //     }
+    // }
 
     this.visuals = commonService.visuals;
     this.visuals.filesPlugin = this;
@@ -454,6 +477,10 @@ export class FilesComponent extends AppComponentBase implements OnInit {
 
   InitView() {
     this.IsDataAvailable = (this.visuals.microbeTrace.commonService.session.data.nodes.length === 0 ? false : true);
+  }
+
+  handleContainerStateRequestEvent(): string | undefined {
+    return "state is here";
   }
 
 
@@ -1591,4 +1618,9 @@ export class FilesComponent extends AppComponentBase implements OnInit {
   }
 
 
+}
+
+export namespace FilesComponent {
+  export const componentTypeName = 'Files';
+  export const undefinedColor = 'MediumVioletRed';
 }
