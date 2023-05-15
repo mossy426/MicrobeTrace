@@ -457,6 +457,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     // $.getJSON("../assets/outbreak.microbetrace", window.context.commonService.applySession);
     // Use this when building production (.ie gh-pages branch)
     $.getJSON("outbreaknorm.microbetrace", window.context.commonService.applySession);        
+    // console.log('session: ', this.commonService?.session?.files, this.commonService.session.files.length);
   }
 
 
@@ -1321,7 +1322,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
       console.log(headers);
 
       let parentContext = context;
-      let root = $('<div class="file-table-row"></div>').data('filename', file.name);
+      let root = $('<div class="file-table-row" style="position: relative; z-index: 1;"></div>').data('filename', file.name);
       let fnamerow = $('<div class="row w-100"></div>');
       $('<div class="file-name col"></div>')
         .append($('<a href="javascript:void(0);" class="far flaticon-delete-1 align-middle p-1" title="Remove this file"></a>').on('click', () => {
@@ -1622,5 +1623,4 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
 export namespace FilesComponent {
   export const componentTypeName = 'Files';
-  export const undefinedColor = 'MediumVioletRed';
 }

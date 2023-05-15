@@ -1,4 +1,4 @@
-﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
+﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, Inject } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { EventManager } from '@angular/platform-browser';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
@@ -17,13 +17,15 @@ import { CustomShapes } from '@app/helperClasses/customShapes';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { DialogService } from 'primeng/dynamicdialog';
+import { BaseComponentDirective } from '@app/base-component.directive';
+import { ComponentContainer } from 'golden-layout';
 
 @Component({
     selector: 'TwoDComponent',
     templateUrl: './twoD-plugin.component.html',
     styleUrls: ['./twoD-plugin.component.scss']
 })
-export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTraceNextPluginEvents, OnDestroy {
+export class TwoDComponent extends BaseComponentDirective implements OnInit, MicobeTraceNextPluginEvents, OnDestroy {
 
     @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
 
@@ -164,12 +166,14 @@ export class TwoDComponent extends AppComponentBase implements OnInit, MicobeTra
     constructor(injector: Injector,
         private eventManager: EventManager,
         public commonService: CommonService,
+        @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
+        elRef: ElementRef,
         private cdref: ChangeDetectorRef) {
 
-        super(injector);
+            super(elRef.nativeElement);
 
-        this.visuals = commonService.visuals;
-        this.commonService.visuals.twoD = this;
+            this.visuals = commonService.visuals;
+            this.commonService.visuals.twoD = this;
     }
 
     ngOnInit() {
@@ -2507,4 +2511,8 @@ onPolygonColorTableChange(e) {
         this.onNetworkFrictionChange(this.SelecetedNetworkLinkStrengthVariable);
 
     }
+}
+
+export namespace TwoDComponent {
+    export const componentTypeName = '2D Network';
 }

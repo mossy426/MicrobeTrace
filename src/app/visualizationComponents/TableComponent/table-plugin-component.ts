@@ -1,4 +1,4 @@
-﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, ViewChild, OnDestroy } from '@angular/core';
+﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, ViewChild, OnDestroy, ElementRef, Inject } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { EventManager } from '@angular/platform-browser';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
@@ -7,6 +7,8 @@ import { Table } from 'primeng/table';
 import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
 import { MicrobeTraceNextVisuals } from '../../microbe-trace-next-plugin-visuals';
 import { SelectItem } from 'primeng/api';
+import { BaseComponentDirective } from '@app/base-component.directive';
+import { ComponentContainer } from 'golden-layout';
 
 
 
@@ -19,7 +21,7 @@ import { SelectItem } from 'primeng/api';
     styleUrls: ['./table-plugin-component.less']
 })
 
-export class TableComponent extends AppComponentBase implements OnInit, OnDestroy, MicobeTraceNextPluginEvents {
+export class TableComponent extends BaseComponentDirective implements OnInit, OnDestroy, MicobeTraceNextPluginEvents {
 
     @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
 
@@ -69,10 +71,12 @@ export class TableComponent extends AppComponentBase implements OnInit, OnDestro
 
 
     constructor(injector: Injector,
+        @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
+        elRef: ElementRef,
         private eventManager: EventManager,
         private commonService: CommonService) {
 
-        super(injector);
+        super(elRef.nativeElement);
 
         this.visuals = commonService.visuals;
         this.commonService.visuals.tableComp = this;
@@ -391,4 +395,8 @@ interface TableData {
 interface FilterType{
     label: string,
     value: string
+}
+
+export namespace TableComponent {
+    export const componentTypeName = 'Table';
 }

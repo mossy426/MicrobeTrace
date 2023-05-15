@@ -53,6 +53,9 @@ Backtrace:
 /Applications/Adobe Dreamweaver 2021/Adobe Dreamweaver 2021.app/Contents/Resources/gems/bin/sass:34:in `load'
 /Applications/Adobe Dreamweaver 2021/Adobe Dreamweaver 2021.app/Contents/Resources/gems/bin/sass:34:in `<main>'
 */
+
+@import "goldenlayout-base.css";
+@import "themes/goldenlayout-light-theme.scss";
 body:before {
   white-space: pre;
   font-family: monospace;

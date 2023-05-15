@@ -241,15 +241,16 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     files: any[] = [];
 
-    homepageTabs: HomePageTabItem[] = [
-        {
-            label: 'Files',
-            templateRef: null,
-            tabTitle: 'Files',
-            isActive: true,
-            componentRef: null
-        }
-    ];
+    homepageTabs: HomePageTabItem[] = [];
+    // homepageTabs: HomePageTabItem[] = [
+    //     {
+    //         label: 'Files',
+    //         templateRef: null,
+    //         tabTitle: 'Files',
+    //         isActive: true,
+    //         componentRef: null
+    //     }
+    // ];
 
     constructor(
         injector: Injector,
@@ -359,12 +360,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
             // this.homepageTabs[0].componentRef = this.goldenLayout.componentInstances[0];
 
-
-            // this.subscription = this.homepageTabs[0].componentRef.LoadDefaultVisualizationEvent.subscribe((v) => {
-            //     console.log('loading default: ', v);
-            //     this.loadDefaultVisualization(v);
-            //     this.publishLoadNewData();
-            // });
             
         }, 1000);
         setTimeout(() => {
@@ -409,7 +404,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             $('#add-data-container').fadeTo("slow", 1);
             $('#onload-container').fadeTo("slow", 1);
             $('#tool-btn-container').fadeTo("slow", 1);
-            this.addComponent();
             // console.log('instances: ',this.goldenLayout.componentInstances);
         }, 5000);
         
@@ -417,10 +411,39 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         // reader.onloadend = out => this.commonService.processJSON(out.target, extension);
     }
 
-    addComponent() {
+    addComponent( component: string ) {
+
+        console.log('golden adding component: ', component);
+
         // const componentType = this._selectedRegisteredComponentTypeName;
-        this._goldenLayoutHostComponent.goldenLayout.addComponent('Files');
-        console.log('golden adding Files component');
+        const goldenLayoutComponent = this._goldenLayoutHostComponent.goldenLayout.newComponent(component);
+        console.log('golden comp: ', goldenLayoutComponent);
+        console.log('golden comp containter: ', goldenLayoutComponent['container']);
+
+        const componentRef = this._goldenLayoutHostComponent.getComponentRef(goldenLayoutComponent.container);
+        console.log('golden ref: ', componentRef);
+        this.addTab(component, component + this.activeTabIndex, this.activeTabIndex, componentRef);
+
+        console.log('tab added: ', this.homepageTabs);
+        // let ind = this.homepageTabs.findIndex((tab) => { 
+        //     return tab.tabTitle === 'Files';
+        //     });
+
+        // if (ind > -1) {
+        // this.homepageTabs[ind].componentRef = componentRef;
+        // }
+        
+        
+        setTimeout(() => {
+          
+            // console.log('view name: ', viewName);
+
+            // this.goldenLayout.componentInstances[this.goldenLayout.componentInstances.length - 1].DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
+
+            this.setActiveTabProperties();
+            this.loadSettings();
+        });
+
       }
 
 
@@ -1606,12 +1629,22 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         // let factory = this.cfr.resolveComponentFactory(FilesComponent);
         // this.cmpRef = this.targets.first.createComponent(factory);
+        setTimeout(() => {      
+            this._goldenLayoutHostComponent.initialise();
+            this.addComponent('Files');
 
+            console.log('golden comp ref: ', this.homepageTabs[0].componentRef.instance);
+            this.subscription = this.homepageTabs[0].componentRef.instance.LoadDefaultVisualizationEvent.subscribe((v) => {
+                console.log('loading default: ', v);
+                this.loadDefaultVisualization(v);
+                this.publishLoadNewData();
+            });
+          }, 0);
         
 
         // this.setActiveTabProperties();
 
-        this.cdref.detectChanges();
+        // this.cdref.detectChanges();
     }
 
 
@@ -1827,7 +1860,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         // this.goldenLayout.componentInstances[0].processFiles(fileList)
 
         this.homepageTabs.map(x => {
-            if (x.tabTitle === "Files") {
+            if (x.label === "Files") {
                 if (x.componentRef != null) {
                     console.log('in iles: ', this.subscription);
                     this.subscription.unsubscribe();
@@ -1849,7 +1882,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         // this.goldenLayout.componentInstances[0].processFile(file);
 
         this.homepageTabs.map(x => {
-            if (x.tabTitle === "Files") {
+            if (x.label === "Files") {
                 if (x.componentRef != null) {
                     x.componentRef.processFile(file);
                 }
@@ -1969,7 +2002,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
 
     ResetTabs() {
-        const home = this.homepageTabs.find(x => x.tabTitle === "Files");
+        const home = this.homepageTabs.find(x => x.label === "Files");
         home.isActive = true;
         this.homepageTabs = this.homepageTabs.filter(x => home === x);
         this.homepageTabs = [home];
@@ -2275,39 +2308,28 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
             switch(viewName) {
                 case "2D Network": 
+                    this.addComponent(viewName);
                     // this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
                     // console.log('2d network: ', this.goldenLayout.componentInstances);
                 break;
                 case "Table":
+                    this.addComponent(viewName);
                     // this.srv.createNewComponent(this.srv.getRegisteredComponents()[2]);
                     // console.log('table: ', this.goldenLayout.componentInstances[this.goldenLayout.componentInstances.length - 1]);
 
                 break;
                 case "Map":
+                    this.addComponent(viewName);
                     // this.srv.createNewComponent(this.srv.getRegisteredComponents()[3]);
                 break;
                 case "Phylogenetic Tree":
+                    this.addComponent(viewName);
                     // this.srv.createNewComponent(this.srv.getRegisteredComponents()[4]);
                 break;
                 default:
                     // this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
 
             }
-            
-            // console.log('tabview: ', this.tabView);
-            this.addTab(viewName, viewName + this.activeTabIndex, this.activeTabIndex);
-            console.log('homepage tabs: ' , this.homepageTabs);
-            // console.log('get state: ', JSON.stringify(this.srv.getState()['__zone_symbol__value']));
-
-            setTimeout(() => {
-          
-                console.log('view name: ', viewName);
-
-                // this.goldenLayout.componentInstances[this.goldenLayout.componentInstances.length - 1].DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
-
-                this.setActiveTabProperties();
-                this.loadSettings();
-            });
         }
         else {
             const tabWithoutComponentRef: HomePageTabItem | undefined = this.homepageTabs.find(x => x.label == viewName && x.componentRef != undefined);
@@ -2725,7 +2747,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         // }
     }
 
-    addTab(tabLabel: any, tabTitle: any, tabPosition: any, activate: boolean = true): void {
+    addTab(tabLabel: any, tabTitle: any, tabPosition: any, componentRef: any, activate: boolean = true): void {
 
         /*/
          * Ensure that all tabs are not selected before we set the next new tab.
@@ -2748,8 +2770,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             templateRef: null,
             tabTitle: tabTitle,
             isActive: activate,
-            componentRef: null
-
+            componentRef: componentRef
             // componentRef: this.goldenLayout.componentInstances[this.goldenLayout.componentInstances.length - 1]
         });
 

@@ -29,6 +29,12 @@ $sample-app-warn: mat-palette($mat-red);
 // @include angular-material-theme($sample-app-theme);
 
 /* You can add global styles to this file, and also import other style files */
+
+p-dialog {
+    z-index: 2;
+    position: relative;
+}
+
 .margin-left-5 {
     margin-left: 5px !important;
 }

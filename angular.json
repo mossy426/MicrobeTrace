@@ -81,6 +81,27 @@
             ]
           },
           "configurations": {
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": false,
+              "watch": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "6mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -114,6 +135,9 @@
             "browserTarget": "MicrobeTrace:build"
           },
           "configurations": {
+            "development": {
+              "browserTarget": "MicrobeTrace:build:development"
+            },
             "production": {
               "browserTarget": "MicrobeTrace:build:production"
             }

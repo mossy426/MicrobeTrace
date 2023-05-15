@@ -23,6 +23,7 @@ import { TwoDComponent } from './visualizationComponents/TwoDComponent/twoD-plug
       height: 100%;
       width: 100%;
       padding: 0;
+      display: block;
       position: relative;
     }
     `,
@@ -32,7 +33,7 @@ export class GoldenLayoutHostComponent implements OnDestroy {
   private _goldenLayout: GoldenLayout;
   private _goldenLayoutElement: HTMLElement;
   private _virtualActive = true;
-  private _viewContainerRefActive = false;
+  private _viewContainerRefActive = true;
   private _componentRefMap = new Map<ComponentContainer, ComponentRef<BaseComponentDirective>>();
   private _goldenLayoutBoundingClientRect: DOMRect = new DOMRect();
 
@@ -55,13 +56,10 @@ export class GoldenLayoutHostComponent implements OnDestroy {
     this._goldenLayoutElement = this._elRef.nativeElement;
 
     this.goldenLayoutComponentService.registerComponentType(FilesComponent.componentTypeName, FilesComponent);
-    console.log('golden registering Files component: ',     this.goldenLayoutComponentService.getRegisteredComponentTypeNames());
-
-
-    // this.goldenLayoutComponentService.registerComponentType(TwoDComponent.componentTypeName, TwoDComponent);
-    // this.goldenLayoutComponentService.registerComponentType(TableComponent.componentTypeName, TableComponent);
-    // this.goldenLayoutComponentService.registerComponentType(MapComponent.componentTypeName, MapComponent);
-    // this.goldenLayoutComponentService.registerComponentType(PhylogeneticComponent.componentTypeName, PhylogeneticComponent);
+    this.goldenLayoutComponentService.registerComponentType(TwoDComponent.componentTypeName, TwoDComponent);
+    this.goldenLayoutComponentService.registerComponentType(TableComponent.componentTypeName, TableComponent);
+    this.goldenLayoutComponentService.registerComponentType(MapComponent.componentTypeName, MapComponent);
+    this.goldenLayoutComponentService.registerComponentType(PhylogeneticComponent.componentTypeName, PhylogeneticComponent);
 
   }
 
@@ -71,7 +69,6 @@ export class GoldenLayoutHostComponent implements OnDestroy {
 
   initialise() {
 
-    console.log('golden initialized');
     this._goldenLayout = new GoldenLayout(
       this._goldenLayoutElement,
       this._goldenLayoutBindComponentEventListener,
@@ -83,6 +80,9 @@ export class GoldenLayoutHostComponent implements OnDestroy {
     if (this._goldenLayout.isSubWindow) {
       this._goldenLayout.checkAddDefaultPopinButton();
     }
+
+    this.setViewContainerRefActive(true);
+
   }
 
   setVirtualActive(value: boolean) {

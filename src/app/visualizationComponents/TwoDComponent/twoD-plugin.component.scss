@@ -4,6 +4,12 @@
     min-width: 150px;
 }
 
+:host {
+  position: absolute;
+  overflow: hidden;
+  z-index: 1 !important;
+}
+
 .network {
   margin-top: 0 !important;
   cursor: grab;
@@ -23,6 +29,7 @@
 
 .clusters path {
     cursor: -webkit-grab;
+    cursor: grab;
   }
 
 :host ::ng-deep {

@@ -13,7 +13,8 @@
     </div>
 
 <div class="row align-items-center">
-    <div class="primeng-datatable-container" [busyIf]="primengTableHelper.isLoading">
+    <!-- [busyIf]="primengTableHelper.isLoading" -->
+    <div class="primeng-datatable-container">
         <p-table #dt *ngIf="IsDataAvailable == true && SelectedTableData" 
             [value]="SelectedTableData.data" 
             [rowHover]="true"

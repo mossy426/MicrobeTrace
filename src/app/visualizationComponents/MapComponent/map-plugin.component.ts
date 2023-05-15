@@ -1,4 +1,4 @@
-﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, NgZone, InjectionToken, ElementRef, ViewChild, ViewContainerRef, ViewChildren, QueryList, ChangeDetectorRef, Renderer2 } from '@angular/core';
+﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, NgZone, InjectionToken, ElementRef, ViewChild, ViewContainerRef, ViewChildren, QueryList, ChangeDetectorRef, Renderer2, Inject } from '@angular/core';
 import { EventManager } from '@angular/platform-browser';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
@@ -20,6 +20,8 @@ import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
 import { MicrobeTraceNextVisuals } from '../../microbe-trace-next-plugin-visuals';
 import { ColorIterator } from '../../helperClasses/colorIterator';
 import * as _ from 'lodash';
+import { BaseComponentDirective } from '@app/base-component.directive';
+import { ComponentContainer } from 'golden-layout';
 
 declare var google: any;
 
@@ -58,7 +60,7 @@ class LongLatClass implements LongLatInterface {
 
 
 
-export class MapComponent extends AppComponentBase implements OnInit, MicobeTraceNextPluginEvents {
+export class MapComponent extends BaseComponentDirective implements OnInit, MicobeTraceNextPluginEvents {
 
     @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
 
@@ -233,9 +235,11 @@ export class MapComponent extends AppComponentBase implements OnInit, MicobeTrac
         private elem: ElementRef,
         private eventManager: EventManager,
         public commonService: CommonService,
+        @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
+        elRef: ElementRef,
         private cdref: ChangeDetectorRef) {
 
-        super(injector);
+            super(elRef.nativeElement);
 
         this.visuals = commonService.visuals;
         this.visuals.gisMap = this;
@@ -1650,4 +1654,8 @@ interface LocationDetail {
     Latitude: number | undefined,
     Longitude: number | undefined,
     Date: Date | undefined
+}
+
+export namespace MapComponent {
+    export const componentTypeName = 'Map';
 }

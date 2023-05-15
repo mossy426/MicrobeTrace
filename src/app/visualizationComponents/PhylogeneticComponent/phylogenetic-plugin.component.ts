@@ -1,5 +1,5 @@
 ﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit,
-  ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
+  ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, Inject } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { EventManager } from '@angular/platform-browser';
 import { MatMenu } from '@angular/material/menu';
@@ -17,6 +17,8 @@ import TidyTree from './tidytree';
 import AuspiceHandler from '@app/helperClasses/auspiceHandler';
 import * as d3 from 'd3';
 import auspiceJson from '@app/helperClasses/auspice_example_formatted.json';
+import { BaseComponentDirective } from '@app/base-component.directive';
+import { ComponentContainer } from 'golden-layout';
 
 
 /**
@@ -27,7 +29,7 @@ import auspiceJson from '@app/helperClasses/auspice_example_formatted.json';
   templateUrl: './phylogenetic-plugin.component.html',
   styleUrls: ['./phylogenetic-plugin.component.scss']
 })
-export class PhylogeneticComponent extends AppComponentBase implements OnInit {
+export class PhylogeneticComponent extends BaseComponentDirective implements OnInit {
 
   @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
   svgStyle: {} = {
@@ -143,9 +145,11 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
   constructor(injector: Injector,
               private eventManager: EventManager,
               public commonService: CommonService,
+              @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
+              elRef: ElementRef,
               private cdref: ChangeDetectorRef) {
 
-    super(injector);
+    super(elRef.nativeElement);
 
     this.visuals = commonService.visuals;
     this.commonService.visuals.phylogenetic = this;
@@ -600,4 +604,8 @@ export class PhylogeneticComponent extends AppComponentBase implements OnInit {
       .on('end', () => tooltip.style('z-index', -1));
   }
 
+}
+
+export namespace PhylogeneticComponent {
+    export const componentTypeName = 'Phylogenetic Tree';
 }
