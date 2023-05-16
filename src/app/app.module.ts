@@ -55,8 +55,8 @@ import { ThreeDComponent } from './visualizationComponents/ThreeDComponent/three
 import { TableComponent } from './visualizationComponents/TableComponent/table-plugin-component';
 import { HistogramComponent } from './visualizationComponents/HistogramComponent/histogram-plugin.component';
 import { MapComponent } from './visualizationComponents/MapComponent/map-plugin.component';
-// import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-// import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
 // import { MatButtonModule, MatInputModule, MatMenuModule, MatToolbarModule, MatSliderModule } from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -64,6 +64,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSliderModule } from '@angular/material/slider';
 import { DndDirective } from '@shared/dnd.directive';
+
+// import { MapModule } from 'ngx-leaflet';
+
 
 // import { GoldenLayoutModule, GoldenLayoutService, GoldenLayoutConfiguration } from '@embedded-enterprises/ng6-golden-layout';
 import GoldenLayout from 'golden-layout';
@@ -186,9 +189,9 @@ export class TestedComponent {
     AccordionModule,
     SidebarModule,
     MultiSelectModule,
-    SliderModule
-    // LeafletModule,
-    // LeafletMarkerClusterModule
+    SliderModule,
+    LeafletModule,
+    LeafletMarkerClusterModule
   ],
   exports: [
     SelectButtonModule

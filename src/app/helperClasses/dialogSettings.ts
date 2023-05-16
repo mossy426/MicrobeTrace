@@ -8,11 +8,14 @@ export class DialogSettings {
 
     // Link Color
     public linkTop: number = 200;
-    public linkLeft: number = 40;
+    public linkLeft: string = "right";
+
+    // Map settings
+    public mapRight: string = "bottom-right";
 
     // Node Color
     public nodeTop: number = 400;
-    public nodeLeft: number = 40;
+    public nodeLeft: string = "left";
 
     // Node Shape
     public shapeTop: number = 700;

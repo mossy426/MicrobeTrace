@@ -456,7 +456,27 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
     // $.getJSON("../assets/outbreak.microbetrace", window.context.commonService.applySession);
     // Use this when building production (.ie gh-pages branch)
-    $.getJSON("outbreaknorm.microbetrace", window.context.commonService.applySession);        
+    if(!this.commonService.session.network.initialLoad) {
+      console.log('inial load1:',this.commonService.session.network.initialLoad);
+      $.getJSON("outbreaknorm.microbetrace", window.context.commonService.applySession);    
+      this.commonService.session.network.initialLoad = true; 
+      // if(this.commonService.session.files && this.commonService.session.files.length > 0) {
+      //   for(let i = 0; i < this.commonService.session.files.length; i++) {
+      //     this.addToTable(this.commonService.session.files[i]);
+      //   }
+      // }  
+      console.log('inial load2:',this.commonService.session.network.initialLoad);
+ 
+    }
+
+    if(this.commonService.session.files && this.commonService.session.files.length > 0) {
+      console.log('adding: ', this.commonService.session.files);
+      for(let i = 0; i < this.commonService.session.files.length; i++) {
+        console.log('adding: ', this.commonService.session.files[i]);
+
+        this.addToTable(this.commonService.session.files[i]);
+      }
+    }
     // console.log('session: ', this.commonService?.session?.files, this.commonService.session.files.length);
   }
 
@@ -526,6 +546,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
   loadDefaultVisualization(e: string) {
 
+    console.log('files loading default visualization');
     setTimeout(() => {
 
       this.visuals.microbeTrace.commonService.session.messages = [];
@@ -1235,6 +1256,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     console.log('1');
     fileto.promise(rawfile, (extension === 'xlsx' || extension === 'xls') ? 'ArrayBuffer' : 'Text').then(file => {
       //debugger;
+      console.log('2');
       file.name = this.visuals.microbeTrace.commonService.filterXSS(file.name);
       file.extension = file.name.split('.').pop().toLowerCase();
       this.visuals.microbeTrace.commonService.session.files.push(file);
@@ -1322,7 +1344,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
       console.log(headers);
 
       let parentContext = context;
-      let root = $('<div class="file-table-row" style="position: relative; z-index: 1;"></div>').data('filename', file.name);
+      let root = $('<div class="file-table-row" style="position: relative; z-index: 1;margin-bottom: 24px;"></div>').data('filename', file.name);
       let fnamerow = $('<div class="row w-100"></div>');
       $('<div class="file-name col"></div>')
         .append($('<a href="javascript:void(0);" class="far flaticon-delete-1 align-middle p-1" title="Remove this file"></a>').on('click', () => {

@@ -60,8 +60,7 @@
 </div>
 
 
-<p-dialog id="map-settings-pane" [positionLeft]="NodeMapSettingsExportDialogSettings.left"
-    [positionTop]="NodeMapSettingsExportDialogSettings.top" [(visible)]="NodeMapSettingsExportDialogSettings.isVisible"
+<p-dialog id="map-settings-pane" [position]="NodeMapSettingsExportDialogSettings.mapRight" [(visible)]="NodeMapSettingsExportDialogSettings.isVisible"
     header="Geospatial Settings" [contentStyle]="{'max-height': '70vh'}">
     <tabset class="tab-container tabbable-line">
         <tab heading="{{'Data' | localize}}" customClass="m-tabs__item">

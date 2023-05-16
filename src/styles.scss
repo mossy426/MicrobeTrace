@@ -458,6 +458,15 @@ body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active, body .ui-tab
     color: #005DAA;
 }
 
+.p-dropdown {
+    display: flex !important;
+    // display: block;
+}
+
+.p-datatable-resizable-table>.p-datatable-thead>tr>th {
+    white-space: pre-wrap !important;
+}
+
 
 .threshold-input-length {
     max-width: 60px;;

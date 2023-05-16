@@ -1,12 +1,12 @@
 ﻿﻿<div class="table-wrapper">
     <div id="tool-btn-container" class="m-portlet">
-        <span style="overflow: visible; position: relative; width: 110px; display: inline;">
+        <span class="tool-btn" style="overflow: visible; position: relative; width: 110px; display: inline;">
             <a title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings()"><i class="flaticon-settings primary"></i></a>
         </span>
-        <span style="overflow: visible; position: relative; width: 110px; display: inline;">
+        <span  class="tool-btn" style="overflow: visible; position: relative; width: 110px; display: inline;">
             <a title="Export Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openExport()"><i class="flaticon-download primary"></i></a>
         </span>
-        <span id="dataType" style="overflow: visible; position: relative; width: 110px; display: inline;">
+        <span class="data-types" id="dataType" style="overflow: visible; position: relative; width: 110px; display: inline;">
             <p-selectButton #dataSet [options]="dataSetView" [(ngModel)]="dataSetViewSelected" (onOptionClick)="openSelectDataSetScreen($event)"></p-selectButton>
         </span>
         <p-multiSelect [options]="SelectedTableData.availableColumns" [(ngModel)]="SelectedTableData.tableColumns"[showToggleAll]=false></p-multiSelect>

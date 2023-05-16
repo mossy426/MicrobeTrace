@@ -1,4 +1,4 @@
-import { ApplicationRef, Component, ComponentRef, ElementRef, EmbeddedViewRef, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
+import { ApplicationRef, Component, ComponentRef, ElementRef, EmbeddedViewRef, EventEmitter, OnDestroy, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import {
   ComponentContainer, GoldenLayout,
   LogicalZIndex,
@@ -14,6 +14,7 @@ import { MapComponent } from './visualizationComponents/MapComponent/map-plugin.
 import { PhylogeneticComponent } from './visualizationComponents/PhylogeneticComponent/phylogenetic-plugin.component';
 import { TableComponent } from './visualizationComponents/TableComponent/table-plugin-component';
 import { TwoDComponent } from './visualizationComponents/TwoDComponent/twoD-plugin.component';
+import { EventEmitterService } from '@shared/utils/event-emitter.service';
 
 @Component({
   selector: 'app-golden-layout-host',
@@ -43,6 +44,8 @@ export class GoldenLayoutHostComponent implements OnDestroy {
     (container: ComponentContainer) => this.handleUnbindComponentEvent(container);
 
   @ViewChild('componentViewContainer', { read: ViewContainerRef, static: true }) private _componentViewContainerRef: ViewContainerRef;
+  
+  @Output() TabRemovedEvent = new EventEmitter();
 
   get goldenLayout() { return this._goldenLayout; }
   get virtualActive() { return this._virtualActive; }
@@ -109,6 +112,21 @@ export class GoldenLayoutHostComponent implements OnDestroy {
     return this._componentRefMap.get(container);
   }
 
+  public focusComponent(componentId: string) : ComponentContainer {
+
+    const container = Array.from(this._componentRefMap.keys()).find(
+      (container) => container.componentType?.toString() === componentId
+    ) as ComponentContainer;
+  
+    if (container) {
+      const componentItem = container.parent;
+      this._goldenLayout.focusComponent(componentItem);
+    }
+
+    return container;
+
+  }
+
   private handleBindComponentEvent(container: ComponentContainer, itemConfig: ResolvedComponentItemConfig): ComponentContainer.BindableComponent {
     const componentType = itemConfig.componentType;
     const componentRef = this.goldenLayoutComponentService.createComponent(componentType, container);
@@ -167,6 +185,10 @@ export class GoldenLayoutHostComponent implements OnDestroy {
       const componentRootElement = component.rootHtmlElement;
       container.element.removeChild(componentRootElement);
       this._appRef.detachView(hostView);
+    }
+
+    if (container.componentType !== undefined){
+      this.TabRemovedEvent.emit(container.componentType.toString());
     }
 
     componentRef.destroy();

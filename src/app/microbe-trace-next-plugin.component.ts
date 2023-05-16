@@ -36,19 +36,13 @@ import { first } from 'rxjs/operators';
 import { EventEmitterService } from '@shared/utils/event-emitter.service';
 // import * as moment from 'moment';
 import moment from 'moment';
-
-// import {
-//     GoldenLayoutModule,
-//     GoldenLayoutService,
-//     GoldenLayoutConfiguration,
-//     MultiWindowService,
-//     GoldenLayoutComponent,
-//   } from '@embedded-enterprises/ng6-golden-layout';
+import { GoldenLayoutComponentService } from './golden-layout-component.service';
 
 import { Tabulator } from 'tabulator-tables';
 
 import { Subscription } from 'rxjs';
 import { GoldenLayoutHostComponent } from './golden-layout-host.component';
+import { ComponentItem } from 'golden-layout';
 
 
 @Component({
@@ -257,6 +251,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         private cfr: ComponentFactoryResolver,
         private compiler: Compiler,
         public commonService: CommonService,
+        private goldenLayoutComponentService: GoldenLayoutComponentService,
         // private keenService: BpaasLedgerPluginServiceProxy,
         // private _userService: UserServiceProxy,
         public domSanitizer: DomSanitizer,
@@ -413,6 +408,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     addComponent( component: string ) {
 
+        console.log('tab added: ', this.homepageTabs);
+
         console.log('golden adding component: ', component);
 
         // const componentType = this._selectedRegisteredComponentTypeName;
@@ -424,7 +421,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         console.log('golden ref: ', componentRef);
         this.addTab(component, component + this.activeTabIndex, this.activeTabIndex, componentRef);
 
-        console.log('tab added: ', this.homepageTabs);
+        // console.log('tab added: ', this.homepageTabs);
         // let ind = this.homepageTabs.findIndex((tab) => { 
         //     return tab.tabTitle === 'Files';
         //     });
@@ -444,7 +441,20 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             this.loadSettings();
         });
 
-      }
+    }
+
+    public removeComponent( component: string ) {
+        console.log('tab removing: ', this.homepageTabs);
+
+        this.homepageTabs = this.homepageTabs.filter((tab) => {
+            return tab.label !== component;
+        });
+
+        console.log('tab removing2: ', _.cloneDeep(this.homepageTabs));
+
+
+        
+    }
 
 
     /**
@@ -606,7 +616,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.showSorting = false;
 
         // Remove the default tab
-        this.removeTab({index : 1})
+        // this.removeTab({index : 1})
 
         console.log('homepage tabs1: ', this.homepageTabs);
         // console.log('instances1: ', this.goldenLayout.componentInstances);
@@ -1639,6 +1649,12 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 this.loadDefaultVisualization(v);
                 this.publishLoadNewData();
             });
+
+            this._goldenLayoutHostComponent.TabRemovedEvent.subscribe((v) => {
+                console.log('removing comp: ', v);
+                // this.loadSettings();
+                this.removeComponent(v);
+            });
           }, 0);
         
 
@@ -1830,19 +1846,13 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         e = e.replace("_", " ");
 
-        // TODO: do something like this when adding new data
-        // if(this.homepageTabs.length > 1) {
-        //     // Remove all golden layout component instances except for the files component by calling srv removeTab
-        //     if(this.goldenLayout.componentInstances.length > 1) {
-        //         for(let i = 1; i < this.goldenLayout.componentInstances.length; i++) {
-        //             this.srv.removeTab(0,1);
-        //             this.homepageTabs.splice(this.homepageTabs.length - 1, 1);
-        //         }
-        //     }
-        // }
-        console.log('homepage launch: ', this.homepageTabs)
-        this.Viewclick(e);
-        // this.Viewclick("Map");
+        if (e === "2d network"){
+            e = "2D Network";
+        }
+        if (this.homepageTabs.findIndex(x => x.label == e) === -1) {
+            this.Viewclick(e);
+        }
+        
     }
 
     public getfileContent(fileList: FileList) {
@@ -1859,22 +1869,22 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         // console.log('homepagetabs: ', this.homepageTabs);
         // this.goldenLayout.componentInstances[0].processFiles(fileList)
 
-        this.homepageTabs.map(x => {
-            if (x.label === "Files") {
-                if (x.componentRef != null) {
-                    console.log('in iles: ', this.subscription);
-                    this.subscription.unsubscribe();
-                    // console.log('unsubscribed');
-                    this.subscription = this.homepageTabs[0].componentRef.LoadDefaultVisualizationEvent.subscribe((v) => {
-                        console.log('loading default: ', v);
-                        // this.loadSettings();
-                        this.loadDefaultVisualization(v);
-                        this.publishLoadNewData();
-                    });
-                    x.componentRef.processFiles(fileList);
-                }
-            }
-        });
+        // this.homepageTabs.map(x => {
+        //     if (x.label === "Files") {
+        //         if (x.componentRef != null) {
+        //             console.log('in iles: ', this.subscription);
+        //             this.subscription.unsubscribe();
+        //             // console.log('unsubscribed');
+        //             this.subscription = this.homepageTabs[0].componentRef.LoadDefaultVisualizationEvent.subscribe((v) => {
+        //                 console.log('loading default: ', v);
+        //                 // this.loadSettings();
+        //                 this.loadDefaultVisualization(v);
+        //                 this.publishLoadNewData();
+        //             });
+        //             x.componentRef.processFiles(fileList);
+        //         }
+        //     }
+        // });
     }
 
     public getSinglefileContent(file: File) {
@@ -2145,6 +2155,15 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
               break;
             }
             case "Add Data": {
+                
+                // If files tab exists, go to it
+                if(this.homepageTabs.length > 1 && this.homepageTabs.findIndex(x => x.label === "Files") !== -1) {
+                    this._goldenLayoutHostComponent.focusComponent("Files");
+                } else {
+                    this.addComponent('Files');
+                }
+
+
                 // this.commonService.launchView("files");
                 // this.activeTabIndex = 0;
 
@@ -2295,104 +2314,38 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         console.log(this.commonService.session.style.widgets['link-threshold']);
         console.log('homepage tabs1: ' , this.homepageTabs);
 
-        let tabNdx = this.homepageTabs.findIndex(x => x.label == viewName);
         if (viewName == "2d network") {
             viewName = "2D Network";
         }
+
+        let tabNdx = this.homepageTabs.findIndex(x => x.label == viewName);
+
         /*/
          * Don't allow duplicate tabs to get added.
         /*/
         if (tabNdx == -1) {
 
             this.activeTabIndex = this.activeTabIndex + 1;
-
-            switch(viewName) {
-                case "2D Network": 
-                    this.addComponent(viewName);
-                    // this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
-                    // console.log('2d network: ', this.goldenLayout.componentInstances);
-                break;
-                case "Table":
-                    this.addComponent(viewName);
-                    // this.srv.createNewComponent(this.srv.getRegisteredComponents()[2]);
-                    // console.log('table: ', this.goldenLayout.componentInstances[this.goldenLayout.componentInstances.length - 1]);
-
-                break;
-                case "Map":
-                    this.addComponent(viewName);
-                    // this.srv.createNewComponent(this.srv.getRegisteredComponents()[3]);
-                break;
-                case "Phylogenetic Tree":
-                    this.addComponent(viewName);
-                    // this.srv.createNewComponent(this.srv.getRegisteredComponents()[4]);
-                break;
-                default:
-                    // this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
-
-            }
+            this.addComponent(viewName);
+            
         }
         else {
-            const tabWithoutComponentRef: HomePageTabItem | undefined = this.homepageTabs.find(x => x.label == viewName && x.componentRef != undefined);
+            
+            const container = this._goldenLayoutHostComponent.focusComponent(viewName);
 
-            if (!tabWithoutComponentRef) {
-               /* 
-                setTimeout(() => {
+            const instance = this._goldenLayoutHostComponent.getComponentRef(container).instance as any;
 
-                    let _type: any = this.GetComponentTypeByName(viewName);
-
-                    let factory = this.cfr.resolveComponentFactory(_type);
-                    this.cmpRef = this.targets.last.createComponent(factory)
-
-                    tabNdx = this.homepageTabs.findIndex(x => x.label == viewName);
-                    this.homepageTabs[tabNdx].componentRef = this.cmpRef;
-                    this.tabView.tabs[tabNdx].selected = true;
-
-                    this.cmpRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
-
-                    this.setActiveTabProperties();
-                });
-                */
+             //Load global settings changes if changed in another view
+            if (instance.loadSettings) {        
+                instance.loadSettings();
+                if (this.metric === 'snps'){
+                    this.commonService.session.style.widgets['default-distance-metric'] = 'snps';
+                    this.commonService.session.style.widgets['link-threshold'] = parseInt(this.threshold);
+                    this.onLinkThresholdChanged();
+                }
             }
-            else {
 
-                this.homepageTabs.map(x => {
-                    x.isActive = false;
-                    if (x.label.toLocaleLowerCase().includes(viewName.toLocaleLowerCase(), 0) == true) {
-                        x.isActive = true;
-                    }
-                });
-
-                // this.tabView.tabs.map(x => {
-
-                //     x.selected = false;
-                //     if (x.header.includes(viewName, 0) == true) {
-                //         x.selected = true;
-                //     }
-
-                // });
-
-                console.log('activeee');
-
-               this.setActiveTabProperties();
-               this.loadSettings();
-
-            }
         }
-
-        const foundTab = this.homepageTabs.find(x => x.label == viewName);
-
-        //TODO: CHange Component Ref
-        console.log('found tab: ', foundTab);
-        if (foundTab && foundTab.componentRef &&
-            foundTab.componentRef.loadSettings) {                
-              foundTab.componentRef.loadSettings();
-              if (this.metric === 'snps'){
-                this.commonService.session.style.widgets['default-distance-metric'] = 'snps';
-                this.commonService.session.style.widgets['link-threshold'] = parseInt(this.threshold);
-                this.onLinkThresholdChanged();
-              }
-        }
-
 
     }
 
@@ -2478,7 +2431,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             item.isActive = item.label === activeComponentName;
         });
 
-
+        console.log('tab switched is: ', tabNdx);
 
         switch (activeComponentName) {
 
@@ -2513,30 +2466,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
                 break;
             }
-            case "3D Network": {
-                this.showSettings = true;
-                this.showExport = true;
-                this.showCenter = false;
-                this.showPinAllNodes = false;
-                this.showRefresh = true;
-                this.showButtonGroup = false;
-                this.showSorting = false;
-
-
-                break;
-            }
-            case "Histogram": {
-
-                this.showSettings = true;
-                this.showExport = true;
-                this.showCenter = false;
-                this.showPinAllNodes = false;
-                this.showRefresh = false;
-                this.showButtonGroup = false;
-                this.showSorting = false;
-
-                break;
-            }
             case "Table": {
 
                 this.showSettings = false;
@@ -2547,66 +2476,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 this.showButtonGroup = true;
                 this.showSorting = true;
 
-                break;
-            }
-            case "Aggregation": {
-
-                this.showSettings = true;
-                this.showExport = true;
-                this.showCenter = false;
-                this.showPinAllNodes = false;
-                this.showRefresh = false;
-                this.showButtonGroup = false;
-                this.showSorting = false;
-
-                break;
-            }
-            case "Bubbles": {
-
-                this.showSettings = true;
-                this.showExport = true;
-                this.showCenter = false;
-                this.showPinAllNodes = false;
-                this.showRefresh = false;
-                this.showButtonGroup = false;
-                this.showSorting = false;
-
-
-                break;
-            }
-            case "Flow Diagram": {
-
-                this.showSettings = true;
-                this.showExport = true;
-                this.showCenter = false;
-                this.showPinAllNodes = false;
-                this.showRefresh = false;
-                this.showButtonGroup = false;
-                this.showSorting = false;
-
-                break;
-            }
-            case "Scatterplot": {
-
-                this.showSettings = true;
-                this.showExport = true;
-                this.showCenter = false;
-                this.showPinAllNodes = false;
-                this.showRefresh = false;
-                this.showButtonGroup = false;
-                this.showSorting = false;
-
-                break;
-            }
-            case "Waterfall": {
-
-                this.showSettings = false;
-                this.showExport = false;
-                this.showCenter = false;
-                this.showPinAllNodes = false;
-                this.showRefresh = false;
-                this.showButtonGroup = false;
-                this.showSorting = false;
+                this.GlobalSettingsDialogSettings.setVisibility(false);
+                this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
+                this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
 
                 break;
             }
@@ -2615,30 +2487,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 this.showSettings = true;
                 this.showExport = true;
                 this.showCenter = true;
-                this.showPinAllNodes = false;
-                this.showRefresh = false;
-                this.showButtonGroup = false;
-                this.showSorting = false;
-
-                break;
-            }
-            case "Gantt": {
-
-                this.showSettings = true;
-                this.showExport = true;
-                this.showCenter = false;
-                this.showPinAllNodes = false;
-                this.showRefresh = false;
-                this.showButtonGroup = false;
-                this.showSorting = false;
-
-                break;
-            }
-            case "Heatmap": {
-
-                this.showSettings = true;
-                this.showExport = true;
-                this.showCenter = false;
                 this.showPinAllNodes = false;
                 this.showRefresh = false;
                 this.showButtonGroup = false;
@@ -2656,35 +2504,20 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 this.showButtonGroup = false;
                 this.showSorting = false;
 
+                this.GlobalSettingsDialogSettings.setVisibility(false);
+                this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
+                this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
+
                 break;
             }
         }
 
-        if (activeComponentName !== "Files" && this.previousTab === "Files") {
-            this.GlobalSettingsDialogSettings.setVisibility(this.cachedGlobalSettingsVisibility);
-            this.GlobalSettingsLinkColorDialogSettings.setVisibility(this.cachedGlobalSettingsLinkColorVisibility);
-            this.GlobalSettingsNodeColorDialogSettings.setVisibility(this.cachedGlobalSettingsNodeColorVisibility);
-        }
 
         if (!this.homepageTabs[tabNdx].componentRef) {
             setTimeout(() => {
 
-                // let _type: any = this.GetComponentTypeByName(activeComponentName);
-
-                // let factory = this.cfr.resolveComponentFactory(_type);
-
-                // const viewContainerRef = this.targets.filter((element, index) => index === tabNdx);
-
-                // if (viewContainerRef.length > 0) {
-
-                //     this.cmpRef = viewContainerRef[0].createComponent(factory);
-                // }
-
                 tabNdx = this.homepageTabs.findIndex(x => x.label == activeComponentName);
-                // this.homepageTabs[tabNdx].componentRef = this.cmpRef;
-                // this.tabView.tabs[tabNdx].selected = true;
 
-                console.log('this cmpRef: ', this.homepageTabs[tabNdx]);
                 // this.cmpRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
 
                 // this.homepageTabs[tabNdx].componentRef.instance.InitView();
@@ -2699,53 +2532,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.previousTab = activeComponentName;
     }
 
-    // openSettings(tabNdx: any): void {
-
-    //     this.activeTabNdx = tabNdx;
-    //     this.homepageTabs[tabNdx].componentRef.instance.openSettings();
-
-    // }
-
-    // openExport(tabNdx: any): void {
-    //     this.homepageTabs[tabNdx].componentRef.instance.openExport();
-    // }
-
-    // openCenter(tabNdx: any): void {
-
-    //     this.homepageTabs[tabNdx].componentRef.instance.openCenter();
-
-    // }
-
     openPinAllNodes(tabNdx: any): void {
         console.log('open : ', tabNdx);
         this.homepageTabs[tabNdx].componentRef.openPinAllNodes();
     }
 
-    // openRefreshScreen(tabNdx: any): void {
-    //     this.homepageTabs[tabNdx].componentRef.instance.openRefreshScreen();
-    // }
-
-    // openSelectDataSetScreen(tabNdx: any, e: any): void {
-    //     this.homepageTabs[tabNdx].componentRef.instance.openSelectDataSetScreen(e.option.value.toString().toLowerCase());
-    // }
-
-
-
-    removeTab(e: any) {
-        console.log('remove tabs: ');
-        // if (e.index > 0) {
-
-        //     this.homepageTabs.splice(e.index, 1);
-
-        //     if (e.index == this.homepageTabs.length - 1) {
-        //         this.tabView.activeIndex = this.homepageTabs.length;
-        //     } else {
-        //         this.tabView.activeIndex = this.homepageTabs.length - 1;
-        //     }
-
-        //     this.setActiveTabProperties();
-        // }
-    }
 
     addTab(tabLabel: any, tabTitle: any, tabPosition: any, componentRef: any, activate: boolean = true): void {
 

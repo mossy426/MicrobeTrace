@@ -10,7 +10,7 @@ import * as L from 'leaflet';
 import moment from 'moment';
 import 'leaflet.markercluster';
 
-//import * as MarkerCluster from 'leaflet.markercluster';
+import * as MarkerCluster from 'leaflet.markercluster';
 import { window } from 'ngx-bootstrap';
 import { SelectItem } from 'primeng/api';
 import { Observable } from 'rxjs';
@@ -291,9 +291,54 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
 
         });
 
+
+    }
+
+
+    initializeMap(address: string) {
+
+        this.codeAddress(["US"]).then((result: any[]) => {
+
+            console.log('map codeAddress result', result);
+            if (result.length > 0) {
+                let latitude = result[0].Latitude;
+                let longitude = result[0].Longitude;
+
+                this.initializeLeafletMap(latitude, longitude);
+            }
+        });
+    }
+
+    initializeLeafletMap(latitude: number, longitude: number) {
+        //TODO: put this in a config?
+        const mapTokenKey: string = 'sk.eyJ1IjoicndhdHR5IiwiYSI6ImNrY2RuMWlzcDAwMmUyc3A5ejl3ODEzMXoifQ.qpXOouVsI6P8-HOHUWofuQ'
+
+        console.log('map initializing');
+
+
+        this.layers.basemap = tileLayer(`http://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png`);
+        this.layers.satellite = tileLayer(`https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v9/tiles/256/{z}/{x}/{y}?access_token=${mapTokenKey}`);
+
+        this.leafletInitialOptions = {
+            zoom: 4,
+            zoomControl: true,
+            maxZoom: 15,
+            preferCanvas: true,
+            center: latLng([latitude, longitude]),
+        };
+
+        this.leafletMarkerClusterOptions = {
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: true,
+            spiderfyOnMaxZoom: true,
+            removeOutsideVisibleBounds: false,
+            maxClusterRadius: 20,
+            spiderLegPolylineOptions: { opacity: 0 }
+        };
     }
 
     onMapReady(map: Map) {
+
         //get the leaflet map
         this.lmap = map;
         this.lmap.zoomControl.setPosition('bottomleft');
@@ -411,91 +456,6 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
                 that.resetStack();
                 // that.visuals.gisMap.lmap.flyToBounds(that.layers.nodes().getBounds());
               }, false);
-
-        // if (this.SelectedZipCode) {
-
-        //     console.log('in zip');
-
-        //     this.nodes.forEach(n => {
-
-        //         cnt = cnt + 1;
-
-        //         if (this.commonService.temp.mapData && this.commonService.temp.mapData.zipcodes) {
-        //             let locationData = this.commonService.temp.mapData.zipcodes.find(x => x.zipcode == n[this.SelectedZipCode]);
-        //             if (locationData != undefined && n[this.SelectedZipCode] != undefined && n[this.SelectedZipCode] != '') {
-
-        //                 dataFound = true;
-
-        //                 n._lat = locationData._lat;
-        //                 n._lon = locationData._lon;
-
-        //                 const newLeafletMarker = this.getMarker(locationData._lat, locationData._lon);
-        //                 this.leafletMarkers.push(newLeafletMarker);
-
-        //             }
-        //         }
-
-        //         if (dataFound == true && cnt >= this.nodes.length) {
-
-        //             this.rerollNodes();
-        //             this.drawNodes();
-        //             this.drawLinks();
-        //             this.resetStack();
-        //         }
-        //     });
-
-        // }
-
-
-        // if (this.SelectedLatitude != "None" && this.SelectedLongitude != "None") {
-
-
-        //     console.log('in lat');
-
-        //     var lat = this.SelectedLatitude,
-        //         lon = this.SelectedLongitude;
-
-        //     this.nodes.forEach(n => {
-
-        //         debugger;
-
-        //         if (typeof n[lat] == 'string') {
-        //             n._lat = (this.commonService.includes(n[lat], 'S') ? -1 : 1) * parseFloat(n[lat]);
-        //         } else {
-        //             n._lat = n[lat];
-        //         }
-        //         if (typeof n[lon] == 'string') {
-        //             n._lon = (this.commonService.includes(n[lon], 'W') ? -1 : 1) * parseFloat(n[lon]);
-        //         } else {
-        //             n._lon = n[lon];
-        //         }
-        //     });
-
-        //     this.rerollNodes();
-        //     this.drawNodes();
-        //     this.drawLinks();
-        //     this.showAllVisibleMarkers();
-
-
-        // } if (this.SelectedCountry != "None") {
-
-        //     console.log('seelcted country');
-        //     let that = this;
-        //     this.matchCoordinates(function () {
-        //         that.rerollNodes();
-        //         that.drawLinks();
-        //         that.drawNodes();
-        //         that.resetStack();
-        //         // that.visuals.gisMap.lmap.flyToBounds(that.layers.nodes().getBounds());
-        //       }, false);
-
-        // }
-
-        // if (this.SelectedGeospatialTypeVariable === 'On') {
-        //     this.rerollNodes();
-        //     this.drawNodes();
-        //     this.drawLinks();
-        // }
 
     }
 
@@ -789,44 +749,6 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
 
     displayColorOptions() {
         this.DisplayGlobalSettingsDialogEvent.emit("Styling");
-    }
-
-    initializeMap(address: string) {
-
-        this.codeAddress(["US"]).then((result: any[]) => {
-
-            if (result.length > 0) {
-                let latitude = result[0].Latitude;
-                let longitude = result[0].Longitude;
-
-                this.initializeLeafletMap(latitude, longitude);
-            }
-        });
-    }
-
-    initializeLeafletMap(latitude: number, longitude: number) {
-        //TODO: put this in a config?
-        const mapTokenKey: string = 'sk.eyJ1IjoicndhdHR5IiwiYSI6ImNrY2RuMWlzcDAwMmUyc3A5ejl3ODEzMXoifQ.qpXOouVsI6P8-HOHUWofuQ'
-
-        this.layers.basemap = tileLayer(`http://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png`);
-        this.layers.satellite = tileLayer(`https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v9/tiles/256/{z}/{x}/{y}?access_token=${mapTokenKey}`);
-
-        this.leafletInitialOptions = {
-            zoom: 4,
-            zoomControl: true,
-            maxZoom: 15,
-            preferCanvas: true,
-            center: latLng([latitude, longitude]),
-        };
-
-        this.leafletMarkerClusterOptions = {
-            showCoverageOnHover: false,
-            zoomToBoundsOnClick: true,
-            spiderfyOnMaxZoom: true,
-            removeOutsideVisibleBounds: false,
-            maxClusterRadius: 20,
-            spiderLegPolylineOptions: { opacity: 0 }
-        };
     }
 
     codeAddress(addressList: any[]) {

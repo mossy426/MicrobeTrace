@@ -2,7 +2,23 @@
     position: absolute;
     overflow: hidden;
     z-index: 1 !important;
+    overflow-y: scroll;
   }
+
+  #tool-btn-container {
+    display: flex !important;
+  }
+
+  .tool-btn {
+    height: 30px;
+    width: 30px !important;
+    display: block !important;
+}
+
+.data-types{
+    width: auto !important;
+    margin: 0 20px;
+}
 
 :host ::ng-deep .ui-table-customers {
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
@@ -216,5 +232,5 @@
 }
 
 .table-wrapper {
-    padding: 55px 20px 10px 20px;
+    padding: 70px 20px 10px 20px;
 }
