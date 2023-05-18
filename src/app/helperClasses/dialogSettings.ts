@@ -8,7 +8,7 @@ export class DialogSettings {
 
     // Link Color
     public linkTop: number = 200;
-    public linkLeft: string = "right";
+    public linkLeft: string = "bottom-left";
 
     // Map settings
     public mapRight: string = "bottom-right";

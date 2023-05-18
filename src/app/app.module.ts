@@ -39,37 +39,19 @@ import { AppSessionService } from '@shared/common/session/app-session.service';
 import { AppUiCustomizationService } from '@shared/common/ui/app-ui-customization.service';
 import { AppUrlService } from '@shared/common/nav/app-url.service';
 import { FilesComponent } from './filesComponent/files-plugin.component';
-import { AggregationComponent } from './visualizationComponents/AggregationComponent/aggregation-plugin.component';
-import { BubblesComponent } from './visualizationComponents/BubblesComponent/bubbles-plugin.component';
-import { FlowDiagramComponent } from './visualizationComponents/FlowDiagrmComponent/flowDiagram-plugin.component';
-import { GanttComponent } from './visualizationComponents/GanttCompnent/gantt-plugin.component';
-import { HeatMapComponent } from './visualizationComponents/HeatMapComponent/heatMap-plugin.component';
 import { PhylogeneticComponent } from './visualizationComponents/PhylogeneticComponent/phylogenetic-plugin.component';
-import { ScatterPlotComponent } from './visualizationComponents/ScatterPlotComponent/scatterPlot-plugin.component';
-import { TimelineComponent } from './visualizationComponents/TimelineComponent/timeline-plugin.component';
 import { TwoDComponent } from './visualizationComponents/TwoDComponent/twoD-plugin.component';
-import { WaterfallComponent } from './visualizationComponents/WaterfallComponent/waterfall-plugin.component';
-
 import { CoreModule } from '@metronic/app/core/core.module';
-import { ThreeDComponent } from './visualizationComponents/ThreeDComponent/threeD-plugin-component';
 import { TableComponent } from './visualizationComponents/TableComponent/table-plugin-component';
-import { HistogramComponent } from './visualizationComponents/HistogramComponent/histogram-plugin.component';
 import { MapComponent } from './visualizationComponents/MapComponent/map-plugin.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
-// import { MatButtonModule, MatInputModule, MatMenuModule, MatToolbarModule, MatSliderModule } from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSliderModule } from '@angular/material/slider';
 import { DndDirective } from '@shared/dnd.directive';
-
-// import { MapModule } from 'ngx-leaflet';
-
-
-// import { GoldenLayoutModule, GoldenLayoutService, GoldenLayoutConfiguration } from '@embedded-enterprises/ng6-golden-layout';
-import GoldenLayout from 'golden-layout';
 
 // It is required to have JQuery as global in the window object.
 window['$'] = $;
@@ -126,20 +108,10 @@ export class TestedComponent {
     MicrobeTraceNextHomeComponent,
     FilesComponent,
     TwoDComponent,
-    HistogramComponent,
-    ThreeDComponent,
     TableComponent,
-    AggregationComponent,
-    BubblesComponent,
     GoldenLayoutHostComponent,
-    FlowDiagramComponent,
-    ScatterPlotComponent,
-    WaterfallComponent,
     MapComponent,
-    GanttComponent,
-    TimelineComponent,
     TestedComponent,
-    HeatMapComponent,
     DndDirective,
     PhylogeneticComponent,
   ],

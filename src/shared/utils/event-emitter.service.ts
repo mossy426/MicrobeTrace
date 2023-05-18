@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 export class EventEmitterService {    
     
   invokeFirstComponentFunction = new EventEmitter();    
-  subsVar: Subscription;    
+  subsVar: Subscription = new Subscription;    
     
   constructor() { }    
     

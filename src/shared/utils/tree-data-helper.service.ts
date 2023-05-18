@@ -5,15 +5,15 @@ import * as _ from 'lodash';
 @Injectable()
 export class TreeDataHelperService {
 
-    findNode(data, selector): any {
+    findNode(data: any, selector: any): any {
         let nodes = _.filter(data, selector);
         if (nodes && nodes.length === 1) {
             return nodes[0];
         }
 
-        let foundNode = null;
+        let foundNode: null = null;
 
-        _.forEach(data, d => {
+        _.forEach(data, (d: { children: any; }) => {
             if (!foundNode) {
                 foundNode = this.findNode(d.children, selector);
             }
@@ -22,7 +22,7 @@ export class TreeDataHelperService {
         return foundNode;
     }
 
-    findParent(data, nodeSelector) {
+    findParent(data: any, nodeSelector: any) {
         let node = this.findNode(data, nodeSelector);
         if (!node) {
             return null;

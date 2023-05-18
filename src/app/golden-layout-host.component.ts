@@ -5,10 +5,7 @@ import {
   ResolvedComponentItemConfig
 } from "golden-layout";
 import { BaseComponentDirective } from './base-component.directive';
-import { BooleanComponent } from './boolean.component';
-import { ColorComponent } from './color.component';
 import { GoldenLayoutComponentService } from './golden-layout-component.service';
-import { TextComponent } from './text.component';
 import { FilesComponent } from './filesComponent/files-plugin.component';
 import { MapComponent } from './visualizationComponents/MapComponent/map-plugin.component';
 import { PhylogeneticComponent } from './visualizationComponents/PhylogeneticComponent/phylogenetic-plugin.component';

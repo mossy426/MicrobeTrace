@@ -1,20 +1,9 @@
-﻿import { ChangeDetectionStrategy, Component, OnInit, Injector, ViewChild, ViewChildren, AfterViewInit, Compiler, TemplateRef, ComponentRef, ViewContainerRef, QueryList, ElementRef, Output, EventEmitter, ChangeDetectorRef, OnDestroy, ViewEncapsulation, Renderer2 } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, OnInit, Injector, ViewChild, ViewChildren, AfterViewInit, ComponentRef, ViewContainerRef, QueryList, ElementRef, Output, EventEmitter, ChangeDetectorRef, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
 import { CommonService } from './contactTraceCommonServices/common.service';
-import { FilesComponent } from './filesComponent/files-plugin.component';
 import { TwoDComponent } from './visualizationComponents/TwoDComponent/twoD-plugin.component';
-import { ThreeDComponent } from './visualizationComponents/ThreeDComponent/threeD-plugin-component';
 import { TableComponent } from './visualizationComponents/TableComponent/table-plugin-component';
-import { AggregationComponent } from './visualizationComponents/AggregationComponent/aggregation-plugin.component';
-import { HistogramComponent } from './visualizationComponents/HistogramComponent/histogram-plugin.component';
-import { BubblesComponent } from './visualizationComponents/BubblesComponent/bubbles-plugin.component';
-import { FlowDiagramComponent } from './visualizationComponents/FlowDiagrmComponent/flowDiagram-plugin.component';
-import { ScatterPlotComponent } from './visualizationComponents/ScatterPlotComponent/scatterPlot-plugin.component';
-import { WaterfallComponent } from './visualizationComponents/WaterfallComponent/waterfall-plugin.component';
 import { MapComponent } from './visualizationComponents/MapComponent/map-plugin.component';
-import { GanttComponent } from './visualizationComponents/GanttCompnent/gantt-plugin.component';
-import { TimelineComponent } from './visualizationComponents/TimelineComponent/timeline-plugin.component';
-import { HeatMapComponent } from './visualizationComponents/HeatMapComponent/heatMap-plugin.component';
 import { PhylogeneticComponent } from './visualizationComponents/PhylogeneticComponent/phylogenetic-plugin.component';
 import * as d3 from 'd3';
 import { window, TabsetComponent } from 'ngx-bootstrap';
@@ -31,18 +20,14 @@ import { StashObjects, HomePageTabItem } from './helperClasses/interfaces';
 import { Observable, forkJoin } from 'rxjs';
 import { MicrobeTraceNextVisuals } from './microbe-trace-next-plugin-visuals';
 import * as _ from 'lodash';
-import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { EventEmitterService } from '@shared/utils/event-emitter.service';
 // import * as moment from 'moment';
 import moment from 'moment';
 import { GoldenLayoutComponentService } from './golden-layout-component.service';
-
 import { Tabulator } from 'tabulator-tables';
-
 import { Subscription } from 'rxjs';
 import { GoldenLayoutHostComponent } from './golden-layout-host.component';
-import { ComponentItem } from 'golden-layout';
 
 
 @Component({
@@ -57,14 +42,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
 
     // recommit original code
-    // @ViewChild('stashes') stashes: ElementRef;
     @ViewChild('stashes') stashes: ElementRef;
 
-
-//     @ViewChild('goldenLayout')
-//   goldenLayout: any;
-
-  @ViewChild('goldenLayoutHost') _goldenLayoutHostComponent: GoldenLayoutHostComponent;
+    @ViewChild('goldenLayoutHost') _goldenLayoutHostComponent: GoldenLayoutHostComponent;
 
     public metric: string = "tn93";
     public ambiguity: string = "Average";
@@ -177,7 +157,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     activeTabNdx = null;
     ShowGlobalSettingsLinkColorTable: boolean = false;
     ShowGlobalSettingsNodeColorTable: boolean = false;
-    // user: UserEditDto = new UserEditDto();
     roles: Array<string> = new Array<string>();
 
     ShowGlobalSettingsSettingsPane: boolean = false;
@@ -214,15 +193,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
 
     // @ViewChild(TabView) tabView: TabView;
-    // @ViewChild('dataSet') dataSet: Selection;
     @ViewChild('dataSet') dataSet: Selection;
-    // @ViewChildren('placeholder', { read: ViewContainerRef, static: false }) targets: QueryList<ViewContainerRef>
     @ViewChildren('placeholder', { read: ViewContainerRef }) targets: QueryList<ViewContainerRef>
-    // @ViewChild('ledgerloader') spinnerElement: ElementRef;
     @ViewChild('ledgerloader') spinnerElement: ElementRef;
-    // @ViewChild('ledgerloadDiv') spinnerDivElement: ElementRef;
     @ViewChild('ledgerloadDiv') spinnerDivElement: ElementRef;
-    // @ViewChild('globalSettingsTab') globalSettingsTab: TabsetComponent;
     @ViewChild('globalSettingsTab') globalSettingsTab: TabsetComponent;
 
 
@@ -248,18 +222,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     constructor(
         injector: Injector,
-        private cfr: ComponentFactoryResolver,
-        private compiler: Compiler,
         public commonService: CommonService,
         private goldenLayoutComponentService: GoldenLayoutComponentService,
-        // private keenService: BpaasLedgerPluginServiceProxy,
-        // private _userService: UserServiceProxy,
         public domSanitizer: DomSanitizer,
         private cdref: ChangeDetectorRef,
         private eventEmitterService: EventEmitterService,
-        // private bpaasLedgerPluginServiceProxy: BpaasLedgerPluginServiceProxy,
-        private route: ActivatedRoute,
-        // private srv: GoldenLayoutService
     ) {
 
 
@@ -408,17 +375,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     addComponent( component: string ) {
 
-        console.log('tab added: ', this.homepageTabs);
-
-        console.log('golden adding component: ', component);
-
         // const componentType = this._selectedRegisteredComponentTypeName;
         const goldenLayoutComponent = this._goldenLayoutHostComponent.goldenLayout.newComponent(component);
-        console.log('golden comp: ', goldenLayoutComponent);
-        console.log('golden comp containter: ', goldenLayoutComponent['container']);
 
         const componentRef = this._goldenLayoutHostComponent.getComponentRef(goldenLayoutComponent.container);
-        console.log('golden ref: ', componentRef);
+        
         this.addTab(component, component + this.activeTabIndex, this.activeTabIndex, componentRef);
 
         // console.log('tab added: ', this.homepageTabs);
@@ -444,15 +405,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     public removeComponent( component: string ) {
-        console.log('tab removing: ', this.homepageTabs);
-
         this.homepageTabs = this.homepageTabs.filter((tab) => {
             return tab.label !== component;
         });
-
-        console.log('tab removing2: ', _.cloneDeep(this.homepageTabs));
-
-
         
     }
 
@@ -806,6 +761,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     onNodeColorTableChanged() {
 
+        console.log('node color changed: ', this.SelectedNodeColorTableTypesVariable);
         this.commonService.GlobalSettingsModel.SelectedNodeColorTableTypesVariable = this.SelectedNodeColorTableTypesVariable;
 
         if (this.SelectedNodeColorTableTypesVariable == "Hide") {
@@ -984,8 +940,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
 
                     // Call the updateLinkColor method in the active tab
-                    // this.goldenLayout.componentInstances[1].updateLinkColor();
-                    this.visuals.microbeTrace.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef.updateLinkColor();
+                    this.visuals.microbeTrace.homepageTabs[this.activeTabIndex].componentRef.instance.updateLinkColor();
 
                 });
 
@@ -1010,7 +965,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                                 .domain(aggregateValues);
                             $("#color-transparency-wrapper").fadeOut();
 
-                            this.visuals.microbeTrace.homepageTabs[this.visuals.microbeTrace.activeTabNdx].componentRef.updateLinkColor();
+                            this.visuals.microbeTrace.homepageTabs[this.activeTabIndex].componentRef.instance.updateLinkColor();
                             // this.goldenLayout.componentInstances[1].updateLinkColor();
 
                         });
@@ -1350,6 +1305,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             let colorinput = $(`<input type="color" value="${color}" ${disabled}>`)
                 .on("change", e => {
 
+
+                    console.log('color: ', this.SelectedColorNodesByVariable);
+                    console.log('color2: ',  this.visuals.microbeTrace.commonService.session.style.nodeColorsTableKeys);
                     let key = this.visuals.microbeTrace.commonService.session.style.nodeColorsTableKeys[this.SelectedColorNodesByVariable].findIndex( k => k === value);
                     this.visuals.microbeTrace.commonService.session.style.nodeColorsTable[this.SelectedColorNodesByVariable].splice(key, 1, e);
 
@@ -1651,7 +1609,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             });
 
             this._goldenLayoutHostComponent.TabRemovedEvent.subscribe((v) => {
-                console.log('removing comp: ', v);
                 // this.loadSettings();
                 this.removeComponent(v);
             });
@@ -2251,52 +2208,12 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 _type = TwoDComponent;
                 break;
             }
-            case "3D Network": {
-                _type = ThreeDComponent;
-                break;
-            }
-            case "Histogram": {
-                _type = HistogramComponent;
-                break;
-            }
             case "Table": {
                 _type = TableComponent;
                 break;
             }
-            case "Aggregation": {
-                _type = AggregationComponent;
-                break;
-            }
-            case "Bubbles": {
-                _type = BubblesComponent;
-                break;
-            }
-            case "Flow Diagram": {
-                _type = FlowDiagramComponent;
-                break;
-            }
-            case "Scatterplot": {
-                _type = ScatterPlotComponent;
-                break;
-            }
-            case "Waterfall": {
-                _type = WaterfallComponent;
-                break;
-            }
             case "Map": {
                 _type = MapComponent;
-                break;
-            }
-            case "Gantt": {
-                _type = GanttComponent;
-                break;
-            }
-            case "Timeline": {
-                _type = TimelineComponent;
-                break;
-            }
-            case "Heatmap": {
-                _type = HeatMapComponent;
                 break;
             }
             case "Phylogenetic Tree": {
@@ -2327,7 +2244,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
             this.activeTabIndex = this.activeTabIndex + 1;
             this.addComponent(viewName);
-            
+
         }
         else {
             
@@ -2431,7 +2348,13 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             item.isActive = item.label === activeComponentName;
         });
 
+        // this.activeTabIndex = tabNdx;
+
         console.log('tab switched is: ', tabNdx);
+
+        console.log('global l: ', this.GlobalSettingsLinkColorDialogSettings);
+        console.log('global n: ', this.GlobalSettingsNodeColorDialogSettings);
+
 
         switch (activeComponentName) {
 
@@ -2448,9 +2371,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 this.cachedGlobalSettingsVisibility = this.GlobalSettingsDialogSettings.isVisible;
                 this.cachedGlobalSettingsLinkColorVisibility = this.GlobalSettingsLinkColorDialogSettings.isVisible;
                 this.cachedGlobalSettingsNodeColorVisibility = this.GlobalSettingsNodeColorDialogSettings.isVisible;
-                this.GlobalSettingsDialogSettings.setVisibility(false);
-                this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
-                this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
+                // this.GlobalSettingsDialogSettings.setVisibility(false);
+                // this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
+                // this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
 
                 break;
             }
@@ -2476,7 +2399,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 this.showButtonGroup = true;
                 this.showSorting = true;
 
-                this.GlobalSettingsDialogSettings.setVisibility(false);
+                // this.GlobalSettingsDialogSettings.setVisibility(false);
                 this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
                 this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
 
@@ -2492,6 +2415,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 this.showButtonGroup = false;
                 this.showSorting = false;
 
+                // this.GlobalSettingsDialogSettings.setVisibility(false);
+                this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
+                this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
+
                 break;
             }
             case "Phylogenetic Tree": {
@@ -2504,7 +2431,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 this.showButtonGroup = false;
                 this.showSorting = false;
 
-                this.GlobalSettingsDialogSettings.setVisibility(false);
+                // this.GlobalSettingsDialogSettings.setVisibility(false);
                 this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
                 this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
 
@@ -2529,6 +2456,12 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             // this.homepageTabs[tabNdx].componentRef.InitView();
         }
 
+        console.log('global l 2: ', this.GlobalSettingsLinkColorDialogSettings);
+        console.log('global n 2: ', this.GlobalSettingsNodeColorDialogSettings);
+
+        console.log('acive index: ', this.activeTabIndex);
+
+        // this.cdref.detectChanges();
         this.previousTab = activeComponentName;
     }
 

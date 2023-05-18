@@ -13,7 +13,7 @@ export class LocalStorageService {
     }
 
 
-    setItem(key, value): void {
+    setItem(key: string, value: string | null | undefined): void {
         if (!localForage) {
             return;
         }
@@ -25,7 +25,7 @@ export class LocalStorageService {
         localForage.setItem(key, value);
     }
 
-    removeItem(key, value): void {
+    removeItem(key: string, value: ((err: any) => void) | null | undefined): void {
         if (!localForage) {
             return;
         }
