@@ -108,7 +108,7 @@
 
         <p-dialog id="global-settings-node-color-table" 
             [position]="GlobalSettingsNodeColorDialogSettings.nodeLeft" 
-            [visible]="GlobalSettingsNodeColorDialogSettings.isVisible"  
+            [(visible)]="GlobalSettingsNodeColorDialogSettings.isVisible"  
             header="Node Color Table" [style]="{width: '45vw', maxWidth: '450px'}"
             (onShow)="SelectedNodeColorTableTypesVariable='Show'"
             (onHide)="SelectedNodeColorTableTypesVariable='Hide'"

@@ -20,6 +20,7 @@ import { StashObjects, HomePageTabItem } from './helperClasses/interfaces';
 import { Observable, forkJoin } from 'rxjs';
 import { MicrobeTraceNextVisuals } from './microbe-trace-next-plugin-visuals';
 import * as _ from 'lodash';
+import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { EventEmitterService } from '@shared/utils/event-emitter.service';
 // import * as moment from 'moment';
