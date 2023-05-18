@@ -65,42 +65,6 @@ export class TestedComponent {
 
 }
 
-// const config: GoldenLayoutConfiguration = {
-//   components: [
-//     {
-//       componentName: "FilesComponent",
-//       component: FilesComponent
-//     },
-//     {
-//       componentName: "TwoDComponent",
-//       component: TwoDComponent
-//     },
-//     {
-//       componentName: "TableComponent",
-//       component: TableComponent
-//     },
-//     {
-//       componentName: "MapComponent",
-//       component: MapComponent
-//     },
-//     {
-//       componentName: "PhylogeneticComponent",
-//       component: PhylogeneticComponent
-//     },
-//   ],
-//   defaultLayout: {
-//     content: [{
-//         type: 'stack',
-//         content:[
-//           {
-//             type: 'component',
-//             componentName: 'FilesComponent',
-//             componentState: { label: 'A' }
-//            }
-//           ]
-//     }]
-//   }
-// };
 
 @NgModule({
   declarations: [
