@@ -208,6 +208,21 @@ export class GoldenLayoutHostComponent implements OnDestroy {
     component.setPositionAndSize(left, top, width, height);
   }
 
+  public removeComponent(componentId: string) {
+    const container = Array.from(this._componentRefMap.keys()).find(
+      (container) => container.componentType?.toString() === componentId
+    ) as ComponentContainer;
+  
+    if (container) {
+      const componentItem = container.parent;
+      if (componentItem && componentItem.parent) {
+        componentItem.parent.removeChild(componentItem);
+      }
+    } else {
+      throw new Error('Component not found for the provided id');
+    }
+  }
+
   private handleContainerVisibilityChangeRequiredEvent(container: ComponentContainer, visible: boolean) {
     const componentRef = this._componentRefMap.get(container);
     if (componentRef === undefined) {

@@ -572,7 +572,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.showSorting = false;
 
         // Remove the default tab
-        // this.removeTab({index : 1})
+        this._removeGlView('2D Network');
 
         console.log('homepage tabs1: ', this.homepageTabs);
         // console.log('instances1: ', this.goldenLayout.componentInstances);
@@ -657,6 +657,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
      * @param {void}
      */
      public continueClicked() : void {
+        // this._removeGlView('Files');
         $('#overlay').fadeOut("slow");
         $('.ui-tabview-nav').fadeTo("slow", 1);
         $('.m-portlet').fadeTo("slow", 1);
@@ -1604,7 +1605,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
             console.log('golden comp ref: ', this.homepageTabs[0].componentRef.instance);
             this.subscription = this.homepageTabs[0].componentRef.instance.LoadDefaultVisualizationEvent.subscribe((v) => {
-                console.log('loading default: ', v);
+                console.log('loading default1: ', v);
                 this.loadDefaultVisualization(v);
                 this.publishLoadNewData();
             });
@@ -1710,6 +1711,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         });
     }
 
+    private _removeGlView(view : string) {
+        this._goldenLayoutHostComponent.removeComponent(view);
+        this.removeComponent(view);
+    }
+
 
     convertToCSV(objArray) {
 
@@ -1807,10 +1813,27 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         if (e === "2d network"){
             e = "2D Network";
         }
-        if (this.homepageTabs.findIndex(x => x.label == e) === -1) {
-            this.Viewclick(e);
-        }
+
+        this.resetLayout();
+
+        setTimeout(() => {
+            if (this.homepageTabs.findIndex(x => x.label == e) === -1) {
+                this.Viewclick(e);
+            }
+        }, 500);
         
+    }
+
+    public resetLayout() {
+    
+        this.homepageTabs.forEach( tab => {
+            if (tab.label !== "Files") {
+                console.group('removing: ', tab.label);
+                this._removeGlView(tab.label);
+            }
+        });
+
+        this.activeTabIndex = 0;
     }
 
     public getfileContent(fileList: FileList) {
@@ -1823,26 +1846,26 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         // TODO: unccomment back when updated
         // this.srv.removeTab(0,1);
         //remove last homepage tab
-        this.homepageTabs.splice(this.homepageTabs.length - 1, 1);
+        // this.homepageTabs.splice(this.homepageTabs.length - 1, 1);
         // console.log('homepagetabs: ', this.homepageTabs);
         // this.goldenLayout.componentInstances[0].processFiles(fileList)
 
-        // this.homepageTabs.map(x => {
-        //     if (x.label === "Files") {
-        //         if (x.componentRef != null) {
-        //             console.log('in iles: ', this.subscription);
-        //             this.subscription.unsubscribe();
-        //             // console.log('unsubscribed');
-        //             this.subscription = this.homepageTabs[0].componentRef.LoadDefaultVisualizationEvent.subscribe((v) => {
-        //                 console.log('loading default: ', v);
-        //                 // this.loadSettings();
-        //                 this.loadDefaultVisualization(v);
-        //                 this.publishLoadNewData();
-        //             });
-        //             x.componentRef.processFiles(fileList);
-        //         }
-        //     }
-        // });
+        this.homepageTabs.map(x => {
+            if (x.label === "Files") {
+                if (x.componentRef != null) {
+                    console.log('in iles: ', this.subscription);
+                    this.subscription.unsubscribe();
+                    // console.log('unsubscribed');
+                    this.subscription = this.homepageTabs[0].componentRef.instance.LoadDefaultVisualizationEvent.subscribe((v) => {
+                        console.log('loading default2: ', v);
+                        // this.loadSettings();
+                        this.loadDefaultVisualization(v);
+                        this.publishLoadNewData();
+                    });
+                    x.componentRef.instance.processFiles(fileList);
+                }
+            }
+        });
     }
 
     public getSinglefileContent(file: File) {
@@ -2120,7 +2143,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 } else {
                     this.addComponent('Files');
                 }
-
 
                 // this.commonService.launchView("files");
                 // this.activeTabIndex = 0;
