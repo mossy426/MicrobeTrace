@@ -352,14 +352,12 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 marginTop: '-30px',
                 opacity: '1'
             }, 1000);
-
         }, 2000);
         setTimeout(() => {
             $("#welcome-description").animate({
                 marginTop: '0px',
                 opacity: '1'
             }, 1000);
-
 
         }, 3000);
         setTimeout(() => {
@@ -770,7 +768,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
         }
         else {
-            this.onColorNodesByChanged();
+            this.onColorNodesByChanged();         
         }
     }
 
@@ -808,44 +806,34 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     publishUpdateNodeColors() {
-        // if(this.goldenLayout.componentInstances[1]) {
-        //     this.goldenLayout.componentInstances[1].updateNodeColors();
-        // }
         this.homepageTabs.forEach(tab => {
             if (tab.componentRef &&
-                tab.componentRef.updateNodeColors) {
-                tab.componentRef.updateNodeColors();
+                tab.componentRef.instance.updateNodeColors) {
+                tab.componentRef.instance.updateNodeColors();
             }
         })
     }
 
     publishUpdateVisualization() {
-        // if(this.goldenLayout.componentInstances[1]) {
-        //     this.goldenLayout.componentInstances[1].updateVisualization();
-        // }
         this.homepageTabs.forEach(tab => {
             if (tab.componentRef &&
-                tab.componentRef.updateVisualization) {
-                tab.componentRef.updateVisualization();
+                tab.componentRef.instance.updateVisualization) {
+                tab.componentRef.instance.updateVisualization();
             }
         })
     }
 
     publishUpdateLinkColor() {
-
-        // this.goldenLayout.componentInstances[1].updateLinkColor();
-
-        // this.homepageTabs.forEach(tab => {
-        //     if (tab.componentRef &&
-        //         tab.componentRef.instance.updateLinkColor) {
-        //         tab.componentRef.instance.updateLinkColor();
-        //     }
-        // })
+        this.homepageTabs.forEach(tab => {
+            if (tab.componentRef &&
+                tab.componentRef.instance.updateLinkColor) {
+                tab.componentRef.instance.updateLinkColor();
+            }
+        })
     }
 
     public onLinkColorChanged() : void {
 
-        console.log('color change');
 
         this.commonService.session.style.widgets["link-color"] = this.SelectedLinkColorVariable;
 
@@ -855,7 +843,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     onColorLinksByChanged() {
 
-        console.log('links changed by');
         this.visuals.microbeTrace.SelectedColorLinksByVariable = this.visuals.microbeTrace.SelectedColorLinksByVariable;
 
         this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedColorLinksByVariable = this.visuals.microbeTrace.SelectedColorLinksByVariable;
@@ -1608,6 +1595,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 console.log('loading default1: ', v);
                 this.loadDefaultVisualization(v);
                 this.publishLoadNewData();
+                this.getGlobalSettingsData();
             });
 
             this._goldenLayoutHostComponent.TabRemovedEvent.subscribe((v) => {
