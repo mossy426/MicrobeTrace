@@ -7159,8 +7159,7 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
     this.previousTab = activeComponentName;
   }
   openPinAllNodes(tabNdx) {
-    console.log('open : ', tabNdx);
-    this.homepageTabs[tabNdx].componentRef.openPinAllNodes();
+    this.homepageTabs[tabNdx].componentRef.instance.openPinAllNodes();
   }
   addTab(tabLabel, tabTitle, tabPosition, componentRef, activate = true) {
     /*/
