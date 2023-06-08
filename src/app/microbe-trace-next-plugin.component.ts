@@ -2477,8 +2477,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     openPinAllNodes(tabNdx: any): void {
-        console.log('open : ', tabNdx);
-        this.homepageTabs[tabNdx].componentRef.openPinAllNodes();
+        this.homepageTabs[tabNdx].componentRef.instance.openPinAllNodes();
     }
 
 
