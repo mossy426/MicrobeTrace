@@ -341,105 +341,70 @@
                               <div class="form-group row" title="Show polygons?">
                                 <div class="col-4">Polygons</div>
                                 <div class="col-8">
-                                  <div class="btn-group btn-group-toggle btn-group-sm w-100" data-toggle="buttons">
-                                    <label class="btn btn-light col" title="Show convex hull under the network.">
-                                      <input type="radio" (click) ="polygonsShow()" name="polygons" id="polygons-show" autocomplete="off">
-                                      Show
-                                    </label>
-                                    <label class="btn btn-light col active" title="Do Not show convex hull under the network.">
-                                      <input type="radio" (click) ="polygonsHide()" name="polygons" id="polygons-hide" autocomplete="off" checked>
-                                      Hide
-                                    </label>
-                                  </div>
+                                    <p-selectButton id="colorPolygonsTable" [options]="hideShowOptions" [(ngModel)]="commonService.session.style.widgets['polygons-show']" (ngModelChange)="polygonsToggle($event)"></p-selectButton>
                                 </div>
                               </div>
-                              <div class="form-group row polygons-settings-row" title="What Foci should be used when creating convex hulls?">
+                              <div *ngIf="commonService.session.style.widgets['polygons-show']" class="form-group row polygons-settings-row" title="What Foci should be used when creating convex hulls?">
                                 <div class="col-4"><label for="polygons-foci">Center</label></div>
                                 <div class="col-8">
-                                    <p-dropdown id="polygons-foci" [options]="FieldList" appendTo="body" [(ngModel)]="CenterPolygonVariable" (ngModelChange)="centerPolygons($event)"></p-dropdown>
+                                    <p-dropdown id="polygons-foci" [options]="FieldList" appendTo="body" [(ngModel)]="commonService.session.style.widgets['polygons-foci']" (ngModelChange)="centerPolygons($event)"></p-dropdown>
                                 </div>
                               </div>
-                              <div class="form-group row polygons-settings-row" title="What amount of gather force should be used?">
+                              <div *ngIf="commonService.session.style.widgets['polygons-show']" class="form-group row polygons-settings-row" title="What amount of gather force should be used?">
                                 <div class="col-4">
                                   <label for="polygons-gather-force">Gather</label>
                                 </div>
                                 <div class="col-8">
-                                <input type="range" class="custom-range" id="polygons-gather-force" min="0" value="0" step="0.0001" max=".02" [(ngModel)]="SelectedPolygonGatherValue" (ngModelChange)="onPolygonGatherChange($event)">
+                                <input type="range" class="custom-range" id="polygons-gather-force" min="0" value="0" step="0.0001" max=".02" [(ngModel)]="commonService.session.style.widgets['polygons-gather-force']" (ngModelChange)="onPolygonGatherChange($event)">
                                 </div>
                               </div>
                             </div>
                           </div>
                     </p-accordionTab>
-                    <p-accordionTab style="color:#495057" header="Labels" id="polygons-controls-accordion">
+                    <p-accordionTab *ngIf="commonService.session.style.widgets['polygons-show']" style="color:#495057" header="Labels" id="polygons-controls-accordion">
                           <div id="polygons-controls-labels" data-parent="#polygons-controls-accordion">
                             <div class="card-body">
                               <div class="form-group row" title="Show polygons label?">
                                 <div class="col-4">Label Polygons</div>
                                 <div class="col-8">
-                                    <p-selectButton id="polygons-label-visibility" [options]="hideShowOptions" [(ngModel)]="SelectedPolygonLabelShowVariable" (ngModelChange)="onPolygonLabelShowChange($event)"></p-selectButton>
+                                    <p-selectButton id="polygons-label-visibility" [options]="hideShowOptions" [(ngModel)]="commonService.session.style.widgets['polygons-label-show']" (ngModelChange)="onPolygonLabelShowChange($event)"></p-selectButton>
                                 </div>
                               </div>
                               <div class="form-group row polygons-label-row" title="How big should polygon labels be?">
                                 <div class="col-4"><label for="polygons-label-size">Label Size</label></div>
                                 <div class="col-8">
-                                    <input type="range" class="custom-range" id="polygons-label-size" min="6" value="16" step="1" max="72" [(ngModel)]="SelectedPolygonLabelSizeVariable" (ngModelChange)="onPolygonLabelSizeChange($event)">
+                                    <input type="range" class="custom-range" id="polygons-label-size" min="6" value="16" step="1" max="72" [(ngModel)]="commonService.session.style.widgets['polygons-label-size']" (ngModelChange)="onPolygonLabelSizeChange($event)">
                                 </div>
                               </div>
                               <div class="form-group row polygons-label-row" title="How should the labels be oriented relative to center of polygon?">
                                 <div class="col-4"><label for="polygons-label-orientation">Orientation</label></div>
                                 <div class="col-8">
-                                    <!-- <p-dropdown id="polygons-label-orientation" [options]="FieldList" appendTo="body" [(ngModel)]="onPolygonLabelOrientationChange" (ngModelChange)="SelectedPolygonLabelOrientationVariable($event)"></p-dropdown>
-                                  <select id="polygons-label-orientation" class="form-control form-control-sm">
-                                      
-                                    <option selected>Middle</option>
-                                              <option>Right</option>
-                                    <option>Left</option>
-                                    <option>Top</option>
-                                    <option>Bottom</option>
-                                  </select> -->
-
-                                  <select id="polygons-label-orientation" [(ngModel)]="SelectedPolygonLabelOrientationVariable" (ngModelChange)="onPolygonLabelOrientationChange($event)">
-                                    <option selected>Middle</option>
-                                    <option>Left</option>
-                                    <option>Top</option>
-                                    <option>Bottom</option>
-                                    <option>Right</option>
-                                </select>
+                                <p-dropdown id="polygons-label-orientation" [options]="FieldList" appendTo="body" [(ngModel)]="commonService.session.style.widgets['polygons-label-variable']" (ngModelChange)="onPolygonLabelOrientationChange($event)"></p-dropdown>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </p-accordionTab>
                         <!-- style="display: none;" -->
-                        <p-accordionTab style="color:#495057" header="Colors" id="polygons-controls-accordion">  
+                        <p-accordionTab *ngIf="commonService.session.style.widgets['polygons-show']" style="color:#495057" header="Colors" id="polygons-controls-accordion">  
                           <div id="polygons-controls-colors" data-parent="#polygons-controls-accordion">
                             <div class="card-body">
                               <div id="color-polygons" class="form-group row" title="Show polygons colored?">
                                 <div class="col-4">Color Polygons</div>
                                 <div class="col-8">
-                                    <p-selectButton id="colorPolygons" [options]="hideShowOptions" [(ngModel)]="SelectedPolygonColorShowVariable" (ngModelChange)="polygonColorsToggle($event)"></p-selectButton>
+                                    <p-selectButton id="colorPolygons" [options]="hideShowOptions" [(ngModel)]="commonService.session.style.widgets['polygons-color-show']" (ngModelChange)="polygonColorsToggle($event)"></p-selectButton>
                                 </div>
                               </div>
-                              <!-- <div id="polygon-color-table-row" class="form-group row" title="Should MicrobeTrace display the table of colors?">
+                              <div *ngIf="commonService.session.style.widgets['polygons-color-show']" id="polygon-color-table-row" class="form-group row" title="Should MicrobeTrace display the table of colors?">
                                 <div class="col-4">Polygon Color Table</div>
                                 <div class="col-8">
-                                    <p-selectButton id="colorPolygonsTable" [options]="hideShowOptions" [(ngModel)]="SelectedPolygonColorTableShowVariable" (ngModelChange)="polygonColorsTableToggle($event)"></p-selectButton>
-                                    <div class="btn-group btn-group-toggle btn-group-sm w-100" data-toggle="buttons">
-                                    <label class="btn btn-light active col">
-                                      <input type="radio" name="polygonColorTableShowHide" id="polygon-color-table-show" autocomplete="off" checked>
-                                      Show
-                                    </label>
-                                    <label class="btn btn-light col">
-                                      <input type="radio" name="polygonColorTableShowHide" id="polygon-color-table-hide" autocomplete="off">
-                                      Hide
-                                    </label>
-                                  </div> 
+                                    <p-selectButton id="colorPolygonsTable" [options]="hideShowOptions" [(ngModel)]="commonService.session.style.widgets['polygon-color-table-visible']" (ngModelChange)="polygonColorsTableToggle($event)"></p-selectButton>
                                 </div>
-                              </div> -->
-                              <div id="polygon-color-value-row" class="form-group row" title="What color should the polygons be?">
+                              </div>
+                              <div *ngIf="!commonService.session.style.widgets['polygons-color-show']" id="polygon-color-value-row" class="form-group row" title="What color should the polygons be?">
                                 <div class="col-4"><label for="polygon-color">Polygons</label></div>
                                 <div class="col-8">
-                                  <input type="color" id="polygon-color" class="form-control form-control-sm" value="#1f77b4" [(ngModel)]="SelectedPolygonColorVariable" (ngModelChange)="onPolygonColorChanged($event)">
+                                  <input type="color" id="polygon-color" class="form-control form-control-sm" value="#1f77b4" [(ngModel)]="commonService.session.style.widgets['polygon-color']" (ngModelChange)="onPolygonColorChanged($event)">
                                 </div>
                               </div>              
                             </div>
@@ -456,11 +421,10 @@
 </div>
 
     <p-dialog id="node-symbol-table-wrapper" 
-                [positionLeft]="NodeSymbolTableWrapperDialogSettings.shapeLeft" 
-                [positionTop]="NodeSymbolTableWrapperDialogSettings.shapeTop" 
+                [position]="NodeSymbolTableWrapperDialogSettings.shapeRight"
                 [(visible)]="NodeSymbolTableWrapperDialogSettings.isVisible"  
-                header="Node Symbol Selection Table" 
-                [style]="{width: 'auto'}" 
+                header="Node Symbol Selection Table"  
+                [style]="{width: '45vw', maxWidth: '450px'}"
                 (onHide)="onNodeSymbolTableChange('Hide')"
                 (onShow)="onNodeSymbolTableChange('Show')"
                 >
@@ -492,13 +456,12 @@
     </p-dialog>
 
     <p-dialog id="polygon-color-table-wrapper" 
-                [positionLeft]="PolygonColorTableWrapperDialogSettings.polygonLeft" 
-                [positionTop]="PolygonColorTableWrapperDialogSettings.polygonTop" 
+                [position]="PolygonColorTableWrapperDialogSettings.polygonRight" 
                 [(visible)]="PolygonColorTableWrapperDialogSettings.isVisible"  
                 header="Polygon Color Selection Table" 
-                [style]="{width: '45vw'}" 
-                (onHide)="onPolygonColorTableChange('Hide')"
-                (onShow)="onPolygonColorTableChange('Show')"
+                [style]="{width: '45vw', maxWidth: '450px'}" 
+                (onHide)="onPolygonColorTableChange(false)"
+                (onShow)="onPolygonColorTableChange(true)"
                 >
         <div class="col-12" style="width:100%;max-height:50vh;" title="Polygon Color Selection.">          
              <table id="polygon-color-table" style="width:100%;height:100%;"></table>          

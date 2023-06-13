@@ -258,6 +258,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             'polygons-label-show' : false,
             'polygons-label-size' : 16,
             'polygons-show' : false,
+            'polygon-color-table-visible': false,
             'reference-source-file': true,
             'reference-source-first': false,
             'reference-source-consensus': false,

@@ -19,9 +19,11 @@ export class DialogSettings {
 
     // Node Shape
     public shapeTop: number = 700;
-    public shapeLeft: number = 40;
+    public shapeRight: string = "bottom-right";
 
     // Polygon Color
+    public polygonRight: string = "right";
+
     public polygonTop: number = 200;
     public polygonLeft: number = 950;
 
