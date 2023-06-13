@@ -420,8 +420,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 this.visuals.twoD.fit(undefined, undefined);
                 // Add a little force for effect in landing
                 this.visuals.twoD.force.alpha(1).alphaTarget(0).restart();
-
-                console.log('poly show: ', this.commonService.session.style.widgets['polygons-show']);
             }
                 , 3000);
 
@@ -795,7 +793,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this.visuals.twoD.ShowStatistics = showStatistics;
         this.visuals.twoD.cdref.detectChanges();
 
-
     };
 
     polygonLabelDragStarted(d) {
@@ -809,8 +806,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     }
 
     updatePolygonColors() {
-
-        console.log('poly update color');
         let polygonSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
             this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts-sort"] = "";
           if (this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-name-sort"] === "ASC")
@@ -840,12 +835,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
           .append("<th>Color</th>" );
         if (!this.visuals.twoD.commonService.session.style['polygonValueNames']) this.visuals.twoD.commonService.session.style['polygonValueNames'] = {};
         let aggregates = this.visuals.twoD.commonService.createPolygonColorMap();
-
-        console.log('poly aggregagates: ', aggregates);
         let values = Object.keys(aggregates);
-
-        console.log('poly values: ', values);
-
   
         if (this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts-sort"] == "ASC")
           values.sort(function(a, b) { return aggregates[a] - aggregates[b] });
@@ -902,10 +892,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
               (that.visuals.twoD.commonService.session.style.widgets["polygon-color-table-frequencies"] ? "<td>" + (aggregates[value] / total).toLocaleString() + "</td>" : "") +
             "</tr>"
           ).append(cell);
-          console.log('poly row', row);
           polygonColorTable.append(row);
-          console.log('poly col', polygonColorTable);
-
         });
         
         this.visuals.twoD.commonService.temp.style.polygonColorMap = d3
@@ -914,8 +901,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
           this.visuals.twoD.commonService.temp.style.polygonAlphaMap = d3
           .scaleOrdinal(this.visuals.twoD.commonService.session.style['polygonAlphas'])
           .domain(values);
-
-          console.log('polygonColorTable', polygonColorTable);
   
         polygonColorTable
           .find("td")
@@ -939,26 +924,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this.visuals.twoD.render();
       }
 
-    // polygonsShow() {
-    //     this.visuals.twoD.commonService.session.style.widgets['polygons-show'] = true;
-    //   $(".polygons-settings-row").slideDown();
-    //   if(this.visuals.twoD.commonService.session.style.widgets['polygons-color-show'] == true){
-    //     $('#polygons-color-show').click();
-    //   } else {
-    //     $('#polygons-color-hide').click();
-    //   }
-    //   if(this.visuals.twoD.commonService.session.style.widgets['polygons-label-show'] == true){
-    //     $('#polygons-label-show').click();
-    //   } else {
-    //     $('#polygons-label-hide').click();
-    //   }
-
-    //   this.render();
-    // }
-
     polygonsToggle(e) {
 
-        console.log('polygonsToggle', e);
         this.visuals.twoD.commonService.session.style.widgets['polygons-show'] = e;
 
         if(e) {
@@ -981,18 +948,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         }
         this.render();
     }
-
-    // polygonsHide() {
-
-    //     this.visuals.twoD.commonService.session.style.widgets['polygons-show'] = false;
-    //     $(".polygons-settings-row").slideUp();
-    //     $('.polygons-label-row').slideUp();
-    //     $("#polygon-color-table-row").slideUp();
-    //     $("#polygon-color-value-row").slideUp();
-    //     $("#polygon-color-table").empty();
-
-    //   this.render();
-    // }
 
     polygonColorsToggle(e) {
         if (e) {
