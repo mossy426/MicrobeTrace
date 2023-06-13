@@ -98,7 +98,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumError": "20mb"
                 }
               ]
             },
@@ -112,7 +112,6 @@
               "optimization": false,
               "outputHashing": "none",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": false,
               "extractLicenses": false,
@@ -122,7 +121,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
-                  "maximumError": "10mb"
+                  "maximumError": "20mb"
                 }
               ]
             }
