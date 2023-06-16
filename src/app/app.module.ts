@@ -53,6 +53,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSliderModule } from '@angular/material/slider';
 import { DndDirective } from '@shared/dnd.directive';
 
+import {MatSelectModule} from '@angular/material/select';
+
+
 // It is required to have JQuery as global in the window object.
 window['$'] = $;
 
@@ -92,6 +95,7 @@ export class TestedComponent {
     MatMenuModule,
     MatSliderModule,
     MatToolbarModule,
+    MatSelectModule,
     HttpClientJsonpModule,
     ModalModule.forRoot(),
     TooltipModule.forRoot(),

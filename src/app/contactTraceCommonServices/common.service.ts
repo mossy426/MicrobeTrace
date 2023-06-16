@@ -237,7 +237,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             'node-symbol-variable': 'None',
             'node-symbol-table-visible': 'Hide',
             'node-timeline-variable' : 'None',
-            'node-tooltip-variable': '_id',
+            'node-tooltip-variable': ['_id'],
             'physics-tree-branch-type': 'Straight',
             'physics-tree-charge': 30,
             'physics-tree-friction': 0.05,

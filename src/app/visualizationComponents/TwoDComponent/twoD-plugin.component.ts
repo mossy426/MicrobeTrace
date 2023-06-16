@@ -20,6 +20,9 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { ComponentContainer } from 'golden-layout';
 
+declare var $: any;
+
+
 @Component({
     selector: 'TwoDComponent',
     templateUrl: './twoD-plugin.component.html',
@@ -71,7 +74,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     // Node Tab    
     SelectedNodeLabelVariable: string = "None";
     SelectedNodeLabelOrientationVariable: string = "Right";
-    SelectedNodeTooltipVariable: string = "None";
+    SelectedNodeTooltipVariable: any = "None";
     SelectedNodeSymbolVariable: string = "None";
     SelectedNodeShapeVariable: string = "symbolCircle";
     SelectedNodeRadiusVariable: string = "None";
@@ -414,6 +417,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 if (this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'] !== 'None') {
                     $('#node-symbol-variable').change(); //.trigger('change');
                 }
+
             }, 1);
 
             setTimeout(() =>{
@@ -1296,29 +1300,85 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     };
 
     showNodeTooltip(d) {
-        if (this.visuals.twoD.commonService.session.style.widgets['node-highlight']) this.visuals.twoD.highlightNeighbors(d);
-        //if ($('#node-tooltip-variable').val() == 'None') return;
-        if (this.visuals.twoD.SelectedNodeTooltipVariable == 'None') return;
+        if (this.visuals.twoD.commonService.session.style.widgets['node-highlight']) 
+            this.visuals.twoD.highlightNeighbors(d);
+    
+        // If no tooltip variable is selected, we shouldn't show a tooltip
+        if (this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'].length > 0 && this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'][0] == 'None') 
+            return;
 
-        //let htmlValue: any = $('#node-tooltip-variable').val();
-        let htmlValue: any = this.visuals.twoD.SelectedNodeTooltipVariable;
+        this.visuals.twoD.SelectedNodeTooltipVariable = this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'];
+    
+        // Tooltip variables can be a single string or an array
+        let tooltipVariables = this.visuals.twoD.SelectedNodeTooltipVariable;
+        if (!Array.isArray(tooltipVariables)) {
+            tooltipVariables = [tooltipVariables];
+        }
+    
+        // Generate the HTML for the tooltip
+        let tooltipHtml = '';
+        if (tooltipVariables.length > 1) {
+            tooltipHtml = this.tabulate(tooltipVariables.map(variable => [this.titleize(variable), d[variable]]));
+        } else {
+            tooltipHtml = d[tooltipVariables[0]];
+        }
+
 
         $('#tooltip').css({ top: d3.event.pageY, left: d3.event.pageX, position: 'absolute' });
 
+    
         d3.select('#tooltip')
-            .html(d[htmlValue])
+            .html(tooltipHtml)
             .style('left', (d3.event.pageX) + 'px')
             .style('top', (d3.event.pageY) - 120 + 'px')
             .style('z-index', 1000)
             .transition().duration(100)
-            .style('opacity', 1)
-            .style('color','#333333')
-            .style('background','#f5f5f5')
-            .style('border', '1px solid #cccccc')
-            .style('border-radius','.25rem')
-            .style('padding','.25rem')
-            ;
-    };
+            .style('opacity', 1);
+    }
+    
+    titleize(str: string) {
+        return str.replace(/\b\w/g, l => l.toUpperCase());
+    }
+    
+    // Generate a tabular HTML string from the data array, similar to the tabulate function in the original JavaScript
+    tabulate(data: any[]) {
+
+        let tableHtml = `
+            <style>
+            #tooltip-table {
+                border-spacing: 0;
+                width: 100%;
+                border: 1px solid #ddd;
+                z-index: 1000;
+            }
+            
+            #tooltip-table td, #tooltip-table th {
+                text-align: left;
+                padding: 16px;
+                border: 1px solid #ddd;
+            }
+            
+            #tooltip-table tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+            
+            #tooltip-table tr:nth-child(odd) {
+                background-color: #fff;
+            }
+            </style>
+            <table id="tooltip-table"><tbody>`;
+
+        for (let row of data) {
+            tableHtml += '<tr>';
+            for (let cell of row) {
+                tableHtml += '<td>' + cell + '</td>';
+            }
+            tableHtml += '</tr>';
+        }
+        tableHtml += '</tbody></table>';
+
+        return tableHtml;
+    }
 
     highlightNeighbors(node) {
         let links = this.visuals.twoD.getVLinks();
@@ -1770,6 +1830,7 @@ onPolygonColorTableChange(e) {
     }
 
     onNodeTooltipVariableChange(e) {
+        console.log('on change: ', e);
         this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'] = e;
         this.visuals.twoD.redrawLabels();
     }
@@ -2430,6 +2491,10 @@ onPolygonColorTableChange(e) {
         this.onNodeLabelOrientationChange(this.SelectedNodeLabelOrientationVariable);
 
         //Nodes|Tooltip
+
+        if (!Array.isArray(this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'])) {
+            this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'] = [this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable']];
+        }
         this.SelectedNodeTooltipVariable = this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'];
         this.onNodeTooltipVariableChange(this.SelectedNodeTooltipVariable);
 
