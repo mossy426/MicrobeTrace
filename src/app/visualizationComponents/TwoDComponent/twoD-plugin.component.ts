@@ -20,9 +20,6 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { ComponentContainer } from 'golden-layout';
 
-declare var $: any;
-
-
 @Component({
     selector: 'TwoDComponent',
     templateUrl: './twoD-plugin.component.html',
@@ -93,6 +90,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     // Link Tab
     SelectedLinkTooltipVariable: string = "None";
     SelectedLinkLabelVariable: string = "None";
+    SelectedLinkDecimalVariable: number = 2;
     SelectedLinkTransparencyVariable: any = 0;
     SelectedLinkWidthByVariable: string = "None";
 
@@ -417,7 +415,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 if (this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'] !== 'None') {
                     $('#node-symbol-variable').change(); //.trigger('change');
                 }
-
             }, 1);
 
             setTimeout(() =>{
@@ -649,7 +646,13 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             .join('text')
             .attr('text-anchor', 'middle')
             .attr('dy', this.visuals.twoD.commonService.session.style.widgets['link-width'] + 2)
-            .text(l => l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']]);
+            .text((l) => 
+            (!l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']] || 
+            l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']].toLocaleString().indexOf('.') === -1)
+                ? l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']] 
+                : parseFloat((l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']]))
+                    .toFixed(this.visuals.twoD.commonService.session.style.widgets['link-decimal-variable'])
+        )
 
         let layoutTick = () => {
              nodes
@@ -1830,7 +1833,6 @@ onPolygonColorTableChange(e) {
     }
 
     onNodeTooltipVariableChange(e) {
-        console.log('on change: ', e);
         this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'] = e;
         this.visuals.twoD.redrawLabels();
     }
@@ -1935,12 +1937,17 @@ onPolygonColorTableChange(e) {
         }
 
         table.empty().append(
-            '<tr>' +
-            `<th ${isEditable ? 'contenteditable' : ''}>Node ${this.visuals.twoD.commonService.titleize(variable)}</th>` +
-            (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-counts'] ? '<th>Count</th>' : '') +
-            (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-frequencies'] ? '<th>Frequency</th>' : '') +
-            '<th>Shape</th>' +
-            '</tr>');
+            "<tr>" +
+              `<th class="${isEditable ? 'table-header-row' : ''}" ${isEditable ? 'contenteditable' : ''}><div class="header-content sortable">Node ${this.commonService.titleize(variable)}<a class='sort-button' style='cursor: pointer'>⇅</a></div></th>` +
+              (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-counts']
+                ? `<th class="table-header-row"><div class="header-content sortable">Count<a class='sort-button' style='cursor: pointer'>⇅</a></div></th>`
+                : '') +
+              (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-frequencies']
+                ? `<th class="table-header-row"><div class="header-content sortable">Frequency<a class='sort-button' style='cursor: pointer'>⇅</a></div></th>`
+                : '') +
+              '<th>Shape</th>' +
+              '</tr>'
+          );
         let options = $('#node-symbol2').html();
 
         values.sort( (a, b)  => {
@@ -1968,6 +1975,32 @@ onPolygonColorTableChange(e) {
             ).append(cell);
             table.append(row);
         });
+
+
+        let isAscending = true;  // add this line before the click event handler
+
+
+        // The sorting functionality is added here
+        $(tableId).on('click', 'th', function () {
+            let table = $(this).parents('table').eq(0);
+            let rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
+            isAscending = !isAscending;  // replace 'this.asc' with 'isAscending'
+            if (!isAscending){rows = rows.reverse();}
+            for (let i = 0; i < rows.length; i++) { table.append(rows[i]); }
+        });
+
+        function comparer(index) {
+            return function(a, b) {
+                let valA = getCellValue(a, index), valB = getCellValue(b, index);
+                console.log(`Comparing: ${valA} and ${valB}`);  // New line
+                return !isNaN(Number(valA)) && !isNaN(Number(valB)) ? Number(valA) - Number(valB) : valA.toString().localeCompare(valB);
+            }
+        }
+
+    function getCellValue(row, index) {
+        return $(row).children('td').eq(index).text();
+    }
+
     }
 
     onNodeRadiusVariableChange(e) {
@@ -2040,13 +2073,17 @@ onPolygonColorTableChange(e) {
         if (label == 'None') {
             this.visuals.twoD.svg.select('g.links').selectAll('text').text('');
         } else {
-            this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.visuals.twoD.getLLinks()).text(l => l[label] === null || l[label] === undefined ? '' :  _.unescape(l[label])
-            );
+            this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.visuals.twoD.getLLinks()).text(l => l[label] === null || l[label] === undefined ? '' :  parseFloat((l[label])).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-decimal-variable']));
             this.visuals.twoD.force.alpha(0.01).alphaTarget(0).restart();
         }
     }
 
 
+    onLinkDecimalVariableChange(e) {
+
+        this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length'] = e;
+        this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.getLLinks()).text(l => parseFloat((l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']])).toFixed( this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']));
+    }
 
 
 
@@ -2527,6 +2564,10 @@ onPolygonColorTableChange(e) {
         //Links|Label
         this.SelectedLinkLabelVariable = this.visuals.twoD.commonService.session.style.widgets['link-label-variable'];
         this.onLinkLabelVariableChange(this.SelectedLinkLabelVariable);
+
+        //Links|Decimal Length
+        this.SelectedLinkDecimalVariable = this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length'];
+        this.onLinkDecimalVariableChange(this.SelectedLinkDecimalVariable);
 
         //Links|Transparency
         this.SelectedLinkTransparencyVariable = this.visuals.twoD.commonService.session.style.widgets['link-opacity'];

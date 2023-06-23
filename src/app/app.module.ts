@@ -54,6 +54,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { DndDirective } from '@shared/dnd.directive';
 
 import {MatSelectModule} from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
 
 
 // It is required to have JQuery as global in the window object.
@@ -96,6 +97,7 @@ export class TestedComponent {
     MatSliderModule,
     MatToolbarModule,
     MatSelectModule,
+    MatIconModule,
     HttpClientJsonpModule,
     ModalModule.forRoot(),
     TooltipModule.forRoot(),

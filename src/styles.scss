@@ -35,6 +35,22 @@ p-dialog {
     position: relative;
 }
 
+.sort-button {
+    cursor: pointer;
+}
+
+.table-header-row .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+// .table-header-row span[contenteditable],
+// .table-header-row i {
+//     flex: 0 0 auto;
+// }
+
 .margin-left-5 {
     margin-left: 5px !important;
 }

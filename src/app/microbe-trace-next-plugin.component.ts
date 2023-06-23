@@ -890,15 +890,15 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     generateNodeLinkTable(tableId: string, isEditable: boolean = true) {
         let linkColorTable = $(tableId)
-            .empty()
-            .append(
-                "<tr>" +
-                ("<th class='p-1' >Link " + this.visuals.microbeTrace.commonService.titleize(this.visuals.microbeTrace.SelectedColorLinksByVariable) + "</th>") +
-                (this.visuals.microbeTrace.commonService.session.style.widgets["link-color-table-counts"] ? "<th>Count</th>" : "") +
-                (this.visuals.microbeTrace.commonService.session.style.widgets["link-color-table-frequencies"] ? "<th>Frequency</th>" : "") +
-                "<th>Color</th>" +
-                "</tr>"
-            );
+        .empty()
+        .append(
+            "<tr>" +
+            ("<th class='p-1 table-header-row'><div class='header-content'><span contenteditable>Link " + this.commonService.titleize(this.SelectedColorLinksByVariable) + "</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>") +
+            (this.visuals.microbeTrace.commonService.session.style.widgets["link-color-table-counts"] ? "<th class='table-header-row'><div class='header-content'><span contenteditable>Count</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>" : "") +
+            (this.visuals.microbeTrace.commonService.session.style.widgets["link-color-table-frequencies"] ? "<th class='table-header-row'><div class='header-content'><span contenteditable>Frequency</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>" : "") +
+            "<th>Color</th>" +
+            "</tr>"
+        );
 
         if (!this.visuals.microbeTrace.commonService.session.style.linkValueNames)
             this.visuals.microbeTrace.commonService.session.style.linkValueNames = {};
@@ -995,7 +995,36 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
                 });
         }
-    }
+
+        let isAscending = true;  // add this line before the click event handler
+
+        $(tableId).on('click', '.sort-button', function() {
+            console.log('Sorting triggered.');
+            let table = $(this).parents('table').eq(0);
+            let rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).parent().parent().index()));
+            isAscending = !isAscending;  // replace 'this.asc' with 'isAscending'
+            if (!isAscending){rows = rows.reverse();}
+            for (let i = 0; i < rows.length; i++){
+                console.log(`Appending row: ${i}`);
+                table.append(rows[i]);
+            }
+        });
+        
+        
+        function comparer(index) {
+            return function(a, b) {
+                let valA = getCellValue(a, index), valB = getCellValue(b, index);
+                console.log(`Comparing: ${valA} and ${valB}`);  // New line
+                return !isNaN(Number(valA)) && !isNaN(Number(valB)) ? Number(valA) - Number(valB) : valA.toString().localeCompare(valB);
+            }
+        }
+        
+        function getCellValue(row, index){ 
+            let value = $(row).children('td').eq(index).text();
+            console.log(`Cell value: ${value}`);  // New line
+            return value;
+        }        
+     }
 
     public onTimelineChanged(e) : void {
         this.SelectedTimelineVariable = e;
@@ -1264,15 +1293,15 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     generateNodeColorTable(tableId: string, isEditable: boolean = true) {
         let nodeColorTable = $(tableId)
-            .empty()
-            .append(
-                "<tr>" +
-                "<th class='p-1' contenteditable>Node " + this.commonService.titleize(this.SelectedColorNodesByVariable) + "</th>" +
-                (this.commonService.session.style.widgets["node-color-table-counts"] ? "<th>Count</th>" : "") +
-                (this.commonService.session.style.widgets["node-color-table-frequencies"] ? "<th>Frequency</th>" : "") +
-                "<th>Color</th>" +
-                "<tr>"
-            );
+        .empty()
+        .append(
+            "<tr>" +
+            "<th class='p-1 table-header-row'><div class='header-content'><span contenteditable>Node " + this.commonService.titleize(this.SelectedColorNodesByVariable) + "</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>" +
+            (this.commonService.session.style.widgets["node-color-table-counts"] ? "<th class='table-header-row'><div class='header-content'><span contenteditable>Count</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>" : "") +
+            (this.commonService.session.style.widgets["node-color-table-frequencies"] ? "<th class='table-header-row'><div class='header-content'><span contenteditable>Frequency</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>" : "") +
+            "<th>Color</th>" +
+            "</tr>"
+        );
 
 
         if (!this.commonService.session.style.nodeValueNames)
@@ -1388,6 +1417,25 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
                 });
         }
+
+        
+        $(tableId).on('click', '.sort-button', function() {
+            let table = $(this).parents('table').eq(0);
+            let rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).parent().parent().index()));
+            this.asc = !this.asc; // using property 'asc' on DOM object instead of jQuery data function
+            if (!this.asc){rows = rows.reverse();}
+            for (let i = 0; i < rows.length; i++){table.append(rows[i]);}
+        });
+        
+        function comparer(index) {
+            return function(a, b) {
+                let valA = getCellValue(a, index), valB = getCellValue(b, index);
+                return !isNaN(Number(valA)) && !isNaN(Number(valB)) ? Number(valA) - Number(valB) : valA.toString().localeCompare(valB);
+            }
+        }
+        
+        function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
+
     }
 
     onLinkThresholdChanged() {

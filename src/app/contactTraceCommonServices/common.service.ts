@@ -183,6 +183,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             'link-color-variable': 'None',
             'link-directed': false,
             'link-label-variable': 'None',
+            'link-label-decimal-length' : 2,
             'link-length': 0.125,
             'link-opacity': 0,
             'link-show-nn': false,
