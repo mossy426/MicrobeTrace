@@ -90,7 +90,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     // Link Tab
     SelectedLinkTooltipVariable: string = "None";
     SelectedLinkLabelVariable: string = "None";
-    SelectedLinkDecimalVariable: number = 2;
+    SelectedLinkDecimalVariable: number = 3;
     SelectedLinkTransparencyVariable: any = 0;
     SelectedLinkWidthByVariable: string = "None";
 
@@ -646,13 +646,15 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             .join('text')
             .attr('text-anchor', 'middle')
             .attr('dy', this.visuals.twoD.commonService.session.style.widgets['link-width'] + 2)
-            .text((l) => 
-            (!l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']] || 
-            l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']].toLocaleString().indexOf('.') === -1)
-                ? l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']] 
-                : parseFloat((l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']]))
-                    .toFixed(this.visuals.twoD.commonService.session.style.widgets['link-decimal-variable'])
-        )
+            .text((l) => {
+                const labelValue = l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']];
+              
+                if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
+                    return parseFloat(labelValue).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']);
+                } else {
+                    return labelValue;
+                }
+              });
 
         let layoutTick = () => {
              nodes
@@ -2073,7 +2075,15 @@ onPolygonColorTableChange(e) {
         if (label == 'None') {
             this.visuals.twoD.svg.select('g.links').selectAll('text').text('');
         } else {
-            this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.visuals.twoD.getLLinks()).text(l => l[label] === null || l[label] === undefined ? '' :  parseFloat((l[label])).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-decimal-variable']));
+            this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.visuals.twoD.getLLinks()).text((l) => {
+                const labelValue = l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']];
+              
+                if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
+                    return parseFloat(labelValue).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']);
+                } else {
+                    return labelValue;
+                }
+              });
             this.visuals.twoD.force.alpha(0.01).alphaTarget(0).restart();
         }
     }
@@ -2082,10 +2092,17 @@ onPolygonColorTableChange(e) {
     onLinkDecimalVariableChange(e) {
 
         this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length'] = e;
-        this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.getLLinks()).text(l => parseFloat((l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']])).toFixed( this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']));
+        this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.getLLinks()).text((l) => {
+            const labelValue = l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']];
+              
+            if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
+                return parseFloat(labelValue).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']);
+            } else {
+                return labelValue;
+            }
+          });
+          
     }
-
-
 
     onLinkOpacityChange(e) {
 

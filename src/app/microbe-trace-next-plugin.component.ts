@@ -313,7 +313,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             cachedView = result;
         });
 
+        let that = this;
 
+        $( document ).on( "link-visibility", function( ) {
+            that.generateNodeLinkTable("#link-color-table");
+        });
 
         // console.log('instanceeee: ', this.goldenLayout.componentInstances);
 
@@ -889,6 +893,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     generateNodeLinkTable(tableId: string, isEditable: boolean = true) {
+        console.log('generateNodeLinkTable: ', tableId);
         let linkColorTable = $(tableId)
         .empty()
         .append(
@@ -1458,7 +1463,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             $("#cluster-minimum-size").trigger("change");
         } 
 
-        this.commonService.setLinkVisibility(true);
+        this.commonService.setLinkVisibility(false);
         this.commonService.tagClusters().then(() => {
             this.visuals.microbeTrace.commonService.setClusterVisibility(true);
             //To catch links that should be filtered out based on cluster size:

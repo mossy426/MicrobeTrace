@@ -183,7 +183,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             'link-color-variable': 'None',
             'link-directed': false,
             'link-label-variable': 'None',
-            'link-label-decimal-length' : 2,
+            'link-label-decimal-length' : 3,
             'link-length': 0.125,
             'link-opacity': 0,
             'link-show-nn': false,
@@ -3100,9 +3100,13 @@ export class CommonService extends AppComponentBase implements OnInit {
             let visible = true;
             let overrideNN = false;
 
+            if( (link.source === "30576_KF773426_B90cl57"  && link.target === "30582_KF773578_H96cl11") || link.target === "30576_KF773426_B90cl57"  && link.source === "30582_KF773578_H96cl11") {
+                console.log('link1: ', _.cloneDeep(link));
+            }
             if (link.hasDistance && !link.origin.includes(link.distanceOrigin)) {
                 link.origin.push(link.distanceOrigin);
             }
+
 
             // No distance value
             if (link[metric] == null) {
@@ -3126,16 +3130,37 @@ export class CommonService extends AppComponentBase implements OnInit {
 
                 if (!visible) {
 
-                    // Only need to get distance origin and override if there are other files using a distance metric, otherwise the else code block below would be exectued since the link would not have distance
-                    if (link.origin.length > 1 && link.origin.filter(fileName =>{
-                        // console.log(fileName);
-                        fileName && (/[Aa]uspice/.test(fileName) || !fileName.includes(link.distanceOrigin))}).length > 0) {
-                        // Set visible and origin to only show the from the file outside of Distance
-                        link.origin = link.origin.filter(fileName => fileName && (/[Aa]uspice/.test(fileName) || !fileName.includes(link.distanceOrigin)));
+
+                    if (
+                        (link.source === "30576_KF773426_B90cl57" && link.target === "30582_KF773578_H96cl11") ||
+                        (link.target === "30576_KF773426_B90cl57" && link.source === "30582_KF773578_H96cl11")
+                      ) {
+                        console.log('link1: ', _.cloneDeep(link));
+                        console.log('origin filt: ', link.origin.filter(fileName => {
+                          const hasAuspice = /[Aa]uspice/.test(fileName);
+                          const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
+                          return fileName && !includesDistanceOrigin && !hasAuspice;
+                        }));
+                      }
+                    // Only need to get distance origin and override if there are other files using a distance metric, otherwise the else code block below would be executed since the link would not have distance
+                    if (
+                        link.origin.length > 1 &&
+                        link.origin.filter(fileName => {
+                        const hasAuspice = /[Aa]uspice/.test(fileName);
+                        const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
+                        return fileName && !includesDistanceOrigin && !hasAuspice;
+                        }).length > 0
+                    ) {
+                        // Set visible and origin to only show the file outside of Distance
+                        link.origin = link.origin.filter(fileName => {
+                        const hasAuspice = /[Aa]uspice/.test(fileName);
+                        const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
+                        return fileName && !includesDistanceOrigin && !hasAuspice;
+                        });
                         overrideNN = true;
                         visible = true;
                     }
-                }
+                    }
 
                 } else {
 
@@ -3165,6 +3190,10 @@ export class CommonService extends AppComponentBase implements OnInit {
 
 
         }
+
+
+        console.log('silent: ', silent);
+        
         if (!silent) $(document).trigger("link-visibility");
         // console.log("Link Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
     };
