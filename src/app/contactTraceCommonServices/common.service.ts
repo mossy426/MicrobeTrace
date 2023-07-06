@@ -191,6 +191,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             'link-threshold': 0.015,
             'link-tooltip-variable': 'None',
             'link-width': 3,
+            "link-width-max":27,
+            "link-width-min":3,
             'link-width-variable': 'None',
             'link-width-reciprocal': true,
             'map-basemap-show': false,
@@ -841,7 +843,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         $(document).trigger("stop-force-simulation"); // stop previous network ticks so previous polygon won't show up
         $(document).off('.2d');
 
-        console.log('applying session:');
+        console.log('applying session:', stashObject);
         if(stashObject.session) {
 
         } else {
@@ -866,6 +868,8 @@ export class CommonService extends AppComponentBase implements OnInit {
         window.context.commonService.session.style = _.assign(window.context.commonService.session.style, oldSession.style);
         window.context.commonService.session.meta.startTime = Date.now();
 
+
+        console.log('stashfiles: ',  window.context.commonService.session);
         if(oldSession.layout) {
             window.context.commonService.session.layout = oldSession.layout;
         }
@@ -3030,6 +3034,8 @@ export class CommonService extends AppComponentBase implements OnInit {
     };
 
     setNodeVisibility(silent) {
+
+        console.log('setting node');
         let start = Date.now();
         let dateField = window.context.commonService.session.style.widgets["timeline-date-field"];
         let nodes = window.context.commonService.session.data.nodes,

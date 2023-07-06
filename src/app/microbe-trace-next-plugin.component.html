@@ -10,13 +10,13 @@
                   <div class="menu-items">
                     <button class="navbar-item" mat-button [matMenuTriggerFor]="fileMenu"><i class="far nav-icon flaticon-file-1"></i>File<span class="dropdown-symbol">&#9660;</span></button>
                     <mat-menu #fileMenu="matMenu" overlapTrigger="false">
-                      <button mat-menu-item (click)="FileClick('Stash Session')">Stash</button>
-                      <button mat-menu-item (click)="FileClick('Recall Session')">Recall</button>
+                      <!-- <button mat-menu-item (click)="FileClick('Stash Session')">Stash</button> -->
+                      <!-- <button mat-menu-item (click)="FileClick('Recall Session')">Recall</button> -->
                       <button mat-menu-item (click)="FileClick('Save Session')">Save</button>
-                      <button mat-menu-item (click)="FileClick('Open Session')">Open</button>
+                      <!-- <button mat-menu-item (click)="FileClick('Open Session')">Open</button> -->
                       <button mat-menu-item (click)="FileClick('Open URL')">Open URL</button>
                       <button mat-menu-item (click)="FileClick('Add Data')">Add Data</button>
-                      <button mat-menu-item (click)="FileClick('New Session')">New</button>
+                      <!-- <button mat-menu-item (click)="FileClick('New Session')">New</button> -->
                     </mat-menu>
                     <button class="navbar-item" (click)="DisplayGlobalSettingsDialog()" mat-button><i class="far nav-icon flaticon-cogwheel-2"></i>Settings</button>
                     <button class="navbar-item" mat-button [matMenuTriggerFor]="viewMenu"><i class="far nav-icon flaticon-web"></i>View<span class="dropdown-symbol">&#9660;</span></button>

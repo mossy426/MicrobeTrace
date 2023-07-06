@@ -93,6 +93,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     SelectedLinkDecimalVariable: number = 3;
     SelectedLinkTransparencyVariable: any = 0;
     SelectedLinkWidthByVariable: string = "None";
+    SelectedLinkWidthMax: number = 27;
+    SelectedLinkWidthMin: number = 3;
 
     ReciprocalTypes: any = [
         { label: 'Reciprocal', value: 'Reciprocal' },
@@ -954,6 +956,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             $("#polygon-color-table-row").slideUp();
             $("#polygon-color-value-row").slideUp();
             $("#polygon-color-table").empty();
+
+            this.visuals.twoD.PolygonColorTableWrapperDialogSettings.setVisibility(false);
         }
         this.render();
     }
@@ -2115,8 +2119,13 @@ onPolygonColorTableChange(e) {
 
         if (e == 'None') {
             $('#link-reciprocalthickness-row').slideUp();
+            $('#link-max-width-row').slideUp();
+            $('#link-min-width-row').slideUp();
+
         } else {
             $('#link-reciprocalthickness-row').css('display', 'flex');
+            $('#link-max-width-row').css('display', 'flex');
+            $('#link-min-width-row').css('display', 'flex');
         }
         this.visuals.twoD.commonService.session.style.widgets['link-width-variable'] = e;
         this.visuals.twoD.scaleLinkWidth();
@@ -2139,6 +2148,22 @@ onPolygonColorTableChange(e) {
     onLinkWidthChange(e) {
 
         this.visuals.twoD.commonService.session.style.widgets['link-width'] = e;
+        this.visuals.twoD.scaleLinkWidth();
+
+    }
+
+    onLinkWidthMaxChange(e) {
+
+        this.visuals.twoD.commonService.session.style.widgets['link-width-max'] = e;
+        this.visuals.twoD.scaleLinkWidth();
+
+        console.log('scaling width');
+
+    }
+
+    onLinkWidthMinChange(e) {
+
+        this.visuals.twoD.commonService.session.style.widgets['link-width-min'] = e;
         this.visuals.twoD.scaleLinkWidth();
 
     }
@@ -2381,6 +2406,9 @@ onPolygonColorTableChange(e) {
         let links = this.visuals.twoD.svg.select('g.links').selectAll('line').data(vlinks);
         if (variable == 'None') return links.attr('stroke-width', scalar);
         let n = vlinks.length;
+        let maxWidth = this.visuals.twoD.commonService.session.style.widgets['link-width-max'];
+        let minWidth = this.visuals.twoD.commonService.session.style.widgets['link-width-min'];
+
         let max = -Infinity;
         let min = Infinity;
         for (let i = 0; i < n; i++) {
@@ -2392,7 +2420,7 @@ onPolygonColorTableChange(e) {
         let mid = (max - min) / 2 + min;
         let scale = d3.scaleLinear()
             .domain(this.visuals.twoD.commonService.session.style.widgets['link-width-reciprocal'] ? [max, min] : [min, max])
-            .range([1, scalar]);
+            .range([minWidth, maxWidth]);
         links.attr('stroke-width', d => {
             let v = d[variable];
             if (!this.visuals.twoD.isNumber(v)) v = mid;
@@ -2601,6 +2629,14 @@ onPolygonColorTableChange(e) {
         //Links|Width
         this.SelectedLinkWidthVariable = this.visuals.twoD.commonService.session.style.widgets['link-width'];
         this.onLinkWidthChange(this.SelectedLinkWidthVariable);
+
+         //Links|Width Max
+         this.SelectedLinkWidthMax = this.visuals.twoD.commonService.session.style.widgets['link-width-max'];
+         this.onLinkWidthMaxChange(this.SelectedLinkWidthByVariable);
+ 
+         //Links|Width Min
+         this.SelectedLinkWidthMin = this.visuals.twoD.commonService.session.style.widgets['link-width-min'];
+         this.onLinkWidthMinChange(this.SelectedLinkWidthByVariable);
 
         //Links|Length
         this.SelectedLinkLengthVariable = this.visuals.twoD.commonService.session.style.widgets['link-length'];

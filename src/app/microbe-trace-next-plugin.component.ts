@@ -1904,6 +1904,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                         this.publishLoadNewData();
                     });
                     x.componentRef.instance.processFiles(fileList);
+                    // ensure files table is populated after processing
+                    setTimeout(() => {
+                        x.componentRef.instance.populateTable();
+                    }, 3000);
+                    console.log('file process: ', this.commonService.session);
                 }
             }
         });

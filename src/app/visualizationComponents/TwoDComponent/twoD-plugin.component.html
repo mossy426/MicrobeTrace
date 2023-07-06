@@ -260,7 +260,15 @@
                                     <p-dropdown id="link-width-variable" [options]="ToolTipFieldList" appendTo="body" [(ngModel)]="SelectedLinkWidthByVariable" (ngModelChange)="onLinkWidthVariableChange($event)"></p-dropdown>
                                 </div>
                             </div>
-                            <div id="link-reciprocalthickness-row" class="form-group row" title="Should link widths be proportioned to the reciprocal of this variable?">
+                            <div id="link-max-width-row" class="form-group row display-none" title="Should link max widths to this variable?">
+                                <div class="col-4"><label for="link-width-max">Max Width</label></div>
+                                <div class="col-8"><input type="range" class="custom-range" id="link-width-max" min="0.3" max="30" step=".3" value="27" [(ngModel)]="SelectedLinkWidthMax" (ngModelChange)="onLinkWidthMaxChange($event)"></div>
+                              </div>
+                              <div id="link-min-width-row" class="form-group row display-none" title="Should link min widths to this variable?">
+                                <div class="col-4"><label for="link-width-min">Min Width</label></div>
+                                <div class="col-8"><input type="range" class="custom-range" id="link-width-min" min="0.3" max="30" step=".3" value="3" [(ngModel)]="SelectedLinkWidthMin" (ngModelChange)="onLinkWidthMinChange($event)"></div>
+                              </div>
+                            <div id="link-reciprocalthickness-row" class="form-group row display-none" title="Should link widths be proportioned to the reciprocal of this variable?">
                                 <div class="col-4">Reciprocal</div>
                                 <div class="col-8">
                                     <p-selectButton id="link-width-reciprocal-non-reciprocal" appendTo="body"  [options]="ReciprocalTypes" [(ngModel)]="SelectedLinkReciprocalTypeVariable" (ngModelChange)="onLinkWidthReciprocalNonReciprocalChange($event)"></p-selectButton>

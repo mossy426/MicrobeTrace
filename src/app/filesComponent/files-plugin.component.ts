@@ -469,17 +469,21 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
  
     }
 
-    if(this.commonService.session.files && this.commonService.session.files.length > 0) {
-      console.log('adding: ', this.commonService.session.files);
-      for(let i = 0; i < this.commonService.session.files.length; i++) {
-        console.log('adding: ', this.commonService.session.files[i]);
+    console.log('Files: On load: ', this.commonService.session);
 
-        this.addToTable(this.commonService.session.files[i]);
-      }
-    }
+
+    this.populateTable();
     // console.log('session: ', this.commonService?.session?.files, this.commonService.session.files.length);
   }
 
+  public populateTable() {
+    if(this.commonService.session.files && this.commonService.session.files.length > 0) {
+      for(let i = 0; i < this.commonService.session.files.length; i++) {
+        this.addToTable(this.commonService.session.files[i]);
+      }
+    }
+  }
+  
 
   toglleAll() {
 
@@ -546,7 +550,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
   loadDefaultVisualization(e: string) {
 
-    console.log('files loading default visualization');
+    console.log('files: loading default visualization');
     setTimeout(() => {
 
       this.visuals.microbeTrace.commonService.session.messages = [];
@@ -569,6 +573,8 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
   }
 
   launchClick() {
+
+    console.log('files: launch click');
 
     const thresholdOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"];
     const metricOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["default-distance-metric"];
@@ -597,7 +603,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
 
   creatLaunchSequences() {
-    console.log('Launched');
+    console.log('Files: Luaunch Sequences');
     this.visuals.microbeTrace.commonService.session.meta.startTime = Date.now();
     $('#launch').prop('disabled', true);
 
