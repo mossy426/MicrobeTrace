@@ -472,16 +472,28 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     console.log('Files: On load: ', this.commonService.session);
 
 
-    this.populateTable();
+    setTimeout(() => {
+      this.populateTable();
+  }, 2000);
+
     // console.log('session: ', this.commonService?.session?.files, this.commonService.session.files.length);
   }
 
   public populateTable() {
-    if(this.commonService.session.files && this.commonService.session.files.length > 0) {
-      for(let i = 0; i < this.commonService.session.files.length; i++) {
-        this.addToTable(this.commonService.session.files[i]);
-      }
-    }
+
+    
+    const fileTableRows = $(".file-table-row");
+    fileTableRows.slideUp(() => fileTableRows.remove());
+
+    // Give some time before adding to table
+    setTimeout(() => {
+      let files = _.cloneDeep(this.commonService.session.files);
+      if(files && files.length > 0) {
+        for(let i = 0; i < files.length; i++) {
+          this.addToTable(files[i]);
+        }
+      }  }, 500);
+
   }
   
 

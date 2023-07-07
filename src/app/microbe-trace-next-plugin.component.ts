@@ -552,11 +552,12 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
      */
     prepareFilesLists($event) {
 
+        // this.commonService.resetData();
         this.commonService.session.files = [];
-      if (!this.commonService.session.style.widgets) {
-        console.log('Greating default style widget');
-          this.commonService.session.style.widgets = this.commonService.defaultWidgets();
-      }
+        if (!this.commonService.session.style.widgets) {
+            console.log('Greating default style widget');
+            this.commonService.session.style.widgets = this.commonService.defaultWidgets();
+        }
 
         console.log('threshold: ', this.commonService.session.style.widgets['link-threshold']);
         // this.loadSettings();
@@ -1894,7 +1895,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.homepageTabs.map(x => {
             if (x.label === "Files") {
                 if (x.componentRef != null) {
-                    console.log('in iles: ', this.subscription);
                     this.subscription.unsubscribe();
                     // console.log('unsubscribed');
                     this.subscription = this.homepageTabs[0].componentRef.instance.LoadDefaultVisualizationEvent.subscribe((v) => {
@@ -1904,11 +1904,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                         this.publishLoadNewData();
                     });
                     x.componentRef.instance.processFiles(fileList);
+
                     // ensure files table is populated after processing
                     setTimeout(() => {
                         x.componentRef.instance.populateTable();
-                    }, 3000);
-                    console.log('file process: ', this.commonService.session);
+                    }, 1000);
                 }
             }
         });
