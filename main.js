@@ -604,7 +604,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           timelinePinned: false,
           nodes: [],
           timelineNodes: [],
-          initialLoad: false
+          initialLoad: false,
+          launched: false
         },
         state: {
           timeStart: 0,
@@ -3533,12 +3534,14 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
     $('#loading-information').html(this.visuals.microbeTrace.commonService.session.messages.join('<br>'));
   }
   launchClick() {
-    console.log('files: launch click');
     const thresholdOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"];
     const metricOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["default-distance-metric"];
     const ambiguityOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["ambiguity-resolution-strategy"];
     const viewOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["default-view"];
-    this.visuals.microbeTrace.commonService.resetData();
+    if (!this.commonService.session.network.launched) {
+      this.visuals.microbeTrace.commonService.resetData();
+      this.commonService.session.network.launched = true;
+    }
     this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"] = thresholdOnLaunch;
     this.visuals.microbeTrace.commonService.session.style.widgets["default-distance-metric"] = metricOnLaunch;
     this.visuals.microbeTrace.commonService.session.style.widgets["ambiguity-resolution-strategy"] = ambiguityOnLaunch;
