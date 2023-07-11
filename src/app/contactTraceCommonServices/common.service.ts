@@ -327,7 +327,8 @@ export class CommonService extends AppComponentBase implements OnInit {
                 timelinePinned : false,
                 nodes: [],
                 timelineNodes: [],
-                initialLoad: false
+                initialLoad: false,
+                launched : false
             },
             state: {
                 timeStart: 0,

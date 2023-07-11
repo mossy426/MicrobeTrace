@@ -586,14 +586,15 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
   launchClick() {
 
-    console.log('files: launch click');
-
     const thresholdOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"];
     const metricOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["default-distance-metric"];
     const ambiguityOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["ambiguity-resolution-strategy"];
     const viewOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["default-view"];
 
-    this.visuals.microbeTrace.commonService.resetData();
+    if (!this.commonService.session.network.launched) {
+      this.visuals.microbeTrace.commonService.resetData();
+      this.commonService.session.network.launched = true;
+    }
 
     this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"] = thresholdOnLaunch;
     this.visuals.microbeTrace.commonService.session.style.widgets["default-distance-metric"] = metricOnLaunch;
