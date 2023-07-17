@@ -736,13 +736,21 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         else {
             this.visuals.microbeTrace.commonService.session.style.widgets["link-show-nn"] = true;
 
-            if(!this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]) {
-                this.visuals.microbeTrace.commonService.computeMST().then(this.visuals.microbeTrace.commonService.updateNetwork);
-                this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"] = true;
-              } else {
-                this.visuals.microbeTrace.commonService.updateNetwork();
+            // TODO:: Removed to fix nearest neighbor bug as it's unesscary as of now.  Remove later if it appears to not be neded.
+            // if(!this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]) {
+            //     this.visuals.microbeTrace.commonService.computeMST().then(this.visuals.microbeTrace.commonService.updateNetwork);
+            //     this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"] = true;
+            //     console.log('updated compute:' , this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]);
+            //   } else {
 
-              }
+            //     console.log('onPrun in else else');
+
+            //     this.visuals.microbeTrace.commonService.updateNetwork();
+
+            //   }
+
+            this.visuals.microbeTrace.commonService.updateNetwork();
+
 
             this.visuals.microbeTrace.updatedVisualization();
         }
