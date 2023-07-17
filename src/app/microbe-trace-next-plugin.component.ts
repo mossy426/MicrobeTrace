@@ -80,7 +80,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     displayUrlDialog: boolean = false;
     displayRecallStashDialog: boolean = false;
     displayLedgerLoaderDialog: boolean = false;
-    version: string = '0.6.1';
+    version: string = '2.0';
     auspiceUrlVal: string = '';
 
     saveFileName: string = '';
