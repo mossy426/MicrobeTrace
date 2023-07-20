@@ -1931,6 +1931,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             if (x.label === "Files") {
                 if (x.componentRef != null) {
                     x.componentRef.processFile(file);
+                    //TODO does this need instance?
                 }
             }
         });

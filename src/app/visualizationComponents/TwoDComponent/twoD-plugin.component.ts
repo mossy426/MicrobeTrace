@@ -644,7 +644,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this.visuals.twoD.updateLinkColor();
         this.visuals.twoD.scaleLinkWidth();
 
-        let linklabels = this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.visuals.twoD.getLLinks())
+        let linklabels = this.visuals.twoD.svg.select('g.links').selectAll('text').data(vlinks)
             .join('text')
             .attr('text-anchor', 'middle')
             .attr('dy', this.visuals.twoD.commonService.session.style.widgets['link-width'] + 2)
@@ -2127,7 +2127,6 @@ onPolygonColorTableChange(e) {
             this.visuals.twoD.force.alpha(0.01).alphaTarget(0).restart();
         }
     }
-
 
     onLinkDecimalVariableChange(e) {
 

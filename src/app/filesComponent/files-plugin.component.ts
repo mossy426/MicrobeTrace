@@ -1643,6 +1643,8 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
         .attr('step', 1)
         .val(16)
         .trigger('change');
+
+        $("#ambiguities-row").slideUp();
       this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
       this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'snps';
       this.visuals.microbeTrace.onDistanceMetricChanged();
@@ -1652,6 +1654,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
         .attr('step', 0.001)
         .val(0.015)
         .trigger('change');
+        $("#ambiguities-row").slideDown();
       this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'TN93';
       this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'tn93';
       this.visuals.microbeTrace.onDistanceMetricChanged();
