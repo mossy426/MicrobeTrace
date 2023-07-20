@@ -189,7 +189,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             'link-show-nn': false,
             'link-sort-variable': 'distance',
             'link-threshold': 0.015,
-            'link-tooltip-variable': 'None',
+            'link-tooltip-variable': ['None'],
             'link-width': 3,
             "link-width-max":27,
             "link-width-min":3,
@@ -1803,7 +1803,8 @@ export class CommonService extends AppComponentBase implements OnInit {
         }
         };
 
-        this.foldMultiSelect();
+        // TODO:: See if this is needed
+        // this.foldMultiSelect();
 
         $("#search-field")
             .html(window.context.commonService.session.data.nodeFields.map(field => '<option value="' + field + '">' + window.context.commonService.titleize(field) + "</option>").join("\n"))

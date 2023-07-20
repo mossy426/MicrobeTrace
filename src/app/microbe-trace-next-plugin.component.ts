@@ -286,7 +286,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         this.SelectedColorNodesByVariable = this.commonService.GlobalSettingsModel.SelectedColorNodesByVariable;
         this.SelectedNodeColorVariable = this.commonService.session.style.widgets['node-color'];
-        this.SelectedColorLinksByVariable = this.commonService.session.style.widgets['link-tooltip-variable'];
+        this.SelectedColorLinksByVariable = this.commonService.GlobalSettingsModel.SelectedColorLinksByVariable;
 
         this.SelectedTimelineVariable = this.commonService.session.style.widgets['node-timeline-variable'];
         this.SelectedColorVariable = this.commonService.session.style.widgets['selected-color'];
@@ -1529,7 +1529,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.commonService.session.style.widgets['node-color-variable'] = this.SelectedColorNodesByVariable;
         //this.commonService.session.style.widgets['node-color-variable'] = this.SelectedNodeColorVariable;
 
-        this.commonService.session.style.widgets['link-tooltip-variable'] = this.SelectedColorLinksByVariable;
+        // TODO: Removed, see if this is still necessary
+        // this.commonService.session.style.widgets['link-tooltip-variable'] = this.SelectedColorLinksByVariable;
 
 
         this.commonService.GlobalSettingsModel.SelectedColorVariable = this.SelectedColorVariable;

@@ -88,7 +88,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     public isExporting: boolean = false;
 
     // Link Tab
-    SelectedLinkTooltipVariable: string = "None";
+    SelectedLinkTooltipVariable: any = "None";
     SelectedLinkLabelVariable: string = "None";
     SelectedLinkDecimalVariable: number = 3;
     SelectedLinkTransparencyVariable: any = 0;
@@ -1420,13 +1420,33 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
     showLinkTooltip(d) {
         let v: any = this.visuals.twoD.SelectedLinkTooltipVariable;
+
         if (v == 'None') return;
+
+
+        // Tooltip variables can be a single string or an array
+        let tooltipVariables = this.visuals.twoD.SelectedLinkTooltipVariable;
+        if (!Array.isArray(tooltipVariables)) {
+            tooltipVariables = [tooltipVariables];
+            this.visuals.twoD.SelectedLinkTooltipVariable = tooltipVariables;  // Update SelectedLinkTooltipVariable to be an array
+        }
+
+        // If no tooltip variable is selected, we shouldn't show a tooltip
+        if (tooltipVariables.length > 0 && tooltipVariables[0] == 'None') 
+            return;
+
+        // Generate the HTML for the tooltip
+        let tooltipHtml = '';
+        if (tooltipVariables.length > 1) {
+            tooltipHtml = this.tabulate(tooltipVariables.map(variable => [this.titleize(variable), d[variable]]));
+        } else {
+            tooltipHtml = (tooltipVariables[0] == 'source' || tooltipVariables[0] == 'target') ? d[tooltipVariables[0]]._id : d[tooltipVariables[0]];
+        }
 
         $('#tooltip').css({ top: d3.event.pageY, left: d3.event.pageX, position: 'absolute' });
 
-
         d3.select('#tooltip')
-            .html((v == 'source' || v == 'target') ? d[v]._id : d[v])
+            .html(tooltipHtml)
             .style('left', (d3.event.pageX) + 'px')
             .style('top', (d3.event.pageY - 120) + 'px')
             .style('z-index', 1000)
@@ -1672,7 +1692,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     }
 
     onPolygonLabelShowChange(e) {
-        if (e == "Show") {
+        if (e) {
             this.visuals.twoD.commonService.session.style.widgets['polygons-label-show'] = true;
             $('.polygons-label-row').slideDown();
             this.visuals.twoD.render();
@@ -1839,7 +1859,14 @@ onPolygonColorTableChange(e) {
     }
 
     onNodeTooltipVariableChange(e) {
-        this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'] = e;
+
+        let selectedValue = e;
+
+        if (!Array.isArray(selectedValue)) {
+            selectedValue = [selectedValue];
+        }
+
+        this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'] = selectedValue;
         this.visuals.twoD.redrawLabels();
     }
 
@@ -2067,7 +2094,16 @@ onPolygonColorTableChange(e) {
 
     onLinkTooltipVariableChange(e) {
 
+        let selectedValue = e;
+
+        if (!Array.isArray(selectedValue)) {
+            selectedValue = [selectedValue];
+        }
+    
         this.visuals.twoD.commonService.session.style.widgets['link-tooltip-variable'] = e;
+        this.visuals.twoD.SelectedLinkTooltipVariable = this.visuals.twoD.commonService.session.style.widgets['link-tooltip-variable'];
+        this.visuals.twoD.redrawLabels();
+
 //TODO: umm.... do something here?
     }
 

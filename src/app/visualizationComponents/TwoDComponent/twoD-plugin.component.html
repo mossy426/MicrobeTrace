@@ -231,7 +231,11 @@
                             <div class="form-group row" title="What data should be displayed when you hover over a link?">
                                 <div class="col-4"><label for="link-tooltip-variable">Tooltip</label></div>
                                 <div class="col-8">
-                                    <p-dropdown id="link-tooltip-variable" [options]="ToolTipFieldList" appendTo="body" [(ngModel)]="SelectedLinkTooltipVariable" (ngModelChange)="onLinkTooltipVariableChange($event)"></p-dropdown>
+                                    <mat-select multiple [(value)]="commonService.session.style.widgets['link-tooltip-variable']" (valueChange)="onLinkTooltipVariableChange($event)">
+                                        <mat-option *ngFor="let option of commonService.session.data['linkFields']" [value]="option">
+                                          {{option}}
+                                        </mat-option>
+                                      </mat-select>
                                 </div>
                             </div>
                             <div class="form-group row" title="What data should be displayed when you hover over a link?">
