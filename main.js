@@ -3183,12 +3183,14 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
       if (e.toLowerCase() === 'snps') {
         console.log("saw snps");
         $('#default-distance-threshold, #link-threshold').attr('step', 1).val(16).trigger('change');
+        $("#ambiguities-row").slideUp();
         this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
         this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'snps';
         this.visuals.microbeTrace.onDistanceMetricChanged();
         this.onLinkThresholdChange('16');
       } else {
         $('#default-distance-threshold, #link-threshold').attr('step', 0.001).val(0.015).trigger('change');
+        $("#ambiguities-row").slideDown();
         this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'TN93';
         this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'tn93';
         this.visuals.microbeTrace.onDistanceMetricChanged();
@@ -6754,10 +6756,12 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
       if (x.label === "Files") {
         if (x.componentRef != null) {
           x.componentRef.processFile(file);
+          //TODO does this need instance?
         }
       }
     });
   }
+
   onPanelHide($event) {
     console.log($event);
   }
@@ -10068,7 +10072,7 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     let links = this.visuals.twoD.svg.select('g.links').selectAll('line').data(vlinks).join('line').attr('stroke-width', this.visuals.twoD.commonService.session.style.widgets['link-width']).attr('opacity', 1 - this.visuals.twoD.commonService.session.style.widgets['link-opacity']).on('mouseenter', x => this.visuals.twoD.showLinkTooltip(x)).on('mouseout', x => this.visuals.twoD.hideTooltip());
     this.visuals.twoD.updateLinkColor();
     this.visuals.twoD.scaleLinkWidth();
-    let linklabels = this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.visuals.twoD.getLLinks()).join('text').attr('text-anchor', 'middle').attr('dy', this.visuals.twoD.commonService.session.style.widgets['link-width'] + 2).text(l => {
+    let linklabels = this.visuals.twoD.svg.select('g.links').selectAll('text').data(vlinks).join('text').attr('text-anchor', 'middle').attr('dy', this.visuals.twoD.commonService.session.style.widgets['link-width'] + 2).text(l => {
       const labelValue = l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']];
       if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
         return parseFloat(labelValue).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']);
