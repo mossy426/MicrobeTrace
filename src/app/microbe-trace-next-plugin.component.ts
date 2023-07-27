@@ -2523,24 +2523,14 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             setTimeout(() => {
 
                 tabNdx = this.homepageTabs.findIndex(x => x.label == activeComponentName);
-
-                // this.cmpRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
-
-                // this.homepageTabs[tabNdx].componentRef.instance.InitView();
-                // this.homepageTabs[tabNdx].componentRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
-                // this.homepageTabs[tabNdx].componentRef.instance.onRecallSession();
+                this.homepageTabs[tabNdx].componentRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
 
             });
         } else {
-            // this.homepageTabs[tabNdx].componentRef.InitView();
+            this.homepageTabs[tabNdx].componentRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
         }
 
-        console.log('global l 2: ', this.GlobalSettingsLinkColorDialogSettings);
-        console.log('global n 2: ', this.GlobalSettingsNodeColorDialogSettings);
 
-        console.log('acive index: ', this.activeTabIndex);
-
-        // this.cdref.detectChanges();
         this.previousTab = activeComponentName;
     }
 
