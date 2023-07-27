@@ -36,6 +36,8 @@ export class CommonService extends AppComponentBase implements OnInit {
     decoder: any = new TextDecoder('utf-8');
     r01: any = Math.random;
 
+    thresholdHistogram: any;
+
     GlobalSettingsModel: any = {
         SelectedColorNodesByVariable: 'None',
         SelectedColorLinksByVariable: 'None',
@@ -3217,17 +3219,22 @@ export class CommonService extends AppComponentBase implements OnInit {
         });
     };
 
-    updateThresholdHistogram() {
-
-        //debugger;
+    updateThresholdHistogram(histogram?: any) {
 
         let width = 280,
-            height = 48,
-            svg = d3
-                .select("svg#link-threshold-sparkline")
-                .html(null)
-                .attr("width", width)
-                .attr("height", height);
+        height = 48,
+        svg = null;
+
+        // Update histogram so that it can be altered outside of the main wrapper 
+        if(histogram){
+            this.thresholdHistogram = histogram;
+        }
+        
+        svg = d3
+        .select(this.thresholdHistogram)
+        .html(null)
+        .attr("width", width)
+        .attr("height", height);
 
         let lsv = this.session.style.widgets["link-sort-variable"],
             n = this.session.data.links.length,

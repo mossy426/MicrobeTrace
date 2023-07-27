@@ -47,6 +47,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     @ViewChild('goldenLayoutHost') _goldenLayoutHostComponent: GoldenLayoutHostComponent;
 
+    @ViewChild('linkThresholdSparkline') linkThresholdSparkline: ElementRef;
+
+
     public metric: string = "tn93";
     public ambiguity: string = "Average";
     public launchView: string = "2D Network";
@@ -2352,8 +2355,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.visuals.microbeTrace.GlobalSettingsDialogSettings.setVisibility(true);
         this.cachedGlobalSettingsVisibility = this.GlobalSettingsDialogSettings.isVisible;
 
-
-        this.visuals.microbeTrace.commonService.updateThresholdHistogram();
+        this.visuals.microbeTrace.commonService.updateThresholdHistogram(this.linkThresholdSparkline.nativeElement);
 
         this.globalSettingsTab.tabs[activeTab === "Styling" ? 1 : 0].active = true;
     }
