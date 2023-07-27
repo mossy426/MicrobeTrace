@@ -200,7 +200,7 @@
                                     <input type="range" class="custom-range" id="node-radius-min" min="100" value="250" step="1" max="5000" [(ngModel)]="SelectedNodeRadiusSizeMinVariable" (ngModelChange)="onNodeRadiusMinChange($event)">
                                 </div>
                             </div>
-                            <div class="form-group row" title="How big should the nodes be?">
+                            <div id="node-radius-row" class="form-group row" title="How big should the nodes be?">
                                 <div class="col-4"><label for="node-radius">Size</label></div>
                                 <div class="col-8">
                                     <input type="range" class="custom-range" id="node-radius" min="100" value="250" step="1" max="5000" [(ngModel)]="SelectedNodeRadiusSizeVariable" (ngModelChange)="onNodeRadiusChange($event)">
