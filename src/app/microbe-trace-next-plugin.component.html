@@ -395,6 +395,14 @@
                                 <input type="text" id="stash-name" class="form-control form-control-sm" [(ngModel)]="saveFileName" placeholder="Name your session!">
                             </div>
                         </div>
+                        <div class="form-group row" title="Should MicrobeTrace compress this save file?">
+                            <div class="col">
+                              <div id="cluster-checkbox-container" class="form-check form-check-inline">
+                                <input class="form-check-input" [(ngModel)]="saveByCluster" type="checkbox" id="save-file-cluster">
+                                <label class="form-check-label" for="save-file-cluster">By Cluster</label>
+                              </div>
+                            </div>
+                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-error" (click)="DisplayStashDialog('Cancel')">Cancel</button>

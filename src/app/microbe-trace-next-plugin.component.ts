@@ -29,6 +29,8 @@ import { GoldenLayoutComponentService } from './golden-layout-component.service'
 import { Tabulator } from 'tabulator-tables';
 import { Subscription } from 'rxjs';
 import { GoldenLayoutHostComponent } from './golden-layout-host.component';
+import * as Papa from 'papaparse';
+import JSZip from 'jszip';
 
 
 @Component({
@@ -90,6 +92,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     searchField: string = '';
     searchText: string = '';
+
+    saveByCluster: boolean = false;
 
     private subscription: Subscription;
 
@@ -1984,9 +1988,15 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.displayLedgerLoaderDialog = !this.displayLedgerLoaderDialog;
     }
 
+    clusterSaveClick() {
+
+    }
+
     DisplayStashDialog(saveStash: string) {
         switch (saveStash) {
             case "Save": {
+
+                let zip = new JSZip();
 
                 const lightTabs: HomePageTabItem[] = this.homepageTabs.map(x => {
                     return {
@@ -1998,13 +2008,112 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                     }
                 });
 
-                const stash: StashObjects = {
-                    session: this.visuals.microbeTrace.commonService.session,
-                    tabs: lightTabs
-                };
+                console.log('cluser save: ', this.saveByCluster)
 
-                const blob = new Blob([JSON.stringify(stash)], { type: "application/json;charset=utf-8" });
-                saveAs(blob, `${this.saveFileName}.microbetrace`);
+                if(this.saveByCluster){
+                    let clusterNodeList = [];
+                    let clusterLinkList = [];
+                    let singletonNodeList = [];
+                    let dyadNodeList = [];
+                    let dyadEdgeList = [];
+                    let nodes = this.commonService.session.data.nodes;
+                    let links = this.commonService.session.data.links;
+
+                    this.commonService.session.data.clusters.forEach(cluster => {
+
+                    let clusterNodes = nodes.filter(node => node.cluster === cluster.id);
+
+                    let clusterLinks = links.filter(link => link.cluster === cluster.id);
+
+                    // We have a singleton - all singletons go into one file
+                    if(clusterNodes.length == 1){
+                        singletonNodeList.push(clusterNodes[0]);
+                    // We have a dyad - all dyads go into one file
+                    } else if (clusterNodes.length == 2) {
+                        // Add both nodes
+                        dyadNodeList.push(clusterNodes[0]);
+                        dyadNodeList.push(clusterNodes[1]);
+                        // Add the single link
+                        dyadEdgeList.push(clusterLinks[0]);
+                    // We have a cluster
+                    } else {
+                        // Add array object of nodes with matching cluster
+                        clusterNodeList.push(clusterNodes);
+
+                        // Add array object of links with matching cluster
+                        clusterLinkList.push(clusterLinks);
+                    }
+
+                    });
+
+                    let singletonFolder = null;
+                    let dyadFolder = null;
+
+                    for (var i = 0; i < this.commonService.session.data.clusters.length; i++) {
+
+                    let currentCluster = this.commonService.session.data.clusters[i];
+
+                    let cluster = clusterNodeList.filter(nodeList => nodeList[0].cluster == currentCluster.id);
+
+                    // Check if cluster is in clusterNodesList
+                    if(cluster.length > 0){
+
+                        // Create cluster folder
+                        var clusterFolder = zip.folder("cluster-" + cluster[0][0].cluster);
+                    
+                        // If node and edge lists exists, add them to the current folder
+                        let clusterNode = clusterNodeList.filter(NodeList => NodeList[0].cluster == currentCluster.id);
+
+                        if(clusterNode) {
+
+                        let blob = new Blob([Papa.unparse(cluster[0])], {type: 'text/csv;charset=utf-8'});
+                        clusterFolder.file( "nodeList_cluster_" + cluster[0][0].cluster + ".csv", blob);
+
+                        // Now get link list of cluster
+                        let clusterLink = clusterLinkList.filter(LinkList => LinkList[0].cluster == currentCluster.id);
+
+                        if(clusterLink) {
+                            let blob = new Blob([Papa.unparse(clusterLink[0])], {type: 'text/csv;charset=utf-8'});
+                            clusterFolder.file("edgeList_cluster_" + cluster[0][0].cluster + ".csv", blob);
+                        }
+                        }
+                    }
+                    }
+
+                    if(dyadNodeList.length > 0){
+                        dyadFolder = zip.folder("dyads");
+                        // Add all dyads in one shot
+                        let nodesBlob = new Blob([Papa.unparse(dyadNodeList)], {type: 'text/csv;charset=utf-8'});
+                        dyadFolder.file("nodeList_cluster.csv", nodesBlob);
+                        let edgesBlob = new Blob([Papa.unparse(dyadEdgeList)], {type: 'text/csv;charset=utf-8'});
+                        dyadFolder.file("edgeList_cluster.csv", edgesBlob);
+                      }
+                
+                      if (singletonNodeList.length > 0) {
+                        singletonFolder = zip.folder("singletons");
+                        // Add all singletons in one shot
+                        let blob = new Blob([Papa.unparse(singletonNodeList)], {type: 'text/csv;charset=utf-8'});
+                        singletonFolder.file("nodeList_cluster.csv", blob);
+                      }
+                        
+                      let that = this;
+                      // generate zip repsetnation in memory
+                      zip.generateAsync({type:"blob"}).then(function(content) {
+                          // see FileSaver.js
+                          saveAs(content, `${that.saveFileName}.zip`);
+                      });
+                } else {
+                    const stash: StashObjects = {
+                        session: this.visuals.microbeTrace.commonService.session,
+                        tabs: lightTabs
+                    };
+    
+                    const blob = new Blob([JSON.stringify(stash)], { type: "application/json;charset=utf-8" });
+                    saveAs(blob, `${this.saveFileName}.microbetrace`);
+                }
+
+
+                
                 break;
             }
             case "Cancel": {
