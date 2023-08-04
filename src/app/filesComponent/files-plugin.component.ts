@@ -1635,7 +1635,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
   }
 
   onDistanceMetricChange = (e) => {
-    console.log(e);
+    console.log('distance ch:', e);
     this.SelectedDefaultDistanceMetricVariable = e;
     if (e.toLowerCase() === 'snps') {
       console.log("saw snps");

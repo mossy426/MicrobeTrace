@@ -862,17 +862,17 @@ export class CommonService extends AppComponentBase implements OnInit {
             }
         }
 
-        console.log('stashObject: ', stashObject.session);
 
         const oldSession = stashObject.session;
         window.context.commonService.temp.matrix = [];
         window.context.commonService.session.files = oldSession.files;
         window.context.commonService.session.state = oldSession.state;
-        window.context.commonService.session.style = _.assign(window.context.commonService.session.style, oldSession.style);
+        window.context.commonService.session.style = oldSession.style;
+
         window.context.commonService.session.meta.startTime = Date.now();
 
 
-        console.log('stashfiles: ',  window.context.commonService.session);
+        console.log('stashObject2: ',  _.cloneDeep(window.context.commonService.session));
         if(oldSession.layout) {
             window.context.commonService.session.layout = oldSession.layout;
         }
@@ -1820,11 +1820,13 @@ export class CommonService extends AppComponentBase implements OnInit {
                 "<option selected>None</option>" +
                 window.context.commonService.session.data.nodeFields.map(field => '<option value="' + field + '">' + window.context.commonService.titleize(field) + "</option>").join("\n"))
             .val(window.context.commonService.session.style.widgets["node-color-variable"]);
+        $("#default-distance-metric")
+            .val(window.context.commonService.session.style.widgets["default-distance-metric"]);
         $("#link-color-variable")
-            .html(
-                "<option>None</option>" +
-                window.context.commonService.session.data.linkFields.map(field => '<option value="' + field + '">' + window.context.commonService.titleize(field) + "</option>").join("\n"))
-            .val(window.context.commonService.session.style.widgets["link-color-variable"]);
+        .html(
+            "<option>None</option>" +
+            window.context.commonService.session.data.linkFields.map(field => '<option value="' + field + '">' + window.context.commonService.titleize(field) + "</option>").join("\n"))
+        .val(window.context.commonService.session.style.widgets["link-color-variable"]);
         try {
             window.context.commonService.updateThresholdHistogram();
         } catch (error) {
@@ -3047,6 +3049,8 @@ export class CommonService extends AppComponentBase implements OnInit {
         let n = nodes.length;
         for (let i = 0; i < n; i++) {
             let node = nodes[i];
+
+
             node.visible = true;
             // console.log('node cluster: ', node.cluster);
             let cluster = clusters[node.cluster];

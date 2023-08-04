@@ -1523,12 +1523,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
 
 
-
+        this.SelectedDistanceMetricVariable = this.commonService.session.style.widgets['default-distance-metric'];
         this.commonService.GlobalSettingsModel.SelectedNodeColorVariable = this.SelectedNodeColorVariable;
         this.commonService.session.style.widgets['node-color'] = this.SelectedNodeColorVariable;
         this.commonService.session.style.widgets['link-color'] = this.SelectedLinkColorVariable;
         this.commonService.session.style.widgets['link-threshold'] = this.SelectedLinkThresholdVariable;
-        this.commonService.session.style.widgets['default-distance-metric'] = this.SelectedDistanceMetricVariable;
         this.commonService.session.style.widgets['node-color-variable'] = this.SelectedColorNodesByVariable;
         //this.commonService.session.style.widgets['node-color-variable'] = this.SelectedNodeColorVariable;
 
@@ -2582,6 +2581,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     loadSettings() {
+
         //Filtering|Prune With
         this.SelectedPruneWityTypesVariable = this.visuals.microbeTrace.commonService.session.style.widgets["link-show-nn"] ? "Nearest Neighbor" : "None";
         this.onPruneWithTypesChanged();

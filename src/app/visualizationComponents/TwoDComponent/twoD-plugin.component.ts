@@ -1552,35 +1552,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             d3.select(this).attr('d', d3.symbol().size(size).type(type));    
             
           });
-
-        // TODO: Remove when done
-        // nodes.selectAll('path')._parents.forEach(x=>{
-        //     const path = x.childNodes[0];
-        //     const data = x.__data__;
-
-            
-
-        //     if (symbolVariable !== 'None') {
-        //         type = d3[this.visuals.twoD.commonService.temp.style.nodeSymbolMap(data[symbolVariable])];
-
-        //         // Custom Shape Selected
-        //         if (type === undefined) {
-
-        //             type = this.customShapes.shapes[this.visuals.twoD.commonService.temp.style.nodeSymbolMap(data[symbolVariable])];
-
-        //         }
-
-        //     }
-        //     if (sizeVariable !== 'None') {
-        //         size = data[sizeVariable];
-        //         if (!this.visuals.twoD.isNumber(size)) size = med;
-        //         size = (size - min) / oldrng;
-        //         size = size * size * defaultSize + 100;
-        //     }
-
-        //         d3.select(path).attr('d', d3.symbol().size(size).type(type));
-
-        //     });
     };
 
     private redrawNodeBorder(){
