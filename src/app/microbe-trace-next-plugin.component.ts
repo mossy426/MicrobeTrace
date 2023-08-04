@@ -450,10 +450,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             let node = nodes[i];
             if (node[field]) {
   
-              const encodedField = (node[field]).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
-                return '&#'+i.charCodeAt(0)+';';
-             });
-              dataSet.add(`${encodedField}`);
+                let fieldData = node[field].toString(); // Convert the data to string
+                const encodedField = fieldData.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+                  return '&#'+i.charCodeAt(0)+';';
+                });
+                dataSet.add(`${encodedField}`);
             }
           }
           let dataArray = Array.from(dataSet).sort();
