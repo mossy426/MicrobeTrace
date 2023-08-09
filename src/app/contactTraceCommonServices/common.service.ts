@@ -513,21 +513,21 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     addNode(newNode: any, check: any = null) {
 
-
-        if (newNode._id === "30576_KF773440_B96cl58") {
-            console.log('node1: ', newNode);
+        // TODO: Remove when done testing
+        // if (newNode._id === "30576_KF773440_B96cl58") {
+        //     console.log('node1: ', newNode);
             
-        }
-        if (newNode._id === "30576_KF773440_B96cl58 ") {
-            console.log('node2: ', newNode);
-        }
+        // }
+        // if (newNode._id === "30576_KF773440_B96cl58 ") {
+        //     console.log('node2: ', newNode);
+        // }
 
-        if (newNode._id === "30576_KF773440_B96cl58 ") {
-            console.log('node7: ', newNode);
-        }
-        if (newNode.id === "30576_KF773440_B96cl58") {
-            console.log('node8: ', newNode);
-        }
+        // if (newNode._id === "30576_KF773440_B96cl58 ") {
+        //     console.log('node7: ', newNode);
+        // }
+        // if (newNode.id === "30576_KF773440_B96cl58") {
+        //     console.log('node8: ', newNode);
+        // }
 
         //  If no _id, set _id to id
         if (window.context.commonService.isNumber(newNode._id)) {
@@ -3063,24 +3063,23 @@ export class CommonService extends AppComponentBase implements OnInit {
         let nodes = window.context.commonService.session.data.nodes,
             clusters = window.context.commonService.session.data.clusters;
         let n = nodes.length;
-        console.log('nodes: ', nodes);
         for (let i = 0; i < n; i++) {
             let node = nodes[i];
 
-            console.log()
-            if (node._id === "30576_KF773440_B96cl58") {
-                console.log('node1: ', node);
-            }
-            if (node._id === "30576_KF773440_B96cl58 ") {
-                console.log('node2: ', node);
-            }
+            // TODO:: Remove when done testing
+            // if (node._id === "30576_KF773440_B96cl58") {
+            //     console.log('node1: ', node);
+            // }
+            // if (node._id === "30576_KF773440_B96cl58 ") {
+            //     console.log('node2: ', node);
+            // }
 
-            if (node._id === "30576_KF773440_B96cl58 ") {
-                console.log('node7: ', node);
-            }
-            if (node.id === "30576_KF773440_B96cl58") {
-                console.log('node8: ', node);
-            }
+            // if (node._id === "30576_KF773440_B96cl58 ") {
+            //     console.log('node7: ', node);
+            // }
+            // if (node.id === "30576_KF773440_B96cl58") {
+            //     console.log('node8: ', node);
+            // }
 
             node.visible = true;
             // console.log('node cluster: ', node.cluster);
@@ -3244,7 +3243,6 @@ export class CommonService extends AppComponentBase implements OnInit {
     };
 
     updateNetwork() {
-        console.log('plu update')
         window.context.commonService.setLinkVisibility(true);
         window.context.commonService.tagClusters().then(() => {
             window.context.commonService.setClusterVisibility(true);
