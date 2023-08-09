@@ -1483,6 +1483,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.commonService.setLinkVisibility(false);
         this.commonService.tagClusters().then(() => {
             this.visuals.microbeTrace.commonService.setClusterVisibility(true);
+            $(document).trigger("cluster-visibility");
             //To catch links that should be filtered out based on cluster size:
             this.visuals.microbeTrace.commonService.setLinkVisibility(true);
             this.visuals.microbeTrace.commonService.setNodeVisibility(true);

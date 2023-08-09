@@ -393,7 +393,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             });
 
             $( document ).on( "cluster-visibility", function( ) {
-            that.visuals.twoD.render(false);
+                that.updatePolygonColors();
+                that.visuals.twoD.render(false);
             });
 
             $( document ).on( "node-selected", function( ) {
@@ -930,6 +931,30 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             that.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderVariable'] = that.visuals.twoD.commonService.session.style.widgets["polygons-foci"];
             that.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderTitle'] = $($(this).contents()[0]).text();
           });
+
+          let isAscending = true;  // add this line before the click event handler
+
+
+               // The sorting functionality is added here
+        $('#polygon-color-table').on('click', 'th', function () {
+            let table = $(this).parents('table').eq(0);
+            let rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
+            isAscending = !isAscending;  // replace 'this.asc' with 'isAscending'
+            if (!isAscending){rows = rows.reverse();}
+            for (let i = 0; i < rows.length; i++) { table.append(rows[i]); }
+        });
+
+        function comparer(index) {
+            return function(a, b) {
+                let valA = getCellValue(a, index), valB = getCellValue(b, index);
+                console.log(`Comparing: ${valA} and ${valB}`);  // New line
+                return !isNaN(Number(valA)) && !isNaN(Number(valB)) ? Number(valA) - Number(valB) : valA.toString().localeCompare(valB);
+            }
+        }
+
+        function getCellValue(row, index) {
+            return $(row).children('td').eq(index).text();
+        }
   
         // this.sortable("#polygon-color-table", { items: "tr" });
         this.visuals.twoD.render();
@@ -1695,99 +1720,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         }
     }
 
-generatePolygonColorSelectionTable(tableId: string, variable: string, isEditable: boolean = true) {
-    this.visuals.microbeTrace.clearTable(tableId);
-
-    let symbolMapping: { key: string, value: string }[] = [
-        { key: 'symbolCircle', value: '&#11044; (Circle)' },
-        { key: "symbolTriangle", value: '&#9650; (Up Triangle)' },
-        { key: "symbolTriangleDown", value: '&#9660; (Down Triangle)' },
-        { key: "symbolTriangleLeft", value: '&#9664; (Left Triangle)' },
-        { key: "symbolTriangleRight", value: '&#9654; (Right Triangle)' },
-        { key: "symbolDiamond", value: '&#10731; (Vertical Diamond)' },
-        { key: "symbolDiamondAlt", value: '&#10731; (Horizontal Diamond)' },
-        { key: "symbolSquare", value: '&#9632; (Square)' },
-        { key: "symbolDiamondSquare", value: '&#9670; (Tilted Square)' },
-        { key: "symbolPentagon", value: '&#11039; (Pentagon)' },
-        { key: "symbolHexagon", value: '&#11042; (Hexagon)' },
-        { key: "symbolHexagonAlt", value: '&#11043; (Tilted Hexagon)' },
-        { key: "symbolOctagon", value: '&#11042; (Octagon)' },
-        { key: "symbolOctagonAlt", value: '&#11043; (Tilted Octagon)' },
-        { key: "symbolCross", value: '&#10010; (Addition Sign)' },
-        { key: "symbolX", value: '&#10006; (Multiplication Sign)' },
-        { key: "symbolWye", value: '&#120300; (Wye)' },
-        { key: "symbolStar", value: '&#9733; (Star)' },
-    ];
-
-    let table = $(tableId)
-    const disabled: string = isEditable ? '' : 'disabled';
-
-    this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'] = variable;
-
-    if (variable === 'None' && !isEditable) return;
-
-
-    let values = [];
-    let aggregates = {};
-    let nodes = this.visuals.twoD.commonService.session.data.nodes;
-    let n = nodes.length;
-    let vnodes = 0;
-    for (let i = 0; i < n; i++) {
-        let d = nodes[i];
-        if (!d.visible) continue;
-        vnodes++;
-        let dv = d[variable];
-        if (values.indexOf(dv) == -1) values.push(dv);
-        if (dv in aggregates) {
-            aggregates[dv]++;
-        } else {
-            aggregates[dv] = 1;
-        }
-    }
-    if (values.length > this.visuals.twoD.commonService.session.style.nodeSymbols.length) {
-        let symbols = [];
-        let m = Math.ceil(values.length / this.visuals.twoD.commonService.session.style.nodeSymbols.length);
-        while (m-- > 0) {
-            symbols = symbols.concat(this.visuals.twoD.commonService.session.style.nodeSymbols);
-        }
-        this.visuals.twoD.commonService.session.style.nodeSymbols = symbols;
-    }
-
-    table.empty().append(
-        '<tr>' +
-        `<th ${isEditable ? 'contenteditable' : ''}>Node ${this.visuals.twoD.commonService.titleize(variable)}</th>` +
-        (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-counts'] ? '<th>Count</th>' : '') +
-        (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-frequencies'] ? '<th>Frequency</th>' : '') +
-        '<th>Shape</th>' +
-        '</tr>');
-    let options = $('#node-symbol2').html();
-
-    values.sort( (a, b)  => {
-        return aggregates[b] - aggregates[a];
-    });
-    
-    this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
-    
-    values.forEach((v, i) => {
-
-        let selector = $(`<select ${disabled}></select>`).append(options).val(this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v)).on('change',  (e) => {
-            this.visuals.twoD.commonService.session.style.nodeSymbols.splice(i, 1, (e.target as any).value);
-            this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
-            this.visuals.twoD.redrawNodes();
-        });        
-        let symbolText = symbolMapping.find(x => x.key === this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v));
-
-        let cell = $('<td></td>').append(isEditable ? selector : symbolText ? symbolText.value : '');
-        let row = $(
-            '<tr>' +
-            `<td ${isEditable ? 'contenteditable' : ''}> ${this.visuals.twoD.commonService.titleize('' + v)} </td> ` +
-            (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-counts'] ? ('<td>' + aggregates[v] + '</td>') : '') +
-            (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-frequencies'] ? ('<td>' + (aggregates[v] / vnodes).toLocaleString() + '</td>') : '') +
-            '</tr>'
-        ).append(cell);
-        table.append(row);
-    });
-}
 
 onPolygonColorTableChange(e) {
     this.SelectedNetworkTableTypeVariable = e;
@@ -2001,9 +1933,9 @@ onPolygonColorTableChange(e) {
             }
         }
 
-    function getCellValue(row, index) {
-        return $(row).children('td').eq(index).text();
-    }
+        function getCellValue(row, index) {
+            return $(row).children('td').eq(index).text();
+        }
 
     }
 
