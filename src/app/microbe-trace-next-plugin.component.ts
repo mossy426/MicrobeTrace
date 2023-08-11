@@ -592,7 +592,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         console.log('metric updating');
         console.log('updating metric: ', this.metric);
 
-        if (this.metric === "SNPs") {
+        if (this.metric.toLowerCase() === "snps") {
             //Hide Ambiguities
             $('#ambiguities-menu').hide();
             this.threshold = "7";

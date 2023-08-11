@@ -348,7 +348,6 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
       }
       this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = lsv;
       this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedDefaultDistanceMetricVariable = lsv;
-      console.log(this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold']);
     });
 
     let cachedLSV = "";
@@ -644,22 +643,22 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
         this.showMessage(`Parsing ${file.name} as Auspice...`);
         // this.visuals.microbeTrace.commonService.localStorageService.setItem('default-view', 'phylogenetic-tree');
         // this.visuals.microbeTrace.commonService.localStorageService.setItem('default-distance-metric', 'SNPs');
-        this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
-        this.visuals.microbeTrace.metric = 'snps';
-        this.SelectedDefaultDistanceMetricVariable = 'snps';
-        this.onDistanceMetricChange('snps');
-        this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'snps';
-        this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable = 'snps';
-        $('#default-distance-metric').val('SNPs').trigger('change');
-        $('#default-distance-threshold').attr('step', 1).val(16).trigger('change');
-        this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = 16;
-        this.SelectedDefaultDistanceThresholdVariable = '16';
-        this.onLinkThresholdChange('16');
-        this.visuals.microbeTrace.SelectedLinkThresholdVariable = '16';
-        this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 16;
         this.visuals.microbeTrace.commonService.applyAuspice(file.contents).then(auspiceData => {
           this.visuals.microbeTrace.commonService.clearData();
           this.visuals.microbeTrace.commonService.session = this.visuals.microbeTrace.commonService.sessionSkeleton();
+          this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
+          this.visuals.microbeTrace.metric = 'snps';
+          this.SelectedDefaultDistanceMetricVariable = 'snps';
+          this.onDistanceMetricChange('snps');
+          this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'snps';
+          this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable = 'snps';
+          $('#default-distance-metric').val('SNPs').trigger('change');
+          $('#default-distance-threshold', '#link-threshold').attr('step', 1).val(16).trigger('change');
+          this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = 16;
+          this.SelectedDefaultDistanceThresholdVariable = '16';
+          this.onLinkThresholdChange('16');
+          this.visuals.microbeTrace.SelectedLinkThresholdVariable = '16';
+          this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 16;
           this.visuals.microbeTrace.commonService.session.meta.startTime = Date.now();
           this.visuals.microbeTrace.commonService.session.data.tree = auspiceData['tree'];
           this.visuals.microbeTrace.commonService.session.data.newickString = auspiceData['newick'];
@@ -682,6 +681,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
           auspiceData['links'].forEach(link => {
             linkCount += this.visuals.microbeTrace.commonService.addLink(link, true);
           });
+
           this.visuals.microbeTrace.commonService.runHamsters();
           this.showMessage(` - Parsed ${nodeCount} New Nodes and ${linkCount} new Links from Auspice file.`);
           if (fileNum === nFiles) this.processData();

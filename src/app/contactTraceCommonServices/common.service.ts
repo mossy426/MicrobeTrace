@@ -1499,7 +1499,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
             computer.compute_linksWorker.onmessage().subscribe((response) => {
 
-                let dists = window.context.commonService.session.style.widgets['default-distance-metric'] == 'snps' ?
+                let dists = window.context.commonService.session.style.widgets['default-distance-metric'].toLowerCase() == 'snps' ?
                     new Uint16Array(response.data.links) :
                     new Float32Array(response.data.links);
                 console.log("Links Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
