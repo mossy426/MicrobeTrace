@@ -29,6 +29,8 @@ import { GoldenLayoutComponentService } from './golden-layout-component.service'
 import { Tabulator } from 'tabulator-tables';
 import { Subscription } from 'rxjs';
 import { GoldenLayoutHostComponent } from './golden-layout-host.component';
+import * as Papa from 'papaparse';
+import JSZip from 'jszip';
 
 
 @Component({
@@ -46,6 +48,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     @ViewChild('stashes') stashes: ElementRef;
 
     @ViewChild('goldenLayoutHost') _goldenLayoutHostComponent: GoldenLayoutHostComponent;
+
+    @ViewChild('linkThresholdSparkline') linkThresholdSparkline: ElementRef;
+
 
     public metric: string = "tn93";
     public ambiguity: string = "Average";
@@ -80,13 +85,15 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     displayUrlDialog: boolean = false;
     displayRecallStashDialog: boolean = false;
     displayLedgerLoaderDialog: boolean = false;
-    version: string = '0.6.1';
+    version: string = '2.0';
     auspiceUrlVal: string = '';
 
     saveFileName: string = '';
 
     searchField: string = '';
     searchText: string = '';
+
+    saveByCluster: boolean = false;
 
     private subscription: Subscription;
 
@@ -286,7 +293,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         this.SelectedColorNodesByVariable = this.commonService.GlobalSettingsModel.SelectedColorNodesByVariable;
         this.SelectedNodeColorVariable = this.commonService.session.style.widgets['node-color'];
-        this.SelectedColorLinksByVariable = this.commonService.session.style.widgets['link-tooltip-variable'];
+        this.SelectedColorLinksByVariable = this.commonService.GlobalSettingsModel.SelectedColorLinksByVariable;
 
         this.SelectedTimelineVariable = this.commonService.session.style.widgets['node-timeline-variable'];
         this.SelectedColorVariable = this.commonService.session.style.widgets['selected-color'];
@@ -447,10 +454,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             let node = nodes[i];
             if (node[field]) {
   
-              const encodedField = (node[field]).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
-                return '&#'+i.charCodeAt(0)+';';
-             });
-              dataSet.add(`${encodedField}`);
+                let fieldData = node[field].toString(); // Convert the data to string
+                const encodedField = fieldData.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+                  return '&#'+i.charCodeAt(0)+';';
+                });
+                dataSet.add(`${encodedField}`);
             }
           }
           let dataArray = Array.from(dataSet).sort();
@@ -736,13 +744,21 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         else {
             this.visuals.microbeTrace.commonService.session.style.widgets["link-show-nn"] = true;
 
-            if(!this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]) {
-                this.visuals.microbeTrace.commonService.computeMST().then(this.visuals.microbeTrace.commonService.updateNetwork);
-                this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"] = true;
-              } else {
-                this.visuals.microbeTrace.commonService.updateNetwork();
+            // TODO:: Removed to fix nearest neighbor bug as it's unesscary as of now.  Remove later if it appears to not be neded.
+            // if(!this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]) {
+            //     this.visuals.microbeTrace.commonService.computeMST().then(this.visuals.microbeTrace.commonService.updateNetwork);
+            //     this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"] = true;
+            //     console.log('updated compute:' , this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]);
+            //   } else {
 
-              }
+            //     console.log('onPrun in else else');
+
+            //     this.visuals.microbeTrace.commonService.updateNetwork();
+
+            //   }
+
+            this.visuals.microbeTrace.commonService.updateNetwork();
+
 
             this.visuals.microbeTrace.updatedVisualization();
         }
@@ -1467,6 +1483,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.commonService.setLinkVisibility(false);
         this.commonService.tagClusters().then(() => {
             this.visuals.microbeTrace.commonService.setClusterVisibility(true);
+            $(document).trigger("cluster-visibility");
             //To catch links that should be filtered out based on cluster size:
             this.visuals.microbeTrace.commonService.setLinkVisibility(true);
             this.visuals.microbeTrace.commonService.setNodeVisibility(true);
@@ -1512,16 +1529,16 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
 
 
-
+        this.SelectedDistanceMetricVariable = this.commonService.session.style.widgets['default-distance-metric'];
         this.commonService.GlobalSettingsModel.SelectedNodeColorVariable = this.SelectedNodeColorVariable;
         this.commonService.session.style.widgets['node-color'] = this.SelectedNodeColorVariable;
         this.commonService.session.style.widgets['link-color'] = this.SelectedLinkColorVariable;
         this.commonService.session.style.widgets['link-threshold'] = this.SelectedLinkThresholdVariable;
-        this.commonService.session.style.widgets['default-distance-metric'] = this.SelectedDistanceMetricVariable;
         this.commonService.session.style.widgets['node-color-variable'] = this.SelectedColorNodesByVariable;
         //this.commonService.session.style.widgets['node-color-variable'] = this.SelectedNodeColorVariable;
 
-        this.commonService.session.style.widgets['link-tooltip-variable'] = this.SelectedColorLinksByVariable;
+        // TODO: Removed, see if this is still necessary
+        // this.commonService.session.style.widgets['link-tooltip-variable'] = this.SelectedColorLinksByVariable;
 
 
         this.commonService.GlobalSettingsModel.SelectedColorVariable = this.SelectedColorVariable;
@@ -1922,6 +1939,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             if (x.label === "Files") {
                 if (x.componentRef != null) {
                     x.componentRef.processFile(file);
+                    //TODO does this need instance?
                 }
             }
         });
@@ -1971,9 +1989,15 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.displayLedgerLoaderDialog = !this.displayLedgerLoaderDialog;
     }
 
+    clusterSaveClick() {
+
+    }
+
     DisplayStashDialog(saveStash: string) {
         switch (saveStash) {
             case "Save": {
+
+                let zip = new JSZip();
 
                 const lightTabs: HomePageTabItem[] = this.homepageTabs.map(x => {
                     return {
@@ -1985,13 +2009,112 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                     }
                 });
 
-                const stash: StashObjects = {
-                    session: this.visuals.microbeTrace.commonService.session,
-                    tabs: lightTabs
-                };
+                console.log('cluser save: ', this.saveByCluster)
 
-                const blob = new Blob([JSON.stringify(stash)], { type: "application/json;charset=utf-8" });
-                saveAs(blob, `${this.saveFileName}.microbetrace`);
+                if(this.saveByCluster){
+                    let clusterNodeList = [];
+                    let clusterLinkList = [];
+                    let singletonNodeList = [];
+                    let dyadNodeList = [];
+                    let dyadEdgeList = [];
+                    let nodes = this.commonService.session.data.nodes;
+                    let links = this.commonService.session.data.links;
+
+                    this.commonService.session.data.clusters.forEach(cluster => {
+
+                    let clusterNodes = nodes.filter(node => node.cluster === cluster.id);
+
+                    let clusterLinks = links.filter(link => link.cluster === cluster.id);
+
+                    // We have a singleton - all singletons go into one file
+                    if(clusterNodes.length == 1){
+                        singletonNodeList.push(clusterNodes[0]);
+                    // We have a dyad - all dyads go into one file
+                    } else if (clusterNodes.length == 2) {
+                        // Add both nodes
+                        dyadNodeList.push(clusterNodes[0]);
+                        dyadNodeList.push(clusterNodes[1]);
+                        // Add the single link
+                        dyadEdgeList.push(clusterLinks[0]);
+                    // We have a cluster
+                    } else {
+                        // Add array object of nodes with matching cluster
+                        clusterNodeList.push(clusterNodes);
+
+                        // Add array object of links with matching cluster
+                        clusterLinkList.push(clusterLinks);
+                    }
+
+                    });
+
+                    let singletonFolder = null;
+                    let dyadFolder = null;
+
+                    for (var i = 0; i < this.commonService.session.data.clusters.length; i++) {
+
+                    let currentCluster = this.commonService.session.data.clusters[i];
+
+                    let cluster = clusterNodeList.filter(nodeList => nodeList[0].cluster == currentCluster.id);
+
+                    // Check if cluster is in clusterNodesList
+                    if(cluster.length > 0){
+
+                        // Create cluster folder
+                        var clusterFolder = zip.folder("cluster-" + cluster[0][0].cluster);
+                    
+                        // If node and edge lists exists, add them to the current folder
+                        let clusterNode = clusterNodeList.filter(NodeList => NodeList[0].cluster == currentCluster.id);
+
+                        if(clusterNode) {
+
+                        let blob = new Blob([Papa.unparse(cluster[0])], {type: 'text/csv;charset=utf-8'});
+                        clusterFolder.file( "nodeList_cluster_" + cluster[0][0].cluster + ".csv", blob);
+
+                        // Now get link list of cluster
+                        let clusterLink = clusterLinkList.filter(LinkList => LinkList[0].cluster == currentCluster.id);
+
+                        if(clusterLink) {
+                            let blob = new Blob([Papa.unparse(clusterLink[0])], {type: 'text/csv;charset=utf-8'});
+                            clusterFolder.file("edgeList_cluster_" + cluster[0][0].cluster + ".csv", blob);
+                        }
+                        }
+                    }
+                    }
+
+                    if(dyadNodeList.length > 0){
+                        dyadFolder = zip.folder("dyads");
+                        // Add all dyads in one shot
+                        let nodesBlob = new Blob([Papa.unparse(dyadNodeList)], {type: 'text/csv;charset=utf-8'});
+                        dyadFolder.file("nodeList_cluster.csv", nodesBlob);
+                        let edgesBlob = new Blob([Papa.unparse(dyadEdgeList)], {type: 'text/csv;charset=utf-8'});
+                        dyadFolder.file("edgeList_cluster.csv", edgesBlob);
+                      }
+                
+                      if (singletonNodeList.length > 0) {
+                        singletonFolder = zip.folder("singletons");
+                        // Add all singletons in one shot
+                        let blob = new Blob([Papa.unparse(singletonNodeList)], {type: 'text/csv;charset=utf-8'});
+                        singletonFolder.file("nodeList_cluster.csv", blob);
+                      }
+                        
+                      let that = this;
+                      // generate zip repsetnation in memory
+                      zip.generateAsync({type:"blob"}).then(function(content) {
+                          // see FileSaver.js
+                          saveAs(content, `${that.saveFileName}.zip`);
+                      });
+                } else {
+                    const stash: StashObjects = {
+                        session: this.visuals.microbeTrace.commonService.session,
+                        tabs: lightTabs
+                    };
+    
+                    const blob = new Blob([JSON.stringify(stash)], { type: "application/json;charset=utf-8" });
+                    saveAs(blob, `${this.saveFileName}.microbetrace`);
+                }
+
+
+                
                 break;
             }
             case "Cancel": {
@@ -2342,8 +2465,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.visuals.microbeTrace.GlobalSettingsDialogSettings.setVisibility(true);
         this.cachedGlobalSettingsVisibility = this.GlobalSettingsDialogSettings.isVisible;
 
-
-        this.visuals.microbeTrace.commonService.updateThresholdHistogram();
+        this.visuals.microbeTrace.commonService.updateThresholdHistogram(this.linkThresholdSparkline.nativeElement);
 
         this.globalSettingsTab.tabs[activeTab === "Styling" ? 1 : 0].active = true;
     }
@@ -2513,24 +2635,14 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             setTimeout(() => {
 
                 tabNdx = this.homepageTabs.findIndex(x => x.label == activeComponentName);
-
-                // this.cmpRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
-
-                // this.homepageTabs[tabNdx].componentRef.instance.InitView();
-                // this.homepageTabs[tabNdx].componentRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
-                // this.homepageTabs[tabNdx].componentRef.instance.onRecallSession();
+                this.homepageTabs[tabNdx].componentRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
 
             });
         } else {
-            // this.homepageTabs[tabNdx].componentRef.InitView();
+            this.homepageTabs[tabNdx].componentRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
         }
 
-        console.log('global l 2: ', this.GlobalSettingsLinkColorDialogSettings);
-        console.log('global n 2: ', this.GlobalSettingsNodeColorDialogSettings);
 
-        console.log('acive index: ', this.activeTabIndex);
-
-        // this.cdref.detectChanges();
         this.previousTab = activeComponentName;
     }
 
@@ -2580,6 +2692,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     loadSettings() {
+
         //Filtering|Prune With
         this.SelectedPruneWityTypesVariable = this.visuals.microbeTrace.commonService.session.style.widgets["link-show-nn"] ? "Nearest Neighbor" : "None";
         this.onPruneWithTypesChanged();

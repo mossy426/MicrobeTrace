@@ -36,6 +36,8 @@ export class CommonService extends AppComponentBase implements OnInit {
     decoder: any = new TextDecoder('utf-8');
     r01: any = Math.random;
 
+    thresholdHistogram: any;
+
     GlobalSettingsModel: any = {
         SelectedColorNodesByVariable: 'None',
         SelectedColorLinksByVariable: 'None',
@@ -189,7 +191,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             'link-show-nn': false,
             'link-sort-variable': 'distance',
             'link-threshold': 0.015,
-            'link-tooltip-variable': 'None',
+            'link-tooltip-variable': ['None'],
             'link-width': 3,
             "link-width-max":27,
             "link-width-min":3,
@@ -510,6 +512,22 @@ export class CommonService extends AppComponentBase implements OnInit {
 
 
     addNode(newNode: any, check: any = null) {
+
+        // TODO: Remove when done testing
+        // if (newNode._id === "30576_KF773440_B96cl58") {
+        //     console.log('node1: ', newNode);
+            
+        // }
+        // if (newNode._id === "30576_KF773440_B96cl58 ") {
+        //     console.log('node2: ', newNode);
+        // }
+
+        // if (newNode._id === "30576_KF773440_B96cl58 ") {
+        //     console.log('node7: ', newNode);
+        // }
+        // if (newNode.id === "30576_KF773440_B96cl58") {
+        //     console.log('node8: ', newNode);
+        // }
 
         //  If no _id, set _id to id
         if (window.context.commonService.isNumber(newNode._id)) {
@@ -860,17 +878,17 @@ export class CommonService extends AppComponentBase implements OnInit {
             }
         }
 
-        console.log('stashObject: ', stashObject.session);
 
         const oldSession = stashObject.session;
         window.context.commonService.temp.matrix = [];
         window.context.commonService.session.files = oldSession.files;
         window.context.commonService.session.state = oldSession.state;
-        window.context.commonService.session.style = _.assign(window.context.commonService.session.style, oldSession.style);
+        window.context.commonService.session.style = oldSession.style;
+
         window.context.commonService.session.meta.startTime = Date.now();
 
 
-        console.log('stashfiles: ',  window.context.commonService.session);
+        console.log('stashObject2: ',  _.cloneDeep(window.context.commonService.session));
         if(oldSession.layout) {
             window.context.commonService.session.layout = oldSession.layout;
         }
@@ -1803,7 +1821,8 @@ export class CommonService extends AppComponentBase implements OnInit {
         }
         };
 
-        this.foldMultiSelect();
+        // TODO:: See if this is needed
+        // this.foldMultiSelect();
 
         $("#search-field")
             .html(window.context.commonService.session.data.nodeFields.map(field => '<option value="' + field + '">' + window.context.commonService.titleize(field) + "</option>").join("\n"))
@@ -1817,11 +1836,13 @@ export class CommonService extends AppComponentBase implements OnInit {
                 "<option selected>None</option>" +
                 window.context.commonService.session.data.nodeFields.map(field => '<option value="' + field + '">' + window.context.commonService.titleize(field) + "</option>").join("\n"))
             .val(window.context.commonService.session.style.widgets["node-color-variable"]);
+        $("#default-distance-metric")
+            .val(window.context.commonService.session.style.widgets["default-distance-metric"]);
         $("#link-color-variable")
-            .html(
-                "<option>None</option>" +
-                window.context.commonService.session.data.linkFields.map(field => '<option value="' + field + '">' + window.context.commonService.titleize(field) + "</option>").join("\n"))
-            .val(window.context.commonService.session.style.widgets["link-color-variable"]);
+        .html(
+            "<option>None</option>" +
+            window.context.commonService.session.data.linkFields.map(field => '<option value="' + field + '">' + window.context.commonService.titleize(field) + "</option>").join("\n"))
+        .val(window.context.commonService.session.style.widgets["link-color-variable"]);
         try {
             window.context.commonService.updateThresholdHistogram();
         } catch (error) {
@@ -3044,6 +3065,22 @@ export class CommonService extends AppComponentBase implements OnInit {
         let n = nodes.length;
         for (let i = 0; i < n; i++) {
             let node = nodes[i];
+
+            // TODO:: Remove when done testing
+            // if (node._id === "30576_KF773440_B96cl58") {
+            //     console.log('node1: ', node);
+            // }
+            // if (node._id === "30576_KF773440_B96cl58 ") {
+            //     console.log('node2: ', node);
+            // }
+
+            // if (node._id === "30576_KF773440_B96cl58 ") {
+            //     console.log('node7: ', node);
+            // }
+            // if (node.id === "30576_KF773440_B96cl58") {
+            //     console.log('node8: ', node);
+            // }
+
             node.visible = true;
             // console.log('node cluster: ', node.cluster);
             let cluster = clusters[node.cluster];
@@ -3209,6 +3246,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         window.context.commonService.setLinkVisibility(true);
         window.context.commonService.tagClusters().then(() => {
             window.context.commonService.setClusterVisibility(true);
+            $(document).trigger("cluster-visibility");
             window.context.commonService.setLinkVisibility(true);
             window.context.commonService.setNodeVisibility(true);
             ["cluster", "link", "node"].forEach(thing => $(document).trigger(thing + "-visibility"));
@@ -3216,17 +3254,22 @@ export class CommonService extends AppComponentBase implements OnInit {
         });
     };
 
-    updateThresholdHistogram() {
-
-        //debugger;
+    updateThresholdHistogram(histogram?: any) {
 
         let width = 280,
-            height = 48,
-            svg = d3
-                .select("svg#link-threshold-sparkline")
-                .html(null)
-                .attr("width", width)
-                .attr("height", height);
+        height = 48,
+        svg = null;
+
+        // Update histogram so that it can be altered outside of the main wrapper 
+        if(histogram){
+            this.thresholdHistogram = histogram;
+        }
+        
+        svg = d3
+        .select(this.thresholdHistogram)
+        .html(null)
+        .attr("width", width)
+        .attr("height", height);
 
         let lsv = this.session.style.widgets["link-sort-variable"],
             n = this.session.data.links.length,

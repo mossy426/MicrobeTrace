@@ -30,7 +30,6 @@
                     <mat-menu #windowMenu="matMenu" overlapTrigger="false">
                       <button mat-menu-item (click)="WindowClick('Reload Screen')">Reload</button>
                       <button mat-menu-item (click)="WindowClick('Fullscreen')">Fullscreen</button>
-                      <button mat-menu-item (click)="WindowClick('Settings')">Settings</button>
                     </mat-menu>
                     <button class="navbar-item" mat-button [matMenuTriggerFor]="helpMenu"><i class="far nav-icon flaticon-questions-circular-button"></i>Help<span class="dropdown-symbol">&#9660;</span></button>
                     <mat-menu #helpMenu="matMenu" overlapTrigger="false">
@@ -215,7 +214,7 @@
                                         <div class="col-4">Distance Metric</div>
                                         <div class="col-8">
                                             <select id="default-distance-metric" class="form-control form-control-sm mr-5" [(ngModel)]="SelectedDistanceMetricVariable" (ngModelChange)="onDistanceMetricChanged()">
-                                                <option value="tn93" selected>TN93</option>
+                                                <option value="tn93">TN93</option>
                                                 <option value="snps">SNPs</option>
                                             </select>
                                         </div>
@@ -243,7 +242,7 @@
                                         </div>
                                         <div class="form-group row" title="What's the maximum genetic distance you're willing to call a link?">
                                             <div class="col-4"><label for="link-threshold">Filtering Threshold</label></div>
-                                            <div class="col-8"><svg id="link-threshold-sparkline" style="width: 280px; height: 48px;"></svg></div>
+                                            <div class="col-8"><svg id="link-threshold-sparkline" #linkThresholdSparkline style="width: 280px; height: 48px;"></svg></div>
                                             <div class="col-8  offset-4">
                                                 <input type="number" class="form-control form-control-sm" id="link-threshold" min="-1" value="1" step="0.001" [(ngModel)]="SelectedLinkThresholdVariable" (ngModelChange)="onLinkThresholdChanged()">
                                             </div>
@@ -396,6 +395,14 @@
                                 <input type="text" id="stash-name" class="form-control form-control-sm" [(ngModel)]="saveFileName" placeholder="Name your session!">
                             </div>
                         </div>
+                        <div class="form-group row" title="Should MicrobeTrace compress this save file?">
+                            <div class="col">
+                              <div id="cluster-checkbox-container" class="form-check form-check-inline">
+                                <input class="form-check-input" [(ngModel)]="saveByCluster" type="checkbox" id="save-file-cluster">
+                                <label class="form-check-label" for="save-file-cluster">By Cluster</label>
+                              </div>
+                            </div>
+                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-error" (click)="DisplayStashDialog('Cancel')">Cancel</button>
