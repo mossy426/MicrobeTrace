@@ -1,5 +1,5 @@
 ﻿import { Injectable, OnInit, Output, EventEmitter, Injector, Directive } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import * as d3 from 'd3';
 import * as patristic from 'patristic';
 import * as GoldenLayout from 'golden-layout';
@@ -37,6 +37,22 @@ export class CommonService extends AppComponentBase implements OnInit {
     r01: any = Math.random;
 
     thresholdHistogram: any;
+
+    private linkElementSource = new BehaviorSubject<HTMLElement | null>(null);
+    private nodeElementSource = new BehaviorSubject<HTMLElement | null>(null);
+
+    currentLinkTableElement = this.linkElementSource.asObservable();
+
+    currentNodeTableElement = this.nodeElementSource.asObservable();
+
+
+    setLinkTableElement(element: HTMLElement | null) {
+        this.linkElementSource.next(element);
+    }
+
+    setNodeTableElement(element: HTMLElement | null) {
+        this.nodeElementSource.next(element);
+    }
 
     GlobalSettingsModel: any = {
         SelectedColorNodesByVariable: 'None',

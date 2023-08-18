@@ -18,7 +18,10 @@ import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { DialogService } from 'primeng/dynamicdialog';
 import { BaseComponentDirective } from '@app/base-component.directive';
+import { saveSvgAsPng } from 'save-svg-as-png';
 import { ComponentContainer } from 'golden-layout';
+import { MicrobeTraceNextHomeComponent } from '../../microbe-trace-next-plugin.component';
+
 
 @Component({
     selector: 'TwoDComponent',
@@ -35,6 +38,13 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     };
 
     private customShapes : CustomShapes = new CustomShapes();
+
+    private symbolTableWrapper: HTMLElement | null = null;
+    private linkColorTableWrapper: HTMLElement | null = null;
+    private nodeColorTableWrapper: HTMLElement | null = null;
+
+
+
 
     ShowNetworkAttributes: boolean = false;
     ShowStatistics: boolean = true;
@@ -471,23 +481,24 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this.visuals.twoD.Show2DExportPane = false;
         this.isExporting = true;
 
-        if (this.commonService.session.style.widgets['node-symbol-variable'] != 'None') {
-            this.generateNodeSymbolSelectionTable("#node-symbol-table-bottom", this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'], false);
-        }
+        // if (this.commonService.session.style.widgets['node-symbol-variable'] != 'None') {
+        //     this.generateNodeSymbolSelectionTable("#node-symbol-table-bottom", this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'], false);
+        // }
 
-        if (this.commonService.session.style.widgets['node-color-variable'] != 'None') {
-            this.visuals.microbeTrace.generateNodeColorTable("#node-color-table-bottom", false);
-        }
+        // if (this.commonService.session.style.widgets['node-color-variable'] != 'None') {
+        //     this.visuals.microbeTrace.generateNodeColorTable("#node-color-table-bottom", false);
+        // }
 
-        if (this.commonService.session.style.widgets['link-color-variable'] != 'None') {
-            this.visuals.microbeTrace.generateNodeLinkTable("#link-color-table-bottom", false);
-        }
+        // if (this.commonService.session.style.widgets['link-color-variable'] != 'None') {
+        //     this.visuals.microbeTrace.generateNodeLinkTable("#link-color-table-bottom", false);
+        // }
 
         if (!this.isExportClosed) {
             setTimeout(() => this.exportVisualization(undefined), 300);
         }
         else {
-            this.exportWork();
+            console.log('e2');
+            this.exportWork2();
         }
     }
 
@@ -508,10 +519,11 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         let network = document.getElementById('network');
         let $network = $(network);
         let watermark = d3.select(network).append('text')
-            .text('MicrobeTrace')
-            .attr('x', $network.width() - 170)
-            .attr('y', $network.height() - 20)
-            .attr('class', 'watermark');
+        .attr('xlink:href', this.visuals.twoD.commonService.watermark)
+        .attr('height', 128)
+        .attr('width', 128)
+        .attr('x', 10)
+        .style('opacity', $('#network-export-opacity').val());
         let filetype = this.SelectedNetworkExportFileTypeListVariable, 
             filename = this.SelectedNetworkExportFilenameVariable;
         if (filetype == 'svg') {
@@ -544,22 +556,219 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
                         watermark.remove();
                         this.visuals.twoD.isExporting = false;
-                        this.visuals.microbeTrace.clearTable("#node-symbol-table-bottom");
-                        this.visuals.microbeTrace.clearTable("#node-color-table-bottom");
-                        this.visuals.microbeTrace.clearTable("#link-color-table-bottom");
+                        // this.visuals.microbeTrace.clearTable("#node-symbol-table-bottom");
+                        // this.visuals.microbeTrace.clearTable("#node-color-table-bottom");
+                        // this.visuals.microbeTrace.clearTable("#link-color-table-bottom");
 
-                        this.visuals.microbeTrace.GlobalSettingsDialogSettings.restoreStateAfterExport();
-                        this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.restoreStateAfterExport();
-                        this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.restoreStateAfterExport();
-                        this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.restoreStateAfterExport();
-                        this.visuals.twoD.PolygonColorTableWrapperDialogSettings.restoreStateAfterExport();
-                        this.visuals.twoD.Node2DNetworkExportDialogSettings.restoreStateAfterExport();
+                        // this.visuals.microbeTrace.GlobalSettingsDialogSettings.restoreStateAfterExport();
+                        // this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.restoreStateAfterExport();
+                        // this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.restoreStateAfterExport();
+                        // this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.restoreStateAfterExport();
+                        // this.visuals.twoD.PolygonColorTableWrapperDialogSettings.restoreStateAfterExport();
+                        // this.visuals.twoD.Node2DNetworkExportDialogSettings.restoreStateAfterExport();
                     });
             }, 1000);
            
         }
     }
 
+    exportWork2() {
+        let network = document.getElementById('network');
+        let $network = $(network);
+        let watermark = d3.select(network).append('image')
+        .attr('xlink:href', this.visuals.twoD.commonService.watermark)
+        .attr('height', 128)
+        .attr('width', 128)
+        .attr('x', 35)
+        .attr('y', 35)
+        .style('opacity', $('#network-export-opacity').val());
+        let filetype = this.SelectedNetworkExportFileTypeListVariable, 
+            filename = this.SelectedNetworkExportFilenameVariable;
+            let vnodes : any = this.visuals.twoD.commonService.getVisibleNodes();
+            let aggregates = this.visuals.twoD.commonService.createNodeColorMap();
+            let values = Object.keys(aggregates);
+            var columns = [];
+            columns.push('Node ' + this.visuals.twoD.commonService.titleize(this.visuals.twoD.commonService.session.style.widgets["node-color-variable"]));
+            if (this.visuals.twoD.commonService.session.style.widgets["node-color-table-counts"]) columns.push('Count');
+            if (this.visuals.twoD.commonService.session.style.widgets["node-color-table-frequencies"]) columns.push('Frequency');
+            columns.push('Color');
+            var data = [];
+            values.forEach((value, i) => {
+              let nodeValue =  (this.visuals.twoD.commonService.session.style.nodeValueNames[value] ? this.visuals.twoD.commonService.session.style.nodeValueNames[value] : this.visuals.twoD.commonService.titleize("" + value));
+              let tableCounts = (this.visuals.twoD.commonService.session.style.widgets["node-color-table-counts"] ?  aggregates[value] : undefined);
+              let tableFreq = (this.visuals.twoD.commonService.session.style.widgets["node-color-table-frequencies"] ? (aggregates[value] / vnodes.length).toLocaleString() : undefined);
+              let line = {
+                Node: nodeValue,
+                Count: tableCounts, 
+                Frequency: tableFreq,
+                Color: '<div  style="margin-left:5px; width:40px;height:12px;background:' + this.visuals.twoD.commonService.temp.style.nodeColorMap(value)  +'"> </div>'
+              }
+              data.push(line);
+            })
+
+            let nodeWrapper = null;
+
+            this.visuals.twoD.commonService.currentNodeTableElement.subscribe((element) => {
+                nodeWrapper = element;
+                // You can now interact with this.myElement
+              });
+            // private symbolTableWrapper: HTMLElement | null = null;
+            // private linkColorTableWrapper: HTMLElement | null = null;
+            // private nodeColorTableWrapper: HTMLElement | null = null;
+            // let nodeWrapper = this.parent.getElementById('node-color-table');
+
+            console.log('node wrapper: ', nodeWrapper);
+            let nodeLegend = this.tabulate2(data, columns, nodeWrapper, network, 200,false);
+        
+            let vlinks = this.visuals.twoD.commonService.getVisibleLinks();
+            aggregates = this.visuals.twoD.commonService.createLinkColorMap();
+            values = Object.keys(aggregates);
+            columns = [];
+            columns.push('Link ' + this.visuals.twoD.commonService.titleize(this.visuals.twoD.commonService.session.style.widgets["link-color-variable"]));
+            if (this.visuals.twoD.commonService.session.style.widgets["link-color-table-counts"]) columns.push('Count');
+            if (this.visuals.twoD.commonService.session.style.widgets["link-color-table-frequencies"]) columns.push('Frequency');
+            columns.push('Color');
+            data = [];
+            values.forEach((value, i) => {
+              let nodeValue =  (this.visuals.twoD.commonService.session.style.linkValueNames[value] ? this.visuals.twoD.commonService.session.style.linkValueNames[value] : this.visuals.twoD.commonService.titleize("" + value));
+              let tableCounts = (this.visuals.twoD.commonService.session.style.widgets["link-color-table-counts"] ?  aggregates[value] : undefined);
+              let tableFreq = (this.visuals.twoD.commonService.session.style.widgets["link-color-table-frequencies"] ? (aggregates[value] / vlinks.length).toLocaleString() : undefined);
+              let line = {
+                Link: nodeValue,
+                Count: tableCounts, 
+                Frequency: tableFreq,
+                Color: '<div  style="margin-left:5px; width:40px;height:12px;background:' + this.visuals.twoD.commonService.temp.style.linkColorMap(value)  +'"> </div>'
+              }
+              data.push(line);
+            })
+            console.log('1');
+
+            let linkWrapper = null;
+
+            this.visuals.twoD.commonService.currentLinkTableElement.subscribe((element) => {
+                linkWrapper = element;
+                // You can now interact with this.myElement
+              });
+            // let linkWrapper = document.getElementById('link-color-table-wrapper');
+            let linkLegend = this.tabulate2(data, columns, linkWrapper, network, 600, false);
+        
+            let variable = this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'];
+              values = [];
+            aggregates = {};
+            let nodes = this.visuals.twoD.commonService.session.data.nodes;
+            let n = nodes.length;
+            vnodes = 0;
+            for (let i = 0; i < n; i++) {
+              let d = nodes[i];
+              if (!d.visible) continue;
+              vnodes++;
+              let dv = d[variable];
+              if (values.indexOf(dv) == -1) values.push(dv);
+              if (dv in aggregates) {
+                aggregates[dv]++;
+              } else {
+                aggregates[dv] = 1;
+              }
+            }
+              columns = [];
+            columns.push('Node ' + this.visuals.twoD.commonService.titleize(variable));
+            if (this.visuals.twoD.commonService.session.style.widgets["node-symbol-table-counts"]) columns.push('Count');
+            if (this.visuals.twoD.commonService.session.style.widgets["node-symbol-table-frequencies"]) columns.push('Frequency');
+            columns.push('Shape');
+            data = [];
+            values.forEach((value, i) => {
+              let nodeValue =  this.visuals.twoD.commonService.titleize("" + value);
+              let tableCounts = (this.visuals.twoD.commonService.session.style.widgets["node-symbol-table-counts"] ?  aggregates[value] : undefined);
+              let tableFreq = (this.visuals.twoD.commonService.session.style.widgets["node-symbol-table-frequencies"] ? (aggregates[value] / vnodes.length).toLocaleString() : undefined);        
+              let line = {
+                Node: nodeValue,
+                Count: tableCounts, 
+                Frequency: tableFreq,
+                Shape: $("#node-symbol option[value='" + this.visuals.twoD.commonService.temp.style.nodeSymbolMap(value) + "']").text()
+              }
+              data.push(line);
+            })
+            let symbolWrapper = document.getElementById('node-symbol-table');
+            let symbolLegend = this.tabulate2(data, columns, symbolWrapper, network, 200, true);
+        
+            let statsDiv = document.getElementById('network-statistics-wrapper');
+            let foreignObjStats = d3.select(network).append("svg:foreignObject")
+            .attr("x", statsDiv.offsetLeft)
+            .attr("y", statsDiv.offsetTop-60)
+            .attr("width", statsDiv.offsetWidth)
+            .attr("height", statsDiv.offsetHeight);
+            foreignObjStats.append("xhtml:body").html(statsDiv.innerHTML);
+
+            if (filetype == 'svg') {
+              let content = this.visuals.twoD.commonService.unparseSVG(network);
+              let blob = new Blob([content], { type: 'image/svg+xml;charset=utf-8' });
+              saveAs(blob, filename + '.' + filetype);
+              watermark.remove();
+              nodeLegend.remove();
+              linkLegend.remove();
+              symbolLegend.remove();
+              foreignObjStats.remove();
+            } else {
+              saveSvgAsPng(network, filename + '.' + filetype, {
+                scale: parseFloat($('#network-export-scale').val() as string),
+                backgroundColor: this.visuals.twoD.commonService.session.style.widgets['background-color'],
+                encoderType: 'image/' + filetype,
+                encoderOptions: parseFloat($('#network-export-quality').val() as string)
+              }).then(() => {
+                  watermark.remove(); 
+                  nodeLegend.remove(); 
+                  linkLegend.remove();
+                  symbolLegend.remove();
+                  foreignObjStats.remove();
+                });
+            }
+    }
+
+    tabulate2 = (data, columns, wrapper, container, topOffset, leftOffset) => {
+
+        console.log('left: ', wrapper.offsetLeft);
+        let containerWidth = container.getBBox().width;
+        let rightPosition = containerWidth - wrapper.offsetWidth;        
+        console.log('right: ', rightPosition);
+
+        let foreignObj = d3.select(container).append("svg:foreignObject")
+          .attr("x", (leftOffset) ? rightPosition : wrapper.offsetLeft)
+          .attr("y", wrapper.offsetTop + topOffset)
+          .attr("width", wrapper.offsetWidth)
+          .attr("height", wrapper.offsetHeight);
+        let body = foreignObj 
+          .append("xhtml:body")
+          .append("table")
+          .style('position', 'absolute')
+          .style('top', '0')
+          .style('width', '100%')
+          .style('height', '100%')
+          .attr('cellpadding', '1px')
+          .attr("class", "table-bordered");
+          // .html(nodeColorTable.innerHTML); SVG doesn't translate
+        let thead = body.append("thead"),
+            tbody = body.append("tbody");
+        thead.append("tr")
+          .selectAll("th")
+          .data(columns)
+          .enter()
+          .append("th")
+          .text(function(column) { return column; });
+        let rows = tbody.selectAll("tr")
+          .data(data)
+          .enter()
+          .append("tr");
+        let cells = rows.selectAll("td")
+          .data(function(row) {
+            return columns.map(function(column) {
+                return {column: column, value: row[column.split(" ")[0]]};
+            });
+          })
+          .enter()
+          .append("td")
+          .html(function(d) { return d.value; });
+        return foreignObj;
+      }
 
     render(showStatistics: boolean = true) {
 
@@ -2406,11 +2615,11 @@ onPolygonColorTableChange(e) {
 
     openExport() {
 
-        this.visuals.microbeTrace.GlobalSettingsDialogSettings.setStateBeforeExport();
-        this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.setStateBeforeExport();
-        this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.setStateBeforeExport();
-        this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.setStateBeforeExport();
-        this.visuals.twoD.Node2DNetworkExportDialogSettings.setStateBeforeExport();
+        // this.visuals.microbeTrace.GlobalSettingsDialogSettings.setStateBeforeExport();
+        // this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.setStateBeforeExport();
+        // this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.setStateBeforeExport();
+        // this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.setStateBeforeExport();
+        // this.visuals.twoD.Node2DNetworkExportDialogSettings.setStateBeforeExport();
 
         this.isExportClosed = false;
         this.visuals.twoD.Show2DExportPane = true;

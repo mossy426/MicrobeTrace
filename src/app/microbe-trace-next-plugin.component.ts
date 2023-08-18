@@ -1,4 +1,4 @@
-﻿import { ChangeDetectionStrategy, Component, OnInit, Injector, ViewChild, ViewChildren, AfterViewInit, ComponentRef, ViewContainerRef, QueryList, ElementRef, Output, EventEmitter, ChangeDetectorRef, OnDestroy, ViewEncapsulation } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, OnInit, Injector, ViewChild, ViewChildren, AfterViewInit, ComponentRef, ViewContainerRef, QueryList, ElementRef, Output, EventEmitter, ChangeDetectorRef, OnDestroy, ViewEncapsulation, Renderer2 } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
 import { CommonService } from './contactTraceCommonServices/common.service';
 import { TwoDComponent } from './visualizationComponents/TwoDComponent/twoD-plugin.component';
@@ -234,6 +234,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         private goldenLayoutComponentService: GoldenLayoutComponentService,
         public domSanitizer: DomSanitizer,
         private cdref: ChangeDetectorRef,
+        private el: ElementRef, 
+        private renderer: Renderer2,
         private eventEmitterService: EventEmitterService,
     ) {
 
@@ -261,6 +263,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         //   setTimeout(() => {
         //     srv.createNewComponent(srv.getRegisteredComponents()[0]);
         //   }, 10000);
+    }
+
+    getElementById(id: string): HTMLElement | null {
+        const element = this.el.nativeElement.querySelector(`#${id}`);
+        return element;
     }
 
     ngOnInit() {
@@ -376,6 +383,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             $('#add-data-container').fadeTo("slow", 1);
             $('#onload-container').fadeTo("slow", 1);
             $('#tool-btn-container').fadeTo("slow", 1);
+
             // console.log('instances: ',this.goldenLayout.componentInstances);
         }, 5000);
         
@@ -890,6 +898,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
             //If hidden by default, unhide to perform slide up and down
             if(!this.ShowGlobalSettingsLinkColorTable){
+                const element = this.el.nativeElement.querySelector('#link-color-table');
+                this.commonService.setLinkTableElement(element);
                 this.ShowGlobalSettingsLinkColorTable = true;
             } else {
                 $('#link-color-table-row').slideDown();
@@ -1293,6 +1303,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
             //If hidden by default, unhide to perform slide up and down
             if(!this.ShowGlobalSettingsNodeColorTable){
+                const element = this.el.nativeElement.querySelector('#node-color-table');
+                this.commonService.setNodeTableElement(element);
                 this.ShowGlobalSettingsNodeColorTable = true;
             } else {
                 $('#node-color-table-row').slideDown();
@@ -2008,8 +2020,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                         templateRef: undefined
                     }
                 });
-
-                console.log('cluser save: ', this.saveByCluster)
 
                 if(this.saveByCluster){
                     let clusterNodeList = [];
