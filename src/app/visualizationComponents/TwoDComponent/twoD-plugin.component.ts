@@ -187,6 +187,11 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
             this.visuals = commonService.visuals;
             this.commonService.visuals.twoD = this;
+            window.addEventListener('resize', () => {
+                // Replace this with the logic to determine the current show/hide state
+                const showState: boolean = this.visuals.twoD.commonService.session.style.widgets['network-gridlines-show'];
+                this.drawGridlines(showState);
+            });
     }
 
     ngOnInit() {
@@ -2346,36 +2351,66 @@ onPolygonColorTableChange(e) {
         }
     }
 
-    onNetworkGridlinesShowHideChange(e) {
-
-        if (e == "Show") {
-
-            // Reset width and height in case they have changed
-            this.visuals.twoD.halfWidth = $('#network').parent().width() / 2;
-            this.visuals.twoD.halfHeight = $('#network').parent().parent().parent().height() / 2;
-
-            this.visuals.twoD.commonService.session.style.widgets['network-gridlines-show'] = true;
+    drawGridlines(show: boolean): void {
+        // Reset width and height in case they have changed
+        this.visuals.twoD.halfWidth = ($('#network').parent().width() as number) / 2;
+        this.visuals.twoD.halfHeight = ($('#network').parent().parent().parent().height() as number) / 2;
+    
+        if (show) {
             let range = Math.ceil(Math.max(this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight) / 50);
             let ords = Object.keys(new Array(range).fill(null)).map(parseFloat);
-            d3.select('#network g.horizontal-gridlines').selectAll('line').data(ords).enter().append('line')
+    
+            // Horizontal lines
+            let horizontalLines = d3.select('#network g.horizontal-gridlines').selectAll('line').data(ords);
+    
+            // Exit selection: remove extra lines
+            horizontalLines.exit().remove();
+    
+            // Update selection: modify existing lines
+            horizontalLines.attr('x2', this.visuals.twoD.halfWidth * 2);
+    
+            // Enter selection: add new lines
+            horizontalLines.enter().append('line')
                 .attr('x1', 0)
                 .attr('x2', this.visuals.twoD.halfWidth * 2)
                 .attr('y1', function (d) { return d * 100; })
                 .attr('y2', function (d) { return d * 100; })
                 .attr('stroke', 'lightgray');
-            d3.select('#network g.vertical-gridlines').selectAll('line').data(ords).enter().append('line')
+    
+            // Vertical lines
+            let verticalLines = d3.select('#network g.vertical-gridlines').selectAll('line').data(ords);
+    
+            // Exit selection: remove extra lines
+            verticalLines.exit().remove();
+    
+            // Update selection: modify existing lines
+            verticalLines.attr('y2', this.visuals.twoD.halfHeight * 2);
+    
+            // Enter selection: add new lines
+            verticalLines.enter().append('line')
                 .attr('x1', function (d) { return d * 100; })
                 .attr('x2', function (d) { return d * 100; })
                 .attr('y1', 0)
                 .attr('y2', this.visuals.twoD.halfHeight * 2)
                 .attr('stroke', 'lightgray');
-        }
-        else {
-            this.visuals.twoD.commonService.session.style.widgets['network-gridlines-show'] = false;
+        } else {
             d3.select('#network g.horizontal-gridlines').html(null);
             d3.select('#network g.vertical-gridlines').html(null);
         }
     }
+    
+    
+    onNetworkGridlinesShowHideChange(e: string): void {
+        console.log('network grid:', e);
+        if (e === "Show") {
+            this.visuals.twoD.commonService.session.style.widgets['network-gridlines-show'] = true;
+            this.drawGridlines(true);
+        } else {
+            this.visuals.twoD.commonService.session.style.widgets['network-gridlines-show'] = false;
+            this.drawGridlines(false);
+        }
+    }
+    
 
     onNodeChargeChange(e) {
 
