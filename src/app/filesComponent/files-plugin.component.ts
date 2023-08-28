@@ -1259,6 +1259,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
       let reader = new FileReader();
       reader.onloadend = (out) => {
         const output = JSON.parse(out.target['result'] as string);
+        console.log(output);
         if (output.meta && output.tree) {
           const auspiceFile = { contents: output, name: fileName, extension: extension};
           this.visuals.microbeTrace.commonService.session.files.push(auspiceFile);

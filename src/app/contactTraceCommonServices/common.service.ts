@@ -837,6 +837,7 @@ export class CommonService extends AppComponentBase implements OnInit {
     };
 
     processJSON(json: any, extension: any) {
+      console.log("Trying to process JSON file");
         let data;
         try {
             if(json.result) {
@@ -863,6 +864,7 @@ export class CommonService extends AppComponentBase implements OnInit {
               if (data.version) {
                   window.context.commonService.applyGHOST(data);
               } else {
+                console.log("Trying to load HIVTrace file");
                   window.context.commonService.applyHIVTrace(data);
               }
            }
@@ -1019,20 +1021,29 @@ export class CommonService extends AppComponentBase implements OnInit {
     };
 
     applyHIVTrace(hivtrace) {
+      console.log("Running applyHIVTrace");
         window.context.commonService.session = window.context.commonService.sessionSkeleton();
         window.context.commonService.session.meta.startTime = Date.now();
         hivtrace["trace_results"]["Nodes"].forEach(node => {
-            let newNode = JSON.parse(JSON.stringify(node.patient_attributes));
-            newNode._id = node._id;
-            newNode.origin = "HIVTRACE Import";
-            window.context.commonService.addNode(newNode, false);
+          console.log(node);
+          let newNode = {
+            _id: node.id,
+            origin: "HIVTRACE Import",
+          }
+          if (node.hasOwnProperty("patient_attributes")){ 
+            console.log("had patient_attributes");
+            newNode = JSON.parse(JSON.stringify(node.patient_attributes));
+            Object.keys(
+                hivtrace["trace_results"]["Nodes"][0]["patient_attributes"]
+            ).forEach(key => {
+                if (!window.context.commonService.session.data.nodeFields.includes(key))
+                    window.context.commonService.session.data.nodeFields.push(key);
+            });
+          }
+          console.log(newNode);
+          window.context.commonService.addNode(newNode, false);
         });
-        Object.keys(
-            hivtrace["trace_results"]["Nodes"][0]["patient_attributes"]
-        ).forEach(key => {
-            if (!window.context.commonService.session.data.nodeFields.includes(key))
-                window.context.commonService.session.data.nodeFields.push(key);
-        });
+      console.log(window.context.commonService.session.data.nodes);
         let n = hivtrace["trace_results"]["Edges"].length;
         let metric = window.context.commonService.session.style.widgets['default-distance-metric'];
         for (let i = 0; i < n; i++) {
@@ -1044,8 +1055,11 @@ export class CommonService extends AppComponentBase implements OnInit {
                 visible: true
             };
             newLink[metric] = parseFloat(link.length);
+            newLink["distance"] = newLink[metric];
+          console.log(newLink);
             window.context.commonService.addLink(newLink, false);
         }
+        console.log(window.context.commonService.session.data);
         window.context.commonService.session.data.linkFields.push(metric);
         window.context.commonService.runHamsters();
     };
@@ -1575,7 +1589,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             let m = new Array(n);
             for (let i = 0; i < n; i++) {
                 dm[i] = new Array(n);
-                dm[i][i] = 0;                
+                dm[i][i] = 0;
                 let source = labels[i];
                 let row = window.context.commonService.temp.matrix[source];
                 if (!row) {
@@ -1610,8 +1624,9 @@ export class CommonService extends AppComponentBase implements OnInit {
             let computer: WorkerModule = new WorkerModule();
             console.log('getting dm');
             window.context.commonService.getDM().then(dm => {
-
+                console.log(dm);
                 console.log('got dm');
+              console.log(window.context.commonService.temp.matrix);
                 computer.compute_treeWorker.postMessage({
                     labels: Object.keys(window.context.commonService.temp.matrix).sort(),
                     matrix: dm,
