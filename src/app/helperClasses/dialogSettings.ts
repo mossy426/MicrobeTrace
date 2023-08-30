@@ -1,5 +1,3 @@
-import { CommonService } from "../contactTraceCommonServices/common.service";
-
 export class DialogSettings {
     public isVisible: boolean = false;
 
@@ -98,5 +96,18 @@ export class DialogSettings {
         }
 
         this.isVisible = isVisible;
+
+        if(isVisible){
+            const dialog = document.querySelector('#network-settings-pane');
+            const tabset = dialog.querySelector('.tab-container');
+    
+            if(tabset){
+                const tabs: Array<Element> = Array.from(tabset.querySelectorAll('.m-tabs__item'));
+            
+                for(let tab of tabs){
+                    tab.classList.remove('active');
+                }
+            }
+        }
     }
 }
