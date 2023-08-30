@@ -16,7 +16,7 @@ import { MicrobeTraceNextVisuals } from '../../microbe-trace-next-plugin-visuals
 import { CustomShapes } from '@app/helperClasses/customShapes';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
-import { DialogService } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { saveSvgAsPng } from 'save-svg-as-png';
 import { ComponentContainer } from 'golden-layout';
@@ -65,6 +65,9 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     brush: any = null;
     FieldList: SelectItem[] = [];
     ToolTipFieldList: SelectItem[] = [];
+
+    shiftPressed : boolean = false;
+    dragging : boolean = false;
     
     //Polygon Tab
     SelectedPolygonLabelVariable: string = "None";
@@ -199,6 +202,10 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this.InitView();
     }
 
+    ngAfterViewInit() {
+
+    }
+
     InitView() {
 
         this.visuals.twoD.IsDataAvailable = (this.visuals.twoD.commonService.session.data.nodes.length === 0 ? false : true);
@@ -208,6 +215,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
           this.visuals.twoD.commonService.session.style.widgets['link-threshold'] = 
             this.visuals.twoD.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable;
         }
+      
 
         if (this.visuals.twoD.IsDataAvailable === true && this.visuals.twoD.zoom === null) {
 
@@ -250,16 +258,28 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             };
 
             this.visuals.twoD.zoom = d3.zoom().on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3.event.transform));
-            this.visuals.twoD.brush = d3.brush();
+            // this.visuals.twoD.brush = d3.brush();
             this.visuals.twoD.halfWidth = $('#network').parent().width() / 2;
             this.visuals.twoD.halfHeight = $('#network').parent().parent().parent().height() / 2;
             this.visuals.twoD.transform = d3.zoomTransform(d3.select('svg#network').node());
             this.visuals.twoD.commonService.session.style.widgets = this.visuals.twoD.commonService.session.style.widgets;
 
-            let zoom = d3.zoom().on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3.event.transform));
+            let zoom = d3.zoom().filter(() => !this.shiftPressed).on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3.event.transform));
 
-            let brush = d3.brush()
+            let width = d3.select('svg#network').node().getBoundingClientRect().width;
+            let height = d3.select('svg#network').node().getBoundingClientRect().height;
+
+            let svgSelection = d3.select('svg#network');
+            let svgWidth = svgSelection.node().getBoundingClientRect().width;
+            let svgHeight = svgSelection.node().getBoundingClientRect().height;
+
+            console.log('brush height: ', svgHeight);
+            console.log('brush width: ', svgWidth);
+
+            this.visuals.twoD.brush = d3.brush()
+                .extent([[0, 0], [svgWidth, svgHeight]]) // Set the extent to cover the entire SVG
                 .on('start', () => {
+                    this.dragging = true;
                     this.visuals.twoD.commonService.session.network.nodes.forEach(d => {
                         if (d.visible) d._previouslySelected = d.selected;
                     });
@@ -282,6 +302,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                     });
                 })
                 .on('end', () => {
+                    this.dragging = false;
                     if (d3.event.selection == null) return;
                     this.visuals.twoD.commonService.session.network.nodes.forEach(d => delete d._previouslySelected);
                     this.visuals.twoD.commonService.session.data.nodes.forEach(d => {
@@ -301,19 +322,29 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
             d3.select('svg#network')
                 .append('g')
-                .attr('class', 'brush')
-                .call(brush)
-                .attr('pointer-events', 'none')
-                .select('rect.overlay')
-                .attr('pointer-events', 'none');
-
-            d3.select('svg#network')
-                .append('g')
                 .attr('class', 'horizontal-gridlines');
 
             d3.select('svg#network')
                 .append('g')
                 .attr('class', 'vertical-gridlines');
+
+                d3.select(window).on('keydown', () => {
+                    const event: any = d3.event; // You may need to typecast d3.event
+                    console.log('keydown: ', event);
+                    if (event.key === "Shift"  && !this.dragging) {
+                      this.shiftPressed = true; // Shift key is pressed
+                      this.toggleBrush(true);
+                    }
+                  });
+                  
+                d3.select(window).on('keyup', () => {
+                const event: any = d3.event; // You may need to typecast d3.event
+                console.log('keyup: ', event);
+                if (event.key === "Shift"  && !this.dragging) {
+                    this.shiftPressed = false; // Shift key is released
+                    this.toggleBrush(false);
+                }
+                });
 
 
             this.visuals.twoD.svg = d3.select('svg#network').append('g');
@@ -322,6 +353,11 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             this.visuals.twoD.svg.append('g').attr('class', 'links');
             this.visuals.twoD.svg.append('g').attr('class', 'nodes');
             this.visuals.twoD.svg.append('g').attr('class', 'clustersLabels');
+
+            d3.select('svg#network')
+            .append('g')
+            .attr('class', 'brush')
+            .call(this.visuals.twoD.brush);
 
             this.visuals.twoD.svg.append('svg:defs').append('marker')
                 .attr('id', 'end-arrow')
@@ -352,13 +388,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             if (this.visuals.twoD.commonService.session.style.widgets['network-friction']) this.visuals.twoD.force.velocityDecay(this.visuals.twoD.commonService.session.style.widgets['network-friction']);
 
             // this.visuals.twoD.clipboard.on('success', ()=>this.hideContextMenu());
-
-            d3.select(window).on('keydown keyup', () => {
-                d3.select('g.brush')
-                    .attr('pointer-events', d3.event.ctrlKey ? 'all' : 'none')
-                    .select('rect.overlay')
-                    .attr('pointer-events', d3.event.ctrlKey ? 'all' : 'none');
-            });
 
             let that = this;
 
@@ -413,6 +442,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             });
 
             $( document ).on( "node-selected", function( ) {
+                console.log('node selected');
                 that.visuals.twoD.render(false);
             });
 
@@ -447,6 +477,13 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
 
     }
+
+    private toggleBrush(enable: boolean): void {
+        d3.select('svg#network g.brush')
+          .attr('pointer-events', enable ? 'all' : 'none')
+          .select('rect.overlay')
+          .attr('pointer-events', enable ? 'all' : 'none');
+      }
 
     onDataChange(event) {
 
@@ -517,6 +554,11 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         // The color transparency slider should dissapear if clicked out
         $("#color-transparency-wrapper").css({
             display: "none"
+        });
+
+        this.commonService.session.network.nodes.forEach(node => {
+            console.log('node: ', node);
+            node.selected = false;
         });
     }
 
@@ -1019,6 +1061,16 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this.visuals.twoD.ShowStatistics = showStatistics;
         this.visuals.twoD.cdref.detectChanges();
 
+        // Get the new SVG dimensions after the network is generated
+        let newSvgWidth = d3.select('svg#network').node().getBoundingClientRect().width;
+        let newSvgHeight = d3.select('svg#network').node().getBoundingClientRect().height;
+
+        // Update the brush extent
+        this.visuals.twoD.brush.extent([[0, 0], [newSvgWidth, newSvgHeight]]);
+
+        // Recall the brush to apply the new extent
+        d3.select('g.brush').call(this.visuals.twoD.brush);
+
     };
 
     polygonLabelDragStarted(d) {
@@ -1469,7 +1521,9 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     };
 
     clickHandler(n) {
-        if (d3.event && d3.event.ctrlKey) {
+
+        console.log('event: ',d3.event)
+        if (d3.event && d3.event.key === "Shift") {
             this.visuals.twoD.commonService.session.data.nodes.find(node => node._id == n._id).selected = !n.selected;
         } else {
             this.visuals.twoD.commonService.session.data.nodes.forEach(node => {
@@ -2637,8 +2691,8 @@ onPolygonColorTableChange(e) {
     }
 
     openSettings() {
-
-        this.visuals.twoD.Node2DNetworkExportDialogSettings.setVisibility(true);
+        
+       this.visuals.twoD.Node2DNetworkExportDialogSettings.setVisibility(true);
        this.visuals.twoD.ShowStatistics = !this.visuals.twoD.Show2DSettingsPane;
 
     }
