@@ -906,7 +906,6 @@ export class CommonService extends AppComponentBase implements OnInit {
         window.context.commonService.session.meta.startTime = Date.now();
 
 
-        console.log('stashObject2: ',  _.cloneDeep(window.context.commonService.session));
         if(oldSession.layout) {
             window.context.commonService.session.layout = oldSession.layout;
         }
@@ -918,7 +917,6 @@ export class CommonService extends AppComponentBase implements OnInit {
             n = nodes.length,
             m = links.length;
 
-        console.log('nodes: ', oldSession.data.nodes);
         for (let i = 0; i < n; i++) window.context.commonService.addNode(nodes[i]);
         for (let j = 0; j < m; j++) {
             // Add distance property for files saved prior to distance visibility fix
@@ -1022,10 +1020,9 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     applyHIVTrace(hivtrace) {
       console.log("Running applyHIVTrace");
-        window.context.commonService.session = window.context.commonService.sessionSkeleton();
+        window.context.commonService.resetData();
         window.context.commonService.session.meta.startTime = Date.now();
         hivtrace["trace_results"]["Nodes"].forEach(node => {
-          console.log(node);
           let newNode = {
             _id: node.id,
             origin: "HIVTRACE Import",
@@ -1040,10 +1037,9 @@ export class CommonService extends AppComponentBase implements OnInit {
                     window.context.commonService.session.data.nodeFields.push(key);
             });
           }
-          console.log(newNode);
           window.context.commonService.addNode(newNode, false);
         });
-      console.log(window.context.commonService.session.data.nodes);
+        window.context.commonService.processData();
         let n = hivtrace["trace_results"]["Edges"].length;
         let metric = window.context.commonService.session.style.widgets['default-distance-metric'];
         for (let i = 0; i < n; i++) {
@@ -1056,10 +1052,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             };
             newLink[metric] = parseFloat(link.length);
             newLink["distance"] = newLink[metric];
-          console.log(newLink);
             window.context.commonService.addLink(newLink, false);
         }
-        console.log(window.context.commonService.session.data);
         window.context.commonService.session.data.linkFields.push(metric);
         window.context.commonService.runHamsters();
     };
@@ -1624,9 +1618,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             let computer: WorkerModule = new WorkerModule();
             console.log('getting dm');
             window.context.commonService.getDM().then(dm => {
-                console.log(dm);
                 console.log('got dm');
-              console.log(window.context.commonService.temp.matrix);
                 computer.compute_treeWorker.postMessage({
                     labels: Object.keys(window.context.commonService.temp.matrix).sort(),
                     matrix: dm,
@@ -2305,7 +2297,6 @@ export class CommonService extends AppComponentBase implements OnInit {
         }
 
         let linkColors;
-        console.log('link col: ',  window.context.commonService.session.style.linkColorsTable);
         if( window.context.commonService.session.style.linkColorsTable && window.context.commonService.session.style.linkColorsTable[variable]) {
             linkColors =  window.context.commonService.session.style.linkColorsTable[variable];
         } else {

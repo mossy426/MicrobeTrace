@@ -663,8 +663,9 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
           this.visuals.microbeTrace.commonService.session.data.tree = auspiceData['tree'];
           this.visuals.microbeTrace.commonService.session.data.newickString = auspiceData['newick'];
           let nodeCount = 0;
+          const nodeRegex = /^NODE_[0-9]{7}$/i;
           auspiceData['nodes'].forEach(node => {
-            if (!/NODE0*/.exec(node.id)) {
+            if (!nodeRegex.test(node.id) && node.id !== 'wrapper') {
               const nodeKeys = Object.keys(node);
               nodeKeys.forEach( key => {
                 if (this.visuals.microbeTrace.commonService.session.data.nodeFields.indexOf(key) === -1) {

@@ -2148,7 +2148,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
           const auspiceUrl = this.auspiceUrlVal;
           this.commonService.openAuspiceUrl(auspiceUrl)
           .then( (out) => {
-            console.log(out);
             if (out['meta'] && out['tree']) {
               const auspiceFile = { contents: out, name: this.getAuspiceName(auspiceUrl), extension: 'json'};
               this.visuals.microbeTrace.commonService.session.files.push(auspiceFile);

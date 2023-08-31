@@ -8,6 +8,8 @@
 # dependencies
 /node_modules
 /node_modules_dev
+/dev_node_modules
+/Hantavirus_Testing
 
 # Temp files to help troubleshoot what sessions are expected from the numbers files for testing
 /src/app/contactTraceCommonServices/DistanceDev.json

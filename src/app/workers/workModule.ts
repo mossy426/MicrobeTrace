@@ -1621,13 +1621,11 @@ export class WorkerModule implements OnInit {
 
 
       let start = Date.now();
-      console.log(e);
 
       const matrix = e.matrix;
       let patristic = new Patristic();
 
       console.log('parsingggg');
-      console.log(matrix);
       const RNJ = patristic.parseMatrix(matrix, e.labels);
       console.log('Tree Compute time: ', (Date.now() - start).toLocaleString(), 'ms');
       start = Date.now();
@@ -1642,7 +1640,6 @@ export class WorkerModule implements OnInit {
     }
 
     onmessage = (evt) => {
-      console.log(evt);
       compute_tree(evt.data);
     }
 

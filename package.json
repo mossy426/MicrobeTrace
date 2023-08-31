@@ -63,7 +63,6 @@
     "sharp": "^0.28.3",
     "stream": "0.0.2",
     "tabulator-tables": "^5.4.4",
-    "tidytree": "^0.5.9",
     "zone.js": "^0.13.0"
   },
   "devDependencies": {
