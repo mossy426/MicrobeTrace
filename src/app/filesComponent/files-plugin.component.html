@@ -1,11 +1,15 @@
 ﻿﻿<div class="m-content">
 
     <div id="file-panel" class="container-fluid" style="min-height:710px; padding-top: 60px;">
-        <div id="file-table" class="container">
+        <div id="file-table" [style.display]="isLoadingFiles ? 'none' : 'block'" class="container">
         </div>
         <div id="file-prompt" *ngIf="this.commonService?.session?.files != (undefined || []) && this.commonService.session.files.length === 0" class="d-flex justify-content-center">
             <h1><b>Please add data files to load...</b></h1>
         </div>
+        <div class="spinner-wrapper" *ngIf="isLoadingFiles">
+            <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+        </div>
+    
     </div>
 
     <div id="tool-btn-container" class="m-portlet">
@@ -14,8 +18,7 @@
         </span>
     </div>
     
-
-
+   
 
     <div class="view-controls">
         <p-dialog id="file-settings-pane" [(visible)]="displayFileSettings" header="File Settings">
