@@ -65,6 +65,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
   ];
   SelectedAlignTypeVariable: string = "None";
 
+  isLoadingFiles: boolean = false;
 
   ReferenceTypes: any = [
     { label: 'LoadFrom FASTA', value: 'LoadFrom FASTA' },
@@ -1203,6 +1204,8 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
   processFiles(files?: FileList) {
 
+    this.isLoadingFiles = true;
+
     if (Array.from(files).length > 0) {
 
       Array.from(files).map(file => {
@@ -1210,6 +1213,13 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
         this.processFile(file);
       });
     }
+
+    setTimeout(() => {
+      this.isLoadingFiles = false;
+
+  }, 2000);
+
+
   };
 
   processFile(rawfile?) {
