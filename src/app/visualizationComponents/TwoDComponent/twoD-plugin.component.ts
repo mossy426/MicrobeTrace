@@ -656,8 +656,11 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             let nodeWrapper = null;
 
             this.visuals.twoD.commonService.currentNodeTableElement.subscribe((element) => {
-                nodeWrapper = element;
-                // You can now interact with this.myElement
+                if(element){
+                    nodeWrapper = element;
+                  } else {
+                    console.error('currentNodeTableElement is null');
+                  }                // You can now interact with this.myElement
               });
             // private symbolTableWrapper: HTMLElement | null = null;
             // private linkColorTableWrapper: HTMLElement | null = null;
@@ -736,8 +739,13 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
               data.push(line);
             })
             let symbolWrapper = document.getElementById('node-symbol-table');
-            let symbolLegend = this.tabulate2(data, columns, symbolWrapper, network, 200, true);
-        
+
+            let symbolLegend;
+
+            if (symbolWrapper) {
+                symbolLegend = this.tabulate2(data, columns, symbolWrapper, network, 200, true);
+            }
+            
             let statsDiv = document.getElementById('network-statistics-wrapper');
             let foreignObjStats = d3.select(network).append("svg:foreignObject")
             .attr("x", statsDiv.offsetLeft)
@@ -746,15 +754,26 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             .attr("height", statsDiv.offsetHeight);
             foreignObjStats.append("xhtml:body").html(statsDiv.innerHTML);
 
+            console.log('file type: ', filetype);
             if (filetype == 'svg') {
               let content = this.visuals.twoD.commonService.unparseSVG(network);
               let blob = new Blob([content], { type: 'image/svg+xml;charset=utf-8' });
               saveAs(blob, filename + '.' + filetype);
-              watermark.remove();
-              nodeLegend.remove();
-              linkLegend.remove();
-              symbolLegend.remove();
-              foreignObjStats.remove();
+              if (watermark){
+                watermark.remove();
+              }
+              if (nodeLegend){
+                nodeLegend.remove();
+              }
+              if (linkLegend){
+                linkLegend.remove();
+              }
+              if (symbolLegend){
+                symbolLegend.remove();
+              }
+              if (foreignObjStats){
+                foreignObjStats.remove();
+              }
             } else {
               saveSvgAsPng(network, filename + '.' + filetype, {
                 scale: parseFloat($('#network-export-scale').val() as string),
@@ -762,17 +781,28 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 encoderType: 'image/' + filetype,
                 encoderOptions: parseFloat($('#network-export-quality').val() as string)
               }).then(() => {
-                  watermark.remove(); 
-                  nodeLegend.remove(); 
-                  linkLegend.remove();
-                  symbolLegend.remove();
-                  foreignObjStats.remove();
+                  if (watermark){
+                    watermark.remove();
+                  }
+                  if (nodeLegend){
+                    nodeLegend.remove();
+                  }
+                  if (linkLegend){
+                    linkLegend.remove();
+                  }
+                  if (symbolLegend){
+                    symbolLegend.remove();
+                  }
+                  if (foreignObjStats){
+                    foreignObjStats.remove();
+                  }
                 });
             }
     }
 
     tabulate2 = (data, columns, wrapper, container, topOffset, leftOffset) => {
 
+        console.log('wrapper: ', wrapper);
         console.log('left: ', wrapper.offsetLeft);
         let containerWidth = container.getBBox().width;
         let rightPosition = containerWidth - wrapper.offsetWidth;        
