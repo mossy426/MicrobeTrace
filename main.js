@@ -92,23 +92,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ngx-bootstrap */ 11109);
 /* harmony import */ var _golden_layout_component_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./golden-layout-component.service */ 90893);
 /* harmony import */ var _golden_layout_host_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./golden-layout-host.component */ 42027);
-/* harmony import */ var primeng_table__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! primeng/table */ 41765);
-/* harmony import */ var primeng_fileupload__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! primeng/fileupload */ 13388);
-/* harmony import */ var primeng_listbox__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! primeng/listbox */ 38433);
-/* harmony import */ var primeng_radiobutton__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! primeng/radiobutton */ 50613);
-/* harmony import */ var primeng_calendar__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! primeng/calendar */ 70585);
-/* harmony import */ var primeng_paginator__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! primeng/paginator */ 29061);
-/* harmony import */ var primeng_progressbar__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! primeng/progressbar */ 78235);
-/* harmony import */ var primeng_confirmdialog__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! primeng/confirmdialog */ 32137);
-/* harmony import */ var primeng_dropdown__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! primeng/dropdown */ 82210);
-/* harmony import */ var primeng_accordion__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! primeng/accordion */ 32174);
-/* harmony import */ var primeng_sidebar__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! primeng/sidebar */ 23214);
-/* harmony import */ var primeng_multiselect__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! primeng/multiselect */ 65722);
-/* harmony import */ var primeng_slider__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! primeng/slider */ 78177);
-/* harmony import */ var primeng_tabview__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! primeng/tabview */ 58783);
-/* harmony import */ var primeng_selectbutton__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! primeng/selectbutton */ 85362);
-/* harmony import */ var primeng_tree__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! primeng/tree */ 14323);
-/* harmony import */ var primeng_dialog__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! primeng/dialog */ 77729);
+/* harmony import */ var primeng_table__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! primeng/table */ 41765);
+/* harmony import */ var primeng_fileupload__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! primeng/fileupload */ 13388);
+/* harmony import */ var primeng_listbox__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! primeng/listbox */ 38433);
+/* harmony import */ var primeng_radiobutton__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! primeng/radiobutton */ 50613);
+/* harmony import */ var primeng_calendar__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! primeng/calendar */ 70585);
+/* harmony import */ var primeng_paginator__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! primeng/paginator */ 29061);
+/* harmony import */ var primeng_progressbar__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! primeng/progressbar */ 78235);
+/* harmony import */ var primeng_confirmdialog__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! primeng/confirmdialog */ 32137);
+/* harmony import */ var primeng_dropdown__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! primeng/dropdown */ 82210);
+/* harmony import */ var primeng_accordion__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! primeng/accordion */ 32174);
+/* harmony import */ var primeng_sidebar__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! primeng/sidebar */ 23214);
+/* harmony import */ var primeng_multiselect__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! primeng/multiselect */ 65722);
+/* harmony import */ var primeng_slider__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! primeng/slider */ 78177);
+/* harmony import */ var primeng_tabview__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! primeng/tabview */ 58783);
+/* harmony import */ var primeng_selectbutton__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! primeng/selectbutton */ 85362);
+/* harmony import */ var primeng_tree__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! primeng/tree */ 14323);
+/* harmony import */ var primeng_dialog__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! primeng/dialog */ 77729);
 /* harmony import */ var _microbe_trace_next_plugin_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./microbe-trace-next-plugin.component */ 87097);
 /* harmony import */ var _shared_common_session_app_session_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @shared/common/session/app-session.service */ 34845);
 /* harmony import */ var _shared_common_ui_app_ui_customization_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @shared/common/ui/app-ui-customization.service */ 87940);
@@ -119,8 +119,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _metronic_app_core_core_module__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @metronic/app/core/core.module */ 95760);
 /* harmony import */ var _visualizationComponents_TableComponent_table_plugin_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./visualizationComponents/TableComponent/table-plugin-component */ 31209);
 /* harmony import */ var _visualizationComponents_MapComponent_map_plugin_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./visualizationComponents/MapComponent/map-plugin.component */ 53605);
-/* harmony import */ var _asymmetrik_ngx_leaflet__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! @asymmetrik/ngx-leaflet */ 76651);
-/* harmony import */ var _asymmetrik_ngx_leaflet_markercluster__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! @asymmetrik/ngx-leaflet-markercluster */ 46597);
+/* harmony import */ var _asymmetrik_ngx_leaflet__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! @asymmetrik/ngx-leaflet */ 76651);
+/* harmony import */ var _asymmetrik_ngx_leaflet_markercluster__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! @asymmetrik/ngx-leaflet-markercluster */ 46597);
 /* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @angular/material/button */ 4859);
 /* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @angular/material/input */ 284);
 /* harmony import */ var _angular_material_menu__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! @angular/material/menu */ 28255);
@@ -128,7 +128,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_material_slider__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @angular/material/slider */ 87314);
 /* harmony import */ var _shared_dnd_directive__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @shared/dnd.directive */ 7015);
 /* harmony import */ var _angular_material_select__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! @angular/material/select */ 84385);
-/* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! @angular/material/icon */ 97392);
+/* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! @angular/material/icon */ 97392);
+/* harmony import */ var _angular_material_progress_spinner__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! @angular/material/progress-spinner */ 51572);
 var _class;
 
 
@@ -145,6 +146,7 @@ var _class;
 
 // import { TableModule } from 'primeng/components/table/table';
 // import { FileUploadModule, ListboxModule, RadioButtonModule, CalendarModule, PaginatorModule, ProgressBarModule, ConfirmDialogModule, DropdownModule, AccordionModule, SidebarModule, MultiSelect, MultiSelectModule, SliderModule } from 'primeng/primeng';
+
 
 
 
@@ -201,21 +203,21 @@ AppModule = (0,tslib__WEBPACK_IMPORTED_MODULE_18__.__decorate)([(0,_angular_core
   //ngCommon.CommonModule,
   _angular_forms__WEBPACK_IMPORTED_MODULE_22__.FormsModule,
   // GoldenLayoutModule.forRoot(config),
-  _angular_common_http__WEBPACK_IMPORTED_MODULE_23__.HttpClientModule, _angular_material_button__WEBPACK_IMPORTED_MODULE_24__.MatButtonModule, _angular_material_input__WEBPACK_IMPORTED_MODULE_25__.MatInputModule, _angular_material_menu__WEBPACK_IMPORTED_MODULE_26__.MatMenuModule, _angular_material_slider__WEBPACK_IMPORTED_MODULE_27__.MatSliderModule, _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_28__.MatToolbarModule, _angular_material_select__WEBPACK_IMPORTED_MODULE_29__.MatSelectModule, _angular_material_icon__WEBPACK_IMPORTED_MODULE_30__.MatIconModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_23__.HttpClientJsonpModule, ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.ModalModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.TooltipModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.TabsModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.BsDropdownModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.PopoverModule.forRoot(), primeng_fileupload__WEBPACK_IMPORTED_MODULE_31__.FileUploadModule,
+  _angular_common_http__WEBPACK_IMPORTED_MODULE_23__.HttpClientModule, _angular_material_button__WEBPACK_IMPORTED_MODULE_24__.MatButtonModule, _angular_material_input__WEBPACK_IMPORTED_MODULE_25__.MatInputModule, _angular_material_menu__WEBPACK_IMPORTED_MODULE_26__.MatMenuModule, _angular_material_slider__WEBPACK_IMPORTED_MODULE_27__.MatSliderModule, _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_28__.MatToolbarModule, _angular_material_select__WEBPACK_IMPORTED_MODULE_29__.MatSelectModule, _angular_material_progress_spinner__WEBPACK_IMPORTED_MODULE_30__.MatProgressSpinnerModule, _angular_material_icon__WEBPACK_IMPORTED_MODULE_31__.MatIconModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_23__.HttpClientJsonpModule, ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.ModalModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.TooltipModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.TabsModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.BsDropdownModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.PopoverModule.forRoot(), primeng_fileupload__WEBPACK_IMPORTED_MODULE_32__.FileUploadModule,
   // AbpModule,
   _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule, _shared_utils_utils_module__WEBPACK_IMPORTED_MODULE_3__.UtilsModule,
   //AppCommonModule.forRoot(),
   // ServiceProxyModule,
-  primeng_table__WEBPACK_IMPORTED_MODULE_32__.TableModule, primeng_listbox__WEBPACK_IMPORTED_MODULE_33__.ListboxModule, primeng_radiobutton__WEBPACK_IMPORTED_MODULE_34__.RadioButtonModule, primeng_calendar__WEBPACK_IMPORTED_MODULE_35__.CalendarModule, primeng_paginator__WEBPACK_IMPORTED_MODULE_36__.PaginatorModule,
+  primeng_table__WEBPACK_IMPORTED_MODULE_33__.TableModule, primeng_listbox__WEBPACK_IMPORTED_MODULE_34__.ListboxModule, primeng_radiobutton__WEBPACK_IMPORTED_MODULE_35__.RadioButtonModule, primeng_calendar__WEBPACK_IMPORTED_MODULE_36__.CalendarModule, primeng_paginator__WEBPACK_IMPORTED_MODULE_37__.PaginatorModule,
   //PrimeNgFileUploadModule,
-  primeng_progressbar__WEBPACK_IMPORTED_MODULE_37__.ProgressBarModule,
+  primeng_progressbar__WEBPACK_IMPORTED_MODULE_38__.ProgressBarModule,
   //PerfectScrollbarModule,
   _metronic_app_core_core_module__WEBPACK_IMPORTED_MODULE_14__.CoreModule,
   //NgxChartsModule,
   //TextMaskModule,
   //ImageCropperModule,
-  primeng_confirmdialog__WEBPACK_IMPORTED_MODULE_38__.ConfirmDialogModule, primeng_dropdown__WEBPACK_IMPORTED_MODULE_39__.DropdownModule, primeng_tabview__WEBPACK_IMPORTED_MODULE_40__.TabViewModule, primeng_selectbutton__WEBPACK_IMPORTED_MODULE_41__.SelectButtonModule, primeng_tree__WEBPACK_IMPORTED_MODULE_42__.TreeModule, primeng_dialog__WEBPACK_IMPORTED_MODULE_43__.DialogModule, primeng_accordion__WEBPACK_IMPORTED_MODULE_44__.AccordionModule, primeng_sidebar__WEBPACK_IMPORTED_MODULE_45__.SidebarModule, primeng_multiselect__WEBPACK_IMPORTED_MODULE_46__.MultiSelectModule, primeng_slider__WEBPACK_IMPORTED_MODULE_47__.SliderModule, _asymmetrik_ngx_leaflet__WEBPACK_IMPORTED_MODULE_48__.LeafletModule, _asymmetrik_ngx_leaflet_markercluster__WEBPACK_IMPORTED_MODULE_49__.LeafletMarkerClusterModule],
-  exports: [primeng_selectbutton__WEBPACK_IMPORTED_MODULE_41__.SelectButtonModule],
+  primeng_confirmdialog__WEBPACK_IMPORTED_MODULE_39__.ConfirmDialogModule, primeng_dropdown__WEBPACK_IMPORTED_MODULE_40__.DropdownModule, primeng_tabview__WEBPACK_IMPORTED_MODULE_41__.TabViewModule, primeng_selectbutton__WEBPACK_IMPORTED_MODULE_42__.SelectButtonModule, primeng_tree__WEBPACK_IMPORTED_MODULE_43__.TreeModule, primeng_dialog__WEBPACK_IMPORTED_MODULE_44__.DialogModule, primeng_accordion__WEBPACK_IMPORTED_MODULE_45__.AccordionModule, primeng_sidebar__WEBPACK_IMPORTED_MODULE_46__.SidebarModule, primeng_multiselect__WEBPACK_IMPORTED_MODULE_47__.MultiSelectModule, primeng_slider__WEBPACK_IMPORTED_MODULE_48__.SliderModule, _asymmetrik_ngx_leaflet__WEBPACK_IMPORTED_MODULE_49__.LeafletModule, _asymmetrik_ngx_leaflet_markercluster__WEBPACK_IMPORTED_MODULE_50__.LeafletMarkerClusterModule],
+  exports: [primeng_selectbutton__WEBPACK_IMPORTED_MODULE_42__.SelectButtonModule],
   providers: [_shared_common_session_app_session_service__WEBPACK_IMPORTED_MODULE_8__.AppSessionService, _shared_common_ui_app_ui_customization_service__WEBPACK_IMPORTED_MODULE_9__.AppUiCustomizationService, _shared_common_nav_app_url_service__WEBPACK_IMPORTED_MODULE_10__.AppUrlService, _golden_layout_component_service__WEBPACK_IMPORTED_MODULE_5__.GoldenLayoutComponentService],
   bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_1__.AppComponent]
 })], AppModule);
@@ -286,8 +288,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "CommonService": () => (/* binding */ CommonService)
 /* harmony export */ });
 /* harmony import */ var _Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@angular-devkit/build-angular/node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js */ 49671);
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! tslib */ 70655);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! tslib */ 70655);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/core */ 94650);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs */ 591);
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3 */ 92925);
 /* harmony import */ var patristic__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! patristic */ 78457);
 /* harmony import */ var patristic__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(patristic__WEBPACK_IMPORTED_MODULE_2__);
@@ -303,9 +306,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _app_helperClasses_auspiceHandler__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @app/helperClasses/auspiceHandler */ 60817);
 /* harmony import */ var _shared_common_app_component_base__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @shared/common/app-component-base */ 40506);
 /* harmony import */ var _microbe_trace_next_plugin_visuals__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../microbe-trace-next-plugin-visuals */ 57643);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/common/http */ 80529);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/common/http */ 80529);
 
 var _class;
+
 
 
 
@@ -328,6 +332,12 @@ var _class;
 // import { GoldenLayoutService } from '@embedded-enterprises/ng6-golden-layout';
 // import { ConsoleReporter } from 'jasmine';
 let CommonService = (_class = class CommonService extends _shared_common_app_component_base__WEBPACK_IMPORTED_MODULE_10__.AppComponentBase {
+  setLinkTableElement(element) {
+    this.linkElementSource.next(element);
+  }
+  setNodeTableElement(element) {
+    this.nodeElementSource.next(element);
+  }
   //table = new Tabulator("#recall-stashes-available", {
   //    height: "100%",
   //    layout: "fitColumns",
@@ -345,6 +355,10 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     this.LoadViewEvent = new _angular_core__WEBPACK_IMPORTED_MODULE_12__.EventEmitter();
     this.decoder = new TextDecoder('utf-8');
     this.r01 = Math.random;
+    this.linkElementSource = new rxjs__WEBPACK_IMPORTED_MODULE_13__.BehaviorSubject(null);
+    this.nodeElementSource = new rxjs__WEBPACK_IMPORTED_MODULE_13__.BehaviorSubject(null);
+    this.currentLinkTableElement = this.linkElementSource.asObservable();
+    this.currentNodeTableElement = this.nodeElementSource.asObservable();
     this.GlobalSettingsModel = {
       SelectedColorNodesByVariable: 'None',
       SelectedColorLinksByVariable: 'None',
@@ -765,6 +779,19 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     return typeof a == 'number';
   }
   addNode(newNode, check = null) {
+    // TODO: Remove when done testing
+    // if (newNode._id === "30576_KF773440_B96cl58") {
+    //     console.log('node1: ', newNode);
+    // }
+    // if (newNode._id === "30576_KF773440_B96cl58 ") {
+    //     console.log('node2: ', newNode);
+    // }
+    // if (newNode._id === "30576_KF773440_B96cl58 ") {
+    //     console.log('node7: ', newNode);
+    // }
+    // if (newNode.id === "30576_KF773440_B96cl58") {
+    //     console.log('node8: ', newNode);
+    // }
     //  If no _id, set _id to id
     if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.isNumber(newNode._id)) {
       newNode._id = '' + newNode._id;
@@ -960,6 +987,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.runHamsters();
   }
   processJSON(json, extension) {
+    console.log("Trying to process JSON file");
     let data;
     try {
       if (json.result) {
@@ -984,6 +1012,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         if (data.version) {
           ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.applyGHOST(data);
         } else {
+          console.log("Trying to load HIVTrace file");
           ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.applyHIVTrace(data);
         }
       }
@@ -1014,7 +1043,6 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.state = oldSession.state;
     ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style = oldSession.style;
     ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.meta.startTime = Date.now();
-    console.log('stashObject2: ', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session));
     if (oldSession.layout) {
       ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.layout = oldSession.layout;
     }
@@ -1023,7 +1051,6 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       links = oldSession.data.links,
       n = nodes.length,
       m = links.length;
-    console.log('nodes: ', oldSession.data.nodes);
     for (let i = 0; i < n; i++) ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addNode(nodes[i]);
     for (let j = 0; j < m; j++) {
       // Add distance property for files saved prior to distance visibility fix
@@ -1115,17 +1142,24 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   }
 
   applyHIVTrace(hivtrace) {
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.sessionSkeleton();
+    console.log("Running applyHIVTrace");
+    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.resetData();
     ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.meta.startTime = Date.now();
     hivtrace["trace_results"]["Nodes"].forEach(node => {
-      let newNode = JSON.parse(JSON.stringify(node.patient_attributes));
-      newNode._id = node._id;
-      newNode.origin = "HIVTRACE Import";
+      let newNode = {
+        _id: node.id,
+        origin: "HIVTRACE Import"
+      };
+      if (node.hasOwnProperty("patient_attributes")) {
+        console.log("had patient_attributes");
+        newNode = JSON.parse(JSON.stringify(node.patient_attributes));
+        Object.keys(hivtrace["trace_results"]["Nodes"][0]["patient_attributes"]).forEach(key => {
+          if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.includes(key)) ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.push(key);
+        });
+      }
       ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addNode(newNode, false);
     });
-    Object.keys(hivtrace["trace_results"]["Nodes"][0]["patient_attributes"]).forEach(key => {
-      if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.includes(key)) ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.push(key);
-    });
+    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.processData();
     let n = hivtrace["trace_results"]["Edges"].length;
     let metric = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-distance-metric"];
     for (let i = 0; i < n; i++) {
@@ -1137,6 +1171,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         visible: true
       };
       newLink[metric] = parseFloat(link.length);
+      newLink["distance"] = newLink[metric];
       ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addLink(newLink, false);
     }
     ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.linkFields.push(metric);
@@ -1474,7 +1509,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         threshold: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["ambiguity-threshold"]
       });
       computer.compute_linksWorker.onmessage().subscribe(response => {
-        let dists = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-distance-metric"] == 'snps' ? new Uint16Array(response.data.links) : new Float32Array(response.data.links);
+        let dists = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-distance-metric"].toLowerCase() == 'snps' ? new Uint16Array(response.data.links) : new Float32Array(response.data.links);
         console.log("Links Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
         let start = Date.now();
         let check = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.files.length > 1;
@@ -2129,7 +2164,6 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       return [];
     }
     let linkColors;
-    console.log('link col: ', ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTable);
     if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTable && ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTable[variable]) {
       linkColors = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTable[variable];
     } else {
@@ -2840,6 +2874,19 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     let n = nodes.length;
     for (let i = 0; i < n; i++) {
       let node = nodes[i];
+      // TODO:: Remove when done testing
+      // if (node._id === "30576_KF773440_B96cl58") {
+      //     console.log('node1: ', node);
+      // }
+      // if (node._id === "30576_KF773440_B96cl58 ") {
+      //     console.log('node2: ', node);
+      // }
+      // if (node._id === "30576_KF773440_B96cl58 ") {
+      //     console.log('node7: ', node);
+      // }
+      // if (node.id === "30576_KF773440_B96cl58") {
+      //     console.log('node8: ', node);
+      // }
       node.visible = true;
       // console.log('node cluster: ', node.cluster);
       let cluster = clusters[node.cluster];
@@ -2963,6 +3010,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.setLinkVisibility(true);
     ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.tagClusters().then(() => {
       ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.setClusterVisibility(true);
+      $(document).trigger("cluster-visibility");
       ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.setLinkVisibility(true);
       ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.setNodeVisibility(true);
       ["cluster", "link", "node"].forEach(thing => $(document).trigger(thing + "-visibility"));
@@ -3024,15 +3072,15 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
 }, {
   type: _microbe_trace_next_plugin_visuals__WEBPACK_IMPORTED_MODULE_11__.MicrobeTraceNextVisuals
 }, {
-  type: _angular_common_http__WEBPACK_IMPORTED_MODULE_13__.HttpClient
+  type: _angular_common_http__WEBPACK_IMPORTED_MODULE_14__.HttpClient
 }], _class.propDecorators = {
   LoadViewEvent: [{
     type: _angular_core__WEBPACK_IMPORTED_MODULE_12__.Output
   }]
 }, _class);
-CommonService = (0,tslib__WEBPACK_IMPORTED_MODULE_14__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_12__.Directive)(), (0,_angular_core__WEBPACK_IMPORTED_MODULE_12__.Injectable)({
+CommonService = (0,tslib__WEBPACK_IMPORTED_MODULE_15__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_12__.Directive)(), (0,_angular_core__WEBPACK_IMPORTED_MODULE_12__.Injectable)({
   providedIn: 'root'
-}), (0,tslib__WEBPACK_IMPORTED_MODULE_14__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_12__.Injector, _shared_utils_local_storage_service__WEBPACK_IMPORTED_MODULE_8__.LocalStorageService, _microbe_trace_next_plugin_visuals__WEBPACK_IMPORTED_MODULE_11__.MicrobeTraceNextVisuals, _angular_common_http__WEBPACK_IMPORTED_MODULE_13__.HttpClient])], CommonService);
+}), (0,tslib__WEBPACK_IMPORTED_MODULE_15__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_12__.Injector, _shared_utils_local_storage_service__WEBPACK_IMPORTED_MODULE_8__.LocalStorageService, _microbe_trace_next_plugin_visuals__WEBPACK_IMPORTED_MODULE_11__.MicrobeTraceNextVisuals, _angular_common_http__WEBPACK_IMPORTED_MODULE_14__.HttpClient])], CommonService);
 
 
 /***/ }),
@@ -3140,6 +3188,7 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
       value: 'Smith-Waterman'
     }];
     this.SelectedAlignTypeVariable = "None";
+    this.isLoadingFiles = false;
     this.ReferenceTypes = [{
       label: 'LoadFrom FASTA',
       value: 'LoadFrom FASTA'
@@ -3390,7 +3439,6 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
       }
       this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = lsv;
       this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedDefaultDistanceMetricVariable = lsv;
-      console.log(this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold']);
     });
     let cachedLSV = "";
     this.visuals.microbeTrace.commonService.localStorageService.getItem('default-distance-metric', result => {
@@ -3584,28 +3632,29 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
         this.showMessage(`Parsing ${file.name} as Auspice...`);
         // this.visuals.microbeTrace.commonService.localStorageService.setItem('default-view', 'phylogenetic-tree');
         // this.visuals.microbeTrace.commonService.localStorageService.setItem('default-distance-metric', 'SNPs');
-        this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
-        this.visuals.microbeTrace.metric = 'snps';
-        this.SelectedDefaultDistanceMetricVariable = 'snps';
-        this.onDistanceMetricChange('snps');
-        this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'snps';
-        this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable = 'snps';
-        $('#default-distance-metric').val('SNPs').trigger('change');
-        $('#default-distance-threshold').attr('step', 1).val(16).trigger('change');
-        this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = 16;
-        this.SelectedDefaultDistanceThresholdVariable = '16';
-        this.onLinkThresholdChange('16');
-        this.visuals.microbeTrace.SelectedLinkThresholdVariable = '16';
-        this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 16;
         this.visuals.microbeTrace.commonService.applyAuspice(file.contents).then(auspiceData => {
           this.visuals.microbeTrace.commonService.clearData();
           this.visuals.microbeTrace.commonService.session = this.visuals.microbeTrace.commonService.sessionSkeleton();
+          this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
+          this.visuals.microbeTrace.metric = 'snps';
+          this.SelectedDefaultDistanceMetricVariable = 'snps';
+          this.onDistanceMetricChange('snps');
+          this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'snps';
+          this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable = 'snps';
+          $('#default-distance-metric').val('SNPs').trigger('change');
+          $('#default-distance-threshold', '#link-threshold').attr('step', 1).val(16).trigger('change');
+          this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = 16;
+          this.SelectedDefaultDistanceThresholdVariable = '16';
+          this.onLinkThresholdChange('16');
+          this.visuals.microbeTrace.SelectedLinkThresholdVariable = '16';
+          this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 16;
           this.visuals.microbeTrace.commonService.session.meta.startTime = Date.now();
           this.visuals.microbeTrace.commonService.session.data.tree = auspiceData['tree'];
           this.visuals.microbeTrace.commonService.session.data.newickString = auspiceData['newick'];
           let nodeCount = 0;
+          const nodeRegex = /^NODE_[0-9]{7}$/i;
           auspiceData['nodes'].forEach(node => {
-            if (!/NODE0*/.exec(node.id)) {
+            if (!nodeRegex.test(node.id) && node.id !== 'wrapper') {
               const nodeKeys = Object.keys(node);
               nodeKeys.forEach(key => {
                 if (this.visuals.microbeTrace.commonService.session.data.nodeFields.indexOf(key) === -1) {
@@ -4083,12 +4132,16 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
     }
   }
   processFiles(files) {
+    this.isLoadingFiles = true;
     if (Array.from(files).length > 0) {
       Array.from(files).map(file => {
         console.log('files: ', file);
         this.processFile(file);
       });
     }
+    setTimeout(() => {
+      this.isLoadingFiles = false;
+    }, 2000);
   }
   processFile(rawfile) {
     if (!rawfile) {
@@ -4132,6 +4185,7 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
       let reader = new FileReader();
       reader.onloadend = out => {
         const output = JSON.parse(out.target['result']);
+        console.log(output);
         if (output.meta && output.tree) {
           const auspiceFile = {
             contents: output,
@@ -4930,10 +4984,12 @@ class AuspiceHandler {
     this.addLatLong = (nodes, metadata) => {
       const newNodes = [];
       for (const node of nodes) {
-        for (let i = 0; i < metadata.geo_resolutions.length; i++) {
-          const deme = node[metadata.geo_resolutions[i].key];
-          node.latitude = metadata.geo_resolutions[i].demes[deme].latitude;
-          node.longtude = metadata.geo_resolutions[i].demes[deme].longitude;
+        if (metadata.hasOwnProperty('geo_resolutions')) {
+          for (let i = 0; i < metadata.geo_resolutions.length; i++) {
+            const deme = node[metadata.geo_resolutions[i].key];
+            node.latitude = metadata.geo_resolutions[i].demes[deme].latitude;
+            node.longtude = metadata.geo_resolutions[i].demes[deme].longitude;
+          }
         }
         newNodes.push(node);
       }
@@ -5317,6 +5373,16 @@ class DialogSettings {
       this.setStateBeforeExport();
     }
     this.isVisible = isVisible;
+    if (isVisible) {
+      const dialog = document.querySelector('#network-settings-pane');
+      const tabset = dialog.querySelector('.tab-container');
+      if (tabset) {
+        const tabs = Array.from(tabset.querySelectorAll('.m-tabs__item'));
+        for (let tab of tabs) {
+          tab.classList.remove('active');
+        }
+      }
+    }
   }
 }
 
@@ -5473,12 +5539,14 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
   //         componentRef: null
   //     }
   // ];
-  constructor(injector, commonService, goldenLayoutComponentService, domSanitizer, cdref, eventEmitterService) {
+  constructor(injector, commonService, goldenLayoutComponentService, domSanitizer, cdref, el, renderer, eventEmitterService) {
     super(injector);
     this.commonService = commonService;
     this.goldenLayoutComponentService = goldenLayoutComponentService;
     this.domSanitizer = domSanitizer;
     this.cdref = cdref;
+    this.el = el;
+    this.renderer = renderer;
     this.eventEmitterService = eventEmitterService;
     this.metric = "tn93";
     this.ambiguity = "Average";
@@ -5615,6 +5683,10 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
     //   }, 10000);
   }
 
+  getElementById(id) {
+    const element = this.el.nativeElement.querySelector(`#${id}`);
+    return element;
+  }
   ngOnInit() {
     this.getGlobalSettingsData();
     this.elem = document.documentElement;
@@ -5870,7 +5942,7 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
     this.metric = value;
     console.log('metric updating');
     console.log('updating metric: ', this.metric);
-    if (this.metric === "SNPs") {
+    if (this.metric.toLowerCase() === "snps") {
       //Hide Ambiguities
       $('#ambiguities-menu').hide();
       this.threshold = "7";
@@ -6064,6 +6136,8 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
       $('#link-color-value-row').slideUp();
       //If hidden by default, unhide to perform slide up and down
       if (!this.ShowGlobalSettingsLinkColorTable) {
+        const element = this.el.nativeElement.querySelector('#link-color-table');
+        this.commonService.setLinkTableElement(element);
         this.ShowGlobalSettingsLinkColorTable = true;
       } else {
         $('#link-color-table-row').slideDown();
@@ -6343,6 +6417,8 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
       $('#node-color-value-row').slideUp();
       //If hidden by default, unhide to perform slide up and down
       if (!this.ShowGlobalSettingsNodeColorTable) {
+        const element = this.el.nativeElement.querySelector('#node-color-table');
+        this.commonService.setNodeTableElement(element);
         this.ShowGlobalSettingsNodeColorTable = true;
       } else {
         $('#node-color-table-row').slideDown();
@@ -6456,6 +6532,7 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
     this.commonService.setLinkVisibility(false);
     this.commonService.tagClusters().then(() => {
       this.visuals.microbeTrace.commonService.setClusterVisibility(true);
+      $(document).trigger("cluster-visibility");
       //To catch links that should be filtered out based on cluster size:
       this.visuals.microbeTrace.commonService.setLinkVisibility(true);
       this.visuals.microbeTrace.commonService.setNodeVisibility(true);
@@ -6818,7 +6895,6 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
               templateRef: undefined
             };
           });
-          console.log('cluser save: ', this.saveByCluster);
           if (this.saveByCluster) {
             let clusterNodeList = [];
             let clusterLinkList = [];
@@ -6934,7 +7010,6 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
         {
           const auspiceUrl = this.auspiceUrlVal;
           this.commonService.openAuspiceUrl(auspiceUrl).then(out => {
-            console.log(out);
             if (out['meta'] && out['tree']) {
               const auspiceFile = {
                 contents: out,
@@ -7465,6 +7540,10 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
 }, {
   type: _angular_core__WEBPACK_IMPORTED_MODULE_20__.ChangeDetectorRef
 }, {
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_20__.ElementRef
+}, {
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_20__.Renderer2
+}, {
   type: _shared_utils_event_emitter_service__WEBPACK_IMPORTED_MODULE_14__.EventEmitterService
 }], _class.propDecorators = {
   stashes: [{
@@ -7515,7 +7594,7 @@ MicrobeTraceNextHomeComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_23__.__decorat
   encapsulation: _angular_core__WEBPACK_IMPORTED_MODULE_20__.ViewEncapsulation.None,
   template: _microbe_trace_next_plugin_component_html_ngResource__WEBPACK_IMPORTED_MODULE_0__,
   styles: [(_microbe_trace_next_plugin_component_less_ngResource__WEBPACK_IMPORTED_MODULE_1___default())]
-}), (0,tslib__WEBPACK_IMPORTED_MODULE_23__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_20__.Injector, _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_2__.CommonService, _golden_layout_component_service__WEBPACK_IMPORTED_MODULE_16__.GoldenLayoutComponentService, _angular_platform_browser__WEBPACK_IMPORTED_MODULE_22__.DomSanitizer, _angular_core__WEBPACK_IMPORTED_MODULE_20__.ChangeDetectorRef, _shared_utils_event_emitter_service__WEBPACK_IMPORTED_MODULE_14__.EventEmitterService])], MicrobeTraceNextHomeComponent);
+}), (0,tslib__WEBPACK_IMPORTED_MODULE_23__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_20__.Injector, _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_2__.CommonService, _golden_layout_component_service__WEBPACK_IMPORTED_MODULE_16__.GoldenLayoutComponentService, _angular_platform_browser__WEBPACK_IMPORTED_MODULE_22__.DomSanitizer, _angular_core__WEBPACK_IMPORTED_MODULE_20__.ChangeDetectorRef, _angular_core__WEBPACK_IMPORTED_MODULE_20__.ElementRef, _angular_core__WEBPACK_IMPORTED_MODULE_20__.Renderer2, _shared_utils_event_emitter_service__WEBPACK_IMPORTED_MODULE_14__.EventEmitterService])], MicrobeTraceNextHomeComponent);
 
 class BpaaSPayloadWrapper {
   constructor() {
@@ -9704,12 +9783,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "TwoDComponent": () => (/* binding */ TwoDComponent)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! tslib */ 70655);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! tslib */ 70655);
 /* harmony import */ var _twoD_plugin_component_html_ngResource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./twoD-plugin.component.html?ngResource */ 75066);
 /* harmony import */ var _twoD_plugin_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./twoD-plugin.component.scss?ngResource */ 80122);
 /* harmony import */ var _twoD_plugin_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_twoD_plugin_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/core */ 94650);
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/platform-browser */ 11481);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/core */ 94650);
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/platform-browser */ 11481);
 /* harmony import */ var _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../contactTraceCommonServices/common.service */ 37822);
 /* harmony import */ var ngx_bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ngx-bootstrap */ 11109);
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! d3 */ 92925);
@@ -9721,8 +9800,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _helperClasses_dialogSettings__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../helperClasses/dialogSettings */ 30796);
 /* harmony import */ var _app_helperClasses_customShapes__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @app/helperClasses/customShapes */ 71863);
 /* harmony import */ var _app_base_component_directive__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @app/base-component.directive */ 75738);
-/* harmony import */ var golden_layout__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! golden-layout */ 10478);
+/* harmony import */ var save_svg_as_png__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! save-svg-as-png */ 2033);
+/* harmony import */ var save_svg_as_png__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(save_svg_as_png__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var golden_layout__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! golden-layout */ 10478);
 var _class;
+
 
 
 
@@ -9745,12 +9827,15 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     this.commonService = commonService;
     this.container = container;
     this.cdref = cdref;
-    this.DisplayGlobalSettingsDialogEvent = new _angular_core__WEBPACK_IMPORTED_MODULE_11__.EventEmitter();
+    this.DisplayGlobalSettingsDialogEvent = new _angular_core__WEBPACK_IMPORTED_MODULE_12__.EventEmitter();
     this.svgStyle = {
       'height': '0px',
       'width': '1000px'
     };
     this.customShapes = new _app_helperClasses_customShapes__WEBPACK_IMPORTED_MODULE_9__.CustomShapes();
+    this.symbolTableWrapper = null;
+    this.linkColorTableWrapper = null;
+    this.nodeColorTableWrapper = null;
     this.ShowNetworkAttributes = false;
     this.ShowStatistics = true;
     this.Show2DExportPane = false;
@@ -9770,6 +9855,8 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     this.brush = null;
     this.FieldList = [];
     this.ToolTipFieldList = [];
+    this.shiftPressed = false;
+    this.dragging = false;
     //Polygon Tab
     this.SelectedPolygonLabelVariable = "None";
     this.SelectedPolygonColorVariable = "None";
@@ -9884,14 +9971,47 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     this.PolygonColorTableWrapperDialogSettings = new _helperClasses_dialogSettings__WEBPACK_IMPORTED_MODULE_8__.DialogSettings('#polygon-color-table-wrapper', false);
     this.Node2DNetworkExportDialogSettings = new _helperClasses_dialogSettings__WEBPACK_IMPORTED_MODULE_8__.DialogSettings('#network-settings-pane', false);
     this.ContextSelectedNodeAttributes = [];
+    this.tabulate2 = (data, columns, wrapper, container, topOffset, leftOffset) => {
+      console.log('wrapper: ', wrapper);
+      console.log('left: ', wrapper.offsetLeft);
+      let containerWidth = container.getBBox().width;
+      let rightPosition = containerWidth - wrapper.offsetWidth;
+      console.log('right: ', rightPosition);
+      let foreignObj = d3__WEBPACK_IMPORTED_MODULE_4__.select(container).append("svg:foreignObject").attr("x", leftOffset ? rightPosition : wrapper.offsetLeft).attr("y", wrapper.offsetTop + topOffset).attr("width", wrapper.offsetWidth).attr("height", wrapper.offsetHeight);
+      let body = foreignObj.append("xhtml:body").append("table").style('position', 'absolute').style('top', '0').style('width', '100%').style('height', '100%').attr('cellpadding', '1px').attr("class", "table-bordered");
+      // .html(nodeColorTable.innerHTML); SVG doesn't translate
+      let thead = body.append("thead"),
+        tbody = body.append("tbody");
+      thead.append("tr").selectAll("th").data(columns).enter().append("th").text(function (column) {
+        return column;
+      });
+      let rows = tbody.selectAll("tr").data(data).enter().append("tr");
+      let cells = rows.selectAll("td").data(function (row) {
+        return columns.map(function (column) {
+          return {
+            column: column,
+            value: row[column.split(" ")[0]]
+          };
+        });
+      }).enter().append("td").html(function (d) {
+        return d.value;
+      });
+      return foreignObj;
+    };
     this.polygonNodeSelected = null;
     this.visuals = commonService.visuals;
     this.commonService.visuals.twoD = this;
+    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_3__.window.addEventListener('resize', () => {
+      // Replace this with the logic to determine the current show/hide state
+      const showState = this.visuals.twoD.commonService.session.style.widgets['network-gridlines-show'];
+      this.drawGridlines(showState);
+    });
   }
   ngOnInit() {
     this.visuals.twoD.commonService.updateNetwork();
     this.InitView();
   }
+  ngAfterViewInit() {}
   InitView() {
     this.visuals.twoD.IsDataAvailable = this.visuals.twoD.commonService.session.data.nodes.length === 0 ? false : true;
     if (!this.visuals.twoD.commonService.session.style.widgets['default-distance-metric']) {
@@ -9929,13 +10049,22 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
         "margin-top": '-39px'
       };
       this.visuals.twoD.zoom = d3__WEBPACK_IMPORTED_MODULE_4__.zoom().on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3__WEBPACK_IMPORTED_MODULE_4__.event.transform));
-      this.visuals.twoD.brush = d3__WEBPACK_IMPORTED_MODULE_4__.brush();
+      // this.visuals.twoD.brush = d3.brush();
       this.visuals.twoD.halfWidth = $('#network').parent().width() / 2;
       this.visuals.twoD.halfHeight = $('#network').parent().parent().parent().height() / 2;
       this.visuals.twoD.transform = d3__WEBPACK_IMPORTED_MODULE_4__.zoomTransform(d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').node());
       this.visuals.twoD.commonService.session.style.widgets = this.visuals.twoD.commonService.session.style.widgets;
-      let zoom = d3__WEBPACK_IMPORTED_MODULE_4__.zoom().on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3__WEBPACK_IMPORTED_MODULE_4__.event.transform));
-      let brush = d3__WEBPACK_IMPORTED_MODULE_4__.brush().on('start', () => {
+      let zoom = d3__WEBPACK_IMPORTED_MODULE_4__.zoom().filter(() => !this.shiftPressed).on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3__WEBPACK_IMPORTED_MODULE_4__.event.transform));
+      let width = d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').node().getBoundingClientRect().width;
+      let height = d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').node().getBoundingClientRect().height;
+      let svgSelection = d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network');
+      let svgWidth = svgSelection.node().getBoundingClientRect().width;
+      let svgHeight = svgSelection.node().getBoundingClientRect().height;
+      console.log('brush height: ', svgHeight);
+      console.log('brush width: ', svgWidth);
+      this.visuals.twoD.brush = d3__WEBPACK_IMPORTED_MODULE_4__.brush().extent([[0, 0], [svgWidth, svgHeight]]) // Set the extent to cover the entire SVG
+      .on('start', () => {
+        this.dragging = true;
         this.visuals.twoD.commonService.session.network.nodes.forEach(d => {
           if (d.visible) d._previouslySelected = d.selected;
         });
@@ -9950,6 +10079,7 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
           d.selected = (d._previouslySelected ^ exp) == 1;
         });
       }).on('end', () => {
+        this.dragging = false;
         if (d3__WEBPACK_IMPORTED_MODULE_4__.event.selection == null) return;
         this.visuals.twoD.commonService.session.network.nodes.forEach(d => delete d._previouslySelected);
         this.visuals.twoD.commonService.session.data.nodes.forEach(d => {
@@ -9961,21 +10091,34 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       });
       d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').html(null) //Let's make sure the canvas is blank.
       .on('click', () => this.visuals.twoD.hideContextMenu()).call(zoom);
-      d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').append('g').attr('class', 'brush').call(brush).attr('pointer-events', 'none').select('rect.overlay').attr('pointer-events', 'none');
       d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').append('g').attr('class', 'horizontal-gridlines');
       d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').append('g').attr('class', 'vertical-gridlines');
+      d3__WEBPACK_IMPORTED_MODULE_4__.select(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_3__.window).on('keydown', () => {
+        const event = d3__WEBPACK_IMPORTED_MODULE_4__.event; // You may need to typecast d3.event
+        console.log('keydown: ', event);
+        if (event.key === "Shift" && !this.dragging) {
+          this.shiftPressed = true; // Shift key is pressed
+          this.toggleBrush(true);
+        }
+      });
+      d3__WEBPACK_IMPORTED_MODULE_4__.select(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_3__.window).on('keyup', () => {
+        const event = d3__WEBPACK_IMPORTED_MODULE_4__.event; // You may need to typecast d3.event
+        console.log('keyup: ', event);
+        if (event.key === "Shift" && !this.dragging) {
+          this.shiftPressed = false; // Shift key is released
+          this.toggleBrush(false);
+        }
+      });
       this.visuals.twoD.svg = d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').append('g');
       this.visuals.twoD.svg.append('g').attr('class', 'clusters');
       this.visuals.twoD.svg.append('g').attr('class', 'links');
       this.visuals.twoD.svg.append('g').attr('class', 'nodes');
       this.visuals.twoD.svg.append('g').attr('class', 'clustersLabels');
+      d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').append('g').attr('class', 'brush').call(this.visuals.twoD.brush);
       this.visuals.twoD.svg.append('svg:defs').append('marker').attr('id', 'end-arrow').attr('viewBox', '0 0 10 10').attr('refX', 20).attr('refY', 5).attr('markerWidth', 4).attr('markerHeight', 4).attr('orient', 'auto').append('svg:path').attr('d', 'M0,0 L0,10 L10,5 z');
       this.visuals.twoD.force = d3__WEBPACK_IMPORTED_MODULE_4__.forceSimulation().force('link', d3__WEBPACK_IMPORTED_MODULE_4__.forceLink().id(d => d._id).distance(l => l.origin.length * this.visuals.twoD.commonService.session.style.widgets['link-length']).strength(this.visuals.twoD.commonService.session.style.widgets['network-link-strength'])).force('charge', d3__WEBPACK_IMPORTED_MODULE_4__.forceManyBody().strength(-this.visuals.twoD.commonService.session.style.widgets['node-charge'])).force('gravity', (0,d3_force_attract__WEBPACK_IMPORTED_MODULE_5__.forceAttract)().target([this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight]).strength(this.visuals.twoD.commonService.session.style.widgets['network-gravity'])).force('center', d3__WEBPACK_IMPORTED_MODULE_4__.forceCenter(this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight));
       if (this.visuals.twoD.commonService.session.style.widgets['network-friction']) this.visuals.twoD.force.velocityDecay(this.visuals.twoD.commonService.session.style.widgets['network-friction']);
       // this.visuals.twoD.clipboard.on('success', ()=>this.hideContextMenu());
-      d3__WEBPACK_IMPORTED_MODULE_4__.select(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_3__.window).on('keydown keyup', () => {
-        d3__WEBPACK_IMPORTED_MODULE_4__.select('g.brush').attr('pointer-events', d3__WEBPACK_IMPORTED_MODULE_4__.event.ctrlKey ? 'all' : 'none').select('rect.overlay').attr('pointer-events', d3__WEBPACK_IMPORTED_MODULE_4__.event.ctrlKey ? 'all' : 'none');
-      });
       let that = this;
       // this.visuals.twoD.eventManager.addGlobalEventListener('window', 'node-color-change', () => {
       //     this.visuals.twoD.updateNodeColors;
@@ -10008,9 +10151,11 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
         that.visuals.twoD.render(false);
       });
       $(document).on("cluster-visibility", function () {
+        that.updatePolygonColors();
         that.visuals.twoD.render(false);
       });
       $(document).on("node-selected", function () {
+        console.log('node selected');
         that.visuals.twoD.render(false);
       });
       this.visuals.twoD.eventManager.addGlobalEventListener('window', "node-selected", () => {
@@ -10035,6 +10180,9 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       }, 3000);
     }
   }
+  toggleBrush(enable) {
+    d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network g.brush').attr('pointer-events', enable ? 'all' : 'none').select('rect.overlay').attr('pointer-events', enable ? 'all' : 'none');
+  }
   onDataChange(event) {}
   // loadDefaultVisualization(e: String) {
   //     setTimeout(() => {
@@ -10057,19 +10205,20 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
   exportVisualization(event) {
     this.visuals.twoD.Show2DExportPane = false;
     this.isExporting = true;
-    if (this.commonService.session.style.widgets['node-symbol-variable'] != 'None') {
-      this.generateNodeSymbolSelectionTable("#node-symbol-table-bottom", this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'], false);
-    }
-    if (this.commonService.session.style.widgets['node-color-variable'] != 'None') {
-      this.visuals.microbeTrace.generateNodeColorTable("#node-color-table-bottom", false);
-    }
-    if (this.commonService.session.style.widgets['link-color-variable'] != 'None') {
-      this.visuals.microbeTrace.generateNodeLinkTable("#link-color-table-bottom", false);
-    }
+    // if (this.commonService.session.style.widgets['node-symbol-variable'] != 'None') {
+    //     this.generateNodeSymbolSelectionTable("#node-symbol-table-bottom", this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'], false);
+    // }
+    // if (this.commonService.session.style.widgets['node-color-variable'] != 'None') {
+    //     this.visuals.microbeTrace.generateNodeColorTable("#node-color-table-bottom", false);
+    // }
+    // if (this.commonService.session.style.widgets['link-color-variable'] != 'None') {
+    //     this.visuals.microbeTrace.generateNodeLinkTable("#link-color-table-bottom", false);
+    // }
     if (!this.isExportClosed) {
       setTimeout(() => this.exportVisualization(undefined), 300);
     } else {
-      this.exportWork();
+      console.log('e2');
+      this.exportWork2();
     }
   }
   onCloseExport() {
@@ -10081,11 +10230,15 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     $("#color-transparency-wrapper").css({
       display: "none"
     });
+    this.commonService.session.network.nodes.forEach(node => {
+      console.log('node: ', node);
+      node.selected = false;
+    });
   }
   exportWork() {
     let network = document.getElementById('network');
     let $network = $(network);
-    let watermark = d3__WEBPACK_IMPORTED_MODULE_4__.select(network).append('text').text('MicrobeTrace').attr('x', $network.width() - 170).attr('y', $network.height() - 20).attr('class', 'watermark');
+    let watermark = d3__WEBPACK_IMPORTED_MODULE_4__.select(network).append('text').attr('xlink:href', this.visuals.twoD.commonService.watermark).attr('height', 128).attr('width', 128).attr('x', 10).style('opacity', $('#network-export-opacity').val());
     let filetype = this.SelectedNetworkExportFileTypeListVariable,
       filename = this.SelectedNetworkExportFilenameVariable;
     if (filetype == 'svg') {
@@ -10116,17 +10269,178 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
           file_saver__WEBPACK_IMPORTED_MODULE_6__(blob, filename + '.' + filetype);
           watermark.remove();
           this.visuals.twoD.isExporting = false;
-          this.visuals.microbeTrace.clearTable("#node-symbol-table-bottom");
-          this.visuals.microbeTrace.clearTable("#node-color-table-bottom");
-          this.visuals.microbeTrace.clearTable("#link-color-table-bottom");
-          this.visuals.microbeTrace.GlobalSettingsDialogSettings.restoreStateAfterExport();
-          this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.restoreStateAfterExport();
-          this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.restoreStateAfterExport();
-          this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.restoreStateAfterExport();
-          this.visuals.twoD.PolygonColorTableWrapperDialogSettings.restoreStateAfterExport();
-          this.visuals.twoD.Node2DNetworkExportDialogSettings.restoreStateAfterExport();
+          // this.visuals.microbeTrace.clearTable("#node-symbol-table-bottom");
+          // this.visuals.microbeTrace.clearTable("#node-color-table-bottom");
+          // this.visuals.microbeTrace.clearTable("#link-color-table-bottom");
+          // this.visuals.microbeTrace.GlobalSettingsDialogSettings.restoreStateAfterExport();
+          // this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.restoreStateAfterExport();
+          // this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.restoreStateAfterExport();
+          // this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.restoreStateAfterExport();
+          // this.visuals.twoD.PolygonColorTableWrapperDialogSettings.restoreStateAfterExport();
+          // this.visuals.twoD.Node2DNetworkExportDialogSettings.restoreStateAfterExport();
         });
       }, 1000);
+    }
+  }
+  exportWork2() {
+    let network = document.getElementById('network');
+    let $network = $(network);
+    let watermark = d3__WEBPACK_IMPORTED_MODULE_4__.select(network).append('image').attr('xlink:href', this.visuals.twoD.commonService.watermark).attr('height', 128).attr('width', 128).attr('x', 35).attr('y', 35).style('opacity', $('#network-export-opacity').val());
+    let filetype = this.SelectedNetworkExportFileTypeListVariable,
+      filename = this.SelectedNetworkExportFilenameVariable;
+    let vnodes = this.visuals.twoD.commonService.getVisibleNodes();
+    let aggregates = this.visuals.twoD.commonService.createNodeColorMap();
+    let values = Object.keys(aggregates);
+    var columns = [];
+    columns.push('Node ' + this.visuals.twoD.commonService.titleize(this.visuals.twoD.commonService.session.style.widgets["node-color-variable"]));
+    if (this.visuals.twoD.commonService.session.style.widgets["node-color-table-counts"]) columns.push('Count');
+    if (this.visuals.twoD.commonService.session.style.widgets["node-color-table-frequencies"]) columns.push('Frequency');
+    columns.push('Color');
+    var data = [];
+    values.forEach((value, i) => {
+      let nodeValue = this.visuals.twoD.commonService.session.style.nodeValueNames[value] ? this.visuals.twoD.commonService.session.style.nodeValueNames[value] : this.visuals.twoD.commonService.titleize("" + value);
+      let tableCounts = this.visuals.twoD.commonService.session.style.widgets["node-color-table-counts"] ? aggregates[value] : undefined;
+      let tableFreq = this.visuals.twoD.commonService.session.style.widgets["node-color-table-frequencies"] ? (aggregates[value] / vnodes.length).toLocaleString() : undefined;
+      let line = {
+        Node: nodeValue,
+        Count: tableCounts,
+        Frequency: tableFreq,
+        Color: '<div  style="margin-left:5px; width:40px;height:12px;background:' + this.visuals.twoD.commonService.temp.style.nodeColorMap(value) + '"> </div>'
+      };
+      data.push(line);
+    });
+    let nodeWrapper = null;
+    this.visuals.twoD.commonService.currentNodeTableElement.subscribe(element => {
+      if (element) {
+        nodeWrapper = element;
+      } else {
+        console.error('currentNodeTableElement is null');
+      } // You can now interact with this.myElement
+    });
+    // private symbolTableWrapper: HTMLElement | null = null;
+    // private linkColorTableWrapper: HTMLElement | null = null;
+    // private nodeColorTableWrapper: HTMLElement | null = null;
+    // let nodeWrapper = this.parent.getElementById('node-color-table');
+    console.log('node wrapper: ', nodeWrapper);
+    let nodeLegend = this.tabulate2(data, columns, nodeWrapper, network, 200, false);
+    let vlinks = this.visuals.twoD.commonService.getVisibleLinks();
+    aggregates = this.visuals.twoD.commonService.createLinkColorMap();
+    values = Object.keys(aggregates);
+    columns = [];
+    columns.push('Link ' + this.visuals.twoD.commonService.titleize(this.visuals.twoD.commonService.session.style.widgets["link-color-variable"]));
+    if (this.visuals.twoD.commonService.session.style.widgets["link-color-table-counts"]) columns.push('Count');
+    if (this.visuals.twoD.commonService.session.style.widgets["link-color-table-frequencies"]) columns.push('Frequency');
+    columns.push('Color');
+    data = [];
+    values.forEach((value, i) => {
+      let nodeValue = this.visuals.twoD.commonService.session.style.linkValueNames[value] ? this.visuals.twoD.commonService.session.style.linkValueNames[value] : this.visuals.twoD.commonService.titleize("" + value);
+      let tableCounts = this.visuals.twoD.commonService.session.style.widgets["link-color-table-counts"] ? aggregates[value] : undefined;
+      let tableFreq = this.visuals.twoD.commonService.session.style.widgets["link-color-table-frequencies"] ? (aggregates[value] / vlinks.length).toLocaleString() : undefined;
+      let line = {
+        Link: nodeValue,
+        Count: tableCounts,
+        Frequency: tableFreq,
+        Color: '<div  style="margin-left:5px; width:40px;height:12px;background:' + this.visuals.twoD.commonService.temp.style.linkColorMap(value) + '"> </div>'
+      };
+      data.push(line);
+    });
+    console.log('1');
+    let linkWrapper = null;
+    this.visuals.twoD.commonService.currentLinkTableElement.subscribe(element => {
+      linkWrapper = element;
+      // You can now interact with this.myElement
+    });
+    // let linkWrapper = document.getElementById('link-color-table-wrapper');
+    let linkLegend = this.tabulate2(data, columns, linkWrapper, network, 600, false);
+    let variable = this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'];
+    values = [];
+    aggregates = {};
+    let nodes = this.visuals.twoD.commonService.session.data.nodes;
+    let n = nodes.length;
+    vnodes = 0;
+    for (let i = 0; i < n; i++) {
+      let d = nodes[i];
+      if (!d.visible) continue;
+      vnodes++;
+      let dv = d[variable];
+      if (values.indexOf(dv) == -1) values.push(dv);
+      if (dv in aggregates) {
+        aggregates[dv]++;
+      } else {
+        aggregates[dv] = 1;
+      }
+    }
+    columns = [];
+    columns.push('Node ' + this.visuals.twoD.commonService.titleize(variable));
+    if (this.visuals.twoD.commonService.session.style.widgets["node-symbol-table-counts"]) columns.push('Count');
+    if (this.visuals.twoD.commonService.session.style.widgets["node-symbol-table-frequencies"]) columns.push('Frequency');
+    columns.push('Shape');
+    data = [];
+    values.forEach((value, i) => {
+      let nodeValue = this.visuals.twoD.commonService.titleize("" + value);
+      let tableCounts = this.visuals.twoD.commonService.session.style.widgets["node-symbol-table-counts"] ? aggregates[value] : undefined;
+      let tableFreq = this.visuals.twoD.commonService.session.style.widgets["node-symbol-table-frequencies"] ? (aggregates[value] / vnodes.length).toLocaleString() : undefined;
+      let line = {
+        Node: nodeValue,
+        Count: tableCounts,
+        Frequency: tableFreq,
+        Shape: $("#node-symbol option[value='" + this.visuals.twoD.commonService.temp.style.nodeSymbolMap(value) + "']").text()
+      };
+      data.push(line);
+    });
+    let symbolWrapper = document.getElementById('node-symbol-table');
+    let symbolLegend;
+    if (symbolWrapper) {
+      symbolLegend = this.tabulate2(data, columns, symbolWrapper, network, 200, true);
+    }
+    let statsDiv = document.getElementById('network-statistics-wrapper');
+    let foreignObjStats = d3__WEBPACK_IMPORTED_MODULE_4__.select(network).append("svg:foreignObject").attr("x", statsDiv.offsetLeft).attr("y", statsDiv.offsetTop - 60).attr("width", statsDiv.offsetWidth).attr("height", statsDiv.offsetHeight);
+    foreignObjStats.append("xhtml:body").html(statsDiv.innerHTML);
+    console.log('file type: ', filetype);
+    if (filetype == 'svg') {
+      let content = this.visuals.twoD.commonService.unparseSVG(network);
+      let blob = new Blob([content], {
+        type: 'image/svg+xml;charset=utf-8'
+      });
+      file_saver__WEBPACK_IMPORTED_MODULE_6__(blob, filename + '.' + filetype);
+      if (watermark) {
+        watermark.remove();
+      }
+      if (nodeLegend) {
+        nodeLegend.remove();
+      }
+      if (linkLegend) {
+        linkLegend.remove();
+      }
+      if (symbolLegend) {
+        symbolLegend.remove();
+      }
+      if (foreignObjStats) {
+        foreignObjStats.remove();
+      }
+    } else {
+      (0,save_svg_as_png__WEBPACK_IMPORTED_MODULE_11__.saveSvgAsPng)(network, filename + '.' + filetype, {
+        scale: parseFloat($('#network-export-scale').val()),
+        backgroundColor: this.visuals.twoD.commonService.session.style.widgets['background-color'],
+        encoderType: 'image/' + filetype,
+        encoderOptions: parseFloat($('#network-export-quality').val())
+      }).then(() => {
+        if (watermark) {
+          watermark.remove();
+        }
+        if (nodeLegend) {
+          nodeLegend.remove();
+        }
+        if (linkLegend) {
+          linkLegend.remove();
+        }
+        if (symbolLegend) {
+          symbolLegend.remove();
+        }
+        if (foreignObjStats) {
+          foreignObjStats.remove();
+        }
+      });
     }
   }
   render(showStatistics = true) {
@@ -10268,6 +10582,13 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     $('#node-symbol-variable').trigger('change');
     this.visuals.twoD.ShowStatistics = showStatistics;
     this.visuals.twoD.cdref.detectChanges();
+    // Get the new SVG dimensions after the network is generated
+    let newSvgWidth = d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').node().getBoundingClientRect().width;
+    let newSvgHeight = d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').node().getBoundingClientRect().height;
+    // Update the brush extent
+    this.visuals.twoD.brush.extent([[0, 0], [newSvgWidth, newSvgHeight]]);
+    // Recall the brush to apply the new extent
+    d3__WEBPACK_IMPORTED_MODULE_4__.select('g.brush').call(this.visuals.twoD.brush);
   }
   polygonLabelDragStarted(d) {
     d3__WEBPACK_IMPORTED_MODULE_4__.select(this).raise().attr("class", "polygonText");
@@ -10344,6 +10665,30 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       that.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderVariable'] = that.visuals.twoD.commonService.session.style.widgets["polygons-foci"];
       that.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderTitle'] = $($(this).contents()[0]).text();
     });
+    let isAscending = true; // add this line before the click event handler
+    // The sorting functionality is added here
+    $('#polygon-color-table').on('click', 'th', function () {
+      let table = $(this).parents('table').eq(0);
+      let rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
+      isAscending = !isAscending; // replace 'this.asc' with 'isAscending'
+      if (!isAscending) {
+        rows = rows.reverse();
+      }
+      for (let i = 0; i < rows.length; i++) {
+        table.append(rows[i]);
+      }
+    });
+    function comparer(index) {
+      return function (a, b) {
+        let valA = getCellValue(a, index),
+          valB = getCellValue(b, index);
+        console.log(`Comparing: ${valA} and ${valB}`); // New line
+        return !isNaN(Number(valA)) && !isNaN(Number(valB)) ? Number(valA) - Number(valB) : valA.toString().localeCompare(valB);
+      };
+    }
+    function getCellValue(row, index) {
+      return $(row).children('td').eq(index).text();
+    }
     // this.sortable("#polygon-color-table", { items: "tr" });
     this.visuals.twoD.render();
   }
@@ -10577,7 +10922,8 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     }
   }
   clickHandler(n) {
-    if (d3__WEBPACK_IMPORTED_MODULE_4__.event && d3__WEBPACK_IMPORTED_MODULE_4__.event.ctrlKey) {
+    console.log('event: ', d3__WEBPACK_IMPORTED_MODULE_4__.event);
+    if (d3__WEBPACK_IMPORTED_MODULE_4__.event && d3__WEBPACK_IMPORTED_MODULE_4__.event.key === "Shift") {
       this.visuals.twoD.commonService.session.data.nodes.find(node => node._id == n._id).selected = !n.selected;
     } else {
       this.visuals.twoD.commonService.session.data.nodes.forEach(node => {
@@ -10924,110 +11270,6 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       this.visuals.twoD.render();
     }
   }
-  generatePolygonColorSelectionTable(tableId, variable, isEditable = true) {
-    this.visuals.microbeTrace.clearTable(tableId);
-    let symbolMapping = [{
-      key: 'symbolCircle',
-      value: '&#11044; (Circle)'
-    }, {
-      key: "symbolTriangle",
-      value: '&#9650; (Up Triangle)'
-    }, {
-      key: "symbolTriangleDown",
-      value: '&#9660; (Down Triangle)'
-    }, {
-      key: "symbolTriangleLeft",
-      value: '&#9664; (Left Triangle)'
-    }, {
-      key: "symbolTriangleRight",
-      value: '&#9654; (Right Triangle)'
-    }, {
-      key: "symbolDiamond",
-      value: '&#10731; (Vertical Diamond)'
-    }, {
-      key: "symbolDiamondAlt",
-      value: '&#10731; (Horizontal Diamond)'
-    }, {
-      key: "symbolSquare",
-      value: '&#9632; (Square)'
-    }, {
-      key: "symbolDiamondSquare",
-      value: '&#9670; (Tilted Square)'
-    }, {
-      key: "symbolPentagon",
-      value: '&#11039; (Pentagon)'
-    }, {
-      key: "symbolHexagon",
-      value: '&#11042; (Hexagon)'
-    }, {
-      key: "symbolHexagonAlt",
-      value: '&#11043; (Tilted Hexagon)'
-    }, {
-      key: "symbolOctagon",
-      value: '&#11042; (Octagon)'
-    }, {
-      key: "symbolOctagonAlt",
-      value: '&#11043; (Tilted Octagon)'
-    }, {
-      key: "symbolCross",
-      value: '&#10010; (Addition Sign)'
-    }, {
-      key: "symbolX",
-      value: '&#10006; (Multiplication Sign)'
-    }, {
-      key: "symbolWye",
-      value: '&#120300; (Wye)'
-    }, {
-      key: "symbolStar",
-      value: '&#9733; (Star)'
-    }];
-    let table = $(tableId);
-    const disabled = isEditable ? '' : 'disabled';
-    this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'] = variable;
-    if (variable === 'None' && !isEditable) return;
-    let values = [];
-    let aggregates = {};
-    let nodes = this.visuals.twoD.commonService.session.data.nodes;
-    let n = nodes.length;
-    let vnodes = 0;
-    for (let i = 0; i < n; i++) {
-      let d = nodes[i];
-      if (!d.visible) continue;
-      vnodes++;
-      let dv = d[variable];
-      if (values.indexOf(dv) == -1) values.push(dv);
-      if (dv in aggregates) {
-        aggregates[dv]++;
-      } else {
-        aggregates[dv] = 1;
-      }
-    }
-    if (values.length > this.visuals.twoD.commonService.session.style.nodeSymbols.length) {
-      let symbols = [];
-      let m = Math.ceil(values.length / this.visuals.twoD.commonService.session.style.nodeSymbols.length);
-      while (m-- > 0) {
-        symbols = symbols.concat(this.visuals.twoD.commonService.session.style.nodeSymbols);
-      }
-      this.visuals.twoD.commonService.session.style.nodeSymbols = symbols;
-    }
-    table.empty().append('<tr>' + `<th ${isEditable ? 'contenteditable' : ''}>Node ${this.visuals.twoD.commonService.titleize(variable)}</th>` + (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-counts'] ? '<th>Count</th>' : '') + (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-frequencies'] ? '<th>Frequency</th>' : '') + '<th>Shape</th>' + '</tr>');
-    let options = $('#node-symbol2').html();
-    values.sort((a, b) => {
-      return aggregates[b] - aggregates[a];
-    });
-    this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3__WEBPACK_IMPORTED_MODULE_4__.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
-    values.forEach((v, i) => {
-      let selector = $(`<select ${disabled}></select>`).append(options).val(this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v)).on('change', e => {
-        this.visuals.twoD.commonService.session.style.nodeSymbols.splice(i, 1, e.target.value);
-        this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3__WEBPACK_IMPORTED_MODULE_4__.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
-        this.visuals.twoD.redrawNodes();
-      });
-      let symbolText = symbolMapping.find(x => x.key === this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v));
-      let cell = $('<td></td>').append(isEditable ? selector : symbolText ? symbolText.value : '');
-      let row = $('<tr>' + `<td ${isEditable ? 'contenteditable' : ''}> ${this.visuals.twoD.commonService.titleize('' + v)} </td> ` + (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-counts'] ? '<td>' + aggregates[v] + '</td>' : '') + (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-frequencies'] ? '<td>' + (aggregates[v] / vnodes).toLocaleString() + '</td>' : '') + '</tr>').append(cell);
-      table.append(row);
-    });
-  }
   onPolygonColorTableChange(e) {
     this.SelectedNetworkTableTypeVariable = e;
     this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-visible"] = e;
@@ -11363,28 +11605,50 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       this.visuals.twoD.commonService.session.style.widgets['node-highlight'] = true;
     }
   }
-  onNetworkGridlinesShowHideChange(e) {
-    if (e == "Show") {
-      // Reset width and height in case they have changed
-      this.visuals.twoD.halfWidth = $('#network').parent().width() / 2;
-      this.visuals.twoD.halfHeight = $('#network').parent().parent().parent().height() / 2;
-      this.visuals.twoD.commonService.session.style.widgets['network-gridlines-show'] = true;
+  drawGridlines(show) {
+    // Reset width and height in case they have changed
+    this.visuals.twoD.halfWidth = $('#network').parent().width() / 2;
+    this.visuals.twoD.halfHeight = $('#network').parent().parent().parent().height() / 2;
+    if (show) {
       let range = Math.ceil(Math.max(this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight) / 50);
       let ords = Object.keys(new Array(range).fill(null)).map(parseFloat);
-      d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.horizontal-gridlines').selectAll('line').data(ords).enter().append('line').attr('x1', 0).attr('x2', this.visuals.twoD.halfWidth * 2).attr('y1', function (d) {
+      // Horizontal lines
+      let horizontalLines = d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.horizontal-gridlines').selectAll('line').data(ords);
+      // Exit selection: remove extra lines
+      horizontalLines.exit().remove();
+      // Update selection: modify existing lines
+      horizontalLines.attr('x2', this.visuals.twoD.halfWidth * 2);
+      // Enter selection: add new lines
+      horizontalLines.enter().append('line').attr('x1', 0).attr('x2', this.visuals.twoD.halfWidth * 2).attr('y1', function (d) {
         return d * 100;
       }).attr('y2', function (d) {
         return d * 100;
       }).attr('stroke', 'lightgray');
-      d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.vertical-gridlines').selectAll('line').data(ords).enter().append('line').attr('x1', function (d) {
+      // Vertical lines
+      let verticalLines = d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.vertical-gridlines').selectAll('line').data(ords);
+      // Exit selection: remove extra lines
+      verticalLines.exit().remove();
+      // Update selection: modify existing lines
+      verticalLines.attr('y2', this.visuals.twoD.halfHeight * 2);
+      // Enter selection: add new lines
+      verticalLines.enter().append('line').attr('x1', function (d) {
         return d * 100;
       }).attr('x2', function (d) {
         return d * 100;
       }).attr('y1', 0).attr('y2', this.visuals.twoD.halfHeight * 2).attr('stroke', 'lightgray');
     } else {
-      this.visuals.twoD.commonService.session.style.widgets['network-gridlines-show'] = false;
       d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.horizontal-gridlines').html(null);
       d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.vertical-gridlines').html(null);
+    }
+  }
+  onNetworkGridlinesShowHideChange(e) {
+    console.log('network grid:', e);
+    if (e === "Show") {
+      this.visuals.twoD.commonService.session.style.widgets['network-gridlines-show'] = true;
+      this.drawGridlines(true);
+    } else {
+      this.visuals.twoD.commonService.session.style.widgets['network-gridlines-show'] = false;
+      this.drawGridlines(false);
     }
   }
   onNodeChargeChange(e) {
@@ -11550,11 +11814,11 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     this.cdref.detectChanges();
   }
   openExport() {
-    this.visuals.microbeTrace.GlobalSettingsDialogSettings.setStateBeforeExport();
-    this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.setStateBeforeExport();
-    this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.setStateBeforeExport();
-    this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.setStateBeforeExport();
-    this.visuals.twoD.Node2DNetworkExportDialogSettings.setStateBeforeExport();
+    // this.visuals.microbeTrace.GlobalSettingsDialogSettings.setStateBeforeExport();
+    // this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.setStateBeforeExport();
+    // this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.setStateBeforeExport();
+    // this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.setStateBeforeExport();
+    // this.visuals.twoD.Node2DNetworkExportDialogSettings.setStateBeforeExport();
     this.isExportClosed = false;
     this.visuals.twoD.Show2DExportPane = true;
   }
@@ -11698,31 +11962,31 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     this.onNetworkFrictionChange(this.SelecetedNetworkLinkStrengthVariable);
   }
 }, _class.ctorParameters = () => [{
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Injector
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_12__.Injector
 }, {
-  type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_12__.EventManager
+  type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_13__.EventManager
 }, {
   type: _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_2__.CommonService
 }, {
-  type: golden_layout__WEBPACK_IMPORTED_MODULE_13__.ComponentContainer,
+  type: golden_layout__WEBPACK_IMPORTED_MODULE_14__.ComponentContainer,
   decorators: [{
-    type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Inject,
+    type: _angular_core__WEBPACK_IMPORTED_MODULE_12__.Inject,
     args: [_app_base_component_directive__WEBPACK_IMPORTED_MODULE_10__.BaseComponentDirective.GoldenLayoutContainerInjectionToken]
   }]
 }, {
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.ElementRef
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_12__.ElementRef
 }, {
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.ChangeDetectorRef
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_12__.ChangeDetectorRef
 }], _class.propDecorators = {
   DisplayGlobalSettingsDialogEvent: [{
-    type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Output
+    type: _angular_core__WEBPACK_IMPORTED_MODULE_12__.Output
   }]
 }, _class);
-TwoDComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_14__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_11__.Component)({
+TwoDComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_15__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_12__.Component)({
   selector: 'TwoDComponent',
   template: _twoD_plugin_component_html_ngResource__WEBPACK_IMPORTED_MODULE_0__,
   styles: [(_twoD_plugin_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1___default())]
-}), (0,tslib__WEBPACK_IMPORTED_MODULE_14__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_11__.Injector, _angular_platform_browser__WEBPACK_IMPORTED_MODULE_12__.EventManager, _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_2__.CommonService, golden_layout__WEBPACK_IMPORTED_MODULE_13__.ComponentContainer, _angular_core__WEBPACK_IMPORTED_MODULE_11__.ElementRef, _angular_core__WEBPACK_IMPORTED_MODULE_11__.ChangeDetectorRef])], TwoDComponent);
+}), (0,tslib__WEBPACK_IMPORTED_MODULE_15__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_12__.Injector, _angular_platform_browser__WEBPACK_IMPORTED_MODULE_13__.EventManager, _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_2__.CommonService, golden_layout__WEBPACK_IMPORTED_MODULE_14__.ComponentContainer, _angular_core__WEBPACK_IMPORTED_MODULE_12__.ElementRef, _angular_core__WEBPACK_IMPORTED_MODULE_12__.ChangeDetectorRef])], TwoDComponent);
 
 (function (TwoDComponent) {
   TwoDComponent.componentTypeName = '2D Network';
@@ -16898,7 +17162,7 @@ var ___CSS_LOADER_API_NO_SOURCEMAP_IMPORT___ = __webpack_require__(/*! ../../../
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ 40479);
 var ___CSS_LOADER_EXPORT___ = ___CSS_LOADER_API_IMPORT___(___CSS_LOADER_API_NO_SOURCEMAP_IMPORT___);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".example-container {\n  width: 400px;\n  height: 200px;\n  margin: 12px;\n  border: 1px solid #555;\n}\n:host {\n  position: absolute;\n  overflow: hidden;\n}\nmat-drawer-content {\n  padding: 12px;\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n}\n#file-footer {\n  z-index: 1;\n  position: relative;\n}\n#file-prompt {\n  z-index: 1;\n  position: relative;\n}\n#alignment-preview {\n  margin: 0 15px;\n  padding: 0;\n  min-height: 115px;\n  max-height: 200px;\n  overflow-x: scroll;\n  overflow-y: auto;\n}\n#distance-metrics_chosen .chosen-choices {\n  border: 1px solid #ced4da;\n  border-radius: 0.25rem;\n}\n#loading-information {\n  font-family: \"Courier New\", Courier, \"Lucida Sans Typewriter\", \"Lucida Typewriter\", monospace;\n  font-size: 11px;\n  font-style: normal;\n  font-variant: normal;\n  font-weight: 400;\n  line-height: 23px;\n  padding: 10px;\n  white-space: pre-line;\n}\n.dna {\n  margin: 40px auto;\n  width: 360px;\n  height: 70px;\n  perspective: 466px;\n  transform-style: preserve-3d;\n}\n.ele {\n  width: 1px;\n  height: 70px;\n  float: left;\n  margin: 0 8px;\n  border-left: 1px #b0b0b0 dashed;\n  position: relative;\n  transform: rotateX(-360deg);\n  animation: run 2s linear infinite;\n}\n.ele:before,\n.ele:after {\n  content: \"\";\n  width: 10px;\n  height: 10px;\n  background: deepskyblue;\n  border-radius: 50%;\n  position: absolute;\n  left: 50%;\n  transform: translateX(-50%);\n}\n.ele:before {\n  top: -2px;\n  background: #000000;\n}\n.ele:after {\n  bottom: -2px;\n}\n.ele:nth-of-type(1) {\n  animation-delay: -0.15s;\n}\n.ele:nth-of-type(2) {\n  animation-delay: -0.3s;\n}\n.ele:nth-of-type(3) {\n  animation-delay: -0.45s;\n}\n.ele:nth-of-type(4) {\n  animation-delay: -0.6s;\n}\n.ele:nth-of-type(5) {\n  animation-delay: -0.75s;\n}\n.ele:nth-of-type(6) {\n  animation-delay: -0.9s;\n}\n.ele:nth-of-type(7) {\n  animation-delay: -1.05s;\n}\n.ele:nth-of-type(8) {\n  animation-delay: -1.2s;\n}\n.ele:nth-of-type(9) {\n  animation-delay: -1.35s;\n}\n.ele:nth-of-type(10) {\n  animation-delay: -1.5s;\n}\n.ele:nth-of-type(11) {\n  animation-delay: -1.65s;\n}\n.ele:nth-of-type(12) {\n  animation-delay: -1.8s;\n}\n.ele:nth-of-type(13) {\n  animation-delay: -1.95s;\n}\n.ele:nth-of-type(14) {\n  animation-delay: -2.1s;\n}\n.ele:nth-of-type(15) {\n  animation-delay: -2.25s;\n}\n.ele:nth-of-type(16) {\n  animation-delay: -2.4s;\n}\n.ele:nth-of-type(17) {\n  animation-delay: -2.55s;\n}\n.ele:nth-of-type(18) {\n  animation-delay: -2.7s;\n}\n.ele:nth-of-type(19) {\n  animation-delay: -2.85s;\n}\n.ele:nth-of-type(20) {\n  animation-delay: -3s;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".example-container {\n  width: 400px;\n  height: 200px;\n  margin: 12px;\n  border: 1px solid #555;\n}\n:host {\n  position: absolute;\n  overflow: hidden;\n}\nmat-drawer-content {\n  padding: 12px;\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n}\n.spinner-wrapper {\n  position: fixed;\n  /* Absolute positioning relative to the viewport */\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background-color: rgba(255, 255, 255, 0.8);\n  /* Optional background overlay */\n  z-index: 9999;\n  /* Ensures it appears above all content */\n  display: flex;\n  /* Utilizes Flexbox */\n  align-items: center;\n  /* Center vertically */\n  justify-content: center;\n  /* Center horizontally */\n}\n#file-footer {\n  z-index: 1;\n  position: relative;\n}\n#file-prompt {\n  z-index: 1;\n  position: relative;\n}\n#alignment-preview {\n  margin: 0 15px;\n  padding: 0;\n  min-height: 115px;\n  max-height: 200px;\n  overflow-x: scroll;\n  overflow-y: auto;\n}\n#distance-metrics_chosen .chosen-choices {\n  border: 1px solid #ced4da;\n  border-radius: 0.25rem;\n}\n#loading-information {\n  font-family: \"Courier New\", Courier, \"Lucida Sans Typewriter\", \"Lucida Typewriter\", monospace;\n  font-size: 11px;\n  font-style: normal;\n  font-variant: normal;\n  font-weight: 400;\n  line-height: 23px;\n  padding: 10px;\n  white-space: pre-line;\n}\n.dna {\n  margin: 40px auto;\n  width: 360px;\n  height: 70px;\n  perspective: 466px;\n  transform-style: preserve-3d;\n}\n.ele {\n  width: 1px;\n  height: 70px;\n  float: left;\n  margin: 0 8px;\n  border-left: 1px #b0b0b0 dashed;\n  position: relative;\n  transform: rotateX(-360deg);\n  animation: run 2s linear infinite;\n}\n.ele:before,\n.ele:after {\n  content: \"\";\n  width: 10px;\n  height: 10px;\n  background: deepskyblue;\n  border-radius: 50%;\n  position: absolute;\n  left: 50%;\n  transform: translateX(-50%);\n}\n.ele:before {\n  top: -2px;\n  background: #000000;\n}\n.ele:after {\n  bottom: -2px;\n}\n.ele:nth-of-type(1) {\n  animation-delay: -0.15s;\n}\n.ele:nth-of-type(2) {\n  animation-delay: -0.3s;\n}\n.ele:nth-of-type(3) {\n  animation-delay: -0.45s;\n}\n.ele:nth-of-type(4) {\n  animation-delay: -0.6s;\n}\n.ele:nth-of-type(5) {\n  animation-delay: -0.75s;\n}\n.ele:nth-of-type(6) {\n  animation-delay: -0.9s;\n}\n.ele:nth-of-type(7) {\n  animation-delay: -1.05s;\n}\n.ele:nth-of-type(8) {\n  animation-delay: -1.2s;\n}\n.ele:nth-of-type(9) {\n  animation-delay: -1.35s;\n}\n.ele:nth-of-type(10) {\n  animation-delay: -1.5s;\n}\n.ele:nth-of-type(11) {\n  animation-delay: -1.65s;\n}\n.ele:nth-of-type(12) {\n  animation-delay: -1.8s;\n}\n.ele:nth-of-type(13) {\n  animation-delay: -1.95s;\n}\n.ele:nth-of-type(14) {\n  animation-delay: -2.1s;\n}\n.ele:nth-of-type(15) {\n  animation-delay: -2.25s;\n}\n.ele:nth-of-type(16) {\n  animation-delay: -2.4s;\n}\n.ele:nth-of-type(17) {\n  animation-delay: -2.55s;\n}\n.ele:nth-of-type(18) {\n  animation-delay: -2.7s;\n}\n.ele:nth-of-type(19) {\n  animation-delay: -2.85s;\n}\n.ele:nth-of-type(20) {\n  animation-delay: -3s;\n}\n", ""]);
 // Exports
 module.exports = ___CSS_LOADER_EXPORT___.toString();
 
@@ -17260,7 +17524,7 @@ module.exports = "\n<router-outlet></router-outlet>\n";
 /***/ ((module) => {
 
 "use strict";
-module.exports = "﻿﻿<div class=\"m-content\">\n\n    <div id=\"file-panel\" class=\"container-fluid\" style=\"min-height:710px; padding-top: 60px;\">\n        <div id=\"file-table\" class=\"container\">\n        </div>\n        <div id=\"file-prompt\" *ngIf=\"this.commonService?.session?.files != (undefined || []) && this.commonService.session.files.length === 0\" class=\"d-flex justify-content-center\">\n            <h1><b>Please add data files to load...</b></h1>\n        </div>\n    </div>\n\n    <div id=\"tool-btn-container\" class=\"m-portlet\">\n        <span style=\"overflow: visible; position: relative; width: 110px;\">\n            <a title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openSettings()\"><i class=\"flaticon-settings primary\"></i></a>\n        </span>\n    </div>\n    \n\n\n\n    <div class=\"view-controls\">\n        <p-dialog id=\"file-settings-pane\" [(visible)]=\"displayFileSettings\" header=\"File Settings\">\n            <div class=\"modal-dialog modal-lg\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        <tabset class=\"tab-container tabbable-line\" style='width: 100%;'>\n                            <tab heading=\"{{'Files' | localize}}\" [active]=\"true\" customClass=\"m-tabs__item\">\n                                <div id=\"file-settings\" class=\"tab-pane fade active show\" role=\"tabpanel\">\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-5\">\n                                            <label style=\"padding-left: 10px;\" for=\"default-distance-metric\" class=\"mr-2\" title=\"Which Genetic Distance Metric should Microbe use to first construct the network?\">\n                                                {{\"Distance Metric\" | localize}}\n                                            </label>\n                                        </div>\n                                        <div class=\"col-7\">\n                                            <select id=\"default-distance-metric\" class=\"form-control form-control-sm mr-5\" [(ngModel)]=\"SelectedDefaultDistanceMetricVariable\" (ngModelChange)=\"onDistanceMetricChange($event)\">\n                                                <option value=\"tn93\" selected>TN93</option>\n                                                <option value=\"snps\">SNPs</option>\n                                            </select>\n                                        </div>\n                                    </div>\n                                    <div id=\"ambiguities-row\" class=\"form-group row\">\n                                        <div class=\"col-5\">\n                                            <label style=\"padding-left: 10px;\" for=\"ambiguity-resolution-strategy\" class=\"mr-2\" title=\"What Strategy should MicrobeTrace use to handle ambiguities?\">\n                                                {{\"Ambiguities\" | localize}}\n                                            </label>\n                                        </div>\n                                        <div class=\"col-7\">\n                                            <select id=\"ambiguity-resolution-strategy\" class=\"form-control form-control-sm mr-5\" [(ngModel)]=\"SelectedAmbiguityResolutionStrategyVariable\">\n                                                <option value=\"AVERAGE\">Average</option>\n                                                <option value=\"RESOLVE\">Resolve</option>\n                                                <option value=\"SKIP\">Skip</option>\n                                                <option value=\"GAPMM\">GapMM</option>\n                                                <option value=\"HIVTRACE-G\">HIV-TRACE -g</option>\n                                            </select>\n                                        </div>\n                                    </div>\n                                    <div id=\"ambiguity-threshold-row\" class=\"form-group row\" *ngIf=\"SelectedAmbiguityResolutionStrategyVariable=='HIVRACE-G' || SelectedAmbiguityThresholdVariable=='RESOLVE'\">\n                                        <div class=\"col-5\">\n                                            <label style=\"padding-left: 10px;\" for=\"ambiguity-threshold\" class=\"mr-2\" title=\"What's the maximum proportion of ambiguities that should be resolved? (Ambiguities will be averaged rather than resolved in sequences with > this threshold.) Please note that this can be changed later.\">\n                                                {{\"Ambiguity Threshold\" | localize}}\n                                            </label>\n                                        </div>\n                                        <div class=\"col-7\">\n                                            <input type=\"number\" id=\"ambiguity-threshold\" class=\"form-control form-control-sm\" min=\"0\" value=\"0.015\" step=\"0.001\" [(ngModel)]=\"SelectedAmbiguityThresholdVariable\" (ngModelChange)=\"onAmbiguityThresholdChanged()\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-5\">\n                                            <label style=\"padding-left: 10px;\" for=\"default-distance-threshold\" class=\"mr-2\" title=\"What's the maximum genetic distance you wish to consider linked? Please note that this can be changed later.\">\n                                                {{\"Link Threshold\" | localize}}\n                                            </label>\n                                        </div>\n                                        <div class=\"col-7\">\n                                            <input type=\"number\" id=\"default-distance-threshold\" class=\"form-control form-control-sm\" min=\"0\" value=\"0.015\" step=\"0.001\" [(ngModel)]=\"SelectedDefaultDistanceThresholdVariable\" (ngModelChange)=\"onLinkThresholdChange($event)\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-5\">\n                                            <label style=\"padding-left: 10px;\" for=\"default-view\">{{\"View to Launch\" | localize}}</label>\n                                        </div>\n                                        <div class=\"col-7\">\n                                            <select id=\"default-view\" class=\"form-control form-control-sm\" (change)=\"changeDefaultView($event)\" title=\"Which view should MicrobeTrace render first, once it has successfully processed the data?\" [(ngModel)]=\"SelectedDefaultViewVariable\">\n                                                <option value=\"2D Network\" selected>2D Network</option>\n                                                <option value=\"Table\">Table</option>\n                                                <option value=\"Map\">Map</option>\n                                                <option value=\"Phylogenetic Tree\">Phylogenetic Tree</option>\n                                            </select>\n                                        </div>\n                                    </div>\n                                </div>\n                            </tab>\n                            <tab heading=\"{{'Experimental' | localize}}\" customClass=\"m-tabs__item\">\n                                <div id=\"experimental-settings\" class=\"tab-pane fade active show\" role=\"tabpanel\">\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-12\">\n                                            <div class=\"alert alert-warning alert-dismissible\" role=\"alert\">\n                                                <p>The following settings are experimental! Use at your own risk!</p>\n                                                <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n                                                    <span aria-hidden=\"true\">&times;</span>\n                                                </button>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"Would you like to generate a network based on random data?\">\n                                        <div class=\"col-4\">\n                                            <label style=\"padding-left: 10px;\" class=\"mr-2\">{{\"Generate\" | localize}}</label>\n                                        </div>\n                                        <div class=\"col\">\n                                            <input id=\"generate-number\" type=\"number\" class=\"form-control form-control-sm\" min=\"1\" max=\"2000\" step=\"1\" value=\"100\" [(ngModel)]=\"SelectedGenerateNumberVariable\">\n                                        </div>\n                                        <div class=\"col\">\n                                            <button id=\"generate-sequences\" class=\"btn btn-light btn-sm col\">Sequences</button>\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"Would you like to attempt to infer the direction of your links?\">\n                                        <div class=\"col-4\">\n                                            <label style=\"padding-left: 10px;\" class=\"mr-2\">{{\"Directionality\" | localize}}</label>\n                                        </div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"DirectionalityTypes\" [(ngModel)]=\"SelectedDirectionalityTypeVariable\"></p-selectButton>                                           \n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"Would you like to attempt to triangulate missing values in your distance matrices?\">\n                                        <div class=\"col-4\">\n                                            <label style=\"padding-left: 10px;\" class=\"mr-2\">{{\"Triangulation\" | localize}}</label>\n                                        </div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"TriangulationTypes\" [(ngModel)]=\"SelectedTriangulationTypeVariable\"></p-selectButton>                                            \n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\"\n                                         title=\"Should MicrobeTrace automatically stash your session so if your computer crashes you can recover your session?\n                                Please note that this causes MicrobeTrace to store data on your computer's hard drive, which may have implications for PII.\">\n                                        <div class=\"col-4\">\n                                            <label style=\"padding-left: 10px;\" class=\"mr-2\">{{\"Autostashing\" | localize}}</label>\n                                        </div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"AutostashingTypes\" [(ngModel)]=\"SelectedAutostashingTypeVariable\"></p-selectButton>                                          \n                                        </div>\n                                    </div>\n                                </div>\n                            </tab>\n                        </tabset>\n                    </div>\n                </div>\n            </div>\n        </p-dialog>\n\n\n\n\n        <p-dialog id=\"sequence-controls-modal\" [(visible)]=\"displaySequenceSettings\" header=\"Sequence Settings\">\n            <div class=\"modal-dialog modal-lg\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        <tabset class=\"tab-container tabbable-line\" style='width: 100%;'>\n                            <tab heading=\"{{'Alignment' | localize}}\" [active]=\"true\" customClass=\"m-tabs__item\">\n                                <div id=\"sequence-alignment\" class=\"tab-pane fade show active\" role=\"tabpanel\">\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-12\">\n                                            <div class=\"alert alert-warning alert-dismissible\" role=\"alert\">\n                                                <p>\n                                                    <span>{{\"Micro-Tracing \" | localize}}</span>\n                                                    <span>{{\"Next\" | localize}}</span>\n                                                    <span><sup>&reg;</sup></span>\n                                                    is not intended to be an alignment program (although it can be used in that way).\n                                                    For best results, please align your sequences using\n                                                    <a href=\"https://en.wikipedia.org/wiki/List_of_sequence_alignment_software\" target=\"_blank\" rel=\"noreferrer noopener\">an external tool</a>\n                                                    before loading them into MicrobeTrace.\n                                                    <a href=\"https://github.com/CDCgov/MicrobeTrace/wiki/Alignment\" class=\"ifOnline\" target=\"_blank\" rel=\"noreferrer noopener\">Click here for additional information.</a>\n                                                </p>\n                                                <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n                                                    <span aria-hidden=\"true\">&times;</span>\n                                                </button>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-2\" title=\"Should MicrobeTrace align your sequences?\">Align</div>\n                                        <div class=\"col-10\">\n                                            <p-selectButton [options]=\"AlignTypes\" [(ngModel)]=\"SelectedAlignTypeVariable\" (onChange)=\"IsReferenceSourceSelected=(SelectedAlignTypeVariable=='None' ? false : true)\"></p-selectButton>\n                                        </div>\n                                    </div>\n\n                                    <p-accordion *ngIf=\"IsReferenceSourceSelected == true\">\n                                        <p-accordionTab style=\"color:#495057\" header=\"Reference Source Options\" [(selected)]=\"IsReferenceSourceSelected\">\n\n                                            <div class=\"form-group row alignConfigRow\">\n                                                <div class=\"col-2\" title=\"What should MicrobeTrace use as a reference to align your sequences?\">Reference Source</div>\n                                                <div class=\"col-10\">\n                                                    <p-selectButton [options]=\"ReferenceTypes\" [(ngModel)]=\"SelectedReferenceTypeVariable\" (onChange)=\"IsReferenceOptionsSelected=(SelectedReferenceTypeVariable=='LoadFrom FASTA' ? true : false)\"></p-selectButton>\n                                                </div>\n                                            </div>\n\n                                            <p-accordionTab style=\"color:#495057\" header=\"Reference Options\" *ngIf=\"IsReferenceOptionsSelected == true\" [(selected)]=\"IsReferenceOptionsSelected\">\n                                                <div class=\"form-group row\" id=\"reference-file-row\">\n                                                    <div class=\"col-2\" title=\"Against what sequence should MicrobeTrace align your sequences?\">Reference</div>\n                                                    <div class=\"col-5\">\n                                                        <div class=\"custom-file\">\n                                                            <input type=\"file\" class=\"custom-file-input\" id=\"refSeqFileLoad\" [(ngModel)]=\"SelectedRefSeqFileLoadVariable\">\n                                                            <label class=\"custom-file-label\" for=\"refSeqFileLoad\" style=\"overflow:hidden\">HXB2</label>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col-5\">\n                                                        <p-dropdown id=\"refSeqID\" [options]=\"RefSeqIDTypes\" [(ngModel)]=\"SelectedRefSeqIDVariable\"></p-dropdown>\n\n                                                       \n                                                    </div>\n                                                </div>\n                                            </p-accordionTab>\n\n                                                    <div class=\"row alignConfigRow\">\n                                                        <div class=\"form-group col offset-2\" title=\"How much should MicrobeTrace reward matching bases?\">\n                                                            <label for=\"alignerMatch\">Match Reward</label>\n                                                            <input type=\"number\" id=\"alignerMatch\" class=\"form-control\" value=\"1\" min=\"0\" [(ngModel)]=\"SelectedAlignerMatchVariable\">\n                                                        </div>\n                                                        <div class=\"form-group col\" title=\"How much should MicrobeTrace penalize non-matching bases?\">\n                                                            <label for=\"alignerMismatch\">Mismatch Cost</label>\n                                                            <input type=\"number\" id=\"alignerMismatch\" class=\"form-control\" value=\"1\" min=\"0\" [(ngModel)]=\"SelectedAlignerMismatchVariable\">\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"row alignConfigRow\">\n                                                        <div class=\"form-group col offset-2\" title=\"How much should MicrobeTrace Penalize opening a gap?\">\n                                                            <label for=\"alignerGapO\">Gap Opening Cost</label>\n                                                            <input type=\"number\" id=\"alignerGapO\" class=\"form-control\" value=\"5\" min=\"0\" [(ngModel)]=\"SelectedAlignerGapOVariable\">\n                                                        </div>\n                                                        <div class=\"form-group col\" title=\"How much should MicrobeTrace Penalize extending a gap?\">\n                                                            <label for=\"alignerGapE\">Gap Extension Cost</label>\n                                                            <input type=\"number\" id=\"alignerGapE\" class=\"form-control\" value=\"2\" min=\"0\" [(ngModel)]=\"SelectedAlignerGapEVariable\">\n                                                        </div>\n                                                    </div>\n                                        </p-accordionTab>\n                                    </p-accordion>\n\n\n\n                                    <div class=\"row alignPreviewRow\">\n                                        <div class=\"w-100 text-center\" id=\"alignment-preview\"></div>\n                                    </div>\n                                </div>\n                            </tab>\n                            <tab heading=\"{{'Audit' | localize}}\" [active]=\"true\" customClass=\"m-tabs__item\">\n                                <div id=\"sequence-auditor\" class=\"tab-pane fade show\" role=\"tabpanel\">\n                                    <div class=\"row mb-3\" style=\"padding-left:15px;\">\n                                        <div class=\"form-check col\" title=\"Checks to see if a Sequence is empty.\">\n                                            <input class=\"form-check-input\" style=\"padding-left:5px;\" type=\"checkbox\" id=\"audit-empty\" checked [(ngModel)]=\"SelectedAuditEmptyVariable\">\n                                            <label class=\"form-check-label\" style=\"padding-left:5px;\" for=\"audit-empty\">\n                                                Empty\n                                            </label>\n                                        </div>\n                                        <div class=\"form-check col\" title=\"Checks to see if a Sequence is all gaps.\">\n                                            <input class=\"form-check-input\" type=\"checkbox\" id=\"audit-gaps\" checked [(ngModel)]=\"SelectedAuditGapsVariable\">\n                                            <label class=\"form-check-label\" style=\"padding-left:5px;\" for=\"audit-gaps\">\n                                                Gaps\n                                            </label>\n                                        </div>\n                                        <div class=\"form-check col\" title=\"Check to see if sequence contains any characters that are RNA instead of DNA.\">\n                                            <input class=\"form-check-input\" type=\"checkbox\" id=\"audit-RNA\" checked [(ngModel)]=\"SelectedAuditRNAVariable\">\n                                            <label class=\"form-check-label\" style=\"padding-left:5px;\" for=\"audit-RNA\">\n                                                RNA\n                                            </label>\n                                        </div>\n                                        <div class=\"form-check col\" title=\"Check to see if Sequence contains any characters that represent Amino Acids.\">\n                                            <input class=\"form-check-input\" type=\"checkbox\" id=\"audit-amino-acids\" checked [(ngModel)]=\"SelectedAuditAminoAcidsVariable\">\n                                            <label class=\"form-check-label\" style=\"padding-left:5px;\" for=\"audit-amino-acids\">\n                                                Amino Acids\n                                            </label>\n                                        </div>\n                                        <div class=\"form-check col\" title=\"Check to see if Sequence contains any characters describing an alignment.\">\n                                            <input class=\"form-check-input\" type=\"checkbox\" id=\"audit-CIGAR\" checked [(ngModel)]=\"SelectedAuditCIGARVariable\">\n                                            <label class=\"form-check-label\" style=\"padding-left:5px;\" for=\"audit-CIGAR\">\n                                                CIGAR\n                                            </label>\n                                        </div>\n                                        <div class=\"form-check col\" title=\"Check to see if Sequence contains any characters that are illegal in any genomic or proteomic alphabet.\">\n                                            <input class=\"form-check-input\" type=\"checkbox\" id=\"audit-malformed\" checked [(ngModel)]=\"SelectedAuditMalformedVariable\">\n                                            <label class=\"form-check-label\" style=\"padding-left:5px;\" for=\"audit-malformed\">\n                                                Malformed\n                                            </label>\n                                        </div>\n                                        <div class=\"col\">\n                                            <button type=\"button\" class=\"btn btn-primary btn-sm w-100\" id=\"audit-launcher\" (click)=\"run()\">Run</button>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\" id=\"audited-sequences\"></div>\n                                    <div class=\"row flex-row-reverse\" style=\"padding-right: 21px\">\n                                        <button class=\"btn btn-danger btn-sm\" id=\"audit-toggle-all\" (click)=\"toglleAll()\">Toggle All</button>\n                                    </div>\n                                </div>\n                            </tab>\n                        </tabset>\n                    </div>\n                    <div class=\"modal-footer clearfix\">\n                        <button type=\"submit\" class=\"btn btn-success pull-right\" data-dismiss=\"modal\"\n                                title=\"Confirm Load Settings are All Properly Set\" (click)=\"displaySequenceSettings = !displaySequenceSettings\">\n                            Confirm\n                        </button>\n                    </div>\n                </div>\n            </div>\n        </p-dialog>\n\n    </div><!-- Files Settings & Sequence Settings/.modal -->\n\n\n    <div class=\"view-controls\">\n        <p-dialog id=\"loading-information-modal\" [(visible)]=\"displayloadingInformationModal\" header=\"Processing Files...\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                   \n\n                        <!-- <img class=\"img-responsive\" [src]=\"appRootUrl() + 'assets/common/images/giphy.gif'\" alt=\"logo\" height=\"300\" /> -->\n\n                        <div id=\"loading-information-collapse\" class=\"collapse show\">\n                            <div id=\"loading-information\" class=\"card card-body\">\n\n                                <a *ngFor=\"let message of messages\">\n                                    {{ message }}\n                                </a>\n                                <br>\n\n                            </div>\n                        </div>\n                    \n                    <p-footer>\n                        <button type=\"button\" class=\"btn btn-success\" data-dismiss=\"modal\" (click)=\"displayloadingInformationModal=false\">Close</button>\n                    </p-footer>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog>\n    </div><!-- Loading Files/.modal -->\n\n\n    <div id=\"file-footer\">\n        <!-- <p-accordion (onOpen)=\"accordianToggle(1)\" (onClose)=\"accordianToggle(0)\" >\n            <p-accordionTab *ngIf=\"uniqueNodes.length > 0\" header=\"{{uniqueNodes.length}} node(s) missing in edge list\">\n                <table>\n                    <tr>\n                        <th>Node</th>\n                    </tr>\n                    <tr *ngFor=\"let node of uniqueNodes\">\n                        <td>\n                            {{node}}\n                        </td>\n                    </tr>\n                </table>\n            </p-accordionTab>\n            <p-accordionTab *ngIf=\"uniqueEdgeNodes.length > 0\" header=\"{{uniqueEdgeNodes.length}} edge node(s) missing in node list\">\n                <table>\n                    <tr>\n                        <th>Node</th>\n                    </tr>\n                    <tr *ngFor=\"let node of uniqueEdgeNodes\">\n                        <td>\n                            {{node}}\n                        </td>\n                    </tr>\n                </table>\n            </p-accordionTab>\n\n        </p-accordion> -->\n\n        <br/>\n\n        <div class=\"m-portlet\" style=\"padding: 1px\">\n            <div class=\"d-flex justify-content-center\">\n                <span>\n                    <input type=\"file\" id=\"data-files1\" class=\"d-none\" multiple=\"true\" onclick=\"this.value=null;\" (change)=\"processFiles($event.target.files)\">\n                    <label for=\"data-files1\" class=\"btn btn-primary btn-nr floater mb-0\">Add File(s)</label>\n                </span>\n                <span>\n                    <button type=\"button\" class=\"btn btn-default btn-nr floater\" (click)=\"showSequenceSettings()\">Sequence Controls</button>\n                </span>\n                <span>\n                    <button id=\"launch\" class=\"btn btn-success\" (click)=\"launchClick()\" title=\"Please select a Network CSV or FASTA File\" disabled>Launch</button>\n                </span>\n            </div>\n        </div>\n    </div>\n\n\n</div>\n";
+module.exports = "﻿﻿<div class=\"m-content\">\n\n    <div id=\"file-panel\" class=\"container-fluid\" style=\"min-height:710px; padding-top: 60px;\">\n        <div id=\"file-table\" [style.display]=\"isLoadingFiles ? 'none' : 'block'\" class=\"container\">\n        </div>\n        <div id=\"file-prompt\" *ngIf=\"this.commonService?.session?.files != (undefined || []) && this.commonService.session.files.length === 0\" class=\"d-flex justify-content-center\">\n            <h1><b>Please add data files to load...</b></h1>\n        </div>\n        <div class=\"spinner-wrapper\" *ngIf=\"isLoadingFiles\">\n            <mat-progress-spinner mode=\"indeterminate\"></mat-progress-spinner>\n        </div>\n    \n    </div>\n\n    <div id=\"tool-btn-container\" class=\"m-portlet\">\n        <span style=\"overflow: visible; position: relative; width: 110px;\">\n            <a title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openSettings()\"><i class=\"flaticon-settings primary\"></i></a>\n        </span>\n    </div>\n    \n   \n\n    <div class=\"view-controls\">\n        <p-dialog id=\"file-settings-pane\" [(visible)]=\"displayFileSettings\" header=\"File Settings\">\n            <div class=\"modal-dialog modal-lg\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        <tabset class=\"tab-container tabbable-line\" style='width: 100%;'>\n                            <tab heading=\"{{'Files' | localize}}\" [active]=\"true\" customClass=\"m-tabs__item\">\n                                <div id=\"file-settings\" class=\"tab-pane fade active show\" role=\"tabpanel\">\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-5\">\n                                            <label style=\"padding-left: 10px;\" for=\"default-distance-metric\" class=\"mr-2\" title=\"Which Genetic Distance Metric should Microbe use to first construct the network?\">\n                                                {{\"Distance Metric\" | localize}}\n                                            </label>\n                                        </div>\n                                        <div class=\"col-7\">\n                                            <select id=\"default-distance-metric\" class=\"form-control form-control-sm mr-5\" [(ngModel)]=\"SelectedDefaultDistanceMetricVariable\" (ngModelChange)=\"onDistanceMetricChange($event)\">\n                                                <option value=\"tn93\" selected>TN93</option>\n                                                <option value=\"snps\">SNPs</option>\n                                            </select>\n                                        </div>\n                                    </div>\n                                    <div id=\"ambiguities-row\" class=\"form-group row\">\n                                        <div class=\"col-5\">\n                                            <label style=\"padding-left: 10px;\" for=\"ambiguity-resolution-strategy\" class=\"mr-2\" title=\"What Strategy should MicrobeTrace use to handle ambiguities?\">\n                                                {{\"Ambiguities\" | localize}}\n                                            </label>\n                                        </div>\n                                        <div class=\"col-7\">\n                                            <select id=\"ambiguity-resolution-strategy\" class=\"form-control form-control-sm mr-5\" [(ngModel)]=\"SelectedAmbiguityResolutionStrategyVariable\">\n                                                <option value=\"AVERAGE\">Average</option>\n                                                <option value=\"RESOLVE\">Resolve</option>\n                                                <option value=\"SKIP\">Skip</option>\n                                                <option value=\"GAPMM\">GapMM</option>\n                                                <option value=\"HIVTRACE-G\">HIV-TRACE -g</option>\n                                            </select>\n                                        </div>\n                                    </div>\n                                    <div id=\"ambiguity-threshold-row\" class=\"form-group row\" *ngIf=\"SelectedAmbiguityResolutionStrategyVariable=='HIVRACE-G' || SelectedAmbiguityThresholdVariable=='RESOLVE'\">\n                                        <div class=\"col-5\">\n                                            <label style=\"padding-left: 10px;\" for=\"ambiguity-threshold\" class=\"mr-2\" title=\"What's the maximum proportion of ambiguities that should be resolved? (Ambiguities will be averaged rather than resolved in sequences with > this threshold.) Please note that this can be changed later.\">\n                                                {{\"Ambiguity Threshold\" | localize}}\n                                            </label>\n                                        </div>\n                                        <div class=\"col-7\">\n                                            <input type=\"number\" id=\"ambiguity-threshold\" class=\"form-control form-control-sm\" min=\"0\" value=\"0.015\" step=\"0.001\" [(ngModel)]=\"SelectedAmbiguityThresholdVariable\" (ngModelChange)=\"onAmbiguityThresholdChanged()\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-5\">\n                                            <label style=\"padding-left: 10px;\" for=\"default-distance-threshold\" class=\"mr-2\" title=\"What's the maximum genetic distance you wish to consider linked? Please note that this can be changed later.\">\n                                                {{\"Link Threshold\" | localize}}\n                                            </label>\n                                        </div>\n                                        <div class=\"col-7\">\n                                            <input type=\"number\" id=\"default-distance-threshold\" class=\"form-control form-control-sm\" min=\"0\" value=\"0.015\" step=\"0.001\" [(ngModel)]=\"SelectedDefaultDistanceThresholdVariable\" (ngModelChange)=\"onLinkThresholdChange($event)\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-5\">\n                                            <label style=\"padding-left: 10px;\" for=\"default-view\">{{\"View to Launch\" | localize}}</label>\n                                        </div>\n                                        <div class=\"col-7\">\n                                            <select id=\"default-view\" class=\"form-control form-control-sm\" (change)=\"changeDefaultView($event)\" title=\"Which view should MicrobeTrace render first, once it has successfully processed the data?\" [(ngModel)]=\"SelectedDefaultViewVariable\">\n                                                <option value=\"2D Network\" selected>2D Network</option>\n                                                <option value=\"Table\">Table</option>\n                                                <option value=\"Map\">Map</option>\n                                                <option value=\"Phylogenetic Tree\">Phylogenetic Tree</option>\n                                            </select>\n                                        </div>\n                                    </div>\n                                </div>\n                            </tab>\n                            <tab heading=\"{{'Experimental' | localize}}\" customClass=\"m-tabs__item\">\n                                <div id=\"experimental-settings\" class=\"tab-pane fade active show\" role=\"tabpanel\">\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-12\">\n                                            <div class=\"alert alert-warning alert-dismissible\" role=\"alert\">\n                                                <p>The following settings are experimental! Use at your own risk!</p>\n                                                <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n                                                    <span aria-hidden=\"true\">&times;</span>\n                                                </button>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"Would you like to generate a network based on random data?\">\n                                        <div class=\"col-4\">\n                                            <label style=\"padding-left: 10px;\" class=\"mr-2\">{{\"Generate\" | localize}}</label>\n                                        </div>\n                                        <div class=\"col\">\n                                            <input id=\"generate-number\" type=\"number\" class=\"form-control form-control-sm\" min=\"1\" max=\"2000\" step=\"1\" value=\"100\" [(ngModel)]=\"SelectedGenerateNumberVariable\">\n                                        </div>\n                                        <div class=\"col\">\n                                            <button id=\"generate-sequences\" class=\"btn btn-light btn-sm col\">Sequences</button>\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"Would you like to attempt to infer the direction of your links?\">\n                                        <div class=\"col-4\">\n                                            <label style=\"padding-left: 10px;\" class=\"mr-2\">{{\"Directionality\" | localize}}</label>\n                                        </div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"DirectionalityTypes\" [(ngModel)]=\"SelectedDirectionalityTypeVariable\"></p-selectButton>                                           \n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"Would you like to attempt to triangulate missing values in your distance matrices?\">\n                                        <div class=\"col-4\">\n                                            <label style=\"padding-left: 10px;\" class=\"mr-2\">{{\"Triangulation\" | localize}}</label>\n                                        </div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"TriangulationTypes\" [(ngModel)]=\"SelectedTriangulationTypeVariable\"></p-selectButton>                                            \n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\"\n                                         title=\"Should MicrobeTrace automatically stash your session so if your computer crashes you can recover your session?\n                                Please note that this causes MicrobeTrace to store data on your computer's hard drive, which may have implications for PII.\">\n                                        <div class=\"col-4\">\n                                            <label style=\"padding-left: 10px;\" class=\"mr-2\">{{\"Autostashing\" | localize}}</label>\n                                        </div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"AutostashingTypes\" [(ngModel)]=\"SelectedAutostashingTypeVariable\"></p-selectButton>                                          \n                                        </div>\n                                    </div>\n                                </div>\n                            </tab>\n                        </tabset>\n                    </div>\n                </div>\n            </div>\n        </p-dialog>\n\n\n\n\n        <p-dialog id=\"sequence-controls-modal\" [(visible)]=\"displaySequenceSettings\" header=\"Sequence Settings\">\n            <div class=\"modal-dialog modal-lg\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        <tabset class=\"tab-container tabbable-line\" style='width: 100%;'>\n                            <tab heading=\"{{'Alignment' | localize}}\" [active]=\"true\" customClass=\"m-tabs__item\">\n                                <div id=\"sequence-alignment\" class=\"tab-pane fade show active\" role=\"tabpanel\">\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-12\">\n                                            <div class=\"alert alert-warning alert-dismissible\" role=\"alert\">\n                                                <p>\n                                                    <span>{{\"Micro-Tracing \" | localize}}</span>\n                                                    <span>{{\"Next\" | localize}}</span>\n                                                    <span><sup>&reg;</sup></span>\n                                                    is not intended to be an alignment program (although it can be used in that way).\n                                                    For best results, please align your sequences using\n                                                    <a href=\"https://en.wikipedia.org/wiki/List_of_sequence_alignment_software\" target=\"_blank\" rel=\"noreferrer noopener\">an external tool</a>\n                                                    before loading them into MicrobeTrace.\n                                                    <a href=\"https://github.com/CDCgov/MicrobeTrace/wiki/Alignment\" class=\"ifOnline\" target=\"_blank\" rel=\"noreferrer noopener\">Click here for additional information.</a>\n                                                </p>\n                                                <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n                                                    <span aria-hidden=\"true\">&times;</span>\n                                                </button>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-2\" title=\"Should MicrobeTrace align your sequences?\">Align</div>\n                                        <div class=\"col-10\">\n                                            <p-selectButton [options]=\"AlignTypes\" [(ngModel)]=\"SelectedAlignTypeVariable\" (onChange)=\"IsReferenceSourceSelected=(SelectedAlignTypeVariable=='None' ? false : true)\"></p-selectButton>\n                                        </div>\n                                    </div>\n\n                                    <p-accordion *ngIf=\"IsReferenceSourceSelected == true\">\n                                        <p-accordionTab style=\"color:#495057\" header=\"Reference Source Options\" [(selected)]=\"IsReferenceSourceSelected\">\n\n                                            <div class=\"form-group row alignConfigRow\">\n                                                <div class=\"col-2\" title=\"What should MicrobeTrace use as a reference to align your sequences?\">Reference Source</div>\n                                                <div class=\"col-10\">\n                                                    <p-selectButton [options]=\"ReferenceTypes\" [(ngModel)]=\"SelectedReferenceTypeVariable\" (onChange)=\"IsReferenceOptionsSelected=(SelectedReferenceTypeVariable=='LoadFrom FASTA' ? true : false)\"></p-selectButton>\n                                                </div>\n                                            </div>\n\n                                            <p-accordionTab style=\"color:#495057\" header=\"Reference Options\" *ngIf=\"IsReferenceOptionsSelected == true\" [(selected)]=\"IsReferenceOptionsSelected\">\n                                                <div class=\"form-group row\" id=\"reference-file-row\">\n                                                    <div class=\"col-2\" title=\"Against what sequence should MicrobeTrace align your sequences?\">Reference</div>\n                                                    <div class=\"col-5\">\n                                                        <div class=\"custom-file\">\n                                                            <input type=\"file\" class=\"custom-file-input\" id=\"refSeqFileLoad\" [(ngModel)]=\"SelectedRefSeqFileLoadVariable\">\n                                                            <label class=\"custom-file-label\" for=\"refSeqFileLoad\" style=\"overflow:hidden\">HXB2</label>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col-5\">\n                                                        <p-dropdown id=\"refSeqID\" [options]=\"RefSeqIDTypes\" [(ngModel)]=\"SelectedRefSeqIDVariable\"></p-dropdown>\n\n                                                       \n                                                    </div>\n                                                </div>\n                                            </p-accordionTab>\n\n                                                    <div class=\"row alignConfigRow\">\n                                                        <div class=\"form-group col offset-2\" title=\"How much should MicrobeTrace reward matching bases?\">\n                                                            <label for=\"alignerMatch\">Match Reward</label>\n                                                            <input type=\"number\" id=\"alignerMatch\" class=\"form-control\" value=\"1\" min=\"0\" [(ngModel)]=\"SelectedAlignerMatchVariable\">\n                                                        </div>\n                                                        <div class=\"form-group col\" title=\"How much should MicrobeTrace penalize non-matching bases?\">\n                                                            <label for=\"alignerMismatch\">Mismatch Cost</label>\n                                                            <input type=\"number\" id=\"alignerMismatch\" class=\"form-control\" value=\"1\" min=\"0\" [(ngModel)]=\"SelectedAlignerMismatchVariable\">\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"row alignConfigRow\">\n                                                        <div class=\"form-group col offset-2\" title=\"How much should MicrobeTrace Penalize opening a gap?\">\n                                                            <label for=\"alignerGapO\">Gap Opening Cost</label>\n                                                            <input type=\"number\" id=\"alignerGapO\" class=\"form-control\" value=\"5\" min=\"0\" [(ngModel)]=\"SelectedAlignerGapOVariable\">\n                                                        </div>\n                                                        <div class=\"form-group col\" title=\"How much should MicrobeTrace Penalize extending a gap?\">\n                                                            <label for=\"alignerGapE\">Gap Extension Cost</label>\n                                                            <input type=\"number\" id=\"alignerGapE\" class=\"form-control\" value=\"2\" min=\"0\" [(ngModel)]=\"SelectedAlignerGapEVariable\">\n                                                        </div>\n                                                    </div>\n                                        </p-accordionTab>\n                                    </p-accordion>\n\n\n\n                                    <div class=\"row alignPreviewRow\">\n                                        <div class=\"w-100 text-center\" id=\"alignment-preview\"></div>\n                                    </div>\n                                </div>\n                            </tab>\n                            <tab heading=\"{{'Audit' | localize}}\" [active]=\"true\" customClass=\"m-tabs__item\">\n                                <div id=\"sequence-auditor\" class=\"tab-pane fade show\" role=\"tabpanel\">\n                                    <div class=\"row mb-3\" style=\"padding-left:15px;\">\n                                        <div class=\"form-check col\" title=\"Checks to see if a Sequence is empty.\">\n                                            <input class=\"form-check-input\" style=\"padding-left:5px;\" type=\"checkbox\" id=\"audit-empty\" checked [(ngModel)]=\"SelectedAuditEmptyVariable\">\n                                            <label class=\"form-check-label\" style=\"padding-left:5px;\" for=\"audit-empty\">\n                                                Empty\n                                            </label>\n                                        </div>\n                                        <div class=\"form-check col\" title=\"Checks to see if a Sequence is all gaps.\">\n                                            <input class=\"form-check-input\" type=\"checkbox\" id=\"audit-gaps\" checked [(ngModel)]=\"SelectedAuditGapsVariable\">\n                                            <label class=\"form-check-label\" style=\"padding-left:5px;\" for=\"audit-gaps\">\n                                                Gaps\n                                            </label>\n                                        </div>\n                                        <div class=\"form-check col\" title=\"Check to see if sequence contains any characters that are RNA instead of DNA.\">\n                                            <input class=\"form-check-input\" type=\"checkbox\" id=\"audit-RNA\" checked [(ngModel)]=\"SelectedAuditRNAVariable\">\n                                            <label class=\"form-check-label\" style=\"padding-left:5px;\" for=\"audit-RNA\">\n                                                RNA\n                                            </label>\n                                        </div>\n                                        <div class=\"form-check col\" title=\"Check to see if Sequence contains any characters that represent Amino Acids.\">\n                                            <input class=\"form-check-input\" type=\"checkbox\" id=\"audit-amino-acids\" checked [(ngModel)]=\"SelectedAuditAminoAcidsVariable\">\n                                            <label class=\"form-check-label\" style=\"padding-left:5px;\" for=\"audit-amino-acids\">\n                                                Amino Acids\n                                            </label>\n                                        </div>\n                                        <div class=\"form-check col\" title=\"Check to see if Sequence contains any characters describing an alignment.\">\n                                            <input class=\"form-check-input\" type=\"checkbox\" id=\"audit-CIGAR\" checked [(ngModel)]=\"SelectedAuditCIGARVariable\">\n                                            <label class=\"form-check-label\" style=\"padding-left:5px;\" for=\"audit-CIGAR\">\n                                                CIGAR\n                                            </label>\n                                        </div>\n                                        <div class=\"form-check col\" title=\"Check to see if Sequence contains any characters that are illegal in any genomic or proteomic alphabet.\">\n                                            <input class=\"form-check-input\" type=\"checkbox\" id=\"audit-malformed\" checked [(ngModel)]=\"SelectedAuditMalformedVariable\">\n                                            <label class=\"form-check-label\" style=\"padding-left:5px;\" for=\"audit-malformed\">\n                                                Malformed\n                                            </label>\n                                        </div>\n                                        <div class=\"col\">\n                                            <button type=\"button\" class=\"btn btn-primary btn-sm w-100\" id=\"audit-launcher\" (click)=\"run()\">Run</button>\n                                        </div>\n                                    </div>\n                                    <div class=\"row\" id=\"audited-sequences\"></div>\n                                    <div class=\"row flex-row-reverse\" style=\"padding-right: 21px\">\n                                        <button class=\"btn btn-danger btn-sm\" id=\"audit-toggle-all\" (click)=\"toglleAll()\">Toggle All</button>\n                                    </div>\n                                </div>\n                            </tab>\n                        </tabset>\n                    </div>\n                    <div class=\"modal-footer clearfix\">\n                        <button type=\"submit\" class=\"btn btn-success pull-right\" data-dismiss=\"modal\"\n                                title=\"Confirm Load Settings are All Properly Set\" (click)=\"displaySequenceSettings = !displaySequenceSettings\">\n                            Confirm\n                        </button>\n                    </div>\n                </div>\n            </div>\n        </p-dialog>\n\n    </div><!-- Files Settings & Sequence Settings/.modal -->\n\n\n    <div class=\"view-controls\">\n        <p-dialog id=\"loading-information-modal\" [(visible)]=\"displayloadingInformationModal\" header=\"Processing Files...\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                   \n\n                        <!-- <img class=\"img-responsive\" [src]=\"appRootUrl() + 'assets/common/images/giphy.gif'\" alt=\"logo\" height=\"300\" /> -->\n\n                        <div id=\"loading-information-collapse\" class=\"collapse show\">\n                            <div id=\"loading-information\" class=\"card card-body\">\n\n                                <a *ngFor=\"let message of messages\">\n                                    {{ message }}\n                                </a>\n                                <br>\n\n                            </div>\n                        </div>\n                    \n                    <p-footer>\n                        <button type=\"button\" class=\"btn btn-success\" data-dismiss=\"modal\" (click)=\"displayloadingInformationModal=false\">Close</button>\n                    </p-footer>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog>\n    </div><!-- Loading Files/.modal -->\n\n\n    <div id=\"file-footer\">\n        <!-- <p-accordion (onOpen)=\"accordianToggle(1)\" (onClose)=\"accordianToggle(0)\" >\n            <p-accordionTab *ngIf=\"uniqueNodes.length > 0\" header=\"{{uniqueNodes.length}} node(s) missing in edge list\">\n                <table>\n                    <tr>\n                        <th>Node</th>\n                    </tr>\n                    <tr *ngFor=\"let node of uniqueNodes\">\n                        <td>\n                            {{node}}\n                        </td>\n                    </tr>\n                </table>\n            </p-accordionTab>\n            <p-accordionTab *ngIf=\"uniqueEdgeNodes.length > 0\" header=\"{{uniqueEdgeNodes.length}} edge node(s) missing in node list\">\n                <table>\n                    <tr>\n                        <th>Node</th>\n                    </tr>\n                    <tr *ngFor=\"let node of uniqueEdgeNodes\">\n                        <td>\n                            {{node}}\n                        </td>\n                    </tr>\n                </table>\n            </p-accordionTab>\n\n        </p-accordion> -->\n\n        <br/>\n\n        <div class=\"m-portlet\" style=\"padding: 1px\">\n            <div class=\"d-flex justify-content-center\">\n                <span>\n                    <input type=\"file\" id=\"data-files1\" class=\"d-none\" multiple=\"true\" onclick=\"this.value=null;\" (change)=\"processFiles($event.target.files)\">\n                    <label for=\"data-files1\" class=\"btn btn-primary btn-nr floater mb-0\">Add File(s)</label>\n                </span>\n                <span>\n                    <button type=\"button\" class=\"btn btn-default btn-nr floater\" (click)=\"showSequenceSettings()\">Sequence Controls</button>\n                </span>\n                <span>\n                    <button id=\"launch\" class=\"btn btn-success\" (click)=\"launchClick()\" title=\"Please select a Network CSV or FASTA File\" disabled>Launch</button>\n                </span>\n            </div>\n        </div>\n    </div>\n\n\n</div>\n";
 
 /***/ }),
 
