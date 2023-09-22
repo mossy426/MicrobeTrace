@@ -936,10 +936,17 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             .attr('text-anchor', 'middle')
             .attr('dy', this.visuals.twoD.commonService.session.style.widgets['link-width'] + 2)
             .text((l) => {
+
                 const labelValue = l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']];
               
                 if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
-                    return parseFloat(labelValue).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']);
+
+                    if(this.visuals.twoD.commonService.session.style.widgets['default-distance-metric'] == 'snps') {
+                        return Math.round(parseFloat(labelValue));
+                    } else {
+                        return parseFloat(labelValue).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']);
+                    }
+
                 } else {
                     return labelValue;
                 }
@@ -2318,10 +2325,12 @@ onPolygonColorTableChange(e) {
         } else {
             this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.visuals.twoD.getLLinks()).text((l) => {
                 const labelValue = l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']];
-              
                 if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
-                    return parseFloat(labelValue).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']);
-                } else {
+                    if(this.visuals.twoD.commonService.session.style.widgets['default-distance-metric'] == 'snps') {
+                        return Math.round(parseFloat(labelValue));
+                    } else {
+                        return parseFloat(labelValue).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']);
+                    }                } else {
                     return labelValue;
                 }
               });

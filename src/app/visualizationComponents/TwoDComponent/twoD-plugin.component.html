@@ -366,7 +366,7 @@
                                 </div>
                               </div>
                               <div *ngIf="commonService.session.style.widgets['polygons-show']" class="form-group row polygons-settings-row" title="What Foci should be used when creating convex hulls?">
-                                <div class="col-4"><label for="polygons-foci">Center</label></div>
+                                <div class="col-4"><label for="polygons-foci">Group By</label></div>
                                 <div class="col-8">
                                     <p-dropdown id="polygons-foci" [options]="FieldList" appendTo="body" [(ngModel)]="commonService.session.style.widgets['polygons-foci']" (ngModelChange)="centerPolygons($event)"></p-dropdown>
                                 </div>

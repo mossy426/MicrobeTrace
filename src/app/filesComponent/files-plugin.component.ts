@@ -454,11 +454,16 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
       this.visuals.microbeTrace.commonService.localStorageService.setItem('stash-auto', 'false');
     });
 
+    if(this.commonService.session.network.launched){
+      $('#launch').text('Update');
+    }
+
     // $.getJSON("../assets/outbreak.microbetrace", window.context.commonService.applySession);
     // Use this when building production (.ie gh-pages branch)
     if(!this.commonService.session.network.initialLoad) {
       console.log('inial load1:',this.commonService.session.network.initialLoad);
-      $.getJSON("outbreaknorm.microbetrace", window.context.commonService.applySession);    
+      $.getJSON("outbreaknorm.microbetrace", window.context.commonService.applySession);   
+      this.commonService.session.network.launched = true; 
       this.commonService.session.network.initialLoad = true; 
       // if(this.commonService.session.files && this.commonService.session.files.length > 0) {
       //   for(let i = 0; i < this.commonService.session.files.length; i++) {
@@ -591,9 +596,16 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     const ambiguityOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["ambiguity-resolution-strategy"];
     const viewOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["default-view"];
 
-    if (!this.commonService.session.network.launched) {
+
+    if( this.commonService.session.network.launched) {
+      this.visuals.microbeTrace.commonService.session.data = this.visuals.microbeTrace.commonService.sessionSkeleton().data;
+      const newTempSkeleton = this.visuals.microbeTrace.commonService.tempSkeleton();
+      this.visuals.microbeTrace.commonService.temp.tress = newTempSkeleton.trees;
+      $('#launch').text('Update');
+    }
+    else if (!this.commonService.session.network.launched) {
       this.visuals.microbeTrace.commonService.resetData();
-      this.commonService.session.network.launched = true;
+      this.visuals.microbeTrace.commonService.session.network.launched = true;
     }
 
     this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"] = thresholdOnLaunch;
@@ -1381,6 +1393,8 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
         .append($('<a href="javascript:void(0);" class="far flaticon-delete-1 align-middle p-1" title="Remove this file"></a>').on('click', () => {
           parentContext.commonService.session.files.splice(parentContext.commonService.session.files.findIndex(f => f.name === file.name), 1);
           context.visuals.filesPlugin.removeFile(file.name);
+          $('#launch').prop('disabled', false).focus();
+          $('#launch').text('Update');
           root.slideUp(() => root.remove());
         }))
         .append($('<a href="javascript:void(0);" class="far flaticon2-download-1 align-middle p-1" title="Resave this file"></a>').on('click', () => {
