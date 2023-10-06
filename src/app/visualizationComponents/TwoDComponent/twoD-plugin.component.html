@@ -400,7 +400,13 @@
                               <div class="form-group row polygons-label-row" title="How should the labels be oriented relative to center of polygon?">
                                 <div class="col-4"><label for="polygons-label-orientation">Orientation</label></div>
                                 <div class="col-8">
-                                <p-dropdown id="polygons-label-orientation" [options]="FieldList" appendTo="body" [(ngModel)]="commonService.session.style.widgets['polygons-label-variable']" (ngModelChange)="onPolygonLabelOrientationChange($event)"></p-dropdown>
+                                    <select id="polygon-label-orientation" [(ngModel)]="SelectedPolygonLabelOrientationVariable" (ngModelChange)="onPolygonLabelOrientationChange($event)">
+                                        <option selected>Right</option>
+                                        <option>Left</option>
+                                        <option>Top</option>
+                                        <option>Bottom</option>
+                                        <option>Middle</option>
+                                    </select>                                
                                 </div>
                               </div>
                             </div>

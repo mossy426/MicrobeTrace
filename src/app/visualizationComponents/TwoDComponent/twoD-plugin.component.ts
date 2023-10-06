@@ -2946,6 +2946,10 @@ onPolygonColorTableChange(e) {
         this.SelecetedNetworkLinkStrengthVariable = this.visuals.twoD.commonService.session.style.widgets['network-link-strength'];
         this.onNetworkFrictionChange(this.SelecetedNetworkLinkStrengthVariable);
 
+
+         //Network|Polygon Orientation
+         this.SelectedPolygonLabelOrientationVariable = this.visuals.twoD.commonService.session.style.widgets['polygon-label-orientation'];
+         this.onPolygonLabelOrientationChange(this.SelectedPolygonLabelOrientationVariable);
     }
 }
 

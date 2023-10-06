@@ -2118,9 +2118,26 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                         session: this.visuals.microbeTrace.commonService.session,
                         tabs: lightTabs
                     };
+
+                    let that = this;
+
+                    if ($("#save-file-compress").is(":checked")) {
+                        let zip = new JSZip();
+                        zip.file(`${that.saveFileName}.microbetrace`, new Blob([JSON.stringify(stash)], { type: "application/json;charset=utf-8" }));
+                        zip.generateAsync({
+                            type: "blob",
+                            compression: "DEFLATE",
+                            compressionOptions: {
+                                level: 9
+                            }
+                        })
+                        .then(content => saveAs(content, `${that.saveFileName}.zip`));
+                    } else {
+                        const blob = new Blob([JSON.stringify(stash)], { type: "application/json;charset=utf-8" });
+                        saveAs(blob, `${this.saveFileName}.microbetrace`);
+                    }
     
-                    const blob = new Blob([JSON.stringify(stash)], { type: "application/json;charset=utf-8" });
-                    saveAs(blob, `${this.saveFileName}.microbetrace`);
+                   
                 }
 
 

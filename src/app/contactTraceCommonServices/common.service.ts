@@ -277,6 +277,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             'polygons-foci': 'cluster',
             'polygons-gather-force': 0,
             'polygons-label-show' : false,
+            'polygon-label-orientation' : 'Right',
             'polygons-label-size' : 16,
             'polygons-show' : false,
             'polygon-color-table-visible': false,
