@@ -10202,6 +10202,8 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       }, 1);
       setTimeout(() => {
         this.visuals.twoD.fit(undefined, undefined);
+        // Ensure brush is off
+        this.toggleBrush(false);
         // Add a little force for effect in landing
         this.visuals.twoD.force.alpha(1).alphaTarget(0).restart();
       }, 3000);
