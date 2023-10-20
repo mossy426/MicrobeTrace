@@ -467,6 +467,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
             setTimeout(() =>{
                 this.visuals.twoD.fit(undefined, undefined);
+                // Ensure brush is off
+                this.toggleBrush(false);
                 // Add a little force for effect in landing
                 this.visuals.twoD.force.alpha(1).alphaTarget(0).restart();
             }
