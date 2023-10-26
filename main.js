@@ -9882,7 +9882,7 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     this.brush = null;
     this.FieldList = [];
     this.ToolTipFieldList = [];
-    this.shiftPressed = false;
+    this.ctrlPressed = false;
     this.dragging = false;
     //Polygon Tab
     this.SelectedPolygonLabelVariable = "None";
@@ -9914,6 +9914,7 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     this.SelectedNetworkTableTypeVariable = "Hide";
     this.isExportClosed = false;
     this.isExporting = false;
+    this.isMac = navigator.userAgent.toUpperCase().indexOf('MAC') >= 0;
     // Link Tab
     this.SelectedLinkTooltipVariable = "None";
     this.SelectedLinkLabelVariable = "None";
@@ -10081,7 +10082,7 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       this.visuals.twoD.halfHeight = $('#network').parent().parent().parent().height() / 2;
       this.visuals.twoD.transform = d3__WEBPACK_IMPORTED_MODULE_4__.zoomTransform(d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').node());
       this.visuals.twoD.commonService.session.style.widgets = this.visuals.twoD.commonService.session.style.widgets;
-      let zoom = d3__WEBPACK_IMPORTED_MODULE_4__.zoom().filter(() => !this.shiftPressed).on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3__WEBPACK_IMPORTED_MODULE_4__.event.transform));
+      let zoom = d3__WEBPACK_IMPORTED_MODULE_4__.zoom().filter(() => !this.ctrlPressed).on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3__WEBPACK_IMPORTED_MODULE_4__.event.transform));
       let width = d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').node().getBoundingClientRect().width;
       let height = d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').node().getBoundingClientRect().height;
       let svgSelection = d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network');
@@ -10121,18 +10122,18 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').append('g').attr('class', 'horizontal-gridlines');
       d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').append('g').attr('class', 'vertical-gridlines');
       d3__WEBPACK_IMPORTED_MODULE_4__.select(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_3__.window).on('keydown', () => {
-        const event = d3__WEBPACK_IMPORTED_MODULE_4__.event; // You may need to typecast d3.event
-        console.log('keydown: ', event);
-        if (event.key === "Shift" && !this.dragging) {
-          this.shiftPressed = true; // Shift key is pressed
+        const event = d3__WEBPACK_IMPORTED_MODULE_4__.event;
+        const keyToCheck = this.isMac ? 'metaKey' : 'ctrlKey';
+        if (event[keyToCheck] && !this.dragging) {
+          this.ctrlPressed = true;
           this.toggleBrush(true);
         }
       });
       d3__WEBPACK_IMPORTED_MODULE_4__.select(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_3__.window).on('keyup', () => {
-        const event = d3__WEBPACK_IMPORTED_MODULE_4__.event; // You may need to typecast d3.event
-        console.log('keyup: ', event);
-        if (event.key === "Shift" && !this.dragging) {
-          this.shiftPressed = false; // Shift key is released
+        const event = d3__WEBPACK_IMPORTED_MODULE_4__.event;
+        const keyToCheck = this.isMac ? 'metaKey' : 'ctrlKey';
+        if (event[keyToCheck] && !this.dragging) {
+          this.ctrlPressed = false;
           this.toggleBrush(false);
         }
       });
