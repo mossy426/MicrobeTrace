@@ -66,7 +66,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     FieldList: SelectItem[] = [];
     ToolTipFieldList: SelectItem[] = [];
 
-    shiftPressed : boolean = false;
+    ctrlPressed : boolean = false;
     dragging : boolean = false;
     
     //Polygon Tab
@@ -99,6 +99,9 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
     private isExportClosed: boolean = false;
     public isExporting: boolean = false;
+
+    isMac: boolean = navigator.userAgent.toUpperCase().indexOf('MAC') >= 0;
+
 
     // Link Tab
     SelectedLinkTooltipVariable: any = "None";
@@ -264,7 +267,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             this.visuals.twoD.transform = d3.zoomTransform(d3.select('svg#network').node());
             this.visuals.twoD.commonService.session.style.widgets = this.visuals.twoD.commonService.session.style.widgets;
 
-            let zoom = d3.zoom().filter(() => !this.shiftPressed).on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3.event.transform));
+            let zoom = d3.zoom().filter(() => !this.ctrlPressed).on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3.event.transform));
 
             let width = d3.select('svg#network').node().getBoundingClientRect().width;
             let height = d3.select('svg#network').node().getBoundingClientRect().height;
@@ -329,22 +332,24 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 .attr('class', 'vertical-gridlines');
 
                 d3.select(window).on('keydown', () => {
-                    const event: any = d3.event; // You may need to typecast d3.event
-                    console.log('keydown: ', event);
-                    if (event.key === "Shift"  && !this.dragging) {
-                      this.shiftPressed = true; // Shift key is pressed
+                    const event: any = d3.event;
+                    const keyToCheck = this.isMac ? 'metaKey' : 'ctrlKey';
+                
+                    if (event[keyToCheck] && !this.dragging) {
+                      this.ctrlPressed = true;
                       this.toggleBrush(true);
                     }
                   });
-                  
-                d3.select(window).on('keyup', () => {
-                const event: any = d3.event; // You may need to typecast d3.event
-                console.log('keyup: ', event);
-                if (event.key === "Shift"  && !this.dragging) {
-                    this.shiftPressed = false; // Shift key is released
-                    this.toggleBrush(false);
-                }
-                });
+                
+                  d3.select(window).on('keyup', () => {
+                    const event: any = d3.event;
+                    const keyToCheck = this.isMac ? 'metaKey' : 'ctrlKey';
+                
+                    if (event[keyToCheck] && !this.dragging) {
+                      this.ctrlPressed = false;
+                      this.toggleBrush(false);
+                    }
+                  });
 
 
             this.visuals.twoD.svg = d3.select('svg#network').append('g');
