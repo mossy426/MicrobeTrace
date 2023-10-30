@@ -366,7 +366,7 @@
                                 </div>
                               </div>
                               <div *ngIf="commonService.session.style.widgets['polygons-show']" class="form-group row polygons-settings-row" title="What Foci should be used when creating convex hulls?">
-                                <div class="col-4"><label for="polygons-foci">Center</label></div>
+                                <div class="col-4"><label for="polygons-foci">Group By</label></div>
                                 <div class="col-8">
                                     <p-dropdown id="polygons-foci" [options]="FieldList" appendTo="body" [(ngModel)]="commonService.session.style.widgets['polygons-foci']" (ngModelChange)="centerPolygons($event)"></p-dropdown>
                                 </div>
@@ -400,7 +400,13 @@
                               <div class="form-group row polygons-label-row" title="How should the labels be oriented relative to center of polygon?">
                                 <div class="col-4"><label for="polygons-label-orientation">Orientation</label></div>
                                 <div class="col-8">
-                                <p-dropdown id="polygons-label-orientation" [options]="FieldList" appendTo="body" [(ngModel)]="commonService.session.style.widgets['polygons-label-variable']" (ngModelChange)="onPolygonLabelOrientationChange($event)"></p-dropdown>
+                                    <select id="polygon-label-orientation" [(ngModel)]="SelectedPolygonLabelOrientationVariable" (ngModelChange)="onPolygonLabelOrientationChange($event)">
+                                        <option selected>Right</option>
+                                        <option>Left</option>
+                                        <option>Top</option>
+                                        <option>Bottom</option>
+                                        <option>Middle</option>
+                                    </select>                                
                                 </div>
                               </div>
                             </div>

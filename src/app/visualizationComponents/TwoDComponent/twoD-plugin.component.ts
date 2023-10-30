@@ -66,7 +66,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     FieldList: SelectItem[] = [];
     ToolTipFieldList: SelectItem[] = [];
 
-    shiftPressed : boolean = false;
+    ctrlPressed : boolean = false;
     dragging : boolean = false;
     
     //Polygon Tab
@@ -99,6 +99,9 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
     private isExportClosed: boolean = false;
     public isExporting: boolean = false;
+
+    isMac: boolean = navigator.userAgent.toUpperCase().indexOf('MAC') >= 0;
+
 
     // Link Tab
     SelectedLinkTooltipVariable: any = "None";
@@ -264,7 +267,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             this.visuals.twoD.transform = d3.zoomTransform(d3.select('svg#network').node());
             this.visuals.twoD.commonService.session.style.widgets = this.visuals.twoD.commonService.session.style.widgets;
 
-            let zoom = d3.zoom().filter(() => !this.shiftPressed).on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3.event.transform));
+            let zoom = d3.zoom().filter(() => !this.ctrlPressed).on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3.event.transform));
 
             let width = d3.select('svg#network').node().getBoundingClientRect().width;
             let height = d3.select('svg#network').node().getBoundingClientRect().height;
@@ -329,22 +332,24 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 .attr('class', 'vertical-gridlines');
 
                 d3.select(window).on('keydown', () => {
-                    const event: any = d3.event; // You may need to typecast d3.event
-                    console.log('keydown: ', event);
-                    if (event.key === "Shift"  && !this.dragging) {
-                      this.shiftPressed = true; // Shift key is pressed
+                    const event: any = d3.event;
+                    const keyToCheck = this.isMac ? 'metaKey' : 'ctrlKey';
+                
+                    if (event[keyToCheck] && !this.dragging) {
+                      this.ctrlPressed = true;
                       this.toggleBrush(true);
                     }
                   });
-                  
-                d3.select(window).on('keyup', () => {
-                const event: any = d3.event; // You may need to typecast d3.event
-                console.log('keyup: ', event);
-                if (event.key === "Shift"  && !this.dragging) {
-                    this.shiftPressed = false; // Shift key is released
-                    this.toggleBrush(false);
-                }
-                });
+                
+                  d3.select(window).on('keyup', () => {
+                    const event: any = d3.event;
+                    const keyToCheck = this.isMac ? 'metaKey' : 'ctrlKey';
+                
+                    if (event[keyToCheck] && !this.dragging) {
+                      this.ctrlPressed = false;
+                      this.toggleBrush(false);
+                    }
+                  });
 
 
             this.visuals.twoD.svg = d3.select('svg#network').append('g');
@@ -467,6 +472,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
             setTimeout(() =>{
                 this.visuals.twoD.fit(undefined, undefined);
+                // Ensure brush is off
+                this.toggleBrush(false);
                 // Add a little force for effect in landing
                 this.visuals.twoD.force.alpha(1).alphaTarget(0).restart();
             }
@@ -936,10 +943,17 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             .attr('text-anchor', 'middle')
             .attr('dy', this.visuals.twoD.commonService.session.style.widgets['link-width'] + 2)
             .text((l) => {
+
                 const labelValue = l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']];
               
                 if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
-                    return parseFloat(labelValue).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']);
+
+                    if(this.visuals.twoD.commonService.session.style.widgets['default-distance-metric'] == 'snps') {
+                        return Math.round(parseFloat(labelValue));
+                    } else {
+                        return parseFloat(labelValue).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']);
+                    }
+
                 } else {
                     return labelValue;
                 }
@@ -2318,10 +2332,12 @@ onPolygonColorTableChange(e) {
         } else {
             this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.visuals.twoD.getLLinks()).text((l) => {
                 const labelValue = l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']];
-              
                 if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
-                    return parseFloat(labelValue).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']);
-                } else {
+                    if(this.visuals.twoD.commonService.session.style.widgets['default-distance-metric'] == 'snps') {
+                        return Math.round(parseFloat(labelValue));
+                    } else {
+                        return parseFloat(labelValue).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']);
+                    }                } else {
                     return labelValue;
                 }
               });
@@ -2937,6 +2953,10 @@ onPolygonColorTableChange(e) {
         this.SelecetedNetworkLinkStrengthVariable = this.visuals.twoD.commonService.session.style.widgets['network-link-strength'];
         this.onNetworkFrictionChange(this.SelecetedNetworkLinkStrengthVariable);
 
+
+         //Network|Polygon Orientation
+         this.SelectedPolygonLabelOrientationVariable = this.visuals.twoD.commonService.session.style.widgets['polygon-label-orientation'];
+         this.onPolygonLabelOrientationChange(this.SelectedPolygonLabelOrientationVariable);
     }
 }
 
