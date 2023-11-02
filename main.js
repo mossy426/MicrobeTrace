@@ -3050,8 +3050,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       let xc = d3__WEBPACK_IMPORTED_MODULE_1__.mouse(svg.node())[0];
       ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-threshold"] = xc / width * range * 1.05 + min;
       $("#link-threshold").val(parseFloat(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-threshold"].toLocaleString()));
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.microbeTrace.SelectedLinkThresholdVariable = parseFloat(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-threshold"].toLocaleString());
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.microbeTrace.onLinkThresholdChanged();
+      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.visuals.microbeTrace.SelectedLinkThresholdVariable = parseFloat(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-threshold"].toLocaleString());
+      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.visuals.microbeTrace.onLinkThresholdChanged();
     }
     svg.on("click", () => {
       updateThreshold();
@@ -4239,7 +4239,7 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
     const isXL = extension === 'xlsx' || extension === 'xls';
     const isJSON = extension === 'json';
     const isAuspice = extension === 'json' && file.contents.meta && file.contents.tree;
-    const isNode = this.visuals.microbeTrace.commonService.includes(file.name.toLowerCase(), 'node');
+    const isNode = this.visuals.microbeTrace.commonService.includes(file.name.toLowerCase(), 'node') || file.format && file.format.toLowerCase() === 'node';
     if (isXL) {
       let workbook = xlsx__WEBPACK_IMPORTED_MODULE_15__.read(file.contents, {
         type: 'array'
