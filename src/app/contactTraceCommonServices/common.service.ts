@@ -3344,8 +3344,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             window.context.commonService.session.style.widgets["link-threshold"] = (xc / width) * range * 1.05 + min;
             $("#link-threshold").val(parseFloat(window.context.commonService.session.style.widgets["link-threshold"].toLocaleString()));
 
-            window.context.microbeTrace.SelectedLinkThresholdVariable = parseFloat(window.context.commonService.session.style.widgets["link-threshold"].toLocaleString());
-            window.context.microbeTrace.onLinkThresholdChanged();
+            window.context.commonService.visuals.microbeTrace.SelectedLinkThresholdVariable = parseFloat(window.context.commonService.session.style.widgets["link-threshold"].toLocaleString());
+            window.context.commonService.visuals.microbeTrace.onLinkThresholdChanged();
         }
 
         svg.on("click", () => {

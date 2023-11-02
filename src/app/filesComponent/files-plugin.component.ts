@@ -1328,7 +1328,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     const isXL = (extension === 'xlsx' || extension === 'xls');
     const isJSON = (extension === 'json');
     const isAuspice = (extension === 'json' && file.contents.meta && file.contents.tree);
-    const isNode = this.visuals.microbeTrace.commonService.includes(file.name.toLowerCase(), 'node');
+    const isNode = this.visuals.microbeTrace.commonService.includes(file.name.toLowerCase(), 'node') || (file.format && file.format.toLowerCase() === 'node');
     if (isXL) {
       let workbook = XLSX.read(file.contents, { type: 'array' });
       let data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
