@@ -1577,12 +1577,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         this.visuals.microbeTrace.publishUpdateVisualization();
 
-        console.log('active tab ind: ', this.homepageTabs,this.homepageTabs[this.activeTabIndex]);
+        // console.log('active tab ind: ', this.homepageTabs,this.homepageTabs[this.activeTabIndex]);
 
         if (!this.homepageTabs[this.activeTabIndex]) return;
-
-        // console.log('active tab ind2: ', this.homepageTabs[this.activeTabIndex]);
-
 
         switch (this.homepageTabs[this.activeTabIndex].label) {
             case "2D Network":
