@@ -2166,12 +2166,18 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
           this.commonService.openAuspiceUrl(auspiceUrl)
           .then( (out) => {
             if (out['meta'] && out['tree']) {
+              console.log(this);
+              this.homepageTabs[0].componentRef.instance.removeAllFiles();
+              this.visuals.microbeTrace.commonService.clearData();
               const auspiceFile = { contents: out, name: this.getAuspiceName(auspiceUrl), extension: 'json'};
               this.visuals.microbeTrace.commonService.session.files.push(auspiceFile);
+              this.homepageTabs[0].componentRef.instance.addToTable(auspiceFile);
             //   console.log(this.homepageTabs[0].componentRef);
                 // this.goldenLayout.componentInstances[0].addToTable(auspiceFile);
-              this.homepageTabs[0].componentRef.addToTable(auspiceFile);
+              //this.homepageTabs[0].componentRef.addToTable(auspiceFile);
               this.homepageTabs[0].isActive = true;
+              console.log("Trying to launch");
+              this.homepageTabs[0].componentRef.instance.launchClick();
               $('#overlay').fadeOut();
               $('.ui-tabview-nav').fadeTo("slow", 1);
               $('.m-portlet').fadeTo("slow", 1);

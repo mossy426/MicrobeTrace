@@ -1511,10 +1511,13 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
       const fname = $el.data('filename');
       const selects = $el.find('select');
       const f = this.visuals.microbeTrace.commonService.session.files.find(file => file.name === fname);
-      f.format = $el.find('input[type="radio"]:checked').data('type');
-      f.field1 = selects.get(0).value;
-      f.field2 = selects.get(1).value;
-      f.field3 = selects.get(2).value;
+      console.log(f);
+      if (f) {
+        f.format = $el.find('input[type="radio"]:checked').data('type');
+        f.field1 = selects.get(0).value;
+        f.field2 = selects.get(1).value;
+        f.field3 = selects.get(2).value;
+      }
     });
 
   }
