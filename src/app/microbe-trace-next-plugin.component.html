@@ -384,6 +384,19 @@
             </div><!-- /.modal-dialog -->
         </p-dialog><!-- /.modal -->
 
+        <p-dialog id="open-old-mt" [(visible)]="displayMTDialog" header="Open Auspice JSON in classic MicrobeTrace">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        Welcome to the newest version of MicrobeTrace! If you'd like to open your auspice JSON file in the previous version of MicrobeTrace, please click this link: <br />
+                        <a href="https://microbetrace.cdc.gov/MicrobeTrace/?url={{auspiceUrlVal}}">https://microbetrace.cdc.gov/MicrobeTrace/?url={{auspiceUrlVal}}</a>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" (click)="DisplayMTDialog('Cancel')">Close</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </p-dialog><!-- /.modal -->
 
         <p-dialog id="session-stash-modal" [(visible)]="displayStashDialog" header="Save Session">
             <div class="modal-dialog" role="document">

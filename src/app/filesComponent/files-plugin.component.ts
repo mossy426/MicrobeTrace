@@ -460,7 +460,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
     // $.getJSON("../assets/outbreak.microbetrace", window.context.commonService.applySession);
     // Use this when building production (.ie gh-pages branch)
-    if(!this.commonService.session.network.initialLoad) {
+    if(!this.commonService.session.network.initialLoad && this.visuals.microbeTrace.auspiceUrlVal === null) {
       console.log('inial load1:',this.commonService.session.network.initialLoad);
       $.getJSON("outbreaknorm.microbetrace", window.context.commonService.applySession);   
       this.commonService.session.network.launched = true; 

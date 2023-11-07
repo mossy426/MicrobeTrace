@@ -83,6 +83,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     displayAbout: boolean = false;
     displayStashDialog: boolean = false;
     displayUrlDialog: boolean = false;
+    displayMTDialog: boolean = false;
     displayRecallStashDialog: boolean = false;
     displayLedgerLoaderDialog: boolean = false;
     version: string = '2.0';
@@ -272,6 +273,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     ngOnInit() {
 
+        const params = new URLSearchParams(window.location.search);
+        this.auspiceUrlVal = params.get('url');
+        console.log(this.auspiceUrlVal);
         this.getGlobalSettingsData();
 
         this.elem = document.documentElement;
@@ -338,10 +342,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         setTimeout(() => {
             $('#top-toolbar').fadeTo("slow", 1);
             // TODO:: uncommentback when done Subscribe for files subscription
-
             // this.homepageTabs[0].componentRef = this.goldenLayout.componentInstances[0];
-
-            
         }, 1000);
         setTimeout(() => {
             if (cachedLSV) {
@@ -387,6 +388,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             // console.log('instances: ',this.goldenLayout.componentInstances);
         }, 5000);
         
+            // this.commonService.applyAuspice(out);
        
         // reader.onloadend = out => this.commonService.processJSON(out.target, extension);
     }
@@ -568,6 +570,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
      */
     prepareFilesLists($event) {
 
+        console.log("Trying to prepare files");
         // this.commonService.resetData();
         this.commonService.session.files = [];
         if (!this.commonService.session.style.widgets) {
@@ -1669,23 +1672,48 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         // let factory = this.cfr.resolveComponentFactory(FilesComponent);
         // this.cmpRef = this.targets.first.createComponent(factory);
-        setTimeout(() => {      
+        setTimeout(() => {
             this._goldenLayoutHostComponent.initialise();
             this.addComponent('Files');
 
-            console.log('golden comp ref: ', this.homepageTabs[0].componentRef.instance);
-            this.subscription = this.homepageTabs[0].componentRef.instance.LoadDefaultVisualizationEvent.subscribe((v) => {
-                console.log('loading default1: ', v);
-                this.loadDefaultVisualization(v);
-                this.publishLoadNewData();
-                this.getGlobalSettingsData();
+          if (this.auspiceUrlVal) {
+            console.log("Trying to open URL");
+            this.DisplayUrlDialog("Open");
+            this.continueClicked();
+            this.displayUrlDialog = false;
+            this.displayMTDialog = true;
+            // this.DisplayMTDialog("Open");
+            /**
+            this.commonService.openAuspiceUrl(this.auspiceUrlVal)
+            .then( (out) => {
+            if (out['meta'] && out['tree']) {
+              const auspiceFile = { contents: out, name: this.getAuspiceName(this.auspiceUrlVal), extension: 'json'};
+              this.commonService.session.files.push(auspiceFile);
+              this.prepareFilesLists(auspiceFile);
+              console.log(out);
+            //   console.log(this.homepageTabs[0].componentRef);
+                // this.goldenLayout.componentInstances[0].addToTable(auspiceFile);
+              this.homepageTabs[0].componentRef.addToTable(auspiceFile);
+              this.homepageTabs[0].isActive = true;
+            } else {
+              console.log("This isn't a valid Auspice JSON file");
+            }
             });
+            */
+          }
+        console.log('golden comp ref: ', this.homepageTabs[0].componentRef.instance);
+        this.subscription = this.homepageTabs[0].componentRef.instance.LoadDefaultVisualizationEvent.subscribe((v) => {
+            console.log('loading default1: ', v);
+            this.loadDefaultVisualization(v);
+            this.publishLoadNewData();
+            this.getGlobalSettingsData();
+        });
 
-            this._goldenLayoutHostComponent.TabRemovedEvent.subscribe((v) => {
-                // this.loadSettings();
-                this.removeComponent(v);
-            });
-          }, 0);
+        this._goldenLayoutHostComponent.TabRemovedEvent.subscribe((v) => {
+            // this.loadSettings();
+            this.removeComponent(v);
+        });
+        }, 0);
         
 
         // this.setActiveTabProperties();
@@ -2192,6 +2220,18 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
       this.displayUrlDialog = !this.displayUrlDialog;
     }
 
+    DisplayMTDialog(saveUrl: string) {
+      switch (saveUrl) {
+        case 'Open': {
+          const auspiceUrl = this.auspiceUrlVal;
+          break;
+        }
+        case 'Cancel': {
+            break;
+        }
+      }
+      this.displayMTDialog = !this.displayMTDialog;
+    }
 
     ResetTabs() {
         const home = this.homepageTabs.find(x => x.label === "Files");
@@ -2216,7 +2256,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         // console.log(stashFile);
 
         const files: File[] = Array.from(stashFile);
-
+        
         if (files.length > 0) {
 
             const extension = files[0].name.split('.').pop().toLowerCase();
@@ -2567,6 +2607,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         let activeComponentName: string = this.homepageTabs[tabNdx].label;
 
+
         this.homepageTabs.forEach((item: HomePageTabItem) => {
             item.isActive = item.label === activeComponentName;
         });
@@ -2671,6 +2712,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
             });
         } else {
+          console.log(this.homepageTabs[tabNdx].componentRef.instance);
             this.homepageTabs[tabNdx].componentRef.instance.DisplayGlobalSettingsDialogEvent.subscribe((v) => { this.DisplayGlobalSettingsDialog(v) });
         }
 

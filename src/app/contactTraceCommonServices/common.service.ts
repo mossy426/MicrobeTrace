@@ -3167,9 +3167,12 @@ export class CommonService extends AppComponentBase implements OnInit {
             let visible = true;
             let overrideNN = false;
 
+          /*
             if( (link.source === "30576_KF773426_B90cl57"  && link.target === "30582_KF773578_H96cl11") || link.target === "30576_KF773426_B90cl57"  && link.source === "30582_KF773578_H96cl11") {
                 console.log('link1: ', _.cloneDeep(link));
+            
             }
+          */
             if (link.hasDistance && !link.origin.includes(link.distanceOrigin)) {
                 link.origin.push(link.distanceOrigin);
             }
