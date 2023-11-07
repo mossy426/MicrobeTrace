@@ -3080,7 +3080,6 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     setNodeVisibility(silent) {
 
-        console.log('setting node');
         let start = Date.now();
         let dateField = window.context.commonService.session.style.widgets["timeline-date-field"];
         let nodes = window.context.commonService.session.data.nodes,
@@ -3089,25 +3088,9 @@ export class CommonService extends AppComponentBase implements OnInit {
         for (let i = 0; i < n; i++) {
             let node = nodes[i];
 
-            // TODO:: Remove when done testing
-            // if (node._id === "30576_KF773440_B96cl58") {
-            //     console.log('node1: ', node);
-            // }
-            // if (node._id === "30576_KF773440_B96cl58 ") {
-            //     console.log('node2: ', node);
-            // }
-
-            // if (node._id === "30576_KF773440_B96cl58 ") {
-            //     console.log('node7: ', node);
-            // }
-            // if (node.id === "30576_KF773440_B96cl58") {
-            //     console.log('node8: ', node);
-            // }
-
             node.visible = true;
-            // console.log('node cluster: ', node.cluster);
             let cluster = clusters[node.cluster];
-            // console.log('setting clus: ', cluster);
+
             if (cluster) {
                 // TODO: uncomment if something breaks since this was defaulted to visible
                 // cluster.visible = true;
@@ -3116,15 +3099,12 @@ export class CommonService extends AppComponentBase implements OnInit {
                 node.visible = node.visible && cluster.visible;
             }
             if (dateField != "None") {
-                // console.log('date field not none: visible: ', node.visible);
                 node.visible = node.visible && moment(window.context.commonService.session.state.timeEnd).toDate() >= moment(node[dateField]).toDate();
-                // console.log('date compare: ', moment(window.context.commonService.session.state.timeEnd).toDate() >= moment(node[dateField]).toDate());
-
             }
         }
         if (!silent) $(document).trigger("node-visibility");
        
-        // console.log("Node Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
+        console.log("Node Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
     };
 
     updatePinNodes(copy) {
@@ -3167,12 +3147,6 @@ export class CommonService extends AppComponentBase implements OnInit {
             let visible = true;
             let overrideNN = false;
 
-          /*
-            if( (link.source === "30576_KF773426_B90cl57"  && link.target === "30582_KF773578_H96cl11") || link.target === "30576_KF773426_B90cl57"  && link.source === "30582_KF773578_H96cl11") {
-                console.log('link1: ', _.cloneDeep(link));
-            
-            }
-          */
             if (link.hasDistance && !link.origin.includes(link.distanceOrigin)) {
                 link.origin.push(link.distanceOrigin);
             }
@@ -3200,18 +3174,6 @@ export class CommonService extends AppComponentBase implements OnInit {
 
                 if (!visible) {
 
-
-                    if (
-                        (link.source === "30576_KF773426_B90cl57" && link.target === "30582_KF773578_H96cl11") ||
-                        (link.target === "30576_KF773426_B90cl57" && link.source === "30582_KF773578_H96cl11")
-                      ) {
-                        console.log('link1: ', _.cloneDeep(link));
-                        console.log('origin filt: ', link.origin.filter(fileName => {
-                          const hasAuspice = /[Aa]uspice/.test(fileName);
-                          const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
-                          return fileName && !includesDistanceOrigin && !hasAuspice;
-                        }));
-                      }
                     // Only need to get distance origin and override if there are other files using a distance metric, otherwise the else code block below would be executed since the link would not have distance
                     if (
                         link.origin.length > 1 &&
@@ -3261,11 +3223,9 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         }
 
-
-        console.log('silent: ', silent);
         
         if (!silent) $(document).trigger("link-visibility");
-        // console.log("Link Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
+        console.log("Link Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
     };
 
     updateNetwork() {
@@ -3347,8 +3307,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             window.context.commonService.session.style.widgets["link-threshold"] = (xc / width) * range * 1.05 + min;
             $("#link-threshold").val(parseFloat(window.context.commonService.session.style.widgets["link-threshold"].toLocaleString()));
 
-            window.context.microbeTrace.SelectedLinkThresholdVariable = parseFloat(window.context.commonService.session.style.widgets["link-threshold"].toLocaleString());
-            window.context.microbeTrace.onLinkThresholdChanged();
+            window.context.commonService.visuals.microbeTrace.SelectedLinkThresholdVariable = parseFloat(window.context.commonService.session.style.widgets["link-threshold"].toLocaleString());
+            window.context.commonService.visuals.microbeTrace.onLinkThresholdChanged();
         }
 
         svg.on("click", () => {
