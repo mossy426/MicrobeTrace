@@ -706,13 +706,26 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         this.visuals.microbeTrace.commonService.session.style.widgets["cluster-minimum-size"] = val;
 
-        this.visuals.microbeTrace.commonService.setClusterVisibility(true);
+        // this.visuals.microbeTrace.commonService.setClusterVisibility(true);
+        // this.visuals.microbeTrace.commonService.setLinkVisibility(true);
+        // this.visuals.microbeTrace.commonService.setNodeVisibility(true);
+
+        // this.visuals.microbeTrace.updatedVisualization();
+
+        // this.visuals.microbeTrace.commonService.updateStatistics();
+
         this.visuals.microbeTrace.commonService.setLinkVisibility(true);
-        this.visuals.microbeTrace.commonService.setNodeVisibility(true);
+        this.visuals.microbeTrace.commonService.tagClusters().then(() => {
+            this.visuals.microbeTrace.commonService.setClusterVisibility(true);
+            this.visuals.microbeTrace.commonService.setNodeVisibility(true);
+            this.visuals.microbeTrace.commonService.setLinkVisibility(true);
+          ["cluster", "link", "node"].forEach(thing => {
+            $(document).trigger(thing + "-visibility");
+          });
+          this.visuals.microbeTrace.commonService.updateStatistics();
+          this.visuals.microbeTrace.updatedVisualization();
 
-        this.visuals.microbeTrace.updatedVisualization();
-
-        this.visuals.microbeTrace.commonService.updateStatistics();
+        });
 
     }
 
@@ -1489,6 +1502,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.commonService.session.style.widgets["mst-computed"] = false;
 
         if (minClust !== "1" ){
+            console.log('reseting min clust');
             $("#cluster-minimum-size").val("1");
             $("#cluster-minimum-size").trigger("change");
             $("#cluster-minimum-size").val(minClust);
@@ -1498,17 +1512,26 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.commonService.setLinkVisibility(false);
         this.commonService.tagClusters().then(() => {
             this.visuals.microbeTrace.commonService.setClusterVisibility(true);
-            $(document).trigger("cluster-visibility");
+            // $(document).trigger("cluster-visibility");
+
+            console.log('session clusters: ', _.cloneDeep(this.commonService.session.data.clusters.filter(cluster => cluster.id === 171 || cluster.id === 515)));
             //To catch links that should be filtered out based on cluster size:
             this.visuals.microbeTrace.commonService.setLinkVisibility(true);
             this.visuals.microbeTrace.commonService.setNodeVisibility(true);
+
             //Because the network isn't robust to the order in which these operations
             //take place, we just do them all silently and then react as though we did
             //them each after all of them are already done.
 
+            ["cluster", "link", "node"].forEach(thing => $(document).trigger(thing + "-visibility"));
+
+
             this.updatedVisualization();
 
             this.commonService.updateStatistics();
+
+            console.log('session clusters2 : ', _.cloneDeep(this.commonService.session.data.clusters.filter(cluster => cluster.id === 171 || cluster.id === 515)));
+
 
         });
 
