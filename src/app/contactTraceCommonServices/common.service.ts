@@ -3006,21 +3006,11 @@ export class CommonService extends AppComponentBase implements OnInit {
                         break;
                     }
                 }
-
-                // if(id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
-                //     console.log('tag id dfs: ', node);
-                // }
                 let clusterID = cluster.id;
                 node.cluster = clusterID;
                 cluster.nodes++;
                 let row = window.context.commonService.temp.matrix[id];
-                // if(id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
-                //     console.log('tag id dfs 2: ', node);
-                // }
                 if (!row) return;
-                if(id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
-                    console.log('tag id dfs 3: ', node);
-                }
                 for (let j = 0; j < numNodes; j++) {
                     let l = row[labels[j]];
                     if (!l) continue;
@@ -3039,10 +3029,6 @@ export class CommonService extends AppComponentBase implements OnInit {
                 d.degree = 0;
                 let id = d._id;
 
-
-                if(id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
-                    console.log('tag id: ', d, id);
-                }
                 if (tempnodes.indexOf(id) == -1) {
 
                     let cluster = {
@@ -3056,15 +3042,8 @@ export class CommonService extends AppComponentBase implements OnInit {
                     };
 
 
-                    if(id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
-                        console.log('tag cluster 1: ',_.cloneDeep(cluster));
-                    }
                     clusters.push(cluster);
                     DFS(id, cluster);
-
-                    if(id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
-                        console.log('tag cluster 2: ',_.cloneDeep(cluster));
-                    }
                     if (tempnodes.length == numNodes) break;
                 }
             }
@@ -3174,7 +3153,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         return out;
       };
 
-    setLinkVisibility(silent) {
+    setLinkVisibility(silent, checkCluster = true) {
         let start = Date.now();
         let metric = window.context.commonService.session.style.widgets["link-sort-variable"],
             threshold = window.context.commonService.session.style.widgets["link-threshold"],
@@ -3187,9 +3166,6 @@ export class CommonService extends AppComponentBase implements OnInit {
         for (let i = 0; i < n; i++) {
             let link = links[i];
 
-            if(link.index === 154630) {
-                console.log('session link: ', _.cloneDeep(link));
-            }
             let visible = true;
             let overrideNN = false;
 
@@ -3218,17 +3194,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
                 visible = link[metric] <= threshold;
 
-                if(link.index === 154630) {
-                    console.log('session viz 0 link', _.cloneDeep(link));
-                    console.log('session viz 0 vis', visible);
-
-                }
-
                 if (!visible) {
-
-                    if(link.index === 154630) {
-                        console.log('session viz 1');
-                    }
 
                     // Only need to get distance origin and override if there are other files using a distance metric, otherwise the else code block below would be executed since the link would not have distance
                     if (
@@ -3255,9 +3221,6 @@ export class CommonService extends AppComponentBase implements OnInit {
 
                 } else {
 
-                    if(link.index === 154630) {
-                        console.log('session viz 3');
-                    }
                     // If has no distance, then link should be visible and unnaffected by NN
                     overrideNN = true;
                     visible = true;
@@ -3276,25 +3239,12 @@ export class CommonService extends AppComponentBase implements OnInit {
             }
 
             let cluster = clusters[link.cluster];
-            if (cluster) {
-
+            if (cluster && checkCluster) {
 
                 visible = visible && cluster.visible;
             }
 
-            if(link.index === 154630) {
-                console.log('session cluster: ,', _.cloneDeep(cluster));
-                console.log('session cluster vis: ,',visible);
-                console.log('session link2: ', _.cloneDeep(link));
-                console.log('session link vis: ',visible);
-            }
-
             link.visible = visible;
-
-            if(link.index === 154630) {
-                console.log('session link3: ', _.cloneDeep(link));
-            }
-
 
         }
 
