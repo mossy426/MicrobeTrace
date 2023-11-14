@@ -2798,20 +2798,11 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
             break;
           }
         }
-        // if(id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
-        //     console.log('tag id dfs: ', node);
-        // }
         let clusterID = cluster.id;
         node.cluster = clusterID;
         cluster.nodes++;
         let row = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.matrix[id];
-        // if(id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
-        //     console.log('tag id dfs 2: ', node);
-        // }
         if (!row) return;
-        if (id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
-          console.log('tag id dfs 3: ', node);
-        }
         for (let j = 0; j < numNodes; j++) {
           let l = row[labels[j]];
           if (!l) continue;
@@ -2828,9 +2819,6 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         let d = nodes[k];
         d.degree = 0;
         let id = d._id;
-        if (id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
-          console.log('tag id: ', d, id);
-        }
         if (tempnodes.indexOf(id) == -1) {
           let cluster = {
             id: clusters.length > 0 ? clusters.length : 0,
@@ -2841,14 +2829,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
             mean_genetic_distance: undefined,
             visible: true
           };
-          if (id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
-            console.log('tag cluster 1: ', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(cluster));
-          }
           clusters.push(cluster);
           DFS(id, cluster);
-          if (id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
-            console.log('tag cluster 2: ', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(cluster));
-          }
           if (tempnodes.length == numNodes) break;
         }
       }
@@ -2932,7 +2914,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       }
     }
   }
-  setLinkVisibility(silent) {
+  setLinkVisibility(silent, checkCluster = true) {
     let start = Date.now();
     let metric = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-sort-variable"],
       threshold = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-threshold"],
@@ -2943,9 +2925,6 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     console.log(`Setting Link Visibility with ${metric} ${threshold} ${showNN}`);
     for (let i = 0; i < n; i++) {
       let link = links[i];
-      if (link.index === 154630) {
-        console.log('session link: ', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(link));
-      }
       let visible = true;
       let overrideNN = false;
       if (link.hasDistance && !link.origin.includes(link.distanceOrigin)) {
@@ -2966,14 +2945,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       } else {
         if (link.hasDistance) {
           visible = link[metric] <= threshold;
-          if (link.index === 154630) {
-            console.log('session viz 0 link', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(link));
-            console.log('session viz 0 vis', visible);
-          }
           if (!visible) {
-            if (link.index === 154630) {
-              console.log('session viz 1');
-            }
             // Only need to get distance origin and override if there are other files using a distance metric, otherwise the else code block below would be executed since the link would not have distance
             if (link.origin.length > 1 && link.origin.filter(fileName => {
               const hasAuspice = /[Aa]uspice/.test(fileName);
@@ -2993,9 +2965,6 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
             }
           }
         } else {
-          if (link.index === 154630) {
-            console.log('session viz 3');
-          }
           // If has no distance, then link should be visible and unnaffected by NN
           overrideNN = true;
           visible = true;
@@ -3010,19 +2979,10 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         }
       }
       let cluster = clusters[link.cluster];
-      if (cluster) {
+      if (cluster && checkCluster) {
         visible = visible && cluster.visible;
       }
-      if (link.index === 154630) {
-        console.log('session cluster: ,', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(cluster));
-        console.log('session cluster vis: ,', visible);
-        console.log('session link2: ', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(link));
-        console.log('session link vis: ', visible);
-      }
       link.visible = visible;
-      if (link.index === 154630) {
-        console.log('session link3: ', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(link));
-      }
     }
     if (!silent) $(document).trigger("link-visibility");
     console.log("Link Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
@@ -6582,11 +6542,10 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
       $("#cluster-minimum-size").val(minClust);
       $("#cluster-minimum-size").trigger("change");
     }
-    this.commonService.setLinkVisibility(false);
+    this.commonService.setLinkVisibility(false, false);
     this.commonService.tagClusters().then(() => {
       this.visuals.microbeTrace.commonService.setClusterVisibility(true);
       // $(document).trigger("cluster-visibility");
-      console.log('session clusters: ', lodash__WEBPACK_IMPORTED_MODULE_13__.cloneDeep(this.commonService.session.data.clusters.filter(cluster => cluster.id === 171 || cluster.id === 515)));
       //To catch links that should be filtered out based on cluster size:
       this.visuals.microbeTrace.commonService.setLinkVisibility(true);
       this.visuals.microbeTrace.commonService.setNodeVisibility(true);
@@ -6596,7 +6555,6 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
       ["cluster", "link", "node"].forEach(thing => $(document).trigger(thing + "-visibility"));
       this.updatedVisualization();
       this.commonService.updateStatistics();
-      console.log('session clusters2 : ', lodash__WEBPACK_IMPORTED_MODULE_13__.cloneDeep(this.commonService.session.data.clusters.filter(cluster => cluster.id === 171 || cluster.id === 515)));
     });
   }
   revealClicked() {
