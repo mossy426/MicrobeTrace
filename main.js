@@ -2798,11 +2798,20 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
             break;
           }
         }
+        // if(id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
+        //     console.log('tag id dfs: ', node);
+        // }
         let clusterID = cluster.id;
         node.cluster = clusterID;
         cluster.nodes++;
         let row = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.matrix[id];
+        // if(id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
+        //     console.log('tag id dfs 2: ', node);
+        // }
         if (!row) return;
+        if (id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
+          console.log('tag id dfs 3: ', node);
+        }
         for (let j = 0; j < numNodes; j++) {
           let l = row[labels[j]];
           if (!l) continue;
@@ -2819,6 +2828,9 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         let d = nodes[k];
         d.degree = 0;
         let id = d._id;
+        if (id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
+          console.log('tag id: ', d, id);
+        }
         if (tempnodes.indexOf(id) == -1) {
           let cluster = {
             id: clusters.length > 0 ? clusters.length : 0,
@@ -2829,8 +2841,14 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
             mean_genetic_distance: undefined,
             visible: true
           };
+          if (id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
+            console.log('tag cluster 1: ', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(cluster));
+          }
           clusters.push(cluster);
           DFS(id, cluster);
+          if (id === "IHVN_NG863057" || id === "NIMR_NG894803" || id === "NIMR_NG219300" || id === "NIMR_NG153966" || id === "NIMR_NG831677") {
+            console.log('tag cluster 2: ', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(cluster));
+          }
           if (tempnodes.length == numNodes) break;
         }
       }
@@ -2874,8 +2892,14 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     let n = nodes.length;
     for (let i = 0; i < n; i++) {
       let node = nodes[i];
+      if (node._id === "NIMR_NG894803") {
+        console.log('setting node vis: ', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(node));
+      }
       node.visible = true;
       let cluster = clusters[node.cluster];
+      if (node._id === "NIMR_NG894803") {
+        console.log('setting node cluster: ', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(cluster));
+      }
       if (cluster) {
         // TODO: uncomment if something breaks since this was defaulted to visible
         // cluster.visible = true;
@@ -2886,8 +2910,13 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       if (dateField != "None") {
         node.visible = node.visible && moment__WEBPACK_IMPORTED_MODULE_6___default()(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.state.timeEnd).toDate() >= moment__WEBPACK_IMPORTED_MODULE_6___default()(node[dateField]).toDate();
       }
+      if (node._id === "NIMR_NG894803") {
+        console.log('setting node vis 2: ', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(node));
+      }
     }
     if (!silent) $(document).trigger("node-visibility");
+    console.log('session nodes: ', nodes.filter(n => n.visible));
+    console.log('session nodes length: ', nodes.filter(n => n.visible).length);
     console.log("Node Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
   }
   updatePinNodes(copy) {
@@ -2914,6 +2943,9 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     console.log(`Setting Link Visibility with ${metric} ${threshold} ${showNN}`);
     for (let i = 0; i < n; i++) {
       let link = links[i];
+      if (link.index === 154630) {
+        console.log('session link: ', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(link));
+      }
       let visible = true;
       let overrideNN = false;
       if (link.hasDistance && !link.origin.includes(link.distanceOrigin)) {
@@ -2934,14 +2966,23 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       } else {
         if (link.hasDistance) {
           visible = link[metric] <= threshold;
+          if (link.index === 154630) {
+            console.log('session viz 0 link', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(link));
+            console.log('session viz 0 vis', visible);
+          }
           if (!visible) {
+            if (link.index === 154630) {
+              console.log('session viz 1');
+            }
             // Only need to get distance origin and override if there are other files using a distance metric, otherwise the else code block below would be executed since the link would not have distance
             if (link.origin.length > 1 && link.origin.filter(fileName => {
               const hasAuspice = /[Aa]uspice/.test(fileName);
               const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
               return fileName && !includesDistanceOrigin && !hasAuspice;
             }).length > 0) {
-              // Set visible and origin to only show the file outside of Distance
+              if (link.index === 154630) {
+                console.log('session viz 2');
+              } // Set visible and origin to only show the file outside of Distance
               link.origin = link.origin.filter(fileName => {
                 const hasAuspice = /[Aa]uspice/.test(fileName);
                 const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
@@ -2952,6 +2993,9 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
             }
           }
         } else {
+          if (link.index === 154630) {
+            console.log('session viz 3');
+          }
           // If has no distance, then link should be visible and unnaffected by NN
           overrideNN = true;
           visible = true;
@@ -2969,7 +3013,16 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       if (cluster) {
         visible = visible && cluster.visible;
       }
+      if (link.index === 154630) {
+        console.log('session cluster: ,', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(cluster));
+        console.log('session cluster vis: ,', visible);
+        console.log('session link2: ', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(link));
+        console.log('session link vis: ', visible);
+      }
       link.visible = visible;
+      if (link.index === 154630) {
+        console.log('session link3: ', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(link));
+      }
     }
     if (!silent) $(document).trigger("link-visibility");
     console.log("Link Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
@@ -6001,11 +6054,22 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
     this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedClusterMinimumSizeVariable = this.visuals.microbeTrace.SelectedClusterMinimumSizeVariable;
     let val = parseInt(this.visuals.microbeTrace.SelectedClusterMinimumSizeVariable);
     this.visuals.microbeTrace.commonService.session.style.widgets["cluster-minimum-size"] = val;
-    this.visuals.microbeTrace.commonService.setClusterVisibility(true);
+    // this.visuals.microbeTrace.commonService.setClusterVisibility(true);
+    // this.visuals.microbeTrace.commonService.setLinkVisibility(true);
+    // this.visuals.microbeTrace.commonService.setNodeVisibility(true);
+    // this.visuals.microbeTrace.updatedVisualization();
+    // this.visuals.microbeTrace.commonService.updateStatistics();
     this.visuals.microbeTrace.commonService.setLinkVisibility(true);
-    this.visuals.microbeTrace.commonService.setNodeVisibility(true);
-    this.visuals.microbeTrace.updatedVisualization();
-    this.visuals.microbeTrace.commonService.updateStatistics();
+    this.visuals.microbeTrace.commonService.tagClusters().then(() => {
+      this.visuals.microbeTrace.commonService.setClusterVisibility(true);
+      this.visuals.microbeTrace.commonService.setNodeVisibility(true);
+      this.visuals.microbeTrace.commonService.setLinkVisibility(true);
+      ["cluster", "link", "node"].forEach(thing => {
+        $(document).trigger(thing + "-visibility");
+      });
+      this.visuals.microbeTrace.commonService.updateStatistics();
+      this.visuals.microbeTrace.updatedVisualization();
+    });
   }
   onLinkSortChanged() {
     this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkSortVariable = this.visuals.microbeTrace.SelectedLinkSortVariable;
@@ -6512,6 +6576,7 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
     // Unset MST construction since links might have been changed
     this.commonService.session.style.widgets["mst-computed"] = false;
     if (minClust !== "1") {
+      console.log('reseting min clust');
       $("#cluster-minimum-size").val("1");
       $("#cluster-minimum-size").trigger("change");
       $("#cluster-minimum-size").val(minClust);
@@ -6520,15 +6585,18 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
     this.commonService.setLinkVisibility(false);
     this.commonService.tagClusters().then(() => {
       this.visuals.microbeTrace.commonService.setClusterVisibility(true);
-      $(document).trigger("cluster-visibility");
+      // $(document).trigger("cluster-visibility");
+      console.log('session clusters: ', lodash__WEBPACK_IMPORTED_MODULE_13__.cloneDeep(this.commonService.session.data.clusters.filter(cluster => cluster.id === 171 || cluster.id === 515)));
       //To catch links that should be filtered out based on cluster size:
       this.visuals.microbeTrace.commonService.setLinkVisibility(true);
       this.visuals.microbeTrace.commonService.setNodeVisibility(true);
       //Because the network isn't robust to the order in which these operations
       //take place, we just do them all silently and then react as though we did
       //them each after all of them are already done.
+      ["cluster", "link", "node"].forEach(thing => $(document).trigger(thing + "-visibility"));
       this.updatedVisualization();
       this.commonService.updateStatistics();
+      console.log('session clusters2 : ', lodash__WEBPACK_IMPORTED_MODULE_13__.cloneDeep(this.commonService.session.data.clusters.filter(cluster => cluster.id === 171 || cluster.id === 515)));
     });
   }
   revealClicked() {
