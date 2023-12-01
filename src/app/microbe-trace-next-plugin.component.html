@@ -240,7 +240,7 @@
                                                 <p-dropdown id="link-sort-variable" [options]="ToolTipFieldList" appendTo="body" [(ngModel)]="SelectedLinkSortVariable" (onChange)="onLinkSortChanged()"></p-dropdown>
                                             </div>
                                         </div>
-                                        <div class="form-group row" title="What's the maximum genetic distance you're willing to call a link?">
+                                        <div class="form-group row" id="filtering-threshold" title="What's the maximum genetic distance you're willing to call a link?">
                                             <div class="col-4"><label for="link-threshold">Filtering Threshold</label></div>
                                             <div class="col-8"><svg id="link-threshold-sparkline" #linkThresholdSparkline style="width: 280px; height: 48px;"></svg></div>
                                             <div class="col-8  offset-4">
