@@ -54,4 +54,26 @@
     }
   }
 }
-  
+
+  /* Button appearance on hover */
+.btn-icon:hover {
+  transform: scale(1.1); /* Slight enlarge on hover */
+  background-color: rgba(0, 0, 0, 0.1); /* Subtle background color on hover */
+}
+
+.btn-icon {
+  margin-right: 10px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.flaticon-settings:before {
+  font-weight: 800 !important;
+}
+
+.flaticon-pin:before {
+  font-weight: 800 !important;
+}
+
+.flaticon-download:before {
+  font-weight: 800 !important;
+}
