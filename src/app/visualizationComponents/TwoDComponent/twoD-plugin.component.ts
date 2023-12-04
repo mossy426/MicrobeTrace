@@ -2736,9 +2736,10 @@ onPolygonColorTableChange(e) {
         return true
     }
 
+    // On click of settings button, show/hide settings dialog
     openSettings() {
         
-       this.visuals.twoD.Node2DNetworkExportDialogSettings.setVisibility(true);
+        (this.visuals.twoD.Node2DNetworkExportDialogSettings.isVisible) ? this.visuals.twoD.Node2DNetworkExportDialogSettings.setVisibility(false) : this.visuals.twoD.Node2DNetworkExportDialogSettings.setVisibility(true);
        this.visuals.twoD.ShowStatistics = !this.visuals.twoD.Show2DSettingsPane;
 
     }
