@@ -96,18 +96,22 @@ export class DialogSettings {
         }
 
         this.isVisible = isVisible;
-
+        
+        // this section causes the network settings dialog box (at least on 2D network) to minimize so that only top headings to be displayed. Removed (12/5/23) because it causes unwanted behavior
+        /*
         if(isVisible){
             const dialog = document.querySelector('#network-settings-pane');
             const tabset = dialog.querySelector('.tab-container');
     
             if(tabset){
                 const tabs: Array<Element> = Array.from(tabset.querySelectorAll('.m-tabs__item'));
-            
+                
                 for(let tab of tabs){
                     tab.classList.remove('active');
                 }
+                
             }
         }
+        */
     }
 }
