@@ -2717,9 +2717,9 @@ onPolygonColorTableChange(e) {
         let parent = this.visuals.twoD.svg.node().parentElement.parentElement,
             midX = bounds.x + bounds.width / 2,
             midY = bounds.y + bounds.height / 2;
-        let scale = 0.8 / Math.max(bounds.width / parent.parentNode.clientWidth, bounds.height / parent.parentNode.clientHeight);
-        const w = parent.parentNode.clientWidth / 2 - midX*scale ;
-        const h = parent.parentNode.clientHeight / 2 - midY*scale;
+        let scale = 0.8 / Math.max(bounds.width / parent.clientWidth, bounds.height / parent.clientHeight);
+        const w = parent.clientWidth / 2 - midX*scale ;
+        const h = parent.clientHeight / 2 - midY*scale;
         d3.select('svg#network')
             .transition()
             .duration(750)
