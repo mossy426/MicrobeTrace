@@ -2235,6 +2235,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         }
       }
       this.displayUrlDialog = !this.displayUrlDialog;
+      if (this.displayUrlDialog){
+        console.log(this.displayUrlDialog);
+        this.continueClicked();
+      }
     }
 
     DisplayMTDialog(saveUrl: string) {
