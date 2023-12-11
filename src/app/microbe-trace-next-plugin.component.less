@@ -14,12 +14,12 @@
 /* Search */
 .autocomplete-wrapper {
   position: relative;
-  border: solid 1px #EEE;
+  /*border: solid 1px #EEE;*/
   padding: 1px 2px;
   font-family: 'Verdana', sans-serif;
 }
 .autocomplete-wrapper #search {
-  padding: 0;
+  padding: 0px 0px 0px 5px;
   margin: 0;
   width: 100%;
   font-size: 13px;
@@ -57,9 +57,10 @@
   float: right;
   z-index: 2;
   position: relative;
+  margin-left: auto;
 }
 label[for="search"] {
-  color: #555555;
+  color: white;
   margin-right: 10px;
 }
 #search {
@@ -68,6 +69,12 @@ label[for="search"] {
 #search-field {
   border-radius: 0 0.25rem 0.25rem 0;
   border-left: 0;
+  margin-left: 2px;
+}
+
+#casesensitivebutton, #wholewordbutton {
+  margin: 2px;
+  border-radius: 0.25rem;
 }
 
 :host ::ng-deep .ui-multiselected-item-token {
