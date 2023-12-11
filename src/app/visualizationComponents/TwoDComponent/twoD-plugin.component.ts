@@ -254,7 +254,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
 
             this.visuals.twoD.svgStyle = {
-                'height': '88vh',
+                'height': '100%',
                 'min-width.%': 100,
                 "margin-top" : '-39px'
 

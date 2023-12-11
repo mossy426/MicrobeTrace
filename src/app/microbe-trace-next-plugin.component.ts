@@ -1691,6 +1691,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         // this.cmpRef = this.targets.first.createComponent(factory);
         setTimeout(() => {
             this._goldenLayoutHostComponent.initialise();
+            
+            // headerHeight (tab) is updated so that goldenLayout knows what the css is set to. 
+            window.context.commonService.visuals.microbeTrace._goldenLayoutHostComponent._goldenLayout.layoutConfig.dimensions.headerHeight = 36;
             this.addComponent('Files');
 
           if (this.auspiceUrlVal) {
