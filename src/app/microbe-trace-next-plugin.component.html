@@ -5,6 +5,7 @@
                 <div class="navbar-logo">
                     <span class="microbe-font">Microbe</span>
                     <span class="trace-font">Trace</span>
+                    <span><img alt="microbetrace" class="mt-icon-toolbar" [src]="appRootUrl() + 'assets/images/Logo.png'"></span>
                   </div>
                   <div class="menu-items">
                     <button class="navbar-item" mat-button [matMenuTriggerFor]="fileMenu"><i class="far nav-icon flaticon-file-1"></i>File<span class="dropdown-symbol">&#9660;</span></button>
@@ -107,7 +108,7 @@
                     <span class="primary">Trace&#8482;</span>
                     <!-- <span><img class="mt-icon" src="../../assets/images/Logo.png"></span> -->
                     <!-- Swap/Uncomment when building productions -->
-                    <span><img class="mt-icon" [src]="appRootUrl() + 'assets/images/Logo.png'"></span>
+                    <span><img alt="microbetrace" class="mt-icon" [src]="appRootUrl() + 'assets/images/Logo.png'"></span>
                 </div>
                 <div id="welcome-description" class="bottom primary">The Visualization Multitool for Molecular Epidemiology and Bioinformatics</div>
             </div>
