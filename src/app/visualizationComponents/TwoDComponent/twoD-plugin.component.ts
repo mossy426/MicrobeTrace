@@ -52,7 +52,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     Show2DSettingsPane: boolean = false;
     IsDataAvailable: boolean = false;
     svg: any = null;
-    settings: any = this.commonService.session.style.widgets;
+    widgets: object;
     halfWidth: any = null;
     halfHeight: any = null;
     transform: any = null;
@@ -160,9 +160,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     SelectedNetworkExportFileTypeListVariable: string = "png";
     SelectedNetworkExportScaleVariable: any = 1;
     SelectedNetworkExportQualityVariable: any = 0.92;
-    CalculatedResolutionWidth: any = 1918;
-    CalculatedResolutionHeight: any = 909;
-    CalculatedResolution: any = ((this.CalculatedResolutionWidth * this.SelectedNetworkExportScaleVariable) + " x " + (this.CalculatedResolutionHeight * this.SelectedNetworkExportScaleVariable) + "px");
+    CalculatedResolution: string;
 
     SelectedNodeLabelSizeVariable: any = 16;
 
@@ -193,9 +191,10 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
             this.visuals = commonService.visuals;
             this.commonService.visuals.twoD = this;
+            this.widgets = this.commonService.session.style.widgets;
             window.addEventListener('resize', () => {
                 // Replace this with the logic to determine the current show/hide state
-                const showState: boolean = this.visuals.twoD.commonService.session.style.widgets['network-gridlines-show'];
+                const showState: boolean = this.widgets['network-gridlines-show'];
                 this.drawGridlines(showState);
             });
     }
@@ -212,10 +211,10 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     InitView() {
 
         this.visuals.twoD.IsDataAvailable = (this.visuals.twoD.commonService.session.data.nodes.length === 0 ? false : true);
-        if (!this.visuals.twoD.commonService.session.style.widgets['default-distance-metric']) {
-          this.visuals.twoD.commonService.session.style.widgets['default-distance-metric'] = 
+        if (!this.widgets['default-distance-metric']) {
+          this.widgets['default-distance-metric'] = 
             this.visuals.twoD.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable;
-          this.visuals.twoD.commonService.session.style.widgets['link-threshold'] = 
+          this.widgets['link-threshold'] = 
             this.visuals.twoD.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable;
         }
       
@@ -265,7 +264,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             this.visuals.twoD.halfWidth = $('#network').parent().width() / 2;
             this.visuals.twoD.halfHeight = $('#network').parent().parent().parent().height() / 2;
             this.visuals.twoD.transform = d3.zoomTransform(d3.select('svg#network').node());
-            this.visuals.twoD.commonService.session.style.widgets = this.visuals.twoD.commonService.session.style.widgets;
+            this.widgets = this.widgets;
 
             let zoom = d3.zoom().filter(() => !this.ctrlPressed).on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3.event.transform));
 
@@ -378,19 +377,19 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             this.visuals.twoD.force = d3.forceSimulation()
                 .force('link', d3.forceLink()
                     .id(d => d._id)
-                    .distance(l => l.origin.length * this.visuals.twoD.commonService.session.style.widgets['link-length'])
-                    .strength(this.visuals.twoD.commonService.session.style.widgets['network-link-strength'])
+                    .distance(l => l.origin.length * this.widgets['link-length'])
+                    .strength(this.widgets['network-link-strength'])
                 )
                 .force('charge', d3.forceManyBody()
-                    .strength(-this.visuals.twoD.commonService.session.style.widgets['node-charge'])
+                    .strength(-this.widgets['node-charge'])
                 )
                 .force('gravity', forceAttract()
                     .target([this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight])
-                    .strength(this.visuals.twoD.commonService.session.style.widgets['network-gravity'])
+                    .strength(this.widgets['network-gravity'])
                 )
                 .force('center', d3.forceCenter(this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight));
 
-            if (this.visuals.twoD.commonService.session.style.widgets['network-friction']) this.visuals.twoD.force.velocityDecay(this.visuals.twoD.commonService.session.style.widgets['network-friction']);
+            if (this.widgets['network-friction']) this.visuals.twoD.force.velocityDecay(this.widgets['network-friction']);
 
             // this.visuals.twoD.clipboard.on('success', ()=>this.hideContextMenu());
 
@@ -416,11 +415,11 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
             // // this.visuals.twoD.eventManager.addGlobalEventListener('window', 'background-color-change', () => {
 
-            // //     $('#network').css('background-color', this.visuals.twoD.commonService.session.style.widgets['background-color']);
+            // //     $('#network').css('background-color', this.widgets['background-color']);
             // // });
 
             // $( document ).on( "background-color-change", function( ) {
-            //     $('#network').css('background-color', that.visuals.twoD.commonService.session.style.widgets['background-color']);
+            //     $('#network').css('background-color', that.widgets['background-color']);
             // });
 
             // // this.visuals.twoD.eventManager.addGlobalEventListener('document', 'node-visibility link-visibility cluster-visibility node-selected', () => {
@@ -456,7 +455,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             });
 
             if (this.visuals.twoD.commonService.session.files.length > 1) $('#link-color-variable').val('origin').change();
-            if (this.visuals.twoD.commonService.session.style.widgets['background-color']) $('#network').css('background-color', this.visuals.twoD.commonService.session.style.widgets['background-color']);
+            if (this.widgets['background-color']) $('#network').css('background-color', this.widgets['background-color']);
             this.visuals.microbeTrace.SelectedStatisticsTypesVariable = 'Show';
             this.visuals.microbeTrace.onShowStatisticsChanged();
             this.loadSettings();
@@ -465,7 +464,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             //For some mysterious reason, this really needed a delay...
             setTimeout(() => {
 
-                if (this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'] !== 'None') {
+                if (this.widgets['node-symbol-variable'] !== 'None') {
                     $('#node-symbol-variable').change(); //.trigger('change');
                 }
             }, 1);
@@ -512,10 +511,19 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     //     this.LoadDefaultVisualizationEvent.emit(e);
     // }
 
+    getImageDimensions() {
+        let parent = this.svg.node().parentElement.parentElement;
+        return [parent.clientWidth, parent.clientHeight] 
+    }
+
+    setCalculatedResolution() {
+        let [width, height] = this.getImageDimensions();
+        this.CalculatedResolution = (Math.round(width * this.SelectedNetworkExportScaleVariable) + " x " + Math.round(height * this.SelectedNetworkExportScaleVariable) + "px");
+    }
 
     updateCalculatedResolution(event) {
-
-        this.CalculatedResolution = (Math.round(this.CalculatedResolutionWidth * this.SelectedNetworkExportScaleVariable) + " x " + Math.round(this.CalculatedResolutionHeight * this.SelectedNetworkExportScaleVariable) + "px");
+        let [width, height] = this.getImageDimensions();
+        this.CalculatedResolution = (Math.round(width * this.SelectedNetworkExportScaleVariable) + " x " + Math.round(height * this.SelectedNetworkExportScaleVariable) + "px");
         this.cdref.detectChanges();
     }
 
@@ -530,15 +538,15 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this.visuals.twoD.Show2DExportPane = false;
         this.isExporting = true;
 
-        // if (this.commonService.session.style.widgets['node-symbol-variable'] != 'None') {
-        //     this.generateNodeSymbolSelectionTable("#node-symbol-table-bottom", this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'], false);
+        // if (this.widgets['node-symbol-variable'] != 'None') {
+        //     this.generateNodeSymbolSelectionTable("#node-symbol-table-bottom", this.widgets['node-symbol-variable'], false);
         // }
 
-        // if (this.commonService.session.style.widgets['node-color-variable'] != 'None') {
+        // if (this.widgets['node-color-variable'] != 'None') {
         //     this.visuals.microbeTrace.generateNodeColorTable("#node-color-table-bottom", false);
         // }
 
-        // if (this.commonService.session.style.widgets['link-color-variable'] != 'None') {
+        // if (this.widgets['link-color-variable'] != 'None') {
         //     this.visuals.microbeTrace.generateNodeLinkTable("#link-color-table-bottom", false);
         // }
 
@@ -546,7 +554,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             setTimeout(() => this.exportVisualization(undefined), 300);
         }
         else {
-            console.log('e2');
             this.exportWork2();
         }
     }
@@ -629,182 +636,186 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     exportWork2() {
         let network = document.getElementById('network');
         let $network = $(network);
+
+        // add microbeTrace logo as a watermark
         let watermark = d3.select(network).append('image')
-        .attr('xlink:href', this.visuals.twoD.commonService.watermark)
-        .attr('height', 128)
-        .attr('width', 128)
-        .attr('x', 35)
-        .attr('y', 35)
-        .style('opacity', $('#network-export-opacity').val());
-        let filetype = this.SelectedNetworkExportFileTypeListVariable, 
-            filename = this.SelectedNetworkExportFilenameVariable;
-            let vnodes : any = this.visuals.twoD.commonService.getVisibleNodes();
-            let aggregates = this.visuals.twoD.commonService.createNodeColorMap();
-            let values = Object.keys(aggregates);
-            var columns = [];
-            columns.push('Node ' + this.visuals.twoD.commonService.titleize(this.visuals.twoD.commonService.session.style.widgets["node-color-variable"]));
-            if (this.visuals.twoD.commonService.session.style.widgets["node-color-table-counts"]) columns.push('Count');
-            if (this.visuals.twoD.commonService.session.style.widgets["node-color-table-frequencies"]) columns.push('Frequency');
-            columns.push('Color');
-            var data = [];
-            values.forEach((value, i) => {
-              let nodeValue =  (this.visuals.twoD.commonService.session.style.nodeValueNames[value] ? this.visuals.twoD.commonService.session.style.nodeValueNames[value] : this.visuals.twoD.commonService.titleize("" + value));
-              let tableCounts = (this.visuals.twoD.commonService.session.style.widgets["node-color-table-counts"] ?  aggregates[value] : undefined);
-              let tableFreq = (this.visuals.twoD.commonService.session.style.widgets["node-color-table-frequencies"] ? (aggregates[value] / vnodes.length).toLocaleString() : undefined);
-              let line = {
+            .attr('xlink:href', this.visuals.twoD.commonService.watermark)
+            .attr('height', 128)
+            .attr('width', 128)
+            .attr('x', 35)
+            .attr('y', 35)
+            .style('opacity', $('#network-export-opacity').val());
+
+        let filetype = this.SelectedNetworkExportFileTypeListVariable; 
+        let filename = this.SelectedNetworkExportFilenameVariable;
+
+        // add node color table
+        let vnodes : any = this.visuals.twoD.commonService.getVisibleNodes();
+        let aggregates = this.visuals.twoD.commonService.createNodeColorMap();
+        let values = Object.keys(aggregates);
+        var columns = [];
+        columns.push('Node ' + this.visuals.twoD.commonService.titleize(this.widgets["node-color-variable"]));
+        if (this.widgets["node-color-table-counts"]) columns.push('Count');
+        if (this.widgets["node-color-table-frequencies"]) columns.push('Frequency');
+        columns.push('Color');
+        var data = [];
+        values.forEach((value, i) => {
+            let nodeValue =  (this.visuals.twoD.commonService.session.style.nodeValueNames[value] ? this.visuals.twoD.commonService.session.style.nodeValueNames[value] : this.visuals.twoD.commonService.titleize("" + value));
+            let tableCounts = (this.widgets["node-color-table-counts"] ?  aggregates[value] : undefined);
+            let tableFreq = (this.widgets["node-color-table-frequencies"] ? (aggregates[value] / vnodes.length).toLocaleString() : undefined);
+            let line = {
                 Node: nodeValue,
                 Count: tableCounts, 
                 Frequency: tableFreq,
                 Color: '<div  style="margin-left:5px; width:40px;height:12px;background:' + this.visuals.twoD.commonService.temp.style.nodeColorMap(value)  +'"> </div>'
-              }
-              data.push(line);
-            })
+            }
+            data.push(line);
+        })
 
-            let nodeWrapper = null;
+        let nodeWrapper = null;
 
-            this.visuals.twoD.commonService.currentNodeTableElement.subscribe((element) => {
-                if(element){
-                    nodeWrapper = element;
-                  } else {
-                    console.error('currentNodeTableElement is null');
-                  }                // You can now interact with this.myElement
-              });
+        this.visuals.twoD.commonService.currentNodeTableElement.subscribe((element) => {
+            if(element){
+                nodeWrapper = element;
+                } else {
+                console.error('currentNodeTableElement is null');
+                }                // You can now interact with this.myElement
+        });
             // private symbolTableWrapper: HTMLElement | null = null;
             // private linkColorTableWrapper: HTMLElement | null = null;
             // private nodeColorTableWrapper: HTMLElement | null = null;
             // let nodeWrapper = this.parent.getElementById('node-color-table');
 
-            console.log('node wrapper: ', nodeWrapper);
-            let nodeLegend = this.tabulate2(data, columns, nodeWrapper, network, 200,false);
-        
-            let vlinks = this.visuals.twoD.commonService.getVisibleLinks();
-            aggregates = this.visuals.twoD.commonService.createLinkColorMap();
-            values = Object.keys(aggregates);
-            columns = [];
-            columns.push('Link ' + this.visuals.twoD.commonService.titleize(this.visuals.twoD.commonService.session.style.widgets["link-color-variable"]));
-            if (this.visuals.twoD.commonService.session.style.widgets["link-color-table-counts"]) columns.push('Count');
-            if (this.visuals.twoD.commonService.session.style.widgets["link-color-table-frequencies"]) columns.push('Frequency');
-            columns.push('Color');
-            data = [];
-            values.forEach((value, i) => {
-              let nodeValue =  (this.visuals.twoD.commonService.session.style.linkValueNames[value] ? this.visuals.twoD.commonService.session.style.linkValueNames[value] : this.visuals.twoD.commonService.titleize("" + value));
-              let tableCounts = (this.visuals.twoD.commonService.session.style.widgets["link-color-table-counts"] ?  aggregates[value] : undefined);
-              let tableFreq = (this.visuals.twoD.commonService.session.style.widgets["link-color-table-frequencies"] ? (aggregates[value] / vlinks.length).toLocaleString() : undefined);
-              let line = {
+        console.log('node wrapper: ', nodeWrapper);
+        let nodeLegend = this.tabulate2(data, columns, nodeWrapper, network, 200,false);
+    
+        // add link origin table
+        let vlinks = this.visuals.twoD.commonService.getVisibleLinks();
+        aggregates = this.visuals.twoD.commonService.createLinkColorMap();
+        values = Object.keys(aggregates);
+        columns = [];
+        columns.push('Link ' + this.visuals.twoD.commonService.titleize(this.widgets["link-color-variable"]));
+        if (this.widgets["link-color-table-counts"]) columns.push('Count');
+        if (this.widgets["link-color-table-frequencies"]) columns.push('Frequency');
+        columns.push('Color');
+        data = [];
+        values.forEach((value, i) => {
+            let nodeValue =  (this.visuals.twoD.commonService.session.style.linkValueNames[value] ? this.visuals.twoD.commonService.session.style.linkValueNames[value] : this.visuals.twoD.commonService.titleize("" + value));
+            let tableCounts = (this.widgets["link-color-table-counts"] ?  aggregates[value] : undefined);
+            let tableFreq = (this.widgets["link-color-table-frequencies"] ? (aggregates[value] / vlinks.length).toLocaleString() : undefined);
+            let line = {
                 Link: nodeValue,
                 Count: tableCounts, 
                 Frequency: tableFreq,
                 Color: '<div  style="margin-left:5px; width:40px;height:12px;background:' + this.visuals.twoD.commonService.temp.style.linkColorMap(value)  +'"> </div>'
               }
               data.push(line);
-            })
-            console.log('1');
+        })
 
-            let linkWrapper = null;
+        let linkWrapper = null;
 
-            this.visuals.twoD.commonService.currentLinkTableElement.subscribe((element) => {
-                linkWrapper = element;
-                // You can now interact with this.myElement
-              });
-            // let linkWrapper = document.getElementById('link-color-table-wrapper');
-            let linkLegend = this.tabulate2(data, columns, linkWrapper, network, 600, false);
-        
-            let variable = this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'];
-              values = [];
-            aggregates = {};
-            let nodes = this.visuals.twoD.commonService.session.data.nodes;
-            let n = nodes.length;
-            vnodes = 0;
-            for (let i = 0; i < n; i++) {
-              let d = nodes[i];
-              if (!d.visible) continue;
-              vnodes++;
-              let dv = d[variable];
-              if (values.indexOf(dv) == -1) values.push(dv);
-              if (dv in aggregates) {
+        this.visuals.twoD.commonService.currentLinkTableElement.subscribe((element) => {
+            linkWrapper = element;
+            // You can now interact with this.myElement
+            });
+        // let linkWrapper = document.getElementById('link-color-table-wrapper');
+        let linkLegend = this.tabulate2(data, columns, linkWrapper, network, 600, false);
+    
+        // add node symbol table
+        let variable = this.widgets['node-symbol-variable'];
+            values = [];
+        aggregates = {};
+        let nodes = this.visuals.twoD.commonService.session.data.nodes;
+        let n = nodes.length;
+        vnodes = 0;
+        for (let i = 0; i < n; i++) {
+            let d = nodes[i];
+            if (!d.visible) continue;
+            vnodes++;
+            let dv = d[variable];
+            if (values.indexOf(dv) == -1) values.push(dv);
+            if (dv in aggregates) {
                 aggregates[dv]++;
-              } else {
+            } else {
                 aggregates[dv] = 1;
-              }
             }
-              columns = [];
-            columns.push('Node ' + this.visuals.twoD.commonService.titleize(variable));
-            if (this.visuals.twoD.commonService.session.style.widgets["node-symbol-table-counts"]) columns.push('Count');
-            if (this.visuals.twoD.commonService.session.style.widgets["node-symbol-table-frequencies"]) columns.push('Frequency');
-            columns.push('Shape');
-            data = [];
-            values.forEach((value, i) => {
-              let nodeValue =  this.visuals.twoD.commonService.titleize("" + value);
-              let tableCounts = (this.visuals.twoD.commonService.session.style.widgets["node-symbol-table-counts"] ?  aggregates[value] : undefined);
-              let tableFreq = (this.visuals.twoD.commonService.session.style.widgets["node-symbol-table-frequencies"] ? (aggregates[value] / vnodes.length).toLocaleString() : undefined);        
-              let line = {
+        }
+        columns = [];
+        columns.push('Node ' + this.visuals.twoD.commonService.titleize(variable));
+        if (this.widgets["node-symbol-table-counts"]) columns.push('Count');
+        if (this.widgets["node-symbol-table-frequencies"]) columns.push('Frequency');
+        columns.push('Shape');
+        data = [];
+        values.forEach((value, i) => {
+            let nodeValue =  this.visuals.twoD.commonService.titleize("" + value);
+            let tableCounts = (this.widgets["node-symbol-table-counts"] ?  aggregates[value] : undefined);
+            let tableFreq = (this.widgets["node-symbol-table-frequencies"] ? (aggregates[value] / vnodes.length).toLocaleString() : undefined);        
+            let line = {
                 Node: nodeValue,
                 Count: tableCounts, 
                 Frequency: tableFreq,
-                Shape: $("#node-symbol option[value='" + this.visuals.twoD.commonService.temp.style.nodeSymbolMap(value) + "']").text()
-              }
-              data.push(line);
-            })
-            let symbolWrapper = document.getElementById('node-symbol-table');
-
-            let symbolLegend;
-
-            if (symbolWrapper) {
-                symbolLegend = this.tabulate2(data, columns, symbolWrapper, network, 200, true);
+                Shape: $("#node-symbol-table option[value='" + this.commonService.temp.style.nodeSymbolMap(value) + "']").eq(parseInt(value)).text()
             }
+            data.push(line);
+        })
+        let symbolWrapper = document.getElementById('node-symbol-table');
+        let symbolLegend;
+        if (symbolWrapper) {
+            symbolLegend = this.tabulate2(data, columns, symbolWrapper, network, 200, true);
+        }
             
-            let statsDiv = document.getElementById('network-statistics-wrapper');
-            let foreignObjStats = d3.select(network).append("svg:foreignObject")
+        // add network statistics table
+        let statsDiv = document.getElementById('network-statistics-wrapper');
+        let foreignObjStats = d3.select(network).append("svg:foreignObject")
             .attr("x", statsDiv.offsetLeft)
-            .attr("y", statsDiv.offsetTop-60)
+            .attr("y", statsDiv.offsetTop-10)
             .attr("width", statsDiv.offsetWidth)
             .attr("height", statsDiv.offsetHeight);
-            foreignObjStats.append("xhtml:body").html(statsDiv.innerHTML);
+        foreignObjStats.append("xhtml:body").html(statsDiv.innerHTML);
 
-            console.log('file type: ', filetype);
-            if (filetype == 'svg') {
-              let content = this.visuals.twoD.commonService.unparseSVG(network);
-              let blob = new Blob([content], { type: 'image/svg+xml;charset=utf-8' });
-              saveAs(blob, filename + '.' + filetype);
-              if (watermark){
+        if (filetype == 'svg') {
+            let content = this.visuals.twoD.commonService.unparseSVG(network);
+            let blob = new Blob([content], { type: 'image/svg+xml;charset=utf-8' });
+            saveAs(blob, filename + '.' + filetype);
+            if (watermark){
                 watermark.remove();
-              }
-              if (nodeLegend){
-                nodeLegend.remove();
-              }
-              if (linkLegend){
-                linkLegend.remove();
-              }
-              if (symbolLegend){
-                symbolLegend.remove();
-              }
-              if (foreignObjStats){
-                foreignObjStats.remove();
-              }
-            } else {
-              saveSvgAsPng(network, filename + '.' + filetype, {
-                scale: parseFloat($('#network-export-scale').val() as string),
-                backgroundColor: this.visuals.twoD.commonService.session.style.widgets['background-color'],
-                encoderType: 'image/' + filetype,
-                encoderOptions: parseFloat($('#network-export-quality').val() as string)
-              }).then(() => {
-                  if (watermark){
-                    watermark.remove();
-                  }
-                  if (nodeLegend){
-                    nodeLegend.remove();
-                  }
-                  if (linkLegend){
-                    linkLegend.remove();
-                  }
-                  if (symbolLegend){
-                    symbolLegend.remove();
-                  }
-                  if (foreignObjStats){
-                    foreignObjStats.remove();
-                  }
-                });
             }
+            if (nodeLegend){
+                nodeLegend.remove();
+            }
+            if (linkLegend){
+                linkLegend.remove();
+            }
+            if (symbolLegend){
+                symbolLegend.remove();
+            }
+            if (foreignObjStats){
+                foreignObjStats.remove();
+            }
+        } else {
+            saveSvgAsPng(network, filename + '.' + filetype, {
+                scale: this.SelectedNetworkExportScaleVariable,
+                backgroundColor: this.widgets['background-color'],
+                encoderType: 'image/' + filetype,
+                encoderOptions: this.SelectedNetworkExportQualityVariable
+            }).then(() => {
+                if (watermark){
+                    watermark.remove();
+                }
+                if (nodeLegend){
+                    nodeLegend.remove();
+                }
+                if (linkLegend){
+                    linkLegend.remove();
+                }
+                if (symbolLegend){
+                    symbolLegend.remove();
+                }
+                if (foreignObjStats){
+                    foreignObjStats.remove();
+                }
+            });
+        }
     }
 
     tabulate2 = (data, columns, wrapper, container, topOffset, leftOffset) => {
@@ -864,12 +875,12 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         let newNodes = this.visuals.twoD.commonService.getVisibleNodes(true);
         let oldNodes;
 
-        if(this.visuals.twoD.commonService.session.style.widgets["timeline-date-field"] != 'None')
+        if(this.widgets["timeline-date-field"] != 'None')
             oldNodes = this.visuals.twoD.commonService.session.network.timelineNodes;
         else
             oldNodes = this.visuals.twoD.commonService.session.network.nodes;
         
-        if (newNodes.length === 0 && this.visuals.twoD.commonService.session.style.widgets["timeline-date-field"] == 'None') return;
+        if (newNodes.length === 0 && this.widgets["timeline-date-field"] == 'None') return;
 
         newNodes.forEach((d, i) => {
             let match = oldNodes.find(d2 =>  {
@@ -930,8 +941,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         let vlinks = this.visuals.twoD.getVLinks();
         let links = this.visuals.twoD.svg.select('g.links').selectAll('line').data(vlinks)
             .join('line')
-            .attr('stroke-width', this.visuals.twoD.commonService.session.style.widgets['link-width'])
-            .attr('opacity', 1 - this.visuals.twoD.commonService.session.style.widgets['link-opacity'])
+            .attr('stroke-width', this.widgets['link-width'])
+            .attr('opacity', 1 - this.widgets['link-opacity'])
             .on('mouseenter', (x) => this.visuals.twoD.showLinkTooltip(x))
             .on('mouseout', (x) => this.visuals.twoD.hideTooltip());
 
@@ -941,17 +952,17 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         let linklabels = this.visuals.twoD.svg.select('g.links').selectAll('text').data(vlinks)
             .join('text')
             .attr('text-anchor', 'middle')
-            .attr('dy', this.visuals.twoD.commonService.session.style.widgets['link-width'] + 2)
+            .attr('dy', this.widgets['link-width'] + 2)
             .text((l) => {
 
-                const labelValue = l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']];
+                const labelValue = l[this.widgets['link-label-variable']];
               
                 if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
 
-                    if(this.visuals.twoD.commonService.session.style.widgets['default-distance-metric'] == 'snps') {
+                    if(this.widgets['default-distance-metric'] == 'snps') {
                         return Math.round(parseFloat(labelValue));
                     } else {
-                        return parseFloat(labelValue).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']);
+                        return parseFloat(labelValue).toFixed(this.widgets['link-label-decimal-length']);
                     }
 
                 } else {
@@ -977,7 +988,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 .attr('y2', l => l.target.y);
 
 
-            if (this.visuals.twoD.commonService.session.style.widgets['link-label-variable'] !== 'None') {
+            if (this.widgets['link-label-variable'] !== 'None') {
                 linklabels
                     .attr('x', l => (l.source.x + l.target.x) / 2)
                     .attr('y', l => (l.source.y + l.target.y) / 2)
@@ -989,12 +1000,12 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             }
         };
 
-        let foci = this.visuals.twoD.commonService.session.style.widgets['polygons-foci'];
-        let gather = this.visuals.twoD.commonService.session.style.widgets['polygons-gather-force'];
-        let fill = this.visuals.twoD.commonService.session.style.widgets['polygon-color'] as any;
+        let foci = this.widgets['polygons-foci'];
+        let gather = this.widgets['polygons-gather-force'];
+        let fill = this.widgets['polygon-color'] as any;
         var opacity;
         
-        if (this.visuals.twoD.commonService.session.style.widgets['polygons-color-show']) {
+        if (this.widgets['polygons-color-show']) {
             fill = d => this.visuals.twoD.commonService.temp.style.polygonColorMap(d.key);
             opacity = (d) => this.visuals.twoD.commonService.temp.style.polygonAlphaMap(d.key);
         } else {
@@ -1039,7 +1050,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             .attr('y1', l => l.source.y)
             .attr('x2', l => l.target.x)
             .attr('y2', l => l.target.y);
-            if (this.visuals.twoD.commonService.session.style.widgets['link-label-variable'] !== 'None') {
+            if (this.widgets['link-label-variable'] !== 'None') {
             linklabels
                 .attr('x', l => (l.source.x + l.target.x) / 2)
                 .attr('y', l => (l.source.y + l.target.y) / 2)
@@ -1068,7 +1079,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
                     // (x) => this.visuals.twoD.dragstarted(x)
 
-            if (this.visuals.twoD.commonService.session.style.widgets['polygons-label-show']) {
+            if (this.widgets['polygons-label-show']) {
 
             let g= d3.select('#network g.clustersLabels').text("").selectAll('text')
                 .data(groups)
@@ -1087,7 +1098,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             }
         }      
         
-        if(this.visuals.twoD.commonService.session.style.widgets['polygons-show']) this.visuals.twoD.commonService.temp.polygonGroups = groups;
+        if(this.widgets['polygons-show']) this.visuals.twoD.commonService.temp.polygonGroups = groups;
         else delete this.visuals.twoD.commonService.temp.polygonGroups;
 
         let handleTick = d => {
@@ -1097,7 +1108,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             else return layoutTick;		
         }
 
-        this.visuals.twoD.force.nodes(this.visuals.twoD.commonService.session.network.nodes).on('tick', handleTick(this.visuals.twoD.commonService.session.style.widgets['polygons-show']));
+        this.visuals.twoD.force.nodes(this.visuals.twoD.commonService.session.network.nodes).on('tick', handleTick(this.widgets['polygons-show']));
         this.visuals.twoD.force.force('link').links(vlinks);
         this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
         $('#node-symbol-variable').trigger('change');
@@ -1129,43 +1140,43 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
     updatePolygonColors() {
         let polygonSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
-            this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts-sort"] = "";
-          if (this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-name-sort"] === "ASC")
-          this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-name-sort"] = "DESC"
+            this.widgets["polygon-color-table-counts-sort"] = "";
+          if (this.widgets["polygon-color-table-name-sort"] === "ASC")
+          this.widgets["polygon-color-table-name-sort"] = "DESC"
           else
-          this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-name-sort"] = "ASC"
+          this.widgets["polygon-color-table-name-sort"] = "ASC"
             this.visuals.twoD.updatePolygonColors();
         });
-        let polygonColorHeaderTitle =  (this.visuals.twoD.commonService.session.style['overwrite'] && this.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderVariable'] && this.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderVariable'] == this.visuals.twoD.commonService.session.style.widgets['polygons-foci'] ? this.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderTitle'] : "Polygon " + this.visuals.twoD.commonService.titleize(this.visuals.twoD.commonService.session.style.widgets['polygons-foci']));
+        let polygonColorHeaderTitle =  (this.visuals.twoD.commonService.session.style['overwrite'] && this.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderVariable'] && this.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderVariable'] == this.widgets['polygons-foci'] ? this.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderTitle'] : "Polygon " + this.visuals.twoD.commonService.titleize(this.widgets['polygons-foci']));
         let polygonHeader = $("<th class='p-1' contenteditable>" + polygonColorHeaderTitle + "</th>").append(polygonSort);
         let countSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
   
-            this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-name-sort"] = "";
-          if (this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts-sort"] === "ASC")
-          this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts-sort"] = "DESC"
+            this.widgets["polygon-color-table-name-sort"] = "";
+          if (this.widgets["polygon-color-table-counts-sort"] === "ASC")
+          this.widgets["polygon-color-table-counts-sort"] = "DESC"
           else
-          this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts-sort"] = "ASC"
+          this.widgets["polygon-color-table-counts-sort"] = "ASC"
             this.visuals.twoD.updatePolygonColors();
         });
-        let countHeader = $((this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts"] ? "<th>Count</th>" : "")).append(countSort);
+        let countHeader = $((this.widgets["polygon-color-table-counts"] ? "<th>Count</th>" : "")).append(countSort);
         let polygonColorTable = $("#polygon-color-table")
           .empty()
           .append($("<tr></tr>"))
           .append(polygonHeader)
           .append(countHeader)
-          .append((this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-frequencies"] ? "<th>Frequency</th>" : ""))
+          .append((this.widgets["polygon-color-table-frequencies"] ? "<th>Frequency</th>" : ""))
           .append("<th>Color</th>" );
         if (!this.visuals.twoD.commonService.session.style['polygonValueNames']) this.visuals.twoD.commonService.session.style['polygonValueNames'] = {};
         let aggregates = this.visuals.twoD.commonService.createPolygonColorMap();
         let values = Object.keys(aggregates);
   
-        if (this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts-sort"] == "ASC")
+        if (this.widgets["polygon-color-table-counts-sort"] == "ASC")
           values.sort(function(a, b) { return aggregates[a] - aggregates[b] });
-        else if (this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts-sort"] == "DESC")
+        else if (this.widgets["polygon-color-table-counts-sort"] == "DESC")
           values.sort(function(a, b) { return aggregates[b] - aggregates[a] });
-        if (this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-name-sort"] == "ASC")
+        if (this.widgets["polygon-color-table-name-sort"] == "ASC")
           values.sort(function(a, b) { return a as any - (b as any) });
-        else if (this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-name-sort"] == "DESC")
+        else if (this.widgets["polygon-color-table-name-sort"] == "DESC")
           values.sort(function(a, b) { return b as any - (a as any) });
   
         let total = 0;
@@ -1210,8 +1221,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
               "<td data-value='" + value + "'>" +
                 (that.visuals.twoD.commonService.session.style['polygonValueNames'][value] ? that.visuals.twoD.commonService.session.style['polygonValueNames'][value] : that.visuals.twoD.commonService.titleize("" + value)) +
               "</td>" +
-              (that.visuals.twoD.commonService.session.style.widgets["polygon-color-table-counts"] ? "<td>" + aggregates[value] + "</td>" : "") +
-              (that.visuals.twoD.commonService.session.style.widgets["polygon-color-table-frequencies"] ? "<td>" + (aggregates[value] / total).toLocaleString() + "</td>" : "") +
+              (that.widgets["polygon-color-table-counts"] ? "<td>" + aggregates[value] + "</td>" : "") +
+              (that.widgets["polygon-color-table-frequencies"] ? "<td>" + (aggregates[value] / total).toLocaleString() + "</td>" : "") +
             "</tr>"
           ).append(cell);
           polygonColorTable.append(row);
@@ -1238,7 +1249,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         polygonColorTable
           .find(".p-1")
           .on("focusout", function() {
-            that.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderVariable'] = that.visuals.twoD.commonService.session.style.widgets["polygons-foci"];
+            that.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderVariable'] = that.widgets["polygons-foci"];
             that.visuals.twoD.commonService.session.style['overwrite']['polygonColorHeaderTitle'] = $($(this).contents()[0]).text();
           });
 
@@ -1272,15 +1283,15 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
     polygonsToggle(e) {
 
-        this.visuals.twoD.commonService.session.style.widgets['polygons-show'] = e;
+        this.widgets['polygons-show'] = e;
 
         if(e) {
-            if(this.visuals.twoD.commonService.session.style.widgets['polygons-color-show'] == true){
+            if(this.widgets['polygons-color-show'] == true){
                 $('#polygons-color-show').click();
               } else {
                 $('#polygons-color-hide').click();
               }
-              if(this.visuals.twoD.commonService.session.style.widgets['polygons-label-show'] == true){
+              if(this.widgets['polygons-label-show'] == true){
                 $('#polygons-label-show').click();
               } else {
                 $('#polygons-label-hide').click();
@@ -1299,7 +1310,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
     polygonColorsToggle(e) {
         if (e) {
-            this.visuals.twoD.commonService.session.style.widgets['polygons-color-show'] = true;
+            this.widgets['polygons-color-show'] = true;
             $("#polygon-color-value-row").slideUp();
             $("#polygon-color-table-row").slideDown();
             this.visuals.twoD.PolygonColorTableWrapperDialogSettings.setVisibility(true);
@@ -1311,7 +1322,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
         }
         else {
-            this.visuals.twoD.commonService.session.style.widgets['polygons-color-show'] = false;
+            this.widgets['polygons-color-show'] = false;
             $("#polygon-color-value-row").slideDown();
             $("#polygon-color-table-row").slideUp();
             $("#polygon-color-table").empty();
@@ -1323,7 +1334,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     }
 
     onPolygonColorChanged(e) {
-        this.visuals.twoD.commonService.session.style.widgets["polygon-color"] = e;
+        this.widgets["polygon-color"] = e;
         this.visuals.twoD.render();
     }
 
@@ -1345,8 +1356,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
     redrawPolygonLabels() {
         let nodes = d3.select('#network g.clustersLabels').selectAll('text');
-        let size = this.visuals.twoD.commonService.session.style.widgets['polygons-label-size'],
-          orientation = this.visuals.twoD.commonService.session.style.widgets['polygons-label-orientation'];
+        let size = this.widgets['polygons-label-size'],
+          orientation = this.widgets['polygons-label-orientation'];
 
         nodes
           .style('font-size', size + 'px');
@@ -1546,7 +1557,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 d.fy = null;
             } else {
                 // save node location back to temp network for pinned network
-                if(that.visuals.twoD.commonService.session.style.widgets["timeline-date-field"] != 'None') {
+                if(that.widgets["timeline-date-field"] != 'None') {
                   let node = that.visuals.twoD.commonService.session.network.timelineNodes.find(d2 => d2._id == d._id);
                   if(node) {
                     node.x = d.x;
@@ -1646,14 +1657,14 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     };
 
     showNodeTooltip(d) {
-        if (this.visuals.twoD.commonService.session.style.widgets['node-highlight']) 
+        if (this.widgets['node-highlight']) 
             this.visuals.twoD.highlightNeighbors(d);
     
         // If no tooltip variable is selected, we shouldn't show a tooltip
-        if (this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'].length > 0 && this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'][0] == 'None') 
+        if (this.widgets['node-tooltip-variable'].length > 0 && this.widgets['node-tooltip-variable'][0] == 'None') 
             return;
 
-        this.visuals.twoD.SelectedNodeTooltipVariable = this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'];
+        this.visuals.twoD.SelectedNodeTooltipVariable = this.widgets['node-tooltip-variable'];
     
         // Tooltip variables can be a single string or an array
         let tooltipVariables = this.visuals.twoD.SelectedNodeTooltipVariable;
@@ -1792,13 +1803,13 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     };
 
     hideTooltip() {
-        if (this.visuals.twoD.commonService.session.style.widgets['node-highlight']) {
+        if (this.widgets['node-highlight']) {
             this.visuals.twoD.svg
                 .select('g.nodes')
                 .selectAll('g')
                 .selectAll('path')
                 .attr('opacity', 1);
-            let linkOpacity = 1 - this.visuals.twoD.commonService.session.style.widgets['link-opacity'];
+            let linkOpacity = 1 - this.widgets['link-opacity'];
             this.visuals.twoD.svg
                 .select('g.links')
                 .selectAll('line')
@@ -1822,22 +1833,22 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
         //Things to track in the function:
         //* Shapes:
-        let type = d3[this.visuals.twoD.commonService.session.style.widgets['node-symbol']];
-        let symbolVariable = this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'];
+        let type = d3[this.widgets['node-symbol']];
+        let symbolVariable = this.widgets['node-symbol-variable'];
        
         // Custom Shape Selected
         if (type === undefined) {
-            type = this.customShapes.shapes[this.visuals.twoD.commonService.session.style.widgets['node-symbol']];
+            type = this.customShapes.shapes[this.widgets['node-symbol']];
         }
 
         //* Sizes:
-        let defaultSize = this.visuals.twoD.commonService.session.style.widgets['node-radius'];
+        let defaultSize = this.widgets['node-radius'];
         let size = defaultSize, med = defaultSize, oldrng, min, max;
-        let sizeVariable = this.visuals.twoD.commonService.session.style.widgets['node-radius-variable'];
+        let sizeVariable = this.widgets['node-radius-variable'];
         let scale;
         let nodes;
         if (sizeVariable !== 'None') {
-            if (this.visuals.twoD.commonService.session.style.widgets["timeline-date-field"] == 'None') nodes = this.visuals.twoD.commonService.session.network.nodes;
+            if (this.widgets["timeline-date-field"] == 'None') nodes = this.visuals.twoD.commonService.session.network.nodes;
             else nodes = this.visuals.twoD.commonService.session.network.timelineNodes;
             let n = this.visuals.twoD.commonService.session.network.nodes.length;
             min = Number.MAX_VALUE;
@@ -1851,8 +1862,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             oldrng = max - min;
             med = oldrng / 2;
 
-            let maxWidth = this.visuals.twoD.commonService.session.style.widgets['node-radius-max'];
-            let minWidth = this.visuals.twoD.commonService.session.style.widgets['node-radius-min'];
+            let maxWidth = this.widgets['node-radius-max'];
+            let minWidth = this.widgets['node-radius-min'];
             scale = d3.scaleLinear()
             .domain([min, max])
             .range([minWidth, maxWidth]);
@@ -1896,19 +1907,19 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         nodes
           .selectAll('path')
           .style('stroke', 'black')
-          .style('stroke-width', this.visuals.twoD.commonService.session.style.widgets['node-border-width']);
+          .style('stroke-width', this.widgets['node-border-width']);
       }
 
 
     redrawLabels() {
 
         let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes).select('text'),
-            labelVar = this.visuals.twoD.commonService.session.style.widgets['node-label-variable'];
+            labelVar = this.widgets['node-label-variable'];
         if (labelVar == 'None') {
             nodes.text('');
         } else {
-            let size = this.visuals.twoD.commonService.session.style.widgets['node-label-size'],
-                orientation = this.visuals.twoD.commonService.session.style.widgets['node-label-orientation'];
+            let size = this.widgets['node-label-size'],
+                orientation = this.widgets['node-label-orientation'];
             nodes
                 .text(n => n[labelVar])
                 .style('font-size', size + 'px');
@@ -1950,7 +1961,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
     onPolygonLabelVariableChange(e) {
 
-        this.visuals.twoD.commonService.session.style.widgets['polygons-label-variable'] = e;
+        this.widgets['polygons-label-variable'] = e;
         if (e == 'None') {
             $('.polygon-label-row').slideUp();
         } else {
@@ -1962,9 +1973,9 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
     centerPolygons(e) {
 
-        this.visuals.twoD.commonService.session.style.widgets['polygons-foci'] = e;
+        this.widgets['polygons-foci'] = e;
         this.visuals.twoD.render();
-        if(this.visuals.twoD.commonService.session.style.widgets['polygons-color-show'] == true) {
+        if(this.widgets['polygons-color-show'] == true) {
           $("#polygon-color-table").empty();
           this.visuals.twoD.updatePolygonColors();
         }
@@ -1980,7 +1991,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     }
 
     setPolygonLabelSize(size) {
-        this.visuals.twoD.commonService.session.style.widgets['polygons-label-size'] = parseFloat(size);
+        this.widgets['polygons-label-size'] = parseFloat(size);
         this.visuals.twoD.redrawPolygonLabels();
     }
 
@@ -1989,24 +2000,24 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     }
 
     onPolygonLabelOrientationChange(e) {
-        this.visuals.twoD.commonService.session.style.widgets['polygons-label-orientation'] = e;
+        this.widgets['polygons-label-orientation'] = e;
         this.visuals.twoD.redrawPolygonLabels();
     }
 
     onPolygonGatherChange(e) {
         let v = parseFloat(e);
-        this.visuals.twoD.commonService.session.style.widgets['polygons-gather-force'] = v;
+        this.widgets['polygons-gather-force'] = v;
         this.visuals.twoD.render();
     }
 
     onPolygonLabelShowChange(e) {
         if (e) {
-            this.visuals.twoD.commonService.session.style.widgets['polygons-label-show'] = true;
+            this.widgets['polygons-label-show'] = true;
             $('.polygons-label-row').slideDown();
             this.visuals.twoD.render();
         }
         else {
-            this.visuals.twoD.commonService.session.style.widgets['polygons-label-show'] = false;
+            this.widgets['polygons-label-show'] = false;
             $('.polygons-label-row').slideUp();
             this.visuals.twoD.render();
         }
@@ -2014,7 +2025,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
     onPolygonShowChange(e) {
         if (e == "Show") {
-            this.visuals.twoD.commonService.session.style.widgets['polygons-label-show'] = true;
+            this.widgets['polygons-label-show'] = true;
             $('.polygons-label-row').slideDown();
             this.visuals.twoD.render();
              //If hidden by default, unhide to perform slide up and down
@@ -2025,7 +2036,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             // }
         }
         else {
-            this.visuals.twoD.commonService.session.style.widgets['polygons-label-show'] = false;
+            this.widgets['polygons-label-show'] = false;
             $('#node-color-value-row').slideDown();
             $('#node-color-table-row').slideUp();
             this.visuals.twoD.render();
@@ -2035,7 +2046,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
 onPolygonColorTableChange(e) {
     this.SelectedNetworkTableTypeVariable = e;
-    this.visuals.twoD.commonService.session.style.widgets["polygon-color-table-visible"] = e;
+    this.widgets["polygon-color-table-visible"] = e;
     if (this.SelectedNetworkTableTypeVariable == 'Show') {
         this.PolygonColorTableWrapperDialogSettings.setVisibility(true);
     }
@@ -2050,7 +2061,7 @@ onPolygonColorTableChange(e) {
     /*/
     onNodeLabelVaribleChange(e) {
 
-        this.visuals.twoD.commonService.session.style.widgets['node-label-variable'] = e;
+        this.widgets['node-label-variable'] = e;
         if (e == 'None') {
             $('.node-label-row').slideUp();
         } else {
@@ -2064,12 +2075,12 @@ onPolygonColorTableChange(e) {
     }
 
     setNodeLabelSize(size) {
-        this.visuals.twoD.commonService.session.style.widgets['node-label-size'] = parseFloat(size);
+        this.widgets['node-label-size'] = parseFloat(size);
         this.visuals.twoD.redrawLabels();
     }
 
     onNodeLabelOrientationChange(e) {
-        this.visuals.twoD.commonService.session.style.widgets['node-label-orientation'] = e;
+        this.widgets['node-label-orientation'] = e;
         this.visuals.twoD.redrawLabels();
     }
 
@@ -2081,13 +2092,13 @@ onPolygonColorTableChange(e) {
             selectedValue = [selectedValue];
         }
 
-        this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'] = selectedValue;
+        this.widgets['node-tooltip-variable'] = selectedValue;
         this.visuals.twoD.redrawLabels();
     }
 
     onNodeSymbolVariableChange(e, setVisibility = true) {
 
-            this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'] = this.SelectedNodeSymbolVariable;
+            this.widgets['node-symbol-variable'] = this.SelectedNodeSymbolVariable;
 
 
             if(setVisibility){
@@ -2153,7 +2164,7 @@ onPolygonColorTableChange(e) {
         let table = $(tableId)
         const disabled: string = isEditable ? '' : 'disabled';
 
-        this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'] = variable;
+        this.widgets['node-symbol-variable'] = variable;
 
         if (variable === 'None' && !isEditable) return;
 
@@ -2187,10 +2198,10 @@ onPolygonColorTableChange(e) {
         table.empty().append(
             "<tr>" +
               `<th class="${isEditable ? 'table-header-row' : ''}" ${isEditable ? 'contenteditable' : ''}><div class="header-content sortable">Node ${this.commonService.titleize(variable)}<a class='sort-button' style='cursor: pointer'>⇅</a></div></th>` +
-              (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-counts']
+              (this.widgets['node-symbol-table-counts']
                 ? `<th class="table-header-row"><div class="header-content sortable">Count<a class='sort-button' style='cursor: pointer'>⇅</a></div></th>`
                 : '') +
-              (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-frequencies']
+              (this.widgets['node-symbol-table-frequencies']
                 ? `<th class="table-header-row"><div class="header-content sortable">Frequency<a class='sort-button' style='cursor: pointer'>⇅</a></div></th>`
                 : '') +
               '<th>Shape</th>' +
@@ -2217,8 +2228,8 @@ onPolygonColorTableChange(e) {
             let row = $(
                 '<tr>' +
                 `<td ${isEditable ? 'contenteditable' : ''}> ${this.visuals.twoD.commonService.titleize('' + v)} </td> ` +
-                (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-counts'] ? ('<td>' + aggregates[v] + '</td>') : '') +
-                (this.visuals.twoD.commonService.session.style.widgets['node-symbol-table-frequencies'] ? ('<td>' + (aggregates[v] / vnodes).toLocaleString() + '</td>') : '') +
+                (this.widgets['node-symbol-table-counts'] ? ('<td>' + aggregates[v] + '</td>') : '') +
+                (this.widgets['node-symbol-table-frequencies'] ? ('<td>' + (aggregates[v] / vnodes).toLocaleString() + '</td>') : '') +
                 '</tr>'
             ).append(cell);
             table.append(row);
@@ -2263,41 +2274,41 @@ onPolygonColorTableChange(e) {
             $('#node-radius-row').slideUp();
           }
 
-        this.visuals.twoD.commonService.session.style.widgets['node-radius-variable'] = e;
+        this.widgets['node-radius-variable'] = e;
         this.visuals.twoD.redrawNodes();
 
     }
 
    onNodeRadiusMaxChange(e) {
-    this.visuals.twoD.commonService.session.style.widgets['node-radius-max'] = e;
+    this.widgets['node-radius-max'] = e;
     this.visuals.twoD.redrawNodes();
    }
 
    onNodeRadiusMinChange(e) {
-    this.visuals.twoD.commonService.session.style.widgets['node-radius-min'] = e;
+    this.widgets['node-radius-min'] = e;
     this.visuals.twoD.redrawNodes();
    }
 
     onNodeBorderWidthChange(e) {
-        this.visuals.twoD.commonService.session.style.widgets['node-border-width'] = e;
+        this.widgets['node-border-width'] = e;
         this.visuals.twoD.redrawNodeBorder();
     }
 
     onNodeRadiusChange(e) {
 
-        this.visuals.twoD.commonService.session.style.widgets['node-radius'] = e;
+        this.widgets['node-radius'] = e;
         this.visuals.twoD.redrawNodes();
     }
 
     onNodeSymbolChange(e) {
 
-        this.visuals.twoD.commonService.session.style.widgets['node-symbol'] = e;
+        this.widgets['node-symbol'] = e;
         this.visuals.twoD.redrawNodes();
     }
 
     onNodeSymbolTableChange(e) {
         this.SelectedNetworkTableTypeVariable = e;
-        this.visuals.twoD.commonService.session.style.widgets["node-symbol-table-visible"] = this.SelectedNetworkTableTypeVariable;
+        this.widgets["node-symbol-table-visible"] = this.SelectedNetworkTableTypeVariable;
         if (this.SelectedNetworkTableTypeVariable == "Show") {
             this.NodeSymbolTableWrapperDialogSettings.setVisibility(true);
         }
@@ -2315,8 +2326,8 @@ onPolygonColorTableChange(e) {
             selectedValue = [selectedValue];
         }
     
-        this.visuals.twoD.commonService.session.style.widgets['link-tooltip-variable'] = e;
-        this.visuals.twoD.SelectedLinkTooltipVariable = this.visuals.twoD.commonService.session.style.widgets['link-tooltip-variable'];
+        this.widgets['link-tooltip-variable'] = e;
+        this.visuals.twoD.SelectedLinkTooltipVariable = this.widgets['link-tooltip-variable'];
         this.visuals.twoD.redrawLabels();
 
 //TODO: umm.... do something here?
@@ -2326,17 +2337,17 @@ onPolygonColorTableChange(e) {
 
 
         let label: any = e;
-        this.visuals.twoD.commonService.session.style.widgets['link-label-variable'] = label;
+        this.widgets['link-label-variable'] = label;
         if (label == 'None') {
             this.visuals.twoD.svg.select('g.links').selectAll('text').text('');
         } else {
             this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.visuals.twoD.getLLinks()).text((l) => {
-                const labelValue = l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']];
+                const labelValue = l[this.widgets['link-label-variable']];
                 if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
-                    if(this.visuals.twoD.commonService.session.style.widgets['default-distance-metric'] == 'snps') {
+                    if(this.widgets['default-distance-metric'] == 'snps') {
                         return Math.round(parseFloat(labelValue));
                     } else {
-                        return parseFloat(labelValue).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']);
+                        return parseFloat(labelValue).toFixed(this.widgets['link-label-decimal-length']);
                     }                } else {
                     return labelValue;
                 }
@@ -2347,12 +2358,12 @@ onPolygonColorTableChange(e) {
 
     onLinkDecimalVariableChange(e) {
 
-        this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length'] = e;
+        this.widgets['link-label-decimal-length'] = e;
         this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.getLLinks()).text((l) => {
-            const labelValue = l[this.visuals.twoD.commonService.session.style.widgets['link-label-variable']];
+            const labelValue = l[this.widgets['link-label-variable']];
               
             if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
-                return parseFloat(labelValue).toFixed(this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length']);
+                return parseFloat(labelValue).toFixed(this.widgets['link-label-decimal-length']);
             } else {
                 return labelValue;
             }
@@ -2362,7 +2373,7 @@ onPolygonColorTableChange(e) {
 
     onLinkOpacityChange(e) {
 
-        this.visuals.twoD.commonService.session.style.widgets['link-opacity'] = e;
+        this.widgets['link-opacity'] = e;
         let opacity = 1 - e;
         this.visuals.twoD.svg.select('g.links').selectAll('line').attr('opacity', opacity);
     }
@@ -2379,7 +2390,7 @@ onPolygonColorTableChange(e) {
             $('#link-max-width-row').css('display', 'flex');
             $('#link-min-width-row').css('display', 'flex');
         }
-        this.visuals.twoD.commonService.session.style.widgets['link-width-variable'] = e;
+        this.widgets['link-width-variable'] = e;
         this.visuals.twoD.scaleLinkWidth();
     }
 
@@ -2387,11 +2398,11 @@ onPolygonColorTableChange(e) {
     onLinkWidthReciprocalNonReciprocalChange(e) {
 
         if (e == "Reciprocal") {
-            this.visuals.twoD.commonService.session.style.widgets['link-width-reciprocal'] = true;
+            this.widgets['link-width-reciprocal'] = true;
             this.visuals.twoD.scaleLinkWidth();
         }
         else {
-            this.visuals.twoD.commonService.session.style.widgets['link-width-reciprocal'] = false;
+            this.widgets['link-width-reciprocal'] = false;
             this.visuals.twoD.scaleLinkWidth();
 
         }
@@ -2399,14 +2410,14 @@ onPolygonColorTableChange(e) {
 
     onLinkWidthChange(e) {
 
-        this.visuals.twoD.commonService.session.style.widgets['link-width'] = e;
+        this.widgets['link-width'] = e;
         this.visuals.twoD.scaleLinkWidth();
 
     }
 
     onLinkWidthMaxChange(e) {
 
-        this.visuals.twoD.commonService.session.style.widgets['link-width-max'] = e;
+        this.widgets['link-width-max'] = e;
         this.visuals.twoD.scaleLinkWidth();
 
         console.log('scaling width');
@@ -2415,7 +2426,7 @@ onPolygonColorTableChange(e) {
 
     onLinkWidthMinChange(e) {
 
-        this.visuals.twoD.commonService.session.style.widgets['link-width-min'] = e;
+        this.widgets['link-width-min'] = e;
         this.visuals.twoD.scaleLinkWidth();
 
     }
@@ -2424,19 +2435,19 @@ onPolygonColorTableChange(e) {
 
         this.visuals.twoD.force.force('link').distance(e);
         this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
-        this.visuals.twoD.commonService.session.style.widgets['link-length'] = e;
+        this.widgets['link-length'] = e;
     }
 
     onLinkDirectedUndirectedChange(e) {
 
         if (e == "Show") {
             this.visuals.twoD.svg.select('g.links').selectAll('line').attr('marker-end', 'url(#end-arrow)');
-            this.visuals.twoD.commonService.session.style.widgets['link-directed'] = true;
+            this.widgets['link-directed'] = true;
         }
         else {
 
             this.visuals.twoD.svg.select('g.links').selectAll('line').attr('marker-end', null);
-            this.visuals.twoD.commonService.session.style.widgets['link-directed'] = false;
+            this.widgets['link-directed'] = false;
         }
     }
 
@@ -2444,10 +2455,10 @@ onPolygonColorTableChange(e) {
     onDontHighlightNeighborsHighlightNeighborsChange(e) {
 
         if (e == "Normal") {
-            this.visuals.twoD.commonService.session.style.widgets['node-highlight'] = false;
+            this.widgets['node-highlight'] = false;
         }
         else {
-            this.visuals.twoD.commonService.session.style.widgets['node-highlight'] = true;
+            this.widgets['node-highlight'] = true;
         }
     }
 
@@ -2503,10 +2514,10 @@ onPolygonColorTableChange(e) {
     onNetworkGridlinesShowHideChange(e: string): void {
         console.log('network grid:', e);
         if (e === "Show") {
-            this.visuals.twoD.commonService.session.style.widgets['network-gridlines-show'] = true;
+            this.widgets['network-gridlines-show'] = true;
             this.drawGridlines(true);
         } else {
-            this.visuals.twoD.commonService.session.style.widgets['network-gridlines-show'] = false;
+            this.widgets['network-gridlines-show'] = false;
             this.drawGridlines(false);
         }
     }
@@ -2516,21 +2527,21 @@ onPolygonColorTableChange(e) {
 
         this.visuals.twoD.force.force('charge').strength(-e);
         this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
-        this.visuals.twoD.commonService.session.style.widgets['node-charge'] = e;
+        this.widgets['node-charge'] = e;
     }
 
     onNetworkGravityChange(e) {
 
         this.visuals.twoD.force.force('gravity').strength(e);
         this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
-        this.visuals.twoD.commonService.session.style.widgets['network-gravity'] = e;
+        this.widgets['network-gravity'] = e;
     }
 
     onNetworkFrictionChange(e) {
 
         this.visuals.twoD.force.velocityDecay(e);
         this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
-        this.visuals.twoD.commonService.session.style.widgets['network-friction'] = e;
+        this.widgets['network-friction'] = e;
     }
 
     onNetworkLinkStrengthVariableChange(e) {
@@ -2539,7 +2550,7 @@ onPolygonColorTableChange(e) {
         let v = parseFloat(e);
         this.visuals.twoD.force.force('link').strength(v);
         this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
-        this.visuals.twoD.commonService.session.style.widgets['network-link-strength'] = e;
+        this.widgets['network-link-strength'] = e;
     }
 
 
@@ -2555,12 +2566,12 @@ onPolygonColorTableChange(e) {
 
         //debugger;
 
-        let variable = this.visuals.twoD.commonService.session.style.widgets['node-color-variable'];
+        let variable = this.widgets['node-color-variable'];
         let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').select('path').data(this.visuals.twoD.commonService.session.network.nodes).classed('selected', d => d.selected);
-        let col = this.visuals.twoD.commonService.session.style.widgets['node-color'];
+        let col = this.widgets['node-color'];
 
-        let stroke = this.visuals.twoD.commonService.session.style.widgets['selected-node-stroke-color'];
-        let stroke_width = parseInt(this.visuals.twoD.commonService.session.style.widgets['selected-node-stroke-width']);
+        let stroke = this.widgets['selected-node-stroke-color'];
+        let stroke_width = parseInt(this.widgets['selected-node-stroke-width']);
 
         if (variable == 'None') {
 
@@ -2613,7 +2624,7 @@ onPolygonColorTableChange(e) {
                         /*/
 
                         y.style['stroke'] = "#000000";
-                        y.style['strokeWidth'] = this.visuals.twoD.commonService.session.style.widgets['node-border-width'];
+                        y.style['strokeWidth'] = this.widgets['node-border-width'];
                     }
                 });
             });
@@ -2630,7 +2641,7 @@ onPolygonColorTableChange(e) {
                     /*/
 
                     y.style['stroke'] = "#000000";
-                    y.style['strokeWidth'] = this.visuals.twoD.commonService.session.style.widgets['node-border-width'];
+                    y.style['strokeWidth'] = this.widgets['node-border-width'];
 
                 });
             });
@@ -2644,12 +2655,12 @@ onPolygonColorTableChange(e) {
 
     updateLinkColor() {
 
-        let variable = this.visuals.twoD.commonService.session.style.widgets['link-color-variable'];
+        let variable = this.widgets['link-color-variable'];
         // console.log('updating variable: ',variable );
         let links = this.visuals.twoD.svg.select('g.links').selectAll('line');
         if (variable == 'None') {
-            let color = this.visuals.twoD.commonService.session.style.widgets['link-color'],
-                opacity = 1 - this.visuals.twoD.commonService.session.style.widgets['link-opacity'];
+            let color = this.widgets['link-color'],
+                opacity = 1 - this.widgets['link-opacity'];
             links
                 .attr('stroke', color)
                 .attr('opacity', opacity);
@@ -2682,14 +2693,14 @@ onPolygonColorTableChange(e) {
 
 
     scaleLinkWidth() {
-        let scalar = this.visuals.twoD.commonService.session.style.widgets['link-width'];
-        let variable = this.visuals.twoD.commonService.session.style.widgets['link-width-variable'];
+        let scalar = this.widgets['link-width'];
+        let variable = this.widgets['link-width-variable'];
         let vlinks = this.visuals.twoD.getVLinks();
         let links = this.visuals.twoD.svg.select('g.links').selectAll('line').data(vlinks);
         if (variable == 'None') return links.attr('stroke-width', scalar);
         let n = vlinks.length;
-        let maxWidth = this.visuals.twoD.commonService.session.style.widgets['link-width-max'];
-        let minWidth = this.visuals.twoD.commonService.session.style.widgets['link-width-min'];
+        let maxWidth = this.widgets['link-width-max'];
+        let minWidth = this.widgets['link-width-min'];
 
         let max = -Infinity;
         let min = Infinity;
@@ -2701,7 +2712,7 @@ onPolygonColorTableChange(e) {
         }
         let mid = (max - min) / 2 + min;
         let scale = d3.scaleLinear()
-            .domain(this.visuals.twoD.commonService.session.style.widgets['link-width-reciprocal'] ? [max, min] : [min, max])
+            .domain(this.widgets['link-width-reciprocal'] ? [max, min] : [min, max])
             .range([minWidth, maxWidth]);
         links.attr('stroke-width', d => {
             let v = d[variable];
@@ -2756,7 +2767,7 @@ onPolygonColorTableChange(e) {
         // this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.setStateBeforeExport();
         // this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.setStateBeforeExport();
         // this.visuals.twoD.Node2DNetworkExportDialogSettings.setStateBeforeExport();
-
+        this.setCalculatedResolution()
         this.isExportClosed = false;
         this.visuals.twoD.Show2DExportPane = true;
     }
@@ -2807,7 +2818,7 @@ onPolygonColorTableChange(e) {
     }
 
     ngOnDestroy(): void {
-        //this.context.twoD.commonService.session.style.widgets['node-label-variable'] = 'None';
+        //this.context.twoD.widgets['node-label-variable'] = 'None';
     }
 
     onLoadNewData(){
@@ -2822,141 +2833,141 @@ onPolygonColorTableChange(e) {
         //this.context.twoD.zoom = null;
 
         //Polygons|Label
-        this.SelectedPolygonLabelVariable = this.visuals.twoD.commonService.session.style.widgets['polygons-label-variable'];
+        this.SelectedPolygonLabelVariable = this.widgets['polygons-label-variable'];
         this.onPolygonLabelVariableChange(this.SelectedPolygonLabelVariable);
 
         //Polygons|Label Size
-        this.SelectedPolygonLabelSizeVariable = this.visuals.twoD.commonService.session.style.widgets['polygons-label-size'];
+        this.SelectedPolygonLabelSizeVariable = this.widgets['polygons-label-size'];
         this.setPolygonLabelSize(this.SelectedPolygonLabelSizeVariable);
 
         //Node|Orientation
-        this.SelectedPolygonLabelOrientationVariable = this.visuals.twoD.commonService.session.style.widgets['polygons-label-orientation'];
+        this.SelectedPolygonLabelOrientationVariable = this.widgets['polygons-label-orientation'];
         this.onPolygonLabelOrientationChange(this.SelectedPolygonLabelOrientationVariable);
 
-        this.polygonsToggle(this.visuals.twoD.commonService.session.style.widgets['polygons-show']);
+        this.polygonsToggle(this.widgets['polygons-show']);
 
 
-        if(this.visuals.twoD.commonService.session.style.widgets['polygons-show']){
+        if(this.widgets['polygons-show']){
             this.visuals.twoD.updatePolygonColors();
-            this.polygonColorsToggle(this.visuals.twoD.commonService.session.style.widgets['polygon-color-table-visible'])
+            this.polygonColorsToggle(this.widgets['polygon-color-table-visible'])
 
         }
 
 
        //Nodes|Label
-        this.SelectedNodeLabelVariable = this.visuals.twoD.commonService.session.style.widgets['node-label-variable'];
+        this.SelectedNodeLabelVariable = this.widgets['node-label-variable'];
         this.onNodeLabelVaribleChange(this.SelectedNodeLabelVariable);
 
         //Node|Label Size
-        this.SelectedNodeLabelSizeVariable = this.visuals.twoD.commonService.session.style.widgets['node-label-size'];
+        this.SelectedNodeLabelSizeVariable = this.widgets['node-label-size'];
         this.setNodeLabelSize(this.SelectedNodeLabelSizeVariable);
 
         //Node|Orientation
-        this.SelectedNodeLabelOrientationVariable = this.visuals.twoD.commonService.session.style.widgets['node-label-orientation'];
+        this.SelectedNodeLabelOrientationVariable = this.widgets['node-label-orientation'];
         this.onNodeLabelOrientationChange(this.SelectedNodeLabelOrientationVariable);
 
         //Nodes|Tooltip
 
-        if (!Array.isArray(this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'])) {
-            this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'] = [this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable']];
+        if (!Array.isArray(this.widgets['node-tooltip-variable'])) {
+            this.widgets['node-tooltip-variable'] = [this.widgets['node-tooltip-variable']];
         }
-        this.SelectedNodeTooltipVariable = this.visuals.twoD.commonService.session.style.widgets['node-tooltip-variable'];
+        this.SelectedNodeTooltipVariable = this.widgets['node-tooltip-variable'];
         this.onNodeTooltipVariableChange(this.SelectedNodeTooltipVariable);
 
         //Nodes|Shape By Table
-        this.SelectedNetworkTableTypeVariable = this.visuals.twoD.commonService.session.style.widgets["node-symbol-table-visible"];
+        this.SelectedNetworkTableTypeVariable = this.widgets["node-symbol-table-visible"];
         this.onNodeSymbolTableChange(this.SelectedNetworkTableTypeVariable);
 
         //Nodes|Shape By
-        this.SelectedNodeSymbolVariable = this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'];
-        this.onNodeSymbolVariableChange(this.visuals.twoD.commonService.session.style.widgets['node-symbol-variable'], this.SelectedNetworkTableTypeVariable === "Show");
+        this.SelectedNodeSymbolVariable = this.widgets['node-symbol-variable'];
+        this.onNodeSymbolVariableChange(this.widgets['node-symbol-variable'], this.SelectedNetworkTableTypeVariable === "Show");
         
 
         //Nodes|Shape
-        this.SelectedNodeShapeVariable = this.visuals.twoD.commonService.session.style.widgets['node-symbol'];
+        this.SelectedNodeShapeVariable = this.widgets['node-symbol'];
         this.onNodeSymbolChange(this.SelectedNodeShapeVariable);
 
         //Nodes|Size By
-        this.SelectedNodeRadiusVariable = this.visuals.twoD.commonService.session.style.widgets['node-radius-variable'];
+        this.SelectedNodeRadiusVariable = this.widgets['node-radius-variable'];
         this.onNodeRadiusVariableChange(this.SelectedNodeRadiusVariable);
 
         //Nodes|Size
-        this.SelectedNodeRadiusSizeVariable = this.visuals.twoD.commonService.session.style.widgets['node-radius'].toString();
+        this.SelectedNodeRadiusSizeVariable = this.widgets['node-radius'].toString();
         this.onNodeRadiusChange(this.SelectedNodeRadiusSizeVariable);
 
 
         //Links|Tooltip
-        this.SelectedLinkTooltipVariable = this.visuals.twoD.commonService.session.style.widgets['link-tooltip-variable'];
+        this.SelectedLinkTooltipVariable = this.widgets['link-tooltip-variable'];
         this.onLinkTooltipVariableChange(this.SelectedLinkTooltipVariable);
 
         //Links|Label
-        this.SelectedLinkLabelVariable = this.visuals.twoD.commonService.session.style.widgets['link-label-variable'];
+        this.SelectedLinkLabelVariable = this.widgets['link-label-variable'];
         this.onLinkLabelVariableChange(this.SelectedLinkLabelVariable);
 
         //Links|Decimal Length
-        this.SelectedLinkDecimalVariable = this.visuals.twoD.commonService.session.style.widgets['link-label-decimal-length'];
+        this.SelectedLinkDecimalVariable = this.widgets['link-label-decimal-length'];
         this.onLinkDecimalVariableChange(this.SelectedLinkDecimalVariable);
 
         //Links|Transparency
-        this.SelectedLinkTransparencyVariable = this.visuals.twoD.commonService.session.style.widgets['link-opacity'];
+        this.SelectedLinkTransparencyVariable = this.widgets['link-opacity'];
         this.onLinkOpacityChange(this.SelectedLinkTransparencyVariable);
 
         //Links|Width By
-        this.SelectedLinkWidthByVariable = this.visuals.twoD.commonService.session.style.widgets['link-width-variable'];
+        this.SelectedLinkWidthByVariable = this.widgets['link-width-variable'];
         this.onLinkWidthVariableChange(this.SelectedLinkWidthByVariable);
 
         //Links|Reciprical
-        this.SelectedLinkReciprocalTypeVariable = this.visuals.twoD.commonService.session.style.widgets['link-width-reciprocal'] ? "Reciprocal" : "Non-Reciprocal"
+        this.SelectedLinkReciprocalTypeVariable = this.widgets['link-width-reciprocal'] ? "Reciprocal" : "Non-Reciprocal"
         this.onLinkWidthReciprocalNonReciprocalChange(this.SelectedLinkReciprocalTypeVariable);
 
         //Links|Width
-        this.SelectedLinkWidthVariable = this.visuals.twoD.commonService.session.style.widgets['link-width'];
+        this.SelectedLinkWidthVariable = this.widgets['link-width'];
         this.onLinkWidthChange(this.SelectedLinkWidthVariable);
 
          //Links|Width Max
-         this.SelectedLinkWidthMax = this.visuals.twoD.commonService.session.style.widgets['link-width-max'];
+         this.SelectedLinkWidthMax = this.widgets['link-width-max'];
          this.onLinkWidthMaxChange(this.SelectedLinkWidthByVariable);
  
          //Links|Width Min
-         this.SelectedLinkWidthMin = this.visuals.twoD.commonService.session.style.widgets['link-width-min'];
+         this.SelectedLinkWidthMin = this.widgets['link-width-min'];
          this.onLinkWidthMinChange(this.SelectedLinkWidthByVariable);
 
         //Links|Length
-        this.SelectedLinkLengthVariable = this.visuals.twoD.commonService.session.style.widgets['link-length'];
+        this.SelectedLinkLengthVariable = this.widgets['link-length'];
         this.onLinkLengthChange(this.SelectedLinkLengthVariable);
 
         //Links|Arrows
-        this.SelectedLinkArrowTypeVariable = this.visuals.twoD.commonService.session.style.widgets['link-directed'] ? "Show" : "Hide";
+        this.SelectedLinkArrowTypeVariable = this.widgets['link-directed'] ? "Show" : "Hide";
         this.onLinkDirectedUndirectedChange(this.SelectedLinkArrowTypeVariable); 
 
 
         //Network|Neighbors
-        this.SelectedNetworkNeighborTypeVariable = this.visuals.twoD.commonService.session.style.widgets['node-highlight'] ? "Highlighted" : "Normal";
+        this.SelectedNetworkNeighborTypeVariable = this.widgets['node-highlight'] ? "Highlighted" : "Normal";
         this.onDontHighlightNeighborsHighlightNeighborsChange(this.SelectedNetworkNeighborTypeVariable);
 
         //Network|Gridlines
-        this.SelectedNetworkGridLineTypeVariable = this.visuals.twoD.commonService.session.style.widgets['network-gridlines-show'] ? "Show" : "Hide";
+        this.SelectedNetworkGridLineTypeVariable = this.widgets['network-gridlines-show'] ? "Show" : "Hide";
         this.onNetworkGridlinesShowHideChange(this.SelectedNetworkGridLineTypeVariable);
 
         //Network|Charge
-        this.SelectedNetworkChargeVariable = this.visuals.twoD.commonService.session.style.widgets['node-charge'];
+        this.SelectedNetworkChargeVariable = this.widgets['node-charge'];
         this.onNodeChargeChange(this.SelectedNetworkChargeVariable);
 
         //Network|Gravity
-        this.SelectedNetworkGravityVariable = this.visuals.twoD.commonService.session.style.widgets['network-gravity'];
+        this.SelectedNetworkGravityVariable = this.widgets['network-gravity'];
         this.onNetworkGravityChange(this.SelectedNetworkGravityVariable);
 
         //Network|Friction
-        this.SelectedNetworkFrictionVariable = this.visuals.twoD.commonService.session.style.widgets['network-friction'];
+        this.SelectedNetworkFrictionVariable = this.widgets['network-friction'];
         this.onNetworkFrictionChange(this.SelectedNetworkFrictionVariable);
 
         //Network|Link Strength
-        this.SelecetedNetworkLinkStrengthVariable = this.visuals.twoD.commonService.session.style.widgets['network-link-strength'];
+        this.SelecetedNetworkLinkStrengthVariable = this.widgets['network-link-strength'];
         this.onNetworkFrictionChange(this.SelecetedNetworkLinkStrengthVariable);
 
 
          //Network|Polygon Orientation
-         this.SelectedPolygonLabelOrientationVariable = this.visuals.twoD.commonService.session.style.widgets['polygon-label-orientation'];
+         this.SelectedPolygonLabelOrientationVariable = this.widgets['polygon-label-orientation'];
          this.onPolygonLabelOrientationChange(this.SelectedPolygonLabelOrientationVariable);
     }
 }
