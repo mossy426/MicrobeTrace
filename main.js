@@ -16434,6 +16434,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3 */ 92925);
 
 
+// import "patristic";
+// import "d3";
 
 /**
  * This class function creates a TidyTree object.
@@ -16442,11 +16444,15 @@ __webpack_require__.r(__webpack_exports__);
  */
 function TidyTree(data, options, events) {
   let defaults = {
-    layout: 'vertical',
-    type: 'tree',
-    mode: 'smooth',
+    layout: "vertical",
+    type: "tree",
+    mode: "smooth",
+    colorOptions: {
+      nodeColorMode: "none"
+    },
     leafNodes: true,
     leafLabels: false,
+    equidistantLeaves: false,
     branchNodes: false,
     branchLabels: false,
     branchDistances: false,
@@ -16459,7 +16465,6 @@ function TidyTree(data, options, events) {
   };
 
   if (!options) options = {};
-  console.log(this);
   Object.assign(this, defaults, options, {
     events: {
       draw: [],
@@ -16489,11 +16494,11 @@ function TidyTree(data, options, events) {
  * @return {Object}        the TidyTree object
  */
 TidyTree.prototype.setData = function (data) {
-  if (!data) throw Error('Invalid Data');
+  if (!data) throw Error("Invalid Data");
   this.data = data;
   this.range = [Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER];
   this.hierarchy = d3__WEBPACK_IMPORTED_MODULE_1__.hierarchy(this.data, d => d.children).eachBefore(d => {
-    d.value = (d.parent ? d.parent.value : 0) + (d.data.length ? d.data.length : 0);
+    d.value = (d.parent ? d.parent.value : 0) + (d.data.length ? Math.abs(d.data.length) : 0);
     if (d.value < this.range[0]) this.range[0] = d.value;
     if (d.value > this.range[1]) this.range[1] = d.value;
   }).each(d => d.value /= this.range[1]);
@@ -16510,7 +16515,7 @@ TidyTree.prototype.setData = function (data) {
  * @return {Object}        the TidyTree object
  */
 TidyTree.prototype.setTree = function (newick) {
-  if (!newick) throw Error('Invalid Newick String');
+  if (!newick) throw Error("Invalid Newick String");
   return this.setData(patristic__WEBPACK_IMPORTED_MODULE_0__.parseNewick(newick));
 };
 
@@ -16518,19 +16523,31 @@ TidyTree.prototype.setTree = function (newick) {
  * The available layouts for rendering trees.
  * @type {Array}
  */
-TidyTree.validLayouts = ['horizontal', 'vertical', 'circular'];
+TidyTree.validLayouts = ["horizontal", "vertical", "circular"];
 
 /**
  * The available types for rendering branches.
  * @type {Array}
  */
-TidyTree.validTypes = ['tree', 'weighted', 'dendrogram'];
+TidyTree.validTypes = ["tree", "weighted", "dendrogram"];
 
 /**
  * The available modes for rendering branches.
  * @type {Array}
  */
-TidyTree.validModes = ['smooth', 'square', 'straight'];
+TidyTree.validModes = ["smooth", "square", "straight"];
+
+/**
+ * The available color modes for rendering nodes.
+ * @type {Array}
+ */
+TidyTree.validNodeColorModes = ["none", "list"]; // later, highlight on hover, or maybe color by annotation on a node/ search
+
+/**
+ * The available color modes for rendering branches.
+ * @type {Array}
+ */
+TidyTree.validBranchColorModes = ["none", "monophyletic"]; // later, toRoot? 
 
 /**
  * Draws a Phylogenetic on the element referred to by selector
@@ -16539,24 +16556,23 @@ TidyTree.validModes = ['smooth', 'square', 'straight'];
  */
 TidyTree.prototype.draw = function (selector) {
   if (!selector && !this.parent) {
-    throw Error('No valid target for drawing given! Where should the tree go?');
+    throw Error("No valid target for drawing given! Where should the tree go?");
   }
   let parent = this.parent = d3__WEBPACK_IMPORTED_MODULE_1__.select(selector ? selector : this.parent);
-  this.width = parseFloat(parent.style('width')) - this.margin[1] - this.margin[3];
-  this.height = parseFloat(parent.style('height')) - this.margin[0] - this.margin[2] - 25;
-  console.log(parent.style);
+  this.width = parseFloat(parent.style("width")) - this.margin[1] - this.margin[3];
+  this.height = parseFloat(parent.style("height")) - this.margin[0] - this.margin[2] - 25;
   let tree = d3__WEBPACK_IMPORTED_MODULE_1__.tree();
-  let svg = parent.html(null).append('svg').attr('id', 'tidytree').attr('height', '100%').attr('width', '100%');
-  let g = svg.append('g');
-  svg.append('g').attr('class', 'tidytree-ruler').append('rect').attr('y', -5).attr('fill', 'white');
-  this.zoom = d3__WEBPACK_IMPORTED_MODULE_1__.zoom().on('zoom', () => {
+  let svg = parent.html(null).append("svg").attr("width", "100%").attr("height", "100%");
+  let g = svg.append("g");
+  svg.append("g").attr("class", "tidytree-ruler").append("rect").attr("y", -5).attr("fill", "white");
+  this.zoom = d3__WEBPACK_IMPORTED_MODULE_1__.zoom().on("zoom", () => {
     let transform = this.transform = d3__WEBPACK_IMPORTED_MODULE_1__.event.transform;
-    g.attr('transform', `translate(${transform.x},${transform.y}) scale(${transform.k}) rotate(${this.rotation},${this.layout === 'circular' ? 0 : this.width / 2},${this.layout === 'circular' ? 0 : this.height / 2})`);
+    g.attr("transform", `translate(${transform.x},${transform.y}) scale(${transform.k}) rotate(${this.rotation},${this.layout === "circular" ? 0 : this.width / 2},${this.layout === "circular" ? 0 : this.height / 2})`);
     updateRuler.call(this, transform);
   });
   svg.call(this.zoom);
-  g.append('g').attr('class', 'tidytree-links');
-  g.append('g').attr('class', 'tidytree-nodes');
+  g.append("g").attr("class", "tidytree-links");
+  g.append("g").attr("class", "tidytree-nodes");
   if (this.events.draw.length) this.events.draw.forEach(c => c());
   return this;
 };
@@ -16582,7 +16598,7 @@ let linkTransformers = {
           y0 = Math.sin(startAngle),
           x1 = Math.cos(endAngle),
           y1 = Math.sin(endAngle);
-        return 'M' + startRadius * x0 + ',' + startRadius * y0 + 'L' + endRadius * x1 + ',' + endRadius * y1;
+        return "M" + startRadius * x0 + "," + startRadius * y0 + "L" + endRadius * x1 + "," + endRadius * y1;
       }
     },
     square: {
@@ -16597,7 +16613,7 @@ let linkTransformers = {
           y0 = Math.sin(startAngle),
           x1 = Math.cos(endAngle),
           y1 = Math.sin(endAngle);
-        return 'M' + startRadius * x0 + ',' + startRadius * y0 + (endAngle === startAngle ? '' : 'A' + startRadius + ',' + startRadius + ' 0 0 ' + (endAngle > startAngle ? 1 : 0) + ' ' + startRadius * x1 + ',' + startRadius * y1) + 'L' + endRadius * x1 + ',' + endRadius * y1;
+        return "M" + startRadius * x0 + "," + startRadius * y0 + (endAngle === startAngle ? "" : "A" + startRadius + "," + startRadius + " 0 0 " + (endAngle > startAngle ? 1 : 0) + " " + startRadius * x1 + "," + startRadius * y1) + "L" + endRadius * x1 + "," + endRadius * y1;
       }
     }
   },
@@ -16619,7 +16635,7 @@ let linkTransformers = {
           y0 = Math.sin(startAngle),
           x1 = Math.cos(endAngle),
           y1 = Math.sin(endAngle);
-        return 'M' + startRadius * x0 + ',' + startRadius * y0 + 'L' + endRadius * x1 + ',' + endRadius * y1;
+        return "M" + startRadius * x0 + "," + startRadius * y0 + "L" + endRadius * x1 + "," + endRadius * y1;
       }
     },
     square: {
@@ -16634,12 +16650,20 @@ let linkTransformers = {
           y0 = Math.sin(startAngle),
           x1 = Math.cos(endAngle),
           y1 = Math.sin(endAngle);
-        return 'M' + startRadius * x0 + ',' + startRadius * y0 + (endAngle === startAngle ? '' : 'A' + startRadius + ',' + startRadius + ' 0 0 ' + (endAngle > startAngle ? 1 : 0) + ' ' + startRadius * x1 + ',' + startRadius * y1) + 'L' + endRadius * x1 + ',' + endRadius * y1;
+        return "M" + startRadius * x0 + "," + startRadius * y0 + (endAngle === startAngle ? "" : "A" + startRadius + "," + startRadius + " 0 0 " + (endAngle > startAngle ? 1 : 0) + " " + startRadius * x1 + "," + startRadius * y1) + "L" + endRadius * x1 + "," + endRadius * y1;
       }
     }
   }
 };
 linkTransformers.dendrogram = linkTransformers.tree;
+
+/**
+ * Calculate the coordinates of a point transformed onto a circle.
+ *
+ * @param {number} x - The x-coordinate of the center of the point.
+ * @param {number} y - The y-coordinate of the center of the point.
+ * @return {Array<number>} The new x and y coordinates of the point on the circle.
+ */
 function circularPoint(x, y) {
   return [(y = +y) * Math.cos(x -= Math.PI / 2), y * Math.sin(x)];
 }
@@ -16656,6 +16680,70 @@ let nodeTransformers = {
   }
 };
 nodeTransformers.dendrogram = nodeTransformers.tree;
+
+/**
+ * Finds the color of a given node based on the color options provided.
+ *
+ * @param {Object} node - The node for which to find the color.
+ * @param {Object} colorOptions - The color options object containing the color mode, node list, default color, and highlight color.
+ * @return {string} The color of the node.
+ */
+function findNodeColor(node, colorOptions) {
+  if (colorOptions.nodeColorMode === "none") {
+    // steelblue
+    return colorOptions.defaultNodeColor ?? "#4682B4";
+  }
+  let nodeList = colorOptions.nodeList;
+  if (nodeList && nodeList.includes(node.data._guid)) {
+    // yellowish
+    return colorOptions.highlightColor ?? "#feb640";
+  } else {
+    // charcoal
+    return colorOptions.defaultNodeColor ?? "#243127";
+  }
+}
+
+/**
+ * Find the color of a given link based on the provided color options.
+ *
+ * @param {string} link - The link for which to find the color.
+ * @param {object} colorOptions - The options for different link colors.
+ * @return {string} The color of the link.
+ */
+function findBranchColor(link, colorOptions) {
+  if (colorOptions.branchColorMode === "none") {
+    // light gray
+    return colorOptions.defaultBranchColor ?? "#cccccc";
+  }
+  let source = link.source;
+  let childLeafNodes = getAllLeaves(source);
+  let allChildLeafNodesInNodeList = childLeafNodes.every(child => colorOptions.nodeList?.includes(child.data._guid));
+  if (allChildLeafNodesInNodeList) {
+    // yellowish
+    return colorOptions.highlightColor ?? "#feb640";
+  }
+  return colorOptions.defaultBranchColor ?? "#cccccc";
+}
+
+/**
+ * Returns an array of all the child leaf nodes of the given node in a tree.
+ *
+ * @param {Object} node - A node of the tree.
+ * @param {boolean} includeSelf - Whether to include the given node itself as a leaf node. Defaults to false.
+ * @return {Array} An array of leaf nodes.
+ */
+function getAllLeaves(node, includeSelf) {
+  includeSelf = includeSelf ?? false;
+  let leaves = [];
+  if (includeSelf && node.height === 0) {
+    leaves.push(node);
+  } else {
+    node.children.forEach(child => {
+      leaves.push(...getAllLeaves(child, true));
+    });
+  }
+  return leaves;
+}
 const radToDeg = 180 / Math.PI;
 let labelTransformers = {
   tree: {
@@ -16709,7 +16797,7 @@ labelTransformers.tree.smooth = labelTransformers.tree.straight;
 labelTransformers.weighted.smooth = labelTransformers.weighted.straight;
 labelTransformers.dendrogram = labelTransformers.tree;
 function labeler(d) {
-  if (!d.target.data.length) return '0.000';
+  if (!d.target.data.length) return "0.000";
   return d.target.data.length.toFixed(3);
 }
 
@@ -16719,71 +16807,81 @@ function labeler(d) {
  */
 TidyTree.prototype.redraw = function () {
   let parent = this.parent;
-  this.width = (parseFloat(parent.style('width')) - this.margin[1] - this.margin[3]) * this.hStretch;
-  this.height = (parseFloat(parent.style('height')) - this.margin[0] - this.margin[2] - 25) * this.vStretch;
-  this.scalar = this.layout === 'horizontal' ? this.width : this.layout === 'vertical' ? this.height : Math.min(this.width, this.height) / 2;
+  this.width = (parseFloat(parent.style("width")) - this.margin[1] - this.margin[3]) * this.hStretch;
+  this.height = (parseFloat(parent.style("height")) - this.margin[0] - this.margin[2] - 25) * this.vStretch;
+  this.scalar = this.layout === "horizontal" ? this.width : this.layout === "vertical" ? this.height : Math.min(this.width, this.height) / 2;
   this.hierarchy.each(d => d.weight = this.scalar * d.value);
-  let g = parent.select('svg g');
-  let source = (this.type === 'tree' ? d3__WEBPACK_IMPORTED_MODULE_1__.tree() : d3__WEBPACK_IMPORTED_MODULE_1__.cluster()).size(this.layout === 'circular' ? [2 * Math.PI, Math.min(this.height, this.width) / 2] : this.layout === 'horizontal' ? [this.height, this.width] : [this.width, this.height]);
-  if (this.layout === 'circular') source.separation((a, b) => (a.parent == b.parent ? 1 : 2) / a.depth);
+  let g = parent.select("svg g");
+  let source = (this.type === "tree" ? d3__WEBPACK_IMPORTED_MODULE_1__.tree() : d3__WEBPACK_IMPORTED_MODULE_1__.cluster()).size(this.layout === "circular" ? [2 * Math.PI, Math.min(this.height, this.width) / 2] : this.layout === "horizontal" ? [this.height, this.width] : [this.width, this.height]);
+  if (this.equidistantLeaves) {
+    if (this.layout === "circular") {
+      source.separation((a, b) => 1 / a.depth);
+    } else {
+      source.separation((a, b) => 1);
+    }
+  } else {
+    if (this.layout === "circular") source.separation((a, b) => (a.parent == b.parent ? 1 : 2) / a.depth);
+  }
 
   //Note: You must render links prior to nodes in order to get correct placement!
-  let links = g.select('g.tidytree-links').selectAll('g.tidytree-link').data(source(this.hierarchy).links(), l => l.source.data._guid + ':' + l.target.data._guid);
+  let links = g.select("g.tidytree-links").selectAll("g.tidytree-link").data(source(this.hierarchy).links(), l => l.source.data._guid + ':' + l.target.data._guid);
   links.join(enter => {
-    let newLinks = enter.append('g').attr('class', 'tidytree-link');
+    let newLinks = enter.append("g").attr("class", "tidytree-link");
     let linkTransformer = linkTransformers[this.type][this.mode][this.layout];
-    newLinks.append('path').attr('fill', 'none').attr('stroke', '#ccc').attr('d', linkTransformer).transition().duration(this.animation).attr('opacity', 1);
+    newLinks.append("path").attr("fill", "none").attr("stroke", d => findBranchColor(d, this.colorOptions)).attr("d", linkTransformer).transition().duration(this.animation).attr("opacity", 1);
     let labelTransformer = labelTransformers[this.type][this.mode][this.layout];
-    newLinks.append('text').attr('y', 2).attr('text-anchor', 'middle').style('font-size', '12px').text(labeler).attr('transform', labelTransformer).transition().duration(this.animation).style('opacity', this.branchDistances ? 1 : 0);
+    newLinks.append("text").attr("y", 2).attr("text-anchor", "middle").style("font-size", "12px").text(labeler).attr("transform", labelTransformer).transition().duration(this.animation).style("opacity", this.branchDistances ? 1 : 0);
   }, update => {
     let linkTransformer = linkTransformers[this.type][this.mode][this.layout];
-    let paths = update.select('path');
+    let paths = update.select("path");
     if (!this.animation > 0) {
-      paths.attr('d', linkTransformer);
+      paths.attr("d", linkTransformer).attr("stroke", d => findBranchColor(d, this.colorOptions));
     } else {
-      paths.transition().duration(this.animation / 2).attr('opacity', 0).end().then(() => {
-        paths.attr('d', linkTransformer).transition().duration(this.animation / 2).attr('opacity', 1);
+      paths.transition().duration(this.animation / 2).attr("stroke", d => findBranchColor(d, this.colorOptions)).attr("opacity", 0).end().then(() => {
+        paths.attr("d", linkTransformer).transition().duration(this.animation / 2).attr("opacity", 1);
       });
     }
     let labelTransformer = labelTransformers[this.type][this.mode][this.layout];
-    let labels = update.select('text');
+    let labels = update.select("text");
     if (this.animation) {
-      labels.transition().duration(this.animation / 2).style('opacity', 0).end().then(() => {
-        labels.text(labeler).attr('transform', labelTransformer);
+      labels.transition().duration(this.animation / 2).style("opacity", 0).end().then(() => {
+        labels.text(labeler).attr("transform", labelTransformer);
         if (this.branchDistances) {
-          labels.transition().duration(this.animation / 2).style('opacity', this.branchDistances ? 1 : 0);
+          labels.transition().duration(this.animation / 2).style("opacity", this.branchDistances ? 1 : 0);
         }
       });
     } else {
-      labels.text(labeler).attr('transform', labelTransformer);
+      labels.text(labeler).attr("transform", labelTransformer);
     }
-  }, exit => exit.transition().duration(this.animation).attr('opacity', 0).remove());
-  let nodes = g.select('g.tidytree-nodes').selectAll('g.tidytree-node').data(this.hierarchy.descendants(), d => d.data._guid);
+  }, exit => exit.transition().duration(this.animation).attr("opacity", 0).remove());
+  let nodes = g.select("g.tidytree-nodes").selectAll("g.tidytree-node").data(this.hierarchy.descendants(), d => d.data._guid);
   nodes.join(enter => {
     let nt = nodeTransformers[this.type][this.layout];
-    let newNodes = enter.append('g').attr('class', 'tidytree-node').classed('tidytree-node-internal', d => d.children).classed('tidytree-node-leaf', d => !d.children).attr('transform', nt);
-    newNodes.append('circle').attr('title', d => d.data.id).style('opacity', d => d.children && this.branchNodes || !d.children && this.leafNodes ? 1 : 0).on('mouseenter focusin', d => this.trigger('showtooltip', d)).on('mouseout focusout', d => this.trigger('hidetooltip', d)).on('contextmenu', d => this.trigger('contextmenu', d)).on('click', d => this.trigger('select', d)).attr('r', 2.5);
-    let nodeLabels = newNodes.append('text').text(d => d.data.id).style('font-size', '12px').attr('y', 2).style('opacity', d => d.children && this.branchLabels || !d.children && this.leafLabels ? 1 : 0);
-    if (this.layout === 'vertical') {
-      nodeLabels.attr('text-anchor', 'start').attr('x', 5).transition().duration(this.animation).attr('transform', 'rotate(90)');
-    } else if (this.layout === 'horizontal') {
-      nodeLabels.attr('text-anchor', 'start').attr('x', 5).transition().duration(this.animation).attr('transform', 'rotate(0)');
+    let newNodes = enter.append("g").attr("class", "tidytree-node").classed("tidytree-node-internal", d => d.children).classed("tidytree-node-leaf", d => !d.children).attr("transform", nt);
+    newNodes.append("circle").attr("title", d => d.data.id).style("opacity", d => d.children && this.branchNodes || !d.children && this.leafNodes ? 1 : 0).style("fill", d => findNodeColor(d, this.colorOptions)).on("mouseenter focusin", d => this.trigger("showtooltip", d)).on("mouseout focusout", d => this.trigger("hidetooltip", d)).on("contextmenu", d => this.trigger("contextmenu", d)).on("click", d => this.trigger("select", d)).attr("r", 2.5);
+    let nodeLabels = newNodes.append("text").text(d => d.data.id).style("font-size", "12px").attr("y", 2).style("opacity", d => d.children && this.branchLabels || !d.children && this.leafLabels ? 1 : 0);
+    if (this.layout === "vertical") {
+      nodeLabels.attr("text-anchor", "start").attr("x", 5).transition().duration(this.animation).attr("transform", "rotate(90)");
+    } else if (this.layout === "horizontal") {
+      nodeLabels.attr("text-anchor", "start").attr("x", 5).transition().duration(this.animation).attr("transform", "rotate(0)");
     } else {
-      nodeLabels.transition().duration(this.animation).attr('transform', l => `rotate(${l.x / Math.PI * 180 % 180 - 90})`).attr('text-anchor', l => l.x % (2 * Math.PI) > Math.PI ? 'end' : 'start').attr('x', l => l.x % (2 * Math.PI) > Math.PI ? -5 : 5);
+      nodeLabels.transition().duration(this.animation).attr("transform", l => `rotate(${l.x / Math.PI * 180 % 180 - 90})`).attr("text-anchor", l => l.x % (2 * Math.PI) > Math.PI ? "end" : "start").attr("x", l => l.x % (2 * Math.PI) > Math.PI ? -5 : 5);
     }
-    newNodes.transition().duration(this.animation).attr('opacity', 1);
+    newNodes.transition().duration(this.animation).attr("opacity", 1);
   }, update => {
     let nodeTransformer = nodeTransformers[this.type][this.layout];
-    update.transition().duration(this.animation).attr('transform', nodeTransformer);
-    let nodeLabels = update.select('text');
-    if (this.layout === 'vertical') {
-      nodeLabels.attr('text-anchor', 'start').attr('x', 5).transition().duration(this.animation).attr('transform', 'rotate(90)');
-    } else if (this.layout === 'horizontal') {
-      nodeLabels.attr('text-anchor', 'start').attr('x', 5).transition().duration(this.animation).attr('transform', 'rotate(0)');
+    update.transition().duration(this.animation).attr("transform", nodeTransformer);
+    let nodeGlyphs = update.select("circle");
+    nodeGlyphs.style("fill", d => findNodeColor(d, this.colorOptions));
+    let nodeLabels = update.select("text");
+    if (this.layout === "vertical") {
+      nodeLabels.attr("text-anchor", "start").attr("x", 5).transition().duration(this.animation).attr("transform", "rotate(90)");
+    } else if (this.layout === "horizontal") {
+      nodeLabels.attr("text-anchor", "start").attr("x", 5).transition().duration(this.animation).attr("transform", "rotate(0)");
     } else {
-      nodeLabels.transition().duration(this.animation).attr('transform', l => `rotate(${l.x / Math.PI * 180 % 180 - 90})`).attr('text-anchor', l => l.x % (2 * Math.PI) > Math.PI ? 'end' : 'start').attr('x', l => l.x % (2 * Math.PI) > Math.PI ? -5 : 5);
+      nodeLabels.transition().duration(this.animation).attr("transform", l => `rotate(${l.x / Math.PI * 180 % 180 - 90})`).attr("text-anchor", l => l.x % (2 * Math.PI) > Math.PI ? "end" : "start").attr("x", l => l.x % (2 * Math.PI) > Math.PI ? -5 : 5);
     }
-  }, exit => exit.transition().duration(this.animation).attr('opacity', 0).remove());
+  }, exit => exit.transition().duration(this.animation).attr("opacity", 0).remove());
   updateRuler.call(this);
   return this;
 };
@@ -16791,27 +16889,27 @@ function updateRuler(transform) {
   if (!transform) transform = {
     k: 1
   };
-  let height = parseFloat(this.parent.style('height')) - this.margin[2] - 15;
-  let ruler = this.parent.select('g.tidytree-ruler');
-  let bg = ruler.select('rect');
+  let height = parseFloat(this.parent.style("height")) - this.margin[2] - 15;
+  let ruler = this.parent.select("g.tidytree-ruler");
+  let bg = ruler.select("rect");
   if (this.ruler) {
-    if (this.layout == 'horizontal') {
-      ruler.attr('transform', `translate(${this.margin[3]}, ${height})`);
-      bg.attr('width', `calc(100% - ${this.margin[1] + this.margin[3] - 15}px)`).attr('height', '25px').attr('x', -5);
+    if (this.layout == "horizontal") {
+      ruler.attr("transform", `translate(${this.margin[3]}, ${height})`);
+      bg.attr("width", `calc(100% - ${this.margin[1] + this.margin[3] - 15}px)`).attr("height", "25px").attr("x", -5);
     } else {
-      ruler.attr('transform', `translate(${this.margin[3] - 10}, ${this.margin[0]})`);
-      bg.attr('height', `calc(100% - ${this.margin[0] + this.margin[2] - 15}px)`).attr('width', '25px').attr('x', -25);
+      ruler.attr("transform", `translate(${this.margin[3] - 10}, ${this.margin[0]})`);
+      bg.attr("height", `calc(100% - ${this.margin[0] + this.margin[2] - 15}px)`).attr("width", "25px").attr("x", -25);
     }
-    let axis = this.layout == 'horizontal' ? d3__WEBPACK_IMPORTED_MODULE_1__.axisBottom() : d3__WEBPACK_IMPORTED_MODULE_1__.axisLeft();
-    if (this.type === 'tree' && this.layout !== 'circular') {
-      ruler.attr('opacity', 1).call(axis.scale(d3__WEBPACK_IMPORTED_MODULE_1__.scaleLinear([0, this.hierarchy.height / transform.k], [0, this.scalar])));
-    } else if (this.type === 'weighted' && this.layout !== 'circular') {
-      ruler.attr('opacity', 1).call(axis.scale(d3__WEBPACK_IMPORTED_MODULE_1__.scaleLinear([this.range[0], this.range[1] / transform.k], [0, this.scalar])));
+    let axis = this.layout == "horizontal" ? d3__WEBPACK_IMPORTED_MODULE_1__.axisBottom() : d3__WEBPACK_IMPORTED_MODULE_1__.axisLeft();
+    if (this.type === "tree" && this.layout !== "circular") {
+      ruler.attr("opacity", 1).call(axis.scale(d3__WEBPACK_IMPORTED_MODULE_1__.scaleLinear([0, this.hierarchy.height / transform.k], [0, this.scalar])));
+    } else if (this.type === "weighted" && this.layout !== "circular") {
+      ruler.attr("opacity", 1).call(axis.scale(d3__WEBPACK_IMPORTED_MODULE_1__.scaleLinear([this.range[0], this.range[1] / transform.k], [0, this.scalar])));
     } else {
-      ruler.transition().duration(this.animation).attr('opacity', 0);
+      ruler.transition().duration(this.animation).attr("opacity", 0);
     }
   } else {
-    ruler.transition().duration(this.animation).attr('opacity', 0);
+    ruler.transition().duration(this.animation).attr("opacity", 0);
   }
 }
 
@@ -16820,12 +16918,12 @@ function updateRuler(transform) {
  * @return {TidyTree} The TidyTree object
  */
 TidyTree.prototype.recenter = function () {
-  let svg = this.parent.select('svg'),
+  let svg = this.parent.select("svg"),
     x = this.margin[0],
     y = this.margin[3];
-  if (this.layout === 'circular') {
-    x += parseFloat(svg.style('width')) / 2;
-    y += parseFloat(svg.style('height')) / 2;
+  if (this.layout === "circular") {
+    x += parseFloat(svg.style("width")) / 2;
+    y += parseFloat(svg.style("height")) / 2;
   }
   svg.transition().duration(this.animation).call(this.zoom.transform, d3__WEBPACK_IMPORTED_MODULE_1__.zoomIdentity.translate(x, y));
   return this;
@@ -16844,6 +16942,39 @@ TidyTree.prototype.setLayout = function (newLayout) {
     `);
   }
   this.layout = newLayout;
+  if (this.parent) return this.redraw();
+  return this;
+};
+
+/**
+ * Set the TidyTree's colorOptions
+ * @param {Object} newColorOptions The new colorOptions
+ * @return {TidyTree} The TidyTree Object
+ */
+TidyTree.prototype.setColorOptions = function (newColorOptions) {
+  if (!TidyTree.validNodeColorModes.includes(newColorOptions.nodeColorMode)) {
+    throw Error(`
+      Cannot set TidyTree colorOptions: ${newColorOptions.nodeColorMode}\n
+      Valid nodeColorModes are: ${TidyTree.validNodeColorModes.join(', ')}
+    `);
+  }
+  if (!TidyTree.validBranchColorModes.includes(newColorOptions.branchColorMode)) {
+    throw Error(`
+      Cannot set TidyTree colorOptions: ${newColorOptions.branchColorMode}\n
+      Valid branchColorModes are: ${TidyTree.validBranchColorModes.join(', ')}
+    `);
+  }
+  if (newColorOptions.nodeColorMode === 'list') {
+    if (!Array.isArray(newColorOptions.nodeList)) {
+      throw Error('nodeList must be an array for nodeColorMode "list"');
+    }
+  } else {
+    // nodeColorMode === 'none'
+    if (newColorOptions.branchColorMode !== 'none') {
+      throw Error('branchColorMode must be "none" for nodeColorMode "none"');
+    }
+  }
+  this.colorOptions = newColorOptions;
   if (this.parent) return this.redraw();
   return this;
 };
@@ -16889,12 +17020,12 @@ TidyTree.prototype.setType = function (newType) {
  */
 TidyTree.prototype.setRotation = function (degrees) {
   this.rotation = degrees;
-  if (this.parent) this.parent.select('svg g').attr('transform', `
+  if (this.parent) this.parent.select("svg g").attr("transform", `
         translate(${this.transform.x},${this.transform.y})
         scale(${this.transform.k})
         rotate(${this.rotation},
-          ${this.layout === 'circular' ? 0 : this.width / 2},
-          ${this.layout === 'circular' ? 0 : this.height / 2}
+          ${this.layout === "circular" ? 0 : this.width / 2},
+          ${this.layout === "circular" ? 0 : this.height / 2}
         )
       `);
   return this;
@@ -16953,7 +17084,7 @@ TidyTree.prototype.setBranchNodes = function (show) {
   this.branchNodes = show ? true : false;
   if (this.parent) {
     //i.e. has already been drawn
-    this.parent.select('svg').selectAll('g.tidytree-node-internal circle').transition().duration(this.animation).style('opacity', show ? 1 : 0);
+    this.parent.select("svg").selectAll("g.tidytree-node-internal circle").transition().duration(this.animation).style("opacity", show ? 1 : 0);
   }
   return this;
 };
@@ -16966,8 +17097,8 @@ TidyTree.prototype.setBranchNodes = function (show) {
  * @return {TidyTree} the TidyTree Object
  */
 TidyTree.prototype.eachBranchNode = function (styler) {
-  if (!this.parent) throw Error('Tree has not been rendered yet! Can\'t style Nodes that don\'t exist!');
-  this.parent.select('svg').selectAll('g.tidytree-node-internal circle').each(function (d) {
+  if (!this.parent) throw Error("Tree has not been rendered yet! Can't style Nodes that don't exist!");
+  this.parent.select("svg").selectAll("g.tidytree-node-internal circle").each(function (d) {
     styler(this, d);
   });
   return this;
@@ -16982,7 +17113,7 @@ TidyTree.prototype.setBranchLabels = function (show) {
   this.branchLabels = show ? true : false;
   if (this.parent) {
     //i.e. has already been drawn
-    this.parent.select('svg').selectAll('g.tidytree-node-internal text').transition().duration(this.animation).style('opacity', show ? 1 : 0);
+    this.parent.select("svg").selectAll("g.tidytree-node-internal text").transition().duration(this.animation).style("opacity", show ? 1 : 0);
   }
   return this;
 };
@@ -16996,9 +17127,9 @@ TidyTree.prototype.setBranchLabels = function (show) {
  */
 TidyTree.prototype.eachBranchLabel = function (styler) {
   if (!this.parent) {
-    throw Error('Tree has not been rendered yet! Can\'t style Nodes that don\'t exist!');
+    throw Error("Tree has not been rendered yet! Can't style Nodes that don't exist!");
   }
-  this.parent.select('svg').selectAll('g.tidytree-node-internal text').each(function (d, i, l) {
+  this.parent.select("svg").selectAll("g.tidytree-node-internal text").each(function (d, i, l) {
     styler(this, d);
   });
   return this;
@@ -17013,9 +17144,9 @@ TidyTree.prototype.setBranchDistances = function (show) {
   this.branchDistances = show ? true : false;
   if (this.parent) {
     //i.e. has already been drawn
-    let links = this.parent.select('svg g.tidytree-links').selectAll('g.tidytree-link').selectAll('text');
-    links.attr('transform', labelTransformers[this.type][this.mode][this.layout]);
-    links.transition().duration(this.animation).style('opacity', show ? 1 : 0);
+    let links = this.parent.select("svg g.tidytree-links").selectAll("g.tidytree-link").selectAll("text");
+    links.attr("transform", labelTransformers[this.type][this.mode][this.layout]);
+    links.transition().duration(this.animation).style("opacity", show ? 1 : 0);
   }
   return this;
 };
@@ -17028,8 +17159,8 @@ TidyTree.prototype.setBranchDistances = function (show) {
  * @return {TidyTree} the TidyTree Object
  */
 TidyTree.prototype.eachBranchDistance = function (styler) {
-  if (!this.parent) throw Error('Tree has not been rendered yet! Can\'t style Nodes that don\'t exist!');
-  this.parent.select('svg g.tidytree-links').selectAll('g.tidytree-link').selectAll('text').each(function (d, i, l) {
+  if (!this.parent) throw Error("Tree has not been rendered yet! Can't style Nodes that don't exist!");
+  this.parent.select("svg g.tidytree-links").selectAll("g.tidytree-link").selectAll("text").each(function (d, i, l) {
     styler(this, d);
   });
   return this;
@@ -17044,7 +17175,7 @@ TidyTree.prototype.setLeafNodes = function (show) {
   this.leafNodes = show ? true : false;
   if (this.parent) {
     //i.e. has already been drawn
-    this.parent.select('svg').selectAll('g.tidytree-node-leaf circle').transition().duration(this.animation).style('opacity', show ? 1 : 0);
+    this.parent.select("svg").selectAll("g.tidytree-node-leaf circle").transition().duration(this.animation).style("opacity", show ? 1 : 0);
   }
   return this;
 };
@@ -17058,11 +17189,20 @@ TidyTree.prototype.setLeafNodes = function (show) {
  */
 TidyTree.prototype.eachLeafNode = function (styler) {
   if (!this.parent) {
-    throw Error('Tree has not been rendered yet! Can\'t style Nodes that don\'t exist!');
+    throw Error("Tree has not been rendered yet! Can't style Nodes that don't exist!");
   }
-  this.parent.select('svg').selectAll('g.tidytree-node-leaf circle').each(function (d) {
+  this.parent.select("svg").selectAll("g.tidytree-node-leaf circle").each(function (d) {
     styler(this, d);
   });
+  return this;
+};
+
+/**
+ * Set the TidyTree's leaves to be equidistant
+ */
+TidyTree.prototype.setEquidistantLeaves = function (isEquidistant) {
+  this.equidistantLeaves = isEquidistant ? true : false;
+  if (this.parent) return this.redraw();
   return this;
 };
 
@@ -17075,7 +17215,7 @@ TidyTree.prototype.setLeafLabels = function (show) {
   this.leafLabels = show ? true : false;
   if (this.parent) {
     //i.e. has already been drawn
-    this.parent.select('svg').selectAll('g.tidytree-node-leaf text').transition().duration(this.animation).style('opacity', show ? 1 : 0);
+    this.parent.select("svg").selectAll("g.tidytree-node-leaf text").transition().duration(this.animation).style("opacity", show ? 1 : 0);
   }
   return this;
 };
@@ -17089,9 +17229,9 @@ TidyTree.prototype.setLeafLabels = function (show) {
  */
 TidyTree.prototype.eachLeafLabel = function (styler) {
   if (!this.parent) {
-    throw Error('Tree has not been rendered yet! Can\'t style Nodes that don\'t exist!');
+    throw Error("Tree has not been rendered yet! Can't style Nodes that don't exist!");
   }
-  this.parent.select('svg').selectAll('g.tidytree-node-leaf text').each(function (d) {
+  this.parent.select("svg").selectAll("g.tidytree-node-leaf text").each(function (d) {
     styler(this, d);
   });
   return this;
@@ -17107,12 +17247,33 @@ TidyTree.prototype.setRuler = function (show) {
   if (this.parent) {
     //i.e. has already been drawn
     if (show) {
-      this.parent.select('g.tidytree-ruler').transition().duration(this.animation).attr('opacity', 1);
+      this.parent.select("g.tidytree-ruler").transition().duration(this.animation).attr("opacity", 1);
     } else {
-      this.parent.select('g.tidytree-ruler').transition().duration(this.animation).attr('opacity', 0);
+      this.parent.select("g.tidytree-ruler").transition().duration(this.animation).attr("opacity", 0);
     }
   }
   return this;
+};
+
+/**
+ * Retrieves the GUIDs of the nodes in the TidyTree instance.
+ *
+ * @param {boolean} leavesOnly - Whether to retrieve GUIDs only for leaf nodes.
+ * @param {function} predicate - A function that returns true if the node should be included
+ * @return {Array} An array of GUIDs of the nodes.
+ */
+TidyTree.prototype.getNodeGUIDs = function (leavesOnly, predicate) {
+  let nodeList = this.parent.select("svg").selectAll("g.tidytree-node-leaf circle")._groups[0];
+  if (!leavesOnly) {
+    nodeList = this.parent.select("svg").selectAll("g.tidytree-node-leaf circle, g.tidytree-node-internal circle")._groups[0];
+  }
+  let nodeGUIDs = [];
+  for (const node of nodeList.values()) {
+    if (!predicate || predicate(node)) {
+      nodeGUIDs.push(node.__data__.data._guid);
+    }
+  }
+  return nodeGUIDs;
 };
 
 /**
@@ -17123,7 +17284,7 @@ TidyTree.prototype.setRuler = function (show) {
  */
 TidyTree.prototype.search = function (test) {
   if (!test) return;
-  let results = this.parent.select('svg g.tidytree-nodes').selectAll('g.tidytree-node').filter(test);
+  let results = this.parent.select("svg g.tidytree-nodes").selectAll("g.tidytree-node").filter(test);
   if (this.events.search.length) this.events.search.forEach(c => c(results));
   return results;
 };
@@ -17136,7 +17297,7 @@ TidyTree.prototype.search = function (test) {
  * @return {TidyTree} The TidyTree on which this method was called.
  */
 TidyTree.prototype.on = function (events, callback) {
-  events.split(' ').forEach(event => this.events[event].push(callback));
+  events.split(" ").forEach(event => this.events[event].push(callback));
   return this;
 };
 
@@ -17146,7 +17307,7 @@ TidyTree.prototype.on = function (events, callback) {
  * @return {TidyTree} The TidyTree on which this method was called.
  */
 TidyTree.prototype.off = function (events) {
-  events.split(' ').forEach(event => this.events[event] = []);
+  events.split(" ").forEach(event => this.events[event] = []);
   return this;
 };
 
@@ -17158,7 +17319,7 @@ TidyTree.prototype.off = function (events) {
  * @return The output of the callback run on `event`
  */
 TidyTree.prototype.trigger = function (events, ...args) {
-  return events.split(' ').map(event => {
+  return events.split(" ").map(event => {
     if (this.events[event].length) return this.events[event].map(handler => handler(args));
     return [];
   });
@@ -17652,7 +17813,7 @@ module.exports = "﻿﻿<div class=\"m-content\">\n\n    <div id=\"file-panel\" 
 /***/ ((module) => {
 
 "use strict";
-module.exports = "<div class=\"m-content\">   \n    <div class=\"m-portlet m-portlet--mobile\" style=\"height:100%;\">\n\n        <mat-toolbar id=\"top-toolbar\" class=\"nav-bar\">\n                <div class=\"navbar-logo\">\n                    <span class=\"microbe-font\">Microbe</span>\n                    <span class=\"trace-font\">Trace</span>\n                    <span><img alt=\"microbetrace\" class=\"mt-icon-toolbar\" [src]=\"appRootUrl() + 'assets/images/Logo.png'\"></span>\n                  </div>\n                  <div class=\"menu-items\">\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"fileMenu\"><i class=\"far nav-icon flaticon-file-1\"></i>File<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #fileMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <!-- <button mat-menu-item (click)=\"FileClick('Stash Session')\">Stash</button> -->\n                      <!-- <button mat-menu-item (click)=\"FileClick('Recall Session')\">Recall</button> -->\n                      <button mat-menu-item (click)=\"FileClick('Save Session')\">Save</button>\n                      <!-- <button mat-menu-item (click)=\"FileClick('Open Session')\">Open</button> -->\n                      <button mat-menu-item (click)=\"FileClick('Open URL')\">Open URL</button>\n                      <button mat-menu-item (click)=\"FileClick('Add Data')\">Add Data</button>\n                      <!-- <button mat-menu-item (click)=\"FileClick('New Session')\">New</button> -->\n                    </mat-menu>\n                    <button class=\"navbar-item\" (click)=\"DisplayGlobalSettingsDialog()\" mat-button><i class=\"far nav-icon flaticon-cogwheel-2\"></i>Settings</button>\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"viewMenu\"><i class=\"far nav-icon flaticon-web\"></i>View<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #viewMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <button mat-menu-item (click)=\"Viewclick('2D Network')\">2D Network</button>\n                      <button mat-menu-item (click)=\"Viewclick('Map')\">Map</button>\n                      <!-- <button mat-menu-item (click)=\"Viewclick('Table')\">Table</button>\n                      <button mat-menu-item (click)=\"Viewclick('Map')\">Map</button>\n                      <button mat-menu-item (click)=\"Viewclick('Phylogenetic Tree')\">Phylogenetic Tree</button> -->\n                    </mat-menu>\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"windowMenu\"><i class=\"far nav-icon flaticon-web\"></i>Window<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #windowMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <button mat-menu-item (click)=\"WindowClick('Reload Screen')\">Reload</button>\n                      <button mat-menu-item (click)=\"WindowClick('Fullscreen')\">Fullscreen</button>\n                    </mat-menu>\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"helpMenu\"><i class=\"far nav-icon flaticon-questions-circular-button\"></i>Help<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #helpMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <a href=\"https://github.com/CDCgov/MicrobeTrace/wiki\" class=\"dropdown-item ifOnline\" target=\"_blank\" rel=\"noreferrer noopener\" mat-menu-item>Help</a>\n                      <a href=\"https://github.com/CDCgov/MicrobeTrace/issues/new\" class=\"dropdown-item ifOnline\" target=\"_blank\" rel=\"noreferrer noopener\" mat-menu-item>Report Bug</a>\n                      <button (click)=\"HelpClick('About')\" mat-menu-item>About</button>\n                    </mat-menu>\n                    <!-- <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"langMenu\"><i class=\"far nav-icon flaticon-earth-globe\"></i>Language<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #langMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <button mat-menu-item >English</button>\n                      <button mat-menu-item >Spanish</button>\n                    </mat-menu> -->\n                  </div>\n            <div id=\"search-form\" class=\"form-inline navbar-form\">\n                <label for=\"search\">Search</label>\n                <div class=\"autocomplete-wrapper\">\n                    <input type=\"search\" id=\"search\" class=\"form-control form-control-sm\" (input)=\"onSearch()\" [(ngModel)]=\"searchText\" placeholder=\"Nodes\">\n                    <ul id=\"search-results\"></ul>\n                </div>\n            <button id=\"casesensitivebutton\" (click)=\"onCaseSensitiveChange()\" type=\"button\" class=\"btn btn-light btn-sm\" data-toggle=\"button\" aria-pressed=\"false\" autocomplete=\"off\" title=\"Match Case\">\n                <span>C</span>\n            </button>     \n            <button id=\"wholewordbutton\" type=\"button\" (click)=\"onWholeWordChange()\" class=\"btn btn-light btn-sm\" data-toggle=\"button\" aria-pressed=\"false\" autocomplete=\"off\" title=\"Match Whole Word\">\n                <span>W</span>\n            </button>      \n        \n            <select [(ngModel)]=\"searchField\" (ngModelChange)=\"onSearchFieldChange($event)\" id=\"search-field\"  class=\"form-control form-control-sm nodeValues\">\n                <option val=\"id\">ID</option>\n            </select>\n            </div> \n          </mat-toolbar>\n\n        <div id=\"visualwrapper\" class=\"kt-container  kt-grid__item kt-grid__item--fluid \" style=\"margin: 6px 6px 0 6px;\">\n            <div class=\"kt-portlet kt-portlet--mobile\" style=\"height:100%\">\n                <div class=\"kt-portlet__head kt-portlet__head--lg\" style=\"height:100%\">\n                    <div class=\"m-portlet__body\" style=\"flex: 1 100%; max-width:100%; height:100%\">\n                        <!-- TODO: Add back or replace-->\n                        <!-- <golden-layout-root #goldenLayout></golden-layout-root> -->\n                        <app-golden-layout-host #goldenLayoutHost></app-golden-layout-host>             \n                    </div>\n                </div>\n            </div>\n\n        <p-dialog class=\"table-z-index\" id=\"global-settings-link-color-table\" \n            [position]=\"GlobalSettingsLinkColorDialogSettings.linkLeft\" \n            [(visible)]=\"GlobalSettingsLinkColorDialogSettings.isVisible\"  \n            header=\"Link Color Table\" [style]=\"{'z-index': '1'}\"\n            (onShow)=\"SelectedLinkColorTableTypesVariable='Show'\"\n            (onHide)=\"SelectedLinkColorTableTypesVariable='Hide'\"\n            >\n            <div class=\"col-12\" style=\"max-height: 50vh\">\n                <table id=\"link-color-table\" style=\"width:100%;height:100%;\"></table>\n            </div>\n        </p-dialog>\n\n\n        <p-dialog id=\"global-settings-node-color-table\" \n            [position]=\"GlobalSettingsNodeColorDialogSettings.nodeLeft\" \n            [(visible)]=\"GlobalSettingsNodeColorDialogSettings.isVisible\"  \n            header=\"Node Color Table\" [style]=\"{width: '45vw', maxWidth: '450px'}\"\n            (onShow)=\"SelectedNodeColorTableTypesVariable='Show'\"\n            (onHide)=\"SelectedNodeColorTableTypesVariable='Hide'\"\n                    >\n            <div class=\"col-12\" style=\"max-height: 50vh\">\n                <table id=\"node-color-table\" style=\"width:100%;height:100%;\"></table>\n            </div>\n        </p-dialog>\n        </div>\n\n        <div id=\"overlay\" appDnd (fileDropped)=\"prepareFilesLists($event)\">\n            <input class=\"dnd-input\" type=\"file\" #fileDropRef id=\"fileDropRef\" multiple (change)=\"prepareFilesLists($event.target.files)\" />\n            <div class=\"welcome-msg\">\n                <div id=\"welcome-title\" class=\"top\">\n                    <span class=\"primary\">Welcome to </span>\n                    <span class=\"microbe primary\">Microbe</span>\n                    <span class=\"primary\">Trace&#8482;</span>\n                    <!-- <span><img class=\"mt-icon\" src=\"../../assets/images/Logo.png\"></span> -->\n                    <!-- Swap/Uncomment when building productions -->\n                    <span><img alt=\"microbetrace\" class=\"mt-icon\" [src]=\"appRootUrl() + 'assets/images/Logo.png'\"></span>\n                </div>\n                <div id=\"welcome-description\" class=\"bottom primary\">The Visualization Multitool for Molecular Epidemiology and Bioinformatics</div>\n            </div>\n            <div id=\"add-data-container\" class=\"add-data-container\">\n                <div class=\"files-msg\">\n                    <span class=\"primary\">Click </span>\n                    <a class=\"here-link primary\" for=\"fileDropRef\">here</a>\n                    <span class=\"primary\"> or Drag & Drop files to load data</span>\n                </div>\n                <div class=\"add-btns primary\">\n                    <!-- TODO: add back in when recall is ready-->\n                    <!-- <button mat-raised-button color=\"primary\" class=\"recall\" (click)=\"recallClicked()\">Recall Previous Session</button> -->\n                    <button mat-raised-button color=\"primary\" (click)=\"continueClicked()\">Continue with Sample Dataset</button>\n                </div>\n            </div>\n            <!-- <div id=\"onload-container\" class=\"launch-options-container primary\">\n                <span class=\"onload-bold\">Onload Settings:</span>\n                <span>Distance Metric: <span class=\"option-value\" [matMenuTriggerFor]=\"metricMenu\">{{metric}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\n                <span id=\"ambiguities-menu\">Ambiguities: <span class=\"option-value\" [matMenuTriggerFor]=\"ambiMenu\">{{ambiguity}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\n                <span>View to Launch: <span class=\"option-value\" [matMenuTriggerFor]=\"viewMenuBottom\">{{launchView}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\n                <span class=\"threshold-option\">Link Threshold: \n                    <form class=\"threshold-input\">\n                    <mat-form-field class=\"threshold-input-length\">\n                        <mat-label></mat-label>\n                      <input matInput (input)=\"updateThreshold($event)\" [value]=\"threshold\">\n                    </mat-form-field>\n                  </form>\n                </span>\n            </div>\n            <mat-menu #metricMenu=\"matMenu\"overlapTrigger=\"false\">\n                <button mat-menu-item (click)=\"updateMetric('TN93')\">TN93</button>\n                <button mat-menu-item (click)=\"updateMetric('SNPs')\">SNPs</button>\n            </mat-menu>\n            <mat-menu #ambiMenu=\"matMenu\" overlapTrigger=\"false\">\n                <button mat-menu-item (click)=\"updateAmbiguity('Average')\">Average</button>\n                <button mat-menu-item (click)=\"updateAmbiguity('Resolve')\">Resolve</button>\n                <button mat-menu-item (click)=\"updateAmbiguity('Skip')\">Skip</button>\n                <button mat-menu-item (click)=\"updateAmbiguity('GapMM')\">GapMM</button>\n                <button mat-menu-item (click)=\"updateAmbiguity('HIV-Trace -g')\">HIV-Trace -g</button>\n            </mat-menu>\n            <mat-menu #viewMenuBottom=\"matMenu\" overlapTrigger=\"false\">\n                <button mat-menu-item (click)=\"updateLaunchView('2D Network')\">2D Network</button>\n                <button mat-menu-item (click)=\"updateLaunchView('Table')\">Table</button>\n                <button mat-menu-item (click)=\"updateLaunchView('Map')\">Bubbles</button>\n                <button mat-menu-item (click)=\"updateLaunchView('Phylogenetic Tree')\">Phylogenetic Tree</button>\n            </mat-menu> -->\n        </div>\n\n\n        <p-dialog id=\"ledger-loader-modal\" [(visible)]=\"displayLedgerLoaderDialog\" header=\"Blockchain Ledgers\" styleClass=\"ui-dialog\" [contentStyle]=\"{'max-height':'50vh'}\">\n\n            <div class=\"position-relative\" #ledgerloadDiv>\n                <div class=\"loader\">\n                    <i class=\"fa fa-spinner fa-spin\" style=\"font-size:40px;z-index:1;display:none;\" #ledgerloader></i>\n                </div>\n            </div>\n\n            <div style=\"min-height: 100px;\">\n                <p-tree [value]=\"ledgerOptions\" selectionMode=\"checkbox\"  [filter]=\"true\" [(selection)]=\"ledgerOptionSelected\" *ngIf=\"ledgerOptions && ledgerOptions.length > 0\" scrollHeight=\"flex\"></p-tree>\n            </div>\n\n            <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-error\" (click)=\"ToggleDisplayLedgerLoaderDialog()\">Cancel</button>\n                <button type=\"button\" id=\"stash-data2\" class=\"btn btn-primary\" (click)=\"DisplayLedgerLoaderDialog('Load')\" [disabled]=\"!ledgerOptionSelected || ledgerOptionSelected.length === 0\">Load</button>\n            </div>\n\n        </p-dialog><!-- /.modal -->\n        \n\n\n        <p-dialog id=\"global-settings-modal\" \n                    [positionLeft]=\"GlobalSettingsDialogSettings.left\" \n                    [positionTop]=\"GlobalSettingsDialogSettings.top\" \n                    [(visible)]=\"GlobalSettingsDialogSettings.isVisible\"  \n                    header=\"Global Settings\" >\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        <tabset #globalSettingsTab class=\"tab-container tabbable-line\" style='width: 100%; height: 100%;'>\n                            <tab heading=\"{{'Filtering' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\n\n                                <div id=\"filtering-config\" role=\"tabpanel\" aria-labelledby=\"filtering-tab\">\n                                    <div class=\"form-group row\" title=\"By what metric would you like to measure distance?\">\n                                        <div class=\"col-4\">Distance Metric</div>\n                                        <div class=\"col-8\">\n                                            <select id=\"default-distance-metric\" class=\"form-control form-control-sm mr-5\" [(ngModel)]=\"SelectedDistanceMetricVariable\" (ngModelChange)=\"onDistanceMetricChanged()\">\n                                                <option value=\"tn93\">TN93</option>\n                                                <option value=\"snps\">SNPs</option>\n                                            </select>\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"By what algorithm would you like to prune links from the network?\">\n                                        <div class=\"col-4\">Prune With</div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"PruneWityTypes\" [(ngModel)]=\"SelectedPruneWityTypesVariable\" (onChange)=\"onPruneWithTypesChanged()\"></p-selectButton>\n                                        </div>\n                                    </div>                                    \n                                    <div class=\"form-group row\" title=\"What's the minimum number of nodes a cluster must have in order to be visible?\">\n                                        <div class=\"col-4\">\n                                            <label for=\"cluster-minimum-size\">Minimum Cluster Size</label>\n                                        </div>\n                                        <div class=\"col-8\">\n                                            <input type=\"number\" class=\"form-control form-control-sm\" id=\"cluster-minimum-size\" min=\"1\" value=\"1\" step=\"1\" [(ngModel)]=\"SelectedClusterMinimumSizeVariable\" (ngModelChange)=\"onMinimumClusterSizeChanged()\">\n                                        </div>\n                                    </div>\n                                    <div id=\"filtering-wrapper\">\n                                        <div class=\"form-group row\" title=\"By what variable would you like to prune links from the network?\">\n                                            <div class=\"col-4\"><label for=\"link-sort-variable\">Filter Links on</label></div>\n                                            <div class=\"col-8\">\n                                                <p-dropdown id=\"link-sort-variable\" [options]=\"ToolTipFieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedLinkSortVariable\" (onChange)=\"onLinkSortChanged()\"></p-dropdown>\n                                            </div>\n                                        </div>\n                                        <div class=\"form-group row\" id=\"filtering-threshold\" title=\"What's the maximum genetic distance you're willing to call a link?\">\n                                            <div class=\"col-4\"><label for=\"link-threshold\">Filtering Threshold</label></div>\n                                            <div class=\"col-8\"><svg id=\"link-threshold-sparkline\" #linkThresholdSparkline style=\"width: 280px; height: 48px;\"></svg></div>\n                                            <div class=\"col-8  offset-4\">\n                                                <input type=\"number\" class=\"form-control form-control-sm\" id=\"link-threshold\" min=\"-1\" value=\"1\" step=\"0.001\" [(ngModel)]=\"SelectedLinkThresholdVariable\" (ngModelChange)=\"onLinkThresholdChanged()\">\n                                            </div>\n                                        </div>\n                                        <div class=\"form-group row\" title=\"Click to reveal all hidden elements of the network.\">\n                                            <div class=\"col-4\"><label for=\"reveal-all\">Reveal</label></div>\n                                            <div class=\"col-8\">\n                                              <button type=\"button\" id=\"reveal-all\" (click)=\"revealClicked()\" class=\"btn btn-light btn-sm w-100\">Everything</button>\n                                            </div>\n                                          </div>\n                                    </div>\n                                    <div class=\"form-group row\" hidden title=\"Click to reveal all hidden elements of the network.\">\n                                        <div class=\"col-4\"><label for=\"RevealAllTab\">Reveal</label></div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"RevealTypes\" [(ngModel)]=\"SelectedRevealTypesVariable\" (onChange)=\"updateGlobalSettingsModel()\"></p-selectButton>\n                                        </div>\n                                    </div>\n                                    <hr>\n                                    <div class=\"form-group row\" title=\"Display a table of overview statistics for the network\">\n                                        <div class=\"col-4\">Statistics</div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"StatisticsTypes\" [(ngModel)]=\"SelectedStatisticsTypesVariable\" (onChange)=\"onShowStatisticsChanged()\"></p-selectButton>\n                                        </div>\n                                    </div>\n                                </div>\n                            </tab>\n                            <tab heading=\"{{'Styling' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\n\n                                <div id=\"style-config\" role=\"tabpanel\" aria-labelledby=\"style-tab\">\n                                    <div class=\"form-group row\" title=\"By what variable nodes be colored?\">\n                                        <div class=\"col-4\"><label for=\"node-color-variable\">Color Nodes By</label></div>\n                                        <div class=\"col-8\">\n                                            <p-dropdown id=\"node-color-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedColorNodesByVariable\" (onChange)=\"onColorNodesByChanged()\"></p-dropdown>\n                                        </div>\n                                    </div>\n                                    <div id=\"node-color-table-row\" [hidden]=\"!ShowGlobalSettingsNodeColorTable\" class=\"form-group row\" title=\"Should MicrobeTrace display the table of colors?\">\n                                        <div class=\"col-4\"><label>Nodes Color Table</label></div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton hidde [options]=\"NodeColorTableTypes\" [(ngModel)]=\"SelectedNodeColorTableTypesVariable\" (onChange)=\"onNodeColorTableChanged()\"></p-selectButton>\n                                        </div>\n                                    </div>\n\n\n                                    <div id=\"node-color-value-row\" class=\"form-group row\" title=\"What color should the nodes be?\">\n                                        <div class=\"col-4\"><label for=\"node-color\">Nodes</label></div>\n                                        <div class=\"col-8\">\n                                            <input type=\"color\" id=\"node-color\" class=\"form-control form-control-sm\" value=\"#1f77b4\" [(ngModel)]=\"SelectedNodeColorVariable\" (ngModelChange)=\"onNodeColorChanged()\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"By what variable should links be colored?\">\n                                        <div class=\"col-4\"><label for=\"link-color-variable\">Color Links By</label></div>\n                                        <div class=\"col-8\">\n                                            <p-dropdown id=\"link-tooltip-variable\" [options]=\"ToolTipFieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedColorLinksByVariable\" (onChange)=\"onColorLinksByChanged()\"></p-dropdown>\n                                        </div>\n                                    </div>\n                                    <div id=\"link-color-table-row\" [hidden]=\"!ShowGlobalSettingsLinkColorTable\"  class=\"form-group row\" title=\"Should MicrobeTrace display the table of colors?\">\n                                        <div class=\"col-4\"><label>Link Color Table</label></div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"LinkColorTableTypes\" [(ngModel)]=\"SelectedLinkColorTableTypesVariable\" (onChange)=\"onLinkColorTableChanged()\"></p-selectButton>\n                                        </div>\n                                    </div>\n\n                                    <div id=\"link-color-value-row\" class=\"form-group row\" title=\"What color should the links be?\">\n                                        <div class=\"col-4\"><label for=\"link-color\">Links</label></div>\n                                        <div class=\"col-8\">\n                                            <input type=\"color\" id=\"link-color\" class=\"form-control form-control-sm\" [(ngModel)]=\"SelectedLinkColorVariable\" (ngModelChange)=\"onLinkColorChanged()\">\n                                        </div>\n                                    </div>\n\n                                    <div class=\"form-group row\" title=\"What color should denote selection?\">\n                                        <div class=\"col-4\"><label for=\"selected-color\">Selected</label></div>\n                                        <div class=\"col-8\">\n                                            <input type=\"color\" id=\"selected-color\" class=\"form-control form-control-sm\" value=\"#ff8300\" [(ngModel)]=\"SelectedColorVariable\" (ngModelChange)=\"updateGlobalSettingsModel()\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"What color should the background be?\">\n                                        <div class=\"col-4\"><label for=\"background-color\">Background</label></div>\n                                        <div class=\"col-8\">\n                                            <input type=\"color\" id=\"background-color\" class=\"form-control form-control-sm\" value=\"#ffffff\" [(ngModel)]=\"SelectedBackgroundColorVariable\" (ngModelChange)=\"onBackgroundChanged()\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"Load an existing MicrobeTrace style file\">\n                                        <div class=\"col-4\">Apply Style</div>\n                                        <div class=\"col-8\">\n                                            <input type=\"file\" id=\"apply-style\" class=\"d-none\" [(ngModel)]=\"SelectedApplyStyleVariable\" (ngModelChange)=\"updateGlobalSettingsModel()\">\n                                            <label class=\"custom-file-label\" for=\"apply-style\">Choose MicrobeTrace Style File</label>\n                                        </div>\n                                    </div>\n                                </div>\n                            </tab>\n\n                            <tab heading=\"{{'Timeline' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\n                                <div id=\"timeline-config\" role=\"tabpanel\" aria-labelledby=\"timeline-tab\">\n                                    <div class=\"form-group row\" title=\"By what variable timeline applied?\">\n                                        <div class=\"col-4\"><label for=\"node-timeline-variable\">Timeline By</label></div>\n                                        <div class=\"col-8\">\n                                            <p-dropdown id=\"node-timeline-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedTimelineVariable\" (onChange)=\"onTimelineChanged($event.value)\"></p-dropdown>\n                                        </div>\n                                      </div>\n                                </div> \n                            </tab>\n                        </tabset>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"modal-footer\">\n                <div class=\"btn-group\" data-toggle=\"buttons\">\n                    <button type=\"button\" class=\"btn btn-primary\" (click)=\"GlobalSettingsDialogSettings.setVisibility(false)\">Done</button>\n                </div>\n            </div>\n        </p-dialog><!-- /.modal -->\n\n        <p-dialog id=\"session-recall-modal\" [(visible)]=\"displayRecallStashDialog\" header=\"Recall Stash\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div #stashes id=\"recall-stashes-available\" class=\"table-sm\"></div>\n\n                    <div class=\"modal-footer\">\n                        <button *ngIf=\"!HideThisForNow\" type=\"button\" class=\"btn btn-danger\" id=\"recall-delete-stash\" (click)=\"DisplayRecallStashDialog('Delete')\">Delete</button>\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayRecallStashDialog('Cancel')\">Cancel</button>\n                        <button type=\"button\" class=\"btn btn-success\" id=\"recall-load-stash\" (click)=\"DisplayRecallStashDialog('Recall')\">Recall</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog><!-- /.modal -->\n\n        <p-dialog id=\"open-auspice-url\" [(visible)]=\"displayUrlDialog\" header=\"Open Auspice JSON via URL\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        <input type=\"text\" id=\"auspice-url\" class=\"form-control form-control-sm\" [(ngModel)]=\"auspiceUrlVal\" placeholder=\"URL of Auspice JSON to open\" />\n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayUrlDialog('Cancel')\">Cancel</button>\n                        <button type=\"button\" class=\"btn btn-success\" id=\"url-open-button\" (click)=\"DisplayUrlDialog('Open')\">Open</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog><!-- /.modal -->\n\n        <p-dialog id=\"open-old-mt\" [(visible)]=\"displayMTDialog\" header=\"Open Auspice JSON in classic MicrobeTrace\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        Welcome to the newest version of MicrobeTrace! If you'd like to open your auspice JSON file in the previous version of MicrobeTrace, please click this link: <br />\n                        <a href=\"https://microbetrace.cdc.gov/MicrobeTrace/?url={{auspiceUrlVal}}\">https://microbetrace.cdc.gov/MicrobeTrace/?url={{auspiceUrlVal}}</a>\n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayMTDialog('Cancel')\">Close</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog><!-- /.modal -->\n\n        <p-dialog id=\"session-stash-modal\" [(visible)]=\"displayStashDialog\" header=\"Save Session\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n\n                    <div class=\"modal-body\">\n                        <div class=\"form-group row\" title=\"What would you like to call this session?\">\n                            <div class=\"col\">\n                                <input type=\"text\" id=\"stash-name\" class=\"form-control form-control-sm\" [(ngModel)]=\"saveFileName\" placeholder=\"Name your session!\">\n                            </div>\n                        </div>\n                        <div class=\"form-group row\" title=\"Should MicrobeTrace compress this save file?\">\n                            <div class=\"col\">\n                                <div class=\"form-check form-check-inline\">\n                                    <input class=\"form-check-input\" type=\"checkbox\" id=\"save-file-compress\" checked>\n                                    <label class=\"form-check-label\" for=\"save-file-compress\">Compress?</label>\n                                  </div>\n                              <div id=\"cluster-checkbox-container\" class=\"form-check form-check-inline\">\n                                <input class=\"form-check-input\" [(ngModel)]=\"saveByCluster\" type=\"checkbox\" id=\"save-file-cluster\">\n                                <label class=\"form-check-label\" for=\"save-file-cluster\">By Cluster</label>\n                              </div>\n                            </div>\n                         </div>\n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn btn-error\" (click)=\"DisplayStashDialog('Cancel')\">Cancel</button>\n                        <button type=\"button\" id=\"stash-data\" class=\"btn btn-primary\" (click)=\"DisplayStashDialog('Save')\" [disabled]=\"saveFileName === undefined || saveFileName === ''\">Save</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog><!-- /.modal -->\n\n\n        <p-dialog id=\"about-dialog\" [(visible)]=\"displayAbout\" header=\"About Microbetrace\">\n            <div class=\"modal-dialog modal-lg\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        <h3>\n                            <span>{{\"MicrobeTrace\" | localize}} </span>\n                            <small>v<span id=\"version\">{{version}}</span></small>\n                        </h3>\n                        <p>\n                            MicrobeTrace is an interactive web application that renders existing data from high-risk contact networks\n                            in an easy-to-use Graphical User Interface (GUI). The network visualization can be customized according to\n                            supplemental data sources and mathematical inferences like the most probable transmission pathways.\n                            MicrobeTrace is a highly responsive, visual sequence analytics tool which can reduce the gap between data\n                            production and analytics and help you to discover, understand, and display relationships (links) between\n                            patients (nodes). MicrobeTrace can be deployed on laptops to locations without any Internet access, thereby\n                            reducing both the startup cost and analysis time and effort.\n                          </p>\n                          <p class=\"about-links\">\n                            <a href=\"https://github.com/CDCgov/MicrobeTrace/wiki\" target=\"_blank\" rel=\"noreferrer noopener\">\n                              Click Here to Learn More\n                            </a>\n                          </p>\n                          <p>\n                            MicrobeTrace was built by the Molecular Epidemiology and Bionformatics Team at the CDC in Atlanta.</p>\n                            <a class=\"about-links\" href=\"https://cdcgov.github.io/MEBT\" target=\"_blank\" rel=\"noreferrer noopener\" style=\"display: block;\">\n                              Click Here to See MEBT's Other Tools\n                            </a>\n                          \n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn btn-success\" (click)=\"DisplayAbout()\">Close</button>\n                    </div>\n                </div>\n            </div>\n        </p-dialog>\n\n        <div id=\"main-panel\" class=\"pane-container pane-horizontal\">\n            <noscript class=\"container-fluid\">\n              <div class=\"jumbotron\">\n                <h1>Sorry!</h1>\n                <p class=\"lead\">MicrobeTrace requires Javascript to run. Please <a href=\"https://www.enable-javascript.com/\">enable Javascript</a> and refresh MicrobeTrace.</p>\n              </div>\n            </noscript>\n            <div id=\"global-timeline-wrapper\" style=\"display: none;\">\n              <div id=\"global-timeline\" align=\"center\">\n                <div><button type=\"button\" id=\"timeline-play-button\" class=\"btn btn-light btn-sm\" (click)=\"playTimeline()\">{{playBtnText}}</button>\n                <span id=\"global-timeline-field\" contenteditable></span></div>\n                <!-- <svg></svg>\n                <mat-slider></mat-slider> -->\n              </div>  \n            </div>\n          </div>\n\n       \n        <!-- <p-dialog class=\"table-z-index\" id=\"global-settings-link-color-table\" \n                    [position]=\"GlobalSettingsLinkColorDialogSettings.linkLeft\" \n                    [(visible)]=\"GlobalSettingsLinkColorDialogSettings.isVisible\"  \n                    header=\"Link Color Table\" [style]=\"{'z-index': '1'}\"\n                    (onShow)=\"SelectedLinkColorTableTypesVariable='Show'\"\n                    (onHide)=\"SelectedLinkColorTableTypesVariable='Hide'\"\n                    >\n            <div class=\"col-12\" style=\"max-height: 50vh\">\n                <table id=\"link-color-table\" style=\"width:100%;height:100%;\"></table>\n            </div>\n        </p-dialog> -->\n\n        <div id=\"color-transparency-wrapper\">\n            <input type=\"range\" class=\"custom-range\" id=\"color-transparency\" min=\"0\" max=\"1\" step=\"0.05\" value=\"1\" >\n        </div>\n\n\n    </div>\n</div>\n";
+module.exports = "<div class=\"m-content\">   \n    <div class=\"m-portlet m-portlet--mobile\" style=\"height:100%;\">\n\n        <mat-toolbar id=\"top-toolbar\" class=\"nav-bar\">\n                <div class=\"navbar-logo\">\n                    <span class=\"microbe-font\">Microbe</span>\n                    <span class=\"trace-font\">Trace</span>\n                    <span><img alt=\"microbetrace\" class=\"mt-icon-toolbar\" [src]=\"appRootUrl() + 'assets/images/Logo.png'\"></span>\n                  </div>\n                  <div class=\"menu-items\">\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"fileMenu\"><i class=\"far nav-icon flaticon-file-1\"></i>File<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #fileMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <!-- <button mat-menu-item (click)=\"FileClick('Stash Session')\">Stash</button> -->\n                      <!-- <button mat-menu-item (click)=\"FileClick('Recall Session')\">Recall</button> -->\n                      <button mat-menu-item (click)=\"FileClick('Save Session')\">Save</button>\n                      <!-- <button mat-menu-item (click)=\"FileClick('Open Session')\">Open</button> -->\n                      <button mat-menu-item (click)=\"FileClick('Open URL')\">Open URL</button>\n                      <button mat-menu-item (click)=\"FileClick('Add Data')\">Add Data</button>\n                      <!-- <button mat-menu-item (click)=\"FileClick('New Session')\">New</button> -->\n                    </mat-menu>\n                    <button class=\"navbar-item\" (click)=\"DisplayGlobalSettingsDialog()\" mat-button><i class=\"far nav-icon flaticon-cogwheel-2\"></i>Settings</button>\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"viewMenu\"><i class=\"far nav-icon flaticon-web\"></i>View<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #viewMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <button mat-menu-item (click)=\"Viewclick('2D Network')\">2D Network</button>\n                      <button mat-menu-item (click)=\"Viewclick('Map')\">Map</button>\n                      <!-- <button mat-menu-item (click)=\"Viewclick('Table')\">Table</button>\n                      <button mat-menu-item (click)=\"Viewclick('Map')\">Map</button>-->\n                      <button mat-menu-item (click)=\"Viewclick('Phylogenetic Tree')\">Phylogenetic Tree</button>\n                    </mat-menu>\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"windowMenu\"><i class=\"far nav-icon flaticon-web\"></i>Window<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #windowMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <button mat-menu-item (click)=\"WindowClick('Reload Screen')\">Reload</button>\n                      <button mat-menu-item (click)=\"WindowClick('Fullscreen')\">Fullscreen</button>\n                    </mat-menu>\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"helpMenu\"><i class=\"far nav-icon flaticon-questions-circular-button\"></i>Help<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #helpMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <a href=\"https://github.com/CDCgov/MicrobeTrace/wiki\" class=\"dropdown-item ifOnline\" target=\"_blank\" rel=\"noreferrer noopener\" mat-menu-item>Help</a>\n                      <a href=\"https://github.com/CDCgov/MicrobeTrace/issues/new\" class=\"dropdown-item ifOnline\" target=\"_blank\" rel=\"noreferrer noopener\" mat-menu-item>Report Bug</a>\n                      <button (click)=\"HelpClick('About')\" mat-menu-item>About</button>\n                    </mat-menu>\n                    <!-- <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"langMenu\"><i class=\"far nav-icon flaticon-earth-globe\"></i>Language<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #langMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <button mat-menu-item >English</button>\n                      <button mat-menu-item >Spanish</button>\n                    </mat-menu> -->\n                  </div>\n            <div id=\"search-form\" class=\"form-inline navbar-form\">\n                <label for=\"search\">Search</label>\n                <div class=\"autocomplete-wrapper\">\n                    <input type=\"search\" id=\"search\" class=\"form-control form-control-sm\" (input)=\"onSearch()\" [(ngModel)]=\"searchText\" placeholder=\"Nodes\">\n                    <ul id=\"search-results\"></ul>\n                </div>\n            <button id=\"casesensitivebutton\" (click)=\"onCaseSensitiveChange()\" type=\"button\" class=\"btn btn-light btn-sm\" data-toggle=\"button\" aria-pressed=\"false\" autocomplete=\"off\" title=\"Match Case\">\n                <span>C</span>\n            </button>     \n            <button id=\"wholewordbutton\" type=\"button\" (click)=\"onWholeWordChange()\" class=\"btn btn-light btn-sm\" data-toggle=\"button\" aria-pressed=\"false\" autocomplete=\"off\" title=\"Match Whole Word\">\n                <span>W</span>\n            </button>      \n        \n            <select [(ngModel)]=\"searchField\" (ngModelChange)=\"onSearchFieldChange($event)\" id=\"search-field\"  class=\"form-control form-control-sm nodeValues\">\n                <option val=\"id\">ID</option>\n            </select>\n            </div> \n          </mat-toolbar>\n\n        <div id=\"visualwrapper\" class=\"kt-container  kt-grid__item kt-grid__item--fluid \" style=\"margin: 6px 6px 0 6px;\">\n            <div class=\"kt-portlet kt-portlet--mobile\" style=\"height:100%\">\n                <div class=\"kt-portlet__head kt-portlet__head--lg\" style=\"height:100%\">\n                    <div class=\"m-portlet__body\" style=\"flex: 1 100%; max-width:100%; height:100%\">\n                        <!-- TODO: Add back or replace-->\n                        <!-- <golden-layout-root #goldenLayout></golden-layout-root> -->\n                        <app-golden-layout-host #goldenLayoutHost></app-golden-layout-host>             \n                    </div>\n                </div>\n            </div>\n\n        <p-dialog class=\"table-z-index\" id=\"global-settings-link-color-table\" \n            [position]=\"GlobalSettingsLinkColorDialogSettings.linkLeft\" \n            [(visible)]=\"GlobalSettingsLinkColorDialogSettings.isVisible\"  \n            header=\"Link Color Table\" [style]=\"{'z-index': '1'}\"\n            (onShow)=\"SelectedLinkColorTableTypesVariable='Show'\"\n            (onHide)=\"SelectedLinkColorTableTypesVariable='Hide'\"\n            >\n            <div class=\"col-12\" style=\"max-height: 50vh\">\n                <table id=\"link-color-table\" style=\"width:100%;height:100%;\"></table>\n            </div>\n        </p-dialog>\n\n\n        <p-dialog id=\"global-settings-node-color-table\" \n            [position]=\"GlobalSettingsNodeColorDialogSettings.nodeLeft\" \n            [(visible)]=\"GlobalSettingsNodeColorDialogSettings.isVisible\"  \n            header=\"Node Color Table\" [style]=\"{width: '45vw', maxWidth: '450px'}\"\n            (onShow)=\"SelectedNodeColorTableTypesVariable='Show'\"\n            (onHide)=\"SelectedNodeColorTableTypesVariable='Hide'\"\n                    >\n            <div class=\"col-12\" style=\"max-height: 50vh\">\n                <table id=\"node-color-table\" style=\"width:100%;height:100%;\"></table>\n            </div>\n        </p-dialog>\n        </div>\n\n        <div id=\"overlay\" appDnd (fileDropped)=\"prepareFilesLists($event)\">\n            <input class=\"dnd-input\" type=\"file\" #fileDropRef id=\"fileDropRef\" multiple (change)=\"prepareFilesLists($event.target.files)\" />\n            <div class=\"welcome-msg\">\n                <div id=\"welcome-title\" class=\"top\">\n                    <span class=\"primary\">Welcome to </span>\n                    <span class=\"microbe primary\">Microbe</span>\n                    <span class=\"primary\">Trace&#8482;</span>\n                    <!-- <span><img class=\"mt-icon\" src=\"../../assets/images/Logo.png\"></span> -->\n                    <!-- Swap/Uncomment when building productions -->\n                    <span><img alt=\"microbetrace\" class=\"mt-icon\" [src]=\"appRootUrl() + 'assets/images/Logo.png'\"></span>\n                </div>\n                <div id=\"welcome-description\" class=\"bottom primary\">The Visualization Multitool for Molecular Epidemiology and Bioinformatics</div>\n            </div>\n            <div id=\"add-data-container\" class=\"add-data-container\">\n                <div class=\"files-msg\">\n                    <span class=\"primary\">Click </span>\n                    <a class=\"here-link primary\" for=\"fileDropRef\">here</a>\n                    <span class=\"primary\"> or Drag & Drop files to load data</span>\n                </div>\n                <div class=\"add-btns primary\">\n                    <!-- TODO: add back in when recall is ready-->\n                    <!-- <button mat-raised-button color=\"primary\" class=\"recall\" (click)=\"recallClicked()\">Recall Previous Session</button> -->\n                    <button mat-raised-button color=\"primary\" (click)=\"continueClicked()\">Continue with Sample Dataset</button>\n                </div>\n            </div>\n            <!-- <div id=\"onload-container\" class=\"launch-options-container primary\">\n                <span class=\"onload-bold\">Onload Settings:</span>\n                <span>Distance Metric: <span class=\"option-value\" [matMenuTriggerFor]=\"metricMenu\">{{metric}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\n                <span id=\"ambiguities-menu\">Ambiguities: <span class=\"option-value\" [matMenuTriggerFor]=\"ambiMenu\">{{ambiguity}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\n                <span>View to Launch: <span class=\"option-value\" [matMenuTriggerFor]=\"viewMenuBottom\">{{launchView}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\n                <span class=\"threshold-option\">Link Threshold: \n                    <form class=\"threshold-input\">\n                    <mat-form-field class=\"threshold-input-length\">\n                        <mat-label></mat-label>\n                      <input matInput (input)=\"updateThreshold($event)\" [value]=\"threshold\">\n                    </mat-form-field>\n                  </form>\n                </span>\n            </div>\n            <mat-menu #metricMenu=\"matMenu\"overlapTrigger=\"false\">\n                <button mat-menu-item (click)=\"updateMetric('TN93')\">TN93</button>\n                <button mat-menu-item (click)=\"updateMetric('SNPs')\">SNPs</button>\n            </mat-menu>\n            <mat-menu #ambiMenu=\"matMenu\" overlapTrigger=\"false\">\n                <button mat-menu-item (click)=\"updateAmbiguity('Average')\">Average</button>\n                <button mat-menu-item (click)=\"updateAmbiguity('Resolve')\">Resolve</button>\n                <button mat-menu-item (click)=\"updateAmbiguity('Skip')\">Skip</button>\n                <button mat-menu-item (click)=\"updateAmbiguity('GapMM')\">GapMM</button>\n                <button mat-menu-item (click)=\"updateAmbiguity('HIV-Trace -g')\">HIV-Trace -g</button>\n            </mat-menu>\n            <mat-menu #viewMenuBottom=\"matMenu\" overlapTrigger=\"false\">\n                <button mat-menu-item (click)=\"updateLaunchView('2D Network')\">2D Network</button>\n                <button mat-menu-item (click)=\"updateLaunchView('Table')\">Table</button>\n                <button mat-menu-item (click)=\"updateLaunchView('Map')\">Bubbles</button>\n                <button mat-menu-item (click)=\"updateLaunchView('Phylogenetic Tree')\">Phylogenetic Tree</button>\n            </mat-menu> -->\n        </div>\n\n\n        <p-dialog id=\"ledger-loader-modal\" [(visible)]=\"displayLedgerLoaderDialog\" header=\"Blockchain Ledgers\" styleClass=\"ui-dialog\" [contentStyle]=\"{'max-height':'50vh'}\">\n\n            <div class=\"position-relative\" #ledgerloadDiv>\n                <div class=\"loader\">\n                    <i class=\"fa fa-spinner fa-spin\" style=\"font-size:40px;z-index:1;display:none;\" #ledgerloader></i>\n                </div>\n            </div>\n\n            <div style=\"min-height: 100px;\">\n                <p-tree [value]=\"ledgerOptions\" selectionMode=\"checkbox\"  [filter]=\"true\" [(selection)]=\"ledgerOptionSelected\" *ngIf=\"ledgerOptions && ledgerOptions.length > 0\" scrollHeight=\"flex\"></p-tree>\n            </div>\n\n            <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-error\" (click)=\"ToggleDisplayLedgerLoaderDialog()\">Cancel</button>\n                <button type=\"button\" id=\"stash-data2\" class=\"btn btn-primary\" (click)=\"DisplayLedgerLoaderDialog('Load')\" [disabled]=\"!ledgerOptionSelected || ledgerOptionSelected.length === 0\">Load</button>\n            </div>\n\n        </p-dialog><!-- /.modal -->\n        \n\n\n        <p-dialog id=\"global-settings-modal\" \n                    [positionLeft]=\"GlobalSettingsDialogSettings.left\" \n                    [positionTop]=\"GlobalSettingsDialogSettings.top\" \n                    [(visible)]=\"GlobalSettingsDialogSettings.isVisible\"  \n                    header=\"Global Settings\" >\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        <tabset #globalSettingsTab class=\"tab-container tabbable-line\" style='width: 100%; height: 100%;'>\n                            <tab heading=\"{{'Filtering' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\n\n                                <div id=\"filtering-config\" role=\"tabpanel\" aria-labelledby=\"filtering-tab\">\n                                    <div class=\"form-group row\" title=\"By what metric would you like to measure distance?\">\n                                        <div class=\"col-4\">Distance Metric</div>\n                                        <div class=\"col-8\">\n                                            <select id=\"default-distance-metric\" class=\"form-control form-control-sm mr-5\" [(ngModel)]=\"SelectedDistanceMetricVariable\" (ngModelChange)=\"onDistanceMetricChanged()\">\n                                                <option value=\"tn93\">TN93</option>\n                                                <option value=\"snps\">SNPs</option>\n                                            </select>\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"By what algorithm would you like to prune links from the network?\">\n                                        <div class=\"col-4\">Prune With</div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"PruneWityTypes\" [(ngModel)]=\"SelectedPruneWityTypesVariable\" (onChange)=\"onPruneWithTypesChanged()\"></p-selectButton>\n                                        </div>\n                                    </div>                                    \n                                    <div class=\"form-group row\" title=\"What's the minimum number of nodes a cluster must have in order to be visible?\">\n                                        <div class=\"col-4\">\n                                            <label for=\"cluster-minimum-size\">Minimum Cluster Size</label>\n                                        </div>\n                                        <div class=\"col-8\">\n                                            <input type=\"number\" class=\"form-control form-control-sm\" id=\"cluster-minimum-size\" min=\"1\" value=\"1\" step=\"1\" [(ngModel)]=\"SelectedClusterMinimumSizeVariable\" (ngModelChange)=\"onMinimumClusterSizeChanged()\">\n                                        </div>\n                                    </div>\n                                    <div id=\"filtering-wrapper\">\n                                        <div class=\"form-group row\" title=\"By what variable would you like to prune links from the network?\">\n                                            <div class=\"col-4\"><label for=\"link-sort-variable\">Filter Links on</label></div>\n                                            <div class=\"col-8\">\n                                                <p-dropdown id=\"link-sort-variable\" [options]=\"ToolTipFieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedLinkSortVariable\" (onChange)=\"onLinkSortChanged()\"></p-dropdown>\n                                            </div>\n                                        </div>\n                                        <div class=\"form-group row\" id=\"filtering-threshold\" title=\"What's the maximum genetic distance you're willing to call a link?\">\n                                            <div class=\"col-4\"><label for=\"link-threshold\">Filtering Threshold</label></div>\n                                            <div class=\"col-8\"><svg id=\"link-threshold-sparkline\" #linkThresholdSparkline style=\"width: 280px; height: 48px;\"></svg></div>\n                                            <div class=\"col-8  offset-4\">\n                                                <input type=\"number\" class=\"form-control form-control-sm\" id=\"link-threshold\" min=\"-1\" value=\"1\" step=\"0.001\" [(ngModel)]=\"SelectedLinkThresholdVariable\" (ngModelChange)=\"onLinkThresholdChanged()\">\n                                            </div>\n                                        </div>\n                                        <div class=\"form-group row\" title=\"Click to reveal all hidden elements of the network.\">\n                                            <div class=\"col-4\"><label for=\"reveal-all\">Reveal</label></div>\n                                            <div class=\"col-8\">\n                                              <button type=\"button\" id=\"reveal-all\" (click)=\"revealClicked()\" class=\"btn btn-light btn-sm w-100\">Everything</button>\n                                            </div>\n                                          </div>\n                                    </div>\n                                    <div class=\"form-group row\" hidden title=\"Click to reveal all hidden elements of the network.\">\n                                        <div class=\"col-4\"><label for=\"RevealAllTab\">Reveal</label></div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"RevealTypes\" [(ngModel)]=\"SelectedRevealTypesVariable\" (onChange)=\"updateGlobalSettingsModel()\"></p-selectButton>\n                                        </div>\n                                    </div>\n                                    <hr>\n                                    <div class=\"form-group row\" title=\"Display a table of overview statistics for the network\">\n                                        <div class=\"col-4\">Statistics</div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"StatisticsTypes\" [(ngModel)]=\"SelectedStatisticsTypesVariable\" (onChange)=\"onShowStatisticsChanged()\"></p-selectButton>\n                                        </div>\n                                    </div>\n                                </div>\n                            </tab>\n                            <tab heading=\"{{'Styling' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\n\n                                <div id=\"style-config\" role=\"tabpanel\" aria-labelledby=\"style-tab\">\n                                    <div class=\"form-group row\" title=\"By what variable nodes be colored?\">\n                                        <div class=\"col-4\"><label for=\"node-color-variable\">Color Nodes By</label></div>\n                                        <div class=\"col-8\">\n                                            <p-dropdown id=\"node-color-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedColorNodesByVariable\" (onChange)=\"onColorNodesByChanged()\"></p-dropdown>\n                                        </div>\n                                    </div>\n                                    <div id=\"node-color-table-row\" [hidden]=\"!ShowGlobalSettingsNodeColorTable\" class=\"form-group row\" title=\"Should MicrobeTrace display the table of colors?\">\n                                        <div class=\"col-4\"><label>Nodes Color Table</label></div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton hidde [options]=\"NodeColorTableTypes\" [(ngModel)]=\"SelectedNodeColorTableTypesVariable\" (onChange)=\"onNodeColorTableChanged()\"></p-selectButton>\n                                        </div>\n                                    </div>\n\n\n                                    <div id=\"node-color-value-row\" class=\"form-group row\" title=\"What color should the nodes be?\">\n                                        <div class=\"col-4\"><label for=\"node-color\">Nodes</label></div>\n                                        <div class=\"col-8\">\n                                            <input type=\"color\" id=\"node-color\" class=\"form-control form-control-sm\" value=\"#1f77b4\" [(ngModel)]=\"SelectedNodeColorVariable\" (ngModelChange)=\"onNodeColorChanged()\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"By what variable should links be colored?\">\n                                        <div class=\"col-4\"><label for=\"link-color-variable\">Color Links By</label></div>\n                                        <div class=\"col-8\">\n                                            <p-dropdown id=\"link-tooltip-variable\" [options]=\"ToolTipFieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedColorLinksByVariable\" (onChange)=\"onColorLinksByChanged()\"></p-dropdown>\n                                        </div>\n                                    </div>\n                                    <div id=\"link-color-table-row\" [hidden]=\"!ShowGlobalSettingsLinkColorTable\"  class=\"form-group row\" title=\"Should MicrobeTrace display the table of colors?\">\n                                        <div class=\"col-4\"><label>Link Color Table</label></div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"LinkColorTableTypes\" [(ngModel)]=\"SelectedLinkColorTableTypesVariable\" (onChange)=\"onLinkColorTableChanged()\"></p-selectButton>\n                                        </div>\n                                    </div>\n\n                                    <div id=\"link-color-value-row\" class=\"form-group row\" title=\"What color should the links be?\">\n                                        <div class=\"col-4\"><label for=\"link-color\">Links</label></div>\n                                        <div class=\"col-8\">\n                                            <input type=\"color\" id=\"link-color\" class=\"form-control form-control-sm\" [(ngModel)]=\"SelectedLinkColorVariable\" (ngModelChange)=\"onLinkColorChanged()\">\n                                        </div>\n                                    </div>\n\n                                    <div class=\"form-group row\" title=\"What color should denote selection?\">\n                                        <div class=\"col-4\"><label for=\"selected-color\">Selected</label></div>\n                                        <div class=\"col-8\">\n                                            <input type=\"color\" id=\"selected-color\" class=\"form-control form-control-sm\" value=\"#ff8300\" [(ngModel)]=\"SelectedColorVariable\" (ngModelChange)=\"updateGlobalSettingsModel()\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"What color should the background be?\">\n                                        <div class=\"col-4\"><label for=\"background-color\">Background</label></div>\n                                        <div class=\"col-8\">\n                                            <input type=\"color\" id=\"background-color\" class=\"form-control form-control-sm\" value=\"#ffffff\" [(ngModel)]=\"SelectedBackgroundColorVariable\" (ngModelChange)=\"onBackgroundChanged()\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"Load an existing MicrobeTrace style file\">\n                                        <div class=\"col-4\">Apply Style</div>\n                                        <div class=\"col-8\">\n                                            <input type=\"file\" id=\"apply-style\" class=\"d-none\" [(ngModel)]=\"SelectedApplyStyleVariable\" (ngModelChange)=\"updateGlobalSettingsModel()\">\n                                            <label class=\"custom-file-label\" for=\"apply-style\">Choose MicrobeTrace Style File</label>\n                                        </div>\n                                    </div>\n                                </div>\n                            </tab>\n\n                            <tab heading=\"{{'Timeline' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\n                                <div id=\"timeline-config\" role=\"tabpanel\" aria-labelledby=\"timeline-tab\">\n                                    <div class=\"form-group row\" title=\"By what variable timeline applied?\">\n                                        <div class=\"col-4\"><label for=\"node-timeline-variable\">Timeline By</label></div>\n                                        <div class=\"col-8\">\n                                            <p-dropdown id=\"node-timeline-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedTimelineVariable\" (onChange)=\"onTimelineChanged($event.value)\"></p-dropdown>\n                                        </div>\n                                      </div>\n                                </div> \n                            </tab>\n                        </tabset>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"modal-footer\">\n                <div class=\"btn-group\" data-toggle=\"buttons\">\n                    <button type=\"button\" class=\"btn btn-primary\" (click)=\"GlobalSettingsDialogSettings.setVisibility(false)\">Done</button>\n                </div>\n            </div>\n        </p-dialog><!-- /.modal -->\n\n        <p-dialog id=\"session-recall-modal\" [(visible)]=\"displayRecallStashDialog\" header=\"Recall Stash\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div #stashes id=\"recall-stashes-available\" class=\"table-sm\"></div>\n\n                    <div class=\"modal-footer\">\n                        <button *ngIf=\"!HideThisForNow\" type=\"button\" class=\"btn btn-danger\" id=\"recall-delete-stash\" (click)=\"DisplayRecallStashDialog('Delete')\">Delete</button>\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayRecallStashDialog('Cancel')\">Cancel</button>\n                        <button type=\"button\" class=\"btn btn-success\" id=\"recall-load-stash\" (click)=\"DisplayRecallStashDialog('Recall')\">Recall</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog><!-- /.modal -->\n\n        <p-dialog id=\"open-auspice-url\" [(visible)]=\"displayUrlDialog\" header=\"Open Auspice JSON via URL\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        <input type=\"text\" id=\"auspice-url\" class=\"form-control form-control-sm\" [(ngModel)]=\"auspiceUrlVal\" placeholder=\"URL of Auspice JSON to open\" />\n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayUrlDialog('Cancel')\">Cancel</button>\n                        <button type=\"button\" class=\"btn btn-success\" id=\"url-open-button\" (click)=\"DisplayUrlDialog('Open')\">Open</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog><!-- /.modal -->\n\n        <p-dialog id=\"open-old-mt\" [(visible)]=\"displayMTDialog\" header=\"Open Auspice JSON in classic MicrobeTrace\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        Welcome to the newest version of MicrobeTrace! If you'd like to open your auspice JSON file in the previous version of MicrobeTrace, please click this link: <br />\n                        <a href=\"https://microbetrace.cdc.gov/MicrobeTrace/?url={{auspiceUrlVal}}\">https://microbetrace.cdc.gov/MicrobeTrace/?url={{auspiceUrlVal}}</a>\n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayMTDialog('Cancel')\">Close</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog><!-- /.modal -->\n\n        <p-dialog id=\"session-stash-modal\" [(visible)]=\"displayStashDialog\" header=\"Save Session\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n\n                    <div class=\"modal-body\">\n                        <div class=\"form-group row\" title=\"What would you like to call this session?\">\n                            <div class=\"col\">\n                                <input type=\"text\" id=\"stash-name\" class=\"form-control form-control-sm\" [(ngModel)]=\"saveFileName\" placeholder=\"Name your session!\">\n                            </div>\n                        </div>\n                        <div class=\"form-group row\" title=\"Should MicrobeTrace compress this save file?\">\n                            <div class=\"col\">\n                                <div class=\"form-check form-check-inline\">\n                                    <input class=\"form-check-input\" type=\"checkbox\" id=\"save-file-compress\" checked>\n                                    <label class=\"form-check-label\" for=\"save-file-compress\">Compress?</label>\n                                  </div>\n                              <div id=\"cluster-checkbox-container\" class=\"form-check form-check-inline\">\n                                <input class=\"form-check-input\" [(ngModel)]=\"saveByCluster\" type=\"checkbox\" id=\"save-file-cluster\">\n                                <label class=\"form-check-label\" for=\"save-file-cluster\">By Cluster</label>\n                              </div>\n                            </div>\n                         </div>\n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn btn-error\" (click)=\"DisplayStashDialog('Cancel')\">Cancel</button>\n                        <button type=\"button\" id=\"stash-data\" class=\"btn btn-primary\" (click)=\"DisplayStashDialog('Save')\" [disabled]=\"saveFileName === undefined || saveFileName === ''\">Save</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog><!-- /.modal -->\n\n\n        <p-dialog id=\"about-dialog\" [(visible)]=\"displayAbout\" header=\"About Microbetrace\">\n            <div class=\"modal-dialog modal-lg\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        <h3>\n                            <span>{{\"MicrobeTrace\" | localize}} </span>\n                            <small>v<span id=\"version\">{{version}}</span></small>\n                        </h3>\n                        <p>\n                            MicrobeTrace is an interactive web application that renders existing data from high-risk contact networks\n                            in an easy-to-use Graphical User Interface (GUI). The network visualization can be customized according to\n                            supplemental data sources and mathematical inferences like the most probable transmission pathways.\n                            MicrobeTrace is a highly responsive, visual sequence analytics tool which can reduce the gap between data\n                            production and analytics and help you to discover, understand, and display relationships (links) between\n                            patients (nodes). MicrobeTrace can be deployed on laptops to locations without any Internet access, thereby\n                            reducing both the startup cost and analysis time and effort.\n                          </p>\n                          <p class=\"about-links\">\n                            <a href=\"https://github.com/CDCgov/MicrobeTrace/wiki\" target=\"_blank\" rel=\"noreferrer noopener\">\n                              Click Here to Learn More\n                            </a>\n                          </p>\n                          <p>\n                            MicrobeTrace was built by the Molecular Epidemiology and Bionformatics Team at the CDC in Atlanta.</p>\n                            <a class=\"about-links\" href=\"https://cdcgov.github.io/MEBT\" target=\"_blank\" rel=\"noreferrer noopener\" style=\"display: block;\">\n                              Click Here to See MEBT's Other Tools\n                            </a>\n                          \n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn btn-success\" (click)=\"DisplayAbout()\">Close</button>\n                    </div>\n                </div>\n            </div>\n        </p-dialog>\n\n        <div id=\"main-panel\" class=\"pane-container pane-horizontal\">\n            <noscript class=\"container-fluid\">\n              <div class=\"jumbotron\">\n                <h1>Sorry!</h1>\n                <p class=\"lead\">MicrobeTrace requires Javascript to run. Please <a href=\"https://www.enable-javascript.com/\">enable Javascript</a> and refresh MicrobeTrace.</p>\n              </div>\n            </noscript>\n            <div id=\"global-timeline-wrapper\" style=\"display: none;\">\n              <div id=\"global-timeline\" align=\"center\">\n                <div><button type=\"button\" id=\"timeline-play-button\" class=\"btn btn-light btn-sm\" (click)=\"playTimeline()\">{{playBtnText}}</button>\n                <span id=\"global-timeline-field\" contenteditable></span></div>\n                <!-- <svg></svg>\n                <mat-slider></mat-slider> -->\n              </div>  \n            </div>\n          </div>\n\n       \n        <!-- <p-dialog class=\"table-z-index\" id=\"global-settings-link-color-table\" \n                    [position]=\"GlobalSettingsLinkColorDialogSettings.linkLeft\" \n                    [(visible)]=\"GlobalSettingsLinkColorDialogSettings.isVisible\"  \n                    header=\"Link Color Table\" [style]=\"{'z-index': '1'}\"\n                    (onShow)=\"SelectedLinkColorTableTypesVariable='Show'\"\n                    (onHide)=\"SelectedLinkColorTableTypesVariable='Hide'\"\n                    >\n            <div class=\"col-12\" style=\"max-height: 50vh\">\n                <table id=\"link-color-table\" style=\"width:100%;height:100%;\"></table>\n            </div>\n        </p-dialog> -->\n\n        <div id=\"color-transparency-wrapper\">\n            <input type=\"range\" class=\"custom-range\" id=\"color-transparency\" min=\"0\" max=\"1\" step=\"0.05\" value=\"1\" >\n        </div>\n\n\n    </div>\n</div>\n";
 
 /***/ }),
 
