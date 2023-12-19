@@ -66,6 +66,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     brush: any = null;
     FieldList: SelectItem[] = [];
     ToolTipFieldList: SelectItem[] = [];
+    LinkToolTipList: SelectItem[] = [];
 
     ctrlPressed : boolean = false;
     dragging : boolean = false;
@@ -230,27 +231,60 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
             this.visuals.twoD.FieldList.push({ label: "None", value: "None" });
             this.visuals.twoD.commonService.session.data['nodeFields'].map((d, i) => {
-
-                this.visuals.twoD.FieldList.push(
-                    {
-                        label: this.visuals.twoD.commonService.capitalize(d.replace("_", "")),
-                        value: d
-                    });
+                if (d != 'seq' && d != 'sequence') {
+                    this.visuals.twoD.FieldList.push(
+                        {
+                            label: this.visuals.twoD.commonService.capitalize(d.replace("_", "")),
+                            value: d
+                        });
+                }
 
             });
 
 
             this.visuals.twoD.ToolTipFieldList = [];
+            this.LinkToolTipList = [];
 
             this.visuals.twoD.ToolTipFieldList.push({ label: "None", value: "None" });
             this.visuals.twoD.commonService.session.data['linkFields'].map((d, i) => {
-
-                this.visuals.twoD.ToolTipFieldList.push(
-                    {
-                        label: this.visuals.twoD.commonService.capitalize(d.replace("_", "")),
-                        value: d
-                    });
-
+                if (d == 'source') {
+                    let data = [
+                        {
+                            label: 'Source ID',
+                            value: 'source_id'
+                        },
+                        {
+                            label: 'Source Index',
+                            value: 'source_index'
+                        }
+                    ]
+                    this.visuals.twoD.ToolTipFieldList = this.visuals.twoD.ToolTipFieldList.concat(data);
+                    this.LinkToolTipList = this.LinkToolTipList.concat(data)
+                } else if (d == 'target') {
+                    let data = [
+                        {
+                            label: 'Target ID',
+                            value: 'target_id'
+                        },
+                        {
+                            label: 'Target Index',
+                            value: 'target_index'
+                        }
+                    ]
+                    this.visuals.twoD.ToolTipFieldList = this.visuals.twoD.ToolTipFieldList.concat(data);
+                    this.LinkToolTipList = this.LinkToolTipList.concat(data)
+                } else {
+                    this.LinkToolTipList.push(
+                        {
+                            label: this.visuals.twoD.commonService.capitalize(d.replace("_", "")),
+                            value: d
+                        });
+                    this.visuals.twoD.ToolTipFieldList.push(
+                        {
+                            label: this.visuals.twoD.commonService.capitalize(d.replace("_", "")),
+                            value: d
+                        });
+                }
             });
 
 
@@ -1803,12 +1837,26 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         if (tooltipVariables.length > 0 && tooltipVariables[0] == 'None') 
             return;
 
+        let getData = (data, varName) => {
+            if (varName == 'source_id') {
+                return data['source']._id
+            } else if (varName == 'source_index') {
+                return data['source'].index
+            } else if (varName == 'target_id') {
+                return data['target']._id
+            } else if (varName == 'target_index') {
+                return data['target'].index
+            } else {
+                return data[varName];
+            }
+        }
+
         // Generate the HTML for the tooltip
         let tooltipHtml = '';
         if (tooltipVariables.length > 1) {
-            tooltipHtml = this.tabulate(tooltipVariables.map(variable => [this.titleize(variable), d[variable]]));
+            tooltipHtml = this.tabulate(tooltipVariables.map(variable => [this.titleize(variable), getData(d,variable)]));
         } else {
-            tooltipHtml = (tooltipVariables[0] == 'source' || tooltipVariables[0] == 'target') ? d[tooltipVariables[0]]._id : d[tooltipVariables[0]];
+            tooltipHtml = getData(d, tooltipVariables[0])
         }
 
         let [X, Y] = this.getRelativeMousePosition();
@@ -2362,14 +2410,26 @@ onPolygonColorTableChange(e) {
             this.visuals.twoD.svg.select('g.links').selectAll('text').text('');
         } else {
             this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.visuals.twoD.getLLinks()).text((l) => {
+                if (label == 'source_id') {
+                    return l['source']['id']
+                } else if (label == 'source_index') {
+                    return l['source']['index']
+                } else if (label == 'target_id') {
+                    return l['target']['id']
+                } else if(label == 'target_index') {
+                    return l['target']['index']
+                } else if (label != 'distance') {
+                    return l[this.widgets['link-label-variable']]
+                }
                 const labelValue = l[this.widgets['link-label-variable']];
                 if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
                     if(this.widgets['default-distance-metric'] == 'snps') {
                         return Math.round(parseFloat(labelValue));
                     } else {
                         return parseFloat(labelValue).toFixed(this.widgets['link-label-decimal-length']);
-                    }                } else {
-                    return labelValue;
+                    }                
+                } else {
+                        return labelValue;
                 }
               });
             this.visuals.twoD.force.alpha(0.01).alphaTarget(0).restart();

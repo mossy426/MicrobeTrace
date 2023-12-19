@@ -1,6 +1,6 @@
 ﻿﻿
 
-<span id="tooltip"></span>
+<span id="tooltip" style="background-color: white;"></span>
 
 <div id="tool-btn-container" class="m-portlet">
     <span style="overflow: visible; position: relative; width: 110px;">
@@ -232,8 +232,8 @@
                                 <div class="col-4"><label for="link-tooltip-variable">Tooltip</label></div>
                                 <div class="col-8">
                                     <mat-select multiple [(value)]="commonService.session.style.widgets['link-tooltip-variable']" (valueChange)="onLinkTooltipVariableChange($event)">
-                                        <mat-option *ngFor="let option of commonService.session.data['linkFields']" [value]="option">
-                                          {{option}}
+                                        <mat-option *ngFor="let option of LinkToolTipList" [value]="option.value">
+                                          {{option.label}}
                                         </mat-option>
                                       </mat-select>
                                 </div>
