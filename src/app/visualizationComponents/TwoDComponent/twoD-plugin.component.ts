@@ -4,8 +4,9 @@ import { EventManager } from '@angular/platform-browser';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
 import { window } from 'ngx-bootstrap';
 import * as d3 from 'd3';
-import { forceAttract } from 'd3-force-attract'
-import * as ClipboardJS from 'clipboard';
+import { forceAttract } from 'd3-force-attract';
+import { Clipboard } from '@angular/cdk/clipboard';
+//import * as ClipboardJS from 'clipboard';
 import * as saveAs from 'file-saver';
 import * as domToImage from 'dom-to-image-more';
 import { SelectItem } from 'primeng/api';
@@ -14,7 +15,7 @@ import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
 import * as _ from 'lodash';
 import { MicrobeTraceNextVisuals } from '../../microbe-trace-next-plugin-visuals';
 import { CustomShapes } from '@app/helperClasses/customShapes';
-import { FormsModule } from '@angular/forms';
+//import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { BaseComponentDirective } from '@app/base-component.directive';
@@ -185,7 +186,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         public commonService: CommonService,
         @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
         elRef: ElementRef,
-        private cdref: ChangeDetectorRef) {
+        private cdref: ChangeDetectorRef,
+        private clipboard: Clipboard) {
 
             super(elRef.nativeElement);
 
@@ -255,8 +257,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             this.visuals.twoD.svgStyle = {
                 'height': '100%',
                 'min-width.%': 100,
-                "margin-top" : '-39px'
-
             };
 
             this.visuals.twoD.zoom = d3.zoom().on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3.event.transform));
@@ -446,7 +446,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             });
 
             $( document ).on( "node-selected", function( ) {
-                console.log('node selected');
                 that.visuals.twoD.render(false);
             });
 
@@ -511,8 +510,16 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     //     this.LoadDefaultVisualizationEvent.emit(e);
     // }
 
+    // This function gets position of mouse relative to twodcomponent. Global position (i.e. d3.event.pageX) doesn't work for a dashboard  
+    getRelativeMousePosition() {
+        let rect = d3.select('twodcomponent').node().getBoundingClientRect();
+        let X = d3.event.pageX - rect.left;
+        let Y = d3.event.pageY - rect.top; 
+        return [X, Y];
+    }
+
     getImageDimensions() {
-        let parent = this.svg.node().parentElement.parentElement;
+        let parent = this.svg.node().parentElement;
         return [parent.clientWidth, parent.clientHeight] 
     }
 
@@ -571,7 +578,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         });
 
         this.commonService.session.network.nodes.forEach(node => {
-            console.log('node: ', node);
             node.selected = false;
         });
     }
@@ -1595,11 +1601,27 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         $(document).trigger('node-selected');
     };
 
+    copyID() {
+        let id = $('#copyID').attr('data-clipboard-text')
+        this.clipboard.copy(id);
+        this.hideContextMenu();
+    }
+    copySeq() {
+        let seq = $('#copySeq').attr('data-clipboard-text')
+        this.clipboard.copy(seq);
+        this.hideContextMenu()
+    }
+
     showContextMenu(d) {
         d3.event.preventDefault();
         this.visuals.twoD.hideTooltip();
         $('#copyID').attr('data-clipboard-text', d._id);
-        $('#copySeq').attr('data-clipboard-text', d.seq);
+        if (d.seq === null || d.seq === undefined || d.seq === "") {
+            $('#copySeq').prop('disabled', true);
+        } else {
+            $('#copySeq').prop('disabled', false).attr('data-clipboard-text', d.seq);
+        }
+
         d3.select('#viewAttributes').on('click', () => {
 
             this.visuals.twoD.ContextSelectedNodeAttributes = [];
@@ -1609,17 +1631,16 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             this.visuals.twoD.ShowNetworkAttributes = true;
             this.visuals.twoD.cdref.detectChanges();
 
-            let target = $('#network-attribute-table').empty();
             let nd = this.visuals.twoD.commonService.session.data.nodes.find(nd => nd._id == d._id);
             for (let attribute in nd) {
-                if (attribute[0] == '_') continue;
+                if (attribute[0] == '_' && attribute !== '_id' || attribute == 'data') continue; // DC: where is data being added as an attribute to each node should data be removed here
                 this.visuals.twoD.ContextSelectedNodeAttributes.push({attribute: this.visuals.twoD.commonService.titleize(attribute), value: d[attribute]});
             }
 
-            this.visuals.twoD.ContextSelectedNodeAttributes = 
-            this.visuals.twoD.ContextSelectedNodeAttributes.filter(x=>x.attribute !== "Seq" && x.value !== undefined && x.value !== null && x.value !== "" )
-            .concat(this.visuals.twoD.ContextSelectedNodeAttributes.filter(x=>x.attribute !== "Seq" && (x.value === undefined || x.value === null || x.value === "" )))
-            .concat(this.visuals.twoD.ContextSelectedNodeAttributes.filter(x=>x.attribute === "Seq"));
+            this.visuals.twoD.ContextSelectedNodeAttributes = this.visuals.twoD.ContextSelectedNodeAttributes
+                .filter(x=>x.attribute !== "Seq" && x.value !== undefined && x.value !== null && x.value !== "" )
+                .concat(this.visuals.twoD.ContextSelectedNodeAttributes.filter(x=>x.attribute !== "Seq" && (x.value === undefined || x.value === null || x.value === "" )))
+                .concat(this.visuals.twoD.ContextSelectedNodeAttributes.filter(x=>x.attribute === "Seq"));
 
         }).node().focus();
         if (d.fixed) {
@@ -1641,17 +1662,18 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 this.visuals.twoD.hideContextMenu();
             });
         }
+
+        let [X, Y] = this.getRelativeMousePosition();
         $('#context-menu').css({
             'z-index': 1000,
             'display': 'block',
-            'left': (d3.event.pageX - 300) + 'px',
-            'top': (d3.event.pageY - 125) + 'px',
+            'left': (X-200) + 'px',
+            'top': (Y+30) + 'px',
         }).animate({ 'opacity': 1 }, 80);
     };
 
     hideContextMenu() {
-
-        $('#context-menu').animate({ 'opacity': 0 }, 80, () => {
+        $('#context-menu').animate({ 'opacity': 0 }, 80, function() {
             $(this).css('z-index', -1);
         });
     };
@@ -1680,14 +1702,12 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             tooltipHtml = d[tooltipVariables[0]];
         }
 
-
-        $('#tooltip').css({ top: d3.event.pageY, left: d3.event.pageX, position: 'absolute' });
-
-    
+        let [X, Y] = this.getRelativeMousePosition();    
         d3.select('#tooltip')
             .html(tooltipHtml)
-            .style('left', (d3.event.pageX) + 'px')
-            .style('top', (d3.event.pageY) - 120 + 'px')
+            .style('position', 'absolute')
+            .style('left', (X + 10) + 'px')
+            .style('top', (Y - 10) + 'px')
             .style('z-index', 1000)
             .transition().duration(100)
             .style('opacity', 1);
@@ -1791,12 +1811,12 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             tooltipHtml = (tooltipVariables[0] == 'source' || tooltipVariables[0] == 'target') ? d[tooltipVariables[0]]._id : d[tooltipVariables[0]];
         }
 
-        $('#tooltip').css({ top: d3.event.pageY, left: d3.event.pageX, position: 'absolute' });
-
+        let [X, Y] = this.getRelativeMousePosition();
         d3.select('#tooltip')
             .html(tooltipHtml)
-            .style('left', (d3.event.pageX) + 'px')
-            .style('top', (d3.event.pageY - 120) + 'px')
+            .style('position', 'absolute')
+            .style('left', (X+ 10) + 'px')
+            .style('top', (Y - 10) + 'px')
             .style('z-index', 1000)
             .transition().duration(100)
             .style('opacity', 1);

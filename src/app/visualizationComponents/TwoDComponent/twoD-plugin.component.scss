@@ -8,6 +8,7 @@
   position: absolute;
   overflow: hidden;
   z-index: 1 !important;
+  padding: 1px;
   /*top: 37px !important;
   left: 1px !important; 
   width: 99% !important; */ 
@@ -80,4 +81,24 @@
 
 #network-export-filename{
   height: 42px;  
+}
+
+#network-attribute-table {
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+#network-attribute-table td, #network-attribute-table th {
+  text-align: left;
+  padding: 2px;
+  border: 1px solid #ddd;
+}
+
+#network-attribute-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#network-attribute-table tr:nth-child(odd) {
+  background-color: #fff;
 }

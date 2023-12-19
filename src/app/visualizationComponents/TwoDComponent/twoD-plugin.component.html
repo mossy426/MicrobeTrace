@@ -545,15 +545,15 @@
 
 <div id="context-menu" class="dropdown-menu">
     <a href="javascript:;" id="pinNode" class="dropdown-item">Pin Node</a>
-    <a href="javascript:;" id="copyID" class="dropdown-item">Copy ID</a>
-    <a href="javascript:;" id="copySeq" class="dropdown-item">Copy Sequence</a>
+    <button id="copyID" class="dropdown-item" (click)="copyID()">Copy ID</button>
+    <button id="copySeq" class="dropdown-item" (click)="copySeq()">Copy Sequence</button>
     <a href="javascript:;" id="viewAttributes" class="dropdown-item">View Attributes</a>
 </div>
 
 
 <p-dialog id="network-attribute-table-wrapper" [(visible)]="ShowNetworkAttributes" header="Node Attributes" [style]="{width: '35vw'}" >
     <div class="col-12" style="width:100%;">        
-        <table style="width:100%">
+        <table id="network-attribute-table" style="width:100%">
             <tr *ngFor="let item of ContextSelectedNodeAttributes">
                 <td>
                     <strong>
