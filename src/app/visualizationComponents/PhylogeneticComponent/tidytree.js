@@ -1,5 +1,7 @@
 import * as patristic from 'patristic';
 import * as d3 from 'd3';
+// import "patristic";
+// import "d3";
 
 /**
  * This class function creates a TidyTree object.
@@ -8,11 +10,13 @@ import * as d3 from 'd3';
  */
 export default function TidyTree(data, options, events) {
   let defaults = {
-    layout: 'vertical',
-    type: 'tree',
-    mode: 'smooth',
+    layout: "vertical",
+    type: "tree",
+    mode: "smooth",
+    colorOptions: { nodeColorMode: "none" },
     leafNodes: true,
     leafLabels: false,
+    equidistantLeaves: false,
     branchNodes: false,
     branchLabels: false,
     branchDistances: false,
@@ -24,7 +28,6 @@ export default function TidyTree(data, options, events) {
     margin: [50, 50, 50, 50] //CSS order: top, right, bottom, left
   };
   if (!options) options = {};
-  console.log(this);
   Object.assign(this, defaults, options, {
     events: {
       draw: [],
@@ -58,14 +61,14 @@ export default function TidyTree(data, options, events) {
  * @return {Object}        the TidyTree object
  */
 TidyTree.prototype.setData = function (data) {
-  if (!data) throw Error('Invalid Data');
+  if (!data) throw Error("Invalid Data");
   this.data = data;
   this.range = [Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER];
   this.hierarchy = d3
     .hierarchy(this.data, d => d.children)
     .eachBefore(d => {
       d.value =
-        (d.parent ? d.parent.value : 0) + (d.data.length ? d.data.length : 0);
+        (d.parent ? d.parent.value : 0) + (d.data.length ? Math.abs(d.data.length) : 0);
       if (d.value < this.range[0]) this.range[0] = d.value;
       if (d.value > this.range[1]) this.range[1] = d.value;
     })
@@ -83,7 +86,7 @@ TidyTree.prototype.setData = function (data) {
  * @return {Object}        the TidyTree object
  */
 TidyTree.prototype.setTree = function (newick) {
-  if (!newick) throw Error('Invalid Newick String');
+  if (!newick) throw Error("Invalid Newick String");
   return this.setData(patristic.parseNewick(newick));
 };
 
@@ -91,19 +94,31 @@ TidyTree.prototype.setTree = function (newick) {
  * The available layouts for rendering trees.
  * @type {Array}
  */
-TidyTree.validLayouts = ['horizontal', 'vertical', 'circular'];
+TidyTree.validLayouts = ["horizontal", "vertical", "circular"];
 
 /**
  * The available types for rendering branches.
  * @type {Array}
  */
-TidyTree.validTypes = ['tree', 'weighted', 'dendrogram'];
+TidyTree.validTypes = ["tree", "weighted", "dendrogram"];
 
 /**
  * The available modes for rendering branches.
  * @type {Array}
  */
-TidyTree.validModes = ['smooth', 'square', 'straight'];
+TidyTree.validModes = ["smooth", "square", "straight"];
+
+/**
+ * The available color modes for rendering nodes.
+ * @type {Array}
+ */
+TidyTree.validNodeColorModes = ["none", "list"]; // later, highlight on hover, or maybe color by annotation on a node/ search
+
+/**
+ * The available color modes for rendering branches.
+ * @type {Array}
+ */
+TidyTree.validBranchColorModes = ["none", "monophyletic"]; // later, toRoot? 
 
 /**
  * Draws a Phylogenetic on the element referred to by selector
@@ -112,50 +127,48 @@ TidyTree.validModes = ['smooth', 'square', 'straight'];
  */
 TidyTree.prototype.draw = function (selector) {
   if (!selector && !this.parent) {
-    throw Error('No valid target for drawing given! Where should the tree go?');
+    throw Error("No valid target for drawing given! Where should the tree go?");
   }
   let parent = (this.parent = d3.select(selector ? selector : this.parent));
 
   this.width =
-    parseFloat(parent.style('width')) - this.margin[1] - this.margin[3];
+    parseFloat(parent.style("width")) - this.margin[1] - this.margin[3];
   this.height =
-    parseFloat(parent.style('height')) - this.margin[0] - this.margin[2] - 25;
-  console.log(parent.style);
+    parseFloat(parent.style("height")) - this.margin[0] - this.margin[2] - 25;
 
   let tree = d3.tree();
 
   let svg = parent
     .html(null)
-    .append('svg')
-    .attr('id', 'tidytree')
-    .attr('height', '100%')
-    .attr('width', '100%');
+    .append("svg")
+    .attr("width", "100%")
+    .attr("height", "100%");
 
-  let g = svg.append('g');
+  let g = svg.append("g");
 
   svg
-    .append('g')
-    .attr('class', 'tidytree-ruler')
-    .append('rect')
-    .attr('y', -5)
-    .attr('fill', 'white');
+    .append("g")
+    .attr("class", "tidytree-ruler")
+    .append("rect")
+    .attr("y", -5)
+    .attr("fill", "white");
 
-  this.zoom = d3.zoom().on('zoom', () => {
+  this.zoom = d3.zoom().on("zoom", () => {
     let transform = (this.transform = d3.event.transform);
     g.attr(
-      'transform',
+      "transform",
       `translate(${transform.x},${transform.y}) scale(${transform.k}) rotate(${
         this.rotation
-      },${this.layout === 'circular' ? 0 : this.width / 2},${
-        this.layout === 'circular' ? 0 : this.height / 2
+      },${this.layout === "circular" ? 0 : this.width / 2},${
+        this.layout === "circular" ? 0 : this.height / 2
       })`
     );
     updateRuler.call(this, transform);
   });
   svg.call(this.zoom);
 
-  g.append('g').attr('class', 'tidytree-links');
-  g.append('g').attr('class', 'tidytree-nodes');
+  g.append("g").attr("class", "tidytree-links");
+  g.append("g").attr("class", "tidytree-nodes");
 
   if (this.events.draw.length) this.events.draw.forEach(c => c());
 
@@ -197,13 +210,13 @@ let linkTransformers = {
           x1 = Math.cos(endAngle),
           y1 = Math.sin(endAngle);
         return (
-          'M' +
+          "M" +
           startRadius * x0 +
-          ',' +
+          "," +
           startRadius * y0 +
-          'L' +
+          "L" +
           endRadius * x1 +
-          ',' +
+          "," +
           endRadius * y1
         );
       }
@@ -223,25 +236,25 @@ let linkTransformers = {
           x1 = Math.cos(endAngle),
           y1 = Math.sin(endAngle);
         return (
-          'M' +
+          "M" +
           startRadius * x0 +
-          ',' +
+          "," +
           startRadius * y0 +
           (endAngle === startAngle
-            ? ''
-            : 'A' +
+            ? ""
+            : "A" +
               startRadius +
-              ',' +
+              "," +
               startRadius +
-              ' 0 0 ' +
+              " 0 0 " +
               (endAngle > startAngle ? 1 : 0) +
-              ' ' +
+              " " +
               startRadius * x1 +
-              ',' +
+              "," +
               startRadius * y1) +
-          'L' +
+          "L" +
           endRadius * x1 +
-          ',' +
+          "," +
           endRadius * y1
         );
       }
@@ -277,13 +290,13 @@ let linkTransformers = {
           x1 = Math.cos(endAngle),
           y1 = Math.sin(endAngle);
         return (
-          'M' +
+          "M" +
           startRadius * x0 +
-          ',' +
+          "," +
           startRadius * y0 +
-          'L' +
+          "L" +
           endRadius * x1 +
-          ',' +
+          "," +
           endRadius * y1
         );
       }
@@ -307,25 +320,25 @@ let linkTransformers = {
           x1 = Math.cos(endAngle),
           y1 = Math.sin(endAngle);
         return (
-          'M' +
+          "M" +
           startRadius * x0 +
-          ',' +
+          "," +
           startRadius * y0 +
           (endAngle === startAngle
-            ? ''
-            : 'A' +
+            ? ""
+            : "A" +
               startRadius +
-              ',' +
+              "," +
               startRadius +
-              ' 0 0 ' +
+              " 0 0 " +
               (endAngle > startAngle ? 1 : 0) +
-              ' ' +
+              " " +
               startRadius * x1 +
-              ',' +
+              "," +
               startRadius * y1) +
-          'L' +
+          "L" +
           endRadius * x1 +
-          ',' +
+          "," +
           endRadius * y1
         );
       }
@@ -335,6 +348,13 @@ let linkTransformers = {
 
 linkTransformers.dendrogram = linkTransformers.tree;
 
+/**
+ * Calculate the coordinates of a point transformed onto a circle.
+ *
+ * @param {number} x - The x-coordinate of the center of the point.
+ * @param {number} y - The y-coordinate of the center of the point.
+ * @return {Array<number>} The new x and y coordinates of the point on the circle.
+ */
 function circularPoint(x, y) {
   return [(y = +y) * Math.cos((x -= Math.PI / 2)), y * Math.sin(x)];
 }
@@ -353,6 +373,80 @@ let nodeTransformers = {
 };
 
 nodeTransformers.dendrogram = nodeTransformers.tree;
+
+/**
+ * Finds the color of a given node based on the color options provided.
+ *
+ * @param {Object} node - The node for which to find the color.
+ * @param {Object} colorOptions - The color options object containing the color mode, node list, default color, and highlight color.
+ * @return {string} The color of the node.
+ */
+function findNodeColor(node, colorOptions) {
+  if (colorOptions.nodeColorMode === "none") {
+    // steelblue
+    return colorOptions.defaultNodeColor ?? "#4682B4";
+  }
+ 
+  let nodeList = colorOptions.nodeList;
+
+  if (nodeList && nodeList.includes(node.data._guid)) {
+    // yellowish
+    return colorOptions.highlightColor ?? "#feb640";
+  } else {
+    // charcoal
+    return colorOptions.defaultNodeColor ?? "#243127";
+  }
+}
+
+/**
+ * Find the color of a given link based on the provided color options.
+ *
+ * @param {string} link - The link for which to find the color.
+ * @param {object} colorOptions - The options for different link colors.
+ * @return {string} The color of the link.
+ */
+function findBranchColor(link, colorOptions) {
+  if (colorOptions.branchColorMode === "none") {
+    // light gray
+    return colorOptions.defaultBranchColor ?? "#cccccc";
+  }
+  
+  let source = link.source;
+  let childLeafNodes = getAllLeaves(source);
+  
+  let allChildLeafNodesInNodeList = childLeafNodes.every(child =>
+    colorOptions.nodeList?.includes(child.data._guid)
+  );
+ 
+  if (allChildLeafNodesInNodeList) {
+    // yellowish
+    return colorOptions.highlightColor ?? "#feb640";
+  }
+
+  return colorOptions.defaultBranchColor ?? "#cccccc";
+}
+
+/**
+ * Returns an array of all the child leaf nodes of the given node in a tree.
+ *
+ * @param {Object} node - A node of the tree.
+ * @param {boolean} includeSelf - Whether to include the given node itself as a leaf node. Defaults to false.
+ * @return {Array} An array of leaf nodes.
+ */
+function getAllLeaves(node, includeSelf) {
+  includeSelf = includeSelf ?? false;
+  let leaves = [];
+
+  if (includeSelf && node.height === 0) {
+    leaves.push(node);
+  } else {
+    node.children.forEach(child => {
+      leaves.push(...getAllLeaves(child, true));
+    });
+  }
+
+  return leaves;
+}
 
 const radToDeg = 180 / Math.PI;
 
@@ -438,7 +532,7 @@ labelTransformers.weighted.smooth = labelTransformers.weighted.straight;
 labelTransformers.dendrogram = labelTransformers.tree;
 
 function labeler(d) {
-  if (!d.target.data.length) return '0.000';
+  if (!d.target.data.length) return "0.000";
   return d.target.data.length.toFixed(3);
 }
 
@@ -449,210 +543,225 @@ function labeler(d) {
 TidyTree.prototype.redraw = function () {
   let parent = this.parent;
 
-  this.width  = (parseFloat(parent.style('width' )) - this.margin[1] - this.margin[3]     ) * this.hStretch;
-  this.height = (parseFloat(parent.style('height')) - this.margin[0] - this.margin[2] - 25) * this.vStretch;
+  this.width  = (parseFloat(parent.style("width" )) - this.margin[1] - this.margin[3]     ) * this.hStretch;
+  this.height = (parseFloat(parent.style("height")) - this.margin[0] - this.margin[2] - 25) * this.vStretch;
 
   this.scalar =
-    this.layout === 'horizontal' ? this.width :
-    this.layout === 'vertical' ? this.height :
+    this.layout === "horizontal" ? this.width :
+    this.layout === "vertical" ? this.height :
     Math.min(this.width, this.height) / 2;
 
   this.hierarchy.each(d => (d.weight = this.scalar * d.value));
 
-  let g = parent.select('svg g');
+  let g = parent.select("svg g");
 
-  let source = (this.type === 'tree' ? d3.tree() : d3.cluster()).size(
-    this.layout === 'circular'   ? [2 * Math.PI, Math.min(this.height, this.width) / 2] :
-    this.layout === 'horizontal' ? [this.height, this.width] :
+  let source = (this.type === "tree" ? d3.tree() : d3.cluster()).size(
+    this.layout === "circular"   ? [2 * Math.PI, Math.min(this.height, this.width) / 2] :
+    this.layout === "horizontal" ? [this.height, this.width] :
     [this.width, this.height]
   );
 
-  if (this.layout === 'circular')
-    source.separation((a, b) => (a.parent == b.parent ? 1 : 2) / a.depth);
-
+  if (this.equidistantLeaves) {
+    if (this.layout === "circular") {
+      source.separation((a,b) => 1 / a.depth);
+    } else {
+      source.separation((a,b) => 1);
+    }
+  } else {
+    if (this.layout === "circular")
+      source.separation((a, b) => (a.parent == b.parent ? 1 : 2) / a.depth);
+  }
+  
   //Note: You must render links prior to nodes in order to get correct placement!
   let links = g
-    .select('g.tidytree-links')
-    .selectAll('g.tidytree-link')
+    .select("g.tidytree-links")
+    .selectAll("g.tidytree-link")
     .data(source(this.hierarchy).links(), l => l.source.data._guid + ':' + l.target.data._guid);
 
   links.join(
     enter => {
-      let newLinks = enter.append('g').attr('class', 'tidytree-link');
+      let newLinks = enter.append("g").attr("class", "tidytree-link");
 
       let linkTransformer = linkTransformers[this.type][this.mode][this.layout];
       newLinks
-        .append('path')
-        .attr('fill', 'none')
-        .attr('stroke', '#ccc')
-        .attr('d', linkTransformer)
+        .append("path")
+        .attr("fill", "none")
+        .attr("stroke", d => findBranchColor(d, this.colorOptions))
+        .attr("d", linkTransformer)
         .transition()
         .duration(this.animation)
-        .attr('opacity', 1);
+        .attr("opacity", 1);
 
       let labelTransformer = labelTransformers[this.type][this.mode][this.layout];
       newLinks
-        .append('text')
-        .attr('y', 2)
-        .attr('text-anchor', 'middle')
-        .style('font-size', '12px')
+        .append("text")
+        .attr("y", 2)
+        .attr("text-anchor", "middle")
+        .style("font-size", "12px")
         .text(labeler)
-        .attr('transform', labelTransformer)
+        .attr("transform", labelTransformer)
         .transition()
         .duration(this.animation)
-        .style('opacity', this.branchDistances ? 1 : 0);
+        .style("opacity", this.branchDistances ? 1 : 0);
     },
     update => {
       let linkTransformer = linkTransformers[this.type][this.mode][this.layout];
-      let paths = update.select('path');
+      let paths = update.select("path");
       if (!this.animation > 0) {
-        paths.attr('d', linkTransformer);
+        paths
+        .attr("d", linkTransformer)
+        .attr("stroke", d => findBranchColor(d, this.colorOptions));
       } else {
         paths
           .transition()
           .duration(this.animation / 2)
-          .attr('opacity', 0)
+          .attr("stroke", d => findBranchColor(d, this.colorOptions))
+          .attr("opacity", 0)
           .end()
           .then(() => {
             paths
-              .attr('d', linkTransformer)
+              .attr("d", linkTransformer)
               .transition()
               .duration(this.animation / 2)
-              .attr('opacity', 1);
+              .attr("opacity", 1);
           });
       }
 
       let labelTransformer =
         labelTransformers[this.type][this.mode][this.layout];
-      let labels = update.select('text');
+      let labels = update.select("text");
       if (this.animation) {
         labels
           .transition()
           .duration(this.animation / 2)
-          .style('opacity', 0)
+          .style("opacity", 0)
           .end()
           .then(() => {
-            labels.text(labeler).attr('transform', labelTransformer);
+            labels.text(labeler).attr("transform", labelTransformer);
             if (this.branchDistances) {
             labels
               .transition()
               .duration(this.animation / 2)
-              .style('opacity', this.branchDistances ? 1 : 0);
+              .style("opacity", this.branchDistances ? 1 : 0);
             }
           });
       } else {
-        labels.text(labeler).attr('transform', labelTransformer);
+        labels.text(labeler).attr("transform", labelTransformer);
       }
     },
     exit =>
       exit
         .transition()
         .duration(this.animation)
-        .attr('opacity', 0)
+        .attr("opacity", 0)
         .remove()
   );
 
   let nodes = g
-    .select('g.tidytree-nodes')
-    .selectAll('g.tidytree-node')
+    .select("g.tidytree-nodes")
+    .selectAll("g.tidytree-node")
     .data(this.hierarchy.descendants(), d => d.data._guid);
   nodes.join(
     enter => {
       let nt = nodeTransformers[this.type][this.layout];
       let newNodes = enter
-        .append('g')
-        .attr('class', 'tidytree-node')
-        .classed('tidytree-node-internal', d => d.children)
-        .classed('tidytree-node-leaf', d => !d.children)
-        .attr('transform', nt);
+        .append("g")
+        .attr("class", "tidytree-node")
+        .classed("tidytree-node-internal", d => d.children)
+        .classed("tidytree-node-leaf", d => !d.children)
+        .attr("transform", nt);
 
       newNodes
-        .append('circle')
-        .attr('title', d => d.data.id)
-        .style('opacity', d =>
+        .append("circle")
+        .attr("title", d => d.data.id)
+        .style("opacity", d =>
           (d.children && this.branchNodes) ||
           (!d.children && this.leafNodes) ? 1 : 0
         )
-        .on('mouseenter focusin', d => this.trigger('showtooltip', d))
-        .on('mouseout focusout', d => this.trigger('hidetooltip', d))
-        .on('contextmenu', d => this.trigger('contextmenu', d))
-        .on('click', d => this.trigger('select', d))
-        .attr('r', 2.5);
+        .style("fill", d => findNodeColor(d, this.colorOptions))
+        .on("mouseenter focusin", d => this.trigger("showtooltip", d))
+        .on("mouseout focusout", d => this.trigger("hidetooltip", d))
+        .on("contextmenu", d => this.trigger("contextmenu", d))
+        .on("click", d => this.trigger("select", d))
+        .attr("r", 2.5);
 
       let nodeLabels = newNodes
-        .append('text')
+        .append("text")
         .text(d => d.data.id)
-        .style('font-size', '12px')
-        .attr('y', 2)
-        .style('opacity', d =>
+        .style("font-size", "12px")
+        .attr("y", 2)
+        .style("opacity", d =>
           ( d.children && this.branchLabels) ||
           (!d.children && this.leafLabels) ? 1 : 0
         );
 
-      if (this.layout === 'vertical') {
+      if (this.layout === "vertical") {
         nodeLabels
-          .attr('text-anchor', 'start')
-          .attr('x', 5)
+          .attr("text-anchor", "start")
+          .attr("x", 5)
           .transition()
           .duration(this.animation)
-          .attr('transform', 'rotate(90)');
-      } else if (this.layout === 'horizontal') {
+          .attr("transform", "rotate(90)");
+      } else if (this.layout === "horizontal") {
         nodeLabels
-          .attr('text-anchor', 'start')
-          .attr('x', 5)
+          .attr("text-anchor", "start")
+          .attr("x", 5)
           .transition()
           .duration(this.animation)
-          .attr('transform', 'rotate(0)');
+          .attr("transform", "rotate(0)");
       } else {
         nodeLabels
           .transition()
           .duration(this.animation)
-          .attr('transform', l => `rotate(${(((l.x / Math.PI) * 180) % 180) - 90})`)
-          .attr('text-anchor', l => l.x % (2 * Math.PI) > Math.PI ? 'end' : 'start')
-          .attr('x', l => (l.x % (2 * Math.PI) > Math.PI ? -5 : 5));
+          .attr("transform", l => `rotate(${(((l.x / Math.PI) * 180) % 180) - 90})`)
+          .attr("text-anchor", l => l.x % (2 * Math.PI) > Math.PI ? "end" : "start")
+          .attr("x", l => (l.x % (2 * Math.PI) > Math.PI ? -5 : 5));
       }
 
       newNodes
         .transition()
         .duration(this.animation)
-        .attr('opacity', 1);
+        .attr("opacity", 1);
     },
     update => {
       let nodeTransformer = nodeTransformers[this.type][this.layout];
       update
         .transition()
         .duration(this.animation)
-        .attr('transform', nodeTransformer);
+        .attr("transform", nodeTransformer);
 
-      let nodeLabels = update.select('text');
-      if (this.layout === 'vertical') {
+      let nodeGlyphs = update.select("circle");
+      nodeGlyphs.style("fill", d => findNodeColor(d, this.colorOptions));      
+
+      let nodeLabels = update.select("text");
+      if (this.layout === "vertical") {
         nodeLabels
-          .attr('text-anchor', 'start')
-          .attr('x', 5)
+          .attr("text-anchor", "start")
+          .attr("x", 5)
           .transition()
           .duration(this.animation)
-          .attr('transform', 'rotate(90)');
-      } else if (this.layout === 'horizontal') {
+          .attr("transform", "rotate(90)");
+      } else if (this.layout === "horizontal") {
         nodeLabels
-          .attr('text-anchor', 'start')
-          .attr('x', 5)
+          .attr("text-anchor", "start")
+          .attr("x", 5)
           .transition()
           .duration(this.animation)
-          .attr('transform', 'rotate(0)');
+          .attr("transform", "rotate(0)");
       } else {
         nodeLabels
           .transition()
           .duration(this.animation)
-          .attr('transform', l => `rotate(${(((l.x / Math.PI) * 180) % 180) - 90})`)
-          .attr('text-anchor', l => l.x % (2 * Math.PI) > Math.PI ? 'end' : 'start')
-          .attr('x', l => (l.x % (2 * Math.PI) > Math.PI ? -5 : 5));
+          .attr("transform", l => `rotate(${(((l.x / Math.PI) * 180) % 180) - 90})`)
+          .attr("text-anchor", l => l.x % (2 * Math.PI) > Math.PI ? "end" : "start")
+          .attr("x", l => (l.x % (2 * Math.PI) > Math.PI ? -5 : 5));
       }
     },
     exit =>
       exit
         .transition()
         .duration(this.animation)
-        .attr('opacity', 0)
+        .attr("opacity", 0)
         .remove()
   );
 
@@ -663,27 +772,27 @@ TidyTree.prototype.redraw = function () {
 
 function updateRuler(transform) {
   if (!transform) transform = { k: 1 };
-  let height = parseFloat(this.parent.style('height')) - this.margin[2] - 15;
-  let ruler = this.parent.select('g.tidytree-ruler');
-  let bg = ruler.select('rect');
+  let height = parseFloat(this.parent.style("height")) - this.margin[2] - 15;
+  let ruler = this.parent.select("g.tidytree-ruler");
+  let bg = ruler.select("rect");
   if (this.ruler) {
-    if (this.layout == 'horizontal') {
-      ruler.attr('transform', `translate(${this.margin[3]}, ${height})`);
+    if (this.layout == "horizontal") {
+      ruler.attr("transform", `translate(${this.margin[3]}, ${height})`);
       bg
-        .attr('width', `calc(100% - ${this.margin[1] + this.margin[3] - 15}px)`)
-        .attr('height', '25px')
-        .attr('x', -5);
+        .attr("width", `calc(100% - ${this.margin[1] + this.margin[3] - 15}px)`)
+        .attr("height", "25px")
+        .attr("x", -5);
     } else {
-      ruler.attr('transform', `translate(${this.margin[3] - 10}, ${this.margin[0]})`);
+      ruler.attr("transform", `translate(${this.margin[3] - 10}, ${this.margin[0]})`);
       bg
-        .attr('height', `calc(100% - ${this.margin[0] + this.margin[2] - 15}px)`)
-        .attr('width', '25px')
-        .attr('x', -25);
+        .attr("height", `calc(100% - ${this.margin[0] + this.margin[2] - 15}px)`)
+        .attr("width", "25px")
+        .attr("x", -25);
     }
-    let axis = this.layout == 'horizontal' ? d3.axisBottom() : d3.axisLeft();
-    if (this.type === 'tree' && this.layout !== 'circular') {
+    let axis = this.layout == "horizontal" ? d3.axisBottom() : d3.axisLeft();
+    if (this.type === "tree" && this.layout !== "circular") {
       ruler
-        .attr('opacity', 1)
+        .attr("opacity", 1)
         .call(
           axis.scale(
             d3.scaleLinear(
@@ -692,9 +801,9 @@ function updateRuler(transform) {
             )
           )
         );
-    } else if (this.type === 'weighted' && this.layout !== 'circular') {
+    } else if (this.type === "weighted" && this.layout !== "circular") {
       ruler
-        .attr('opacity', 1)
+        .attr("opacity", 1)
         .call(
           axis.scale(
             d3.scaleLinear(
@@ -707,13 +816,13 @@ function updateRuler(transform) {
       ruler
         .transition()
         .duration(this.animation)
-        .attr('opacity', 0);
+        .attr("opacity", 0);
     }
   } else {
     ruler
       .transition()
       .duration(this.animation)
-      .attr('opacity', 0);
+      .attr("opacity", 0);
   }
 }
 
@@ -722,12 +831,12 @@ function updateRuler(transform) {
  * @return {TidyTree} The TidyTree object
  */
 TidyTree.prototype.recenter = function () {
-  let svg = this.parent.select('svg'),
+  let svg = this.parent.select("svg"),
     x = this.margin[0],
     y = this.margin[3];
-  if (this.layout === 'circular') {
-    x += parseFloat(svg.style('width')) / 2;
-    y += parseFloat(svg.style('height')) / 2;
+  if (this.layout === "circular") {
+    x += parseFloat(svg.style("width")) / 2;
+    y += parseFloat(svg.style("height")) / 2;
   }
   svg
     .transition()
@@ -752,6 +861,41 @@ TidyTree.prototype.setLayout = function (newLayout) {
   if (this.parent) return this.redraw();
   return this;
 };
+
+/**
+ * Set the TidyTree's colorOptions
+ * @param {Object} newColorOptions The new colorOptions
+ * @return {TidyTree} The TidyTree Object
+ */
+TidyTree.prototype.setColorOptions = function (newColorOptions) {
+  if (!TidyTree.validNodeColorModes.includes(newColorOptions.nodeColorMode)) {
+    throw Error(`
+      Cannot set TidyTree colorOptions: ${newColorOptions.nodeColorMode}\n
+      Valid nodeColorModes are: ${TidyTree.validNodeColorModes.join(', ')}
+    `);
+  }
+  if (!TidyTree.validBranchColorModes.includes(newColorOptions.branchColorMode)) {
+    throw Error(`
+      Cannot set TidyTree colorOptions: ${newColorOptions.branchColorMode}\n
+      Valid branchColorModes are: ${TidyTree.validBranchColorModes.join(', ')}
+    `);
+  }
+
+  if (newColorOptions.nodeColorMode === 'list') {
+    if (!Array.isArray(newColorOptions.nodeList)) {
+      throw Error('nodeList must be an array for nodeColorMode "list"');
+    }
+  } else {
+    // nodeColorMode === 'none'
+    if (newColorOptions.branchColorMode !== 'none') {
+      throw Error('branchColorMode must be "none" for nodeColorMode "none"');
+    }
+  }
+
+  this.colorOptions = newColorOptions;
+  if (this.parent) return this.redraw();
+  return this;
+}
 
 /**
  * Set the TidyTree's mode
@@ -796,13 +940,13 @@ TidyTree.prototype.setRotation = function (degrees) {
   this.rotation = degrees;
   if (this.parent)
     this.parent
-      .select('svg g')
-      .attr('transform', `
+      .select("svg g")
+      .attr("transform", `
         translate(${this.transform.x},${this.transform.y})
         scale(${this.transform.k})
         rotate(${this.rotation},
-          ${this.layout === 'circular' ? 0 : this.width / 2},
-          ${this.layout === 'circular' ? 0 : this.height / 2}
+          ${this.layout === "circular" ? 0 : this.width / 2},
+          ${this.layout === "circular" ? 0 : this.height / 2}
         )
       `);
   return this;
@@ -862,11 +1006,11 @@ TidyTree.prototype.setBranchNodes = function (show) {
   if (this.parent) {
     //i.e. has already been drawn
     this.parent
-      .select('svg')
-      .selectAll('g.tidytree-node-internal circle')
+      .select("svg")
+      .selectAll("g.tidytree-node-internal circle")
       .transition()
       .duration(this.animation)
-      .style('opacity', show ? 1 : 0);
+      .style("opacity", show ? 1 : 0);
   }
   return this;
 };
@@ -881,11 +1025,11 @@ TidyTree.prototype.setBranchNodes = function (show) {
 TidyTree.prototype.eachBranchNode = function (styler) {
   if (!this.parent)
     throw Error(
-      'Tree has not been rendered yet! Can\'t style Nodes that don\'t exist!'
+      "Tree has not been rendered yet! Can't style Nodes that don't exist!"
     );
   this.parent
-    .select('svg')
-    .selectAll('g.tidytree-node-internal circle')
+    .select("svg")
+    .selectAll("g.tidytree-node-internal circle")
     .each(function (d) { styler(this, d); });
   return this;
 };
@@ -900,11 +1044,11 @@ TidyTree.prototype.setBranchLabels = function (show) {
   if (this.parent) {
     //i.e. has already been drawn
     this.parent
-      .select('svg')
-      .selectAll('g.tidytree-node-internal text')
+      .select("svg")
+      .selectAll("g.tidytree-node-internal text")
       .transition()
       .duration(this.animation)
-      .style('opacity', show ? 1 : 0);
+      .style("opacity", show ? 1 : 0);
   }
   return this;
 };
@@ -918,11 +1062,11 @@ TidyTree.prototype.setBranchLabels = function (show) {
  */
 TidyTree.prototype.eachBranchLabel = function (styler) {
   if (!this.parent){
-    throw Error('Tree has not been rendered yet! Can\'t style Nodes that don\'t exist!');
+    throw Error("Tree has not been rendered yet! Can't style Nodes that don't exist!");
   }
   this.parent
-    .select('svg')
-    .selectAll('g.tidytree-node-internal text')
+    .select("svg")
+    .selectAll("g.tidytree-node-internal text")
     .each(function (d, i, l) { styler(this, d); });
   return this;
 };
@@ -937,14 +1081,14 @@ TidyTree.prototype.setBranchDistances = function (show) {
   if (this.parent) {
     //i.e. has already been drawn
     let links = this.parent
-      .select('svg g.tidytree-links')
-      .selectAll('g.tidytree-link')
-      .selectAll('text');
-    links.attr('transform', labelTransformers[this.type][this.mode][this.layout]);
+      .select("svg g.tidytree-links")
+      .selectAll("g.tidytree-link")
+      .selectAll("text");
+    links.attr("transform", labelTransformers[this.type][this.mode][this.layout]);
     links
       .transition()
       .duration(this.animation)
-      .style('opacity', show ? 1 : 0);
+      .style("opacity", show ? 1 : 0);
   }
   return this;
 };
@@ -958,11 +1102,11 @@ TidyTree.prototype.setBranchDistances = function (show) {
  */
 TidyTree.prototype.eachBranchDistance = function (styler) {
   if (!this.parent)
-    throw Error('Tree has not been rendered yet! Can\'t style Nodes that don\'t exist!');
+    throw Error("Tree has not been rendered yet! Can't style Nodes that don't exist!");
   this.parent
-    .select('svg g.tidytree-links')
-    .selectAll('g.tidytree-link')
-    .selectAll('text')
+    .select("svg g.tidytree-links")
+    .selectAll("g.tidytree-link")
+    .selectAll("text")
     .each(function (d, i, l) { styler(this, d); });
   return this;
 };
@@ -977,11 +1121,11 @@ TidyTree.prototype.setLeafNodes = function (show) {
   if (this.parent) {
     //i.e. has already been drawn
     this.parent
-      .select('svg')
-      .selectAll('g.tidytree-node-leaf circle')
+      .select("svg")
+      .selectAll("g.tidytree-node-leaf circle")
       .transition()
       .duration(this.animation)
-      .style('opacity', show ? 1 : 0);
+      .style("opacity", show ? 1 : 0);
   }
   return this;
 };
@@ -995,16 +1139,26 @@ TidyTree.prototype.setLeafNodes = function (show) {
  */
 TidyTree.prototype.eachLeafNode = function (styler) {
   if (!this.parent){
-    throw Error('Tree has not been rendered yet! Can\'t style Nodes that don\'t exist!');
+    throw Error("Tree has not been rendered yet! Can't style Nodes that don't exist!");
   }
   this.parent
-    .select('svg')
-    .selectAll('g.tidytree-node-leaf circle')
+    .select("svg")
+    .selectAll("g.tidytree-node-leaf circle")
     .each(function (d) {
       styler(this, d);
     });
   return this;
 };
+
+/**
+ * Set the TidyTree's leaves to be equidistant
+ */
+TidyTree.prototype.setEquidistantLeaves = function (isEquidistant) {
+  this.equidistantLeaves = isEquidistant ? true : false;
+
+  if (this.parent) return this.redraw();
+  return this;
+}
 
 /**
  * Shows or Hides the TidyTree's Leaf Labels
@@ -1016,11 +1170,11 @@ TidyTree.prototype.setLeafLabels = function (show) {
   if (this.parent) {
     //i.e. has already been drawn
     this.parent
-      .select('svg')
-      .selectAll('g.tidytree-node-leaf text')
+      .select("svg")
+      .selectAll("g.tidytree-node-leaf text")
       .transition()
       .duration(this.animation)
-      .style('opacity', show ? 1 : 0);
+      .style("opacity", show ? 1 : 0);
   }
   return this;
 };
@@ -1034,11 +1188,11 @@ TidyTree.prototype.setLeafLabels = function (show) {
  */
 TidyTree.prototype.eachLeafLabel = function (styler) {
   if (!this.parent){
-    throw Error('Tree has not been rendered yet! Can\'t style Nodes that don\'t exist!');
+    throw Error("Tree has not been rendered yet! Can't style Nodes that don't exist!");
   }
   this.parent
-    .select('svg')
-    .selectAll('g.tidytree-node-leaf text')
+    .select("svg")
+    .selectAll("g.tidytree-node-leaf text")
     .each(function (d) { styler(this, d); });
   return this;
 };
@@ -1054,20 +1208,50 @@ TidyTree.prototype.setRuler = function (show) {
     //i.e. has already been drawn
     if (show) {
       this.parent
-        .select('g.tidytree-ruler')
+        .select("g.tidytree-ruler")
         .transition()
         .duration(this.animation)
-        .attr('opacity', 1);
+        .attr("opacity", 1);
     } else {
       this.parent
-        .select('g.tidytree-ruler')
+        .select("g.tidytree-ruler")
         .transition()
         .duration(this.animation)
-        .attr('opacity', 0);
+        .attr("opacity", 0);
     }
   }
   return this;
 };
+
+/**
+ * Retrieves the GUIDs of the nodes in the TidyTree instance.
+ *
+ * @param {boolean} leavesOnly - Whether to retrieve GUIDs only for leaf nodes.
+ * @param {function} predicate - A function that returns true if the node should be included
+ * @return {Array} An array of GUIDs of the nodes.
+ */
+TidyTree.prototype.getNodeGUIDs = function (leavesOnly, predicate) {
+  let nodeList = this.parent
+    .select("svg")
+    .selectAll("g.tidytree-node-leaf circle")
+    ._groups[0];
+
+  if (!leavesOnly) {
+    nodeList = this.parent
+      .select("svg")
+      .selectAll("g.tidytree-node-leaf circle, g.tidytree-node-internal circle")
+      ._groups[0];
+  }
+
+  let nodeGUIDs = [];
+  for (const node of nodeList.values()) {
+    if (!predicate || predicate(node)) {
+      nodeGUIDs.push(node.__data__.data._guid);
+    }
+  }
+
+  return nodeGUIDs;
+}
 
 /**
  * Searches the tree, returns Search Results
@@ -1078,8 +1262,8 @@ TidyTree.prototype.setRuler = function (show) {
 TidyTree.prototype.search = function (test) {
   if (!test) return;
   let results = this.parent
-    .select('svg g.tidytree-nodes')
-    .selectAll('g.tidytree-node')
+    .select("svg g.tidytree-nodes")
+    .selectAll("g.tidytree-node")
     .filter(test);
   if (this.events.search.length) this.events.search.forEach(c => c(results));
   return results;
@@ -1093,7 +1277,7 @@ TidyTree.prototype.search = function (test) {
  * @return {TidyTree} The TidyTree on which this method was called.
  */
 TidyTree.prototype.on = function (events, callback) {
-  events.split(' ').forEach(event => this.events[event].push(callback));
+  events.split(" ").forEach(event => this.events[event].push(callback));
   return this;
 };
 
@@ -1103,7 +1287,7 @@ TidyTree.prototype.on = function (events, callback) {
  * @return {TidyTree} The TidyTree on which this method was called.
  */
 TidyTree.prototype.off = function (events) {
-  events.split(' ').forEach(event => (this.events[event] = []));
+  events.split(" ").forEach(event => (this.events[event] = []));
   return this;
 };
 
@@ -1115,7 +1299,7 @@ TidyTree.prototype.off = function (events) {
  * @return The output of the callback run on `event`
  */
 TidyTree.prototype.trigger = function (events, ...args) {
-  return events.split(' ').map(event => {
+  return events.split(" ").map(event => {
     if (this.events[event].length)
       return this.events[event].map(handler => handler(args));
     return [];
