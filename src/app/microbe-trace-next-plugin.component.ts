@@ -57,6 +57,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     public launchView: string = "2D Network";
     public threshold: string = "0.015";
 
+    widgets: object; 
     elem: any;
     showSettings: boolean = false;
     showExport: boolean = false;
@@ -245,6 +246,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         this.visuals = commonService.visuals;
         this.visuals.microbeTrace = this;
+        this.widgets = this.commonService.session.style.widgets
 
         this.appSession = injector.get(AppSessionService);
 
@@ -936,14 +938,13 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     generateNodeLinkTable(tableId: string, isEditable: boolean = true) {
-        console.log('generateNodeLinkTable: ', tableId);
         let linkColorTable = $(tableId)
         .empty()
         .append(
             "<tr>" +
             ("<th class='p-1 table-header-row'><div class='header-content'><span contenteditable>Link " + this.commonService.titleize(this.SelectedColorLinksByVariable) + "</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>") +
-            (this.visuals.microbeTrace.commonService.session.style.widgets["link-color-table-counts"] ? "<th class='table-header-row'><div class='header-content'><span contenteditable>Count</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>" : "") +
-            (this.visuals.microbeTrace.commonService.session.style.widgets["link-color-table-frequencies"] ? "<th class='table-header-row'><div class='header-content'><span contenteditable>Frequency</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>" : "") +
+            "<th class='table-header-row tableCount'><div class='header-content'><span contenteditable>Count</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>" +
+            "<th class='table-header-row tableFrequency'><div class='header-content'><span contenteditable>Frequency</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>" +
             "<th>Color</th>" +
             "</tr>"
         );
@@ -1013,8 +1014,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 "<td data-value='" + value + "'>" +
                 (this.visuals.microbeTrace.commonService.session.style.linkValueNames[value] ? this.visuals.microbeTrace.commonService.session.style.linkValueNames[value] : this.commonService.titleize("" + value)) +
                 "</td>" +
-                (this.commonService.session.style.widgets["link-color-table-counts"] ? "<td>" + aggregates[value] + "</td>" : "") +
-                (this.commonService.session.style.widgets["link-color-table-frequencies"] ? "<td>" + (aggregates[value] / vlinks.length).toLocaleString() + "</td>" : "") +
+                "<td class='tableCount'>" + aggregates[value] + "</td>" +
+                "<td class='tableFrequency'>" + (aggregates[value] / vlinks.length).toLocaleString() + "</td>" +
                 "</tr>"
             );
 
@@ -1045,15 +1046,15 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         }
 
         let isAscending = true;  // add this line before the click event handler
+        this.updateCountFreqTable('link-color')
+        $('#linkColorTableSettings').on('mouseleave', () => $('#linkColorTableSettings').delay(500).css('display', 'none'));
 
         $(tableId).on('click', '.sort-button', function() {
-            console.log('Sorting triggered.');
             let table = $(this).parents('table').eq(0);
             let rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).parent().parent().index()));
             isAscending = !isAscending;  // replace 'this.asc' with 'isAscending'
             if (!isAscending){rows = rows.reverse();}
             for (let i = 0; i < rows.length; i++){
-                console.log(`Appending row: ${i}`);
                 table.append(rows[i]);
             }
         });
@@ -1347,8 +1348,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         .append(
             "<tr>" +
             "<th class='p-1 table-header-row'><div class='header-content'><span contenteditable>Node " + this.commonService.titleize(this.SelectedColorNodesByVariable) + "</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>" +
-            (this.commonService.session.style.widgets["node-color-table-counts"] ? "<th class='table-header-row'><div class='header-content'><span contenteditable>Count</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>" : "") +
-            (this.commonService.session.style.widgets["node-color-table-frequencies"] ? "<th class='table-header-row'><div class='header-content'><span contenteditable>Frequency</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>" : "") +
+            "<th class='table-header-row tableCount'><div class='header-content'><span contenteditable>Count</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>" +
+            "<th class='table-header-row tableFrequency'><div class='header-content'><span contenteditable>Frequency</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>" +
             "<th>Color</th>" +
             "</tr>"
         );
@@ -1444,8 +1445,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 "<td data-value='" + value + "'>" +
                 (this.visuals.microbeTrace.commonService.session.style.nodeValueNames[value] ? this.visuals.microbeTrace.commonService.session.style.nodeValueNames[value] : this.visuals.microbeTrace.commonService.titleize("" + value)) +
                 "</td>" +
-                (this.visuals.microbeTrace.commonService.session.style.widgets["node-color-table-counts"] ? "<td>" + aggregates[value] + "</td>" : "") +
-                (this.visuals.microbeTrace.commonService.session.style.widgets["node-color-table-frequencies"] ? "<td>" + (aggregates[value] / vnodes.length).toLocaleString() + "</td>" : "") +
+                "<td class='tableCount'>" + aggregates[value] + "</td>" +
+                "<td class='tableFrequency'>" + (aggregates[value] / vnodes.length).toLocaleString() + "</td>" +
                 "</tr>"
             ).append(isEditable ? cell : nonEditCell);
 
@@ -1468,6 +1469,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 });
         }
 
+        this.updateCountFreqTable('node-color');
+        $('#nodeColorTableSettings').on('mouseleave', () => $('#nodeColorTableSettings').delay(500).css('display', 'none'));
         
         $(tableId).on('click', '.sort-button', function() {
             let table = $(this).parents('table').eq(0);
@@ -1486,6 +1489,59 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         
         function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
 
+    }
+
+    // toggles the setting menu for node-color or link-color table.
+    toggleColorTableSettings(tableName) {
+        let settingsPane;
+        if (tableName == 'node-color') {
+            settingsPane = $('#nodeColorTableSettings')
+        } else if (tableName == 'link-color') {
+            settingsPane = $('#linkColorTableSettings')
+        } else {
+            return;
+        }
+        
+        if (settingsPane.css('display') == 'none') {
+            settingsPane.css('display', 'block')
+        } else {
+            settingsPane.css('display', 'none')
+        }
+    }
+
+    // updates the appropriate widget value (T->F or F->T) and then updates the node-color or link-color table
+    toggleColorTableColumns(table: String, column: string) {
+        if (table == 'node-color' && column == 'tableCounts') {
+            this.widgets['node-color-table-counts'] = !this.widgets['node-color-table-counts'];
+        } else if (table == 'node-color' && column == 'tableFreq') {
+            this.widgets['node-color-table-frequencies'] = !this.widgets['node-color-table-frequencies'];
+        } else if (table == 'link-color' && column == 'tableCounts') {
+            this.widgets['link-color-table-counts'] = !this.widgets['link-color-table-counts']
+        } else if (table == 'link-color' && column == 'tableFreq') {
+            this.widgets['link-color-table-frequencies'] = !this.widgets['link-color-table-frequencies']
+        } else {
+            return;
+        }
+
+        this.updateCountFreqTable(table);
+    }
+
+    // updates the node-color-table or link-color-table based on value of widgets; it doesn't recalculate just shows/hide columns
+    updateCountFreqTable(tableName) {
+        let tableReferenceName, showCount, showFreq;
+        if (tableName == 'node-color') {
+            tableReferenceName = '#global-settings-node-color-table';
+            showCount = this.widgets['node-color-table-counts'];
+            showFreq = this.widgets['node-color-table-frequencies'];
+        } else if (tableName == 'link-color') {
+            tableReferenceName = '#global-settings-link-color-table';
+            showCount = this.widgets['link-color-table-counts'];
+            showFreq = this.widgets['link-color-table-frequencies'];
+        }
+        let countColumn = $(tableReferenceName + ' .tableCount');
+        let freqColumn = $(tableReferenceName + ' .tableFrequency');
+        (showCount) ? countColumn.slideDown() : countColumn.slideUp();
+        (showFreq) ? freqColumn.slideDown() : freqColumn.slideUp();
     }
 
     onLinkThresholdChanged() {

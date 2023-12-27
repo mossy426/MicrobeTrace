@@ -76,11 +76,29 @@
         <p-dialog class="table-z-index" id="global-settings-link-color-table" 
             [position]="GlobalSettingsLinkColorDialogSettings.linkLeft" 
             [(visible)]="GlobalSettingsLinkColorDialogSettings.isVisible"  
-            header="Link Color Table" [style]="{'z-index': '1'}"
+            [style]="{'z-index': '1'}"
             (onShow)="SelectedLinkColorTableTypesVariable='Show'"
             (onHide)="SelectedLinkColorTableTypesVariable='Hide'"
             >
-            <div class="col-12" style="max-height: 50vh">
+            <ng-template pTemplate="header">
+                <div style="display: flex; justify-content: space-between; width: 100%;">
+                    <span>Link Color Table</span>
+                    <span style="overflow: visible; position: relative;">
+                        <button title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="toggleColorTableSettings('link-color')"><i class="pi pi-cog"></i></button>
+                        <div id="linkColorTableSettings" class="dropdown-menu" style="display: none;">
+                            <button id="linkColorCounts" class="dropdown-item" (click)="toggleColorTableColumns('link-color', 'tableCounts')">
+                                <span>Show Counts</span>
+                                <i [className]="this.widgets['link-color-table-counts'] ? 'pi pi-check' : 'pi pi-times'" style="line-height: 1.5"></i>
+                            </button>
+                            <button id="linkColorFrequencies" class="dropdown-item" (click)="toggleColorTableColumns('link-color', 'tableFreq')">
+                                <span>Show Frequencies</span>
+                                <i [className]="this.widgets['link-color-table-frequencies'] ? 'pi pi-check' : 'pi pi-times'" style="line-height: 1.5"></i>
+                            </button>
+                        </div>
+                    </span>
+                </div>
+            </ng-template>
+            <div style="max-height: 50vh">
                 <table id="link-color-table" style="width:100%;height:100%;"></table>
             </div>
         </p-dialog>
@@ -89,16 +107,33 @@
         <p-dialog id="global-settings-node-color-table" 
             [position]="GlobalSettingsNodeColorDialogSettings.nodeLeft" 
             [(visible)]="GlobalSettingsNodeColorDialogSettings.isVisible"  
-            header="Node Color Table" [style]="{width: '45vw', maxWidth: '450px'}"
             (onShow)="SelectedNodeColorTableTypesVariable='Show'"
             (onHide)="SelectedNodeColorTableTypesVariable='Hide'"
                     >
-            <div class="col-12" style="max-height: 50vh">
+            <ng-template pTemplate="header">
+                <div style="display: flex; justify-content: space-between; width: 100%;">
+                    <span>Node Color Table</span>
+                    <span style="overflow: visible; position: relative;">
+                        <button title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="toggleColorTableSettings('node-color')"><i class="pi pi-cog"></i></button>
+                        <div id="nodeColorTableSettings" class="dropdown-menu" style="display: none;">
+                            <button id="nodeColorCounts" class="dropdown-item" (click)="toggleColorTableColumns('node-color', 'tableCounts')">
+                                <span>Show Counts</span>
+                                <i [className]="this.widgets['node-color-table-counts'] ? 'pi pi-check' : 'pi pi-times'" style="line-height: 1.5"></i>
+                            </button>
+                            <button id="nodeColorFrequencies" class="dropdown-item" (click)="toggleColorTableColumns('node-color', 'tableFreq')">
+                                <span>Show Frequencies</span>
+                                <i [className]="this.widgets['node-color-table-frequencies'] ? 'pi pi-check' : 'pi pi-times'" style="line-height: 1.5"></i>
+                            </button>
+                        </div>
+                    </span>
+                </div>
+            </ng-template>
+            <div style="max-height: 50vh">
                 <table id="node-color-table" style="width:100%;height:100%;"></table>
             </div>
         </p-dialog>
         </div>
-
+    
         <div id="overlay" appDnd (fileDropped)="prepareFilesLists($event)">
             <input class="dnd-input" type="file" #fileDropRef id="fileDropRef" multiple (change)="prepareFilesLists($event.target.files)" />
             <div class="welcome-msg">
