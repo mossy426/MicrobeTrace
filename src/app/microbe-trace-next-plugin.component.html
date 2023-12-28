@@ -22,8 +22,8 @@
                     <button class="navbar-item" mat-button [matMenuTriggerFor]="viewMenu"><i class="far nav-icon flaticon-web"></i>View<span class="dropdown-symbol">&#9660;</span></button>
                     <mat-menu #viewMenu="matMenu" overlapTrigger="false">
                       <button mat-menu-item (click)="Viewclick('2D Network')">2D Network</button>
-                      <!-- <button mat-menu-item (click)="Viewclick('Table')">Table</button>
-                      <button mat-menu-item (click)="Viewclick('Map')">Map</button>-->
+                      <button mat-menu-item (click)="Viewclick('Table')">Table</button>
+                      <button mat-menu-item (click)="Viewclick('Map')">Map</button>
                       <button mat-menu-item (click)="Viewclick('Phylogenetic Tree')">Phylogenetic Tree</button>
                     </mat-menu>
                     <button class="navbar-item" mat-button [matMenuTriggerFor]="windowMenu"><i class="far nav-icon flaticon-web"></i>Window<span class="dropdown-symbol">&#9660;</span></button>
