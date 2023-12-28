@@ -960,6 +960,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         aggregateValues.forEach((value, i) => {
 
+            if (aggregates[value] == 0) {
+                return;
+            }
             // Grab color of link from session
             const color = this.visuals.microbeTrace.commonService.temp.style.linkColorMap(value);
 
