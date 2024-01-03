@@ -1733,6 +1733,16 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             // this.loadSettings();
             this.removeComponent(v);
         });
+
+        this._goldenLayoutHostComponent.TabChangedEvent.subscribe((v) => {
+            if(v === "Files") {
+                this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
+                this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
+            } else {
+                this.GlobalSettingsLinkColorDialogSettings.setVisibility(true);
+                this.GlobalSettingsNodeColorDialogSettings.setVisibility(true);
+            }
+        });
         }, 0);
         
 

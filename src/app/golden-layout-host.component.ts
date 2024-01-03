@@ -44,6 +44,8 @@ export class GoldenLayoutHostComponent implements OnDestroy {
   
   @Output() TabRemovedEvent = new EventEmitter();
 
+  @Output() TabChangedEvent = new EventEmitter();
+
   get goldenLayout() { return this._goldenLayout; }
   get virtualActive() { return this._virtualActive; }
   get viewContainerRefActive() { return this._viewContainerRefActive; }
@@ -80,6 +82,11 @@ export class GoldenLayoutHostComponent implements OnDestroy {
     if (this._goldenLayout.isSubWindow) {
       this._goldenLayout.checkAddDefaultPopinButton();
     }
+
+    // Add the activeContentItemChanged event listener
+    this._goldenLayout.on('activeContentItemChanged', contentItem => {
+      this.handleActiveTabChange(contentItem);
+    });
 
     this.setViewContainerRefActive(true);
 
@@ -239,6 +246,10 @@ export class GoldenLayoutHostComponent implements OnDestroy {
     }
     const component = componentRef.instance;
     component.setZIndex(defaultZIndex);
+  }
+
+  private handleActiveTabChange(contentItem: any) {
+    this.TabChangedEvent.emit(contentItem._title);
   }
 }
 

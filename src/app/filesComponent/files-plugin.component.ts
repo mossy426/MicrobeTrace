@@ -517,6 +517,8 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
   }
 
 
+
+
   InitView() {
     this.IsDataAvailable = (this.visuals.microbeTrace.commonService.session.data.nodes.length === 0 ? false : true);
   }
