@@ -2748,11 +2748,11 @@ onPolygonColorTableChange(e) {
             // this.context.microbeTrace.clearTable("#link-color-table-bottom");
         } else {
             // this.context.microbeTrace.generateNodeLinkTable("#link-color-table-bottom", false);
-
-            links
+            if (variable == 'source' || variable == 'target') {
+                links
                 .data(this.getVLinks())
-                .attr('stroke', l => this.visuals.twoD.commonService.temp.style.linkColorMap(l[variable]))
-                .attr('opacity', l => this.visuals.twoD.commonService.temp.style.linkAlphaMap(l[variable]))
+                .attr('stroke', l => this.visuals.twoD.commonService.temp.style.linkColorMap(l[variable]['_id']))
+                .attr('opacity', l => this.visuals.twoD.commonService.temp.style.linkAlphaMap(l[variable]['_id']))
                 .attr('stroke-dasharray', l => {
                     //This quirky little algorithm creates the dasharray code necessary to make dash-y links.
                     let length = 15;
@@ -2767,6 +2767,26 @@ onPolygonColorTableChange(e) {
                     }
                     return out.join(', ');
                 });
+            } else {
+                links
+                    .data(this.getVLinks())
+                    .attr('stroke', l => this.visuals.twoD.commonService.temp.style.linkColorMap(l[variable]))
+                    .attr('opacity', l => this.visuals.twoD.commonService.temp.style.linkAlphaMap(l[variable]))
+                    .attr('stroke-dasharray', l => {
+                        //This quirky little algorithm creates the dasharray code necessary to make dash-y links.
+                        let length = 15;
+                        let out = new Array(l.origins * 2);
+                        let ofs = new Array(l.origins).fill(1);
+                        let ons = new Array(l.origins).fill(0);
+                        ons[l.oNum] = 1;
+                        ofs[l.oNum] = 0;
+                        for (let i = 0; i < l.origins; i++) {
+                            out[2 * i] = ons[i] * length;
+                            out[2 * i + 1] = ofs[i] * length;
+                        }
+                        return out.join(', ');
+                    });
+            }
         }
     };
 

@@ -2300,10 +2300,16 @@ export class CommonService extends AppComponentBase implements OnInit {
         let linkColors;
         if( window.context.commonService.session.style.linkColorsTable && window.context.commonService.session.style.linkColorsTable[variable]) {
             linkColors =  window.context.commonService.session.style.linkColorsTable[variable];
+        } else if (variable == 'source' || variable == 'target') {
+            window.context.commonService.session.style.linkColorsTable = {};
+            window.context.commonService.session.style.linkColorsTableKeys = {};
+            linkColors =  window.context.commonService.session.style.linkColorsTable[variable] = [d3.schemeCategory10[0]].concat(d3.schemeCategory10.slice(2));
+            window.context.commonService.session.style.linkColors = [d3.schemeCategory10[0]].concat(d3.schemeCategory10.slice(2));
         } else {
             window.context.commonService.session.style.linkColorsTable = {};
             window.context.commonService.session.style.linkColorsTableKeys = {};
-            linkColors =  window.context.commonService.session.style.linkColorsTable[variable] = [... window.context.commonService.session.style.linkColors];
+            linkColors =  window.context.commonService.session.style.linkColorsTable[variable] = d3.schemePaired;
+            window.context.commonService.session.style.linkColors = d3.schemePaired;
         }
 
         let aggregates = {};
@@ -2323,6 +2329,20 @@ export class CommonService extends AppComponentBase implements OnInit {
                     }
                 });
             }
+        } else if (variable == 'source' || variable == 'target') {
+            // first loop is to populates color in the same order as nodeColorMap would be
+            window.context.commonService.session.data.nodes.forEach((node) => {
+                aggregates[node._id] = 0;
+            })
+            window.context.commonService.session.data.links.forEach((link) => {
+                if (!link.visible) {return;}
+                let node = link[variable];
+                if (node in aggregates) {
+                    aggregates[node] ++;
+                } else {
+                    aggregates[node] = 1;
+                }
+            })
         } else {
             while (i < n) {
                 l = links[i++];
