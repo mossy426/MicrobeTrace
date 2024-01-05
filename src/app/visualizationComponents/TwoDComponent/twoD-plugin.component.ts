@@ -1,4 +1,4 @@
-﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, Inject } from '@angular/core';
+﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { EventManager } from '@angular/platform-browser';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
@@ -27,7 +27,8 @@ import { MicrobeTraceNextHomeComponent } from '../../microbe-trace-next-plugin.c
 @Component({
     selector: 'TwoDComponent',
     templateUrl: './twoD-plugin.component.html',
-    styleUrls: ['./twoD-plugin.component.scss']
+    styleUrls: ['./twoD-plugin.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TwoDComponent extends BaseComponentDirective implements OnInit, MicobeTraceNextPluginEvents, OnDestroy {
 
@@ -308,9 +309,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             let svgSelection = d3.select('svg#network');
             let svgWidth = svgSelection.node().getBoundingClientRect().width;
             let svgHeight = svgSelection.node().getBoundingClientRect().height;
-
-            console.log('brush height: ', svgHeight);
-            console.log('brush width: ', svgWidth);
 
             this.visuals.twoD.brush = d3.brush()
                 .extent([[0, 0], [svgWidth, svgHeight]]) // Set the extent to cover the entire SVG
@@ -2500,8 +2498,6 @@ onPolygonColorTableChange(e) {
         this.widgets['link-width-max'] = e;
         this.visuals.twoD.scaleLinkWidth();
 
-        console.log('scaling width');
-
     }
 
     onLinkWidthMinChange(e) {
@@ -2592,7 +2588,6 @@ onPolygonColorTableChange(e) {
     
     
     onNetworkGridlinesShowHideChange(e: string): void {
-        console.log('network grid:', e);
         if (e === "Show") {
             this.widgets['network-gridlines-show'] = true;
             this.drawGridlines(true);

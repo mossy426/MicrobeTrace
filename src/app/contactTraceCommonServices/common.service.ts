@@ -38,6 +38,9 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     thresholdHistogram: any;
 
+    // Set this to true to enable the debug mode/console logs to appear
+    public debugMode: boolean = false;
+
     private linkElementSource = new BehaviorSubject<HTMLElement | null>(null);
     private nodeElementSource = new BehaviorSubject<HTMLElement | null>(null);
 
@@ -530,22 +533,6 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     addNode(newNode: any, check: any = null) {
 
-        // TODO: Remove when done testing
-        // if (newNode._id === "30576_KF773440_B96cl58") {
-        //     console.log('node1: ', newNode);
-            
-        // }
-        // if (newNode._id === "30576_KF773440_B96cl58 ") {
-        //     console.log('node2: ', newNode);
-        // }
-
-        // if (newNode._id === "30576_KF773440_B96cl58 ") {
-        //     console.log('node7: ', newNode);
-        // }
-        // if (newNode.id === "30576_KF773440_B96cl58") {
-        //     console.log('node8: ', newNode);
-        // }
-
         //  If no _id, set _id to id
         if (window.context.commonService.isNumber(newNode._id)) {
             newNode._id = '' + newNode._id;
@@ -610,11 +597,6 @@ export class CommonService extends AppComponentBase implements OnInit {
             // Ensure no empty origins
             myorigin = myorigin.filter(origin => origin != '');
 
-            // if("" + newLink.source == "3003" && "" + newLink.target == "1703") {
-            //   console.log("add new: ", _.cloneDeep(newLink));
-            //   console.log("add old: ", _.cloneDeep(oldLink));
-            // }
-
             // Ensure new link keeps distance if already defined previously
             if (oldLink.hasDistance) {
                 newLink.hasDistance = true;
@@ -640,10 +622,6 @@ export class CommonService extends AppComponentBase implements OnInit {
             // Object.assign(oldLink, newLink);
             // Object.assign(newLink, oldLink);
 
-            // if("" + newLink.source == "3003" && "" + newLink.target == "1703") {
-            //   console.log("add new2: ", _.cloneDeep(newLink));
-            //   console.log("add old2: ", _.cloneDeep(oldLink));
-            // }
 
             if(newLink["bidirectional"]){
                 oldLink["bidirectional"] = true;
@@ -838,7 +816,9 @@ export class CommonService extends AppComponentBase implements OnInit {
     };
 
     processJSON(json: any, extension: any) {
-      console.log("Trying to process JSON file");
+        if(this.debugMode) {
+            console.log("Trying to process JSON file");
+        }
         let data;
         try {
             if(json.result) {
@@ -881,7 +861,10 @@ export class CommonService extends AppComponentBase implements OnInit {
         $(document).trigger("stop-force-simulation"); // stop previous network ticks so previous polygon won't show up
         $(document).off('.2d');
 
-        console.log('applying session:', stashObject);
+        if(this.debugMode) {
+            console.log('applying session:', stashObject);
+        }
+
         if(stashObject.session) {
 
         } else {
@@ -979,7 +962,9 @@ export class CommonService extends AppComponentBase implements OnInit {
     }
 
     applyStyle(style) {
-        console.log('applying style: ', style);
+        if(this.debugMode) {
+            console.log('applying style: ', style);
+        }
         window.context.commonService.session.style = style;
         window.context.commonService.session.style.widgets = Object.assign({},
             window.context.commonService.defaultWidgets(),
@@ -1140,7 +1125,9 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         computer.compute_parse_fastaWorker.onmessage().subscribe((response) => {
           let nodes = JSON.parse(window.context.commonService.decode(new Uint8Array(response.data.nodes)));
-          console.log("FASTA Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
+          if(this.debugMode) {
+            console.log("FASTA Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
+          }
           resolve(nodes);
 
         });
@@ -1160,11 +1147,14 @@ export class CommonService extends AppComponentBase implements OnInit {
               const data = JSON.parse(
                 window.context.commonService.decode(new Uint8Array(response.data.data))
               );
-              console.log(
-                'CSV Matrix Transit time: ',
-                (Date.now() - response.data.start).toLocaleString(),
-                'ms'
-              );
+              if(this.debugMode) {
+                console.log(
+                    'CSV Matrix Transit time: ',
+                    (Date.now() - response.data.start).toLocaleString(),
+                    'ms'
+                  );              
+                }
+             
               const start = Date.now();
               const nodes = data.nodes;
               const tn = nodes.length;
@@ -1190,11 +1180,15 @@ export class CommonService extends AppComponentBase implements OnInit {
                   check
                 );
               }
-              console.log(
-                'CSV Matrix Merge time: ',
-                (Date.now() - start).toLocaleString(),
-                'ms'
-              );
+
+              if(this.debugMode) {
+                console.log(
+                    'CSV Matrix Merge time: ',
+                    (Date.now() - start).toLocaleString(),
+                    'ms'
+                  );             
+                }
+  
               resolve({ nn, nl, tn, tl });
             };
           });
@@ -1357,7 +1351,9 @@ export class CommonService extends AppComponentBase implements OnInit {
 
             seqs.push({ id: idPrefix + "" + seqs.length, seq: newseed });
         }
-        console.log("Sequence spawn time:", (Date.now() - start).toLocaleString(), 'ms');
+        if(this.debugMode) {
+            console.log("Sequence spawn time:", (Date.now() - start).toLocaleString(), 'ms');
+        }
         return seqs;
     };
 
@@ -1418,7 +1414,9 @@ export class CommonService extends AppComponentBase implements OnInit {
 
             computer.compute_consensusWorker.onmessage().subscribe((response) => {
 
-                console.log("Consensus Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
+                if(this.debugMode) {
+                    console.log("Consensus Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
+                }
                 resolve(window.context.commonService.decode(new Uint8Array(response.data.consensus)));
 
             });
@@ -1545,7 +1543,9 @@ export class CommonService extends AppComponentBase implements OnInit {
                 let dists = window.context.commonService.session.style.widgets['default-distance-metric'].toLowerCase() == 'snps' ?
                     new Uint16Array(response.data.links) :
                     new Float32Array(response.data.links);
-                console.log("Links Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
+                    if(this.debugMode) {
+                        console.log("Links Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
+                    }
                 let start = Date.now();
                 let check = window.context.commonService.session.files.length > 1;
                 let n = subset.length;
@@ -1565,7 +1565,9 @@ export class CommonService extends AppComponentBase implements OnInit {
                         }, check);
                     }
                 }
-                console.log("Links Merge time: ", (Date.now() - start).toLocaleString(), "ms");
+                if(this.debugMode) {
+                    console.log("Links Merge time: ", (Date.now() - start).toLocaleString(), "ms");
+                }
                 resolve(k);
             });
         });
@@ -1603,41 +1605,41 @@ export class CommonService extends AppComponentBase implements OnInit {
 
             // console.log('matrixx: ',  JSON.stringify(window.context.commonService.temp.matrix));
 
-            console.log("DM Compute time: ", (Date.now() - start).toLocaleString(), "ms");
+            if(this.debugMode) {
+                console.log("DM Compute time: ", (Date.now() - start).toLocaleString(), "ms");
+            }
             resolve(dm);
         });
     };
 
     computeTree(): Promise<any> {
 
-        console.log('computing tree')
+        if(this.debugMode) {
+            console.log('computing tree')
+        }
         return new Promise(resolve => {
 
           if (window.context.commonService.treeObj) {
             resolve(window.context.commonService.treeObj.toNewick());
           } else {
             let computer: WorkerModule = new WorkerModule();
-            console.log('getting dm');
             window.context.commonService.getDM().then(dm => {
-                console.log('got dm');
                 computer.compute_treeWorker.postMessage({
                     labels: Object.keys(window.context.commonService.temp.matrix).sort(),
                     matrix: dm,
                     round: window.context.commonService.session.style.widgets["tree-round"]
                 });
 
-                console.log('got dm2');
 
                 computer.compute_treeWorker.onmessage().subscribe((response) => {
-                    console.log('successfully decoded tree');
 
                   const treeObj = window.context.commonService.decode(new Uint8Array(response.data.tree));
 
-                  console.log('successfully decoded tree1');
                   const treeString = patristic.parseJSON(treeObj).toNewick();
-                  console.log('successfully decoded tree 2');
 
-                  console.log('Tree Transit time: ', (Date.now() - response.data.start).toLocaleString(), 'ms');
+                  if(this.debugMode) {
+                    console.log('Tree Transit time: ', (Date.now() - response.data.start).toLocaleString(), 'ms');
+                  }
                   resolve(treeString);
 
               });
@@ -1660,7 +1662,9 @@ export class CommonService extends AppComponentBase implements OnInit {
             computer.compute_directionalityWorker.onmessage().subscribe((response) => {
 
                 let flips = new Uint8Array(response.data.output);
-                console.log("Directionality Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
+                if(this.debugMode) {
+                    console.log("Directionality Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
+                }
                 let start = Date.now();
                 let n = flips.length;
                 for (let i = 0; i < n; i++) {
@@ -1672,7 +1676,9 @@ export class CommonService extends AppComponentBase implements OnInit {
                         fliplink.directed = true;
                     }
                 }
-                console.log("Directionality Integration time: ", (Date.now() - start).toLocaleString(), "ms");
+                if(this.debugMode) {
+                    console.log("Directionality Integration time: ", (Date.now() - start).toLocaleString(), "ms");
+                }
                 resolve();
 
             });
@@ -1696,14 +1702,18 @@ export class CommonService extends AppComponentBase implements OnInit {
               return reject("MST washed out");
             }
             let output = new Uint8Array(response.data.links);
-            console.log("MST Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
+            if(this.debugMode) {
+                console.log("MST Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
+            }
             const start = Date.now();
             let links = window.context.commonService.session.data.links;
             const numLinks = links.length;
             for (let i = 0; i < numLinks; i++) {
               links[i].nn = output[i] ? true : false;
             }
-            console.log("MST Merge time: ", (Date.now() - start).toLocaleString(), "ms");
+            if(this.debugMode) {
+                console.log("MST Merge time: ", (Date.now() - start).toLocaleString(), "ms");
+            }
             resolve();
           });
         });
@@ -1721,21 +1731,24 @@ export class CommonService extends AppComponentBase implements OnInit {
                 metric: window.context.commonService.session.style.widgets['link-sort-variable']
             });
 
-            console.log('computing nn');
             computer.compute_nnWorker.onmessage().subscribe((response) => {
 
                 if (response.data == "Error") {
                     return reject("Nearest Neighbor washed out");
                 }
                 let output = new Uint8Array(response.data.links);
-                console.log("NN Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
+                if(this.debugMode) {
+                    console.log("NN Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
+                }
                 const start = Date.now();
                 let links = window.context.commonService.session.data.links;
                 const numLinks = links.length;
                 for (let i = 0; i < numLinks; i++) {
                     links[i].nn = output[i] ? true : false;
                 }
-                console.log("NN Merge time: ", (Date.now() - start).toLocaleString(), "ms");
+                if(this.debugMode) {
+                    console.log("NN Merge time: ", (Date.now() - start).toLocaleString(), "ms");
+                }
                 resolve();
             });
         });
@@ -1754,7 +1767,9 @@ export class CommonService extends AppComponentBase implements OnInit {
                 computer.compute_triangulationWorker.onmessage().subscribe((response) => {
 
                     if (response.data == "Error") return reject("Triangulation washed out");
-                    console.log("Triangulation Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
+                    if(this.debugMode) {
+                        console.log("Triangulation Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
+                    }
                     let start = Date.now();
                     let matrix = JSON.parse(window.context.commonService.decode(new Uint8Array(response.data.matrix)));
                     let labels = Object.keys(window.context.commonService.temp.matrix);
@@ -1775,7 +1790,9 @@ export class CommonService extends AppComponentBase implements OnInit {
                             row[target][metric] = matrix[i][j];
                         }
                     }
-                    console.log("Triangulation Merge time: ", (Date.now() - start).toLocaleString(), "ms");
+                    if(this.debugMode) {
+                        console.log("Triangulation Merge time: ", (Date.now() - start).toLocaleString(), "ms");
+                    }
                     resolve();
                 })
             });
@@ -1785,17 +1802,9 @@ export class CommonService extends AppComponentBase implements OnInit {
     async runHamsters() {
 
         if (!window.context.commonService.session.style.widgets['triangulate-false']) window.context.commonService.computeTriangulation();
-        console.log('running hamseters');
         window.context.commonService.computeNN();
-
-        console.log('running hamseters 2');
-
         await window.context.commonService.computeTree();
-
-        console.log('running hamseters 3');
-
         if (!window.context.commonService.session.style.widgets['infer-directionality-false']) window.context.commonService.computeDirectionality();
-
         window.context.commonService.finishUp();
     };
 
@@ -1894,7 +1903,9 @@ export class CommonService extends AppComponentBase implements OnInit {
         });
 
         setTimeout(() => {
-            console.log('launching view: ',window.context.commonService.session.style.widgets['default-view']);
+            if(this.debugMode) {
+                console.log('launching view: ',window.context.commonService.session.style.widgets['default-view']);
+            }
             window.context.commonService.launchView(window.context.commonService.session.style.widgets['default-view']);
 
         }, 1000);
@@ -2095,7 +2106,9 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     getVisibleClusters(copy: any = false) {
         let clusters = window.context.commonService.session.data.clusters;
-        console.log('get vis: ', clusters);
+        if(this.debugMode) {
+            console.log('get vis: ', clusters);
+        }
         let n = clusters.length;
         let out = [],
             cluster = null;
@@ -2141,7 +2154,6 @@ export class CommonService extends AppComponentBase implements OnInit {
                 else clusters[id] = 1;
             }
             clusterCount = window.context.commonService.session.data.clusters.filter(cluster => clusters[cluster.id] && clusters[cluster.id]>2 && cluster.visible && cluster.nodes > 1).length;
-            console.log('cluster count 2: ', clusterCount);
 
         }
         let singletons = vnodes.filter(d => d.degree == 0).length;
@@ -2290,7 +2302,9 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     createLinkColorMap() {
         let variable = window.context.commonService.session.style.widgets["link-color-variable"];
-        console.log('link var: ', variable);
+        if(this.debugMode) {
+            console.log('link var: ', variable);
+        }
         if (variable == "None") {
             window.context.commonService.temp.style.linkColorMap = () => window.context.commonService.session.style.widgets["link-color"];
             window.context.commonService.temp.style.linkAlphaMap = () => 1 - window.context.commonService.session.style.widgets["link-opacity"];
@@ -2633,7 +2647,6 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     launchView(view, callback: any = null) {
 
-        console.log('creating compo')
         // this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
 
         window.context.commonService.LoadViewEvent.emit(view);
@@ -3068,7 +3081,9 @@ export class CommonService extends AppComponentBase implements OnInit {
                 }
             }
             
-            console.log("Cluster Tagging time:", (Date.now() - start).toLocaleString(), "ms");
+            if(this.debugMode) {
+                console.log("Cluster Tagging time:", (Date.now() - start).toLocaleString(), "ms");
+            }
 
             start = Date.now();
             //This is O(N^3)
@@ -3097,7 +3112,9 @@ export class CommonService extends AppComponentBase implements OnInit {
                 c.links_per_node = c.links / c.nodes;
                 c.mean_genetic_distance = c.sum_distances / 2 / c.links;
             });
-            console.log("Degree Computation time:", (Date.now() - start).toLocaleString(), "ms");
+            if(this.debugMode) {
+                console.log("Degree Computation time:", (Date.now() - start).toLocaleString(), "ms");
+            }
             resolve();
         });
     };
@@ -3141,11 +3158,12 @@ export class CommonService extends AppComponentBase implements OnInit {
         }
         if (!silent) $(document).trigger("node-visibility");
 
-        console.log('session nodes: ', nodes.filter(n => n.visible));
-
-        console.log('session nodes length: ', nodes.filter(n => n.visible).length);
+        if(this.debugMode) {
+            console.log('session nodes: ', nodes.filter(n => n.visible));
+            console.log('session nodes length: ', nodes.filter(n => n.visible).length);
+            console.log("Node Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");        
+        }
        
-        console.log("Node Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
     };
 
     updatePinNodes(copy) {
@@ -3181,7 +3199,9 @@ export class CommonService extends AppComponentBase implements OnInit {
         let links = window.context.commonService.session.data.links;
         let clusters = window.context.commonService.session.data.clusters;
         let n = links.length;
-        console.log(`Setting Link Visibility with ${metric} ${threshold} ${showNN}`);
+        if(this.debugMode) {
+            console.log(`Setting Link Visibility with ${metric} ${threshold} ${showNN}`);
+        }
 
         for (let i = 0; i < n; i++) {
             let link = links[i];
@@ -3270,7 +3290,9 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         
         if (!silent) $(document).trigger("link-visibility");
-        console.log("Link Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
+        if(this.debugMode) {
+            console.log("Link Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
+        }
     };
 
     updateNetwork() {

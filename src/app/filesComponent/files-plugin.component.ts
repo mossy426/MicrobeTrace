@@ -1,4 +1,4 @@
-﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, Inject, ElementRef } from '@angular/core';
+﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, Inject, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { AppUiCustomizationService } from '@shared/common/ui/app-ui-customization.service';
@@ -25,7 +25,8 @@ import { ComponentContainer } from 'golden-layout';
 @Component({
   selector: 'FilesComponent',
   templateUrl: './files-plugin.component.html',
-  styleUrls: ['./files-plugin.component.less']
+  styleUrls: ['./files-plugin.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class FilesComponent extends BaseComponentDirective implements OnInit {
@@ -152,7 +153,6 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
     this.SelectedDefaultDistanceThresholdVariable = this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable;
     this.SelectedDefaultDistanceMetricVariable = this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable;
-    console.log('selected de: ', this.SelectedDefaultDistanceThresholdVariable);
     this.visuals.microbeTrace.commonService.LoadViewEvent.subscribe((v) => { this.loadDefaultVisualization(v); });
     this.visuals.microbeTrace.commonService.session.data.reference = this.visuals.microbeTrace.commonService.HXB2.substr(2000, 2100);
 
@@ -461,7 +461,6 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     // $.getJSON("../assets/outbreak.microbetrace", window.context.commonService.applySession);
     // Use this when building production (.ie gh-pages branch)
     if(!this.commonService.session.network.initialLoad && this.visuals.microbeTrace.auspiceUrlVal === null) {
-      console.log('inial load1:',this.commonService.session.network.initialLoad);
       $.getJSON("outbreaknorm.microbetrace", window.context.commonService.applySession);   
       this.commonService.session.network.launched = true; 
       this.commonService.session.network.initialLoad = true; 
@@ -469,13 +468,8 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
       //   for(let i = 0; i < this.commonService.session.files.length; i++) {
       //     this.addToTable(this.commonService.session.files[i]);
       //   }
-      // }  
-      console.log('inial load2:',this.commonService.session.network.initialLoad);
- 
+      // }   
     }
-
-    console.log('Files: On load: ', this.commonService.session);
-
 
     setTimeout(() => {
       this.populateTable();
@@ -530,7 +524,6 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
   changeDefaultView(e) {
 
-    console.log('change default view');
     const v = e.target.selectedOptions[0].innerText;
     this.visuals.microbeTrace.commonService.localStorageService.setItem('default-view', v);
     this.visuals.microbeTrace.commonService.session.style.widgets['default-view'] = v;
@@ -569,7 +562,6 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
   loadDefaultVisualization(e: string) {
 
-    console.log('files: loading default visualization');
     setTimeout(() => {
 
       this.visuals.microbeTrace.commonService.session.messages = [];
@@ -630,7 +622,6 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
 
   creatLaunchSequences() {
-    console.log('Files: Luaunch Sequences');
     this.visuals.microbeTrace.commonService.session.meta.startTime = Date.now();
     $('#launch').prop('disabled', true);
 
@@ -638,7 +629,6 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
     this.visuals.microbeTrace.commonService.temp.messageTimeout = setTimeout(() => {
       $('#loadCancelButton').slideDown();
-      console.log('need to cancel');
       // abp.notify.warn('If you stare long enough, you can reverse the DNA Molecule\'s spin direction');
     }, 20000);
 
@@ -705,7 +695,9 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
         });
         this.visuals.microbeTrace.commonService.updateNetwork();
         this.visuals.microbeTrace.commonService.updateStatistics();
-        console.log(this.visuals.microbeTrace.commonService.session);
+        if(this.commonService.debugMode) {
+          console.log(this.visuals.microbeTrace.commonService.session);
+        }
       } else if (file.format === 'fasta') {
 
         this.showMessage(`Parsing ${file.name} as FASTA...`);
@@ -944,7 +936,9 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
       } else if (file.format === 'node') {
 
         this.showMessage(`Parsing ${file.name} as Node List...`);
-        console.log(file.field1);
+        if(this.commonService.debugMode) {
+          console.log(file.field1);
+        }
 
         let m = 0, n = 0;
 
@@ -1133,7 +1127,9 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
   processData() {
     let nodes = this.visuals.microbeTrace.commonService.session.data.nodes;
-    console.log(nodes);
+    if(this.commonService.debugMode) {
+      console.log(nodes);
+    }
     this.visuals.microbeTrace.commonService.session.data.nodeFilteredValues = nodes;
     //Add links for nodes with no edges
     this.uniqueNodes.forEach(x => {
@@ -1223,7 +1219,9 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     if (Array.from(files).length > 0) {
 
       Array.from(files).map(file => {
-        console.log('files: ', file);
+        if(this.commonService.debugMode) {
+          console.log('files: ', file);
+        }
         this.processFile(file);
       });
     }
@@ -1241,10 +1239,11 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
     if(!rawfile) {
       rawfile = this.visuals.microbeTrace.commonService.session.files[0];
-      // console.log('ra file: ', rawfile);
     }
 
-    console.log('raw file: ', rawfile);
+    if(this.commonService.debugMode) {
+      console.log('raw file: ', rawfile);
+    }
 
 
     $('#loading-information').html('');
@@ -1298,10 +1297,8 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
       return;
     }
 
-    console.log('1');
     fileto.promise(rawfile, (extension === 'xlsx' || extension === 'xls') ? 'ArrayBuffer' : 'Text').then(file => {
       //debugger;
-      console.log('2');
       file.name = this.visuals.microbeTrace.commonService.filterXSS(file.name);
       file.extension = file.name.split('.').pop().toLowerCase();
       this.visuals.microbeTrace.commonService.session.files.push(file);
@@ -1321,7 +1318,9 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
   }
 
   addToTable(file) {
-    console.log(file);
+    if(this.commonService.debugMode) {
+      console.log(file);
+    }
 
     //debugger;
     const extension = file.extension ? file.extension : this.visuals.microbeTrace.commonService.filterXSS(file.name).split('.').pop().toLowerCase();
@@ -1386,6 +1385,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     //For the love of all that's good...
     //TODO: Rewrite this as a [Web Component](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements) or [something](https://reactjs.org/docs/react-component.html) or something.
     function addTableTile(headers, context) {
+
       console.log(headers);
 
       let parentContext = context;
@@ -1658,7 +1658,9 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
 
   onLinkThresholdChange = (e) => {
-    console.log('changing link threshold');
+    if(this.commonService.debugMode) {
+      console.log('changing link threshold');
+    }
     this.SelectedDefaultDistanceThresholdVariable = parseFloat(e);
     this.visuals.microbeTrace.SelectedLinkThresholdVariable = parseFloat(e);
     this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = parseFloat(e);
@@ -1666,10 +1668,14 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
   }
 
   onDistanceMetricChange = (e) => {
-    console.log('distance ch:', e);
+    if(this.commonService.debugMode) {
+      console.log('distance ch:', e);
+    }
     this.SelectedDefaultDistanceMetricVariable = e;
     if (e.toLowerCase() === 'snps') {
-      console.log("saw snps");
+      if(this.commonService.debugMode) {
+        console.log("saw snps");
+      }
       $('#default-distance-threshold, #link-threshold')
         .attr('step', 1)
         .val(16)
