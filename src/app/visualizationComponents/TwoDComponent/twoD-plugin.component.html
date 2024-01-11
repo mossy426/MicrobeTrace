@@ -21,6 +21,7 @@
 
 <svg id="network" class="network" [ngStyle]="svgStyle" (click)="networkWhitespaceClicked()"></svg>
 
+<!-- May be able to remove this section <div class=row>, related to exportWork which isn't currently used-->
 <div class="row">
     <div class="col-md-4">
       <h2 *ngIf="isExporting && commonService.session.style.widgets['node-symbol-variable'] != 'None'" class="bottom-table">

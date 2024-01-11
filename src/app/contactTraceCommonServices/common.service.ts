@@ -77,6 +77,10 @@ export class CommonService extends AppComponentBase implements OnInit {
         SelectedRevealTypesVariable: 'Everything'
     };
 
+    /**
+     * Returns an object that will eventually be filled with data. It is accessed throught commonService.session.data
+     * It will store a list of nodes, links, and clusters as well as fields that can be used for each
+     */
     dataSkeleton = () => {
         return {
             nodes: [],
@@ -142,6 +146,10 @@ export class CommonService extends AppComponentBase implements OnInit {
     //         }
     //     ]
     // }, $('#main-panel'));
+
+    /**
+     * @returns an object that stores the common widgets/settings used throughout MicrobeTrace
+     */
     defaultWidgets = () => {
         return {
             '3DNet-link-tooltip-variable': 'None',
@@ -325,6 +333,10 @@ export class CommonService extends AppComponentBase implements OnInit {
             'twoD-settings-visible': 'Hide'
         };
     }
+
+    /**
+     * @returns a session object. It has the data object, information on goldenLayout layout, widgets, as well as other settings
+     */   
     sessionSkeleton = () => {
         return {
             data: this.dataSkeleton(),
@@ -403,12 +415,19 @@ export class CommonService extends AppComponentBase implements OnInit {
             warnings: []
         };
     }
+    /**
+     * 
+     * @returns object found at commonService.temp  which include a matrix for links between nodes and color/alpha mapping functions
+     */
     tempSkeleton = () => {
         return {
             componentCache: {},
             mapData: {},
             matrix: {},
             messageTimeout: null,
+            /* functions in style object get replaced If user decides to color a node, link, or polygon variable.
+             * these functions are replaced with one from the d3 package usind d3.scaleOrdinal(...).domain(...)
+             */
             style: {
                 linkAlphaMap: () => 1 - this.session.style.widgets['link-opacity'],
                 linkColorMap: () => this.session.style.widgets['link-color'],
@@ -434,7 +453,12 @@ export class CommonService extends AppComponentBase implements OnInit {
     //    ]
     //});
 
-
+    /**
+     * @param injector 
+     * @param localStorageService 
+     * @param visuals - this injection allows users to access all the views from commonService (ie. commonService.visuals.twoD)
+     * @param http 
+     */
     constructor(injector: Injector,
         public localStorageService: LocalStorageService,
         public visuals: MicrobeTraceNextVisuals,
@@ -454,31 +478,40 @@ export class CommonService extends AppComponentBase implements OnInit {
     }
 
 
+    /**
+     * Sets window.context.commonSerive = this; and also calls reset() which sets commonService.temp and commonService.session back to default values (except 
+     * temp.mapData, session.files, session.meta)
+     */
     initialize() {
-
-        //debugger;
-
-
         window.context = (window.context == undefined ? {} : window.context);
         window.context.commonService = this;
 
         this.reset();
-
     }
 
+    /**
+     * Capitalizes the first letter of a string
+     * @param s - Expects a string
+     * @returns - the string with first letter capitalized. If typeof s != string returns empty string
+     */
     capitalize(s) {
         if (typeof s !== 'string') return ''
         return s.charAt(0).toUpperCase() + s.slice(1)
     }
 
 
+    /**
+     * Set commonService.session and commonService.temp back to default values
+     */
     clearData() {
         window.context.commonService.session = window.context.commonService.sessionSkeleton();
 
         window.context.commonService.temp = window.context.commonService.tempSkeleton();
-
     }
 
+    /**
+     * @returns a default node object
+     */
     defaultNode(): any {
 
         return {
@@ -494,12 +527,20 @@ export class CommonService extends AppComponentBase implements OnInit {
         }
     }
 
-
+    /** 
+     * XXXXX Not currently used; not sure of future use XXXXX
+     * @returns boolean
+     */
     onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
     }
 
-
+    /**
+     * Checks if an array or string contains a specified value.
+     * @param container - Where to search such as a []
+     * @param {any} value - The value to search for.
+     * @returns {boolean} - `true` if the `container` parameter contains the `value` parameter, and `false` otherwise.
+     */
     includes(container: any, value: any) {
         let returnValue = false;
         const pos = container.indexOf(value);
@@ -510,6 +551,12 @@ export class CommonService extends AppComponentBase implements OnInit {
         return returnValue;
     };
 
+    /**
+     * Sanitizes user input to prevent cross-site scripting (XSS) attacks.
+     * @param {string|number|boolean} t - The user input to be sanitized.
+     * @param {boolean} [e=0 | false] - An optional parameter that specifies whether to encode the sanitized output as HTML entities.
+     * @returns {string} - The sanitized output.
+     */
     filterXSS(t, e: any = 0) {
         let argType: any = typeof t;
         if(argType==='object'){
@@ -526,12 +573,21 @@ export class CommonService extends AppComponentBase implements OnInit {
         return e === !0 ? i : i.replace(/>/g, '&gt;').replace(/</g, '&lt;')
     };
 
-    isNumber(a: any) {
+    /**
+     * @param {any} a an input value
+     * @returns {boolean} whether a is a number
+     */
+    isNumber(a: any): boolean {
         return typeof a == 'number';
     };
 
-
-    addNode(newNode: any, check: any = null) {
+    /**
+     * Adds a new node to an array of nodes.
+     * @param {Node} newNode - The new node to be added to the array.
+     * @param {boolean | null} [check=null] - An optional parameter that specifies whether to check for duplicates before adding the new node.
+     * @returns {number} - `1` if a new node was added to the array, `0` otherwise.
+     */
+    addNode(newNode: any, check: any = null): number {
 
         //  If no _id, set _id to id
         if (window.context.commonService.isNumber(newNode._id)) {
@@ -575,7 +631,13 @@ export class CommonService extends AppComponentBase implements OnInit {
         return 1;
     };
 
-    addLink(newLink: any, check: any = true) {
+    /**
+     * Adds a new link to an array of links.
+     * @param {Object} newLink- The new link to be added to the array.
+     * @param {boolean | null} [check=null] - An optional parameter that specifies whether to check for duplicates before adding the new link.
+     * @returns {number} - `1` if a new link was added to the array, `0` otherwise.
+     */
+    addLink(newLink: any, check: any = true): number {
 
         const serv = window.context.commonService;
         const matrix = serv.temp.matrix;
@@ -670,6 +732,11 @@ export class CommonService extends AppComponentBase implements OnInit {
         return linkIsNew;
     };
 
+    /**
+     * Removes duplicate elements from an array.
+     * @param {Array} a - The array to be processed.
+     * @returns {Array} - The array containing only the unique elements of the input array `a`.
+     */
     uniq(a: any) {
         let seen = {};
         let out = [];
@@ -685,60 +752,12 @@ export class CommonService extends AppComponentBase implements OnInit {
         return out;
     }
 
-    createPolygonColorMap = () => {
-        if (!window.context.commonService.temp.polygonGroups || !window.context.commonService.session.style.widgets['polygons-color-show']) {
-            window.context.commonService.temp.style.polygonColorMap = () => window.context.commonService.session.style.widgets['polygon-color'];
-            return [];
-        }
-    
-        let aggregates = {};
-        let groups = window.context.commonService.temp.polygonGroups;
-
-        groups.forEach(d => {
-            aggregates[d.key] = d.values.length;
-        });
-
-        let values = Object.keys(aggregates);
-    
-        if (window.context.commonService.session.style.widgets['polygon-color-table-counts-sort'] == 'ASC')
-          values.sort(function(a, b) { return aggregates[a] - aggregates[b] });
-        else if (window.context.commonService.session.style.widgets['polygon-color-table-counts-sort'] == 'DESC')
-          values.sort(function(a, b) { return aggregates[b] - aggregates[a] });
-        if (window.context.commonService.session.style.widgets['polygon-color-table-name-sort'] == 'ASC')
-          values.sort(function(a, b) { return a as any - (b as any) });
-        else if (window.context.commonService.session.style.widgets['polygon-color-table-name-sort'] == 'DESC')
-          values.sort(function(a, b) { return b as any - (a as any)});
-    
-        if (values.length > window.context.commonService.session.style.polygonColors.length) {
-          let colors = [];
-          let m = Math.ceil(values.length / window.context.commonService.session.style.polygonColors.length);
-          while (m-- > 0) {
-            colors = colors.concat(window.context.commonService.session.style.polygonColors);
-          }
-          window.context.commonService.session.style.polygonColors = colors;
-        }
-        if(!window.context.commonService.session.style.polygonAlphas) window.context.commonService.session.style.polygonAlphas = new Array(values.length).fill(1);
-        if (values.length > window.context.commonService.session.style.polygonAlphas.length) {
-            window.context.commonService.session.style.polygonAlphas = window.context.commonService.session.style.polygonAlphas.concat(
-            new Array(values.length - window.context.commonService.session.style.polygonAlphas.length).fill(0.5)
-          );
-        }
-        if (window.context.commonService.temp.style.polygonColorMap === undefined || window.context.commonService.temp.style.polygonColorMap.domain === undefined)
-        window.context.commonService.temp.style.polygonColorMap = d3
-            .scaleOrdinal(this.session.style['polygonColors'])
-            .domain(values);
-        if (window.context.commonService.temp.style.polygonAlphaMap === undefined || window.context.commonService.temp.style.polygonColorMap.domain === undefined)
-        window.context.commonService.temp.style.polygonAlphaMap = d3
-            .scaleOrdinal(window.context.commonService.session.style.polygonAlphas)
-            .domain(values);
-          
-        return aggregates;
-      };
-
+    /**
+     * I think this function allows users to import an svg image into MT. Not sure if it currently works.
+     * @param svg 
+     */
     processSVG(svg: any) {
         let nodes = [];
-
-        //debugger;
 
         const $xml: any = document.getElementById(svg);
         if ($xml.find('#edges').length) {
@@ -815,7 +834,12 @@ export class CommonService extends AppComponentBase implements OnInit {
         window.context.commonService.runHamsters();
     };
 
-    processJSON(json: any, extension: any) {
+    /**
+     * Loads JSON, MicrobeTrace, or HivTrace files into MicrobeTrace
+     * @param json 
+     * @param {string} extension file extension such as json, hivtrace, or microbetrace
+     */
+    processJSON(json: any, extension: string) {
         if(this.debugMode) {
             console.log("Trying to process JSON file");
         }
@@ -853,6 +877,9 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     };
 
+    /**
+     * Updates commonService.session with information from stashObject. Variables updated include data, files, state, style, and layout.
+     */
     applySession(stashObject: StashObjects) {
         //If anything here seems eccentric, assume it's to maintain compatibility with
         //session files from older versions of MicrobeTrace.
@@ -879,7 +906,6 @@ export class CommonService extends AppComponentBase implements OnInit {
                 session: stashObject
             }
         }
-
 
         const oldSession = stashObject.session;
         window.context.commonService.temp.matrix = [];
@@ -944,6 +970,10 @@ export class CommonService extends AppComponentBase implements OnInit {
         // $("#network-statistics-show").parent().trigger("click");
     };
 
+    /**
+     * XXXXX Review if function is necessary XXXXX
+     * Sets session.data.nodeFilteredValues = session.data.nodes
+     */
     processData() {
         let nodes = this.session.data.nodes;
         window.context.commonService.session.data.nodeFilteredValues = nodes;
@@ -961,6 +991,9 @@ export class CommonService extends AppComponentBase implements OnInit {
         // this.processSequence()
     }
 
+    /**
+     * Updates session.style with information from style object parameter, also updated Link Color Map, Node Color Map, and Polygon Color Map Functions
+     */
     applyStyle(style) {
         if(this.debugMode) {
             console.log('applying style: ', style);
@@ -1114,10 +1147,20 @@ export class CommonService extends AppComponentBase implements OnInit {
       window.context.commonService.updateStatistics();
     };
 
+    /**
+     * Decodes the given `x` using the utf-8 TextDecoder object.
+     * @param {ArrayBuffer} x - The data to be decoded.
+     * @returns {string} - The decoded string.
+     */
     decode(x) {
         return window.context.commonService.decoder.decode(x);
     };
 
+    /**
+     * Asynchronously parses fasta text on another thread to generate an array of nodes with id and seq
+     * @param {string} text fasta string
+     * @returns {Promise<Array>} A Promise that resolves to an array of nodes with id and seq.
+     */
     parseFASTA(text): Promise<any> {
       return new Promise(resolve => {
         let computer: WorkerModule = new WorkerModule();
@@ -1134,6 +1177,11 @@ export class CommonService extends AppComponentBase implements OnInit {
       });
     };
 
+    /**
+     * Asynchronously parses csv matrix file content and adds nodes and links to session.data
+     * @param {string} file content from csv matrix file
+     * @returns {Promise} A Promise that resolves to an object with {numberOfNodesAdded, numberOfLinksAdded, totalNumberofNodes, totalNumberofLinks}
+     */
     parseCSVMatrix(file) {
         return new Promise((resolve) => {
             let check = window.context.commonService.session.files.length > 1;
@@ -1194,39 +1242,51 @@ export class CommonService extends AppComponentBase implements OnInit {
           });
     };
 
-      auspiceCallBack(auspiceData) {
-        window.context.commonService.clearData();
-        window.context.commonService.session = window.context.commonService.sessionSkeleton();
-        window.context.commonService.session.meta.startTime = Date.now();
-        window.context.commonService.session.data.tree = auspiceData['tree'];
-        window.context.commonService.session.data.newickString = auspiceData['newick'];
-        let nodeCount = 0;
-        auspiceData['nodes'].forEach(node => {
-          if (!/NODE0*/.exec(node.id)) {
-            const nodeKeys = Object.keys(node);
-            nodeKeys.forEach( key => {
-              if (window.context.commonService.session.data.nodeFields.indexOf(key) === -1) {
-                window.context.commonService.session.data.nodeFields.push(key);
-              }
-              if (! node.hasOwnProperty('origin') ) {
-                node.origin = [];
-              }
-              nodeCount += window.context.commonService.addNode(node, true);
-            });
-          }
+    /**
+     * XXXXX function not currently called XXXXX
+     * @param auspiceData 
+     * @returns 
+     */
+    auspiceCallBack(auspiceData) {
+    window.context.commonService.clearData();
+    window.context.commonService.session = window.context.commonService.sessionSkeleton();
+    window.context.commonService.session.meta.startTime = Date.now();
+    window.context.commonService.session.data.tree = auspiceData['tree'];
+    window.context.commonService.session.data.newickString = auspiceData['newick'];
+    let nodeCount = 0;
+    auspiceData['nodes'].forEach(node => {
+        if (!/NODE0*/.exec(node.id)) {
+        const nodeKeys = Object.keys(node);
+        nodeKeys.forEach( key => {
+            if (window.context.commonService.session.data.nodeFields.indexOf(key) === -1) {
+            window.context.commonService.session.data.nodeFields.push(key);
+            }
+            if (! node.hasOwnProperty('origin') ) {
+            node.origin = [];
+            }
+            nodeCount += window.context.commonService.addNode(node, true);
         });
-        let linkCount = 0;
-        auspiceData['links'].forEach(link => {
-          linkCount += window.context.commonService.addLink(link, true);
-        });
-        window.context.commonService.runHamsters();
-        // this.showMessage(` - Parsed ${nodeCount} New Nodes and ${linkCount} new Links from Auspice file.`);
-        this.processData();
-        return nodeCount;
-      };
+        }
+    });
+    let linkCount = 0;
+    auspiceData['links'].forEach(link => {
+        linkCount += window.context.commonService.addLink(link, true);
+    });
+    window.context.commonService.runHamsters();
+    // this.showMessage(` - Parsed ${nodeCount} New Nodes and ${linkCount} new Links from Auspice file.`);
+    this.processData();
+    return nodeCount;
+    };
 
-
-    // ported from https://github.com/CDCgov/SeqSpawnR/blob/91d5857dbda5998839a002fbecae0f494dca960a/R/SequenceSpawner.R
+    /**
+     * Generates new sequences
+     * ported from https://github.com/CDCgov/SeqSpawnR/blob/91d5857dbda5998839a002fbecae0f494dca960a/R/SequenceSpawner.R
+     * @param {string} idPrefix - prefix to label generated sequences
+     * @param {number} count - number of sequences to generate
+     * @param {number} snps - number of snps to add to a new sequence is random value from 0 - snps
+     * @param {string} seed -reference sequence for generating new sequences 
+     * @returns list of objects representings seq, each seq objects has {id: string, seq: string}
+     */
     generateSeqs(idPrefix, count, snps, seed) {
         let start = Date.now();
         if (!count) count = 1000;
@@ -1524,6 +1584,11 @@ export class CommonService extends AppComponentBase implements OnInit {
         });
     };
 
+    /**
+     * Asychronously uses a worker to calculate snp or tn93 distances between each set of nodes and then add links
+     * @param subset an array of nodes
+     * @returns a promise that resolves to the number of new links added from this.addLink()
+     */
     computeLinks(subset): Promise<any> {
         return new Promise(resolve => {
 
@@ -1808,9 +1873,16 @@ export class CommonService extends AppComponentBase implements OnInit {
         window.context.commonService.finishUp();
     };
 
+    /**
+     * Sets node/link values to null when they aren't present. Check each field in nodeField and linkFields, and if the key includes 'date', sets any null or empty string
+     * value to the min date value found. Populates options for #search-field, #link-sort-variable, #node-color-variable, #link-color-variable, set value for #default-distance-metric.
+     * Next calls updateThresholdHistogram, tagClusters, setClusterVisibility, setLinkVisibilty, setNodeVisibility functions. Updates network statistic table.
+     * Launches default view.
+     */
     async finishUp() {
 
         clearTimeout(window.context.commonService.temp.messageTimeout);
+        // cycles through each node and link and if variable in nodeFields/linkFields not a key for the node/link, it is added with value of null
         ["node", "link"].forEach(v => {
             let n = window.context.commonService.session.data[v + "s"].length;
             let fields = window.context.commonService.session.data[v + "Fields"];
@@ -1829,29 +1901,32 @@ export class CommonService extends AppComponentBase implements OnInit {
         let fieldsToCheck = fields.filter(f => !nodeSkeleton.nodeFields.includes(f) && f != '_ambiguity' && f != '_diff'); 
         let n = window.context.commonService.session.data.nodes.length;
         let k = fieldsToCheck.length;
+        // for each field in fieldsToCheck (fieldsToCheck are nodeFields that are not default from dataSkeleton() and also not '_ambiguity' and not '_diff' )
         for (let j = 0; j < k; j++) {
-        let field = fieldsToCheck[j];
-        let times = [];
-        for (let i = 0; i < n; i++) {
-            let node = window.context.commonService.session.data.nodes[i];
-            if (node[field] != null) {
-            let time = moment(node[field]); 
-            if (time.isValid() && isNaN(node[field])) //#315
-                times.push(time.toDate());
+            let field = fieldsToCheck[j];
+            let times = [];
+            // for each node check if node[field] is valid time and if so push to times []
+            for (let i = 0; i < n; i++) {
+                let node = window.context.commonService.session.data.nodes[i];
+                if (node[field] != null) {
+                    let time = moment(node[field]); 
+                    if (time.isValid() && isNaN(node[field])) //#315
+                        times.push(time.toDate());
+                }
             }
-        }
 
-        // If column has the word date in it, date expected to be in column 
-        if (field.toLowerCase().includes("date")){
-    
-            let minTime = Math.min(...times);
-            let minTimeString = new Date(minTime).toString();
-            window.context.commonService.session.data.nodes.forEach(d => {
-            if (d[field] == null || (d[field] && String(d[field]).trim() == ""))  {
-                d[field] = minTimeString;
-            } 
-            });
-        }
+            // If column has the word date in it, date expected to be in column 
+            if (field.toLowerCase().includes("date")){
+        
+                let minTime = Math.min(...times);
+                let minTimeString = new Date(minTime).toString();
+                // for each node d, if d[field] == null or empty string ("", " ", "  " ...) set d[field] to minTimeString
+                window.context.commonService.session.data.nodes.forEach(d => {
+                    if (d[field] == null || (d[field] && String(d[field]).trim() == ""))  {
+                        d[field] = minTimeString;
+                    } 
+                });
+            }
         };
 
         // TODO:: See if this is needed
@@ -2054,20 +2129,11 @@ export class CommonService extends AppComponentBase implements OnInit {
         })
     }
 
-    setClusterVisibility(silent) {
-        let start = Date.now();
-        let min = window.context.commonService.session.style.widgets["cluster-minimum-size"];
-        let clusters = window.context.commonService.session.data.clusters;
-        let n = clusters.length;
-        for (let i = 0; i < n; i++) {
-            let cluster = clusters[i];
-            // console.log('cluster nodes ', cluster);
-            cluster.visible = cluster.nodes >= min;
-        }
-        if (!silent) $(document).trigger("cluster-visibility");//$window.trigger("cluster-visibility");
-        // console.log("Cluster Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
-    };
-
+    /**
+     * Gets a list of all visible node objects
+     * @param {boolean} [copy=false] - optional boolean value to set if you want to deepcopy the nodes
+     * @returns a list of node objects
+     */    
     getVisibleNodes(copy: any = false) {
         let nodes = window.context.commonService.session.data.nodeFilteredValues;
         let n = nodes.length;
@@ -2085,6 +2151,15 @@ export class CommonService extends AppComponentBase implements OnInit {
         return out;
     };
 
+    /**
+     * Gets a list of all visible links objects; Similar to twoD.getVlinks(), and twoD.getLLinks()
+     * 
+     * A link that has multiple origin is stored as a single object
+     * 
+     * Each link's source and target are strings of the node _id
+     * @param {boolean} [copy=false] - optional boolean value to set if you want to deepcopy the links
+     * @returns a array of link objects;
+     */    
     getVisibleLinks(copy: any = false) {
         let links = window.context.commonService.session.data.links;
         let n = links.length;
@@ -2104,6 +2179,11 @@ export class CommonService extends AppComponentBase implements OnInit {
         return out;
     };
 
+    /**
+     * Gets a list of all visible cluster objects
+     * @param {boolean} [copy=false] - optional boolean value to set if you want to deepcopy the cluster
+     * @returns a list of cluster objects
+     */
     getVisibleClusters(copy: any = false) {
         let clusters = window.context.commonService.session.data.clusters;
         if(this.debugMode) {
@@ -2126,6 +2206,10 @@ export class CommonService extends AppComponentBase implements OnInit {
         return out;
     };
 
+    /**
+     * updates the network statistics table with number of visible nodes, visible links, clusters, and selected links
+     * @returns undefined
+     */
     updateStatistics() {
 
         if ($("#network-statistics-hide").is(":checked")) return;
@@ -2164,6 +2248,10 @@ export class CommonService extends AppComponentBase implements OnInit {
         $("#numberOfDisjointComponents").text(clusterCount);
     };
 
+    /**
+	 * updates the functions that set the color and transparency of the nodes [commonService.temp.style.nodeColorMap() and commonService.temp.style.nodeAlphaMap()]
+	 * @returns {Object} where keys are the values to group (ie. subtype B,C,D...) and values are counts of the number of node for each key
+	 */
     createNodeColorMap() {
         let variable = window.context.commonService.session.style.widgets["node-color-variable"];
         if (variable == "None") {
@@ -2181,6 +2269,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             nodeColors = window.context.commonService.session.style.nodeColorsTable[variable] = [...window.context.commonService.session.style.nodeColors];
         }
 
+        // populates aggregates object where key is the value and the value is the count of number of nodes with that value
         let aggregates = {};
         let nodes = window.context.commonService.session.data.nodes;
         let n = nodes.length;
@@ -2194,8 +2283,8 @@ export class CommonService extends AppComponentBase implements OnInit {
                 aggregates[dv] = 1;
             }
         }
-        //debugger;
-
+        
+        // adds more colors and alpha values when number of node options > number of colors/alphas
         let values = Object.keys(aggregates);
         if (values.length > window.context.commonService.session.style.nodeColors.length) {
             let colors = [];
@@ -2291,6 +2380,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     }
 
+        // updates the function that defines which color and transparency value to use for each node
         window.context.commonService.temp.style.nodeColorMap = d3
             .scaleOrdinal(window.context.commonService.session.style.nodeColors)
             .domain(values);
@@ -2300,6 +2390,10 @@ export class CommonService extends AppComponentBase implements OnInit {
         return aggregates;
     };
 
+    /**
+	 * updates the functions that set the color and transparency of the links [commonService.temp.style.linkColorMap() and commonService.temp.style.linkAlphaMap()]
+	 * @returns {Object} where keys are the values to group (ie. origin A, origin B) and values are counts of the number of links for each key
+	 */
     createLinkColorMap() {
         let variable = window.context.commonService.session.style.widgets["link-color-variable"];
         if(this.debugMode) {
@@ -2370,6 +2464,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             }
         }
         let values = Object.keys(aggregates);
+        // adds more colors/alphas when they are less than length of values
         if (values.length > this.session.style.linkColors.length) {
             let colors = [];
             let cycles = Math.ceil(values.length / window.context.commonService.session.style.linkColors.length);
@@ -2453,6 +2548,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             window.context.commonService.temp.style.linkColorsKeys = [...values];
           }
 
+        // updates the function that defines which color and transparency value to use for each link
         window.context.commonService.temp.style.linkColorMap = d3
             .scaleOrdinal(window.context.commonService.session.style.linkColors)
             .domain(values);
@@ -2461,7 +2557,73 @@ export class CommonService extends AppComponentBase implements OnInit {
             .domain(values);
         return aggregates;
     };
+    
+    /**
+	 * updates the functions that set the color and transparency of the polygons [commonService.temp.style.polygonColorMap() and commonService.temp.style.polygonAlphaMap()]
+	 * @returns {Object} where keys are the values to group (ie. subtype B,C,D...) and values are counts of the number of node for each key
+	 */
+    createPolygonColorMap = () => {
+        if (!window.context.commonService.temp.polygonGroups || !window.context.commonService.session.style.widgets['polygons-color-show']) {
+            window.context.commonService.temp.style.polygonColorMap = () => window.context.commonService.session.style.widgets['polygon-color'];
+            return [];
+        }
+    
+        let aggregates = {};
+        let groups = window.context.commonService.temp.polygonGroups;
 
+        // groups array where key = value to group by; and values = [nodes] that share that value
+        // for group by subtype; keys are ['B', 'C', 'D']
+        groups.forEach(d => {
+            aggregates[d.key] = d.values.length;
+        });
+
+        let values = Object.keys(aggregates);
+    
+        if (window.context.commonService.session.style.widgets['polygon-color-table-counts-sort'] == 'ASC')
+            values.sort(function(a, b) { return aggregates[a] - aggregates[b] });
+        else if (window.context.commonService.session.style.widgets['polygon-color-table-counts-sort'] == 'DESC')
+            values.sort(function(a, b) { return aggregates[b] - aggregates[a] });
+        if (window.context.commonService.session.style.widgets['polygon-color-table-name-sort'] == 'ASC')
+            values.sort(function(a, b) { return a as any - (b as any) });
+        else if (window.context.commonService.session.style.widgets['polygon-color-table-name-sort'] == 'DESC')
+            values.sort(function(a, b) { return b as any - (a as any)});
+    
+        // adds more colors when number of polygons > number of colors
+        if (values.length > window.context.commonService.session.style.polygonColors.length) {
+            let colors = [];
+            let m = Math.ceil(values.length / window.context.commonService.session.style.polygonColors.length);
+            while (m-- > 0) {
+            colors = colors.concat(window.context.commonService.session.style.polygonColors);
+            }
+            window.context.commonService.session.style.polygonColors = colors;
+        }
+
+        // adds more alpha values when number of polygons > number of alpha values
+        // alpha value are used for transparency
+        if(!window.context.commonService.session.style.polygonAlphas) window.context.commonService.session.style.polygonAlphas = new Array(values.length).fill(1);
+        if (values.length > window.context.commonService.session.style.polygonAlphas.length) {
+            window.context.commonService.session.style.polygonAlphas = window.context.commonService.session.style.polygonAlphas.concat(
+            new Array(values.length - window.context.commonService.session.style.polygonAlphas.length).fill(0.5)
+            );
+        }
+        if (window.context.commonService.temp.style.polygonColorMap === undefined || window.context.commonService.temp.style.polygonColorMap.domain === undefined)
+        
+        // updates the function that defines which color and transparency value to use for each polygon
+        window.context.commonService.temp.style.polygonColorMap = d3
+            .scaleOrdinal(this.session.style['polygonColors'])
+            .domain(values);
+        if (window.context.commonService.temp.style.polygonAlphaMap === undefined || window.context.commonService.temp.style.polygonColorMap.domain === undefined)
+        window.context.commonService.temp.style.polygonAlphaMap = d3
+            .scaleOrdinal(window.context.commonService.session.style.polygonAlphas)
+            .domain(values);
+            
+        return aggregates;
+    };
+
+    /**
+     * Set commonService.session and commonService.temp back to default values; However keeps previous values for commonService.temp.mapData, commonService.session.files,
+     * and commonService.session.meta
+     */
     reset() {
         //debugger;
 
@@ -2489,6 +2651,10 @@ export class CommonService extends AppComponentBase implements OnInit {
         //this.launchView("files");
     };
 
+    /**
+     * Sets the following objects back to default values: commonService.temp.matrix, commonService.temp.tree, commonService.session.data, commonService.session.network,
+     * commonService.session.style.widgets. Filters 'Demo_outbreak_NodeList.csv' from files
+     */
     resetData() {
 
         const newTempSkeleton = this.tempSkeleton();
@@ -2507,6 +2673,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         window.context.commonService.session.meta = meta;
         window.context.commonService.session.style.widgets = this.defaultWidgets();
 
+        // default values are 'tn93' and 0.015, so not sure if this if statement is every true
         if (window.context.commonService.session.style.widgets['default-distance-metric'] !== 'snps' &&
           window.context.commonService.session.style.widgets['link-threshold'] >= 1) {
           window.context.commonService.visuals.microbeTrace.SelectedLinkThresholdVariable = window.context.commonService.session.style.widgets['link-threshold'];
@@ -2632,6 +2799,12 @@ export class CommonService extends AppComponentBase implements OnInit {
         });
     };
 
+    /** 
+     * XXXXX Not currently used; not sure future use XXXXX
+     * Predicts whether white or black is most contrasting color
+     * @param {string} hexcolor - hexcode representation of a color (ie. '#1e9d00')
+     * @returns {string} - for hex representation of color (white or black)
+     */
     contrastColor(hexcolor) {
         let r = parseInt(hexcolor.substr(1, 2), 16);
         let g = parseInt(hexcolor.substr(3, 2), 16);
@@ -2640,6 +2813,12 @@ export class CommonService extends AppComponentBase implements OnInit {
         return yiq >= 128000 ? "#000000" : "#ffffff";
     };
 
+    /**
+    *  XXXXX Not currently being executed. It's in the codebase but hidden behind comments XXXXX
+    *	Returns the last element of an array
+    * @param ra - an array (potentially could take other datatypes as well)
+    * @returns {any} the last element in an array
+    */
     peek(ra) {
         return ra[ra.length - 1];
     };
@@ -2846,8 +3025,12 @@ export class CommonService extends AppComponentBase implements OnInit {
     //    }
     //};
 
-
-    unparseSVG(svgNode) {
+    /**
+     * Extracts the SVG from the DOM with CSS included. Used during exporting/saving a view as a SVG
+     * @param {HTMLElement} svgNode - HTML element in document such as document.getElementById('network') or document.getElementById('tidytree')
+     * @returns {string} String of SVG code for the element with CSS ie. <svg ...>
+     */
+    unparseSVG(svgNode): string {
         svgNode.setAttribute("xlink", "http://www.w3.org/1999/xlink");
         let selectorTextArr = [];
 
@@ -2907,6 +3090,10 @@ export class CommonService extends AppComponentBase implements OnInit {
         return serializer.serializeToString(svgNode);
     };
 
+    /**
+     * XXXXX currently not in use XXXXX
+     * @returns 
+     */
     exportHIVTRACE() {
         let links = window.context.commonService.session.data.links.filter(l => l.visible);
         let geneticLinks = links.filter(l => l.origin.includes("Genetic Distance"));
@@ -2993,12 +3180,21 @@ export class CommonService extends AppComponentBase implements OnInit {
         );
     };
 
-    size(thing) {
+    /**
+     * Gives the size of a variable in MB
+     * @param thing 
+     * @returns {string} Size of thing in MB as a string ('4MB')
+     */
+    size(thing): string {
         if (!thing) thing = this.session;
         return (JSON.stringify(thing).length / 1024 / 1024).toLocaleString() + 'MB';
     };
 
-    titleize(title) {
+    /**
+     * Converts commonly used titles to a standard output; for less common titles nothing is changed
+     * @param {string} title 
+     */
+    titleize(title: string): string {
         let small = title.toLowerCase().replace(/_/g, " ");
         if (small == "null") return "(Empty)";
         if (small == "id" || small == " id") return "ID";
@@ -3012,6 +3208,11 @@ export class CommonService extends AppComponentBase implements OnInit {
         return small.replace(/(?:^|\s|-)\S/g, c => c.toUpperCase());
     };
 
+    /** 
+     * Set up the clusters; new clusters are created as needed; node.cluster is set to cluster id.
+     * When a node is found that isn't in tempnodes, a cluster is created and a depth-first search is preformed.
+     * During DFS, nodes are added to tempnodes, the node.cluster is assigned and information in cluster is updated
+     */
     tagClusters(): Promise<void> {
         return new Promise<void>(resolve => {
             let start = Date.now();
@@ -3024,9 +3225,16 @@ export class CommonService extends AppComponentBase implements OnInit {
             let tempnodes = window.context.commonService.temp.nodes = [];
             let lsv = window.context.commonService.session.style.widgets["link-sort-variable"];
 
+            /**
+             * A function that performs a depth-first search.
+             * @param id - The ID of the node to start the search from.
+             * @param cluster - The cluster to search in.
+             * @returns {void}
+             */
             let DFS = (id, cluster) => {
+                // if id is found in tempNode exit function
                 if (tempnodes.indexOf(id) >= 0) return;
-                // console.log('past return, temp');
+                // else add it, and continue DFS
                 tempnodes.push(id);
                 let node: any = {};
                 for (let i = 0; i < numNodes; i++) {
@@ -3052,16 +3260,18 @@ export class CommonService extends AppComponentBase implements OnInit {
                     cluster.links++;
                     cluster.sum_distances += l[lsv];
                     if (tempnodes.length == numNodes) return;
+                    // recursively call DFS on both source and target
                     DFS(l.source, cluster);
                     DFS(l.target, cluster);
                 }
-            };
+            }; // DFS function close
 
             for (let k = 0; k < numNodes; k++) {
                 let d = nodes[k];
                 d.degree = 0;
                 let id = d._id;
 
+                // if id isn't in temp nodes, add new cluster and do DFS
                 if (tempnodes.indexOf(id) == -1) {
 
                     let cluster = {
@@ -3119,8 +3329,11 @@ export class CommonService extends AppComponentBase implements OnInit {
         });
     };
 
+    /**
+     * Sets node visibility to true when it cluster is visible
+     * @param {boolean} silent - whether to trigger node-visibility event (True doesn't trigger, False does)
+     */
     setNodeVisibility(silent) {
-
         let start = Date.now();
         let dateField = window.context.commonService.session.style.widgets["timeline-date-field"];
         let nodes = window.context.commonService.session.data.nodes,
@@ -3129,17 +3342,17 @@ export class CommonService extends AppComponentBase implements OnInit {
         for (let i = 0; i < n; i++) {
             let node = nodes[i];
 
-            if (node._id === "NIMR_NG894803") {
-                console.log('setting node vis: ', _.cloneDeep(node));
-            }
+            //if (node._id === "NIMR_NG894803") {
+            //    console.log('setting node vis: ', _.cloneDeep(node));
+            //}
 
             node.visible = true;
             let cluster = clusters[node.cluster];
 
 
-            if (node._id === "NIMR_NG894803") {
-                console.log('setting node cluster: ', _.cloneDeep(cluster));
-            }
+            //if (node._id === "NIMR_NG894803") {
+            //    console.log('setting node cluster: ', _.cloneDeep(cluster));
+            //}
 
             if (cluster) {
                 // TODO: uncomment if something breaks since this was defaulted to visible
@@ -3166,32 +3379,12 @@ export class CommonService extends AppComponentBase implements OnInit {
        
     };
 
-    updatePinNodes(copy) {
-        let nodes =  window.context.commonService.session.network.nodes;
-        let n = nodes.length;
-        for (let i = 0; i < n; i++) {
-            let node = nodes[i]; 
-            if (copy && node.fixed) node.preFixed = true;
-            if (!copy &&  window.context.commonService.session.network.timelineNodes[i].preFixed) {
-                node.fixed = true;
-                node.fx = node.x;
-                node.fy = node.y;
-            }
-        }
-    }
-
-    getNetworkNodes = () => {
-        let nodes =  window.context.commonService.session.network.nodes;
-        let n = nodes.length;
-        let out = [];
-          for (let i = 0; i < n; i++) {
-            let node = nodes[i];
-            out.push(JSON.parse(JSON.stringify(node)));
-          }
-        return out;
-      };
-
-    setLinkVisibility(silent, checkCluster = true) {
+    /**
+     * Sets link visibility based on distance, link-threshold, nearestNeighbor setting, etc...
+     * @param {boolean} silent - whether to trigger link-visibility event (True doesn't trigger, False does)
+     * @param {boolean} [checkCluster=true] - defaults to true; whether to include cluster.visibility when setting link.visibility
+     */
+    setLinkVisibility(silent: boolean, checkCluster = true) {
         let start = Date.now();
         let metric = window.context.commonService.session.style.widgets["link-sort-variable"],
             threshold = window.context.commonService.session.style.widgets["link-threshold"],
@@ -3246,9 +3439,10 @@ export class CommonService extends AppComponentBase implements OnInit {
                         }).length > 0
                     ) {
 
-                        if(link.index === 154630) {
-                            console.log('session viz 2');
-                        }                        // Set visible and origin to only show the file outside of Distance
+                        //if(link.index === 154630) {
+                        //    console.log('session viz 2');
+                        //}                        
+                        // Set visible and origin to only show the file outside of Distance
                         link.origin = link.origin.filter(fileName => {
                         const hasAuspice = /[Aa]uspice/.test(fileName);
                         const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
@@ -3295,6 +3489,54 @@ export class CommonService extends AppComponentBase implements OnInit {
         }
     };
 
+    /**
+     * Set the visibility of each cluster based on if cluster size is greater than cluster-minimum-size
+     * @param {boolean} silent whether to trigger cluster-visibility event (True doesn't trigger, False does)
+     */
+    setClusterVisibility(silent: boolean) {
+        //let start = Date.now();
+        let min = window.context.commonService.session.style.widgets["cluster-minimum-size"];
+        let clusters = window.context.commonService.session.data.clusters;
+        let n = clusters.length;
+        for (let i = 0; i < n; i++) {
+            let cluster = clusters[i];
+            // console.log('cluster nodes ', cluster);
+            cluster.visible = cluster.nodes >= min;
+        }
+        if (!silent) $(document).trigger("cluster-visibility");//$window.trigger("cluster-visibility");
+        // console.log("Cluster Visibility Setting time:", (Date.now() - start).toLocaleString(), "ms");
+    };
+
+
+    updatePinNodes(copy: boolean) {
+        let nodes =  window.context.commonService.session.network.nodes;
+        let n = nodes.length;
+        for (let i = 0; i < n; i++) {
+            let node = nodes[i]; 
+            if (copy && node.fixed) node.preFixed = true;
+            if (!copy &&  window.context.commonService.session.network.timelineNodes[i].preFixed) {
+                node.fixed = true;
+                node.fx = node.x;
+                node.fy = node.y;
+            }
+        }
+    }
+
+    /**
+     * @returns {any[]} Returns an array with a copy of each node object
+     */
+    getNetworkNodes = () => {
+        let nodes =  window.context.commonService.session.network.nodes;
+        let n = nodes.length;
+        let out = [];
+          for (let i = 0; i < n; i++) {
+            let node = nodes[i];
+            out.push(JSON.parse(JSON.stringify(node)));
+          }
+        return out;
+      };
+
+
     updateNetwork() {
         window.context.commonService.setLinkVisibility(true);
         window.context.commonService.tagClusters().then(() => {
@@ -3307,9 +3549,14 @@ export class CommonService extends AppComponentBase implements OnInit {
         });
     };
 
+    /**
+     * Creates and updates the threshold histogram that is found in global settings.
+     * Clicking on the histogram will update the link threshold
+     * @param [histogram] - optional parameter
+     */
     updateThresholdHistogram(histogram?: any) {
 
-        let width = 280,
+        let width = 260,
         height = 48,
         svg = null;
 
@@ -3324,6 +3571,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         .attr("width", width)
         .attr("height", height);
 
+        // add all link distances to data, find max and min distances
         let lsv = this.session.style.widgets["link-sort-variable"],
             n = this.session.data.links.length,
             max = Number.MIN_SAFE_INTEGER,
@@ -3368,6 +3616,9 @@ export class CommonService extends AppComponentBase implements OnInit {
             .attr("width", 6)
             .attr("height", d => height - y(d.length));
 
+        /**
+         * Uses the position on the histogram to set the link thresehold value
+         */
         function updateThreshold() {
             let xc = d3.mouse(svg.node())[0];
             let decimalPlaces = (window.context.commonService.session.style.widgets['default-distance-metric'].toLowerCase() === "tn93") ? 3 : 0;
