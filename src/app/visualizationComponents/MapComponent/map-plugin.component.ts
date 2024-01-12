@@ -1182,41 +1182,66 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
 
     drawLinks() {
         this.layers.removeLinks();
-
+    
         if (!this.commonService.session.style.widgets['map-link-show']) return;
-
+    
         var lcv = this.commonService.session.style.widgets['link-color-variable'];
         var opacity = 1 - this.commonService.session.style.widgets['map-link-transparency'];
         var links = this.commonService.getVisibleLinks();
-
+    
         var features: Layer[] = [];
-
+    
         links.forEach((d) => {
             if (!d.visible) return;
             var source = this.nodes.find(node => node._id == d.source);
             var target = this.nodes.find(node => node._id == d.target);
-            if (source && target) {
-                if (source._jlat && source._jlon && target._jlat && target._jlon) {
+    
+            if (source && target && source._jlat && source._jlon && target._jlat && target._jlon) {
+                // Handle multiple origins
+                if (d.origin && d.origin.length > 1) {
+                    let color1 = this.commonService.temp.style.linkColorMap(d.origin[0]);
+                    let color2 = this.commonService.temp.style.linkColorMap(d.origin[1]);
+    
+                    let dashPattern1 = '10, 10';
+                    let dashPattern2 = '0, 10, 10, 0';
+    
+                    let polyline1 = L.polyline([[source._jlat, source._jlon], [target._jlat, target._jlon]], {
+                        color: color1,
+                        dashArray: dashPattern1,
+                        opacity: opacity
+                    });
+    
+                    let polyline2 = L.polyline([[source._jlat, source._jlon], [target._jlat, target._jlon]], {
+                        color: color2,
+                        dashArray: dashPattern2,
+                        opacity: opacity
+                    });
+    
+                    features.push(polyline1);
+                    features.push(polyline2);
+                } else {
+                    // Single origin handling
                     const connectorLine: PolyLineWithData = L.polyline([
                         [source._jlat, source._jlon],
                         [target._jlat, target._jlon]
                     ], {
-                        color: lcv == "None" ?
+                        color: lcv === "None" ?
                             this.commonService.session.style.widgets['link-color'] :
                             this.commonService.temp.style.linkColorMap(d[lcv]),
-                        opacity: opacity,
+                        opacity: opacity
                     });
-
+    
                     connectorLine.data = d;
-
+    
                     features.push(connectorLine);
                 }
             }
         });
-
+    
         this.layers.links = featureGroup(features);
         this.lmap.addLayer(this.layers.links);
     }
+    
 
     showNodeTooltip(e) {
         var data = e.target.data;
