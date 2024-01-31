@@ -12,6 +12,7 @@ import { PhylogeneticComponent } from './visualizationComponents/PhylogeneticCom
 import { TableComponent } from './visualizationComponents/TableComponent/table-plugin-component';
 import { TwoDComponent } from './visualizationComponents/TwoDComponent/twoD-plugin.component';
 import { EventEmitterService } from '@shared/utils/event-emitter.service';
+import { AlignmentViewComponent } from './visualizationComponents/AlignmentViewComponent/alignment-view-plugin-component';
 
 @Component({
   selector: 'app-golden-layout-host',
@@ -62,6 +63,7 @@ export class GoldenLayoutHostComponent implements OnDestroy {
     this.goldenLayoutComponentService.registerComponentType(TableComponent.componentTypeName, TableComponent);
     this.goldenLayoutComponentService.registerComponentType(MapComponent.componentTypeName, MapComponent);
     this.goldenLayoutComponentService.registerComponentType(PhylogeneticComponent.componentTypeName, PhylogeneticComponent);
+    this.goldenLayoutComponentService.registerComponentType(AlignmentViewComponent.componentTypeName, AlignmentViewComponent);
 
   }
 

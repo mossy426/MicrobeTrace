@@ -1,0 +1,147 @@
+:host {
+    position: absolute;
+    overflow: hidden;
+    z-index: 1 !important;
+    padding: 1px; 
+    //background-color: rgb(168, 125, 211, .2);
+  }
+
+.msa-viewer-container {
+  position: relative;
+  top: 50px;
+  left: 5px;
+  padding-right: 5px;
+}
+
+#msa-viewer {
+  //width: 2500px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  display: flex;
+  gap: 5px;
+}
+
+//.right {  
+  //overflow-x: scroll;
+  //width: 1180px;}
+
+/*.right::-webkit-scrollbar {
+  background-color: #95e1e4;
+  position: relative;
+  top: 0px;
+}*/
+
+.canvasLabels {
+  //direction: rtl;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#searchHighlight {
+  width: 1500px;
+  //display: none;
+  position: absolute;
+  height: 10px;
+  top: 0px;
+  left: 0px;
+  border: red 2px dotted;
+}
+
+#searchHighlightHolder{
+  width: 250px;
+}
+
+.triangle {
+  width: 10px;
+  position: relative;
+  left: 42px;
+  //height: 10px;
+  border-left: 8px transparent solid;
+  border-right: 8px transparent solid;
+  border-bottom: 16px gray solid;
+}
+
+#tooltipHolder {
+  display: none;
+}
+
+#tooltip {
+  background-color: white; 
+  padding: 5px;
+  display: block;
+}
+
+.canvasHolder {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+#alignmentTop {
+  overflow-x: auto;
+  height: 170px;
+}
+
+.alignRow {
+  display: flex;
+}
+
+.alignName {
+  width: 200px;
+  margin-right: 5px;
+  flex: none;
+}
+
+#miniMap canvas {
+  width: 300px;
+}
+
+.customColorSchemeSelection div {
+  justify-content: space-around;
+}
+
+.customColorSchemeSelection label {
+  display: flex; 
+  align-items: center;
+  gap:10px;
+}
+
+.customColorSchemeSelection input {
+  width:46.63px
+}
+
+
+.nt {
+  flex: none;
+}
+
+.nt_A {
+  background-color: rgb(#ccff00, .8);
+}
+
+.nt_C {
+  background-color: rgb(#ffff00, .8);
+}
+
+.nt_G {
+  background-color: rgb(#ff9900, .8);
+}
+
+.nt_T {
+  background-color: rgb(#ff6600, .8);
+}
+
+// may be used in magnification
+.img-magnifier-container {
+  position:relative;
+}
+
+// may be used in magnification
+::ng-deep .img-magnifier-glass {
+  position: absolute;
+  border: 3px solid #000;
+  cursor: none;
+  /*Set the size of the magnifier glass:*/
+  width: 400px;
+  height: 10px;
+}

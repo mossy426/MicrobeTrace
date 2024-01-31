@@ -6,6 +6,7 @@ import { TwoDComponent } from "./visualizationComponents/TwoDComponent/twoD-plug
 import { MapComponent } from "./visualizationComponents/MapComponent/map-plugin.component";
 import { TableComponent } from "./visualizationComponents/TableComponent/table-plugin-component";
 import { PhylogeneticComponent } from "./visualizationComponents/PhylogeneticComponent/phylogenetic-plugin.component";
+import { AlignmentViewComponent } from "./visualizationComponents/AlignmentViewComponent/alignment-view-plugin-component";
 
 @Injectable({
     providedIn: 'root',
@@ -17,4 +18,5 @@ export class MicrobeTraceNextVisuals {
     public gisMap: MapComponent;
     public tableComp: TableComponent;
     public phylogenetic: PhylogeneticComponent;
+    public alignment: AlignmentViewComponent
 }
