@@ -124,6 +124,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     // this.title = this.container.title;
     this.id = this.container.parent.id;
 
+    // sets container.stateRequestEvent to a function that returns "state is here"
     this.container.stateRequestEvent = () => this.handleContainerStateRequestEvent();
     
     const state = this.container.initialState;
@@ -163,6 +164,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
         });    
     }  
 
+    // TODO: the rest of ngOnInit can be revised to take advantage of angular features
     $('.alignConfigRow').hide();
 
     $('#align-sw').parent().on('click', () => {
@@ -478,9 +480,10 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     // console.log('session: ', this.commonService?.session?.files, this.commonService.session.files.length);
   }
 
-  public populateTable() {
-
-    
+  /**
+   * For each file in commonService.session.files, addToTable(file)
+   */
+  public populateTable() {  
     const fileTableRows = $(".file-table-row");
     fileTableRows.slideUp(() => fileTableRows.remove());
 
@@ -495,7 +498,11 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
   }
   
-
+  /**
+   * Toggles the value of multiple variables associated with sequence setting audit including:
+   * SelectedAuditEmptyVariable, SelectedAuditGapsVariable, SelectedAuditRNAVariable, 
+   * SelectedAuditAminoAcidsVariable, SelectedAuditCIGARVariable, SelectedAuditMalformedVariable
+   */
   toglleAll() {
 
     this.SelectedAuditEmptyVariable = !this.SelectedAuditEmptyVariable;
@@ -506,30 +513,42 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     this.SelectedAuditMalformedVariable = !this.SelectedAuditMalformedVariable;
   }
 
+  /**
+   * XXXXX
+   */
   run() {
 
   }
 
-
-
-
+  /**
+   * Updates isDataAvaible variable based on if any nodes under commonService.session.data
+   * 
+   * XXXXX not used XXXXX
+   */
   InitView() {
     this.IsDataAvailable = (this.visuals.microbeTrace.commonService.session.data.nodes.length === 0 ? false : true);
   }
 
+  /**
+   * @returns {string} "state is here"
+   */
   handleContainerStateRequestEvent(): string | undefined {
     return "state is here";
   }
 
-
+  /**
+   * Updated default-view widget and localStorageService
+   */
   changeDefaultView(e) {
-
     const v = e.target.selectedOptions[0].innerText;
     this.visuals.microbeTrace.commonService.localStorageService.setItem('default-view', v);
     this.visuals.microbeTrace.commonService.session.style.widgets['default-view'] = v;
     this.visuals.microbeTrace.commonService.session.layout.content[0].type = v;
   }
 
+  /**
+   * Opens/Closes the settings window
+   */
   openSettings() {
     this.displayFileSettings = !this.displayFileSettings;
   }
@@ -555,11 +574,18 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
   }
 
-
+  /**
+   * Opens/Closes Sequence Controls modal/dialog box
+   */
   showSequenceSettings() {
     this.displaySequenceSettings = !this.displaySequenceSettings;
   }
 
+  /**
+   * Sets commonService.session.messages and this.messages to empty arrays []. Clears and closes loading-information modal.
+   * Emits a LoadDefaultVisualizationEvent.
+   * @param e 
+   */
   loadDefaultVisualization(e: string) {
 
     setTimeout(() => {
@@ -576,13 +602,23 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     this.LoadDefaultVisualizationEvent.emit(e);
   }
 
-  showMessage(msg) {
+  /**
+   * Adds msg to this.messages and commonService.session.messages. 
+   * Updates messages on loading-information modal based on commonService.session.message
+   * @param {string} msg message to add to messages arrays 
+   */
+  showMessage(msg: string) {
 
     this.messages.push(msg);
     this.visuals.microbeTrace.commonService.session.messages.push(msg);
     $('#loading-information').html(this.visuals.microbeTrace.commonService.session.messages.join('<br>'));
   }
 
+  /**
+   * Resets the value of session.data, temp.trees if previously launched (or more if not previously launched). Retains the values of following 
+   * widgets: link-threshold, default-distance-metric, ambiguity-resolution-strategy, and default view.
+   * Calls creatLaunchSequences to process the data files loaded.
+   */
   launchClick() {
 
     const thresholdOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"];
@@ -594,7 +630,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     if( this.commonService.session.network.launched) {
       this.visuals.microbeTrace.commonService.session.data = this.visuals.microbeTrace.commonService.sessionSkeleton().data;
       const newTempSkeleton = this.visuals.microbeTrace.commonService.tempSkeleton();
-      this.visuals.microbeTrace.commonService.temp.tress = newTempSkeleton.trees;
+      this.visuals.microbeTrace.commonService.temp.trees = newTempSkeleton.trees;
       $('#launch').text('Update');
     }
     else if (!this.commonService.session.network.launched) {
@@ -620,7 +656,10 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     }, 1000);
   }
 
-
+  /**
+   * Processes all files in following order (auspice, newick, matrix, link, node, fasta).
+   * Adds/Updates nodes and links. After processing all files, calls processData.
+   */
   creatLaunchSequences() {
     this.visuals.microbeTrace.commonService.session.meta.startTime = Date.now();
     $('#launch').prop('disabled', true);
@@ -635,6 +674,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     const nFiles = this.visuals.microbeTrace.commonService.session.files.length - 1;
     const check = nFiles > 0;
 
+    // sorts files based on hierarchy
     const hierarchy = ['auspice', 'newick', 'matrix', 'link', 'node', 'fasta'];
     this.visuals.microbeTrace.commonService.session.files.sort((a, b) => hierarchy.indexOf(a.format) - hierarchy.indexOf(b.format));
 
@@ -727,10 +767,15 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
         let sources = [];
         let targets = [];
 
+        /**
+         * Processes and then adds link. updates value of l
+         * @param {object} link 
+         */
         let forEachLink = link => {
           const keys = Object.keys(link);
           const n = keys.length;
           let safeLink = {};
+          // for each key in link object
           for (let i = 0; i < n; i++) {
             let key = this.visuals.microbeTrace.commonService.filterXSS(keys[i]);
             // console.log('key is: ',key);
@@ -819,6 +864,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
           let n = 0, t = 0;
           let nodeIDs = [];
           const k = data.length;
+          // for each line or excel file, check if node exist, if not add it
           for (let i = 0; i < k; i++) {
             const l = data[i];
             const f1 = l[file.field1];
@@ -863,6 +909,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
             let newNodes = 0, totalNodes = 0;
             const n = data.length;
             let nodeIDs = [];
+            // for each object in json, check if node exist, if not add it
             for (let i = 0; i < n; i++) {
 
               const l = data[i];
@@ -1125,6 +1172,10 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
   }
 
+  /**
+   * Adds links for nodes with no edge?
+   * Then calls processSequence
+   */
   processData() {
     let nodes = this.visuals.microbeTrace.commonService.session.data.nodes;
     if(this.commonService.debugMode) {
@@ -1145,6 +1196,9 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     this.processSequence()
   }
 
+  /**
+   * If sequences are present, processes them by aligning if needed, computing consensus, consensus distances, ambiguity counts, and then links
+   */
   async processSequence() {
 
     if (!this.visuals.microbeTrace.commonService.session.meta.anySequences) return this.visuals.microbeTrace.commonService.runHamsters();
@@ -1200,6 +1254,10 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
   };
 
+  /**
+   * XXXXX not currently used; if implemented in future switch open parameter to boolean XXXXX
+   * @param open 0 or 1
+   */
   accordianToggle( open : Number) {
 
     if(open){
@@ -1210,10 +1268,11 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
   }
 
-
-
+  /**
+   * When a new file/files are add, each one if processed by processFile
+   * @param files 
+   */
   processFiles(files?: FileList) {
-
     this.isLoadingFiles = true;
 
     if (Array.from(files).length > 0) {
@@ -1229,14 +1288,18 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     setTimeout(() => {
       this.isLoadingFiles = false;
 
-  }, 2000);
-
-
+    }, 2000);
   };
 
+  /**
+   * Gets file extension and calls appropriate function to load info into MicrobeTrace.
+   * For example, for json files commonService.processJSON is used.
+   * Adds file to commonService.session.files and adds file to table with this.addToTable
+   * 
+   * XXXXX Currrently unable to load zip files XXXXX
+   * @returns 
+   */
   processFile(rawfile?) {
-
-
     if(!rawfile) {
       rawfile = this.visuals.microbeTrace.commonService.session.files[0];
     }
@@ -1306,6 +1369,10 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     });
   }
 
+  /**
+   * Removes all files from commonService.session.files, sets this.nodeIds and this.edgeIds to empty arrays [].
+   * Calls nodeEdgeCheck
+   */
   removeAllFiles() {
     const fileTableRows = $(".file-table-row");
     fileTableRows.slideUp(() => fileTableRows.remove());
@@ -1317,6 +1384,9 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     this.nodeEdgeCheck();
   }
 
+  /**
+   * Gets information from file about extension, file type, and header and uses that information to addTableTile for file-table
+   */
   addToTable(file) {
     if(this.commonService.debugMode) {
       console.log(file);
@@ -1384,6 +1454,9 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
     //For the love of all that's good...
     //TODO: Rewrite this as a [Web Component](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements) or [something](https://reactjs.org/docs/react-component.html) or something.
+    /**
+     * Adds a file-table-row for the file.
+     */
     function addTableTile(headers, context) {
 
       console.log(headers);
@@ -1507,6 +1580,9 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     }
   };
 
+  /**
+   * Updates commonService.session.files info, such as field1, field2 ...etc, based on value user selects
+   */
   updateMetadata(file) {
     $('#file-panel .file-table-row').each((i, el) => {
       const $el = $(el);
@@ -1524,6 +1600,9 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
   }
 
+  /**
+   * Populates this.nodeIds
+   */
   loadNodes(fileName: any, output: any, isJson: boolean) {
     if (isJson) {
       const data: any[] = output;
@@ -1554,6 +1633,9 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     }
   }
 
+  /**
+   * Populated this.edgeIds
+   */
   loadEdges(fileName: any, output: any, isJson: boolean) {
     if (isJson) {
       const data: any[] = output;
@@ -1599,12 +1681,18 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
   }
 
+  /**
+   * Updates this.uniqueEdgeNodes and this.uniqueNodes
+   */
   nodeEdgeCheck() {
+    // populated with a string[] of unique node ids
     let allNodesListNodes: string[] = [];
     this.nodeIds.forEach(x => {
       x.ids.forEach(y => allNodesListNodes.push(y));
     });
     allNodesListNodes = _.uniq(allNodesListNodes);
+
+    // populated with a string[] of unique node ids that have a link/edge
     let allEdgeListNodes: string[] = [];
     this.edgeIds.forEach(x => x.ids.forEach(y => {
       allEdgeListNodes.push(y.source);
@@ -1616,12 +1704,22 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     this.uniqueNodes = allNodesListNodes.filter(x => x && !this.uniqueEdgeNodes.some(y=>y==x));
   }
 
+  /**
+   * Removes elements of this.nodeIds and this.edgeIds where the fileName == fileName and then calls nodeEdgeCheck to update uniqueEdgeNodes and uniqueNodes
+   * @param fileName 
+   */
   removeFile(fileName) {
     this.nodeIds = this.nodeIds.filter(x => x.fileName != fileName);
     this.edgeIds = this.edgeIds.filter(x => x.fileName != fileName);
     this.nodeEdgeCheck();
   }
 
+  /**
+   * Async function that reads sequencing data from fasta files
+   * 
+   * XXXXX Not currently working with sequences from csv file XXXXX
+   * @returns An array of sequencing objects [{id, seq},]
+   */
   async readFastas() {
     const fastas = this.visuals.microbeTrace.commonService.session.files.filter(f => this.visuals.microbeTrace.commonService.includes(f.extension, 'fas'));
     const nodeCSVsWithSeqs = this.visuals.microbeTrace.commonService.session.files.filter(f => f.format === "node" && f.field2 != "None" && f.field2 != "");
@@ -1657,6 +1755,11 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
   }
 
 
+  /**
+   * Updates SelectedDefaultDistanceThresholdVariable, microbeTrace.SelectedLinkThresholdVariable, and link-threshold widget values.
+   * Then calls microbeTrace.onLinkThresholdChanged clusters, nodes, and links as well as visualizations and statistics
+   * @param {string} e string representation of link threshold such as '16'
+   */
   onLinkThresholdChange = (e) => {
     if(this.commonService.debugMode) {
       console.log('changing link threshold');
@@ -1667,6 +1770,11 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     this.visuals.microbeTrace.onLinkThresholdChanged();
   }
 
+  /**
+   * Updates this.SelectedDefaultDistanceMetricVariable, microbeTrace.SelectedDistanceMetricVariable, and default-distance-metric widget.
+   * Updates link-threshold variable to default values and updates clusters, nodes, links as well as visualizations and statitistics
+   * @param {string} e such as 'snps' 
+   */
   onDistanceMetricChange = (e) => {
     if(this.commonService.debugMode) {
       console.log('distance ch:', e);

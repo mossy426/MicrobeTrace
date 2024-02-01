@@ -1,0 +1,163 @@
+<div class="msa-viewer-container">
+    <div id="msa-viewer" [style.height.px]="alignmentViewHeight">
+        <div class="left">
+            <div style="height: 170px; text-align: center;" [style.width.px]="leftWidth"><div style="height: 25px;"></div><h1>Logo</h1><div style="height: 25px;"></div><h2>Ruler</h2></div>
+            <div class="canvasLabels" [style.height.px]="canvasViewHeight-20" [style.width.px]="leftWidth" #canvasLabels (scroll)="canvasHolder.scrollTop=canvasLabels.scrollTop">
+                <div *ngFor="let seq of nodesWithSeq" [ngStyle]="{'font-size.px': fontSize, 'height.px': spanHeight}">{{ seq.name }}</div>
+                <div id="searchHighlight" [style.height.px]="spanHeight+4"></div>
+            </div>
+        </div>
+        <div class="right" [style.height.px]="rightViewHeight">
+            <div id="alignmentTop" (scroll)="canvasHolder.scrollLeft=alignmentTop.scrollLeft" [style.width.px]="rightWidth" #alignmentTop>
+                <svg  [attr.width]="spanWidth*proportionMatrix.length+17" height="150">
+                    <g *ngFor="let nt of proportionMatrix; index as i">
+                        <g *ngFor="let prop of nt; index as j" (mouseenter)="showTooltip($event, i)" (mouseleave)="hideTooltip()">
+                            <rect [attr.y]="calculateY(i,j)" [attr.x]="spanWidth*i" [attr.height]="100*prop" [attr.width]="spanWidth" [attr.fill]="fillColor(j)"/>
+                        </g>
+                        <text *ngIf="i %100 == 0" y="150" [attr.x]="spanWidth*i">| {{ i }}</text>
+                        <text *ngIf="i %20 == 0 && i%100 != 0" y="150" [attr.x]="spanWidth*i">:</text>
+                        <!--g *ngIf="i %100==0; then thenBlock else elseBlock" y="150" [attr.x]="spanWidth*i">
+                            <text #thenBlock>| {{ i }}</text>
+                            <text #elseBlock>:</text>
+                        </g -->
+                    </g>
+                </svg>
+            </div>
+            <div class="canvasHolder" [style.height.px]="canvasViewHeight" [style.width.px]="rightWidth" (scroll)="canvasScroll(canvasHolder, canvasLabels, alignmentTop)" #canvasHolder></div>
+            <!--div class="scrollbar" style="overflow-x: scroll; width: 1175px;" (scroll)="horizontalScroll()" #scrollBar>
+                <div [ngStyle]="{'width.px': spanWidth*proportionMatrix.length}" style="height: 1px;"></div>
+            </div-->
+        </div>
+        <!--div class="alignRow" *ngFor="let seq of nodesWithSeq" [ngStyle]="{'font-size.px': fontSize, 'height.px': spanHeight}">
+            <span class="alignName">{{ seq.name }}</span>
+            <span *ngFor="let nt of seq.seq " ngClass="nt_{{nt}} nt" [ngStyle]="{'width.px': spanWidth}">{{ this.showChar ? nt : " " }}</span>
+
+        </div-->
+    </div>
+</div>
+<div id="tooltipHolder">
+    <div class="triangle"></div>
+    <span id="tooltip"></span>
+</div>
+
+
+
+<div id="tool-btn-container" class="m-portlet">
+    <span style="overflow: visible; position: relative; width: 110px;">
+        <a title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings()"><i class="flaticon-settings primary"></i></a>
+    </span>
+    <span style="overflow: visible; position: relative; width: 110px;">
+        <a title="Export Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openExport()"><i class="flaticon-download primary"></i></a>
+    </span>
+</div>
+
+<div class="view-controls">
+    <p-dialog id="network-settings-pane" 
+                [(visible)]="displaySettings"  
+                header="Alignment Viewer Settings" 
+                >
+        <tabset class="tab-container tabbable-line">
+            <tab heading="{{'Nodes' | localize}}" [active]="true" customClass="m-tabs__item">
+                <p-accordion>
+                    <p-accordionTab [selected]="false" style="color:#495057" header="Layout">
+                        <div>
+                            <div class="form-group row" title="">
+                                <div class="col-4"><label for="node-label-variable">Show Nucleotides</label></div>
+                                <div class="col-8">
+                                    <p-selectButton [options]="charSettingOptions"
+                                        [(ngModel)]="charSetting" (onChange)="updateAlignment()"></p-selectButton>
+                                </div>
+
+                            </div>
+                            <div class="form-group row" title="">
+                                <div class="col-4"><label for="node-label-variable">Size</label></div>
+                                <div class="col-8">
+                                    <p-selectButton [options]="sizes" [(ngModel)]="selectedSize" (onChange)="onSelectedSizeChanged()"></p-selectButton>
+                                </div>
+
+                            </div>
+                            <div class="form-group row node-label-row" title="">
+                                <div class="col-4"><label for="node-label-size">Label Height</label></div>
+                                <div class="col-8">
+                                    <input type="number" class="form-control form-control-sm" min="10" step="1" max="20" [(ngModel)]="spanHeight" (ngModelChange)="onSpanHeightChange($event)">
+                                </div>
+                            </div>
+                            <div class="form-group row node-label-row" title="">
+                                <div class="col-4"><label for="node-label-size">Label Width</label></div>
+                                <div class="col-8">
+                                    <input type="number" class="form-control form-control-sm" min="1" step="1" max="15" [(ngModel)]="spanWidth" (ngModelChange)="onSpanWidthChange($event)">
+                                </div>
+                            </div>
+                        </div>
+                    </p-accordionTab>
+
+                    <p-accordionTab style="color:#495057" header="Colors">
+                        <div class="form-group row" title="">
+                            <div class="col-3"><label for="node-label-variable">Color Scheme</label></div>
+                            <div class="col-9">
+                                <p-selectButton [options]="colorSchemeOptions"
+                                    (onChange)="onSelectedColorChanged($event.value)"></p-selectButton>
+                            </div>
+
+                        </div>
+                        <div *ngIf="customColorScheme" class="customColorSchemeSelection">
+                            <div class="form-group row node-label-row" title="">
+                                <label>A:
+                                    <input type="color" class="form-control form-control-sm" [ngModel]="colorScheme['A']" (change)="updateColorScheme('A', $event)">
+                                </label>
+                                <label>C: 
+                                    <input type="color" class="form-control form-control-sm" [ngModel]="colorScheme['C']" (change)="updateColorScheme('C', $event)">
+                                </label>
+                                <label>G: 
+                                    <input type="color" class="form-control form-control-sm" [ngModel]="colorScheme['G']" (change)="updateColorScheme('G', $event)">
+                                </label>
+                                <label>T: 
+                                    <input type="color" class="form-control form-control-sm" [ngModel]="colorScheme['T']" (change)="updateColorScheme('T', $event)">
+                                </label>
+                            </div>
+                            <div class="form-group row node-label-row" title=""> 
+                                <label style="display: flex; align-items: center; gap:10px;">Ambiguities/Other: 
+                                    <input type="color" [ngModel]="colorScheme['ambig']" (change)="updateColorScheme('ambig', $event)">
+                                </label>
+                            </div>
+                            
+                        
+                        </div>
+
+                    </p-accordionTab>
+
+                </p-accordion>
+            </tab>
+            <tab heading="{{'Links' | localize}}" customClass="m-tabs__item">
+                <p-accordion>
+                    <p-accordionTab style="color:#495057" header="Labels and Tooltips">
+                        <div #linkcontrolslabels>
+                            <div class="form-group row" title="What data should be displayed when you hover over a link?">
+                                <div class="col-4"><label for="link-tooltip-variable">Tooltip</label></div>
+                                <div class="col-8">
+                                </div>
+                            </div>
+                            <div class="form-group row" title="What data should be displayed when you hover over a link?">
+                                <div class="col-4"><label for="link-label-variable">Label</label></div>
+                                <div class="col-8">ABC</div>
+                            </div>
+                            <div class="form-group row" title="How many decimals should the number labels have?">
+                                <div class="col-4"><label for="link-label-decimal-length">Decimal Length</label></div>
+                              </div>  
+                        </div>
+                    </p-accordionTab>
+
+                    <p-accordionTab style="color:#495057" header="TestMiniMap">
+                        <div id="miniMap" style="width: 300px; height: 300px;">
+
+                        </div>
+                    </p-accordionTab>
+
+                </p-accordion>
+            </tab>
+        </tabset>
+    </p-dialog>
+
+
+
+</div>

@@ -45,6 +45,7 @@ import { TwoDComponent } from './visualizationComponents/TwoDComponent/twoD-plug
 import { CoreModule } from '@metronic/app/core/core.module';
 import { TableComponent } from './visualizationComponents/TableComponent/table-plugin-component';
 import { MapComponent } from './visualizationComponents/MapComponent/map-plugin.component';
+import { AlignmentViewComponent } from './visualizationComponents/AlignmentViewComponent/alignment-view-plugin-component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
 import { MatButtonModule } from '@angular/material/button';
@@ -86,6 +87,7 @@ export class TestedComponent {
     DndDirective,
     PhylogeneticComponent,
     TimelineComponent,
+    AlignmentViewComponent,
   ],
   imports: [
     BrowserModule,
