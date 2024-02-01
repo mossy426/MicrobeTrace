@@ -19,8 +19,8 @@
                                         <label>Date Field</label>
                                       </div>
                                       <div class="col-8">
-                                        <select (change)="refresh()" class="form-control form-control-sm w-100 nodeVariables" (change)="onDateFieldChange($event)"></select>
-                                      </div>
+                                        <p-dropdown id="epi-timeline-date-field" [options]="FieldList" appendTo="body"  [(ngModel)]="SelectedDateFieldVariable" (ngModelChange)="onDateFieldChange($event)"></p-dropdown>
+                                    </div>
                                     </div>
                                     <div class="form-group row">
                                       <div class="col-4">Epi Curve</div>

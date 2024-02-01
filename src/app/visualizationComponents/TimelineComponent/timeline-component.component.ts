@@ -8,6 +8,7 @@ import moment from 'moment';
 import { MicrobeTraceNextVisuals } from '@app/microbe-trace-next-plugin-visuals';
 
 import { window, TabsetComponent } from 'ngx-bootstrap';
+import { SelectItem } from 'primeng/api';
 
 
 @Component({
@@ -22,6 +23,9 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
   @ViewChild('timeline') timelineElement: ElementRef;
   
   private visuals: MicrobeTraceNextVisuals;
+
+  FieldList: SelectItem[] = [];
+  SelectedDateFieldVariable;
 
   ShowEpiSettingsPane: boolean = false;
   cumulative = false;
@@ -56,6 +60,21 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
 
   }
   ngOnInit() {
+
+    // populate this.twoD.FieldList with [None, ...nodeFields]
+    this.visuals.epiCurve.FieldList = [];
+    this.visuals.epiCurve.FieldList.push({ label: "None", value: "None" });
+    this.visuals.epiCurve.commonService.session.data['nodeFields'].map((d, i) => {
+        if (d != 'seq' && d != 'sequence') {
+            this.visuals.epiCurve.FieldList.push(
+                {
+                    label: this.visuals.epiCurve.commonService.capitalize(d.replace("_", "")),
+                    value: d
+                });
+        }
+
+    });
+    
  }
 
  ngAfterViewInit() {
@@ -63,7 +82,9 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
   // this.initializeD3Chart();
   this.setupEventListeners();
   this.refresh();
-}
+  console.log(this.commonService.session.style.widgets["node-color"]);
+ }
+  
 
 public refresh(): void {
   const wrapper = $(this.timelineElement.nativeElement).empty().parent();
@@ -72,7 +93,7 @@ public refresh(): void {
   this.height = wrapper.height() - this.margin.top - this.margin.bottom;
   this.middle = this.height / 2;
 
-  const field = $("#epi-timeline-date-field").val();
+  const field = this.SelectedDateFieldVariable;
   let times = [];
   this.vnodes = JSON.parse(JSON.stringify(this.commonService.session.data.nodes));
   this.vnodes.forEach(d => {
@@ -124,7 +145,7 @@ public refresh(): void {
     .attr("transform", d => `translate(${this.x(d.x0)}, ${this.y(d.length)})`)
     .attr("width", d => this.x(d.x1) - this.x(d.x0))
     .attr("height", d => this.height - this.y(d.length))
-    .attr("fill", /* session.style.widgets["node-color"] */);
+    .attr("fill",this.commonService.session.style.widgets["node-color"]);
 
   this.svg.append("g")
     .attr("class", "axis axis--x")
@@ -185,13 +206,15 @@ private setupEventListeners(): void {
 
 
   $('[name="timeline-cumulation"]').on('change', () => {
+    console.log('cum 1');
     this.cumulative = $("#timeline-noncumulative").is(":checked");
+    this.commonService.session.style.widgets["timeline-noncumulative"] =  $("#timeline-noncumulative").is(":checked");
     this.refresh();
   });
 
   $(window).on('node-color-change', () => {
     this.svg.selectAll(".timeline-epi-curve rect")
-      .attr("fill", /* new color from session.style.widgets["node-color"] */);
+      .attr("fill", this.commonService.session.style.widgets["node-color-variable"]);
   });
 
   $('#timeline-speed').on('change', () => {
@@ -201,8 +224,7 @@ private setupEventListeners(): void {
 
 // Handle the change event of the date field
 onDateFieldChange(event: any) {
-  this.commonService.session.style.widgets["epi-timeline-date-field"] = event.target.value;
-  // Call the refresh function (implement your refresh logic here)
+  this.commonService.session.style.widgets["epi-timeline-date-field"] = event;
   this.refresh();
 }
 
@@ -213,7 +235,10 @@ openSettings() {
 }
 
 setCumulative(value: boolean): void {
+  console.log('set cum2 ');
   this.cumulative = value;
+  this.commonService.session.style.widgets["timeline-noncumulative"] =  !value;
+
   this.refresh();
 }
 

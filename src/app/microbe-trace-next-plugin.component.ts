@@ -1854,6 +1854,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             if(v === "Files") {
                 this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
                 this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
+            } else if (v === "Epi Curve") {
+                this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
+                this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
             } else {
                 this.GlobalSettingsLinkColorDialogSettings.setVisibility(true);
                 this.GlobalSettingsNodeColorDialogSettings.setVisibility(true);
