@@ -11135,7 +11135,7 @@ let TableComponent = (_class = class TableComponent extends _app_base_component_
   openPinAllNodes() {}
   openRefreshScreen() {}
   openSelectDataSetScreen(e) {
-    this.visuals.tableComp.createTable(e);
+    this.visuals.tableComp.createTable(e.option.value);
   }
   onLoadNewData() {
     this.createTable(this.visuals.microbeTrace.dataSetViewSelected);
