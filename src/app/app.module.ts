@@ -40,6 +40,7 @@ import { AppUiCustomizationService } from '@shared/common/ui/app-ui-customizatio
 import { AppUrlService } from '@shared/common/nav/app-url.service';
 import { FilesComponent } from './filesComponent/files-plugin.component';
 import { PhylogeneticComponent } from './visualizationComponents/PhylogeneticComponent/phylogenetic-plugin.component';
+import { TimelineComponent } from './visualizationComponents/TimelineComponent/timeline-component.component';
 import { TwoDComponent } from './visualizationComponents/TwoDComponent/twoD-plugin.component';
 import { CoreModule } from '@metronic/app/core/core.module';
 import { TableComponent } from './visualizationComponents/TableComponent/table-plugin-component';
@@ -85,6 +86,7 @@ export class TestedComponent {
     TestedComponent,
     DndDirective,
     PhylogeneticComponent,
+    TimelineComponent,
     AlignmentViewComponent,
   ],
   imports: [
