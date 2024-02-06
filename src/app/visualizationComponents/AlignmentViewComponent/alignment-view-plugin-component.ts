@@ -15,36 +15,45 @@ import { ComponentContainer } from 'golden-layout';
 })
 export class AlignmentViewComponent extends BaseComponentDirective implements OnInit {
 
+  // General Settings
   displaySettings: boolean = false;
+
+  showHideOptions: any = [
+    { label: 'Show', value: true },
+    { label: 'Hide', value: false }
+  ];
+
+  private visuals: MicrobeTraceNextVisuals;
+  widgets;
+  
+  // Data
+  nodesWithSeq: any[];
+  nodesWithSeqShortened: any[];
+  longestSeqLength: number = 0;
+  /**
+   * count matrix: [ [#A, #C, #G, #T, #other/ambig]-for each location, ... ]
+   */
+  countMatrix;
+  /**
+   * proportion matrix: [ [A, C, G, T, #other/ambig]-for each location, ... ]
+   */
+  proportionMatrix;
+
+  // Layout
+  showMiniMap: boolean = true;
   charSetting: string; // 'show', 'min', 'hide'
   charSettingOptions: any = [
     { label: 'Show', value: 'show' },
     { label: 'Minimum', value: 'min'},
     { label: 'Hide', value: 'hide' }
   ];
-  testValNumber: number;
-  testValOther;
+  rulerMinorInterval: number = 20;
+  rulerIntervalOptions = [0, 10, 20, 25, 50]
 
+  // Sizing
   spanWidth: number;
   spanHeight: number;
   fontSize: number;
-  
-  nodesWithSeq: any[];
-  longestSeqLength: number = 0;
-
-  /**
-   * count matrix: [ [#A, #C, #G, #T, #other/ambiguos]-for each location, ... ]
-   */
-  countMatrix;
-  /**
-   * proportion matrix: [ [A, C, G, T, #other/ambiguos]-for each location, ... ]
-   */
-  proportionMatrix;
-
-  showHideOptions: any = [
-    { label: 'Show', value: true },
-    { label: 'Hide', value: false }
-  ];
 
   sizes = [
     { label: 'Small', value: 's'},
@@ -54,8 +63,18 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   ]
   selectedSize: string;
 
+  alignmentViewHeight: number;
+  rightViewHeight: number;
+  canvasViewHeight: number;
+
+  leftWidth: number;
+  rightWidth: number;
+
+  // Colors
+  selectedColorSchemeName: string;
   colorScheme;
-  customColorScheme: boolean = false;
+  customColorScheme;
+  useCustomColorScheme: boolean = false;
   colorSchemeOptions = [
     { label: 'Normal', 
       value: 'n',
@@ -68,18 +87,6 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
       value: 'c'
     }
   ]
-
-  alignmentViewHeight: number;
-  rightViewHeight: number;
-  canvasViewHeight: number;
-
-  leftWidth: number;
-  rightWidth: number;
-
-  private visuals: MicrobeTraceNextVisuals;
-  widgets;
-
-  testSeq: any[];
 
   constructor(injector: Injector,
     private eventManager: EventManager,
@@ -95,6 +102,15 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     this.widgets = this.commonService.session.style.widgets;
   }
 
+  /* if new data is add via new fasta file or whatever what do we need to update -need to be added at some point:
+    this.nodesWithSeq; also update longestSeqLength
+    this.calculateProportionAtEachLocation();
+    this.updateAlignment;
+    this.shortenNodesWithSeq();
+    this.updateMiniMap();
+
+    if resized from dashboard view: what to resize?
+  */
   ngOnInit(): void {
     this.setEvents();
     this.nodesWithSeq = [];
@@ -108,12 +124,12 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
           this.longestSeqLength = node.seq.length;
         }
       }
-
     })
 
     this.calculateProportionAtEachLocation();
 
     this.selectedSize= 'l';
+    this.selectedColorSchemeName = 'n'
     this.colorScheme = {
       'A': '#ccff00',
       'C': '#ffff00',
@@ -121,19 +137,27 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
       'T': '#ff6600',
       'ambig': '#ffffff',
     } 
+    this.customColorScheme = {
+      'A': '#000000',
+      'C': '#000000',
+      'G': '#ffffff',
+      'T': '#ffffff',
+      'ambig': '#ffffff',
+    }
+    this.charSetting = 'hide';
     this.onSelectedSizeChanged()
 
-    // order is important as subsequent calculations rely on previous updated values; These values are used to ensure the view heights are correct and scrolling occurs as expectd
-    this.rightViewHeight = this.calculateRightHeight();
-    this.alignmentViewHeight = this.calculateViewHeight();
-    this.canvasViewHeight = this.calculateCanvasViewHeight();
-    
+    this.shortenNodesWithSeq();
     this.updateMiniMap();
+
+    this.updateViewHeights();
   }
 
+
+  // General
   /**
-   * Updates the alignment by generating a new canvas, and recalcuating various heights
-   */
+  * Updates the alignment by generating a new canvas, and recalcuating various heights
+  */
   updateAlignment() {
     this.generateCanvas(this.nodesWithSeq, {width: this.spanWidth, height: this.spanHeight, charSetting: this.charSetting, fontSize: this.fontSize, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
       $('#msa-viewer .canvasHolder').empty().append(canvas)
@@ -141,6 +165,239 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
       //document.body.appendChild(canvas)
     })
     
+    this.updateViewHeights();
+  }
+
+  // Mini Map
+
+  /**
+  * Creates a minimap. 
+  * The sequences (nodesWithSeqShortened) are previously downsample by picking 1 nt / every n nucleotides;
+  */
+  updateMiniMap() {
+    let height = 1;
+    this.generateCanvas(this.nodesWithSeqShortened, {width: 1, height: height, charSetting: 'hide', fontSize: 1, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
+      $('#miniMap canvas').remove();
+      $('#miniMap').append(canvas);
+    })
+  }
+
+  /**
+   * Adds/Removed miniMap and miniMap title
+   */
+  updateMiniMapVisibility() {
+    if (this.showMiniMap){
+      this.updateMiniMap();
+      $('#miniMapHolder').css({'display': 'block'});
+      $('#miniMapTitle').css({'display': 'block'});
+    } else {
+      $('#miniMapHolder').css({'display': 'none'});
+      $('#miniMapTitle').css({'display': 'none'});
+    }
+
+    this.updateViewHeights();
+  }
+
+  /**
+   * Add miniMapHighlight to correct position
+   * @param e mouse event
+   * @param miniMap HTMLElement
+   */
+  showMiniMapHighlight(e: MouseEvent, miniMap: HTMLElement) {
+    let mmDimensions = miniMap.getBoundingClientRect();
+    
+    let viewHeight = $('.canvasLabels').height();
+    let highlightHeight = viewHeight/this.spanHeight;
+
+    let scaleFactor = Math.ceil(this.longestSeqLength/this.rightWidth)
+    let highlightWidth = $('.canvasHolder').width()/(this.spanWidth*scaleFactor)
+
+    let top = e.clientY - mmDimensions.top - (highlightHeight/2)
+    if (top < 0) {
+      top = 0
+    } else if (top > mmDimensions.height-highlightHeight) {
+      top = mmDimensions.height-highlightHeight
+    }
+
+    let canvasWidth = $('#miniMap canvas').width()
+    let left = e.clientX - mmDimensions.left - highlightWidth/2;
+    if (left < 0) {
+      left = 0;
+    } else if (left > canvasWidth - highlightWidth) {
+      left = canvasWidth - highlightWidth;
+    }
+
+    $('#miniMapHighlight').css({'display': 'block', 'top': top +'px', 'left': left +'px', 'height': highlightHeight+'px', 'width': highlightWidth+'px'})
+  }
+
+  /**
+   * Moves the position of miniMapHighlight
+   * @param e mouse event
+   * @param miniMap HTMLElement
+   */
+  updateMiniMapHighlight(e: MouseEvent, miniMap: HTMLElement) {
+    let mmDimensions = miniMap.getBoundingClientRect();
+
+    let highlightHeight = $('#miniMapHighlight').height()
+    let top = e.clientY - mmDimensions.top - (highlightHeight/2)
+    if (top < 0) {
+      top = 0
+    } else if (top > mmDimensions.height-highlightHeight) {
+      top = mmDimensions.height-highlightHeight
+    }
+
+    let canvasWidth = $('#miniMap canvas').width()
+    let highlightWidth = $('#miniMapHighlight').width()
+    let left = e.clientX - mmDimensions.left - highlightWidth/2;
+    if (left < 0) {
+      left = 0;
+    } else if (left > canvasWidth - highlightWidth) {
+      left = canvasWidth - highlightWidth;
+    }
+
+    $('#miniMapHighlight').css({'top': top +'px', 'left': left +'px'});
+
+  }
+
+  /**
+   * Removes highling from minimap
+   */
+  hideMiniMapHighlight() {
+    $('#miniMapHighlight').css({'display': 'none'})
+  }
+
+  /**
+   * Moves scroll position of main canvas, canvasLabels, and alignmentTop(Bar Plot, Rule) based on position of miniMapHighlight
+   */
+  miniMapClick(e: MouseEvent, miniMap: HTMLElement, canvasHolder: HTMLElement, canvasLabels: HTMLElement, alignmentTop: HTMLElement) {
+    let mmDimensions = miniMap.getBoundingClientRect();
+    let highlightDimensions =  document.getElementById('miniMapHighlight').getBoundingClientRect();
+
+    let scaleFactor = Math.ceil(this.longestSeqLength/this.rightWidth)
+    let horizontalScroll = (highlightDimensions.left - mmDimensions.left)*this.spanWidth*scaleFactor;    
+    alignmentTop.scrollLeft = horizontalScroll < 10 ? horizontalScroll : horizontalScroll + 7;
+    canvasHolder.scrollLeft = horizontalScroll < 10 ? horizontalScroll : horizontalScroll + 7;
+
+    let verticalScroll = (highlightDimensions.top - mmDimensions.top)*this.spanHeight;
+    canvasLabels.scrollTop = verticalScroll < 4 ? verticalScroll : verticalScroll+4;
+    canvasHolder.scrollTop = verticalScroll < 4 ? verticalScroll : verticalScroll+4;  
+  
+  }
+
+  // Tooltip
+
+  /**
+   * 
+   * @param e $event
+   * @param index index of the nt for the tooltip
+   */
+  showTooltip(e: MouseEvent ,index:number) {
+    // offsetX = mouse X position + adjustment to center of the bar -50 to center toolbar
+    let [x, ] = this.getRelativeMousePosition(e);
+    let adjX = this.spanWidth/2 - (e.offsetX % this.spanWidth)
+    let offsetX = x + adjX -50;
+    
+    // offsetY
+    let rect = document.querySelector('#alignmentTop').getBoundingClientRect();
+    let offsetY = rect.top - 10;
+
+    let htmlString = this.tabulate(index);
+    $('#tooltip').html(htmlString)
+    $('#tooltipHolder').css({'display': 'block', 'position': 'absolute', 'left': offsetX + 'px', 'top': offsetY + 'px'})
+  }
+
+  /**
+   * Hides the tooltip
+   */
+  hideTooltip() {
+    //$('#tooltip').html("")
+    $('#tooltipHolder').css({'display': 'none'})
+  }
+
+
+  // Data
+
+  /**
+   * Updates nodesWithSeqShortened by downsampling (selecting 1 out of every n NTs) nodesWithSeq
+   * The factor to downsample by is selection such len of new seqs will be around 300bp   * 
+   */
+  shortenNodesWithSeq() {
+    if (this.longestSeqLength < this.rightWidth) {
+      this.nodesWithSeq.forEach((obj) => {
+        this.nodesWithSeqShortened.push({
+          name: obj.name,
+          seq: obj.seq,
+        })
+      })
+      $('#miniMap').css({'width': this.longestSeqLength+'px', 'height': this.nodesWithSeq.length+'px'})
+      return; 
+    }
+
+    // want the minimap to be around this.rightWidth pixels wide; caculate how much to downscale by and then downscale
+    let scaleFactor = Math.ceil(this.longestSeqLength/this.rightWidth)
+    this.nodesWithSeqShortened = [];
+      this.nodesWithSeq.forEach((obj) => {
+        let downSizedSeq = "";
+        for (let i=0; i < this.longestSeqLength; i+= scaleFactor) {
+          downSizedSeq += obj.seq.charAt(i);
+        }
+        this.nodesWithSeqShortened.push({
+          name: obj.name,
+          seq: downSizedSeq,
+        })
+      })
+
+    $('#miniMap').css({'width': Math.ceil(this.longestSeqLength/scaleFactor)+'px', 'height': this.nodesWithSeq.length+'px'})
+  }
+
+  /**
+   * Calculates the count and proportion of each base at each position
+   */
+  calculateProportionAtEachLocation() {
+    // count matrix: [ [#A, #C, #G, #T, #other/ambiguos]-for each location, ... ]
+    this.countMatrix = [];
+    this.proportionMatrix = [];
+
+    for (let i =0; i<this.longestSeqLength; i++) {
+      this.countMatrix.push([0,0,0,0,0]);
+    }
+
+    for (let node of this.nodesWithSeq) {
+      for (let i=0; i< node.seq.length; i++) {
+        let nt = node.seq[i];
+        switch (nt) {
+          case 'A':
+            this.countMatrix[i][0] += 1;
+            break;
+          case 'C':
+            this.countMatrix[i][1] += 1;
+            break;
+          case 'G':
+            this.countMatrix[i][2] += 1;
+            break;
+          case 'T':
+            this.countMatrix[i][3] += 1;
+            break; 
+          default:
+            this.countMatrix[i][4] += 1
+        }
+      } 
+    }
+    
+    function calcProportion(value) {
+      let sum = value[0] + value[1] + value[2] + value[3] + value[4];
+      return [value[0]/sum, value[1]/sum, value[2]/sum, value[3]/sum, value[4]/sum]
+    }
+    this.proportionMatrix = this.countMatrix.map(calcProportion)
+  }
+
+
+  // Layout Positioning
+
+  /**
+  * Set rightViewHeigh, alignmentViewHeight, and canvasViewHeigh
+  */
+  updateViewHeights() {
     // order is important as subsequent calculations rely on previous updated values; These values are used to ensure the view heights are correct and scrolling occurs as expectd
     this.rightViewHeight = this.calculateRightHeight();
     this.alignmentViewHeight = this.calculateViewHeight();
@@ -148,27 +405,12 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   }
 
   /**
-   * Creates a minimap with width of one pixel / nucleotide; therfore total width=#number of nucleotides for longest sequence
-   * Need it to be thin (i.e. 200bp wide); may downsample by picking 1 nt / every n nucleotides to display.
+   * @returns the height needed to for all the elements on the right half of msa-viewer. If this height > available space, then scrolling will be used
    */
-  updateMiniMap() {
-    this.generateCanvas(this.nodesWithSeq, {width: 1, height: 1, charSetting: 'hide', fontSize: 1, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
-      //let YScale = canvas.height > 200 ? 0.5 : 1;
-      //let XScale = canvas.width > 200 ? 200/canvas.width : 1;
-      //let canvasImage = canvas.getContext('2d');
-      //canvasImage.scale(.2, 1);
-      //canvas.width = 700;
-      console.log('abc', canvas.height, canvas.width);
-      $('#miniMap').empty().append(canvas)
-      console.log('def');
-    })
-  }
-
-  /**
-   * @returns the height for the canvasHolder element and then subsequently the canvasLabels element. Not the height of the canvas itself
-   */
-  calculateCanvasViewHeight(): number {
-    return Math.min(this.alignmentViewHeight-170, this.nodesWithSeq.length*this.spanHeight+25)
+  calculateRightHeight(): number {
+    let miniMapHeight = (this.showMiniMap) ? $('#miniMapHolder').height()+16 : 0;
+    // 170 alignmentTop, 17 bottomScrollBar, height of canvas
+    return 170+25+this.nodesWithSeq.length*this.spanHeight+ miniMapHeight;
   }
 
   /**
@@ -179,72 +421,24 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   }
 
   /**
-   * @returns the height needed to for all the elements on the right half of msa-viewer. If this height > available space, then scrolling will be used
+   * @returns the height for the canvasHolder element and then subsequently the canvasLabels element. Not the height of the canvas itself
    */
-  calculateRightHeight(): number {
-    // 170 alignmentTop, 17 bottomScrollBar, height of canvas
-    return 170+25+this.nodesWithSeq.length*this.spanHeight;
+  calculateCanvasViewHeight(): number {
+    let miniMapHeight = (this.showMiniMap) ? $('#miniMapHolder').height()+16 : 0;
+    return Math.min(this.alignmentViewHeight - 170 - miniMapHeight, this.nodesWithSeq.length*this.spanHeight+25)
   }
 
+  /**
+   * @returns the width for the right half of the viewer
+   */
   calculateRightWidth(): number {
     // 7: gap between left and right (5) + 2
     return $("#msa-viewer").width() - this.leftWidth - 7;
   }
 
-  /**
-   * Opens settings pane
-   */
-  openSettings() {
-    this.displaySettings = !this.displaySettings;
-  }
 
-  /**
-   * Ultimately will be used for exporting elements of the view; for now, used to for testing
-   */
-  openExport() {
-    // updating the mini map info
-    console.log('change color now')
-    this.updateMiniMap();
-    setTimeout(() => {
-      //canvas.width = 700;
-      //console.log('abc', canvas.height, canvas.width);
-      let cc = $('#miniMap canvas')[0] as HTMLCanvasElement;
-      
-      //let ccTV = cc.getContext('2d');
-      //ccTV.save();
-      //cc.width = 250;
-      //ccTV.restore();
-    }, 5000)
-    
-
-  }
-
-  /**
-   * Searches nodesWithSequences for name given; adds a highlight box to that node
-   * XXXXX think about another implementation where the background color is changed for the div/s found XXXXX
-   * @param name name/id of node to search for
-   */
-  search(name: string) {
-    let index = this.nodesWithSeq.findIndex((obj) => obj.name == name);
-    if (index == -1) {
-      return;
-    }
-    let newTop =  (index*this.spanHeight)
-    $('#searchHighlight').css({top: newTop+'px', display: "block"})
-
-    // determines if scrolling is needed to bring index into view
-    let scroll = $('.canvasLabels').scrollTop();
-    let topIndex = scroll/this.spanHeight;
-    topIndex = (topIndex%1 > .2) ? Math.ceil(topIndex) : Math.floor(topIndex)
-    let bottomIndex = Math.floor((this.canvasViewHeight-20) / this.spanHeight + topIndex -1);
-    if (index < topIndex || index > bottomIndex) {
-      let scrollPos = (index)*this.spanHeight -5
-      $('.canvasLabels').scrollTop(scrollPos)
-    } 
-  }
-
-
-
+  // Sizing
+  
   /**
   * Updates font size as needed and then updates the alignment view based on new height
   */
@@ -303,62 +497,8 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     this.updateAlignment();
   }
 
-  /**
-   * Calculates the count and proportion of each base at each position
-   */
-  calculateProportionAtEachLocation() {
-    // count matrix: [ [#A, #C, #G, #T, #other/ambiguos]-for each location, ... ]
-    this.countMatrix = [];
-    this.proportionMatrix = [];
 
-    for (let i =0; i<this.longestSeqLength; i++) {
-      this.countMatrix.push([0,0,0,0,0]);
-    }
-
-    for (let node of this.nodesWithSeq) {
-      for (let i=0; i< node.seq.length; i++) {
-        let nt = node.seq[i];
-        switch (nt) {
-          case 'A':
-            this.countMatrix[i][0] += 1;
-            break;
-          case 'C':
-            this.countMatrix[i][1] += 1;
-            break;
-          case 'G':
-            this.countMatrix[i][2] += 1;
-            break;
-          case 'T':
-            this.countMatrix[i][3] += 1;
-            break; 
-          default:
-            this.countMatrix[i][4] += 1
-        }
-      } 
-    }
-    
-    function calcProportion(value) {
-      let sum = value[0] + value[1] + value[2] + value[3] + value[4];
-      return [value[0]/sum, value[1]/sum, value[2]/sum, value[3]/sum, value[4]/sum]
-    }
-    this.proportionMatrix = this.countMatrix.map(calcProportion)
-  }
-
-  /**
-   * @param i current index of the base/nt in proportion matrix
-   * @param j A=0, C=1, G=2, T=3, other/ambiguos=4
-   * @returns location for the y value of rectangle in the logo
-   */
-  calculateY(i:number, j:number) {
-    if (j == 4) { return 0}
-    let nt = this.proportionMatrix[i];
-    let y = nt[4]*100;
-    if (j==0) { return y }
-    for (let k=0; k<j; k++) {
-      y += nt[k]*100
-    }
-    return y;
-  }
+  // Colors
 
   /**
    * Updates the color scheme for the view based on what is selected
@@ -373,7 +513,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
         'T': '#ff6600',
         'ambig': '#ffffff',
       }
-      this.customColorScheme = false;
+      this.useCustomColorScheme = false;
     } else if (e == 'a') {
       this.colorScheme = {
         'A': '#009E73',
@@ -382,12 +522,23 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
         'T': '#D55E00',
         'ambig': '#ffffff',
         }
-        this.customColorScheme = false;
+        this.useCustomColorScheme = false;
     } else {
-      this.customColorScheme = true;
+      this.colorScheme = {
+        'A': this.customColorScheme['A'],
+        'C': this.customColorScheme['C'],
+        'G': this.customColorScheme['G'],
+        'T': this.customColorScheme['T'],
+        'ambig': this.customColorScheme['ambig'],
+        }
+      this.useCustomColorScheme = true;
+
     }
 
     this.updateAlignment();
+    if (this.showMiniMap) {
+      this.updateMiniMap();
+    }
   }
 
   /**
@@ -396,7 +547,11 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    */
   updateColorScheme(nt, e) {
     this.colorScheme[nt] = e.target.value;
+    this.customColorScheme[nt] = e.target.value;
     this.updateAlignment();
+    if (this.showMiniMap) {
+      this.updateMiniMap();
+    }
   }
 
   /**
@@ -415,6 +570,90 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     } else {
       return this.colorScheme['ambig'];
     }
+  }
+
+  // Helper
+
+  /**
+   * Searches nodesWithSequences for name given; changes background color for all nodes that are found
+   * @param name name/id of node to search for
+   */
+  search(name: string) {
+    $('.canvasLabels div').removeClass('searchHighlight2')
+    if (name == "") {
+      return;
+    }
+    
+    let indexes = this.nodesWithSeq.filter((obj) => obj.name.includes(name)).map((obj) => this.nodesWithSeq.indexOf(obj));
+    if (indexes.length == 0) {
+      console.log('not found');
+      return;
+    }
+
+    for (let index of indexes) {
+      let element = $('.canvasLabels div').get(index);
+      $(element).addClass('searchHighlight2')
+    }
+
+    // need to scroll if necessary
+    let scroll = $('.canvasLabels').scrollTop();
+    let topIndex = scroll/this.spanHeight;
+    topIndex = (topIndex%1 > .2) ? Math.ceil(topIndex) : Math.floor(topIndex)
+    let bottomIndex = Math.floor((this.canvasViewHeight-20) / this.spanHeight + topIndex -1);
+    if (indexes[0] < topIndex || indexes[0] > bottomIndex) {
+        let scrollPos = (indexes[0])*this.spanHeight -5
+        $('.canvasLabels').scrollTop(scrollPos)
+    }
+    
+/*  // this uncommented version return exact match of one node
+    let index = this.nodesWithSeq.findIndex((obj) => obj.name == name);
+    if (index == -1) {
+      return;
+    }
+    let newTop =  (index*this.spanHeight)
+    $('#searchHighlight').css({top: newTop+'px', display: "block"})
+    */
+
+    // determines if scrolling is needed to bring index into view
+    /*
+    let scroll = $('.canvasLabels').scrollTop();
+    let topIndex = scroll/this.spanHeight;
+    topIndex = (topIndex%1 > .2) ? Math.ceil(topIndex) : Math.floor(topIndex)
+    let bottomIndex = Math.floor((this.canvasViewHeight-20) / this.spanHeight + topIndex -1);
+    if (index < topIndex || index > bottomIndex) {
+      let scrollPos = (index)*this.spanHeight -5
+      $('.canvasLabels').scrollTop(scrollPos)
+    } */
+  }
+
+  /**
+   * Opens settings pane
+   */
+  openSettings() {
+    this.displaySettings = !this.displaySettings;
+  }
+
+  /**
+   * Ultimately will be used for exporting elements of the view; for now, used to for testing
+   */
+  openExport() {
+    console.log(this.rulerMinorInterval);
+  }
+
+  /**
+   * @param i current index of the base/nt in proportion matrix
+   * @param j A=0, C=1, G=2, T=3, other/ambiguos=4
+   * @returns location for the y value of rectangle in the logo
+   */
+  calculateY(i:number, j:number) {
+    if (j == 4) { return 0}
+    let nt = this.proportionMatrix[i];
+    let y = nt[4]*100;
+    if (j==0) { return y }
+    for (let k=0; k<j; k++) {
+      y += nt[k]*100
+    }
+    return y;
   }
 
   /**
@@ -528,34 +767,6 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   }
 
   /**
-   * 
-   * @param e $event
-   * @param index index of the nt for the tooltip
-   */
-  showTooltip(e: MouseEvent ,index:number) {
-    // offsetX = mouse X position + adjustment to center of the bar -50 to center toolbar
-    let [x, ] = this.getRelativeMousePosition(e);
-    let adjX = this.spanWidth/2 - (e.offsetX % this.spanWidth)
-    let offsetX = x + adjX -50;
-    
-    // offsetY
-    let rect = document.querySelector('#alignmentTop').getBoundingClientRect();
-    let offsetY = rect.top - 10;
-
-    let htmlString = this.tabulate(index);
-    $('#tooltip').html(htmlString)
-    $('#tooltipHolder').css({'display': 'block', 'position': 'absolute', 'left': offsetX + 'px', 'top': offsetY + 'px'})
-  }
-
-  /**
-   * Hides the tooltip
-   */
-  hideTooltip() {
-    $('#tooltip').html("")
-    $('#tooltipHolder').css({'display': 'none'})
-  }
-
-  /**
   * Generate a tabular HTML string from the index of proportionMatrix
   * @param data index of the position to use to make the HTML string of the table
   * @returns an HTML string with a table representation of the data
@@ -637,89 +848,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
 
   }
 
-  // XXXXX come back here when/if I want to do/try magnification
-  onSearch() {
-    //let imgID = "Angular";
-    let cc = $('.canvasHolder canvas')[0] as HTMLCanvasElement;
-    
-
-    let canvasImage = cc.getContext('2d');
-    //let canvasSubset = canvasImage.drawImage(cc, ) 
-    // drawImage of canvasSubset, use toDataURL on canvasElement as background image to magnifier;
-    // at the same time increase font size of label
-    
-    //this.magnify("myimage", 3);
-  }
-  magnify(imgID, zoom) {
-    var img, glass, w, h, bw;
-    img = document.getElementById(imgID);
-    /*create magnifier glass:*/
-    glass = document.createElement("DIV");
-    glass.setAttribute("class", "img-magnifier-glass");
-    /*insert magnifier glass:*/
-    img.parentElement.insertBefore(glass, img);
-    /*set background properties for the magnifier glass:*/
-    glass.style.backgroundImage = "url('" + img.src + "')";
-    glass.style.backgroundRepeat = "no-repeat";
-    glass.style.backgroundSize =
-      img.width * zoom + "px " + img.height * zoom + "px";
-    bw = 3;
-    w = glass.offsetWidth / 2;
-    h = glass.offsetHeight / 2;
-    /*execute a function when someone moves the magnifier glass over the image:*/
-    glass.addEventListener("mousemove", moveMagnifier);
-    img.addEventListener("mousemove", moveMagnifier);
-    /*and also for touch screens:*/
-    glass.addEventListener("touchmove", moveMagnifier);
-    img.addEventListener("touchmove", moveMagnifier);
-    function moveMagnifier(e) {
-      var pos, x, y;
-      /*prevent any other actions that may occur when moving over the image*/
-      e.preventDefault();
-      /*get the cursor's x and y positions:*/
-      pos = getCursorPos(e);
-      x = pos.x;
-      y = pos.y;
-      /*prevent the magnifier glass from being positioned outside the image:*/
-      if (x > img.width - w / zoom) {
-        x = img.width - w / zoom;
-      }
-      if (x < w / zoom) {
-        x = w / zoom;
-      }
-      if (y > img.height - h / zoom) {
-        y = img.height - h / zoom;
-      }
-      if (y < h / zoom) {
-        y = h / zoom;
-      }
-      /*set the position of the magnifier glass:*/
-      glass.style.left = x - w + "px";
-      glass.style.top = y - h + "px";
-      /*display what the magnifier glass "sees":*/
-      glass.style.backgroundPosition =
-        "-" + (x * zoom - w + bw) + "px -" + (y * zoom - h + bw) + "px";
-    }
-    function getCursorPos(e) {
-      var a,
-        x = 0,
-        y = 0;
-      e = e || window.event;
-      /*get the x and y positions of the image:*/
-      a = img.getBoundingClientRect();
-      /*calculate the cursor's x and y coordinates, relative to the image:*/
-      x = e.pageX - a.left;
-      y = e.pageY - a.top;
-      /*consider any page scrolling:*/
-      x = x - window.pageXOffset;
-      y = y - window.pageYOffset;
-      return { x: x, y: y };
-    }
-  }
-
 }
-
-
 
 export namespace AlignmentViewComponent {
   export const componentTypeName = 'Alignment View';

@@ -6,6 +6,29 @@
     //background-color: rgb(168, 125, 211, .2);
   }
 
+    /* Button appearance on hover */
+.btn-icon:hover {
+  transform: scale(1.1); /* Slight enlarge on hover */
+  background-color: rgba(0, 0, 0, 0.1); /* Subtle background color on hover */
+}
+
+.btn-icon {
+  margin-right: 10px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.flaticon-settings:before {
+  font-weight: 800 !important;
+}
+
+.flaticon-pin:before {
+  font-weight: 800 !important;
+}
+
+.flaticon-download:before {
+  font-weight: 800 !important;
+}
+
 .msa-viewer-container {
   position: relative;
   top: 50px;
@@ -14,25 +37,19 @@
 }
 
 #msa-viewer {
-  //width: 2500px;
   overflow-y: hidden;
   overflow-x: hidden;
   display: flex;
   gap: 5px;
 }
 
-//.right {  
-  //overflow-x: scroll;
-  //width: 1180px;}
-
-/*.right::-webkit-scrollbar {
-  background-color: #95e1e4;
-  position: relative;
-  top: 0px;
-}*/
+.title {
+  font-size: 32px;
+  text-align: right;
+  padding-right: 20px;
+}
 
 .canvasLabels {
-  //direction: rtl;
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
@@ -40,7 +57,6 @@
 
 #searchHighlight {
   width: 1500px;
-  //display: none;
   position: absolute;
   height: 10px;
   top: 0px;
@@ -52,14 +68,17 @@
   width: 250px;
 }
 
+.searchHighlight2 {
+  background-color: #E3F2FD;
+}
+
 .triangle {
   width: 10px;
   position: relative;
   left: 42px;
-  //height: 10px;
   border-left: 8px transparent solid;
   border-right: 8px transparent solid;
-  border-bottom: 16px gray solid;
+  border-bottom: 16px lightgray solid;
 }
 
 #tooltipHolder {
@@ -67,7 +86,7 @@
 }
 
 #tooltip {
-  background-color: white; 
+  background-color: lightgray; 
   padding: 5px;
   display: block;
 }
@@ -79,7 +98,7 @@
 
 #alignmentTop {
   overflow-x: auto;
-  height: 170px;
+  height: 160px;
 }
 
 .alignRow {
@@ -92,8 +111,25 @@
   flex: none;
 }
 
-#miniMap canvas {
-  width: 300px;
+#miniMapHolder {
+  padding: 5px 10px;
+  border: 3px black solid;
+  background-color: white;
+  margin-bottom: 10px;
+}
+
+#miniMap {
+  position: relative;
+}
+
+#miniMapTitle{
+  margin-bottom: 10px;
+}
+
+#miniMapHighlight {
+  display: none;
+  background-color: rgb(gray, .4);
+  position: absolute;
 }
 
 .customColorSchemeSelection div {
@@ -107,41 +143,5 @@
 }
 
 .customColorSchemeSelection input {
-  width:46.63px
-}
-
-
-.nt {
-  flex: none;
-}
-
-.nt_A {
-  background-color: rgb(#ccff00, .8);
-}
-
-.nt_C {
-  background-color: rgb(#ffff00, .8);
-}
-
-.nt_G {
-  background-color: rgb(#ff9900, .8);
-}
-
-.nt_T {
-  background-color: rgb(#ff6600, .8);
-}
-
-// may be used in magnification
-.img-magnifier-container {
-  position:relative;
-}
-
-// may be used in magnification
-::ng-deep .img-magnifier-glass {
-  position: absolute;
-  border: 3px solid #000;
-  cursor: none;
-  /*Set the size of the magnifier glass:*/
-  width: 400px;
-  height: 10px;
+  width: 46.63px
 }
