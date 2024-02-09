@@ -10,10 +10,18 @@ export class GoldenLayoutComponentService {
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
 
+  /**
+   * Adds a new element with a specified key and value to the Map (_componentTypeMap). If an element with the same key already exists, the element will be updated.
+   * It doesn't make new view, just registers the view/component with goldenLayout map (_componentTypeMap).
+   */
   registerComponentType(name: string, componentType: Type<BaseComponentDirective>) {
     this._componentTypeMap.set(name, componentType);
   }
 
+  /**
+   * XXXXX Never called in codebase XXXXX
+   * @returns an array of registered components
+   */
   getRegisteredComponentTypeNames(): string[] {
     const count = this._componentTypeMap.size;
     const result = new Array<string>(count);

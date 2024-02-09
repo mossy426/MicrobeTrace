@@ -1,7 +1,5 @@
 import { Directive, InjectionToken } from '@angular/core';
-import {
-    ComponentContainer
-} from "golden-layout";
+import { ComponentContainer } from "golden-layout";
   
 @Directive()
 export abstract class BaseComponentDirective {
@@ -28,6 +26,11 @@ export abstract class BaseComponentDirective {
         this.rootHtmlElement.style.zIndex = value;
     }
 
+    /**
+     * Convert a number to a string and adds 'px' at end of the string
+     * @param value a number to be converted into string
+     * @returns the string
+     */
     private numberToPixels(value: number): string {
         return value.toString(10) + 'px';
     }

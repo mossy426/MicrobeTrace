@@ -38,9 +38,19 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * proportion matrix: [ [A, C, G, T, #other/ambig]-for each location, ... ]
    */
   proportionMatrix;
+    /**
+   * position matrix: [ [A, C, G, T, #other/ambig]-for each location, ... ]
+   * y position (top) for each base at each postion in sequence
+   */
+  positionMatrix;
 
   // Layout
-  showMiniMap: boolean = true;
+  showMiniMap: boolean;
+  alignmentTopDisplay: string;
+  alignmentTopDisplayOptions = [
+    { label: 'Logo', value: 'logo' },
+    { label: 'Bar Plot', value: 'barplot'}
+  ]
   charSetting: string; // 'show', 'min', 'hide'
   charSettingOptions: any = [
     { label: 'Show', value: 'show' },
@@ -112,7 +122,10 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     if resized from dashboard view: what to resize?
   */
   ngOnInit(): void {
+    // set events such as node-selected
     this.setEvents();
+
+    // sets nodesWithSeq and longestSeqLength
     this.nodesWithSeq = [];
     this.commonService.session.data.nodes.forEach(node => {
       if (node.seq != null){
@@ -126,8 +139,12 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
       }
     })
 
+    // calculations countMatrix, proportionMatrix, and positionMatrix
     this.calculateProportionAtEachLocation();
 
+    // sets different variables relating to size and display
+    this.alignmentTopDisplay = 'logo'
+    $('#alignmnetTopTitle').text('Logo');
     this.selectedSize= 'l';
     this.selectedColorSchemeName = 'n'
     this.colorScheme = {
@@ -138,19 +155,26 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
       'ambig': '#ffffff',
     } 
     this.customColorScheme = {
-      'A': '#000000',
-      'C': '#000000',
-      'G': '#ffffff',
-      'T': '#ffffff',
+      'A': '#ccff00',
+      'C': '#ffff00',
+      'G': '#ff9900',
+      'T': '#ff6600',
       'ambig': '#ffffff',
     }
     this.charSetting = 'hide';
-    this.onSelectedSizeChanged()
 
+    // updates spanWidth, spanHeight, rightWidth, leftWidth, fontSize, and then updates alignment
+    this.onSelectedSizeChanged()
+    // updates the valus of nodeWidthSeqShortened based on size of rigthWitdth, longestSeqLength, and nodesWithSeq
     this.shortenNodesWithSeq();
+
+    // updates showMiniMap which triggers updateMiniMapVisibility() and updateMiniMap()
+    this.showMiniMap = true;
     this.updateMiniMap();
 
+    // updates heights such as rightViewHeight, alignmentViewHeight, and canvasViewHeight
     this.updateViewHeights();
+
   }
 
 
@@ -161,8 +185,6 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   updateAlignment() {
     this.generateCanvas(this.nodesWithSeq, {width: this.spanWidth, height: this.spanHeight, charSetting: this.charSetting, fontSize: this.fontSize, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
       $('#msa-viewer .canvasHolder').empty().append(canvas)
-      //$canvas.addClass('testABC')
-      //document.body.appendChild(canvas)
     })
     
     this.updateViewHeights();
@@ -175,8 +197,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   * The sequences (nodesWithSeqShortened) are previously downsample by picking 1 nt / every n nucleotides;
   */
   updateMiniMap() {
-    let height = 1;
-    this.generateCanvas(this.nodesWithSeqShortened, {width: 1, height: height, charSetting: 'hide', fontSize: 1, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
+    this.generateCanvas(this.nodesWithSeqShortened, {width: 1, height: 1, charSetting: 'hide', fontSize: 1, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
       $('#miniMap canvas').remove();
       $('#miniMap').append(canvas);
     })
@@ -336,27 +357,28 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     // want the minimap to be around this.rightWidth pixels wide; caculate how much to downscale by and then downscale
     let scaleFactor = Math.ceil(this.longestSeqLength/this.rightWidth)
     this.nodesWithSeqShortened = [];
-      this.nodesWithSeq.forEach((obj) => {
-        let downSizedSeq = "";
-        for (let i=0; i < this.longestSeqLength; i+= scaleFactor) {
-          downSizedSeq += obj.seq.charAt(i);
-        }
-        this.nodesWithSeqShortened.push({
-          name: obj.name,
-          seq: downSizedSeq,
-        })
+    this.nodesWithSeq.forEach((obj) => {
+      let downSizedSeq = "";
+      for (let i=0; i < this.longestSeqLength; i+= scaleFactor) {
+        downSizedSeq += obj.seq.charAt(i);
+      }
+      this.nodesWithSeqShortened.push({
+        name: obj.name,
+        seq: downSizedSeq,
       })
+    })
 
     $('#miniMap').css({'width': Math.ceil(this.longestSeqLength/scaleFactor)+'px', 'height': this.nodesWithSeq.length+'px'})
   }
 
   /**
-   * Calculates the count and proportion of each base at each position
+   * Calculates the count, proportion, and y position (for logo/bar plot) of each base at each position
    */
   calculateProportionAtEachLocation() {
     // count matrix: [ [#A, #C, #G, #T, #other/ambiguos]-for each location, ... ]
     this.countMatrix = [];
     this.proportionMatrix = [];
+    this.positionMatrix = [];
 
     for (let i =0; i<this.longestSeqLength; i++) {
       this.countMatrix.push([0,0,0,0,0]);
@@ -388,7 +410,41 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
       let sum = value[0] + value[1] + value[2] + value[3] + value[4];
       return [value[0]/sum, value[1]/sum, value[2]/sum, value[3]/sum, value[4]/sum]
     }
+
+    function calculatePosition(value) {
+      // custom merge sort; i want  first four items in value sorted but i want array of indexes returned not array of values
+      let mergeA = value[0] > value[1] ? [0,1] : [1,0]
+      let mergeB = value[2] > value[3] ? [2,3] : [3,2]
+      let sortedIndexes = [];
+      let locA = 0, locB=0;
+      for (let i =0; i<4; i++) {
+        if (locA == 2) {
+          sortedIndexes.push(mergeB[locB])
+          locB += 1;
+        } else if (locB == 2) {
+          sortedIndexes.push(mergeA[locA])
+          locA += 1;
+        } else if (value[mergeA[locA]] > value[mergeB[locB]]) {
+          sortedIndexes.push(mergeA[locA])
+          locA += 1;
+        } else {
+          sortedIndexes.push(mergeB[locB])
+          locB += 1;
+        }
+      }
+
+      // use sorted index to create temp/row of positionMatrix such at the ambig (value[4]) is at the very top and then largest to smallest
+      let temp = [0,0,0,0,0];
+      let y = value[4]*100;
+      for (let index of sortedIndexes) {
+        temp[index] = y;
+        y += value[index]*100
+      }
+      return temp;
+    }
+
     this.proportionMatrix = this.countMatrix.map(calcProportion)
+    this.positionMatrix = this.proportionMatrix.map(calculatePosition)
   }
 
 
@@ -424,7 +480,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * @returns the height for the canvasHolder element and then subsequently the canvasLabels element. Not the height of the canvas itself
    */
   calculateCanvasViewHeight(): number {
-    let miniMapHeight = (this.showMiniMap) ? $('#miniMapHolder').height()+16 : 0;
+    let miniMapHeight = (this.showMiniMap) ? this.nodesWithSeq.length+16 : 0;
     return Math.min(this.alignmentViewHeight - 170 - miniMapHeight, this.nodesWithSeq.length*this.spanHeight+25)
   }
 
@@ -479,7 +535,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
       this.leftWidth = 150;
       this.charSetting = 'hide';
     } else if (this.selectedSize == 'm') {
-      this.spanHeight = 10;
+      this.spanHeight = 12;
       this.spanWidth = 6;
       this.fontSize = 12;
       this.leftWidth = 200;
@@ -637,10 +693,21 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * Ultimately will be used for exporting elements of the view; for now, used to for testing
    */
   openExport() {
-    console.log(this.rulerMinorInterval);
+
   }
 
   /**
+   * Updates text in 
+   */
+  onAlignmentTopChange() {
+    if (this.alignmentTopDisplay == 'barplot') {
+      $('#alignmnetTopTitle').text('Bar Plot');
+    } else {
+      $('#alignmnetTopTitle').text('Logo');
+    }
+  }
+
+  /** XXXX May need to remove XXXX
    * @param i current index of the base/nt in proportion matrix
    * @param j A=0, C=1, G=2, T=3, other/ambiguos=4
    * @returns location for the y value of rectangle in the logo
