@@ -1,9 +1,13 @@
-import { Component, OnInit, Injector, Inject, ElementRef, ChangeDetectorRef, PipeTransform } from '@angular/core';
+import { Component, OnInit, Injector, Inject, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { EventManager } from '@angular/platform-browser';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { MicrobeTraceNextVisuals } from '@app/microbe-trace-next-plugin-visuals';
 import { CommonService } from '@app/contactTraceCommonServices/common.service';
+import { DialogSettings } from '../../helperClasses/dialogSettings';
+import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
 import { ComponentContainer } from 'golden-layout';
+import { generateCanvas } from './generateAlignmentViewCanvas';
+
 
 //import * as alignmentViewer from 'alignment-viewer';
 //import MSAViewer from '@plotly/react-msa-viewer';
@@ -13,10 +17,12 @@ import { ComponentContainer } from 'golden-layout';
   templateUrl: './alignment-view-plugin-component.html',
   styleUrls: ['./alignment-view-plugin-component.scss']
 })
-export class AlignmentViewComponent extends BaseComponentDirective implements OnInit {
+export class AlignmentViewComponent extends BaseComponentDirective implements OnInit, MicobeTraceNextPluginEvents {
+
 
   // General Settings
-  displaySettings: boolean = false;
+  alignmentDialogSettings: DialogSettings = new DialogSettings('#alignment-settings-pane', false)
+  ShowAlignExportPane: boolean = false;
 
   showHideOptions: any = [
     { label: 'Show', value: true },
@@ -98,6 +104,16 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     }
   ]
 
+  // Export
+  SelectedNetworkExportFilenameVariable : string = ""
+  NetworkExportFileTypeList: any = [
+    { label: 'png', value: 'png' },
+    { label: 'jpeg', value: 'jpeg' },
+    { label: 'webp', value: 'webp' },
+    { label: 'svg', value: 'svg' }
+];
+SelectedNetworkExportFileTypeListVariable: string = "png";
+
   constructor(injector: Injector,
     private eventManager: EventManager,
     public commonService: CommonService,
@@ -112,13 +128,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     this.widgets = this.commonService.session.style.widgets;
   }
 
-  /* if new data is add via new fasta file or whatever what do we need to update -need to be added at some point:
-    this.nodesWithSeq; also update longestSeqLength
-    this.calculateProportionAtEachLocation();
-    this.updateAlignment;
-    this.shortenNodesWithSeq();
-    this.updateMiniMap();
-
+  /* 
     if resized from dashboard view: what to resize?
   */
   ngOnInit(): void {
@@ -183,7 +193,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   * Updates the alignment by generating a new canvas, and recalcuating various heights
   */
   updateAlignment() {
-    this.generateCanvas(this.nodesWithSeq, {width: this.spanWidth, height: this.spanHeight, charSetting: this.charSetting, fontSize: this.fontSize, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
+    generateCanvas(this.nodesWithSeq, {width: this.spanWidth, height: this.spanHeight, charSetting: this.charSetting, fontSize: this.fontSize, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
       $('#msa-viewer .canvasHolder').empty().append(canvas)
     })
     
@@ -197,7 +207,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   * The sequences (nodesWithSeqShortened) are previously downsample by picking 1 nt / every n nucleotides;
   */
   updateMiniMap() {
-    this.generateCanvas(this.nodesWithSeqShortened, {width: 1, height: 1, charSetting: 'hide', fontSize: 1, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
+    generateCanvas(this.nodesWithSeqShortened, {width: 1, height: 1, charSetting: 'hide', fontSize: 1, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
       $('#miniMap canvas').remove();
       $('#miniMap').append(canvas);
     })
@@ -323,7 +333,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     let offsetY = rect.top - 10;
 
     let htmlString = this.tabulate(index);
-    $('#tooltip').html(htmlString)
+    $('#tooltipAlign').html(htmlString)
     $('#tooltipHolder').css({'display': 'block', 'position': 'absolute', 'left': offsetX + 'px', 'top': offsetY + 'px'})
   }
 
@@ -331,7 +341,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * Hides the tooltip
    */
   hideTooltip() {
-    //$('#tooltip').html("")
+    //$('#tooltipAlign').html("")
     $('#tooltipHolder').css({'display': 'none'})
   }
 
@@ -343,6 +353,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * The factor to downsample by is selection such len of new seqs will be around 300bp   * 
    */
   shortenNodesWithSeq() {
+    this.nodesWithSeqShortened = [];
     if (this.longestSeqLength < this.rightWidth) {
       this.nodesWithSeq.forEach((obj) => {
         this.nodesWithSeqShortened.push({
@@ -686,14 +697,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * Opens settings pane
    */
   openSettings() {
-    this.displaySettings = !this.displaySettings;
-  }
-
-  /**
-   * Ultimately will be used for exporting elements of the view; for now, used to for testing
-   */
-  openExport() {
-
+    this.alignmentDialogSettings.isVisible ? this.alignmentDialogSettings.setVisibility(false) : this.alignmentDialogSettings.setVisibility(true);
   }
 
   /**
@@ -738,100 +742,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     }   
   }
 
-  /**
-   * Adapted from  https://github.com/CDCgov/AlignmentViewer
-   * XXXXX need to be moved out of alignment-view-plugin-component, so that it can be accessed from files view before launching MT XXXXX
-   * @param seqs list of seq objects [{seq: 'ATCA...', ...},]
-   * @param config  object: { width: number, height: number, charSetting:['hide'|'show'|'min'], fontSize: number, colors: {'A':'#000000', 'C': , 'G':, 'T':, 'ambig':}}
-   * @returns promise of a HTMLCanvasElement showing the alignment
-   */
-  generateCanvas(seqs, config) {
-    config = Object.assign({
-      width: 1,
-      height: 1,
-      'charSetting': 'hide'
-    }, config, {
-      colors: Object.assign({
-        'A': '#ccff00',
-        'C': '#ffff00',
-        'G': '#ff9900',
-        'T': '#ff6600',
-        'ambig': '#ffffff'
-      }, ('colors' in config) ? config.colors : {}),
-    });
   
-    return new Promise(resolve => {
-      let longest = 0;
-      let n = seqs.length;
-      for (let i = 0; i < n; i++) {
-        let s = seqs[i];
-        let seq = s.seq.toUpperCase();
-        if (seq.length > longest) longest = seq.length;
-      }
-      let ch = Math.ceil(config.height);
-      let cw = Math.ceil(config.width);
-      let width = longest * config.width;
-      let height = seqs.length * config.height;
-      let canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-      let context = canvas.getContext('2d', { alpha: false });
-      context.fillStyle = config.colors['ambig'];
-      context.fillRect(0, 0, width, height);
-      Object.keys(config.colors).forEach(nucleotide => {
-        if(nucleotide == 'ambig') return;
-        context.fillStyle = config.colors[nucleotide];
-        for (let row = 0; row < n; row ++) {
-          let seq = seqs[row].seq;
-          let y = Math.floor(row * ch);
-          for (let col = 0; col < longest; col++) {
-            let c = seq[col];
-            if(!c) break;
-            if(c != nucleotide) continue;
-            let x = Math.floor(col * cw);
-            context.fillRect(x, y, cw, ch);
-          }
-        }
-      });
-      context.font = (config.fontSize) + 'px mono';
-      context.textAlign = 'center';
-      context.textBaseline = 'bottom';
-      context.fillStyle = 'black';
-      if(config.charSetting=='show'){
-        for (let row = 0; row < n; row++) {
-          let seq = seqs[row].seq;
-          let y = row * ch + ch;
-          for (let col = 0; col < longest; col++) {
-            let c = seq[col];
-            if(!c) break;
-            let x = col * cw + cw/2;
-            context.fillText(c, x, y, cw);
-          }
-        }
-      } else if (config.charSetting=='min'){
-        let refSeq = seqs[0].seq
-        for (let col = 0; col < longest; col++) {
-          let c = refSeq[col];
-          if(!c) break;
-          let x = col * cw + cw/2;
-          context.fillText(c, x, ch, cw);
-        }
-
-        for (let row = 1; row < n; row++) {
-          let seq = seqs[row].seq;
-          let y = row * ch + ch;
-          for (let col = 0; col < longest; col++) {
-            let c = (refSeq[col] != seq[col] || seq[col]=='-')? seq[col]: '.';
-            if(!c) break;
-            let x = col * cw + cw/2;
-            context.fillText(c, x, y, cw);
-          }
-        } 
-
-      }
-      resolve(canvas);
-    });
-  }
 
   /**
   * Generate a tabular HTML string from the index of proportionMatrix
@@ -913,6 +824,47 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
       that.search($('#search').val() as string)
     });
 
+  }
+
+  updateNodeColors() { }
+  updateLinkColor() { }
+
+  updateVisualization() {
+    
+  }
+
+  openRefreshScreen() {
+    
+  }
+  onRecallSession() {
+    
+  }
+  onLoadNewData() {
+    /*
+    if new data is add via new fasta file or whatever what do we need to update -need to be added at some point:
+      this.nodesWithSeq; also update longestSeqLength
+      this.calculateProportionAtEachLocation();
+      this.updateAlignment;
+      this.shortenNodesWithSeq();
+      this.updateMiniMap();
+    */
+    
+  }
+  onFilterDataChange() {
+    
+  }
+
+  /**
+   * Ultimately will be used for exporting elements of the view; for now, used to for testing
+  */
+  openExport() {
+    //this.setCalculatedResolution()
+    //this.isExportClosed = false;
+    this.ShowAlignExportPane = true;
+  }
+
+  exportVisualization(e) {
+    console.log(e);
   }
 
 }

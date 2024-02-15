@@ -4,7 +4,23 @@
     z-index: 1 !important;
     padding: 1px; 
     //background-color: rgb(168, 125, 211, .2);
+}
+
+:host ::ng-deep {
+  .p-accordion-tab:not(.p-accordion-tab-active) {
+    .p-toggleable-content {
+      height: 0;
+      overflow: hidden;
+    }
   }
+
+  .p-accordion-tab.p-accordion-tab-active {
+    .p-toggleable-content {
+      height: auto !important;
+      overflow: auto !important;
+    }
+  }
+}
 
     /* Button appearance on hover */
 .btn-icon:hover {
@@ -85,7 +101,7 @@
   display: none;
 }
 
-#tooltip {
+#tooltipAlign {
   background-color: lightgray; 
   padding: 5px;
   display: block;

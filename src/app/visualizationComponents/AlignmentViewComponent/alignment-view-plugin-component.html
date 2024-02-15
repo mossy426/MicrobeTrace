@@ -2,7 +2,7 @@
     <div id="msa-viewer" [style.height.px]="alignmentViewHeight">
         <div class="left">  
             <div style="text-align: center;" [style.width.px]="leftWidth">
-                <div id='miniMapTitle' class="title" [style.height.px]="nodesWithSeq.length+16">Mini Map</div>
+                <div id='miniMapTitle' class="title" [style.height.px]="nodesWithSeq.length+16" title="Mini Map of entire length for all the sequences. Click to move to an area of the viewer.">Mini Map</div>
                 <div id='alignmnetTopTitle' class="title" style="height: 100px; padding-top: 22px;"></div>
                 <div class="title" style="height: 43px;">Ruler</div>
                 <div style="height: 17px;"></div>
@@ -19,24 +19,14 @@
                 </div>
             </div>
             <div id="alignmentTop" (scroll)="canvasHolder.scrollLeft=alignmentTop.scrollLeft" [style.width.px]="rightWidth" #alignmentTop>
-                <svg *ngIf="alignmentTopDisplay === 'barplot'" [attr.width]="spanWidth*proportionMatrix.length+17" height="140">
+                <svg [attr.width]="spanWidth*proportionMatrix.length+17" height="140">
                     <g *ngFor="let nt of proportionMatrix; index as i">
-                        <g *ngFor="let prop of nt; index as j" (mouseenter)="showTooltip($event, i)" (mouseleave)="hideTooltip()">
-                            <rect *ngIf="prop>0" [attr.y]="positionMatrix[i][j]" [attr.x]="spanWidth*i" [attr.height]="100*prop" [attr.width]="spanWidth" [attr.fill]="fillColor(j)"/>
+                        <g *ngIf="alignmentTopDisplay === 'barplot'">
+                            <g *ngFor="let prop of nt; index as j">
+                                <rect *ngIf="prop>0" [attr.y]="positionMatrix[i][j]" [attr.x]="spanWidth*i" [attr.height]="100*prop" [attr.width]="spanWidth" [attr.fill]="fillColor(j)"/>
+                            </g>
                         </g>
-                        <g *ngIf="i %100 == 0">
-                            <text y="120" [attr.x]="i >= 100 ? spanWidth*i-10 : spanWidth*i">{{ i }}</text>
-                            <text y="140" [attr.x]="spanWidth*i">|</text>
-                        </g>
-                        <g *ngIf="i % rulerMinorInterval == 0 && i%100 != 0">
-                            <text y="120" [attr.x]="i >= 100 ? spanWidth*i-10 : spanWidth*i-5">{{ i }}</text>
-                            <text y="140" [attr.x]="spanWidth*i">:</text>
-                        </g>
-                    </g>
-                </svg>
-                <svg *ngIf="alignmentTopDisplay === 'logo'" [attr.width]="spanWidth*proportionMatrix.length+17" style="background-color: rgb(256,256,256)" height="140">
-                    <g *ngFor="let nt of proportionMatrix; index as i">
-                        <g (mouseenter)="showTooltip($event, i)" (mouseleave)="hideTooltip()">
+                        <g *ngIf="alignmentTopDisplay === 'logo'">
                             <g class="A" *ngIf="nt[0]>0" [attr.transform]="'translate(' + spanWidth*i + ', ' + positionMatrix[i][0] + ') scale(' + spanWidth/100 + ', ' + nt[0] + ')'" 
                                 [attr.fill]="fillColor(0)">
                                 <path d="M 0 100 L 33 0 L 66 0 L 100 100 L 75 100 L 66 75 L 33 75 L 25 100 L 0 100"/>
@@ -51,16 +41,16 @@
                             <path class="T" *ngIf="nt[3]>0" [attr.transform]="'translate(' + spanWidth*i + ', ' + positionMatrix[i][3] + ') scale(' + spanWidth/100 + ', ' + nt[3] + ')'" 
                                 [attr.fill]="fillColor(3)"
                                 d="M 0 0 L 0 20 L 35 20 L 35 100 L 65 100 L 65 20 L 100 20 L 100 0 L 0 0"/>
-
-                            <g *ngIf="i %100 == 0">
-                                <text y="120" [attr.x]="i >= 100 ? spanWidth*i-10 : spanWidth*i">{{ i }}</text>
-                                <text y="140" [attr.x]="spanWidth*i">|</text>
-                            </g>
-                            <g *ngIf="i % rulerMinorInterval == 0 && i%100 != 0">
-                                <text y="120" [attr.x]="i >= 100 ? spanWidth*i-10 : spanWidth*i-5">{{ i }}</text>
-                                <text y="140" [attr.x]="spanWidth*i">:</text>
-                            </g>
                         </g>
+                        <g *ngIf="i %100 == 0 || i==0">
+                            <text y="120" [attr.x]="i >= 100 ? spanWidth*i-10 : spanWidth*i">{{ i }}</text>
+                            <text y="140" [attr.x]="spanWidth*i">|</text>
+                        </g>
+                        <g *ngIf="i % rulerMinorInterval == 0 && i%100 != 0">
+                            <text y="120" [attr.x]="i >= 100 ? spanWidth*i-10 : spanWidth*i-5">{{ i }}</text>
+                            <text y="140" [attr.x]="spanWidth*i">:</text>
+                        </g>
+                        <rect [attr.width]="spanWidth" [attr.x]="spanWidth*i" height="100" y="0" style="fill: transparent" (mouseenter)="showTooltip($event, i)" (mouseleave)="hideTooltip()"/>
                     </g>
                 </svg>
             </div>
@@ -71,7 +61,7 @@
 
 <div id="tooltipHolder">
     <div class="triangle"></div>
-    <span id="tooltip"></span>
+    <span id="tooltipAlign"></span>
 </div>
 
 <div id="tool-btn-container" class="m-portlet">
@@ -84,31 +74,59 @@
 </div>
 
 <div class="view-controls">
-    <p-dialog [(visible)]="displaySettings" header="Alignment View Settings" >
-        <p-accordion [multiple]="false">
-            <p-accordionTab style="color:#495057" header="Layout">
-                <div>
+    <p-dialog id="alignment-settings-pane" [(visible)]="alignmentDialogSettings.isVisible" header="Alignment View Settings" >
+        <p-accordion>
+            <!-- Idea to allow user change data label (such as gender, transmission risk ...), Filter data based on value (M), and sort by (?), maybe expand tooltip to as well -->
+            <!-- p-accordionTab style="color:#495057" header="Layout">
+                
+                < div #dataControls>
                     <div class="form-group row" title="">
-                        <div class="col-4"><label for="node-label-variable">Show MiniMap</label></div>
+                        <div class="col-4"><label>Labels</label></div>
                         <div class="col-8">
                             <p-selectButton [options]="showHideOptions" [(ngModel)]="showMiniMap" (onChange)="updateMiniMapVisibility()"></p-selectButton>
                         </div>
                     </div>
-                    <div class="form-group row" title="">
-                        <div class="col-4"><label for="">Show Logo</label></div>
+                    <div class="form-group row" title="Switch between a Bar Plot representation or a Logo representation of the nucleotides present at each position">
+                        <div class="col-4"><label>Filter</label></div>
                         <div class="col-8">
                             <p-selectButton [options]="alignmentTopDisplayOptions"
                                 [(ngModel)]="alignmentTopDisplay" (onChange)="onAlignmentTopChange()"></p-selectButton>
                         </div>
                     </div>
-                    <div class="form-group row" title="">
-                        <div class="col-4"><label for="">Ruler Minor Interval</label></div>
+                                        <div class="form-group row" title="Switch between a Bar Plot representation or a Logo representation of the nucleotides present at each position">
+                        <div class="col-4"><label>Sort By</label></div>
                         <div class="col-8">
-                            <p-dropdown id="" [options]="rulerIntervalOptions" [(ngModel)]="rulerMinorInterval"></p-dropdown>
+                            <p-selectButton [options]="alignmentTopDisplayOptions"
+                                [(ngModel)]="alignmentTopDisplay" (onChange)="onAlignmentTopChange()"></p-selectButton>
                         </div>
                     </div>
-                    <div class="form-group row" title="">
-                        <div class="col-4"><label for="">Show Nucleotides</label></div>
+                    
+                </div>
+            </p-accordionTab -->
+            <p-accordionTab style="color:#495057" header="Layout">
+                <div #layoutControls>
+                    <div class="form-group row" title="Show or Hide the Mini Map">
+                        <div class="col-4"><label>Show MiniMap</label></div>
+                        <div class="col-8">
+                            <p-selectButton [options]="showHideOptions" [(ngModel)]="showMiniMap" (onChange)="updateMiniMapVisibility()"></p-selectButton>
+                        </div>
+                    </div>
+                    <div class="form-group row" title="Switch between a Bar Plot representation or a Logo representation of the nucleotides present at each position">
+                        <div class="col-4"><label>Show Logo</label></div>
+                        <div class="col-8">
+                            <p-selectButton [options]="alignmentTopDisplayOptions"
+                                [(ngModel)]="alignmentTopDisplay" (onChange)="onAlignmentTopChange()"></p-selectButton>
+                        </div>
+                    </div>
+                    <div class="form-group row" title="Set the minor interval for the ruler. Set to 0 to remove minor interval.">
+                        <div class="col-4"><label>Ruler Minor Interval</label></div>
+                        <div class="col-8">
+                            <p-dropdown [options]="rulerIntervalOptions" appendTo="body" [(ngModel)]="rulerMinorInterval"></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="form-group row" 
+                    title="Select how you want NT to be shown in the viewer. Show: Shows both the color and letter for each nucleotide. Minimum: Shows the color for each nucleotide and the letter for any nucleotides different than the top sequence. Hide: Only shows the color for each nucleotide.">
+                        <div class="col-4"><label>Show Nucleotides</label></div>
                         <div class="col-8">
                             <p-selectButton [options]="charSettingOptions"
                                 [(ngModel)]="charSetting" (onChange)="updateAlignment()"></p-selectButton>
@@ -116,61 +134,126 @@
                     </div>
                 </div>
             </p-accordionTab>
+        <!--/p-accordion>
+        <p-accordion-->
             <p-accordionTab  style="color:#495057" header="Sizing">
-                <div>
-                    <div class="form-group row" title="">
-                        <div class="col-2"><label for="node-label-variable">Size</label></div>
+                <div #sizingControls>
+                    <div class="form-group row" title="Set a predefined size">
+                        <div class="col-2"><label>Size</label></div>
                         <div class="col-10">
                             <p-selectButton [options]="sizes" [(ngModel)]="selectedSize" (onChange)="onSelectedSizeChanged()"></p-selectButton>
                         </div>
                     </div>
-                    <div class="form-group row node-label-row" title="">
-                        <div class="col-3"><label for="node-label-size">Height</label></div>
+                    <div class="form-group row node-label-row" title="Set a custom height. Updating sets size to custom">
+                        <div class="col-3"><label>Height</label></div>
                         <div class="col-8">
                             <input type="number" class="form-control form-control-sm" min="10" step="1" max="20" [(ngModel)]="spanHeight" (ngModelChange)="onSpanHeightChange($event)">
                         </div>
                     </div>
-                    <div class="form-group row node-label-row" title="">
-                        <div class="col-3"><label for="node-label-size">Width</label></div>
+                    <div class="form-group row node-label-row" title="Set a custom width. Updating sets size to custom">
+                        <div class="col-3"><label>Width</label></div>
                         <div class="col-8">
                             <input type="number" class="form-control form-control-sm" min="1" step="1" max="15" [(ngModel)]="spanWidth" (ngModelChange)="onSpanWidthChange($event)">
                         </div>
                     </div>
                 </div>
             </p-accordionTab>
+        <!--/p-accordion>
+        <p-accordion-->
             <p-accordionTab style="color:#495057" header="Colors">
-                <div class="form-group row" title="">
-                    <div class="col-3"><label for="node-label-variable">Color Scheme</label></div>
-                    <div class="col-9">
-                        <p-selectButton [options]="colorSchemeOptions" [(ngModel)]="selectedColorSchemeName"
-                            (onChange)="onSelectedColorChanged($event.value)"></p-selectButton>
-                    </div>
+                <div #colorControls>
+                    <div class="form-group row" title="Select a color scheme">
+                        <div class="col-3"><label>Color Scheme</label></div>
+                        <div class="col-9">
+                            <p-selectButton [options]="colorSchemeOptions" [(ngModel)]="selectedColorSchemeName"
+                                (onChange)="onSelectedColorChanged($event.value)"></p-selectButton>
+                        </div>
 
-                </div>
-                <div *ngIf="useCustomColorScheme" class="customColorSchemeSelection">
-                    <div class="form-group row node-label-row" title="">
-                        <label>A:
-                            <input type="color" class="form-control form-control-sm" [ngModel]="customColorScheme['A']" (change)="updateColorScheme('A', $event)">
-                        </label>
-                        <label>C: 
-                            <input type="color" class="form-control form-control-sm" [ngModel]="customColorScheme['C']" (change)="updateColorScheme('C', $event)">
-                        </label>
-                        <label>G: 
-                            <input type="color" class="form-control form-control-sm" [ngModel]="customColorScheme['G']" (change)="updateColorScheme('G', $event)">
-                        </label>
-                        <label>T: 
-                            <input type="color" class="form-control form-control-sm" [ngModel]="customColorScheme['T']" (change)="updateColorScheme('T', $event)">
-                        </label>
                     </div>
-                    <div class="form-group row node-label-row" title=""> 
-                        <label style="display: flex; align-items: center; gap:10px;">Ambiguities/Other: 
-                            <input type="color" [ngModel]="customColorScheme['ambig']" (change)="updateColorScheme('ambig', $event)">
-                        </label>
+                    <div *ngIf="useCustomColorScheme" class="customColorSchemeSelection">
+                        <div class="form-group row node-label-row" title="Select a custom color for each NT">
+                            <label>A:
+                                <input type="color" class="form-control form-control-sm" [ngModel]="customColorScheme['A']" (change)="updateColorScheme('A', $event)">
+                            </label>
+                            <label>C: 
+                                <input type="color" class="form-control form-control-sm" [ngModel]="customColorScheme['C']" (change)="updateColorScheme('C', $event)">
+                            </label>
+                            <label>G: 
+                                <input type="color" class="form-control form-control-sm" [ngModel]="customColorScheme['G']" (change)="updateColorScheme('G', $event)">
+                            </label>
+                            <label>T: 
+                                <input type="color" class="form-control form-control-sm" [ngModel]="customColorScheme['T']" (change)="updateColorScheme('T', $event)">
+                            </label>
+                        </div>
+                        <div class="form-group row node-label-row" title="Select a custom color for each NT"> 
+                            <label style="display: flex; align-items: center; gap:10px;">Ambiguities/Other: 
+                                <input type="color" [ngModel]="customColorScheme['ambig']" (change)="updateColorScheme('ambig', $event)">
+                            </label>
+                        </div>
                     </div>
-                    
-                
                 </div>
             </p-accordionTab>
         </p-accordion>
     </p-dialog>
 </div>
+
+<p-dialog id="network-export-modal" [(visible)]="ShowAlignExportPane" header="Export Alignment View"
+    (onHide)="ShowAlignExportPane = false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" style='min-width: 400px; height: 100%;'>
+                <div class="form-group row">
+                    <div class="col-9">
+                        <input type="text" id="network-export-filename" class="form-control form-control-sm"
+                            placeholder="Filename" [(ngModel)]="SelectedNetworkExportFilenameVariable">
+                    </div>
+                    <div class="col-3">
+                        <p-dropdown id="network-export-filetype" [options]="NetworkExportFileTypeList" appendTo="body"
+                            [(ngModel)]="SelectedNetworkExportFileTypeListVariable"></p-dropdown>
+                    </div>
+                </div>
+                <!-- <div>
+                    <p-accordion>
+                        <p-accordionTab style="color:#495057" header="Advanced">
+                            <div id="network-export-advanced">
+
+                                <div class="form-group row">
+                                    <div class="col-3">
+                                        <label for="network-export-scale">Scale</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input type="number" id="network-export-scale"
+                                            class="form-control form-control-sm" min="0" step="0.1" value="1"
+                                            [(ngModel)]="SelectedNetworkExportScaleVariable"
+                                            (ngModelChange)="updateCalculatedResolution($event)">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-3">Resolution</div>
+                                    <div id="network-export-dimensions" class="col-9 text-right">
+                                        {{CalculatedResolution}}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <label for="network-export-quality">Quality</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input type="range" class="custom-range" id="network-export-quality" min="0"
+                                            max="1.0" value="0.92" step="0.01"
+                                            [(ngModel)]="SelectedNetworkExportQualityVariable">
+                                    </div>
+                                </div>
+                            </div>
+                        </p-accordionTab>
+                    </p-accordion>
+                </div> -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-error"
+                    (click)="ShowAlignExportPane = false">Cancel</button>
+                <button type="button" disabled id="network-export" class="btn btn-primary" style="background-color: #495057;"
+                    (click)="exportVisualization($event)">Export</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</p-dialog><!-- /.modal -->
