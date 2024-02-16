@@ -1138,6 +1138,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
       } else { // if(file.format === 'newick'){
 
+        this.visuals.microbeTrace.commonService.resetData();
         let links = 0;
         let newLinks = 0;
         let newNodes = 0;
@@ -1161,8 +1162,6 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
             links++;
           }
         }
-
-
         console.log('Newick Tree Parse time:', (Date.now() - start).toLocaleString(), 'ms');
         this.showMessage(` - Parsed ${newNodes} New, ${n} Total Nodes from Newick Tree.`);
         this.showMessage(` - Parsed ${newLinks} New, ${links} Total Links from Newick Tree.`);
@@ -1459,7 +1458,6 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
      */
     function addTableTile(headers, context) {
 
-      console.log(headers);
 
       let parentContext = context;
       let root = $('<div class="file-table-row" style="position: relative; z-index: 1;margin-bottom: 24px;"></div>').data('filename', file.name);

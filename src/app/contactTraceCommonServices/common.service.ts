@@ -1690,7 +1690,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             let computer: WorkerModule = new WorkerModule();
             window.context.commonService.getDM().then(dm => {
                 computer.compute_treeWorker.postMessage({
-                    labels: Object.keys(window.context.commonService.temp.matrix).sort(),
+                    // labels: Object.keys(window.context.commonService.temp.matrix).sort(), <- This doesn't work because temp.matrix retains blank objects
+                    labels: window.context.commonService.session.data.nodes.map(a => a._id),
                     matrix: dm,
                     round: window.context.commonService.session.style.widgets["tree-round"]
                 });

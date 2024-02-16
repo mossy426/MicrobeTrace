@@ -326,6 +326,7 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
       // this.visuals.phylogenetic.svg = d3.select('svg#network').append('g');
 
       this.LeafLabelFieldList.push({ label: 'None', value: 'None' });
+      console.log("getting node fields")
       this.commonService.session.data['nodeFields'].map((d, i) => {
 
         this.visuals.phylogenetic.LeafLabelFieldList.push(
@@ -334,6 +335,7 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
             value: d
           });
       });
+      console.log(this.visuals.phylogenetic.LeafLabelFieldList);
     }
   }
 
@@ -389,6 +391,10 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
 
   onLeafLabelVariableChange(event) {
     this.SelectedLeafLabelVariable = event;
+  }
+
+  onLeafTooltipVariableChange(event) {
+    this.SelectedLeafTooltipVariable = event;
   }
 
   onBranchLabelShowChange(event) {
