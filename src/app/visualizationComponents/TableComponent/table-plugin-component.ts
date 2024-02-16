@@ -343,7 +343,7 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
 
     openSelectDataSetScreen(e: any) {
 
-        this.visuals.tableComp.createTable(e);
+        this.visuals.tableComp.createTable(e.option.value);
     }
 
     onLoadNewData() {

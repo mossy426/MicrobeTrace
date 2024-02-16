@@ -9,9 +9,11 @@ import { GoldenLayoutComponentService } from './golden-layout-component.service'
 import { FilesComponent } from './filesComponent/files-plugin.component';
 import { MapComponent } from './visualizationComponents/MapComponent/map-plugin.component';
 import { PhylogeneticComponent } from './visualizationComponents/PhylogeneticComponent/phylogenetic-plugin.component';
+import { TimelineComponent } from './visualizationComponents/TimelineComponent/timeline-component.component';
 import { TableComponent } from './visualizationComponents/TableComponent/table-plugin-component';
 import { TwoDComponent } from './visualizationComponents/TwoDComponent/twoD-plugin.component';
 import { EventEmitterService } from '@shared/utils/event-emitter.service';
+import { AlignmentViewComponent } from './visualizationComponents/AlignmentViewComponent/alignment-view-plugin-component';
 
 @Component({
   selector: 'app-golden-layout-host',
@@ -62,6 +64,8 @@ export class GoldenLayoutHostComponent implements OnDestroy {
     this.goldenLayoutComponentService.registerComponentType(TableComponent.componentTypeName, TableComponent);
     this.goldenLayoutComponentService.registerComponentType(MapComponent.componentTypeName, MapComponent);
     this.goldenLayoutComponentService.registerComponentType(PhylogeneticComponent.componentTypeName, PhylogeneticComponent);
+    this.goldenLayoutComponentService.registerComponentType(TimelineComponent.componentTypeName, TimelineComponent);
+    this.goldenLayoutComponentService.registerComponentType(AlignmentViewComponent.componentTypeName, AlignmentViewComponent);
 
   }
 

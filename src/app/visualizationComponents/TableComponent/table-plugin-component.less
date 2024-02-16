@@ -3,19 +3,19 @@
     overflow: hidden;
     z-index: 1 !important;
     overflow-y: scroll;
-  }
+}
 
-  #tool-btn-container {
+#tool-btn-container {
     display: flex !important;
-  }
+}
 
-  .tool-btn {
+.tool-btn {
     height: 30px;
     width: 30px !important;
     display: block !important;
 }
 
-.data-types{
+.data-types {
     width: auto !important;
     margin: 0 20px;
 }
@@ -139,7 +139,7 @@
         padding: 1em;
     }
 
-    .ui-table-thead > tr > th {
+    .ui-table-thead>tr>th {
         border: 0 none;
         text-align: left;
 
@@ -158,7 +158,7 @@
         }
     }
 
-    .ui-table-tbody > tr > td {
+    .ui-table-tbody>tr>td {
         border: 0 none;
         cursor: auto;
 
@@ -177,20 +177,19 @@
         text-transform: uppercase;
     }
 
-    .ui-table-tbody > tr > td .ui-column-title {
+    .ui-table-tbody>tr>td .ui-column-title {
         display: none;
     }
 }
 
-.wrapper{
+.wrapper {}
+
+.item {
+    display: inline-block;
+    background: blue;
 }
 
-.item{
-    display:inline-block; 
-    background:blue;
-}
-
-.filterType{
+.filterType {
     background: transparent;
     border-color: transparent;
     border-width: 0px;
@@ -199,18 +198,19 @@
     border-style: inset;
     outline-style: dashed;
     outline-color: transparent;
- }
+}
 
 /* Responsive */
 @media screen and (max-width: 64em) {
     :host ::ng-deep .ui-table {
         &.ui-table-customers {
-            .ui-table-thead > tr > th,
-            .ui-table-tfoot > tr > td {
+
+            .ui-table-thead>tr>th,
+            .ui-table-tfoot>tr>td {
                 display: none !important;
             }
 
-            .ui-table-tbody > tr > td {
+            .ui-table-tbody>tr>td {
                 text-align: left;
                 display: block;
                 border: 0 none !important;
@@ -236,22 +236,24 @@
 }
 
 
- /* Button appearance on hover */
- .btn-icon:hover {
-    transform: scale(1.1); /* Slight enlarge on hover */
-    background-color: rgba(0, 0, 0, 0.1); /* Subtle background color on hover */
-  }
-  
-  .btn-icon {
+/* Button appearance on hover */
+.btn-icon:hover {
+    transform: scale(1.1);
+    /* Slight enlarge on hover */
+    background-color: rgba(0, 0, 0, 0.1);
+    /* Subtle background color on hover */
+}
+
+.btn-icon {
     margin-right: 10px;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
     background: white;
-  }
-  
-  .flaticon-settings:before {
+}
+
+.flaticon-settings:before {
     font-weight: 800 !important;
-  }
-  
-  .flaticon-download:before {
+}
+
+.flaticon-download:before {
     font-weight: 800 !important;
-  }
+}

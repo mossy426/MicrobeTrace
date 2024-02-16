@@ -412,11 +412,14 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     }
 
+    /**
+     * Removes a component from this.homepageTabs
+     * @param component name of the component to be removed
+     */
     public removeComponent( component: string ) {
         this.homepageTabs = this.homepageTabs.filter((tab) => {
             return tab.label !== component;
         });
-        
     }
 
 
@@ -428,9 +431,12 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.files.splice(index, 1);
     }
 
+    /**
+     * Uses search-field, search-whole-word, search-case-sensitive widgets, and searchText variable to search each node and select all nodes that meet current criteria.
+     * Also populates search-results list, and sets function that selects the node for when an option in the list is selected.
+     */
     public onSearch() {
-        
-        let nodes = this.visuals.twoD.commonService.session.data.nodes;
+        let nodes = this.commonService.session.data.nodes;
         const n = nodes.length;
 
         let v = this.searchText;
@@ -451,16 +457,17 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             if (node[field]) {
   
                 let fieldData = node[field].toString(); // Convert the data to string
+                // matches anything that is not a digit, letter, whitespace or one of following char < > & and replaces with corresponding HTML entity number
                 const encodedField = fieldData.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
                   return '&#'+i.charCodeAt(0)+';';
                 });
                 dataSet.add(`${encodedField}`);
             }
           }
-          let dataArray = Array.from(dataSet).sort();
+          let dataArray = Array.from(dataSet).sort() as string[];
           //#298
           if (this.commonService.session.style.widgets["search-whole-word"])  v = '\\b' + v + '\\b';
-          let vre;
+          let vre: RegExp;
           if (this.commonService.session.style.widgets["search-case-sensitive"])  vre = new RegExp(v);
           else  vre = new RegExp(v, 'i');
   
@@ -475,10 +482,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         let that = this;
           
+        // on click of an option from the search list, the node is selected
           $('.autocomplete-wrapper li').on('click', function() {
             let ac_v = $(this).attr('data-value');
             const ac_val = ac_v;
-            let ac_vre;
+            let ac_vre: RegExp;
             $('#search').val(ac_v);
             $('#search-results').html("").hide();
           
@@ -506,6 +514,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
           });
   
+          // selects that meets current search criteria
           for(let i = 0; i < n; i++){
   
             let node = nodes[i];
@@ -527,17 +536,25 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         $(document).trigger("node-selected");
     }
 
-
+    /**
+     * Updates search-field widget (with variable to search in) can updates search
+     */
     public onSearchFieldChange(ev) {
         this.commonService.session.style.widgets["search-field"] = ev;
         this.onSearch();
     }
 
+    /**
+     * Updates search-whole-word widget can updates search
+     */
     public onWholeWordChange() {
         this.commonService.session.style.widgets["search-whole-word"] = !this.commonService.session.style.widgets["search-whole-word"];
         this.onSearch();
     }
 
+    /**
+     * Updates search-case-sensitive widget can updates search
+     */
     public onCaseSensitiveChange() {
         this.commonService.session.style.widgets["search-case-sensitive"] = !this.commonService.session.style.widgets["search-case-sensitive"];
         this.onSearch();
@@ -673,19 +690,25 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         $('.m-portlet').fadeTo("slow", 1);
     }
 
-
-
+    /**
+     * Updates background-color widget and then updates background color on twoD network (or any element with #network)
+     */
     onBackgroundChanged() {
-
         this.visuals.microbeTrace.commonService.session.style.widgets['background-color'] = this.visuals.microbeTrace.SelectedBackgroundColorVariable;
 
         if ($('#network') != undefined) {
             $('#network').css('background-color', this.SelectedBackgroundColorVariable);
         }
-
     }
 
 
+    /**
+     * Updates GlobalSetingModel variable and cluster-minimum-size widget. Removes and adds clusters when needed
+     * 
+     * XXXXX bug: when minimum cluster size is set to 9 in test dataset, the smallest cluster disappears as expected. When set to 8 it doesn't reappear. Have to 
+     * value to 1 to get the small cluster to appear. Then even though the small clusters has links, the nodes within it are treated as different cluster (node color by cluster)
+     * and network statistics table; however link color by cluster treats them as one cluster. When you set cluster size to 2, the problem resolves. XXXXX
+     */
     onMinimumClusterSizeChanged() {
 
         this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedClusterMinimumSizeVariable = this.visuals.microbeTrace.SelectedClusterMinimumSizeVariable;
@@ -717,19 +740,23 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     }
 
-
+    /**
+     * Updates GlobalSettingsModel variable and link-sort-variable widget. Updates link threshold histogram and then updates network
+     */
     onLinkSortChanged() {
-
         this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkSortVariable = this.visuals.microbeTrace.SelectedLinkSortVariable;
 
         this.visuals.microbeTrace.commonService.session.style.widgets["link-sort-variable"] = this.visuals.microbeTrace.SelectedLinkSortVariable;
         this.visuals.microbeTrace.commonService.updateThresholdHistogram();
         this.visuals.microbeTrace.commonService.updateNetwork();
-
     }
 
+    /**
+     * Reads the file and applies the style to MicrobeTrace session.style
+     * 
+     * XXXXX Not currently executed in the code XXXXX
+     */
     public onApplyStyle( file: any ){
-
         if(this.commonService.debugMode) {
             console.log('applying style');
         }
@@ -738,7 +765,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             reader.onload = e => this.commonService.applyStyle(JSON.parse((e as any).target.result));
             reader.readAsText(this.files[0]);
           }
-
     }
 
 
@@ -832,8 +858,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     }
 
+    /**
+     * Updates node-color widget and published node color to each view to update them. Only relevant when color nodes by = None
+     */
     onNodeColorChanged() {
-
         let variable = this.SelectedNodeColorVariable;
         this.commonService.session.style.widgets["node-color"] = variable;
 
@@ -849,6 +877,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         })
     }
 
+    /**
+     * Updates visualization for each view that is available
+     */
     publishUpdateVisualization() {
         this.homepageTabs.forEach(tab => {
             if (tab.componentRef &&
@@ -1488,8 +1519,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     }
 
-    // toggles the setting menu for node-color or link-color table.
-    toggleColorTableSettings(tableName) {
+    /**
+     * Toggles the setting menu for node-color or link-color table. This menu allow users to show/hide counts and/or frequencies
+     * @param tableName 'node-color' or 'link-color'
+     */
+    toggleColorTableSettings(tableName: string) {
         let settingsPane;
         if (tableName == 'node-color') {
             settingsPane = $('#nodeColorTableSettings')
@@ -1506,8 +1540,12 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         }
     }
 
-    // updates the appropriate widget value (T->F or F->T) and then updates the node-color or link-color table
-    toggleColorTableColumns(table: String, column: string) {
+    /**
+     * Updates the appropriate widget value and then updates the node-color or link-color table
+     * @param table 'node-color' or 'link-color'
+     * @param column 'tableCouts' or 'tableFreq' 
+     */
+    toggleColorTableColumns(table: string, column: string) {
         if (table == 'node-color' && column == 'tableCounts') {
             this.widgets['node-color-table-counts'] = !this.widgets['node-color-table-counts'];
         } else if (table == 'node-color' && column == 'tableFreq') {
@@ -1523,7 +1561,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.updateCountFreqTable(table);
     }
 
-    // updates the node-color-table or link-color-table based on value of widgets; it doesn't recalculate just shows/hide columns
+    /**
+     * Updates the node-color-table or link-color-table based on value of widgets; it doesn't recalculate anything; just shows/hide columns
+     * @param tableName 'node-color' or 'link-color'
+     */
     updateCountFreqTable(tableName) {
         let tableReferenceName, showCount, showFreq;
         if (tableName == 'node-color') {
@@ -1541,6 +1582,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         (showFreq) ? freqColumn.slideDown() : freqColumn.slideUp();
     }
 
+    /**
+     * Updated link-threshold widget and this.threshold variable. Sets mst-computed widget to false.
+     * Updates clusters and cluster visibility, link visibility, and node visibility. Finallys updates
+     * visualizations and stastistics
+     */
     onLinkThresholdChanged() {
         //debugger;
 
@@ -1650,7 +1696,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     }
 
-
+    /**
+     * this.visuals.microbeTrace.publishUpdateVisualization()
+     * 
+     * XXXXX may need to be updated or trimmed (switch statement has no functionality) XXXXX
+     */
     updatedVisualization() {
 
         this.visuals.microbeTrace.publishUpdateVisualization();
@@ -1722,6 +1772,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
 
 
+    /**
+     * XXXXX no current use or functionality XXXXX 
+     */
     getUserRoles() {
 
         // this._userService.getUserForEdit(this.appSession.userId).subscribe(userResult => {
@@ -1739,6 +1792,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
 
+    /**
+     * XXXXX move XXXXX
+     */
     ngAfterViewInit() {
 
         // let factory = this.cfr.resolveComponentFactory(FilesComponent);
@@ -1795,7 +1851,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         });
 
         this._goldenLayoutHostComponent.TabChangedEvent.subscribe((v) => {
-            if(v === "Files") {
+            if(v === "Files" || v === "Epi Curve") {
                 this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
                 this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
             } else {
@@ -2942,6 +2998,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.NewSession();
     }
 
+    /**
+     * Updates default-distance-metric widget and this.SelectedLinkThresholdVariable (16 for snps, 0.015 for TN93).
+     * Calls onLinkThresholdChanged to updated links
+     */
   onDistanceMetricChanged = () => {
     if (this.SelectedDistanceMetricVariable.toLowerCase() === 'snps') {
       $('#default-distance-threshold, #link-threshold')

@@ -1,0 +1,45 @@
+<div #timeline id="timeline"></div>
+
+<div id="tool-btn-container" class="m-portlet">
+    <span style="overflow: visible; position: relative; width: 110px;">
+        <a title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings()"><i class="flaticon-settings primary"></i></a>
+    </span>
+</div>
+
+<p-dialog id="timeline-settings-pane" [(visible)]="ShowEpiSettingsPane" header="Epi Settings"
+    [style]="{width: '45vw', height:'300px'}">
+                <tabset class="tab-container tabbable-line" style='width: 100%;'>
+                    <tab heading="{{'Epi Curve' | localize}}" [active]="true" customClass="m-tabs__item">
+                        <div class="tab-pane fade show active" id="table-node-settings" role="tabpanel"
+                            aria-labelledby="nodes-tab">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" role="tabpanel">
+                                    <div class="form-group row">
+                                      <div class="col-4">
+                                        <label>Date Field</label>
+                                      </div>
+                                      <div class="col-8">
+                                        <p-dropdown id="epi-timeline-date-field" [options]="FieldList" appendTo="body"  [(ngModel)]="SelectedDateFieldVariable" (ngModelChange)="onDateFieldChange($event)"></p-dropdown>
+                                    </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <div class="col-4">Epi Curve</div>
+                                      <div class="col-8">
+                                        <div class="btn-group btn-group-toggle w-100">
+                                          <label class="btn btn-light btn-sm col" [class.active]="!cumulative">
+                                            <input type="radio" name="timeline-cumulation" (click)="setCumulative(false)">
+                                            Noncumulative
+                                          </label>
+                                          <label class="btn btn-light btn-sm col" [class.active]="cumulative">
+                                            <input type="radio" name="timeline-cumulation" (click)="setCumulative(true)">
+                                            Cumulative
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                    </tab>
+                </tabset>
+</p-dialog>
