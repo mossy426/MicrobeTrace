@@ -71,6 +71,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
     ctrlPressed : boolean = false;
     dragging : boolean = false;
+
+    isLoading : boolean = true;
     
     //Polygon Tab
     SelectedPolygonLabelVariable: string = "None";
@@ -231,7 +233,10 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
           this.widgets['link-threshold'] = 
             this.visuals.twoD.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable;
         }
-      
+  
+        // Use this method to prepare your variables before they're used in the template
+        this.commonService.session.style.widgets['node-tooltip-variable'] = this.ensureArray(this.commonService.session.style.widgets['node-tooltip-variable']);
+        this.commonService.session.style.widgets['link-tooltip-variable'] = this.ensureArray(this.commonService.session.style.widgets['link-tooltip-variable']);
 
         if (this.visuals.twoD.IsDataAvailable === true && this.visuals.twoD.zoom === null) {
 
@@ -356,6 +361,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
 
                     this.visuals.twoD.render(true);
+                    console.log('render drag');
                     $(document).trigger('node-selected');
                 });
 
@@ -475,23 +481,51 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             // });
 
             $( document ).on( "node-visibility", function( ) {
-                that.visuals.twoD.render(false);
+                if (!that.isLoading) {
+                    console.log('render node-vis');
+                    that.isLoading = true;
+                    that.visuals.twoD.render(false);
+                    setTimeout(() => {
+                        that.isLoading = false;
+                      }, 1000);
+                }
             });
 
             $( document ).on( "link-visibility", function( ) {
-            that.visuals.twoD.render(false);
+                if (!that.isLoading) {
+                    console.log('render link-vis');
+                    that.isLoading = true;
+                    that.visuals.twoD.render(false);
+                    setTimeout(() => {
+                        that.isLoading = false;
+                      }, 1000);
+                }            
             });
 
             $( document ).on( "cluster-visibility", function( ) {
-                that.updatePolygonColors();
-                that.visuals.twoD.render(false);
+                if (!that.isLoading) {
+                    console.log('render clus-vis');
+                    that.isLoading = true;
+                    that.visuals.twoD.render(true);
+                    setTimeout(() => {
+                        that.isLoading = false;
+                      }, 1000);
+                }            
             });
 
             $( document ).on( "node-selected", function( ) {
-                that.visuals.twoD.render(false);
+                if (!that.isLoading) {
+                    console.log('render node-sel');
+                    that.isLoading = true;
+                    that.visuals.twoD.render(true);
+                    setTimeout(() => {
+                        that.isLoading = false;
+                      }, 1000);
+                }            
             });
 
             this.visuals.twoD.eventManager.addGlobalEventListener('window', "node-selected", () => {
+                console.log('render node-sel2');
                 this.visuals.twoD.render(false);
             });
 
@@ -500,7 +534,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             this.visuals.microbeTrace.SelectedStatisticsTypesVariable = 'Show';
             this.visuals.microbeTrace.onShowStatisticsChanged();
             this.loadSettings();
-            this.visuals.twoD.render();
 
             //For some mysterious reason, this really needed a delay...
             setTimeout(() => {
@@ -508,6 +541,15 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 if (this.widgets['node-symbol-variable'] !== 'None') {
                     $('#node-symbol-variable').change(); //.trigger('change');
                 }
+
+                // Call render and then set isLoading to false to allo triggering of other renders
+                console.log('norm render');
+                this.visuals.twoD.render();
+                setTimeout(() => {
+                    this.isLoading = false;
+                  }, 1000);
+
+
             }, 1);
 
             setTimeout(() =>{
@@ -525,6 +567,17 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
 
     }
+
+        // Method to ensure the value is an array
+        ensureArray(value: any): any[] {
+            if (Array.isArray(value)) {
+            return value; // It's already an array, return as is
+            } else if (value !== null && value !== undefined) {
+            return [value]; // Not an array, but has a value, wrap it in an array
+            } else {
+            return []; // No value, return an empty array
+            }
+        }
 
     /**
      * Toggle the pointer events of the brush and overlay element
@@ -969,6 +1022,11 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     render(showStatistics: boolean = true) {
 
+        if(this.isLoading) {
+
+        
+        console.log('rendering');
+
         if (!$('#network').length) return;
 
         $("#numberOfSelectedNodes").text(this.visuals.twoD.commonService.session.data.nodes.filter(d => d.selected).length.toLocaleString());
@@ -1241,6 +1299,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
         // Recall the brush to apply the new extent
         d3.select('g.brush').call(this.visuals.twoD.brush);
+    }
 
     };
 
@@ -1326,6 +1385,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 that.visuals.twoD.commonService.temp.style.polygonColorMap = d3
                 .scaleOrdinal(that.visuals.twoD.commonService.session.style['polygonColors'])
                 .domain(values);
+                console.log('render poly color inside');
                 that.render();
             });
           let alphainput = $("<a>⇳</a>").on("click", e => {
@@ -1342,6 +1402,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                   .scaleOrdinal(that.visuals.twoD.commonService.session.style['polygonAlphas'])
                   .domain(values);
                 $("#color-transparency-wrapper").fadeOut();
+                console.log('render poly color trans');
+
                 that.render();
               });
           });
@@ -1411,7 +1473,15 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         }
   
         // this.sortable("#polygon-color-table", { items: "tr" });
-        this.visuals.twoD.render();
+        
+        if (!this.isLoading) {
+            console.log('render update poly color');
+            this.isLoading = true;
+            this.visuals.twoD.render();
+            setTimeout(() => {
+                this.isLoading = false;
+              }, 2000);
+        }
       }
 
     /**
@@ -1445,7 +1515,15 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
             this.visuals.twoD.PolygonColorTableWrapperDialogSettings.setVisibility(false);
         }
-        this.render();
+
+        if (!this.isLoading) {
+            console.log('render poly toggle');
+            this.isLoading = true;
+            this.render();
+            setTimeout(() => {
+                this.isLoading = false;
+              }, 1000);
+        }
     }
 
     /**
@@ -1477,7 +1555,14 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
         }
 
-        this.visuals.twoD.render();
+        if (!this.isLoading) {
+            console.log('render poly color toggle');
+            this.isLoading = true;
+            this.visuals.twoD.render();
+            setTimeout(() => {
+                this.isLoading = false;
+              }, 1000);
+        }
     }
 
     /**
@@ -1490,6 +1575,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     onPolygonColorChanged(e) {
         this.widgets["polygon-color"] = e;
+        console.log('render poly color changed');
         this.visuals.twoD.render();
     }
 
@@ -1510,6 +1596,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             this.visuals.twoD.onPolygonColorTableChange('Hide')
         }
 
+        console.log('render poly color table toggle');
         this.visuals.twoD.render();
     }
 
@@ -2272,6 +2359,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     centerPolygons(e) {
 
         this.widgets['polygons-foci'] = e;
+        console.log('render center poly');
         this.visuals.twoD.render();
         if(this.widgets['polygons-color-show'] == true) {
           $("#polygon-color-table").empty();
@@ -2317,6 +2405,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     onPolygonGatherChange(e) {
         let v = parseFloat(e);
         this.widgets['polygons-gather-force'] = v;
+        console.log('render poly gather');
         this.visuals.twoD.render();
     }
 
@@ -2327,11 +2416,13 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         if (e) {
             this.widgets['polygons-label-show'] = true;
             $('.polygons-label-row').slideDown();
+            console.log('render poly label show');
             this.visuals.twoD.render();
         }
         else {
             this.widgets['polygons-label-show'] = false;
             $('.polygons-label-row').slideUp();
+            console.log('render poly label hide');
             this.visuals.twoD.render();
         }
     }
@@ -2343,6 +2434,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         if (e == "Show") {
             this.widgets['polygons-label-show'] = true;
             $('.polygons-label-row').slideDown();
+            console.log('render poly show change');
             this.visuals.twoD.render();
              //If hidden by default, unhide to perform slide up and down
             //  if(!this.ShowGlobalSettingsNodeColorTable){
@@ -2355,6 +2447,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             this.widgets['polygons-label-show'] = false;
             $('#node-color-value-row').slideDown();
             $('#node-color-table-row').slideUp();
+            console.log('render poly hide change');
             this.visuals.twoD.render();
         }
     }
@@ -3282,7 +3375,14 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      * renders the network
      */
     updateVisualization() {
-      this.render();
+        if (!this.isLoading) {
+            console.log('render update vis');
+            this.isLoading = true;
+            this.render();
+            setTimeout(() => {
+                this.isLoading = false;
+              }, 1000);
+        }    
     }
 
     ngOnDestroy(): void {
@@ -3293,6 +3393,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      * renders the network
      */
     onLoadNewData(){
+        console.log('render new data');
         this.render();
     }
 
@@ -3300,6 +3401,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      * renders the network; sets this.showStatistics to false
      */
     onFilterDataChange(){
+        console.log('render filter change');
          this.render(false);
     }
 

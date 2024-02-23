@@ -632,6 +632,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
       const newTempSkeleton = this.visuals.microbeTrace.commonService.tempSkeleton();
       this.visuals.microbeTrace.commonService.temp.trees = newTempSkeleton.trees;
       $('#launch').text('Update');
+      this.visuals.twoD.isLoading = true;
     }
     else if (!this.commonService.session.network.launched) {
       this.visuals.microbeTrace.commonService.resetData();
