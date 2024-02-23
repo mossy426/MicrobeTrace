@@ -7,6 +7,7 @@ import { DialogSettings } from '../../helperClasses/dialogSettings';
 import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
 import { ComponentContainer } from 'golden-layout';
 import { generateCanvas } from './generateAlignmentViewCanvas';
+import { SelectItem } from 'primeng/api';
 
 
 //import * as alignmentViewer from 'alignment-viewer';
@@ -28,13 +29,18 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     { label: 'Show', value: true },
     { label: 'Hide', value: false }
   ];
+  labelFieldList: SelectItem[] = [];
+  labelField = "_id"
+  labelArray: any[];
+  sortField = "index"
 
   private visuals: MicrobeTraceNextVisuals;
   widgets;
   
   // Data
   nodesWithSeq: any[];
-  nodesWithSeqShortened: any[];
+  seqArray: string[];
+  seqArrayShortened: any[];
   longestSeqLength: number = 0;
   /**
    * count matrix: [ [#A, #C, #G, #T, #other/ambig]-for each location, ... ]
@@ -135,19 +141,30 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
     // set events such as node-selected
     this.setEvents();
 
-    // sets nodesWithSeq and longestSeqLength
+    this.labelFieldList = [];
+    this.commonService.session.data['nodeFields'].map((d, i) => {
+      if (d != 'seq' && d != 'sequence') {
+        this.labelFieldList.push({
+          label: this.commonService.capitalize(d.replace("_", "")),
+          value: d
+        });
+      }
+    });
+
+    // sets nodesWithSeq, seqArr, and longestSeqLength
     this.nodesWithSeq = [];
-    this.commonService.session.data.nodes.forEach(node => {
+    this.seqArray = [];
+    this.commonService.session.data.nodes.forEach((node, index) => {
       if (node.seq != null){
-        this.nodesWithSeq.push({
-          'name': node._id, 
-          'seq': node.seq.toUpperCase(),
-        })
+        this.nodesWithSeq.push(index);
+        this.seqArray.push(node.seq.toUpperCase());
         if (node.seq.length > this.longestSeqLength) {
           this.longestSeqLength = node.seq.length;
         }
       }
     })
+
+    this.labelArray = this.getData(this.nodesWithSeq, ['index', this.labelField]);
 
     // calculations countMatrix, proportionMatrix, and positionMatrix
     this.calculateProportionAtEachLocation();
@@ -189,11 +206,34 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
 
 
   // General
+
+  /**
+   * 
+   * @param indexList an array of indexes for the nodes to get data from
+   * @param field string | array of which field to get data from
+   * @returns an array of objects
+   */
+  getData(indexList, field) {
+    if (Array.isArray(field)) {
+      return indexList.map(index => {
+        let currentObj = {}
+        field.forEach(f => currentObj[f] = this.commonService.session.data.nodes[index][f]);
+        return currentObj;
+      })
+    //} else if (field == "index") {
+    //  return indexList.map(index => parseInt(this.commonService.session.data.nodes[index][field]))
+    } else if (field == "seq") {
+      return indexList.map(index => this.commonService.session.data.nodes[index]["seq"].toUpperCase());
+    } else {
+      return indexList.map(index => this.commonService.session.data.nodes[index][field])
+    }
+  }
+
   /**
   * Updates the alignment by generating a new canvas, and recalcuating various heights
   */
   updateAlignment() {
-    generateCanvas(this.nodesWithSeq, {width: this.spanWidth, height: this.spanHeight, charSetting: this.charSetting, fontSize: this.fontSize, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
+    generateCanvas(this.seqArray, {width: this.spanWidth, height: this.spanHeight, charSetting: this.charSetting, fontSize: this.fontSize, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
       $('#msa-viewer .canvasHolder').empty().append(canvas)
     })
     
@@ -204,10 +244,10 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
 
   /**
   * Creates a minimap. 
-  * The sequences (nodesWithSeqShortened) are previously downsample by picking 1 nt / every n nucleotides;
+  * The sequences (seqArrayShortened) are previously downsample by picking 1 nt / every n nucleotides;
   */
   updateMiniMap() {
-    generateCanvas(this.nodesWithSeqShortened, {width: 1, height: 1, charSetting: 'hide', fontSize: 1, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
+    generateCanvas(this.seqArrayShortened, {width: 1, height: 1, charSetting: 'hide', fontSize: 1, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
       $('#miniMap canvas').remove();
       $('#miniMap').append(canvas);
     })
@@ -349,34 +389,26 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
   // Data
 
   /**
-   * Updates nodesWithSeqShortened by downsampling (selecting 1 out of every n NTs) nodesWithSeq
+   * Updates seqArrayShortened by downsampling (selecting 1 out of every n NTs) nodesWithSeq
    * The factor to downsample by is selection such len of new seqs will be around 300bp   * 
    */
   shortenNodesWithSeq() {
-    this.nodesWithSeqShortened = [];
+    this.seqArrayShortened = [];
     if (this.longestSeqLength < this.rightWidth) {
-      this.nodesWithSeq.forEach((obj) => {
-        this.nodesWithSeqShortened.push({
-          name: obj.name,
-          seq: obj.seq,
-        })
-      })
+      this.seqArrayShortened = this.seqArray
       $('#miniMap').css({'width': this.longestSeqLength+'px', 'height': this.nodesWithSeq.length+'px'})
       return; 
     }
 
     // want the minimap to be around this.rightWidth pixels wide; caculate how much to downscale by and then downscale
     let scaleFactor = Math.ceil(this.longestSeqLength/this.rightWidth)
-    this.nodesWithSeqShortened = [];
-    this.nodesWithSeq.forEach((obj) => {
+    this.seqArrayShortened = [];
+    this.seqArray.forEach((seq) => {
       let downSizedSeq = "";
       for (let i=0; i < this.longestSeqLength; i+= scaleFactor) {
-        downSizedSeq += obj.seq.charAt(i);
+        downSizedSeq += seq.charAt(i);
       }
-      this.nodesWithSeqShortened.push({
-        name: obj.name,
-        seq: downSizedSeq,
-      })
+      this.seqArrayShortened.push(downSizedSeq)
     })
 
     $('#miniMap').css({'width': Math.ceil(this.longestSeqLength/scaleFactor)+'px', 'height': this.nodesWithSeq.length+'px'})
@@ -395,9 +427,9 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
       this.countMatrix.push([0,0,0,0,0]);
     }
 
-    for (let node of this.nodesWithSeq) {
-      for (let i=0; i< node.seq.length; i++) {
-        let nt = node.seq[i];
+    for (let seq of this.seqArray) {
+      for (let i=0; i< seq.length; i++) {
+        let nt = seq[i];
         switch (nt) {
           case 'A':
             this.countMatrix[i][0] += 1;
@@ -644,21 +676,32 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
   /**
    * Searches nodesWithSequences for name given; changes background color for all nodes that are found
    * @param name name/id of node to search for
+   * @param field which field from node to search in
    */
-  search(name: string) {
+  search(name: string, field: string) {
     $('.canvasLabels div').removeClass('searchHighlight2')
     if (name == "") {
       return;
     }
-    
-    let indexes = this.nodesWithSeq.filter((obj) => obj.name.includes(name)).map((obj) => this.nodesWithSeq.indexOf(obj));
+
+    let isFieldNumerical = typeof this.getData([this.nodesWithSeq[0]], field)[0] === 'number'
+
+    let data = this.getData(this.nodesWithSeq, (field == 'index' ? ['index'] : ['index', field]))
+    let indexes;
+    if (isFieldNumerical) {
+      indexes = data.filter((obj) => obj[field] == parseFloat(name)).map((obj) => obj['index'])
+    } else {
+      indexes = data.filter((obj) => obj[field].includes(name)).map((obj) => obj['index'])
+    }
+    //let indexes = this.nodesWithSeq.filter((obj) => obj.name.includes(name)).map((obj) => this.nodesWithSeq.indexOf(obj));
     if (indexes.length == 0) {
       console.log('not found');
       return;
     }
 
     for (let index of indexes) {
-      let element = $('.canvasLabels div').get(index);
+      //let element = $('.canvasLabels div').get(index);
+      let element = $(`.canvasLabels div[data-index="${index}"]`)
       $(element).addClass('searchHighlight2')
     }
 
@@ -672,25 +715,6 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
         $('.canvasLabels').scrollTop(scrollPos)
     }
     
-/*  // this uncommented version return exact match of one node
-    let index = this.nodesWithSeq.findIndex((obj) => obj.name == name);
-    if (index == -1) {
-      return;
-    }
-    let newTop =  (index*this.spanHeight)
-    $('#searchHighlight').css({top: newTop+'px', display: "block"})
-    */
-
-    // determines if scrolling is needed to bring index into view
-    /*
-    let scroll = $('.canvasLabels').scrollTop();
-    let topIndex = scroll/this.spanHeight;
-    topIndex = (topIndex%1 > .2) ? Math.ceil(topIndex) : Math.floor(topIndex)
-    let bottomIndex = Math.floor((this.canvasViewHeight-20) / this.spanHeight + topIndex -1);
-    if (index < topIndex || index > bottomIndex) {
-      let scrollPos = (index)*this.spanHeight -5
-      $('.canvasLabels').scrollTop(scrollPos)
-    } */
   }
 
   /**
@@ -711,7 +735,7 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
     }
   }
 
-  /** XXXX May need to remove XXXX
+  /** XXXX May need to remove; currently use position matrix instead of calculating each XXXX
    * @param i current index of the base/nt in proportion matrix
    * @param j A=0, C=1, G=2, T=3, other/ambiguos=4
    * @returns location for the y value of rectangle in the logo
@@ -742,7 +766,6 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
     }   
   }
 
-  
 
   /**
   * Generate a tabular HTML string from the index of proportionMatrix
@@ -817,15 +840,59 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
     let that = this;
 
     $(document).on( "node-selected", function( ) {  
-      if ($('#search-field').val() != '_id') {
-        console.log('can only search in alignment view with id')
-        return;
-      }
-      that.search($('#search').val() as string)
+      that.search($('#search').val() as string, $('#search-field').val() as string)
     });
 
   }
 
+  /**
+   * updates labelArray and then searches again if needed
+   */
+  onLabelFieldChange() {
+    this.labelArray = this.getData(this.nodesWithSeq, ['index', this.labelField])
+    
+    if ($('#search').val() != "") {
+      let that = this;
+      setTimeout(
+        () => that.search($('#search').val() as string, $('#search-field').val() as string),
+        10)
+    }
+  }
+
+  /**
+   * Sorts the indexes in nodesWithSeq based on the field selected. 
+   * After updating nodesWithSeq, it updates labelArray, seqArray, seqArrayShortened, main canvas, and minimap
+   */
+  onSortFieldChange() {
+    let newSort;
+    if (this.sortField == "None") {
+      return;
+    } else if ( this.sortField == "index") {
+      //return
+      newSort = this.getData(this.nodesWithSeq, [this.sortField]).sort((a,b) => a[this.sortField] -b[this.sortField]);
+      //this.nodesWithSeq.sort((a,b) => )
+    } else if (typeof this.getData([this.nodesWithSeq[0]], this.sortField)[0] == 'number') {
+      newSort = this.getData(this.nodesWithSeq, ['index', this.sortField]).sort((a,b) => a[this.sortField] - b[this.sortField]);
+    } else {
+      newSort = this.getData(this.nodesWithSeq, ['index', this.sortField]).sort((a,b) => a[this.sortField].localeCompare(b[this.sortField]));
+    }
+
+    // updates nodesWithSeq
+    this.nodesWithSeq = newSort.map((obj) => obj['index'])
+    // updates labelArray with new sort
+    this.onLabelFieldChange();
+
+    // updates seqArray with new order
+    this.seqArray = this.getData(this.nodesWithSeq, 'seq');
+
+    // updates seqArrayShortened with new order
+    this.shortenNodesWithSeq();
+
+    // updates main canvas and minimap canvas
+    this.updateAlignment();
+  }
+
+  
   updateNodeColors() { }
   updateLinkColor() { }
 

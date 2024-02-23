@@ -8,7 +8,7 @@
                 <div style="height: 17px;"></div>
             </div>
             <div class="canvasLabels" [style.height.px]="canvasViewHeight-19" [style.width.px]="leftWidth" #canvasLabels (scroll)="canvasHolder.scrollTop=canvasLabels.scrollTop">
-                <div *ngFor="let seq of nodesWithSeq" [ngStyle]="{'font-size.px': fontSize, 'height.px': spanHeight}">{{ seq.name }}</div>
+                <div *ngFor="let label of labelArray" [attr.data-index]="label['index']" [ngStyle]="{'font-size.px': fontSize, 'height.px': spanHeight}">{{ label[labelField] }}</div>
             </div>
         </div>
         <div class="right" [style.height.px]="rightViewHeight">
@@ -76,33 +76,6 @@
 <div class="view-controls">
     <p-dialog id="alignment-settings-pane" [(visible)]="alignmentDialogSettings.isVisible" header="Alignment View Settings" >
         <p-accordion>
-            <!-- Idea to allow user change data label (such as gender, transmission risk ...), Filter data based on value (M), and sort by (?), maybe expand tooltip to as well -->
-            <!-- p-accordionTab style="color:#495057" header="Layout">
-                
-                < div #dataControls>
-                    <div class="form-group row" title="">
-                        <div class="col-4"><label>Labels</label></div>
-                        <div class="col-8">
-                            <p-selectButton [options]="showHideOptions" [(ngModel)]="showMiniMap" (onChange)="updateMiniMapVisibility()"></p-selectButton>
-                        </div>
-                    </div>
-                    <div class="form-group row" title="Switch between a Bar Plot representation or a Logo representation of the nucleotides present at each position">
-                        <div class="col-4"><label>Filter</label></div>
-                        <div class="col-8">
-                            <p-selectButton [options]="alignmentTopDisplayOptions"
-                                [(ngModel)]="alignmentTopDisplay" (onChange)="onAlignmentTopChange()"></p-selectButton>
-                        </div>
-                    </div>
-                                        <div class="form-group row" title="Switch between a Bar Plot representation or a Logo representation of the nucleotides present at each position">
-                        <div class="col-4"><label>Sort By</label></div>
-                        <div class="col-8">
-                            <p-selectButton [options]="alignmentTopDisplayOptions"
-                                [(ngModel)]="alignmentTopDisplay" (onChange)="onAlignmentTopChange()"></p-selectButton>
-                        </div>
-                    </div>
-                    
-                </div>
-            </p-accordionTab -->
             <p-accordionTab style="color:#495057" header="Layout">
                 <div #layoutControls>
                     <div class="form-group row" title="Show or Hide the Mini Map">
@@ -134,8 +107,37 @@
                     </div>
                 </div>
             </p-accordionTab>
-        <!--/p-accordion>
-        <p-accordion-->
+            <p-accordionTab style="color:#495057" header="Labels and Order">
+                <div #labelingControls>
+                    <div class="form-group row" title="">
+                        <div class="col-4"><label>Labels</label></div>
+                        <div class="col-8">
+                            <p-dropdown appendTo="body" [options]="labelFieldList" [(ngModel)]="labelField" (onChange)="onLabelFieldChange()"></p-dropdown>
+                        </div>
+                    </div>
+                    <!--div class="form-group row" title="Switch between a Bar Plot representation or a Logo representation of the nucleotides present at each position">
+                        <div class="col-4"><label>Show Logo</label></div>
+                        <div class="col-8">
+                            <p-selectButton [options]="alignmentTopDisplayOptions"
+                                [(ngModel)]="alignmentTopDisplay" (onChange)="onAlignmentTopChange()"></p-selectButton>
+                        </div>
+                    </div-->
+                    <div class="form-group row" title="">
+                        <div class="col-4"><label>Sort By</label></div>
+                        <div class="col-8">
+                            <p-dropdown appendTo="body" [options]="labelFieldList" [(ngModel)]="sortField" (onChange)="onSortFieldChange()"></p-dropdown>
+                        </div>
+                    </div>
+                    <!--div class="form-group row" 
+                    title="Select how you want NT to be shown in the viewer. Show: Shows both the color and letter for each nucleotide. Minimum: Shows the color for each nucleotide and the letter for any nucleotides different than the top sequence. Hide: Only shows the color for each nucleotide.">
+                        <div class="col-4"><label>Show Nucleotides</label></div>
+                        <div class="col-8">
+                            <p-selectButton [options]="charSettingOptions"
+                                [(ngModel)]="charSetting" (onChange)="updateAlignment()"></p-selectButton>
+                        </div>
+                    </div-->
+                </div>
+            </p-accordionTab>
             <p-accordionTab  style="color:#495057" header="Sizing">
                 <div #sizingControls>
                     <div class="form-group row" title="Set a predefined size">
@@ -158,8 +160,6 @@
                     </div>
                 </div>
             </p-accordionTab>
-        <!--/p-accordion>
-        <p-accordion-->
             <p-accordionTab style="color:#495057" header="Colors">
                 <div #colorControls>
                     <div class="form-group row" title="Select a color scheme">
@@ -168,7 +168,6 @@
                             <p-selectButton [options]="colorSchemeOptions" [(ngModel)]="selectedColorSchemeName"
                                 (onChange)="onSelectedColorChanged($event.value)"></p-selectButton>
                         </div>
-
                     </div>
                     <div *ngIf="useCustomColorScheme" class="customColorSchemeSelection">
                         <div class="form-group row node-label-row" title="Select a custom color for each NT">
