@@ -177,7 +177,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             'choropleth-satellite-show': false,
             'choropleth-transparency': 0.3,
             'cluster-minimum-size': 1,
-            'default-view': '2D Network', // 'Phylogenetic Tree'
+            'default-view': '2D Network', // 'Phylogenetic Tree' 'Alignment View'
             'default-distance-metric': 'tn93',
             'filtering-epsilon': -8,
             'flow-showNodes': 'selected',
@@ -1287,7 +1287,7 @@ export class CommonService extends AppComponentBase implements OnInit {
      * @param {string} seed -reference sequence for generating new sequences 
      * @returns list of objects representings seq, each seq objects has {id: string, seq: string}
      */
-    generateSeqs(idPrefix, count, snps, seed) {
+    generateSeqs(idPrefix, count?, snps?, seed?) {
         let start = Date.now();
         if (!count) count = 1000;
         if (!snps) snps = 100;
@@ -1983,6 +1983,7 @@ export class CommonService extends AppComponentBase implements OnInit {
                 console.log('launching view: ',window.context.commonService.session.style.widgets['default-view']);
             }
             window.context.commonService.launchView(window.context.commonService.session.style.widgets['default-view']);
+            //window.context.commonService.launchView('Alignment View');
 
         }, 1000);
         

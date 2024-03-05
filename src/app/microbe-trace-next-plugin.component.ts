@@ -1851,7 +1851,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         });
 
         this._goldenLayoutHostComponent.TabChangedEvent.subscribe((v) => {
-            if(v === "Files" || v === "Epi Curve") {
+            if(v === "Files" || v === "Epi Curve" || v === "Alignment View") {
                 this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
                 this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
             } else {
@@ -2451,7 +2451,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 }
 
                 this.homepageTabs[0].isActive = true;
-
+    
                 this.loadSettings();
             }
         }

@@ -8,7 +8,7 @@ import * as Papa from 'papaparse';
 import * as saveAs from 'file-saver';
 import * as fileto from 'fileto';
 import * as JSZip from 'jszip';
-import * as alignmentViewer from 'alignment-viewer';
+import { generateCanvas } from '../visualizationComponents/AlignmentViewComponent/generateAlignmentViewCanvas';
 import * as tn93 from 'tn93';
 import * as patristic from 'patristic';
 import AuspiceHandler from '@app/helperClasses/auspiceHandler';
@@ -1284,6 +1284,8 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
       });
     }
 
+    this.isLoadingFiles = false;
+
     setTimeout(() => {
       this.isLoadingFiles = false;
 
@@ -1410,8 +1412,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
         });
       });
       addTableTile(headers, this);
-    } else
-      if (isJSON) {
+    } else if (isJSON) {
         let data = [];
         console.log('This is a JSON file');
         if ( (typeof file.contents) === 'string') {
@@ -1432,24 +1433,31 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
         this.nodeEdgeCheck();
 
-      } else {
-        Papa.parse(file.contents, {
-          header: true,
-          skipEmptyLines: true,
-          complete: output => {
-            addTableTile(output.meta.fields.map(this.visuals.microbeTrace.commonService.filterXSS), this);
+    } else if (isFasta) {
+      //let that = this;
+      this.commonService.parseFASTA(file.contents).then((output) => {
+        addTableTile(["id", "seq"], this);
 
-            if (!isFasta && !isNewick && isNode) {
-              this.loadNodes(file.name, output, false);
-            }
-            if (!isFasta && !isNewick && !isNode) {
-              this.loadEdges(file.name, output, false);
-            }
+        this.nodeEdgeCheck();
+        })
+    } else {
+      Papa.parse(file.contents, {
+        header: true,
+        skipEmptyLines: true,
+        complete: output => {
+          addTableTile(output.meta.fields.map(this.visuals.microbeTrace.commonService.filterXSS), this);
 
-            this.nodeEdgeCheck();
+          if (!isFasta && !isNewick && isNode) {
+            this.loadNodes(file.name, output, false);
           }
-        });
-      }
+          if (!isFasta && !isNewick && !isNode) {
+            this.loadEdges(file.name, output, false);
+          }
+
+          this.nodeEdgeCheck();
+        }
+      });
+    }
 
     //For the love of all that's good...
     //TODO: Rewrite this as a [Web Component](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements) or [something](https://reactjs.org/docs/react-component.html) or something.
@@ -1720,25 +1728,53 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
    */
   async readFastas() {
     const fastas = this.visuals.microbeTrace.commonService.session.files.filter(f => this.visuals.microbeTrace.commonService.includes(f.extension, 'fas'));
-    const nodeCSVsWithSeqs = this.visuals.microbeTrace.commonService.session.files.filter(f => f.format === "node" && f.field2 != "None" && f.field2 != "");
-    if (fastas.length === 0 && nodeCSVsWithSeqs.length === 0) return [];
+    const nodeFilesWithSeqs = this.visuals.microbeTrace.commonService.session.files.filter(f => f.format === "node" && f.field2 != "None" && f.field2 != "");
+    if (fastas.length === 0 && nodeFilesWithSeqs.length === 0) return [];
     let data = [];
     for (let i = 0; i < fastas.length; i++) {
       let fasta = fastas[i];
       let nodes = await this.visuals.microbeTrace.commonService.parseFASTA(fasta.contents);
       data = data.concat(nodes);
     }
-    // TODO: Cannot presently preview sequences in Node CSV/XLSX tables.
-    // for(let j = 0; j < nodeCSVsWithSeqs.length; j++){
-    //   let csv = nodeCSVsWithSeqs[j];
-    //   await MT.parseNodeCSV(csv.contents).then(nodes => {
-    //     data = data.concat(nodes);
-    //   });
-    // }
+    
+    for(let j = 0; j < nodeFilesWithSeqs.length; j++){
+      if (nodeFilesWithSeqs[j].extension == "csv") {
+        let csv = nodeFilesWithSeqs[j];
+          await Papa.parse(csv.contents, {
+            header: true,
+            skipEmptyLines: true,
+            complete: output => {
+              output.data.forEach((node) => {
+                if (node.seq != '' || node.seq != undefined || node.seq != null ) {
+                  data = data.concat({
+                    'id': node.id,
+                    'seq': node.seq
+                  })
+                }
+              })
+            }})
+      // TODO: Cannot presently preview sequences in Node XLSX tables.
+      } else {
+        let file = nodeFilesWithSeqs[j]
+        let workbook = XLSX.read(file.contents, { type: 'array' });
+        let data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+        let headers = [];
+        data.forEach(row => {
+          Object.keys(row).forEach(key => {
+            const safeKey = this.visuals.microbeTrace.commonService.filterXSS(key);
+            if (!this.visuals.microbeTrace.commonService.includes(headers, safeKey)) headers.push(safeKey);
+          });
+        });
+          //addTableTile(headers, this);
+      }
+    }
     return data;
   }
 
-  async updatePreview(data) {
+  async updatePreview(data?) {
+    if (!data) {
+      data = await this.readFastas();
+    }
     $('#alignment-preview').empty().append('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
     if ($('#align-sw').is(':checked')) {
       data = await this.visuals.microbeTrace.commonService.align({
@@ -1748,8 +1784,8 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
         gap: [-parseFloat($('#alignerGapO').val().toString()), -parseFloat($('#alignerGapE').val().toString())]
       })
     }
-    alignmentViewer(data, { showID: false })
-      .then(canvas => $('#alignment-preview').empty().append(canvas));
+    generateCanvas(data.map(obj => obj.seq.toUpperCase()), {}).then(function(canvas: HTMLCanvasElement) { 
+      $('#alignment-preview').empty().append(canvas); })
   }
 
 
@@ -1805,6 +1841,11 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     }
   }
 
+  generateSequences() {
+    $('#file-prompt').remove();
+    $('#launch').prop('disabled', false).focus();
+    this.processFile(new File([Papa.unparse(this.commonService.generateSeqs('gen-' + this.visuals.microbeTrace.commonService.session.meta.readyTime + '-', this.SelectedGenerateNumberVariable, 20))], 'generatedNodes.csv'));
+  }
 
 }
 

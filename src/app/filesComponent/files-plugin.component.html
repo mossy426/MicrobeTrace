@@ -112,7 +112,7 @@
                                             <input id="generate-number" type="number" class="form-control form-control-sm" min="1" max="2000" step="1" value="100" [(ngModel)]="SelectedGenerateNumberVariable">
                                         </div>
                                         <div class="col">
-                                            <button id="generate-sequences" class="btn btn-light btn-sm col">Sequences</button>
+                                            <button id="generate-sequences" class="btn btn-light btn-sm col"  (click)="generateSequences()">Sequences</button>
                                         </div>
                                     </div>
                                     <div class="form-group row" title="Would you like to attempt to infer the direction of your links?">
@@ -294,6 +294,7 @@
                         </tabset>
                     </div>
                     <div class="modal-footer clearfix">
+                        <button (click)="updatePreview()" class="btn btn-success">View Preview</button>
                         <button type="submit" class="btn btn-success pull-right" data-dismiss="modal"
                                 title="Confirm Load Settings are All Properly Set" (click)="displaySequenceSettings = !displaySequenceSettings">
                             Confirm

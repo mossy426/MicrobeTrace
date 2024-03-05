@@ -8,10 +8,8 @@ import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
 import { ComponentContainer } from 'golden-layout';
 import { generateCanvas } from './generateAlignmentViewCanvas';
 import { SelectItem } from 'primeng/api';
-
-
-//import * as alignmentViewer from 'alignment-viewer';
-//import MSAViewer from '@plotly/react-msa-viewer';
+import { saveAs } from 'file-saver';
+import { svgAsPngUri } from 'save-svg-as-png';
 
 @Component({
   selector: 'AlignmentViewComponent',
@@ -19,7 +17,6 @@ import { SelectItem } from 'primeng/api';
   styleUrls: ['./alignment-view-plugin-component.scss']
 })
 export class AlignmentViewComponent extends BaseComponentDirective implements OnInit, MicobeTraceNextPluginEvents {
-
 
   // General Settings
   alignmentDialogSettings: DialogSettings = new DialogSettings('#alignment-settings-pane', false)
@@ -111,14 +108,9 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   ]
 
   // Export
-  SelectedNetworkExportFilenameVariable : string = ""
-  NetworkExportFileTypeList: any = [
-    { label: 'png', value: 'png' },
-    { label: 'jpeg', value: 'jpeg' },
-    { label: 'webp', value: 'webp' },
-    { label: 'svg', value: 'svg' }
-];
-SelectedNetworkExportFileTypeListVariable: string = "png";
+  AlignmentExportFileName: string = ""
+  AlignmentExportFileTypeVis: string = "svg";
+  AlignmentExportFileTypeData: string = "fasta";
 
   constructor(injector: Injector,
     private eventManager: EventManager,
@@ -134,9 +126,6 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
     this.widgets = this.commonService.session.style.widgets;
   }
 
-  /* 
-    if resized from dashboard view: what to resize?
-  */
   ngOnInit(): void {
     // set events such as node-selected
     this.setEvents();
@@ -217,7 +206,7 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
     if (Array.isArray(field)) {
       return indexList.map(index => {
         let currentObj = {}
-        field.forEach(f => currentObj[f] = this.commonService.session.data.nodes[index][f]);
+        field.forEach(f => currentObj[f] = (f == "seq") ? this.commonService.session.data.nodes[index][f].toUpperCase() : this.commonService.session.data.nodes[index][f]);
         return currentObj;
       })
     //} else if (field == "index") {
@@ -247,8 +236,8 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
   * The sequences (seqArrayShortened) are previously downsample by picking 1 nt / every n nucleotides;
   */
   updateMiniMap() {
+    $('#miniMap canvas').remove();
     generateCanvas(this.seqArrayShortened, {width: 1, height: 1, charSetting: 'hide', fontSize: 1, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
-      $('#miniMap canvas').remove();
       $('#miniMap').append(canvas);
     })
   }
@@ -277,18 +266,14 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
   showMiniMapHighlight(e: MouseEvent, miniMap: HTMLElement) {
     let mmDimensions = miniMap.getBoundingClientRect();
     
+    // need to reduce number of sequences on minimap if there are too many
+    let scaleFactorNumber = (this.nodesWithSeq.length <= 100)? 1: Math.ceil(this.nodesWithSeq.length/100);
     let viewHeight = $('.canvasLabels').height();
-    let highlightHeight = viewHeight/this.spanHeight;
+    let highlightHeight = viewHeight/(this.spanHeight*scaleFactorNumber);
 
-    let scaleFactor = Math.ceil(this.longestSeqLength/this.rightWidth)
-    let highlightWidth = $('.canvasHolder').width()/(this.spanWidth*scaleFactor)
-
-    let top = e.clientY - mmDimensions.top - (highlightHeight/2)
-    if (top < 0) {
-      top = 0
-    } else if (top > mmDimensions.height-highlightHeight) {
-      top = mmDimensions.height-highlightHeight
-    }
+    // want the minimap to be around this.rightWidth pixels wide; caculate how much to downscale by and then downscale
+    let scaleFactorLength = (this.longestSeqLength < this.rightWidth)? 1 : Math.ceil(this.longestSeqLength/this.rightWidth);
+    let highlightWidth = $('.canvasHolder').width()/(this.spanWidth*scaleFactorLength)
 
     let canvasWidth = $('#miniMap canvas').width()
     let left = e.clientX - mmDimensions.left - highlightWidth/2;
@@ -344,12 +329,16 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
     let mmDimensions = miniMap.getBoundingClientRect();
     let highlightDimensions =  document.getElementById('miniMapHighlight').getBoundingClientRect();
 
-    let scaleFactor = Math.ceil(this.longestSeqLength/this.rightWidth)
-    let horizontalScroll = (highlightDimensions.left - mmDimensions.left)*this.spanWidth*scaleFactor;    
+    // want the minimap to be around this.rightWidth pixels wide; caculate how much to downscale by and then downscale
+    let scaleFactorLength = (this.longestSeqLength < this.rightWidth)? 1 : Math.ceil(this.longestSeqLength/this.rightWidth);
+    // need to reduce number of sequences on minimap if there are too many
+    let scaleFactorNumber = (this.nodesWithSeq.length <= 100)? 1: Math.ceil(this.nodesWithSeq.length/100);
+    //let scaleFactor = Math.ceil(this.longestSeqLength/this.rightWidth)
+    let horizontalScroll = (highlightDimensions.left - mmDimensions.left)*this.spanWidth*scaleFactorLength;    
     alignmentTop.scrollLeft = horizontalScroll < 10 ? horizontalScroll : horizontalScroll + 7;
     canvasHolder.scrollLeft = horizontalScroll < 10 ? horizontalScroll : horizontalScroll + 7;
 
-    let verticalScroll = (highlightDimensions.top - mmDimensions.top)*this.spanHeight;
+    let verticalScroll = (highlightDimensions.top - mmDimensions.top)*this.spanHeight*scaleFactorNumber;
     canvasLabels.scrollTop = verticalScroll < 4 ? verticalScroll : verticalScroll+4;
     canvasHolder.scrollTop = verticalScroll < 4 ? verticalScroll : verticalScroll+4;  
   
@@ -389,29 +378,34 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
   // Data
 
   /**
-   * Updates seqArrayShortened by downsampling (selecting 1 out of every n NTs) nodesWithSeq
-   * The factor to downsample by is selection such len of new seqs will be around 300bp   * 
+   * Updates seqArrayShortened by downsampling (selecting 1 out of every n NTs and selected 1 out of every m sequences, as needed) nodesWithSeq
+   * 
    */
   shortenNodesWithSeq() {
     this.seqArrayShortened = [];
-    if (this.longestSeqLength < this.rightWidth) {
+    if (this.longestSeqLength < this.rightWidth && this.nodesWithSeq.length <= 100) {
       this.seqArrayShortened = this.seqArray
       $('#miniMap').css({'width': this.longestSeqLength+'px', 'height': this.nodesWithSeq.length+'px'})
+      $('#miniMapTitle').css({'height': (this.nodesWithSeq.length+16)+'px'})
       return; 
     }
 
     // want the minimap to be around this.rightWidth pixels wide; caculate how much to downscale by and then downscale
-    let scaleFactor = Math.ceil(this.longestSeqLength/this.rightWidth)
+    let scaleFactorLength = (this.longestSeqLength < this.rightWidth)? 1 : Math.ceil(this.longestSeqLength/this.rightWidth);
+    // need to reduce number of sequences on minimap if there are too many
+    let scaleFactorNumber = (this.nodesWithSeq.length <= 100)? 1: Math.ceil(this.nodesWithSeq.length/100);
     this.seqArrayShortened = [];
-    this.seqArray.forEach((seq) => {
+    this.seqArray.forEach((seq, index) => {
+      if (index % scaleFactorNumber != 0) return;
       let downSizedSeq = "";
-      for (let i=0; i < this.longestSeqLength; i+= scaleFactor) {
+      for (let i=0; i < this.longestSeqLength; i+= scaleFactorLength) {
         downSizedSeq += seq.charAt(i);
       }
       this.seqArrayShortened.push(downSizedSeq)
     })
 
-    $('#miniMap').css({'width': Math.ceil(this.longestSeqLength/scaleFactor)+'px', 'height': this.nodesWithSeq.length+'px'})
+    $('#miniMap').css({'width': Math.ceil(this.longestSeqLength/scaleFactorLength)+'px', 'height': Math.ceil(this.nodesWithSeq.length/scaleFactorNumber)+'px'})
+    $('#miniMapTitle').css({'height': Math.ceil(this.nodesWithSeq.length/scaleFactorNumber+16)+'px'})
   }
 
   /**
@@ -523,7 +517,7 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
    * @returns the height for the canvasHolder element and then subsequently the canvasLabels element. Not the height of the canvas itself
    */
   calculateCanvasViewHeight(): number {
-    let miniMapHeight = (this.showMiniMap) ? this.nodesWithSeq.length+16 : 0;
+    let miniMapHeight = (this.showMiniMap) ? $('#miniMapHolder').outerHeight() : 0;
     return Math.min(this.alignmentViewHeight - 170 - miniMapHeight, this.nodesWithSeq.length*this.spanHeight+25)
   }
 
@@ -930,8 +924,93 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
     this.ShowAlignExportPane = true;
   }
 
-  exportVisualization(e) {
-    console.log(e);
+  /**
+   * Exports the alignmentTop and main canvas as png image
+   */
+  exportPNG() {
+    let that = this;
+    let alignmentTop = document.querySelector('#alignmentTop svg');
+    let mainCanvas = $('.canvasHolder canvas').get(0) as HTMLCanvasElement
+    let exportWidth = mainCanvas.width
+    let exportHeight = mainCanvas.height + 140;
+    svgAsPngUri(alignmentTop, {
+      scale: 1,
+      backgroundColor: '#ffffff',
+      encoderType: 'image/png',
+      encoderOptions: 0.8
+    }).then((topB64string) => {
+      let imageDataUrl;
+
+      let exportCanvas = document.createElement("canvas");
+      exportCanvas.height = exportHeight;
+      exportCanvas.width = exportWidth;
+      let ctx = exportCanvas.getContext("2d");
+
+      let iTop = new Image();
+      let iMain = new Image();
+      iTop.src = topB64string;
+      iTop.onload = function() {
+        iMain.src = mainCanvas.toDataURL()
+        iMain.onload = function() {
+
+          ctx.drawImage(iTop, 0, 0)
+          ctx.drawImage(iMain, 0, 140)
+
+          imageDataUrl = exportCanvas.toDataURL("image/png")
+          saveAs(imageDataUrl, that.AlignmentExportFileName + '.png')
+        }
+      }
+  }); 
+  }
+
+  /**
+   * Exports the alignment top and main canvas as svg or png image
+   */
+  exportVisualization() {
+    $("body").css("cursor", "progress");
+    if (this.AlignmentExportFileTypeVis == 'png') {
+      this.exportPNG();
+    } else {
+      
+    let canvas = $('.canvasHolder canvas').get(0) as HTMLCanvasElement
+    let canvasDataURL = canvas.toDataURL();
+  
+    let foreignObj = document.createElementNS('http://www.w3.org/2000/svg', 'image')
+    foreignObj.setAttribute('x', '0'); // Set the x-coordinate
+    foreignObj.setAttribute('y', '140'); // Set the y-coordinate
+    foreignObj.setAttribute('width', canvas.width.toString()); // Set the width
+    foreignObj.setAttribute('height', canvas.height.toString()); // Set the height
+    foreignObj.setAttribute('xlink:href', canvasDataURL);
+
+    let top = $('#alignmentTop svg').get(0)
+    top.style.height = 150+canvas.height+'px'
+    top.appendChild(foreignObj);
+
+    let content = this.commonService.unparseSVG(top);
+    let blob = new Blob([content], { type: 'image/svg+xml;charset=utf-8' });
+    saveAs(blob, this.AlignmentExportFileName + '.svg');
+
+    top.style.height = 150+canvas.height+'px';
+    top.removeChild(foreignObj)
+    }
+    $("body").css("cursor", "default");
+  }
+
+  /**
+   * Exports sequencing data (id + seq string) as fasta or mega file
+   */
+  exportData() {
+    if (this.AlignmentExportFileTypeData == 'fasta') {
+      let data = this.getData(this.nodesWithSeq, ['_id', 'seq'])
+      let blob = new Blob([data.map(node => ">" + node._id + "\r\n" + node.seq).join("\r\n")])
+      //saveAs(blob, 'hi.fasta')
+      saveAs(blob, this.AlignmentExportFileName+'.fasta')
+    } else if (this.AlignmentExportFileTypeData == 'mega') {
+      let data = this.getData(this.nodesWithSeq, ['_id', 'seq'])
+      let headers = "#mega\r\n!Title " + this.AlignmentExportFileName + ";\r\n!Format\r\n\tDataType=DNA CodeTable=Standard\r\n\tIdentical=. Missing=? Indel=-;\r\n\r\n"
+      let blob = new Blob([headers, data.map(node => "#" + node._id + "\r\n" + node.seq).join("\r\n")])
+      saveAs(blob, this.AlignmentExportFileName+'.meg')
+    }
   }
 
 }
