@@ -27,9 +27,9 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     { label: 'Hide', value: false }
   ];
   labelFieldList: SelectItem[] = [];
-  labelField = "_id"
+  //labelField = "_id" // replaced with this.widgets['alignView-labelField']
   labelArray: any[];
-  sortField = "index"
+  //sortField = "index" // replaced with this.widgets['alignView-sortField']
 
   private visuals: MicrobeTraceNextVisuals;
   widgets;
@@ -39,6 +39,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   seqArray: string[];
   seqArrayShortened: any[];
   longestSeqLength: number = 0;
+
   /**
    * count matrix: [ [#A, #C, #G, #T, #other/ambig]-for each location, ... ]
    */
@@ -47,30 +48,32 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * proportion matrix: [ [A, C, G, T, #other/ambig]-for each location, ... ]
    */
   proportionMatrix;
-    /**
+  /**
    * position matrix: [ [A, C, G, T, #other/ambig]-for each location, ... ]
    * y position (top) for each base at each postion in sequence
    */
   positionMatrix;
 
   // Layout
-  showMiniMap: boolean;
-  alignmentTopDisplay: string;
+  //showMiniMap: boolean; // replaced with this.widgets['alignView-showMiniMap']
+  //alignmentTopDisplay: string; // replaced with this.widgets['alignView-topDisplay']
   alignmentTopDisplayOptions = [
     { label: 'Logo', value: 'logo' },
     { label: 'Bar Plot', value: 'barplot'}
   ]
-  charSetting: string; // 'show', 'min', 'hide'
+  //charSetting: string; // 'show', 'min', 'hide' // replaced with this.widgets['alignView-charSetting']
   charSettingOptions: any = [
     { label: 'Show', value: 'show' },
     { label: 'Minimum', value: 'min'},
     { label: 'Hide', value: 'hide' }
   ];
-  rulerMinorInterval: number = 20;
+  //rulerMinorInterval: number = 20; replaced with this.widgets['alignView-rulerMinorInterval']
   rulerIntervalOptions = [0, 10, 20, 25, 50]
 
   // Sizing
-  spanWidth: number;
+  // spanWidth and spanHeight values are duplicated in the widgets; I didn't replace because these are used through the template in loops and I was concerned that
+  // looking up there values 1000's of times from this.commonService.session.style.widgets would hurt performance
+  spanWidth: number; 
   spanHeight: number;
   fontSize: number;
 
@@ -80,7 +83,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     { label: 'Large', value: 'l'},
     { label: 'Custom', value: 'c'}
   ]
-  selectedSize: string;
+  //selectedSize: string; // replaced with this.widgets['alignView-selectedSize']
 
   alignmentViewHeight: number;
   rightViewHeight: number;
@@ -90,10 +93,10 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   rightWidth: number;
 
   // Colors
-  selectedColorSchemeName: string;
-  colorScheme;
-  customColorScheme;
-  useCustomColorScheme: boolean = false;
+  //selectedColorSchemeName: string; // replaced with this.widgets['alignView-colorSchemeName']
+  colorScheme; // current color scheme;
+  // customColorScheme; // replaced with this.widgets['alignView-customColorScheme']
+  useCustomColorScheme: boolean;
   colorSchemeOptions = [
     { label: 'Normal', 
       value: 'n',
@@ -130,6 +133,8 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     // set events such as node-selected
     this.setEvents();
 
+    this.setDefaultWidgets();
+
     this.labelFieldList = [];
     this.commonService.session.data['nodeFields'].map((d, i) => {
       if (d != 'seq' && d != 'sequence') {
@@ -153,48 +158,86 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
       }
     })
 
-    this.labelArray = this.getData(this.nodesWithSeq, ['index', this.labelField]);
+    this.labelArray = this.getData(this.nodesWithSeq, ['index', this.widgets['alignView-labelField']]);
 
     // calculations countMatrix, proportionMatrix, and positionMatrix
     this.calculateProportionAtEachLocation();
 
     // sets different variables relating to size and display
-    this.alignmentTopDisplay = 'logo'
-    $('#alignmnetTopTitle').text('Logo');
-    this.selectedSize= 'l';
-    this.selectedColorSchemeName = 'n'
-    this.colorScheme = {
-      'A': '#ccff00',
-      'C': '#ffff00',
-      'G': '#ff9900',
-      'T': '#ff6600',
-      'ambig': '#ffffff',
-    } 
-    this.customColorScheme = {
-      'A': '#ccff00',
-      'C': '#ffff00',
-      'G': '#ff9900',
-      'T': '#ff6600',
-      'ambig': '#ffffff',
+    this.onAlignmentTopChange()
+
+    if (this.widgets['alignView-colorSchemeName'] == 'n' || this.widgets['alignView-colorSchemeName'] == 'a') {
+      this.useCustomColorScheme = false;
+    } else {
+      this.useCustomColorScheme = true;
     }
-    this.charSetting = 'hide';
+    this.onSelectedColorChanged()
 
     // updates spanWidth, spanHeight, rightWidth, leftWidth, fontSize, and then updates alignment
     this.onSelectedSizeChanged()
     // updates the valus of nodeWidthSeqShortened based on size of rigthWitdth, longestSeqLength, and nodesWithSeq
     this.shortenNodesWithSeq();
 
-    // updates showMiniMap which triggers updateMiniMapVisibility() and updateMiniMap()
-    this.showMiniMap = true;
-    this.updateMiniMap();
-
-    // updates heights such as rightViewHeight, alignmentViewHeight, and canvasViewHeight
-    this.updateViewHeights();
+    // updates shows or hides minimap and then updates view heights
+    this.updateMiniMapVisibility()
 
   }
 
-
   // General
+
+  /**
+   * Defines new widgets and set default values
+   */
+  setDefaultWidgets() {
+    //size
+    if (this.widgets['alignView-selectedSize'] == undefined) {
+      this.widgets['alignView-selectedSize'] = 'l';
+    }
+    // height and width are declare/checked in this.onSelectedSizeChanged()
+
+    // color
+    if (this.widgets['alignView-colorSchemeName'] == undefined) {
+      this.widgets['alignView-colorSchemeName'] = 'n';
+    }
+
+    if (this.widgets['alignView-customColorScheme'] == undefined) {
+      this.widgets['alignView-customColorScheme'] = {
+        'A': '#ccff00',
+        'C': '#ffff00',
+        'G': '#ff9900',
+        'T': '#ff6600',
+        'ambig': '#ffffff',
+      }
+    }
+
+    // labels/sorting
+    if (this.widgets['alignView-labelField'] == undefined) {
+      this.widgets['alignView-labelField'] = '_id';
+    }
+
+    if (this.widgets['alignView-sortField'] == undefined) {
+      this.widgets['alignView-sortField'] = 'index';
+    }
+
+    // top settings
+    if (this.widgets['alignView-showMiniMap'] == undefined) {
+      this.widgets['alignView-showMiniMap'] = true;
+    }
+
+    if (this.widgets['alignView-topDisplay'] == undefined) {
+      this.widgets['alignView-topDisplay'] = 'logo';
+    }
+
+    if (this.widgets['alignView-rulerMinorInterval'] == undefined) {
+      this.widgets['alignView-rulerMinorInterval'] = 20;
+    }
+
+    // main canvas
+    if (this.widgets['alignView-charSetting'] == undefined) {
+      this.widgets['alignView-charSetting'] = 'hide';
+    }
+
+  }
 
   /**
    * 
@@ -209,8 +252,6 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
         field.forEach(f => currentObj[f] = (f == "seq") ? this.commonService.session.data.nodes[index][f].toUpperCase() : this.commonService.session.data.nodes[index][f]);
         return currentObj;
       })
-    //} else if (field == "index") {
-    //  return indexList.map(index => parseInt(this.commonService.session.data.nodes[index][field]))
     } else if (field == "seq") {
       return indexList.map(index => this.commonService.session.data.nodes[index]["seq"].toUpperCase());
     } else {
@@ -222,7 +263,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   * Updates the alignment by generating a new canvas, and recalcuating various heights
   */
   updateAlignment() {
-    generateCanvas(this.seqArray, {width: this.spanWidth, height: this.spanHeight, charSetting: this.charSetting, fontSize: this.fontSize, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
+    generateCanvas(this.seqArray, {width: this.spanWidth, height: this.spanHeight, charSetting: this.widgets['alignView-charSetting'], fontSize: this.fontSize, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
       $('#msa-viewer .canvasHolder').empty().append(canvas)
     })
     
@@ -246,7 +287,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * Adds/Removed miniMap and miniMap title
    */
   updateMiniMapVisibility() {
-    if (this.showMiniMap){
+    if (this.widgets['alignView-showMiniMap']){
       this.updateMiniMap();
       $('#miniMapHolder').css({'display': 'block'});
       $('#miniMapTitle').css({'display': 'block'});
@@ -312,7 +353,6 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     }
 
     $('#miniMapHighlight').css({'top': top +'px', 'left': left +'px'});
-
   }
 
   /**
@@ -341,7 +381,6 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     let verticalScroll = (highlightDimensions.top - mmDimensions.top)*this.spanHeight*scaleFactorNumber;
     canvasLabels.scrollTop = verticalScroll < 4 ? verticalScroll : verticalScroll+4;
     canvasHolder.scrollTop = verticalScroll < 4 ? verticalScroll : verticalScroll+4;  
-  
   }
 
   // Tooltip
@@ -501,7 +540,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * @returns the height needed to for all the elements on the right half of msa-viewer. If this height > available space, then scrolling will be used
    */
   calculateRightHeight(): number {
-    let miniMapHeight = (this.showMiniMap) ? $('#miniMapHolder').height()+16 : 0;
+    let miniMapHeight = (this.widgets['alignView-showMiniMap']) ? $('#miniMapHolder').height()+16 : 0;
     // 170 alignmentTop, 17 bottomScrollBar, height of canvas
     return 170+25+this.nodesWithSeq.length*this.spanHeight+ miniMapHeight;
   }
@@ -517,7 +556,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * @returns the height for the canvasHolder element and then subsequently the canvasLabels element. Not the height of the canvas itself
    */
   calculateCanvasViewHeight(): number {
-    let miniMapHeight = (this.showMiniMap) ? $('#miniMapHolder').outerHeight() : 0;
+    let miniMapHeight = (this.widgets['alignView-showMiniMap']) ? $('#miniMapHolder').outerHeight() : 0;
     return Math.min(this.alignmentViewHeight - 170 - miniMapHeight, this.nodesWithSeq.length*this.spanHeight+25)
   }
 
@@ -549,7 +588,8 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
 
     this.rightWidth = this.calculateRightWidth();
 
-    this.selectedSize='c';
+    this.widgets['alignView-selectedSize']='c';
+    this.widgets['alignView-spanHeight'] = e;
     this.updateAlignment();
   }
 
@@ -557,7 +597,8 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * Updates the alignment view with the new width
    */
   onSpanWidthChange(e){
-    this.selectedSize='c';
+    this.widgets['alignView-selectedSize']='c';
+    this.widgets['alignView-spanWidth'] = e
     this.updateAlignment();
   }
 
@@ -565,26 +606,46 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * Updates spanHeight, spanWidth, fontSize, and sometimes charSetting and then updates alignment view with new settings
    */
   onSelectedSizeChanged() {
-    if (this.selectedSize == 's') {
+    if (this.widgets['alignView-selectedSize'] == 's') {
       this.spanHeight = 10;
       this.spanWidth = 2;
-      this.fontSize = 10;
-      this.leftWidth = 150;
-      this.charSetting = 'hide';
-    } else if (this.selectedSize == 'm') {
+      this.widgets['alignView-charSetting'] = 'hide';
+    } else if (this.widgets['alignView-selectedSize'] == 'm') {
       this.spanHeight = 12;
       this.spanWidth = 6;
-      this.fontSize = 12;
-      this.leftWidth = 200;
       //this.charSetting = 'hide';
-    } else if (this.selectedSize == 'l') {
+    } else if (this.widgets['alignView-selectedSize'] == 'l') {
       this.spanHeight = 16;
       this.spanWidth = 10;
-      this.fontSize = 16;
-      this.leftWidth = 250;
       //this.charSetting = 'show';
+    } else if (this.widgets['alignView-selectedSize'] == 'c') {
+      
+      if (!this.widgets['alignView-spanWidth']) {
+        this.spanWidth = 10;
+      } else {
+        this.spanWidth = this.widgets['alignView-spanWidth']
+      }
+
+      if (!this.widgets['alignView-spanHeight']) {
+        this.spanHeight = 16;
+      } else {
+        this.spanHeight = this.widgets['alignView-spanHeight']
+      }
     }
 
+    if (this.spanHeight >= 16) {
+      this.fontSize = 16;
+      this.leftWidth=250;
+    } else if (this.spanHeight >= 12) {
+      this.fontSize = 12;
+      this.leftWidth = 200;
+    } else if (this.spanHeight >= 10) {
+      this.fontSize = 10;
+      this.leftWidth = 150;
+    }
+
+    this.widgets['alignView-spanWidth'] = this.spanWidth;
+    this.widgets['alignView-spanHeight'] = this.spanHeight;
 
     this.rightWidth = this.calculateRightWidth();
     this.updateAlignment();
@@ -597,8 +658,8 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * Updates the color scheme for the view based on what is selected
    * @param e 'n' | 'a' | 'c'
    */
-  onSelectedColorChanged(e) {
-    if (e == 'n') {
+  onSelectedColorChanged() {
+    if (this.widgets['alignView-colorSchemeName'] == 'n') {
       this.colorScheme = {
         'A': '#ccff00',
         'C': '#ffff00',
@@ -607,7 +668,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
         'ambig': '#ffffff',
       }
       this.useCustomColorScheme = false;
-    } else if (e == 'a') {
+    } else if (this.widgets['alignView-colorSchemeName'] == 'a') {
       this.colorScheme = {
         'A': '#009E73',
         'C': '#F0E442',
@@ -618,18 +679,18 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
         this.useCustomColorScheme = false;
     } else {
       this.colorScheme = {
-        'A': this.customColorScheme['A'],
-        'C': this.customColorScheme['C'],
-        'G': this.customColorScheme['G'],
-        'T': this.customColorScheme['T'],
-        'ambig': this.customColorScheme['ambig'],
+        'A': this.widgets['alignView-customColorScheme']['A'],
+        'C': this.widgets['alignView-customColorScheme']['C'],
+        'G': this.widgets['alignView-customColorScheme']['G'],
+        'T': this.widgets['alignView-customColorScheme']['T'],
+        'ambig': this.widgets['alignView-customColorScheme']['ambig'],
         }
       this.useCustomColorScheme = true;
 
     }
 
     this.updateAlignment();
-    if (this.showMiniMap) {
+    if (this.widgets['alignView-showMiniMap']) {
       this.updateMiniMap();
     }
   }
@@ -640,9 +701,9 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    */
   updateColorScheme(nt, e) {
     this.colorScheme[nt] = e.target.value;
-    this.customColorScheme[nt] = e.target.value;
+    this.widgets['alignView-customColorScheme'][nt] = e.target.value;
     this.updateAlignment();
-    if (this.showMiniMap) {
+    if (this.widgets['alignView-showMiniMap']) {
       this.updateMiniMap();
     }
   }
@@ -722,7 +783,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * Updates text in 
    */
   onAlignmentTopChange() {
-    if (this.alignmentTopDisplay == 'barplot') {
+    if (this.widgets['alignView-topDisplay'] == 'barplot') {
       $('#alignmnetTopTitle').text('Bar Plot');
     } else {
       $('#alignmnetTopTitle').text('Logo');
@@ -843,7 +904,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * updates labelArray and then searches again if needed
    */
   onLabelFieldChange() {
-    this.labelArray = this.getData(this.nodesWithSeq, ['index', this.labelField])
+    this.labelArray = this.getData(this.nodesWithSeq, ['index', this.widgets['alignView-labelField']])
     
     if ($('#search').val() != "") {
       let that = this;
@@ -859,16 +920,17 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    */
   onSortFieldChange() {
     let newSort;
-    if (this.sortField == "None") {
+    let sortField = this.widgets['alignView-sortField']
+    if (sortField == "None") {
       return;
-    } else if ( this.sortField == "index") {
+    } else if ( sortField == "index") {
       //return
-      newSort = this.getData(this.nodesWithSeq, [this.sortField]).sort((a,b) => a[this.sortField] -b[this.sortField]);
+      newSort = this.getData(this.nodesWithSeq, [sortField]).sort((a,b) => a[sortField] -b[sortField]);
       //this.nodesWithSeq.sort((a,b) => )
-    } else if (typeof this.getData([this.nodesWithSeq[0]], this.sortField)[0] == 'number') {
-      newSort = this.getData(this.nodesWithSeq, ['index', this.sortField]).sort((a,b) => a[this.sortField] - b[this.sortField]);
+    } else if (typeof this.getData([this.nodesWithSeq[0]], sortField)[0] == 'number') {
+      newSort = this.getData(this.nodesWithSeq, ['index', sortField]).sort((a,b) => a[sortField] - b[sortField]);
     } else {
-      newSort = this.getData(this.nodesWithSeq, ['index', this.sortField]).sort((a,b) => a[this.sortField].localeCompare(b[this.sortField]));
+      newSort = this.getData(this.nodesWithSeq, ['index', sortField]).sort((a,b) => a[sortField].localeCompare(b[sortField]));
     }
 
     // updates nodesWithSeq
@@ -900,27 +962,16 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   onRecallSession() {
     
   }
-  onLoadNewData() {
-    /*
-    if new data is add via new fasta file or whatever what do we need to update -need to be added at some point:
-      this.nodesWithSeq; also update longestSeqLength
-      this.calculateProportionAtEachLocation();
-      this.updateAlignment;
-      this.shortenNodesWithSeq();
-      this.updateMiniMap();
-    */
-    
+  onLoadNewData() {   
   }
   onFilterDataChange() {
     
   }
 
   /**
-   * Ultimately will be used for exporting elements of the view; for now, used to for testing
+   * Opens the Alignment View Export Pain
   */
   openExport() {
-    //this.setCalculatedResolution()
-    //this.isExportClosed = false;
     this.ShowAlignExportPane = true;
   }
 
