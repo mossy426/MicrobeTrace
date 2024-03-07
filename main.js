@@ -8432,9 +8432,10 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
       value: false
     }];
     this.labelFieldList = [];
-    this.labelField = "_id";
-    this.sortField = "index";
     this.longestSeqLength = 0;
+    // Layout
+    //showMiniMap: boolean; // replaced with this.widgets['alignView-showMiniMap']
+    //alignmentTopDisplay: string; // replaced with this.widgets['alignView-topDisplay']
     this.alignmentTopDisplayOptions = [{
       label: 'Logo',
       value: 'logo'
@@ -8442,6 +8443,7 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
       label: 'Bar Plot',
       value: 'barplot'
     }];
+    //charSetting: string; // 'show', 'min', 'hide' // replaced with this.widgets['alignView-charSetting']
     this.charSettingOptions = [{
       label: 'Show',
       value: 'show'
@@ -8452,7 +8454,7 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
       label: 'Hide',
       value: 'hide'
     }];
-    this.rulerMinorInterval = 20;
+    //rulerMinorInterval: number = 20; replaced with this.widgets['alignView-rulerMinorInterval']
     this.rulerIntervalOptions = [0, 10, 20, 25, 50];
     this.sizes = [{
       label: 'Small',
@@ -8467,7 +8469,6 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
       label: 'Custom',
       value: 'c'
     }];
-    this.useCustomColorScheme = false;
     this.colorSchemeOptions = [{
       label: 'Normal',
       value: 'n'
@@ -8489,6 +8490,7 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
   ngOnInit() {
     // set events such as node-selected
     this.setEvents();
+    this.setDefaultWidgets();
     this.labelFieldList = [];
     this.commonService.session.data['nodeFields'].map((d, i) => {
       if (d != 'seq' && d != 'sequence') {
@@ -8510,40 +8512,69 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
         }
       }
     });
-    this.labelArray = this.getData(this.nodesWithSeq, ['index', this.labelField]);
+    this.labelArray = this.getData(this.nodesWithSeq, ['index', this.widgets['alignView-labelField']]);
     // calculations countMatrix, proportionMatrix, and positionMatrix
     this.calculateProportionAtEachLocation();
     // sets different variables relating to size and display
-    this.alignmentTopDisplay = 'logo';
-    $('#alignmnetTopTitle').text('Logo');
-    this.selectedSize = 'l';
-    this.selectedColorSchemeName = 'n';
-    this.colorScheme = {
-      'A': '#ccff00',
-      'C': '#ffff00',
-      'G': '#ff9900',
-      'T': '#ff6600',
-      'ambig': '#ffffff'
-    };
-    this.customColorScheme = {
-      'A': '#ccff00',
-      'C': '#ffff00',
-      'G': '#ff9900',
-      'T': '#ff6600',
-      'ambig': '#ffffff'
-    };
-    this.charSetting = 'hide';
+    this.onAlignmentTopChange();
+    if (this.widgets['alignView-colorSchemeName'] == 'n' || this.widgets['alignView-colorSchemeName'] == 'a') {
+      this.useCustomColorScheme = false;
+    } else {
+      this.useCustomColorScheme = true;
+    }
+    this.onSelectedColorChanged();
     // updates spanWidth, spanHeight, rightWidth, leftWidth, fontSize, and then updates alignment
     this.onSelectedSizeChanged();
     // updates the valus of nodeWidthSeqShortened based on size of rigthWitdth, longestSeqLength, and nodesWithSeq
     this.shortenNodesWithSeq();
-    // updates showMiniMap which triggers updateMiniMapVisibility() and updateMiniMap()
-    this.showMiniMap = true;
-    this.updateMiniMap();
-    // updates heights such as rightViewHeight, alignmentViewHeight, and canvasViewHeight
-    this.updateViewHeights();
+    // updates shows or hides minimap and then updates view heights
+    this.updateMiniMapVisibility();
   }
   // General
+  /**
+   * Defines new widgets and set default values
+   */
+  setDefaultWidgets() {
+    //size
+    if (this.widgets['alignView-selectedSize'] == undefined) {
+      this.widgets['alignView-selectedSize'] = 'l';
+    }
+    // height and width are declare/checked in this.onSelectedSizeChanged()
+    // color
+    if (this.widgets['alignView-colorSchemeName'] == undefined) {
+      this.widgets['alignView-colorSchemeName'] = 'n';
+    }
+    if (this.widgets['alignView-customColorScheme'] == undefined) {
+      this.widgets['alignView-customColorScheme'] = {
+        'A': '#ccff00',
+        'C': '#ffff00',
+        'G': '#ff9900',
+        'T': '#ff6600',
+        'ambig': '#ffffff'
+      };
+    }
+    // labels/sorting
+    if (this.widgets['alignView-labelField'] == undefined) {
+      this.widgets['alignView-labelField'] = '_id';
+    }
+    if (this.widgets['alignView-sortField'] == undefined) {
+      this.widgets['alignView-sortField'] = 'index';
+    }
+    // top settings
+    if (this.widgets['alignView-showMiniMap'] == undefined) {
+      this.widgets['alignView-showMiniMap'] = true;
+    }
+    if (this.widgets['alignView-topDisplay'] == undefined) {
+      this.widgets['alignView-topDisplay'] = 'logo';
+    }
+    if (this.widgets['alignView-rulerMinorInterval'] == undefined) {
+      this.widgets['alignView-rulerMinorInterval'] = 20;
+    }
+    // main canvas
+    if (this.widgets['alignView-charSetting'] == undefined) {
+      this.widgets['alignView-charSetting'] = 'hide';
+    }
+  }
   /**
    *
    * @param indexList an array of indexes for the nodes to get data from
@@ -8557,8 +8588,6 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
         field.forEach(f => currentObj[f] = f == "seq" ? this.commonService.session.data.nodes[index][f].toUpperCase() : this.commonService.session.data.nodes[index][f]);
         return currentObj;
       });
-      //} else if (field == "index") {
-      //  return indexList.map(index => parseInt(this.commonService.session.data.nodes[index][field]))
     } else if (field == "seq") {
       return indexList.map(index => this.commonService.session.data.nodes[index]["seq"].toUpperCase());
     } else {
@@ -8572,7 +8601,7 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
     (0,_generateAlignmentViewCanvas__WEBPACK_IMPORTED_MODULE_5__.generateCanvas)(this.seqArray, {
       width: this.spanWidth,
       height: this.spanHeight,
-      charSetting: this.charSetting,
+      charSetting: this.widgets['alignView-charSetting'],
       fontSize: this.fontSize,
       colors: this.colorScheme
     }).then(function (canvas) {
@@ -8601,7 +8630,7 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
    * Adds/Removed miniMap and miniMap title
    */
   updateMiniMapVisibility() {
-    if (this.showMiniMap) {
+    if (this.widgets['alignView-showMiniMap']) {
       this.updateMiniMap();
       $('#miniMapHolder').css({
         'display': 'block'
@@ -8856,7 +8885,7 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
    * @returns the height needed to for all the elements on the right half of msa-viewer. If this height > available space, then scrolling will be used
    */
   calculateRightHeight() {
-    let miniMapHeight = this.showMiniMap ? $('#miniMapHolder').height() + 16 : 0;
+    let miniMapHeight = this.widgets['alignView-showMiniMap'] ? $('#miniMapHolder').height() + 16 : 0;
     // 170 alignmentTop, 17 bottomScrollBar, height of canvas
     return 170 + 25 + this.nodesWithSeq.length * this.spanHeight + miniMapHeight;
   }
@@ -8870,7 +8899,7 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
    * @returns the height for the canvasHolder element and then subsequently the canvasLabels element. Not the height of the canvas itself
    */
   calculateCanvasViewHeight() {
-    let miniMapHeight = this.showMiniMap ? $('#miniMapHolder').outerHeight() : 0;
+    let miniMapHeight = this.widgets['alignView-showMiniMap'] ? $('#miniMapHolder').outerHeight() : 0;
     return Math.min(this.alignmentViewHeight - 170 - miniMapHeight, this.nodesWithSeq.length * this.spanHeight + 25);
   }
   /**
@@ -8896,40 +8925,58 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
       this.leftWidth = 150;
     }
     this.rightWidth = this.calculateRightWidth();
-    this.selectedSize = 'c';
+    this.widgets['alignView-selectedSize'] = 'c';
+    this.widgets['alignView-spanHeight'] = e;
     this.updateAlignment();
   }
   /**
    * Updates the alignment view with the new width
    */
   onSpanWidthChange(e) {
-    this.selectedSize = 'c';
+    this.widgets['alignView-selectedSize'] = 'c';
+    this.widgets['alignView-spanWidth'] = e;
     this.updateAlignment();
   }
   /**
    * Updates spanHeight, spanWidth, fontSize, and sometimes charSetting and then updates alignment view with new settings
    */
   onSelectedSizeChanged() {
-    if (this.selectedSize == 's') {
+    if (this.widgets['alignView-selectedSize'] == 's') {
       this.spanHeight = 10;
       this.spanWidth = 2;
-      this.fontSize = 10;
-      this.leftWidth = 150;
-      this.charSetting = 'hide';
-    } else if (this.selectedSize == 'm') {
+      this.widgets['alignView-charSetting'] = 'hide';
+    } else if (this.widgets['alignView-selectedSize'] == 'm') {
       this.spanHeight = 12;
       this.spanWidth = 6;
-      this.fontSize = 12;
-      this.leftWidth = 200;
       //this.charSetting = 'hide';
-    } else if (this.selectedSize == 'l') {
+    } else if (this.widgets['alignView-selectedSize'] == 'l') {
       this.spanHeight = 16;
       this.spanWidth = 10;
+      //this.charSetting = 'show';
+    } else if (this.widgets['alignView-selectedSize'] == 'c') {
+      if (!this.widgets['alignView-spanWidth']) {
+        this.spanWidth = 10;
+      } else {
+        this.spanWidth = this.widgets['alignView-spanWidth'];
+      }
+      if (!this.widgets['alignView-spanHeight']) {
+        this.spanHeight = 16;
+      } else {
+        this.spanHeight = this.widgets['alignView-spanHeight'];
+      }
+    }
+    if (this.spanHeight >= 16) {
       this.fontSize = 16;
       this.leftWidth = 250;
-      //this.charSetting = 'show';
+    } else if (this.spanHeight >= 12) {
+      this.fontSize = 12;
+      this.leftWidth = 200;
+    } else if (this.spanHeight >= 10) {
+      this.fontSize = 10;
+      this.leftWidth = 150;
     }
-
+    this.widgets['alignView-spanWidth'] = this.spanWidth;
+    this.widgets['alignView-spanHeight'] = this.spanHeight;
     this.rightWidth = this.calculateRightWidth();
     this.updateAlignment();
   }
@@ -8938,8 +8985,8 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
    * Updates the color scheme for the view based on what is selected
    * @param e 'n' | 'a' | 'c'
    */
-  onSelectedColorChanged(e) {
-    if (e == 'n') {
+  onSelectedColorChanged() {
+    if (this.widgets['alignView-colorSchemeName'] == 'n') {
       this.colorScheme = {
         'A': '#ccff00',
         'C': '#ffff00',
@@ -8948,7 +8995,7 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
         'ambig': '#ffffff'
       };
       this.useCustomColorScheme = false;
-    } else if (e == 'a') {
+    } else if (this.widgets['alignView-colorSchemeName'] == 'a') {
       this.colorScheme = {
         'A': '#009E73',
         'C': '#F0E442',
@@ -8959,16 +9006,16 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
       this.useCustomColorScheme = false;
     } else {
       this.colorScheme = {
-        'A': this.customColorScheme['A'],
-        'C': this.customColorScheme['C'],
-        'G': this.customColorScheme['G'],
-        'T': this.customColorScheme['T'],
-        'ambig': this.customColorScheme['ambig']
+        'A': this.widgets['alignView-customColorScheme']['A'],
+        'C': this.widgets['alignView-customColorScheme']['C'],
+        'G': this.widgets['alignView-customColorScheme']['G'],
+        'T': this.widgets['alignView-customColorScheme']['T'],
+        'ambig': this.widgets['alignView-customColorScheme']['ambig']
       };
       this.useCustomColorScheme = true;
     }
     this.updateAlignment();
-    if (this.showMiniMap) {
+    if (this.widgets['alignView-showMiniMap']) {
       this.updateMiniMap();
     }
   }
@@ -8978,9 +9025,9 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
    */
   updateColorScheme(nt, e) {
     this.colorScheme[nt] = e.target.value;
-    this.customColorScheme[nt] = e.target.value;
+    this.widgets['alignView-customColorScheme'][nt] = e.target.value;
     this.updateAlignment();
-    if (this.showMiniMap) {
+    if (this.widgets['alignView-showMiniMap']) {
       this.updateMiniMap();
     }
   }
@@ -9050,7 +9097,7 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
    * Updates text in
    */
   onAlignmentTopChange() {
-    if (this.alignmentTopDisplay == 'barplot') {
+    if (this.widgets['alignView-topDisplay'] == 'barplot') {
       $('#alignmnetTopTitle').text('Bar Plot');
     } else {
       $('#alignmnetTopTitle').text('Logo');
@@ -9161,7 +9208,7 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
    * updates labelArray and then searches again if needed
    */
   onLabelFieldChange() {
-    this.labelArray = this.getData(this.nodesWithSeq, ['index', this.labelField]);
+    this.labelArray = this.getData(this.nodesWithSeq, ['index', this.widgets['alignView-labelField']]);
     if ($('#search').val() != "") {
       let that = this;
       setTimeout(() => that.search($('#search').val(), $('#search-field').val()), 10);
@@ -9173,16 +9220,17 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
    */
   onSortFieldChange() {
     let newSort;
-    if (this.sortField == "None") {
+    let sortField = this.widgets['alignView-sortField'];
+    if (sortField == "None") {
       return;
-    } else if (this.sortField == "index") {
+    } else if (sortField == "index") {
       //return
-      newSort = this.getData(this.nodesWithSeq, [this.sortField]).sort((a, b) => a[this.sortField] - b[this.sortField]);
+      newSort = this.getData(this.nodesWithSeq, [sortField]).sort((a, b) => a[sortField] - b[sortField]);
       //this.nodesWithSeq.sort((a,b) => )
-    } else if (typeof this.getData([this.nodesWithSeq[0]], this.sortField)[0] == 'number') {
-      newSort = this.getData(this.nodesWithSeq, ['index', this.sortField]).sort((a, b) => a[this.sortField] - b[this.sortField]);
+    } else if (typeof this.getData([this.nodesWithSeq[0]], sortField)[0] == 'number') {
+      newSort = this.getData(this.nodesWithSeq, ['index', sortField]).sort((a, b) => a[sortField] - b[sortField]);
     } else {
-      newSort = this.getData(this.nodesWithSeq, ['index', this.sortField]).sort((a, b) => a[this.sortField].localeCompare(b[this.sortField]));
+      newSort = this.getData(this.nodesWithSeq, ['index', sortField]).sort((a, b) => a[sortField].localeCompare(b[sortField]));
     }
     // updates nodesWithSeq
     this.nodesWithSeq = newSort.map(obj => obj['index']);
@@ -9200,23 +9248,12 @@ let AlignmentViewComponent = (_class = class AlignmentViewComponent extends _app
   updateVisualization() {}
   openRefreshScreen() {}
   onRecallSession() {}
-  onLoadNewData() {
-    /*
-    if new data is add via new fasta file or whatever what do we need to update -need to be added at some point:
-      this.nodesWithSeq; also update longestSeqLength
-      this.calculateProportionAtEachLocation();
-      this.updateAlignment;
-      this.shortenNodesWithSeq();
-      this.updateMiniMap();
-    */
-  }
+  onLoadNewData() {}
   onFilterDataChange() {}
   /**
-   * Ultimately will be used for exporting elements of the view; for now, used to for testing
+   * Opens the Alignment View Export Pain
   */
   openExport() {
-    //this.setCalculatedResolution()
-    //this.isExportClosed = false;
     this.ShowAlignExportPane = true;
   }
   /**
@@ -20490,7 +20527,7 @@ module.exports = "<div class=\"m-content\">   \r\n    <div class=\"m-portlet m-p
 /***/ ((module) => {
 
 "use strict";
-module.exports = "<div class=\"msa-viewer-container\">\r\n    <div id=\"msa-viewer\" [style.height.px]=\"alignmentViewHeight\">\r\n        <div class=\"left\">  \r\n            <div style=\"text-align: center;\" [style.width.px]=\"leftWidth\">\r\n                <div id='miniMapTitle' class=\"title\" title=\"Mini Map of entire length for all the sequences. Click to move to an area of the viewer.\">Mini Map</div>\r\n                <div id='alignmnetTopTitle' class=\"title\" style=\"height: 100px; padding-top: 22px;\"></div>\r\n                <div class=\"title\" style=\"height: 43px;\">Ruler</div>\r\n                <div style=\"height: 17px;\"></div>\r\n            </div>\r\n            <div class=\"canvasLabels\" [style.height.px]=\"canvasViewHeight-17\" [style.width.px]=\"leftWidth\" #canvasLabels (scroll)=\"canvasHolder.scrollTop=canvasLabels.scrollTop\">\r\n                <div *ngFor=\"let label of labelArray\" [attr.data-index]=\"label['index']\" [ngStyle]=\"{'font-size.px': fontSize, 'height.px': spanHeight}\">{{ label[labelField] }}</div>\r\n            </div>\r\n        </div>\r\n        <div class=\"right\" [style.height.px]=\"rightViewHeight\">\r\n            <div id=\"miniMapHolder\">\r\n                <div id=\"miniMap\" (mouseenter)=\"showMiniMapHighlight($event, miniMap)\" (mousemove)=\"updateMiniMapHighlight($event, miniMap)\" (mouseleave)=\"hideMiniMapHighlight()\" (click)=\"miniMapClick($event, miniMap, canvasHolder, canvasLabels, alignmentTop)\" #miniMap>\r\n                    <div id=\"miniMapHighlight\"></div>\r\n                    <!--<canvas> for miniMap here-->\r\n                </div>\r\n            </div>\r\n            <div id=\"alignmentTop\" (scroll)=\"canvasHolder.scrollLeft=alignmentTop.scrollLeft\" [style.width.px]=\"rightWidth\" #alignmentTop>\r\n                <svg [attr.width]=\"spanWidth*proportionMatrix.length+17\" height=\"140\" style=\"background-color: white;\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\r\n                    <g *ngFor=\"let nt of proportionMatrix; index as i\">\r\n                        <g *ngIf=\"alignmentTopDisplay === 'barplot'\">\r\n                            <g *ngFor=\"let prop of nt; index as j\">\r\n                                <rect *ngIf=\"prop>0\" [attr.y]=\"positionMatrix[i][j]\" [attr.x]=\"spanWidth*i\" [attr.height]=\"100*prop\" [attr.width]=\"spanWidth\" [attr.fill]=\"fillColor(j)\"/>\r\n                            </g>\r\n                        </g>\r\n                        <g *ngIf=\"alignmentTopDisplay === 'logo'\">\r\n                            <g class=\"A\" *ngIf=\"nt[0]>0\" [attr.transform]=\"'translate(' + spanWidth*i + ', ' + positionMatrix[i][0] + ') scale(' + spanWidth/100 + ', ' + nt[0] + ')'\" \r\n                                [attr.fill]=\"fillColor(0)\">\r\n                                <path d=\"M 0 100 L 33 0 L 66 0 L 100 100 L 75 100 L 66 75 L 33 75 L 25 100 L 0 100\"/>\r\n                                <path fill=\"#ffffff\" d=\"M 41 55 L 50 25 L 58 55 L 41 55\"/>\r\n                            </g>\r\n                            <path class=\"C\" *ngIf=\"nt[1]>0\" [attr.transform]=\"'translate(' + spanWidth*i + ', ' + positionMatrix[i][1] + ') scale(' + spanWidth/100 + ', ' + nt[1] + ')'\" \r\n                                [attr.fill]=\"fillColor(1)\"\r\n                                d=\"M 100 28 C 100 -13 0 -13 0 50 C 0 113 100 113 100 72 L 75 72 C 75 90 30 90 30 50 C 30 10 75 10 75 28 L 100 28\"/>\r\n                            <path class=\"G\" *ngIf=\"nt[2]>0\" [attr.transform]=\"'translate(' + spanWidth*i + ', ' +  positionMatrix[i][2] + ') scale(' + spanWidth/100 + ', ' + nt[2] + ')'\" \r\n                                [attr.fill]=\"fillColor(2)\"\r\n                                d=\"M 100 28 C 100 -13 0 -13 0 50 C 0 113 100 113 100 72 L 100 48 L 55 48 L 55 72 L 75 72 C 75 90 30 90 30 50 C 30 10 75 5 75 28 L 100 28\"/>\r\n                            <path class=\"T\" *ngIf=\"nt[3]>0\" [attr.transform]=\"'translate(' + spanWidth*i + ', ' + positionMatrix[i][3] + ') scale(' + spanWidth/100 + ', ' + nt[3] + ')'\" \r\n                                [attr.fill]=\"fillColor(3)\"\r\n                                d=\"M 0 0 L 0 20 L 35 20 L 35 100 L 65 100 L 65 20 L 100 20 L 100 0 L 0 0\"/>\r\n                        </g>\r\n                        <g *ngIf=\"i %100 == 0 || i==0\">\r\n                            <text y=\"120\" [attr.x]=\"i >= 100 ? spanWidth*i-10 : spanWidth*i\">{{ i }}</text>\r\n                            <text y=\"140\" [attr.x]=\"spanWidth*i\">|</text>\r\n                        </g>\r\n                        <g *ngIf=\"i % rulerMinorInterval == 0 && i%100 != 0\">\r\n                            <text y=\"120\" [attr.x]=\"i >= 100 ? spanWidth*i-10 : spanWidth*i-5\">{{ i }}</text>\r\n                            <text y=\"140\" [attr.x]=\"spanWidth*i\">:</text>\r\n                        </g>\r\n                        <rect [attr.width]=\"spanWidth\" [attr.x]=\"spanWidth*i\" height=\"100\" y=\"0\" style=\"fill: transparent\" (mouseenter)=\"showTooltip($event, i)\" (mouseleave)=\"hideTooltip()\"/>\r\n                    </g>\r\n                </svg>\r\n            </div>\r\n            <div class=\"canvasHolder\" [style.height.px]=\"canvasViewHeight\" [style.width.px]=\"rightWidth\" (scroll)=\"canvasScroll(canvasHolder, canvasLabels, alignmentTop)\" #canvasHolder></div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"tooltipHolder\">\r\n    <div class=\"triangle\"></div>\r\n    <span id=\"tooltipAlign\"></span>\r\n</div>\r\n\r\n<div id=\"tool-btn-container\" class=\"m-portlet\">\r\n    <span style=\"overflow: visible; position: relative; width: 110px;\">\r\n        <a title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openSettings()\"><i class=\"flaticon-settings primary\"></i></a>\r\n    </span>\r\n    <span style=\"overflow: visible; position: relative; width: 110px;\">\r\n        <a title=\"Export Screen\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openExport()\"><i class=\"flaticon-download primary\"></i></a>\r\n    </span>\r\n</div>\r\n\r\n<div class=\"view-controls\">\r\n    <p-dialog id=\"alignment-settings-pane\" [(visible)]=\"alignmentDialogSettings.isVisible\" header=\"Alignment View Settings\" >\r\n        <p-accordion>\r\n            <p-accordionTab style=\"color:#495057\" header=\"Layout\">\r\n                <div #layoutControls>\r\n                    <div class=\"form-group row\" title=\"Show or Hide the Mini Map\">\r\n                        <div class=\"col-4\"><label>Show MiniMap</label></div>\r\n                        <div class=\"col-8\">\r\n                            <p-selectButton [options]=\"showHideOptions\" [(ngModel)]=\"showMiniMap\" (onChange)=\"updateMiniMapVisibility()\"></p-selectButton>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group row\" title=\"Switch between a Bar Plot representation or a Logo representation of the nucleotides present at each position\">\r\n                        <div class=\"col-4\"><label>Show Logo</label></div>\r\n                        <div class=\"col-8\">\r\n                            <p-selectButton [options]=\"alignmentTopDisplayOptions\"\r\n                                [(ngModel)]=\"alignmentTopDisplay\" (onChange)=\"onAlignmentTopChange()\"></p-selectButton>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group row\" title=\"Set the minor interval for the ruler. Set to 0 to remove minor interval.\">\r\n                        <div class=\"col-4\"><label>Ruler Minor Interval</label></div>\r\n                        <div class=\"col-8\">\r\n                            <p-dropdown [options]=\"rulerIntervalOptions\" appendTo=\"body\" [(ngModel)]=\"rulerMinorInterval\"></p-dropdown>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group row\" \r\n                    title=\"Select how you want NT to be shown in the viewer. Show: Shows both the color and letter for each nucleotide. Minimum: Shows the color for each nucleotide and the letter for any nucleotides different than the top sequence. Hide: Only shows the color for each nucleotide.\">\r\n                        <div class=\"col-4\"><label>Show Nucleotides</label></div>\r\n                        <div class=\"col-8\">\r\n                            <p-selectButton [options]=\"charSettingOptions\"\r\n                                [(ngModel)]=\"charSetting\" (onChange)=\"updateAlignment()\"></p-selectButton>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </p-accordionTab>\r\n            <p-accordionTab style=\"color:#495057\" header=\"Labels and Order\">\r\n                <div #labelingControls>\r\n                    <div class=\"form-group row\" title=\"\">\r\n                        <div class=\"col-4\"><label>Labels</label></div>\r\n                        <div class=\"col-8\">\r\n                            <p-dropdown appendTo=\"body\" [options]=\"labelFieldList\" [(ngModel)]=\"labelField\" (onChange)=\"onLabelFieldChange()\"></p-dropdown>\r\n                        </div>\r\n                    </div>\r\n                    <!--div class=\"form-group row\" title=\"Switch between a Bar Plot representation or a Logo representation of the nucleotides present at each position\">\r\n                        <div class=\"col-4\"><label>Show Logo</label></div>\r\n                        <div class=\"col-8\">\r\n                            <p-selectButton [options]=\"alignmentTopDisplayOptions\"\r\n                                [(ngModel)]=\"alignmentTopDisplay\" (onChange)=\"onAlignmentTopChange()\"></p-selectButton>\r\n                        </div>\r\n                    </div-->\r\n                    <div class=\"form-group row\" title=\"\">\r\n                        <div class=\"col-4\"><label>Sort By</label></div>\r\n                        <div class=\"col-8\">\r\n                            <p-dropdown appendTo=\"body\" [options]=\"labelFieldList\" [(ngModel)]=\"sortField\" (onChange)=\"onSortFieldChange()\"></p-dropdown>\r\n                        </div>\r\n                    </div>\r\n                    <!--div class=\"form-group row\" \r\n                    title=\"Select how you want NT to be shown in the viewer. Show: Shows both the color and letter for each nucleotide. Minimum: Shows the color for each nucleotide and the letter for any nucleotides different than the top sequence. Hide: Only shows the color for each nucleotide.\">\r\n                        <div class=\"col-4\"><label>Show Nucleotides</label></div>\r\n                        <div class=\"col-8\">\r\n                            <p-selectButton [options]=\"charSettingOptions\"\r\n                                [(ngModel)]=\"charSetting\" (onChange)=\"updateAlignment()\"></p-selectButton>\r\n                        </div>\r\n                    </div-->\r\n                </div>\r\n            </p-accordionTab>\r\n            <p-accordionTab  style=\"color:#495057\" header=\"Sizing\">\r\n                <div #sizingControls>\r\n                    <div class=\"form-group row\" title=\"Set a predefined size\">\r\n                        <div class=\"col-2\"><label>Size</label></div>\r\n                        <div class=\"col-10\">\r\n                            <p-selectButton [options]=\"sizes\" [(ngModel)]=\"selectedSize\" (onChange)=\"onSelectedSizeChanged()\"></p-selectButton>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group row node-label-row\" title=\"Set a custom height. Updating sets size to custom\">\r\n                        <div class=\"col-3\"><label>Height</label></div>\r\n                        <div class=\"col-8\">\r\n                            <input type=\"number\" class=\"form-control form-control-sm\" min=\"10\" step=\"1\" max=\"20\" [(ngModel)]=\"spanHeight\" (ngModelChange)=\"onSpanHeightChange($event)\">\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group row node-label-row\" title=\"Set a custom width. Updating sets size to custom\">\r\n                        <div class=\"col-3\"><label>Width</label></div>\r\n                        <div class=\"col-8\">\r\n                            <input type=\"number\" class=\"form-control form-control-sm\" min=\"1\" step=\"1\" max=\"15\" [(ngModel)]=\"spanWidth\" (ngModelChange)=\"onSpanWidthChange($event)\">\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </p-accordionTab>\r\n            <p-accordionTab style=\"color:#495057\" header=\"Colors\">\r\n                <div #colorControls>\r\n                    <div class=\"form-group row\" title=\"Select a color scheme\">\r\n                        <div class=\"col-3\"><label>Color Scheme</label></div>\r\n                        <div class=\"col-9\">\r\n                            <p-selectButton [options]=\"colorSchemeOptions\" [(ngModel)]=\"selectedColorSchemeName\"\r\n                                (onChange)=\"onSelectedColorChanged($event.value)\"></p-selectButton>\r\n                        </div>\r\n                    </div>\r\n                    <div *ngIf=\"useCustomColorScheme\" class=\"customColorSchemeSelection\">\r\n                        <div class=\"form-group row node-label-row\" title=\"Select a custom color for each NT\">\r\n                            <label>A:\r\n                                <input type=\"color\" class=\"form-control form-control-sm\" [ngModel]=\"customColorScheme['A']\" (change)=\"updateColorScheme('A', $event)\">\r\n                            </label>\r\n                            <label>C: \r\n                                <input type=\"color\" class=\"form-control form-control-sm\" [ngModel]=\"customColorScheme['C']\" (change)=\"updateColorScheme('C', $event)\">\r\n                            </label>\r\n                            <label>G: \r\n                                <input type=\"color\" class=\"form-control form-control-sm\" [ngModel]=\"customColorScheme['G']\" (change)=\"updateColorScheme('G', $event)\">\r\n                            </label>\r\n                            <label>T: \r\n                                <input type=\"color\" class=\"form-control form-control-sm\" [ngModel]=\"customColorScheme['T']\" (change)=\"updateColorScheme('T', $event)\">\r\n                            </label>\r\n                        </div>\r\n                        <div class=\"form-group row node-label-row\" title=\"Select a custom color for each NT\"> \r\n                            <label style=\"display: flex; align-items: center; gap:10px;\">Ambiguities/Other: \r\n                                <input type=\"color\" [ngModel]=\"customColorScheme['ambig']\" (change)=\"updateColorScheme('ambig', $event)\">\r\n                            </label>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </p-accordionTab>\r\n        </p-accordion>\r\n    </p-dialog>\r\n</div>\r\n\r\n<p-dialog id=\"alignment-export-modal\" [(visible)]=\"ShowAlignExportPane\" header=\"Export Alignment View\"\r\n    (onHide)=\"ShowAlignExportPane = false\">\r\n    <tabset class=\"tab-container tabbable-line\">\r\n        <tab heading=\"{{'Images' | localize}}\" [active]=\"true\" customClass=\"m-tabs__item\">\r\n            <div class=\"modal-dialog\" role=\"document\">\r\n                <div class=\"modal-content\">\r\n                    <div class=\"modal-body\" style='min-width: 400px; height: 100%;'>\r\n                        <div class=\"form-group row\">\r\n                            <div class=\"col-9\">\r\n                                <input type=\"text\" class=\"form-control form-control-sm\"\r\n                                    placeholder=\"Filename\" [(ngModel)]=\"AlignmentExportFileName\">\r\n                            </div>\r\n                            <div class=\"col-3\">\r\n                                <select [(ngModel)]=\"AlignmentExportFileTypeVis\" class=\"form-control form-control-sm\">\r\n                                    <option>svg</option>\r\n                                    <option>png</option>\r\n                                </select>\r\n                            </div>\r\n                        </div>\r\n                        <div *ngIf=\"AlignmentExportFileTypeVis=='png'\" class=\"form-group row\">\r\n                            <div class=\"col-4\" style=\"text-align: center;\">Resolution</div>\r\n                            <div class=\"col-8\" style=\"text-align: center;\">\r\n                                {{ spanWidth * longestSeqLength }} x {{ spanHeight * nodesWithSeq.length +140 }} px\r\n                            </div>\r\n                                <div style=\"width: 100%; text-align: center; margin-top: 5px;\"> Adjust Height and Width in settings to change export dimensions </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"modal-footer\">\r\n                        <button type=\"button\" class=\"btn btn-error\"\r\n                            (click)=\"ShowAlignExportPane = false\">Cancel</button>\r\n                        <button type=\"button\" class=\"btn btn-primary\" style=\"background-color: #495057;\"\r\n                            (click)=\"exportVisualization()\">Export</button>\r\n                    </div>\r\n                </div><!-- /.modal-content -->\r\n            </div><!-- /.modal-dialog -->\r\n        </tab>\r\n        <tab heading=\"{{'Data' | localize}}\" customClass=\"m-tabs__item\">\r\n            <div class=\"modal-dialog\" role=\"document\">\r\n                <div class=\"modal-content\">\r\n                    <div class=\"modal-body\" style='min-width: 400px; height: 100%;'>\r\n                        <div class=\"form-group row\">\r\n                            <div class=\"col-9\">\r\n                                <input type=\"text\" class=\"form-control form-control-sm\"\r\n                                    placeholder=\"Filename\" [(ngModel)]=\"AlignmentExportFileName\">\r\n                            </div>\r\n                            <div class=\"col-3\">\r\n                                <select [(ngModel)]=\"AlignmentExportFileTypeData\" class=\"form-control form-control-sm\">\r\n                                    <option>fasta</option>\r\n                                    <option>mega</option>\r\n                                </select>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"modal-footer\">\r\n                        <button type=\"button\" class=\"btn btn-error\"\r\n                            (click)=\"ShowAlignExportPane = false\">Cancel</button>\r\n                        <button type=\"button\" class=\"btn btn-primary\" style=\"background-color: #495057;\"\r\n                            (click)=\"exportData()\">Export</button>\r\n                    </div>\r\n                </div><!-- /.modal-content -->\r\n            </div><!-- /.modal-dialog -->\r\n        </tab>\r\n    </tabset>\r\n</p-dialog><!-- /.modal -->\r\n";
+module.exports = "<div class=\"msa-viewer-container\">\r\n    <div id=\"msa-viewer\" [style.height.px]=\"alignmentViewHeight\">\r\n        <div class=\"left\">  \r\n            <div style=\"text-align: center;\" [style.width.px]=\"leftWidth\">\r\n                <div id='miniMapTitle' class=\"title\" title=\"Mini Map of entire length for all the sequences. Click to move to an area of the viewer.\">Mini Map</div>\r\n                <div id='alignmnetTopTitle' class=\"title\" style=\"height: 100px; padding-top: 22px;\"></div>\r\n                <div class=\"title\" style=\"height: 43px;\">Ruler</div>\r\n                <div style=\"height: 17px;\"></div>\r\n            </div>\r\n            <div class=\"canvasLabels\" [style.height.px]=\"canvasViewHeight-17\" [style.width.px]=\"leftWidth\" #canvasLabels (scroll)=\"canvasHolder.scrollTop=canvasLabels.scrollTop\">\r\n                <div *ngFor=\"let label of labelArray\" [attr.data-index]=\"label['index']\" [ngStyle]=\"{'font-size.px': fontSize, 'height.px': spanHeight}\">{{ label[ this.widgets['alignView-labelField'] ] }}</div>\r\n            </div>\r\n        </div>\r\n        <div class=\"right\" [style.height.px]=\"rightViewHeight\">\r\n            <div id=\"miniMapHolder\">\r\n                <div id=\"miniMap\" (mouseenter)=\"showMiniMapHighlight($event, miniMap)\" (mousemove)=\"updateMiniMapHighlight($event, miniMap)\" (mouseleave)=\"hideMiniMapHighlight()\" (click)=\"miniMapClick($event, miniMap, canvasHolder, canvasLabels, alignmentTop)\" #miniMap>\r\n                    <div id=\"miniMapHighlight\"></div>\r\n                    <!--<canvas> for miniMap here-->\r\n                </div>\r\n            </div>\r\n            <div id=\"alignmentTop\" (scroll)=\"canvasHolder.scrollLeft=alignmentTop.scrollLeft\" [style.width.px]=\"rightWidth\" #alignmentTop>\r\n                <svg [attr.width]=\"spanWidth*proportionMatrix.length+17\" height=\"140\" style=\"background-color: white;\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\r\n                    <g *ngFor=\"let nt of proportionMatrix; index as i\">\r\n                        <g *ngIf=\"this.widgets['alignView-topDisplay'] === 'barplot'\">\r\n                            <g *ngFor=\"let prop of nt; index as j\">\r\n                                <rect *ngIf=\"prop>0\" [attr.y]=\"positionMatrix[i][j]\" [attr.x]=\"spanWidth*i\" [attr.height]=\"100*prop\" [attr.width]=\"spanWidth\" [attr.fill]=\"fillColor(j)\"/>\r\n                            </g>\r\n                        </g>\r\n                        <g *ngIf=\"this.widgets['alignView-topDisplay'] === 'logo'\">\r\n                            <g class=\"A\" *ngIf=\"nt[0]>0\" [attr.transform]=\"'translate(' + spanWidth*i + ', ' + positionMatrix[i][0] + ') scale(' + spanWidth/100 + ', ' + nt[0] + ')'\" \r\n                                [attr.fill]=\"fillColor(0)\">\r\n                                <path d=\"M 0 100 L 33 0 L 66 0 L 100 100 L 75 100 L 66 75 L 33 75 L 25 100 L 0 100\"/>\r\n                                <path fill=\"#ffffff\" d=\"M 41 55 L 50 25 L 58 55 L 41 55\"/>\r\n                            </g>\r\n                            <path class=\"C\" *ngIf=\"nt[1]>0\" [attr.transform]=\"'translate(' + spanWidth*i + ', ' + positionMatrix[i][1] + ') scale(' + spanWidth/100 + ', ' + nt[1] + ')'\" \r\n                                [attr.fill]=\"fillColor(1)\"\r\n                                d=\"M 100 28 C 100 -13 0 -13 0 50 C 0 113 100 113 100 72 L 75 72 C 75 90 30 90 30 50 C 30 10 75 10 75 28 L 100 28\"/>\r\n                            <path class=\"G\" *ngIf=\"nt[2]>0\" [attr.transform]=\"'translate(' + spanWidth*i + ', ' +  positionMatrix[i][2] + ') scale(' + spanWidth/100 + ', ' + nt[2] + ')'\" \r\n                                [attr.fill]=\"fillColor(2)\"\r\n                                d=\"M 100 28 C 100 -13 0 -13 0 50 C 0 113 100 113 100 72 L 100 48 L 55 48 L 55 72 L 75 72 C 75 90 30 90 30 50 C 30 10 75 5 75 28 L 100 28\"/>\r\n                            <path class=\"T\" *ngIf=\"nt[3]>0\" [attr.transform]=\"'translate(' + spanWidth*i + ', ' + positionMatrix[i][3] + ') scale(' + spanWidth/100 + ', ' + nt[3] + ')'\" \r\n                                [attr.fill]=\"fillColor(3)\"\r\n                                d=\"M 0 0 L 0 20 L 35 20 L 35 100 L 65 100 L 65 20 L 100 20 L 100 0 L 0 0\"/>\r\n                        </g>\r\n                        <g *ngIf=\"i %100 == 0 || i==0\">\r\n                            <text y=\"120\" [attr.x]=\"i >= 100 ? spanWidth*i-10 : spanWidth*i\">{{ i }}</text>\r\n                            <text y=\"140\" [attr.x]=\"spanWidth*i\">|</text>\r\n                        </g>\r\n                        <g *ngIf=\"i % this.widgets['alignView-rulerMinorInterval'] == 0 && i%100 != 0\">\r\n                            <text y=\"120\" [attr.x]=\"i >= 100 ? spanWidth*i-10 : spanWidth*i-5\">{{ i }}</text>\r\n                            <text y=\"140\" [attr.x]=\"spanWidth*i\">:</text>\r\n                        </g>\r\n                        <rect [attr.width]=\"spanWidth\" [attr.x]=\"spanWidth*i\" height=\"100\" y=\"0\" style=\"fill: transparent\" (mouseenter)=\"showTooltip($event, i)\" (mouseleave)=\"hideTooltip()\"/>\r\n                    </g>\r\n                </svg>\r\n            </div>\r\n            <div class=\"canvasHolder\" [style.height.px]=\"canvasViewHeight\" [style.width.px]=\"rightWidth\" (scroll)=\"canvasScroll(canvasHolder, canvasLabels, alignmentTop)\" #canvasHolder></div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"tooltipHolder\">\r\n    <div class=\"triangle\"></div>\r\n    <span id=\"tooltipAlign\"></span>\r\n</div>\r\n\r\n<div id=\"tool-btn-container\" class=\"m-portlet\">\r\n    <span style=\"overflow: visible; position: relative; width: 110px;\">\r\n        <a title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openSettings()\"><i class=\"flaticon-settings primary\"></i></a>\r\n    </span>\r\n    <span style=\"overflow: visible; position: relative; width: 110px;\">\r\n        <a title=\"Export Screen\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openExport()\"><i class=\"flaticon-download primary\"></i></a>\r\n    </span>\r\n</div>\r\n\r\n<div class=\"view-controls\">\r\n    <p-dialog id=\"alignment-settings-pane\" [(visible)]=\"alignmentDialogSettings.isVisible\" header=\"Alignment View Settings\" >\r\n        <p-accordion>\r\n            <p-accordionTab style=\"color:#495057\" header=\"Layout\">\r\n                <div #layoutControls>\r\n                    <div class=\"form-group row\" title=\"Show or Hide the Mini Map\">\r\n                        <div class=\"col-4\"><label>Show MiniMap</label></div>\r\n                        <div class=\"col-8\">\r\n                            <p-selectButton [options]=\"showHideOptions\" [(ngModel)]=\"this.widgets['alignView-showMiniMap']\" (onChange)=\"updateMiniMapVisibility()\"></p-selectButton>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group row\" title=\"Switch between a Bar Plot representation or a Logo representation of the nucleotides present at each position\">\r\n                        <div class=\"col-4\"><label>Show Logo</label></div>\r\n                        <div class=\"col-8\">\r\n                            <p-selectButton [options]=\"alignmentTopDisplayOptions\"\r\n                                [(ngModel)]=\"this.widgets['alignView-topDisplay']\" (onChange)=\"onAlignmentTopChange()\"></p-selectButton>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group row\" title=\"Set the minor interval for the ruler. Set to 0 to remove minor interval.\">\r\n                        <div class=\"col-4\"><label>Ruler Minor Interval</label></div>\r\n                        <div class=\"col-8\">\r\n                            <p-dropdown [options]=\"rulerIntervalOptions\" appendTo=\"body\" [(ngModel)]=\"this.widgets['alignView-rulerMinorInterval']\"></p-dropdown>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group row\" \r\n                    title=\"Select how you want NT to be shown in the viewer. Show: Shows both the color and letter for each nucleotide. Minimum: Shows the color for each nucleotide and the letter for any nucleotides different than the top sequence. Hide: Only shows the color for each nucleotide.\">\r\n                        <div class=\"col-4\"><label>Show Nucleotides</label></div>\r\n                        <div class=\"col-8\">\r\n                            <p-selectButton [options]=\"charSettingOptions\"\r\n                                [(ngModel)]=\"this.widgets['alignView-charSetting']\" (onChange)=\"updateAlignment()\"></p-selectButton>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </p-accordionTab>\r\n            <p-accordionTab style=\"color:#495057\" header=\"Labels and Order\">\r\n                <div #labelingControls>\r\n                    <div class=\"form-group row\" title=\"\">\r\n                        <div class=\"col-4\"><label>Labels</label></div>\r\n                        <div class=\"col-8\">\r\n                            <p-dropdown appendTo=\"body\" [options]=\"labelFieldList\" [(ngModel)]=\"this.widgets['alignView-labelField']\" (onChange)=\"onLabelFieldChange()\"></p-dropdown>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group row\" title=\"\">\r\n                        <div class=\"col-4\"><label>Sort By</label></div>\r\n                        <div class=\"col-8\">\r\n                            <p-dropdown appendTo=\"body\" [options]=\"labelFieldList\" [(ngModel)]=\"this.widgets['alignView-sortField']\" (onChange)=\"onSortFieldChange()\"></p-dropdown>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </p-accordionTab>\r\n            <p-accordionTab  style=\"color:#495057\" header=\"Sizing\">\r\n                <div #sizingControls>\r\n                    <div class=\"form-group row\" title=\"Set a predefined size\">\r\n                        <div class=\"col-2\"><label>Size</label></div>\r\n                        <div class=\"col-10\">\r\n                            <p-selectButton [options]=\"sizes\" [(ngModel)]=\"this.widgets['alignView-selectedSize']\" (onChange)=\"onSelectedSizeChanged()\"></p-selectButton>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group row node-label-row\" title=\"Set a custom height. Updating sets size to custom\">\r\n                        <div class=\"col-3\"><label>Height</label></div>\r\n                        <div class=\"col-8\">\r\n                            <input type=\"number\" class=\"form-control form-control-sm\" min=\"10\" step=\"1\" max=\"20\" [(ngModel)]=\"spanHeight\" (ngModelChange)=\"onSpanHeightChange($event)\">\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group row node-label-row\" title=\"Set a custom width. Updating sets size to custom\">\r\n                        <div class=\"col-3\"><label>Width</label></div>\r\n                        <div class=\"col-8\">\r\n                            <input type=\"number\" class=\"form-control form-control-sm\" min=\"1\" step=\"1\" max=\"15\" [(ngModel)]=\"spanWidth\" (ngModelChange)=\"onSpanWidthChange($event)\">\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </p-accordionTab>\r\n            <p-accordionTab style=\"color:#495057\" header=\"Colors\">\r\n                <div #colorControls>\r\n                    <div class=\"form-group row\" title=\"Select a color scheme\">\r\n                        <div class=\"col-3\"><label>Color Scheme</label></div>\r\n                        <div class=\"col-9\">\r\n                            <p-selectButton [options]=\"colorSchemeOptions\" [(ngModel)]=\"this.widgets['alignView-colorSchemeName']\"\r\n                                (onChange)=\"onSelectedColorChanged()\"></p-selectButton>\r\n                        </div>\r\n                    </div>\r\n                    <div *ngIf=\"useCustomColorScheme\" class=\"customColorSchemeSelection\">\r\n                        <div class=\"form-group row node-label-row\" title=\"Select a custom color for each NT\">\r\n                            <label>A:\r\n                                <input type=\"color\" class=\"form-control form-control-sm\" [ngModel]=\"this.widgets['alignView-customColorScheme']['A']\" (change)=\"updateColorScheme('A', $event)\">\r\n                            </label>\r\n                            <label>C: \r\n                                <input type=\"color\" class=\"form-control form-control-sm\" [ngModel]=\"this.widgets['alignView-customColorScheme']['C']\" (change)=\"updateColorScheme('C', $event)\">\r\n                            </label>\r\n                            <label>G: \r\n                                <input type=\"color\" class=\"form-control form-control-sm\" [ngModel]=\"this.widgets['alignView-customColorScheme']['G']\" (change)=\"updateColorScheme('G', $event)\">\r\n                            </label>\r\n                            <label>T: \r\n                                <input type=\"color\" class=\"form-control form-control-sm\" [ngModel]=\"this.widgets['alignView-customColorScheme']['T']\" (change)=\"updateColorScheme('T', $event)\">\r\n                            </label>\r\n                        </div>\r\n                        <div class=\"form-group row node-label-row\" title=\"Select a custom color for each NT\"> \r\n                            <label style=\"display: flex; align-items: center; gap:10px;\">Ambiguities/Other: \r\n                                <input type=\"color\" [ngModel]=\"this.widgets['alignView-customColorScheme']['ambig']\" (change)=\"updateColorScheme('ambig', $event)\">\r\n                            </label>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </p-accordionTab>\r\n        </p-accordion>\r\n    </p-dialog>\r\n</div>\r\n\r\n<p-dialog id=\"alignment-export-modal\" [(visible)]=\"ShowAlignExportPane\" header=\"Export Alignment View\"\r\n    (onHide)=\"ShowAlignExportPane = false\">\r\n    <tabset class=\"tab-container tabbable-line\">\r\n        <tab heading=\"{{'Images' | localize}}\" [active]=\"true\" customClass=\"m-tabs__item\">\r\n            <div class=\"modal-dialog\" role=\"document\">\r\n                <div class=\"modal-content\">\r\n                    <div class=\"modal-body\" style='min-width: 400px; height: 100%;'>\r\n                        <div class=\"form-group row\">\r\n                            <div class=\"col-9\">\r\n                                <input type=\"text\" class=\"form-control form-control-sm\"\r\n                                    placeholder=\"Filename\" [(ngModel)]=\"AlignmentExportFileName\">\r\n                            </div>\r\n                            <div class=\"col-3\">\r\n                                <select [(ngModel)]=\"AlignmentExportFileTypeVis\" class=\"form-control form-control-sm\">\r\n                                    <option>svg</option>\r\n                                    <option>png</option>\r\n                                </select>\r\n                            </div>\r\n                        </div>\r\n                        <div *ngIf=\"AlignmentExportFileTypeVis=='png'\" class=\"form-group row\">\r\n                            <div class=\"col-4\" style=\"text-align: center;\">Resolution</div>\r\n                            <div class=\"col-8\" style=\"text-align: center;\">\r\n                                {{ spanWidth * longestSeqLength }} x {{ spanHeight * nodesWithSeq.length +140 }} px\r\n                            </div>\r\n                                <div style=\"width: 100%; text-align: center; margin-top: 5px;\"> Adjust Height and Width in settings to change export dimensions </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"modal-footer\">\r\n                        <button type=\"button\" class=\"btn btn-error\"\r\n                            (click)=\"ShowAlignExportPane = false\">Cancel</button>\r\n                        <button type=\"button\" class=\"btn btn-primary\" style=\"background-color: #495057;\"\r\n                            (click)=\"exportVisualization()\">Export</button>\r\n                    </div>\r\n                </div><!-- /.modal-content -->\r\n            </div><!-- /.modal-dialog -->\r\n        </tab>\r\n        <tab heading=\"{{'Data' | localize}}\" customClass=\"m-tabs__item\">\r\n            <div class=\"modal-dialog\" role=\"document\">\r\n                <div class=\"modal-content\">\r\n                    <div class=\"modal-body\" style='min-width: 400px; height: 100%;'>\r\n                        <div class=\"form-group row\">\r\n                            <div class=\"col-9\">\r\n                                <input type=\"text\" class=\"form-control form-control-sm\"\r\n                                    placeholder=\"Filename\" [(ngModel)]=\"AlignmentExportFileName\">\r\n                            </div>\r\n                            <div class=\"col-3\">\r\n                                <select [(ngModel)]=\"AlignmentExportFileTypeData\" class=\"form-control form-control-sm\">\r\n                                    <option>fasta</option>\r\n                                    <option>mega</option>\r\n                                </select>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"modal-footer\">\r\n                        <button type=\"button\" class=\"btn btn-error\"\r\n                            (click)=\"ShowAlignExportPane = false\">Cancel</button>\r\n                        <button type=\"button\" class=\"btn btn-primary\" style=\"background-color: #495057;\"\r\n                            (click)=\"exportData()\">Export</button>\r\n                    </div>\r\n                </div><!-- /.modal-content -->\r\n            </div><!-- /.modal-dialog -->\r\n        </tab>\r\n    </tabset>\r\n</p-dialog><!-- /.modal -->\r\n";
 
 /***/ }),
 
