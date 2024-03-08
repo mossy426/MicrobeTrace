@@ -171,7 +171,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     } else {
       this.useCustomColorScheme = true;
     }
-    this.onSelectedColorChanged()
+    this.onSelectedColorChanged(true)
 
     // updates spanWidth, spanHeight, rightWidth, leftWidth, fontSize, and then updates alignment
     this.onSelectedSizeChanged()
@@ -421,7 +421,6 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * 
    */
   shortenNodesWithSeq() {
-    this.seqArrayShortened = [];
     if (this.longestSeqLength < this.rightWidth && this.nodesWithSeq.length <= 100) {
       this.seqArrayShortened = this.seqArray
       $('#miniMap').css({'width': this.longestSeqLength+'px', 'height': this.nodesWithSeq.length+'px'})
@@ -656,9 +655,9 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
 
   /**
    * Updates the color scheme for the view based on what is selected
-   * @param e 'n' | 'a' | 'c'
+   * @param skipUpdateAlignment set to true during ngOnInit to skip this.updateAlignment() and if statement for this.updateMiniMap()
    */
-  onSelectedColorChanged() {
+  onSelectedColorChanged(skipUpdateAlignment=false) {
     if (this.widgets['alignView-colorSchemeName'] == 'n') {
       this.colorScheme = {
         'A': '#ccff00',
@@ -689,9 +688,11 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
 
     }
 
-    this.updateAlignment();
-    if (this.widgets['alignView-showMiniMap']) {
-      this.updateMiniMap();
+    if (skipUpdateAlignment == false) {
+      this.updateAlignment();
+      if (this.widgets['alignView-showMiniMap']) {
+        this.updateMiniMap();
+      }
     }
   }
 
@@ -780,7 +781,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   }
 
   /**
-   * Updates text in 
+   * Updates text in Alignment Top
    */
   onAlignmentTopChange() {
     if (this.widgets['alignView-topDisplay'] == 'barplot') {
