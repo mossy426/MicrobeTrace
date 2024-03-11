@@ -424,7 +424,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     if (this.longestSeqLength < this.rightWidth && this.nodesWithSeq.length <= 100) {
       this.seqArrayShortened = this.seqArray
       $('#miniMap').css({'width': this.longestSeqLength+'px', 'height': this.nodesWithSeq.length+'px'})
-      $('#miniMapTitle').css({'height': (this.nodesWithSeq.length+16)+'px'})
+      $('#miniMapTitle').css({'height': (this.nodesWithSeq.length+16)+'px', 'line-height': (this.nodesWithSeq.length+16)+'px'})
       return; 
     }
 
@@ -443,7 +443,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     })
 
     $('#miniMap').css({'width': Math.ceil(this.longestSeqLength/scaleFactorLength)+'px', 'height': Math.ceil(this.nodesWithSeq.length/scaleFactorNumber)+'px'})
-    $('#miniMapTitle').css({'height': Math.ceil(this.nodesWithSeq.length/scaleFactorNumber+16)+'px'})
+    $('#miniMapTitle').css({'height': Math.ceil(this.nodesWithSeq.length/scaleFactorNumber+16)+'px', 'line-height': Math.ceil(this.nodesWithSeq.length/scaleFactorNumber+16)+'px'})
   }
 
   /**
@@ -785,9 +785,9 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    */
   onAlignmentTopChange() {
     if (this.widgets['alignView-topDisplay'] == 'barplot') {
-      $('#alignmnetTopTitle').text('Bar Plot');
+      $('#alignmnetTopTitle').text('Bar Plot').prop('title', 'Barplot representation of the sequences that shows the proportion of each nucleotide at each position.');
     } else {
-      $('#alignmnetTopTitle').text('Logo');
+      $('#alignmnetTopTitle').text('Logo').prop('title', 'Logo representation of the sequences that shows the proportion of each nucleotide at each position.');
     }
   }
 
