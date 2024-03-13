@@ -2,13 +2,13 @@
     <div id="msa-viewer" [style.height.px]="alignmentViewHeight">
         <div class="left">  
             <div style="text-align: center;" [style.width.px]="leftWidth">
-                <div id='miniMapTitle' class="title" [style.height.px]="nodesWithSeq.length+16" title="Mini Map of entire length for all the sequences. Click to move to an area of the viewer.">Mini Map</div>
+                <div id='miniMapTitle' class="title" title="Mini Map of entire length for all the sequences. Click to move to an area of the viewer.">Mini Map</div>
                 <div id='alignmnetTopTitle' class="title" style="height: 100px; padding-top: 22px;"></div>
                 <div class="title" style="height: 43px;">Ruler</div>
                 <div style="height: 17px;"></div>
             </div>
-            <div class="canvasLabels" [style.height.px]="canvasViewHeight-19" [style.width.px]="leftWidth" #canvasLabels (scroll)="canvasHolder.scrollTop=canvasLabels.scrollTop">
-                <div *ngFor="let seq of nodesWithSeq" [ngStyle]="{'font-size.px': fontSize, 'height.px': spanHeight}">{{ seq.name }}</div>
+            <div class="canvasLabels" [style.height.px]="canvasViewHeight-17" [style.width.px]="leftWidth" #canvasLabels (scroll)="canvasHolder.scrollTop=canvasLabels.scrollTop">
+                <div *ngFor="let label of labelArray" [attr.data-index]="label['index']" [ngStyle]="{'font-size.px': fontSize, 'height.px': spanHeight}">{{ label[ this.widgets['alignView-labelField'] ] }}</div>
             </div>
         </div>
         <div class="right" [style.height.px]="rightViewHeight">
@@ -19,14 +19,14 @@
                 </div>
             </div>
             <div id="alignmentTop" (scroll)="canvasHolder.scrollLeft=alignmentTop.scrollLeft" [style.width.px]="rightWidth" #alignmentTop>
-                <svg [attr.width]="spanWidth*proportionMatrix.length+17" height="140">
+                <svg [attr.width]="spanWidth*proportionMatrix.length+17" height="140" style="background-color: white;" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <g *ngFor="let nt of proportionMatrix; index as i">
-                        <g *ngIf="alignmentTopDisplay === 'barplot'">
+                        <g *ngIf="this.widgets['alignView-topDisplay'] === 'barplot'">
                             <g *ngFor="let prop of nt; index as j">
                                 <rect *ngIf="prop>0" [attr.y]="positionMatrix[i][j]" [attr.x]="spanWidth*i" [attr.height]="100*prop" [attr.width]="spanWidth" [attr.fill]="fillColor(j)"/>
                             </g>
                         </g>
-                        <g *ngIf="alignmentTopDisplay === 'logo'">
+                        <g *ngIf="this.widgets['alignView-topDisplay'] === 'logo'">
                             <g class="A" *ngIf="nt[0]>0" [attr.transform]="'translate(' + spanWidth*i + ', ' + positionMatrix[i][0] + ') scale(' + spanWidth/100 + ', ' + nt[0] + ')'" 
                                 [attr.fill]="fillColor(0)">
                                 <path d="M 0 100 L 33 0 L 66 0 L 100 100 L 75 100 L 66 75 L 33 75 L 25 100 L 0 100"/>
@@ -46,7 +46,7 @@
                             <text y="120" [attr.x]="i >= 100 ? spanWidth*i-10 : spanWidth*i">{{ i }}</text>
                             <text y="140" [attr.x]="spanWidth*i">|</text>
                         </g>
-                        <g *ngIf="i % rulerMinorInterval == 0 && i%100 != 0">
+                        <g *ngIf="i % this.widgets['alignView-rulerMinorInterval'] == 0 && i%100 != 0">
                             <text y="120" [attr.x]="i >= 100 ? spanWidth*i-10 : spanWidth*i-5">{{ i }}</text>
                             <text y="140" [attr.x]="spanWidth*i">:</text>
                         </g>
@@ -76,52 +76,25 @@
 <div class="view-controls">
     <p-dialog id="alignment-settings-pane" [(visible)]="alignmentDialogSettings.isVisible" header="Alignment View Settings" >
         <p-accordion>
-            <!-- Idea to allow user change data label (such as gender, transmission risk ...), Filter data based on value (M), and sort by (?), maybe expand tooltip to as well -->
-            <!-- p-accordionTab style="color:#495057" header="Layout">
-                
-                < div #dataControls>
-                    <div class="form-group row" title="">
-                        <div class="col-4"><label>Labels</label></div>
-                        <div class="col-8">
-                            <p-selectButton [options]="showHideOptions" [(ngModel)]="showMiniMap" (onChange)="updateMiniMapVisibility()"></p-selectButton>
-                        </div>
-                    </div>
-                    <div class="form-group row" title="Switch between a Bar Plot representation or a Logo representation of the nucleotides present at each position">
-                        <div class="col-4"><label>Filter</label></div>
-                        <div class="col-8">
-                            <p-selectButton [options]="alignmentTopDisplayOptions"
-                                [(ngModel)]="alignmentTopDisplay" (onChange)="onAlignmentTopChange()"></p-selectButton>
-                        </div>
-                    </div>
-                                        <div class="form-group row" title="Switch between a Bar Plot representation or a Logo representation of the nucleotides present at each position">
-                        <div class="col-4"><label>Sort By</label></div>
-                        <div class="col-8">
-                            <p-selectButton [options]="alignmentTopDisplayOptions"
-                                [(ngModel)]="alignmentTopDisplay" (onChange)="onAlignmentTopChange()"></p-selectButton>
-                        </div>
-                    </div>
-                    
-                </div>
-            </p-accordionTab -->
             <p-accordionTab style="color:#495057" header="Layout">
                 <div #layoutControls>
                     <div class="form-group row" title="Show or Hide the Mini Map">
                         <div class="col-4"><label>Show MiniMap</label></div>
                         <div class="col-8">
-                            <p-selectButton [options]="showHideOptions" [(ngModel)]="showMiniMap" (onChange)="updateMiniMapVisibility()"></p-selectButton>
+                            <p-selectButton [options]="showHideOptions" [(ngModel)]="this.widgets['alignView-showMiniMap']" (onChange)="updateMiniMapVisibility()"></p-selectButton>
                         </div>
                     </div>
                     <div class="form-group row" title="Switch between a Bar Plot representation or a Logo representation of the nucleotides present at each position">
                         <div class="col-4"><label>Show Logo</label></div>
                         <div class="col-8">
                             <p-selectButton [options]="alignmentTopDisplayOptions"
-                                [(ngModel)]="alignmentTopDisplay" (onChange)="onAlignmentTopChange()"></p-selectButton>
+                                [(ngModel)]="this.widgets['alignView-topDisplay']" (onChange)="onAlignmentTopChange()"></p-selectButton>
                         </div>
                     </div>
                     <div class="form-group row" title="Set the minor interval for the ruler. Set to 0 to remove minor interval.">
                         <div class="col-4"><label>Ruler Minor Interval</label></div>
                         <div class="col-8">
-                            <p-dropdown [options]="rulerIntervalOptions" appendTo="body" [(ngModel)]="rulerMinorInterval"></p-dropdown>
+                            <p-dropdown [options]="rulerIntervalOptions" appendTo="body" [(ngModel)]="this.widgets['alignView-rulerMinorInterval']"></p-dropdown>
                         </div>
                     </div>
                     <div class="form-group row" 
@@ -129,19 +102,33 @@
                         <div class="col-4"><label>Show Nucleotides</label></div>
                         <div class="col-8">
                             <p-selectButton [options]="charSettingOptions"
-                                [(ngModel)]="charSetting" (onChange)="updateAlignment()"></p-selectButton>
+                                [(ngModel)]="this.widgets['alignView-charSetting']" (onChange)="updateAlignment()"></p-selectButton>
                         </div>
                     </div>
                 </div>
             </p-accordionTab>
-        <!--/p-accordion>
-        <p-accordion-->
+            <p-accordionTab style="color:#495057" header="Labels and Order">
+                <div #labelingControls>
+                    <div class="form-group row" title="">
+                        <div class="col-4"><label>Labels</label></div>
+                        <div class="col-8">
+                            <p-dropdown appendTo="body" [options]="labelFieldList" [(ngModel)]="this.widgets['alignView-labelField']" (onChange)="onLabelFieldChange()"></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="form-group row" title="">
+                        <div class="col-4"><label>Sort By</label></div>
+                        <div class="col-8">
+                            <p-dropdown appendTo="body" [options]="labelFieldList" [(ngModel)]="this.widgets['alignView-sortField']" (onChange)="onSortFieldChange()"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </p-accordionTab>
             <p-accordionTab  style="color:#495057" header="Sizing">
                 <div #sizingControls>
                     <div class="form-group row" title="Set a predefined size">
                         <div class="col-2"><label>Size</label></div>
                         <div class="col-10">
-                            <p-selectButton [options]="sizes" [(ngModel)]="selectedSize" (onChange)="onSelectedSizeChanged()"></p-selectButton>
+                            <p-selectButton [options]="sizes" [(ngModel)]="this.widgets['alignView-selectedSize']" (onChange)="onSelectedSizeChanged()"></p-selectButton>
                         </div>
                     </div>
                     <div class="form-group row node-label-row" title="Set a custom height. Updating sets size to custom">
@@ -158,36 +145,33 @@
                     </div>
                 </div>
             </p-accordionTab>
-        <!--/p-accordion>
-        <p-accordion-->
             <p-accordionTab style="color:#495057" header="Colors">
                 <div #colorControls>
                     <div class="form-group row" title="Select a color scheme">
                         <div class="col-3"><label>Color Scheme</label></div>
                         <div class="col-9">
-                            <p-selectButton [options]="colorSchemeOptions" [(ngModel)]="selectedColorSchemeName"
-                                (onChange)="onSelectedColorChanged($event.value)"></p-selectButton>
+                            <p-selectButton [options]="colorSchemeOptions" [(ngModel)]="this.widgets['alignView-colorSchemeName']"
+                                (onChange)="onSelectedColorChanged()"></p-selectButton>
                         </div>
-
                     </div>
                     <div *ngIf="useCustomColorScheme" class="customColorSchemeSelection">
                         <div class="form-group row node-label-row" title="Select a custom color for each NT">
                             <label>A:
-                                <input type="color" class="form-control form-control-sm" [ngModel]="customColorScheme['A']" (change)="updateColorScheme('A', $event)">
+                                <input type="color" class="form-control form-control-sm" [ngModel]="this.widgets['alignView-customColorScheme']['A']" (change)="updateColorScheme('A', $event)">
                             </label>
                             <label>C: 
-                                <input type="color" class="form-control form-control-sm" [ngModel]="customColorScheme['C']" (change)="updateColorScheme('C', $event)">
+                                <input type="color" class="form-control form-control-sm" [ngModel]="this.widgets['alignView-customColorScheme']['C']" (change)="updateColorScheme('C', $event)">
                             </label>
                             <label>G: 
-                                <input type="color" class="form-control form-control-sm" [ngModel]="customColorScheme['G']" (change)="updateColorScheme('G', $event)">
+                                <input type="color" class="form-control form-control-sm" [ngModel]="this.widgets['alignView-customColorScheme']['G']" (change)="updateColorScheme('G', $event)">
                             </label>
                             <label>T: 
-                                <input type="color" class="form-control form-control-sm" [ngModel]="customColorScheme['T']" (change)="updateColorScheme('T', $event)">
+                                <input type="color" class="form-control form-control-sm" [ngModel]="this.widgets['alignView-customColorScheme']['T']" (change)="updateColorScheme('T', $event)">
                             </label>
                         </div>
                         <div class="form-group row node-label-row" title="Select a custom color for each NT"> 
                             <label style="display: flex; align-items: center; gap:10px;">Ambiguities/Other: 
-                                <input type="color" [ngModel]="customColorScheme['ambig']" (change)="updateColorScheme('ambig', $event)">
+                                <input type="color" [ngModel]="this.widgets['alignView-customColorScheme']['ambig']" (change)="updateColorScheme('ambig', $event)">
                             </label>
                         </div>
                     </div>
@@ -197,63 +181,67 @@
     </p-dialog>
 </div>
 
-<p-dialog id="network-export-modal" [(visible)]="ShowAlignExportPane" header="Export Alignment View"
+<p-dialog id="alignment-export-modal" [(visible)]="ShowAlignExportPane" header="Export Alignment View"
     (onHide)="ShowAlignExportPane = false">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body" style='min-width: 400px; height: 100%;'>
-                <div class="form-group row">
-                    <div class="col-9">
-                        <input type="text" id="network-export-filename" class="form-control form-control-sm"
-                            placeholder="Filename" [(ngModel)]="SelectedNetworkExportFilenameVariable">
-                    </div>
-                    <div class="col-3">
-                        <p-dropdown id="network-export-filetype" [options]="NetworkExportFileTypeList" appendTo="body"
-                            [(ngModel)]="SelectedNetworkExportFileTypeListVariable"></p-dropdown>
-                    </div>
-                </div>
-                <!-- <div>
-                    <p-accordion>
-                        <p-accordionTab style="color:#495057" header="Advanced">
-                            <div id="network-export-advanced">
-
-                                <div class="form-group row">
-                                    <div class="col-3">
-                                        <label for="network-export-scale">Scale</label>
-                                    </div>
-                                    <div class="col-9">
-                                        <input type="number" id="network-export-scale"
-                                            class="form-control form-control-sm" min="0" step="0.1" value="1"
-                                            [(ngModel)]="SelectedNetworkExportScaleVariable"
-                                            (ngModelChange)="updateCalculatedResolution($event)">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-3">Resolution</div>
-                                    <div id="network-export-dimensions" class="col-9 text-right">
-                                        {{CalculatedResolution}}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-3">
-                                        <label for="network-export-quality">Quality</label>
-                                    </div>
-                                    <div class="col-9">
-                                        <input type="range" class="custom-range" id="network-export-quality" min="0"
-                                            max="1.0" value="0.92" step="0.01"
-                                            [(ngModel)]="SelectedNetworkExportQualityVariable">
-                                    </div>
-                                </div>
+    <tabset class="tab-container tabbable-line">
+        <tab heading="{{'Images' | localize}}" [active]="true" customClass="m-tabs__item">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" style='min-width: 400px; height: 100%;'>
+                        <div class="form-group row">
+                            <div class="col-9">
+                                <input type="text" class="form-control form-control-sm"
+                                    placeholder="Filename" [(ngModel)]="AlignmentExportFileName">
                             </div>
-                        </p-accordionTab>
-                    </p-accordion>
-                </div> -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-error"
-                    (click)="ShowAlignExportPane = false">Cancel</button>
-                <button type="button" disabled id="network-export" class="btn btn-primary" style="background-color: #495057;"
-                    (click)="exportVisualization($event)">Export</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
+                            <div class="col-3">
+                                <select [(ngModel)]="AlignmentExportFileTypeVis" class="form-control form-control-sm">
+                                    <option>svg</option>
+                                    <option>png</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div *ngIf="AlignmentExportFileTypeVis=='png'" class="form-group row">
+                            <div class="col-4" style="text-align: center;">Resolution</div>
+                            <div class="col-8" style="text-align: center;">
+                                {{ spanWidth * longestSeqLength }} x {{ spanHeight * nodesWithSeq.length +140 }} px
+                            </div>
+                                <div style="width: 100%; text-align: center; margin-top: 5px;"> Adjust Height and Width in settings to change export dimensions </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-error"
+                            (click)="ShowAlignExportPane = false">Cancel</button>
+                        <button type="button" class="btn btn-primary" style="background-color: #495057;"
+                            (click)="exportVisualization()">Export</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </tab>
+        <tab heading="{{'Data' | localize}}" customClass="m-tabs__item">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" style='min-width: 400px; height: 100%;'>
+                        <div class="form-group row">
+                            <div class="col-9">
+                                <input type="text" class="form-control form-control-sm"
+                                    placeholder="Filename" [(ngModel)]="AlignmentExportFileName">
+                            </div>
+                            <div class="col-3">
+                                <select [(ngModel)]="AlignmentExportFileTypeData" class="form-control form-control-sm">
+                                    <option>fasta</option>
+                                    <option>mega</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-error"
+                            (click)="ShowAlignExportPane = false">Cancel</button>
+                        <button type="button" class="btn btn-primary" style="background-color: #495057;"
+                            (click)="exportData()">Export</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </tab>
+    </tabset>
 </p-dialog><!-- /.modal -->

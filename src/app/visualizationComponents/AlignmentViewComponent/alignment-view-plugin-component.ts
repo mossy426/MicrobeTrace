@@ -7,10 +7,9 @@ import { DialogSettings } from '../../helperClasses/dialogSettings';
 import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
 import { ComponentContainer } from 'golden-layout';
 import { generateCanvas } from './generateAlignmentViewCanvas';
-
-
-//import * as alignmentViewer from 'alignment-viewer';
-//import MSAViewer from '@plotly/react-msa-viewer';
+import { SelectItem } from 'primeng/api';
+import { saveAs } from 'file-saver';
+import { svgAsPngUri } from 'save-svg-as-png';
 
 @Component({
   selector: 'AlignmentViewComponent',
@@ -18,7 +17,6 @@ import { generateCanvas } from './generateAlignmentViewCanvas';
   styleUrls: ['./alignment-view-plugin-component.scss']
 })
 export class AlignmentViewComponent extends BaseComponentDirective implements OnInit, MicobeTraceNextPluginEvents {
-
 
   // General Settings
   alignmentDialogSettings: DialogSettings = new DialogSettings('#alignment-settings-pane', false)
@@ -28,14 +26,20 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     { label: 'Show', value: true },
     { label: 'Hide', value: false }
   ];
+  labelFieldList: SelectItem[] = [];
+  //labelField = "_id" // replaced with this.widgets['alignView-labelField']
+  labelArray: any[];
+  //sortField = "index" // replaced with this.widgets['alignView-sortField']
 
   private visuals: MicrobeTraceNextVisuals;
   widgets;
   
   // Data
   nodesWithSeq: any[];
-  nodesWithSeqShortened: any[];
+  seqArray: string[];
+  seqArrayShortened: any[];
   longestSeqLength: number = 0;
+
   /**
    * count matrix: [ [#A, #C, #G, #T, #other/ambig]-for each location, ... ]
    */
@@ -44,30 +48,32 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * proportion matrix: [ [A, C, G, T, #other/ambig]-for each location, ... ]
    */
   proportionMatrix;
-    /**
+  /**
    * position matrix: [ [A, C, G, T, #other/ambig]-for each location, ... ]
    * y position (top) for each base at each postion in sequence
    */
   positionMatrix;
 
   // Layout
-  showMiniMap: boolean;
-  alignmentTopDisplay: string;
+  //showMiniMap: boolean; // replaced with this.widgets['alignView-showMiniMap']
+  //alignmentTopDisplay: string; // replaced with this.widgets['alignView-topDisplay']
   alignmentTopDisplayOptions = [
     { label: 'Logo', value: 'logo' },
     { label: 'Bar Plot', value: 'barplot'}
   ]
-  charSetting: string; // 'show', 'min', 'hide'
+  //charSetting: string; // 'show', 'min', 'hide' // replaced with this.widgets['alignView-charSetting']
   charSettingOptions: any = [
     { label: 'Show', value: 'show' },
     { label: 'Minimum', value: 'min'},
     { label: 'Hide', value: 'hide' }
   ];
-  rulerMinorInterval: number = 20;
+  //rulerMinorInterval: number = 20; replaced with this.widgets['alignView-rulerMinorInterval']
   rulerIntervalOptions = [0, 10, 20, 25, 50]
 
   // Sizing
-  spanWidth: number;
+  // spanWidth and spanHeight values are duplicated in the widgets; I didn't replace because these are used through the template in loops and I was concerned that
+  // looking up there values 1000's of times from this.commonService.session.style.widgets would hurt performance
+  spanWidth: number; 
   spanHeight: number;
   fontSize: number;
 
@@ -77,7 +83,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     { label: 'Large', value: 'l'},
     { label: 'Custom', value: 'c'}
   ]
-  selectedSize: string;
+  //selectedSize: string; // replaced with this.widgets['alignView-selectedSize']
 
   alignmentViewHeight: number;
   rightViewHeight: number;
@@ -87,10 +93,10 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   rightWidth: number;
 
   // Colors
-  selectedColorSchemeName: string;
-  colorScheme;
-  customColorScheme;
-  useCustomColorScheme: boolean = false;
+  //selectedColorSchemeName: string; // replaced with this.widgets['alignView-colorSchemeName']
+  colorScheme; // current color scheme;
+  // customColorScheme; // replaced with this.widgets['alignView-customColorScheme']
+  useCustomColorScheme: boolean;
   colorSchemeOptions = [
     { label: 'Normal', 
       value: 'n',
@@ -105,14 +111,9 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   ]
 
   // Export
-  SelectedNetworkExportFilenameVariable : string = ""
-  NetworkExportFileTypeList: any = [
-    { label: 'png', value: 'png' },
-    { label: 'jpeg', value: 'jpeg' },
-    { label: 'webp', value: 'webp' },
-    { label: 'svg', value: 'svg' }
-];
-SelectedNetworkExportFileTypeListVariable: string = "png";
+  AlignmentExportFileName: string = ""
+  AlignmentExportFileTypeVis: string = "svg";
+  AlignmentExportFileTypeData: string = "fasta";
 
   constructor(injector: Injector,
     private eventManager: EventManager,
@@ -128,72 +129,141 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
     this.widgets = this.commonService.session.style.widgets;
   }
 
-  /* 
-    if resized from dashboard view: what to resize?
-  */
   ngOnInit(): void {
     // set events such as node-selected
     this.setEvents();
 
-    // sets nodesWithSeq and longestSeqLength
+    this.setDefaultWidgets();
+
+    this.labelFieldList = [];
+    this.commonService.session.data['nodeFields'].map((d, i) => {
+      if (d != 'seq' && d != 'sequence') {
+        this.labelFieldList.push({
+          label: this.commonService.capitalize(d.replace("_", "")),
+          value: d
+        });
+      }
+    });
+
+    // sets nodesWithSeq, seqArr, and longestSeqLength
     this.nodesWithSeq = [];
-    this.commonService.session.data.nodes.forEach(node => {
+    this.seqArray = [];
+    this.commonService.session.data.nodes.forEach((node, index) => {
       if (node.seq != null){
-        this.nodesWithSeq.push({
-          'name': node._id, 
-          'seq': node.seq.toUpperCase(),
-        })
+        this.nodesWithSeq.push(index);
+        this.seqArray.push(node.seq.toUpperCase());
         if (node.seq.length > this.longestSeqLength) {
           this.longestSeqLength = node.seq.length;
         }
       }
     })
 
+    this.labelArray = this.getData(this.nodesWithSeq, ['index', this.widgets['alignView-labelField']]);
+
     // calculations countMatrix, proportionMatrix, and positionMatrix
     this.calculateProportionAtEachLocation();
 
     // sets different variables relating to size and display
-    this.alignmentTopDisplay = 'logo'
-    $('#alignmnetTopTitle').text('Logo');
-    this.selectedSize= 'l';
-    this.selectedColorSchemeName = 'n'
-    this.colorScheme = {
-      'A': '#ccff00',
-      'C': '#ffff00',
-      'G': '#ff9900',
-      'T': '#ff6600',
-      'ambig': '#ffffff',
-    } 
-    this.customColorScheme = {
-      'A': '#ccff00',
-      'C': '#ffff00',
-      'G': '#ff9900',
-      'T': '#ff6600',
-      'ambig': '#ffffff',
+    this.onAlignmentTopChange()
+
+    if (this.widgets['alignView-colorSchemeName'] == 'n' || this.widgets['alignView-colorSchemeName'] == 'a') {
+      this.useCustomColorScheme = false;
+    } else {
+      this.useCustomColorScheme = true;
     }
-    this.charSetting = 'hide';
+    this.onSelectedColorChanged(true)
 
     // updates spanWidth, spanHeight, rightWidth, leftWidth, fontSize, and then updates alignment
     this.onSelectedSizeChanged()
     // updates the valus of nodeWidthSeqShortened based on size of rigthWitdth, longestSeqLength, and nodesWithSeq
     this.shortenNodesWithSeq();
 
-    // updates showMiniMap which triggers updateMiniMapVisibility() and updateMiniMap()
-    this.showMiniMap = true;
-    this.updateMiniMap();
-
-    // updates heights such as rightViewHeight, alignmentViewHeight, and canvasViewHeight
-    this.updateViewHeights();
+    // updates shows or hides minimap and then updates view heights
+    this.updateMiniMapVisibility()
 
   }
 
-
   // General
+
+  /**
+   * Defines new widgets and set default values
+   */
+  setDefaultWidgets() {
+    //size
+    if (this.widgets['alignView-selectedSize'] == undefined) {
+      this.widgets['alignView-selectedSize'] = 'l';
+    }
+    // height and width are declare/checked in this.onSelectedSizeChanged()
+
+    // color
+    if (this.widgets['alignView-colorSchemeName'] == undefined) {
+      this.widgets['alignView-colorSchemeName'] = 'n';
+    }
+
+    if (this.widgets['alignView-customColorScheme'] == undefined) {
+      this.widgets['alignView-customColorScheme'] = {
+        'A': '#ccff00',
+        'C': '#ffff00',
+        'G': '#ff9900',
+        'T': '#ff6600',
+        'ambig': '#ffffff',
+      }
+    }
+
+    // labels/sorting
+    if (this.widgets['alignView-labelField'] == undefined) {
+      this.widgets['alignView-labelField'] = '_id';
+    }
+
+    if (this.widgets['alignView-sortField'] == undefined) {
+      this.widgets['alignView-sortField'] = 'index';
+    }
+
+    // top settings
+    if (this.widgets['alignView-showMiniMap'] == undefined) {
+      this.widgets['alignView-showMiniMap'] = true;
+    }
+
+    if (this.widgets['alignView-topDisplay'] == undefined) {
+      this.widgets['alignView-topDisplay'] = 'logo';
+    }
+
+    if (this.widgets['alignView-rulerMinorInterval'] == undefined) {
+      this.widgets['alignView-rulerMinorInterval'] = 20;
+    }
+
+    // main canvas
+    if (this.widgets['alignView-charSetting'] == undefined) {
+      this.widgets['alignView-charSetting'] = 'hide';
+    }
+
+  }
+
+  /**
+   * 
+   * @param indexList an array of indexes for the nodes to get data from
+   * @param field string | array of which field to get data from
+   * @returns an array of objects
+   */
+  getData(indexList, field) {
+    if (Array.isArray(field)) {
+      return indexList.map(index => {
+        let currentObj = {}
+        field.forEach(f => currentObj[f] = (f == "seq") ? this.commonService.session.data.nodes[index][f].toUpperCase() : this.commonService.session.data.nodes[index][f]);
+        return currentObj;
+      })
+    } else if (field == "seq") {
+      return indexList.map(index => this.commonService.session.data.nodes[index]["seq"].toUpperCase());
+    } else {
+      return indexList.map(index => this.commonService.session.data.nodes[index][field])
+    }
+  }
+
   /**
   * Updates the alignment by generating a new canvas, and recalcuating various heights
   */
   updateAlignment() {
-    generateCanvas(this.nodesWithSeq, {width: this.spanWidth, height: this.spanHeight, charSetting: this.charSetting, fontSize: this.fontSize, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
+    generateCanvas(this.seqArray, {width: this.spanWidth, height: this.spanHeight, charSetting: this.widgets['alignView-charSetting'], fontSize: this.fontSize, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
       $('#msa-viewer .canvasHolder').empty().append(canvas)
     })
     
@@ -204,11 +274,11 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
 
   /**
   * Creates a minimap. 
-  * The sequences (nodesWithSeqShortened) are previously downsample by picking 1 nt / every n nucleotides;
+  * The sequences (seqArrayShortened) are previously downsample by picking 1 nt / every n nucleotides;
   */
   updateMiniMap() {
-    generateCanvas(this.nodesWithSeqShortened, {width: 1, height: 1, charSetting: 'hide', fontSize: 1, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
-      $('#miniMap canvas').remove();
+    $('#miniMap canvas').remove();
+    generateCanvas(this.seqArrayShortened, {width: 1, height: 1, charSetting: 'hide', fontSize: 1, colors: this.colorScheme}).then(function(canvas: HTMLCanvasElement) {
       $('#miniMap').append(canvas);
     })
   }
@@ -217,7 +287,7 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
    * Adds/Removed miniMap and miniMap title
    */
   updateMiniMapVisibility() {
-    if (this.showMiniMap){
+    if (this.widgets['alignView-showMiniMap']){
       this.updateMiniMap();
       $('#miniMapHolder').css({'display': 'block'});
       $('#miniMapTitle').css({'display': 'block'});
@@ -237,18 +307,14 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
   showMiniMapHighlight(e: MouseEvent, miniMap: HTMLElement) {
     let mmDimensions = miniMap.getBoundingClientRect();
     
+    // need to reduce number of sequences on minimap if there are too many
+    let scaleFactorNumber = (this.nodesWithSeq.length <= 100)? 1: Math.ceil(this.nodesWithSeq.length/100);
     let viewHeight = $('.canvasLabels').height();
-    let highlightHeight = viewHeight/this.spanHeight;
+    let highlightHeight = viewHeight/(this.spanHeight*scaleFactorNumber);
 
-    let scaleFactor = Math.ceil(this.longestSeqLength/this.rightWidth)
-    let highlightWidth = $('.canvasHolder').width()/(this.spanWidth*scaleFactor)
-
-    let top = e.clientY - mmDimensions.top - (highlightHeight/2)
-    if (top < 0) {
-      top = 0
-    } else if (top > mmDimensions.height-highlightHeight) {
-      top = mmDimensions.height-highlightHeight
-    }
+    // want the minimap to be around this.rightWidth pixels wide; caculate how much to downscale by and then downscale
+    let scaleFactorLength = (this.longestSeqLength < this.rightWidth)? 1 : Math.ceil(this.longestSeqLength/this.rightWidth);
+    let highlightWidth = $('.canvasHolder').width()/(this.spanWidth*scaleFactorLength)
 
     let canvasWidth = $('#miniMap canvas').width()
     let left = e.clientX - mmDimensions.left - highlightWidth/2;
@@ -287,7 +353,6 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
     }
 
     $('#miniMapHighlight').css({'top': top +'px', 'left': left +'px'});
-
   }
 
   /**
@@ -304,15 +369,18 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
     let mmDimensions = miniMap.getBoundingClientRect();
     let highlightDimensions =  document.getElementById('miniMapHighlight').getBoundingClientRect();
 
-    let scaleFactor = Math.ceil(this.longestSeqLength/this.rightWidth)
-    let horizontalScroll = (highlightDimensions.left - mmDimensions.left)*this.spanWidth*scaleFactor;    
+    // want the minimap to be around this.rightWidth pixels wide; caculate how much to downscale by and then downscale
+    let scaleFactorLength = (this.longestSeqLength < this.rightWidth)? 1 : Math.ceil(this.longestSeqLength/this.rightWidth);
+    // need to reduce number of sequences on minimap if there are too many
+    let scaleFactorNumber = (this.nodesWithSeq.length <= 100)? 1: Math.ceil(this.nodesWithSeq.length/100);
+    //let scaleFactor = Math.ceil(this.longestSeqLength/this.rightWidth)
+    let horizontalScroll = (highlightDimensions.left - mmDimensions.left)*this.spanWidth*scaleFactorLength;    
     alignmentTop.scrollLeft = horizontalScroll < 10 ? horizontalScroll : horizontalScroll + 7;
     canvasHolder.scrollLeft = horizontalScroll < 10 ? horizontalScroll : horizontalScroll + 7;
 
-    let verticalScroll = (highlightDimensions.top - mmDimensions.top)*this.spanHeight;
+    let verticalScroll = (highlightDimensions.top - mmDimensions.top)*this.spanHeight*scaleFactorNumber;
     canvasLabels.scrollTop = verticalScroll < 4 ? verticalScroll : verticalScroll+4;
     canvasHolder.scrollTop = verticalScroll < 4 ? verticalScroll : verticalScroll+4;  
-  
   }
 
   // Tooltip
@@ -349,37 +417,33 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
   // Data
 
   /**
-   * Updates nodesWithSeqShortened by downsampling (selecting 1 out of every n NTs) nodesWithSeq
-   * The factor to downsample by is selection such len of new seqs will be around 300bp   * 
+   * Updates seqArrayShortened by downsampling (selecting 1 out of every n NTs and selected 1 out of every m sequences, as needed) nodesWithSeq
+   * 
    */
   shortenNodesWithSeq() {
-    this.nodesWithSeqShortened = [];
-    if (this.longestSeqLength < this.rightWidth) {
-      this.nodesWithSeq.forEach((obj) => {
-        this.nodesWithSeqShortened.push({
-          name: obj.name,
-          seq: obj.seq,
-        })
-      })
+    if (this.longestSeqLength < this.rightWidth && this.nodesWithSeq.length <= 100) {
+      this.seqArrayShortened = this.seqArray
       $('#miniMap').css({'width': this.longestSeqLength+'px', 'height': this.nodesWithSeq.length+'px'})
+      $('#miniMapTitle').css({'height': (this.nodesWithSeq.length+16)+'px'})
       return; 
     }
 
     // want the minimap to be around this.rightWidth pixels wide; caculate how much to downscale by and then downscale
-    let scaleFactor = Math.ceil(this.longestSeqLength/this.rightWidth)
-    this.nodesWithSeqShortened = [];
-    this.nodesWithSeq.forEach((obj) => {
+    let scaleFactorLength = (this.longestSeqLength < this.rightWidth)? 1 : Math.ceil(this.longestSeqLength/this.rightWidth);
+    // need to reduce number of sequences on minimap if there are too many
+    let scaleFactorNumber = (this.nodesWithSeq.length <= 100)? 1: Math.ceil(this.nodesWithSeq.length/100);
+    this.seqArrayShortened = [];
+    this.seqArray.forEach((seq, index) => {
+      if (index % scaleFactorNumber != 0) return;
       let downSizedSeq = "";
-      for (let i=0; i < this.longestSeqLength; i+= scaleFactor) {
-        downSizedSeq += obj.seq.charAt(i);
+      for (let i=0; i < this.longestSeqLength; i+= scaleFactorLength) {
+        downSizedSeq += seq.charAt(i);
       }
-      this.nodesWithSeqShortened.push({
-        name: obj.name,
-        seq: downSizedSeq,
-      })
+      this.seqArrayShortened.push(downSizedSeq)
     })
 
-    $('#miniMap').css({'width': Math.ceil(this.longestSeqLength/scaleFactor)+'px', 'height': this.nodesWithSeq.length+'px'})
+    $('#miniMap').css({'width': Math.ceil(this.longestSeqLength/scaleFactorLength)+'px', 'height': Math.ceil(this.nodesWithSeq.length/scaleFactorNumber)+'px'})
+    $('#miniMapTitle').css({'height': Math.ceil(this.nodesWithSeq.length/scaleFactorNumber+16)+'px'})
   }
 
   /**
@@ -395,9 +459,9 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
       this.countMatrix.push([0,0,0,0,0]);
     }
 
-    for (let node of this.nodesWithSeq) {
-      for (let i=0; i< node.seq.length; i++) {
-        let nt = node.seq[i];
+    for (let seq of this.seqArray) {
+      for (let i=0; i< seq.length; i++) {
+        let nt = seq[i];
         switch (nt) {
           case 'A':
             this.countMatrix[i][0] += 1;
@@ -475,7 +539,7 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
    * @returns the height needed to for all the elements on the right half of msa-viewer. If this height > available space, then scrolling will be used
    */
   calculateRightHeight(): number {
-    let miniMapHeight = (this.showMiniMap) ? $('#miniMapHolder').height()+16 : 0;
+    let miniMapHeight = (this.widgets['alignView-showMiniMap']) ? $('#miniMapHolder').height()+16 : 0;
     // 170 alignmentTop, 17 bottomScrollBar, height of canvas
     return 170+25+this.nodesWithSeq.length*this.spanHeight+ miniMapHeight;
   }
@@ -491,7 +555,7 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
    * @returns the height for the canvasHolder element and then subsequently the canvasLabels element. Not the height of the canvas itself
    */
   calculateCanvasViewHeight(): number {
-    let miniMapHeight = (this.showMiniMap) ? this.nodesWithSeq.length+16 : 0;
+    let miniMapHeight = (this.widgets['alignView-showMiniMap']) ? $('#miniMapHolder').outerHeight() : 0;
     return Math.min(this.alignmentViewHeight - 170 - miniMapHeight, this.nodesWithSeq.length*this.spanHeight+25)
   }
 
@@ -523,7 +587,8 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
 
     this.rightWidth = this.calculateRightWidth();
 
-    this.selectedSize='c';
+    this.widgets['alignView-selectedSize']='c';
+    this.widgets['alignView-spanHeight'] = e;
     this.updateAlignment();
   }
 
@@ -531,7 +596,8 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
    * Updates the alignment view with the new width
    */
   onSpanWidthChange(e){
-    this.selectedSize='c';
+    this.widgets['alignView-selectedSize']='c';
+    this.widgets['alignView-spanWidth'] = e
     this.updateAlignment();
   }
 
@@ -539,26 +605,46 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
    * Updates spanHeight, spanWidth, fontSize, and sometimes charSetting and then updates alignment view with new settings
    */
   onSelectedSizeChanged() {
-    if (this.selectedSize == 's') {
+    if (this.widgets['alignView-selectedSize'] == 's') {
       this.spanHeight = 10;
       this.spanWidth = 2;
-      this.fontSize = 10;
-      this.leftWidth = 150;
-      this.charSetting = 'hide';
-    } else if (this.selectedSize == 'm') {
+      this.widgets['alignView-charSetting'] = 'hide';
+    } else if (this.widgets['alignView-selectedSize'] == 'm') {
       this.spanHeight = 12;
       this.spanWidth = 6;
-      this.fontSize = 12;
-      this.leftWidth = 200;
       //this.charSetting = 'hide';
-    } else if (this.selectedSize == 'l') {
+    } else if (this.widgets['alignView-selectedSize'] == 'l') {
       this.spanHeight = 16;
       this.spanWidth = 10;
-      this.fontSize = 16;
-      this.leftWidth = 250;
       //this.charSetting = 'show';
+    } else if (this.widgets['alignView-selectedSize'] == 'c') {
+      
+      if (!this.widgets['alignView-spanWidth']) {
+        this.spanWidth = 10;
+      } else {
+        this.spanWidth = this.widgets['alignView-spanWidth']
+      }
+
+      if (!this.widgets['alignView-spanHeight']) {
+        this.spanHeight = 16;
+      } else {
+        this.spanHeight = this.widgets['alignView-spanHeight']
+      }
     }
 
+    if (this.spanHeight >= 16) {
+      this.fontSize = 16;
+      this.leftWidth=250;
+    } else if (this.spanHeight >= 12) {
+      this.fontSize = 12;
+      this.leftWidth = 200;
+    } else if (this.spanHeight >= 10) {
+      this.fontSize = 10;
+      this.leftWidth = 150;
+    }
+
+    this.widgets['alignView-spanWidth'] = this.spanWidth;
+    this.widgets['alignView-spanHeight'] = this.spanHeight;
 
     this.rightWidth = this.calculateRightWidth();
     this.updateAlignment();
@@ -569,10 +655,10 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
 
   /**
    * Updates the color scheme for the view based on what is selected
-   * @param e 'n' | 'a' | 'c'
+   * @param skipUpdateAlignment set to true during ngOnInit to skip this.updateAlignment() and if statement for this.updateMiniMap()
    */
-  onSelectedColorChanged(e) {
-    if (e == 'n') {
+  onSelectedColorChanged(skipUpdateAlignment=false) {
+    if (this.widgets['alignView-colorSchemeName'] == 'n') {
       this.colorScheme = {
         'A': '#ccff00',
         'C': '#ffff00',
@@ -581,7 +667,7 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
         'ambig': '#ffffff',
       }
       this.useCustomColorScheme = false;
-    } else if (e == 'a') {
+    } else if (this.widgets['alignView-colorSchemeName'] == 'a') {
       this.colorScheme = {
         'A': '#009E73',
         'C': '#F0E442',
@@ -592,19 +678,21 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
         this.useCustomColorScheme = false;
     } else {
       this.colorScheme = {
-        'A': this.customColorScheme['A'],
-        'C': this.customColorScheme['C'],
-        'G': this.customColorScheme['G'],
-        'T': this.customColorScheme['T'],
-        'ambig': this.customColorScheme['ambig'],
+        'A': this.widgets['alignView-customColorScheme']['A'],
+        'C': this.widgets['alignView-customColorScheme']['C'],
+        'G': this.widgets['alignView-customColorScheme']['G'],
+        'T': this.widgets['alignView-customColorScheme']['T'],
+        'ambig': this.widgets['alignView-customColorScheme']['ambig'],
         }
       this.useCustomColorScheme = true;
 
     }
 
-    this.updateAlignment();
-    if (this.showMiniMap) {
-      this.updateMiniMap();
+    if (skipUpdateAlignment == false) {
+      this.updateAlignment();
+      if (this.widgets['alignView-showMiniMap']) {
+        this.updateMiniMap();
+      }
     }
   }
 
@@ -614,9 +702,9 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
    */
   updateColorScheme(nt, e) {
     this.colorScheme[nt] = e.target.value;
-    this.customColorScheme[nt] = e.target.value;
+    this.widgets['alignView-customColorScheme'][nt] = e.target.value;
     this.updateAlignment();
-    if (this.showMiniMap) {
+    if (this.widgets['alignView-showMiniMap']) {
       this.updateMiniMap();
     }
   }
@@ -644,21 +732,32 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
   /**
    * Searches nodesWithSequences for name given; changes background color for all nodes that are found
    * @param name name/id of node to search for
+   * @param field which field from node to search in
    */
-  search(name: string) {
+  search(name: string, field: string) {
     $('.canvasLabels div').removeClass('searchHighlight2')
     if (name == "") {
       return;
     }
-    
-    let indexes = this.nodesWithSeq.filter((obj) => obj.name.includes(name)).map((obj) => this.nodesWithSeq.indexOf(obj));
+
+    let isFieldNumerical = typeof this.getData([this.nodesWithSeq[0]], field)[0] === 'number'
+
+    let data = this.getData(this.nodesWithSeq, (field == 'index' ? ['index'] : ['index', field]))
+    let indexes;
+    if (isFieldNumerical) {
+      indexes = data.filter((obj) => obj[field] == parseFloat(name)).map((obj) => obj['index'])
+    } else {
+      indexes = data.filter((obj) => obj[field].includes(name)).map((obj) => obj['index'])
+    }
+    //let indexes = this.nodesWithSeq.filter((obj) => obj.name.includes(name)).map((obj) => this.nodesWithSeq.indexOf(obj));
     if (indexes.length == 0) {
       console.log('not found');
       return;
     }
 
     for (let index of indexes) {
-      let element = $('.canvasLabels div').get(index);
+      //let element = $('.canvasLabels div').get(index);
+      let element = $(`.canvasLabels div[data-index="${index}"]`)
       $(element).addClass('searchHighlight2')
     }
 
@@ -672,25 +771,6 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
         $('.canvasLabels').scrollTop(scrollPos)
     }
     
-/*  // this uncommented version return exact match of one node
-    let index = this.nodesWithSeq.findIndex((obj) => obj.name == name);
-    if (index == -1) {
-      return;
-    }
-    let newTop =  (index*this.spanHeight)
-    $('#searchHighlight').css({top: newTop+'px', display: "block"})
-    */
-
-    // determines if scrolling is needed to bring index into view
-    /*
-    let scroll = $('.canvasLabels').scrollTop();
-    let topIndex = scroll/this.spanHeight;
-    topIndex = (topIndex%1 > .2) ? Math.ceil(topIndex) : Math.floor(topIndex)
-    let bottomIndex = Math.floor((this.canvasViewHeight-20) / this.spanHeight + topIndex -1);
-    if (index < topIndex || index > bottomIndex) {
-      let scrollPos = (index)*this.spanHeight -5
-      $('.canvasLabels').scrollTop(scrollPos)
-    } */
   }
 
   /**
@@ -701,17 +781,17 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
   }
 
   /**
-   * Updates text in 
+   * Updates text in Alignment Top
    */
   onAlignmentTopChange() {
-    if (this.alignmentTopDisplay == 'barplot') {
+    if (this.widgets['alignView-topDisplay'] == 'barplot') {
       $('#alignmnetTopTitle').text('Bar Plot');
     } else {
       $('#alignmnetTopTitle').text('Logo');
     }
   }
 
-  /** XXXX May need to remove XXXX
+  /** XXXX May need to remove; currently use position matrix instead of calculating each XXXX
    * @param i current index of the base/nt in proportion matrix
    * @param j A=0, C=1, G=2, T=3, other/ambiguos=4
    * @returns location for the y value of rectangle in the logo
@@ -742,7 +822,6 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
     }   
   }
 
-  
 
   /**
   * Generate a tabular HTML string from the index of proportionMatrix
@@ -817,15 +896,60 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
     let that = this;
 
     $(document).on( "node-selected", function( ) {  
-      if ($('#search-field').val() != '_id') {
-        console.log('can only search in alignment view with id')
-        return;
-      }
-      that.search($('#search').val() as string)
+      that.search($('#search').val() as string, $('#search-field').val() as string)
     });
 
   }
 
+  /**
+   * updates labelArray and then searches again if needed
+   */
+  onLabelFieldChange() {
+    this.labelArray = this.getData(this.nodesWithSeq, ['index', this.widgets['alignView-labelField']])
+    
+    if ($('#search').val() != "") {
+      let that = this;
+      setTimeout(
+        () => that.search($('#search').val() as string, $('#search-field').val() as string),
+        10)
+    }
+  }
+
+  /**
+   * Sorts the indexes in nodesWithSeq based on the field selected. 
+   * After updating nodesWithSeq, it updates labelArray, seqArray, seqArrayShortened, main canvas, and minimap
+   */
+  onSortFieldChange() {
+    let newSort;
+    let sortField = this.widgets['alignView-sortField']
+    if (sortField == "None") {
+      return;
+    } else if ( sortField == "index") {
+      //return
+      newSort = this.getData(this.nodesWithSeq, [sortField]).sort((a,b) => a[sortField] -b[sortField]);
+      //this.nodesWithSeq.sort((a,b) => )
+    } else if (typeof this.getData([this.nodesWithSeq[0]], sortField)[0] == 'number') {
+      newSort = this.getData(this.nodesWithSeq, ['index', sortField]).sort((a,b) => a[sortField] - b[sortField]);
+    } else {
+      newSort = this.getData(this.nodesWithSeq, ['index', sortField]).sort((a,b) => a[sortField].localeCompare(b[sortField]));
+    }
+
+    // updates nodesWithSeq
+    this.nodesWithSeq = newSort.map((obj) => obj['index'])
+    // updates labelArray with new sort
+    this.onLabelFieldChange();
+
+    // updates seqArray with new order
+    this.seqArray = this.getData(this.nodesWithSeq, 'seq');
+
+    // updates seqArrayShortened with new order
+    this.shortenNodesWithSeq();
+
+    // updates main canvas and minimap canvas
+    this.updateAlignment();
+  }
+
+  
   updateNodeColors() { }
   updateLinkColor() { }
 
@@ -839,32 +963,106 @@ SelectedNetworkExportFileTypeListVariable: string = "png";
   onRecallSession() {
     
   }
-  onLoadNewData() {
-    /*
-    if new data is add via new fasta file or whatever what do we need to update -need to be added at some point:
-      this.nodesWithSeq; also update longestSeqLength
-      this.calculateProportionAtEachLocation();
-      this.updateAlignment;
-      this.shortenNodesWithSeq();
-      this.updateMiniMap();
-    */
-    
+  onLoadNewData() {   
   }
   onFilterDataChange() {
     
   }
 
   /**
-   * Ultimately will be used for exporting elements of the view; for now, used to for testing
+   * Opens the Alignment View Export Pain
   */
   openExport() {
-    //this.setCalculatedResolution()
-    //this.isExportClosed = false;
     this.ShowAlignExportPane = true;
   }
 
-  exportVisualization(e) {
-    console.log(e);
+  /**
+   * Exports the alignmentTop and main canvas as png image
+   */
+  exportPNG() {
+    let that = this;
+    let alignmentTop = document.querySelector('#alignmentTop svg');
+    let mainCanvas = $('.canvasHolder canvas').get(0) as HTMLCanvasElement
+    let exportWidth = mainCanvas.width
+    let exportHeight = mainCanvas.height + 140;
+    svgAsPngUri(alignmentTop, {
+      scale: 1,
+      backgroundColor: '#ffffff',
+      encoderType: 'image/png',
+      encoderOptions: 0.8
+    }).then((topB64string) => {
+      let imageDataUrl;
+
+      let exportCanvas = document.createElement("canvas");
+      exportCanvas.height = exportHeight;
+      exportCanvas.width = exportWidth;
+      let ctx = exportCanvas.getContext("2d");
+
+      let iTop = new Image();
+      let iMain = new Image();
+      iTop.src = topB64string;
+      iTop.onload = function() {
+        iMain.src = mainCanvas.toDataURL()
+        iMain.onload = function() {
+
+          ctx.drawImage(iTop, 0, 0)
+          ctx.drawImage(iMain, 0, 140)
+
+          imageDataUrl = exportCanvas.toDataURL("image/png")
+          saveAs(imageDataUrl, that.AlignmentExportFileName + '.png')
+        }
+      }
+  }); 
+  }
+
+  /**
+   * Exports the alignment top and main canvas as svg or png image
+   */
+  exportVisualization() {
+    $("body").css("cursor", "progress");
+    if (this.AlignmentExportFileTypeVis == 'png') {
+      this.exportPNG();
+    } else {
+      
+    let canvas = $('.canvasHolder canvas').get(0) as HTMLCanvasElement
+    let canvasDataURL = canvas.toDataURL();
+  
+    let foreignObj = document.createElementNS('http://www.w3.org/2000/svg', 'image')
+    foreignObj.setAttribute('x', '0'); // Set the x-coordinate
+    foreignObj.setAttribute('y', '140'); // Set the y-coordinate
+    foreignObj.setAttribute('width', canvas.width.toString()); // Set the width
+    foreignObj.setAttribute('height', canvas.height.toString()); // Set the height
+    foreignObj.setAttribute('xlink:href', canvasDataURL);
+
+    let top = $('#alignmentTop svg').get(0)
+    top.style.height = 150+canvas.height+'px'
+    top.appendChild(foreignObj);
+
+    let content = this.commonService.unparseSVG(top);
+    let blob = new Blob([content], { type: 'image/svg+xml;charset=utf-8' });
+    saveAs(blob, this.AlignmentExportFileName + '.svg');
+
+    top.style.height = 150+canvas.height+'px';
+    top.removeChild(foreignObj)
+    }
+    $("body").css("cursor", "default");
+  }
+
+  /**
+   * Exports sequencing data (id + seq string) as fasta or mega file
+   */
+  exportData() {
+    if (this.AlignmentExportFileTypeData == 'fasta') {
+      let data = this.getData(this.nodesWithSeq, ['_id', 'seq'])
+      let blob = new Blob([data.map(node => ">" + node._id + "\r\n" + node.seq).join("\r\n")])
+      //saveAs(blob, 'hi.fasta')
+      saveAs(blob, this.AlignmentExportFileName+'.fasta')
+    } else if (this.AlignmentExportFileTypeData == 'mega') {
+      let data = this.getData(this.nodesWithSeq, ['_id', 'seq'])
+      let headers = "#mega\r\n!Title " + this.AlignmentExportFileName + ";\r\n!Format\r\n\tDataType=DNA CodeTable=Standard\r\n\tIdentical=. Missing=? Indel=-;\r\n\r\n"
+      let blob = new Blob([headers, data.map(node => "#" + node._id + "\r\n" + node.seq).join("\r\n")])
+      saveAs(blob, this.AlignmentExportFileName+'.meg')
+    }
   }
 
 }

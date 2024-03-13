@@ -1,8 +1,8 @@
 
 // Moved out of alignment-view-plugin-component, so that it can be accessed from files view without having to initialize the whole view
 /**
-   * Adapted from  https://github.com/CDCgov/AlignmentViewer to also allow minimum charSetting
-   * @param seqs array of seq objects [{seq: 'ATCA...', ...},]
+   * Adapted from  https://github.com/CDCgov/AlignmentViewer to also allow minimum charSetting, accepts array of seq (not array of seq objects)
+   * @param seqs array of sequences objects ['ATGA...', 'TATA...', ...]
    * @param config  object: { width: number, height: number, charSetting:['hide'|'show'|'min'], fontSize: number, colors: {'A':'#000000', 'C': , 'G':, 'T':, 'ambig':}}
    * @returns promise of a HTMLCanvasElement showing the alignment
    */
@@ -25,8 +25,7 @@ export function generateCanvas(seqs, config) {
       let longest = 0;
       let n = seqs.length;
       for (let i = 0; i < n; i++) {
-        let s = seqs[i];
-        let seq = s.seq.toUpperCase();
+        let seq = seqs[i].toUpperCase();
         if (seq.length > longest) longest = seq.length;
       }
       let ch = Math.ceil(config.height);
@@ -43,7 +42,7 @@ export function generateCanvas(seqs, config) {
         if(nucleotide == 'ambig') return;
         context.fillStyle = config.colors[nucleotide];
         for (let row = 0; row < n; row ++) {
-          let seq = seqs[row].seq;
+          let seq = seqs[row];
           let y = Math.floor(row * ch);
           for (let col = 0; col < longest; col++) {
             let c = seq[col];
@@ -60,7 +59,7 @@ export function generateCanvas(seqs, config) {
       context.fillStyle = 'black';
       if(config.charSetting=='show'){
         for (let row = 0; row < n; row++) {
-          let seq = seqs[row].seq;
+          let seq = seqs[row];
           let y = row * ch + ch;
           for (let col = 0; col < longest; col++) {
             let c = seq[col];
@@ -70,7 +69,7 @@ export function generateCanvas(seqs, config) {
           }
         }
       } else if (config.charSetting=='min'){
-        let refSeq = seqs[0].seq
+        let refSeq = seqs[0]
         for (let col = 0; col < longest; col++) {
           let c = refSeq[col];
           if(!c) break;
@@ -79,7 +78,7 @@ export function generateCanvas(seqs, config) {
         }
 
         for (let row = 1; row < n; row++) {
-          let seq = seqs[row].seq;
+          let seq = seqs[row];
           let y = row * ch + ch;
           for (let col = 0; col < longest; col++) {
             let c = (refSeq[col] != seq[col] || seq[col]=='-')? seq[col]: '.';
