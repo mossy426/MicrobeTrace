@@ -52,3 +52,5 @@ testem.log
 .nfs*
 .DS_Store
 Thumbs.db
+slr/*
+slr_linux.tgz
