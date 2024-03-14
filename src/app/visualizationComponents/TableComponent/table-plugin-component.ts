@@ -63,6 +63,10 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         {label:'>=', value: 'gte'},
     ];
 
+    scrollHeight: string;
+    tableStyle;
+    selectedRows = 10;
+
     private visuals: MicrobeTraceNextVisuals;
 
     // @ViewChild('dt') dataTable: Table;
@@ -115,8 +119,17 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
                 this.visuals.tableComp.setSelectedNodes();
             }
         });
+
+        // offsets: 70 table-wrapper padding-top, 60 p-paginator, 10 table-wrapper padding-bottom
+        this.scrollHeight = ($('tableComponent').height() - 70 - 60 - 10) + 'px';
+        let width = ($('tableComponent').width() - 20) + 'px';
+        this.tableStyle = {
+            'max-width' : width,
+            'display': 'block'
+        }
     }
 
+    // XXXXX need to revist; currently exporting table does not work
     exportVisualization(event) {
         import("xlsx").then(xlsx => {
             const worksheet = xlsx.utils.json_to_sheet(this.dataTable.filteredValue);
@@ -128,6 +141,7 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         this.ShowTableExportPane = !this.ShowTableExportPane;
     }
 
+    // XXXXX need to revist; this function is called when exporting table and currently exporting table does not work
     saveAsExcelFile(buffer: any, fileName: string): void {
         import("file-saver").then(FileSaver => {
             const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
@@ -139,10 +153,18 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         });
     }
 
+    /**
+     * Called first when filter is applied it applys filter to this.dataTable to update this.dataTable.filterValue
+     * @param col 
+     */
     onTableFilter(col){
         this.dataTable.filter(col.filterValue, col.field, col.filterType);
     }
 
+    /**
+     * Called second when a filter is applied, it updates values sotred in commonService.session.data and this.selectedRows if needed
+     * @param event 
+     */
     onFilter(event) {
         let filteredValues = [];
 
@@ -164,8 +186,14 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         this.visuals.tableComp.commonService.session.data[this.visuals.tableComp.TableType + 'FilteredValues'] = filteredValues;
 
         this.visuals.microbeTrace.publishFilterDataChange();
+
+        // updates number of rows when filter is changed (without there is a visual bug when removing a filter)
+        if ($('.p-paginator-rpp-options span').text() == 'All') {
+            this.selectedRows = event.filteredValue.length;
+        }
     }
 
+    // XXXXX changing font size in settings pane currently calls this function
     onDataChange(event) {
 
     }
@@ -174,14 +202,28 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         //Nothing to do here
     }
 
+    /**
+     * Function is called when a user selects a row by clicking on it.
+     * It calls nodeSelect(event, true), which updates commonService.session.data.nodes/nodeFilteredValues
+     * to be selected for the row/node and also emits a 'node-selected' event
+     */
     onRowSelect(event) {
         this.nodeSelect(event, true);
     }
 
+    /**
+     * Function is called when a user unselects a row.
+     * It calls nodeSelect(event, false), which updates commonService.session.data.nodes/nodeFilteredValues
+     * to be selected for the row/node and also emits a 'node-selected' event
+     */
     onRowUnselect(event) {
         this.nodeSelect(event, false);
     }
 
+    /**
+     * Called when a node is selected/unselected by clicking on a row. This function updates
+     * commonService.session.data.nodes/nodeFilteredValues to be selected for the row/node and also emits a 'node-selected' event
+     */
     nodeSelect(event: any, isSelect: boolean) {
         if(event.data === undefined) return;
 
@@ -197,10 +239,15 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         window.dispatchEvent(new Event('node-selected'));
     }
 
+    /**
+     * Update variables (such as TableType, selectedTableData) needed to update the contents of the table
+     * @param type The type of data (node, link, cluster) to create table with
+     */
     createTable(type: any = "node") {
         type = type.toLowerCase();
         this.visuals.tableComp.TableType = type;
 
+        // checks if data for tableData exists in TableDatas, if not, creates a new TableData object and adds it to TableDatas
         let tableData: TableData | undefined = this.TableDatas.find(x => x.tableType === type);
         const isNewTableData: boolean = tableData == undefined;
         if (isNewTableData) {
@@ -297,6 +344,9 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         this.visuals.tableComp.setSelectedNodes();
     }
 
+    /**
+     * If this.TableType == 'node' update the node TableData.dataSelection to the nodes that are selected in commonService.session.data.nodes
+     */
     setSelectedNodes() {
         if (this.visuals.tableComp.TableType === 'node') {
             const foundTableData = this.TableDatas.find(x => x.tableType === 'node');
@@ -307,11 +357,16 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         }
     }
 
-    capitalize(s) {
+    /**
+     * @param s string
+     * @returns s but with first letter capitatlized, if s is not string type returns empty string
+     */
+    capitalize(s): string {
         if (typeof s !== 'string') return ''
         return s.charAt(0).toUpperCase() + s.slice(1)
     }
 
+    // XXXXX need to revisit for changing text size in table; currently unable to change size of text and changing the setting calls onDataChange()
     resetTextsize() {
         let s: any = $('#table-font-size').val();
         $('#table').css({
@@ -320,10 +375,16 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         });
     }
 
+    /**
+     * Opens settings pane for table component
+     */
     openSettings() {
         this.visuals.tableComp.ShowTableSettingsPane = !this.visuals.tableComp.ShowTableSettingsPane;
     }
 
+    /**
+     * Opens export pane for table component
+     */
     openExport() {
         this.visuals.tableComp.ShowTableExportPane = !this.visuals.tableComp.ShowTableExportPane;
     }
@@ -341,9 +402,16 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
 
     }
 
+    /**
+     * This function is called when the type of data to display in the table is changed (Nodes, Links, Cluster)
+     * @param e event
+     */
     openSelectDataSetScreen(e: any) {
-
         this.visuals.tableComp.createTable(e.option.value);
+        // after changing table type sometimes there is a visual bug that the following code fixes
+        if ($('.p-paginator-rpp-options span').text() == 'All') {
+            this.selectedRows = this.SelectedTableData.data.length;
+        }
     }
 
     onLoadNewData() {
@@ -363,6 +431,9 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
     onRecallSession() {
     }
 
+    /**
+     * Called before the comonent is destroyed; it save tableColumns for each node, link, and cluster in commonService.session.data
+     */
     ngOnDestroy(): void {
 
         let foundTableData = this.TableDatas.find(x => x.tableType === 'node');
