@@ -16,7 +16,33 @@ export class InlineWorker {
         const WORKER_ENABLED = !!(Worker);
 
         if (WORKER_ENABLED) {
-            const functionBody = func.toString().replace(/^[^{]*{\s*/, '').replace(/\s*}[^}]*$/, '');
+            let urls = ["https://raw.githubusercontent.com/CDCgov/patristic/master/dist/patristic.js",
+            "https://raw.githubusercontent.com/CDCgov/tn93.js/master/dist/tn93.js"];
+            let functionBody = "";
+            for (let i=0; i<urls.length; i++){
+                let request = new XMLHttpRequest();
+                request.open("GET", urls[i], false);
+                request.send(null);
+                let returnValue = request.responseText;
+                if (i === 0){
+                    let start = returnValue.indexOf("const version = \"0.5.7\";");
+                    let finish = returnValue.indexOf("exports.Branch = Branch;");
+                    functionBody += returnValue.substring(start, finish);
+
+                }
+                else if (i === 1){
+                    let start = returnValue.indexOf("\n");
+                    let finish = returnValue.indexOf("if(typeof exports !== 'undefined'){");
+                    functionBody += returnValue.substring(start + 1, finish);
+                }
+                else {
+                    functionBody += returnValue;
+                }
+                
+                // functionBody += returnValue;
+                functionBody += "\n";
+            }
+            functionBody += func.toString().replace(/^[^{]*{\s*/, '').replace(/\s*}[^}]*$/, '');
 
             this.worker = new Worker(URL.createObjectURL(
                 new Blob([functionBody], { type: 'text/javascript' })
