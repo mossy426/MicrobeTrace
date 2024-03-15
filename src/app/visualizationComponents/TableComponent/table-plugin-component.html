@@ -1,9 +1,9 @@
 ﻿﻿<div class="table-wrapper">
     <div id="tool-btn-container" class="m-portlet">
-        <span class="tool-btn" style="overflow: visible; position: relative; width: 110px; display: inline;">
+        <span class="tool-btn" style="overflow: visible; position: relative; display: inline;">
             <a title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings()"><i class="flaticon-settings primary"></i></a>
         </span>
-        <span  class="tool-btn" style="overflow: visible; position: relative; width: 110px; display: inline;">
+        <span  class="tool-btn" style="overflow: visible; position: relative; width: 80px; display: inline;">
             <a title="Export Screen" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openExport()"><i class="flaticon-download primary"></i></a>
         </span>
         <span class="data-types" id="dataType" style="overflow: visible; position: relative; width: 110px; display: inline;">
@@ -115,27 +115,32 @@
 </p-dialog>
 
 
-<p-dialog id="network-export-modal" [(visible)]="ShowTableExportPane" header="Export Table"
-    [style]="{width: '30vw', height:'150px'}">
+<p-dialog [(visible)]="ShowTableExportPane" header="Export Table">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body" style='width: 400px; height: 100%;'>
                 <div class="form-group row">
-                    <div class="col-9">
-                        <input type="text" id="network-export-filename" class="form-control form-control-sm"
-                            placeholder="Filename" [(ngModel)]="SelectedNetworkExportFilenameVariable">
+                    <div class="col-8">
+                        <input type="text" style="height:42px" class="form-control form-control-sm"
+                            placeholder="Filename" [(ngModel)]="SelectedTableExportFilenameVariable">
                     </div>
-                    <div class="col-3">
-                        <p-dropdown id="network-export-filetype" [options]="NetworkExportFileTypeList"
-                            [(ngModel)]="SelectedNetworkExportFileTypeListVariable" appendTo="body"></p-dropdown>
+                    <div class="col-4">
+                        <p-dropdown [options]="TableExportFileTypeList"
+                            [(ngModel)]="SelectedTableExportFileTypeListVariable" appendTo="body"></p-dropdown>
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 10px;" title="Do you want to export all the columns in the data or just the currently selected columns?">
+                    <div class="col-6"><label>Columns to Export</label></div>
+                    <div class="col-6">
+                        <p-selectButton style="float: right;" [options]="exportColumnOptions" [(ngModel)]="exportAllColumns"></p-selectButton>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-error"
                     (click)="ShowTableExportPane = !ShowTableExportPane">Cancel</button>
-                <button type="button" id="network-export" class="btn btn-primary"
-                    (click)="exportVisualization($event)">Export</button>
+                <button type="button" class="btn btn-primary"
+                    (click)="exportVisualization()">Export</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

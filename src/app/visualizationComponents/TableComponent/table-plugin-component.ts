@@ -9,6 +9,7 @@ import { MicrobeTraceNextVisuals } from '../../microbe-trace-next-plugin-visuals
 import { SelectItem } from 'primeng/api';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { ComponentContainer } from 'golden-layout';
+import * as saveAs from 'file-saver';
 
 
 
@@ -25,16 +26,22 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
 
     @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
 
-    SelectedNetworkExportFilenameVariable: string = "";
+    SelectedTableExportFilenameVariable: string = "";
 
-    NetworkExportFileTypeList: any = [
+    TableExportFileTypeList: any = [
         { label: 'xlsx', value: 'xlsx' },
+        { label: 'csv', value: 'csv' }
     ];
+    exportColumnOptions: any = [
+        { label: 'All', value: true },
+        { label: 'Current', value: false }
+    ];
+    exportAllColumns: boolean = false;
 
     dataSetView: SelectItem[];
     dataSetViewSelected: string;
     
-    SelectedNetworkExportFileTypeListVariable: string = "png";
+    SelectedTableExportFileTypeListVariable: string = "csv";
 
     SelectedTextSizeVariable: any = 14;
 
@@ -129,27 +136,68 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         }
     }
 
-    // XXXXX need to revist; currently exporting table does not work
-    exportVisualization(event) {
-        import("xlsx").then(xlsx => {
-            const worksheet = xlsx.utils.json_to_sheet(this.dataTable.filteredValue);
-            const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
-            const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-            this.saveAsExcelFile(excelBuffer, this.SelectedNetworkExportFilenameVariable);
-        });
+    /**
+     * Exports table
+     * 
+     * For exporting as excel file it calls this.saveAsExcelFile();
+     * 
+     * For exporting as a csv it uses exportCSV() which is built into primeNG table object
+     */
+    exportVisualization() {
+        if (this.SelectedTableExportFileTypeListVariable == 'xlsx') {
+            this.saveAsExcelFile();
+        } else {
+            this.dataTable.exportFilename = this.SelectedTableExportFilenameVariable;
+            
+            if (this.exportAllColumns) {
+                let temp = this.SelectedTableData.tableColumns;
+                let temp2 = [];
+                this.SelectedTableData.availableColumns.forEach(column => temp2.push(column.value))
+                this.dataTable.columns = temp2;
+                this.dataTable.exportCSV()
+                this.dataTable.columns = temp;
+            } else {
+                this.dataTable.exportCSV()
+            }
+        }
 
         this.ShowTableExportPane = !this.ShowTableExportPane;
     }
 
-    // XXXXX need to revist; this function is called when exporting table and currently exporting table does not work
-    saveAsExcelFile(buffer: any, fileName: string): void {
-        import("file-saver").then(FileSaver => {
+    /**
+     * Allows users to export the table as an excel file
+     * @param fileName optional if not given will use this.SelectedtableExportFilenameVariable
+     */
+    saveAsExcelFile( fileName?: string): void {
+        if (fileName == undefined) {
+            fileName = this.SelectedTableExportFilenameVariable
+        }
+        import("xlsx").then(xlsx => {
+            // if a filtered is applied use filteredValue else use all values
+            let rowData = this.dataTable.filteredValue || this.dataTable.value;
+            if (this.exportAllColumns) {
+                // change name of data fields to header to be consistent with the other exports on this component
+                rowData = rowData.map((row) => {
+                    let output = {}
+                    this.SelectedTableData.availableColumns.forEach((key) => output[key.value.header] = row[key.value.field])
+                    return output;
+                })
+            } else {
+                // gets only the current/visible columns for export and also changes data field name to the header name
+                rowData = rowData.map((row) => {
+                    let output = {}
+                    this.SelectedTableData.tableColumns.forEach((key) => output[key.header] = row[key.field])
+                    return output;
+                })
+            }
+
+            let worksheet = xlsx.utils.json_to_sheet(rowData) ; 
+            const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] }
+            const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
             const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
             const EXCEL_EXTENSION = '.xlsx';
-            const data: Blob = new Blob([buffer], {
-                type: EXCEL_TYPE
-            });
-            FileSaver.saveAs(data, fileName + EXCEL_EXTENSION);
+            const data: Blob = new Blob([excelBuffer], { type: EXCEL_TYPE });
+            saveAs(data, fileName + EXCEL_EXTENSION);
         });
     }
 
@@ -167,7 +215,6 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
      */
     onFilter(event) {
         let filteredValues = [];
-
         switch (this.visuals.tableComp.TableType) {
             case 'node':
                 filteredValues = this.visuals.tableComp.commonService.session.data.nodes.filter(x => event.filteredValue.find(y => y.index === x.index));
