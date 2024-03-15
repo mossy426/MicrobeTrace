@@ -11321,17 +11321,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "TableComponent": () => (/* binding */ TableComponent)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! tslib */ 70655);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! tslib */ 70655);
 /* harmony import */ var _table_plugin_component_html_ngResource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./table-plugin-component.html?ngResource */ 81379);
 /* harmony import */ var _table_plugin_component_less_ngResource__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./table-plugin-component.less?ngResource */ 55);
 /* harmony import */ var _table_plugin_component_less_ngResource__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_table_plugin_component_less_ngResource__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/core */ 94650);
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/platform-browser */ 11481);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/core */ 94650);
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/platform-browser */ 11481);
 /* harmony import */ var _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../contactTraceCommonServices/common.service */ 37822);
 /* harmony import */ var ngx_bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ngx-bootstrap */ 11109);
 /* harmony import */ var _app_base_component_directive__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @app/base-component.directive */ 75738);
-/* harmony import */ var golden_layout__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! golden-layout */ 10478);
+/* harmony import */ var golden_layout__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! golden-layout */ 10478);
+/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! file-saver */ 94327);
+/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_5__);
 var _class;
+
 
 
 
@@ -11351,13 +11354,24 @@ let TableComponent = (_class = class TableComponent extends _app_base_component_
     this.container = container;
     this.eventManager = eventManager;
     this.commonService = commonService;
-    this.DisplayGlobalSettingsDialogEvent = new _angular_core__WEBPACK_IMPORTED_MODULE_5__.EventEmitter();
-    this.SelectedNetworkExportFilenameVariable = "";
-    this.NetworkExportFileTypeList = [{
+    this.DisplayGlobalSettingsDialogEvent = new _angular_core__WEBPACK_IMPORTED_MODULE_6__.EventEmitter();
+    this.SelectedTableExportFilenameVariable = "";
+    this.TableExportFileTypeList = [{
       label: 'xlsx',
       value: 'xlsx'
+    }, {
+      label: 'csv',
+      value: 'csv'
     }];
-    this.SelectedNetworkExportFileTypeListVariable = "png";
+    this.exportColumnOptions = [{
+      label: 'All',
+      value: true
+    }, {
+      label: 'Current',
+      value: false
+    }];
+    this.exportAllColumns = false;
+    this.SelectedTableExportFileTypeListVariable = "csv";
     this.SelectedTextSizeVariable = 14;
     this.ShowTableExportPane = false;
     this.ShowTableSettingsPane = false;
@@ -11445,10 +11459,58 @@ let TableComponent = (_class = class TableComponent extends _app_base_component_
       'display': 'block'
     };
   }
-  // XXXXX need to revist; currently exporting table does not work
-  exportVisualization(event) {
+  /**
+   * Exports table
+   *
+   * For exporting as excel file it calls this.saveAsExcelFile();
+   *
+   * For exporting as a csv it uses exportCSV() which is built into primeNG table object
+   */
+  exportVisualization() {
+    if (this.SelectedTableExportFileTypeListVariable == 'xlsx') {
+      this.saveAsExcelFile();
+    } else {
+      this.dataTable.exportFilename = this.SelectedTableExportFilenameVariable;
+      if (this.exportAllColumns) {
+        let temp = this.SelectedTableData.tableColumns;
+        let temp2 = [];
+        this.SelectedTableData.availableColumns.forEach(column => temp2.push(column.value));
+        this.dataTable.columns = temp2;
+        this.dataTable.exportCSV();
+        this.dataTable.columns = temp;
+      } else {
+        this.dataTable.exportCSV();
+      }
+    }
+    this.ShowTableExportPane = !this.ShowTableExportPane;
+  }
+  /**
+   * Allows users to export the table as an excel file
+   * @param fileName optional if not given will use this.SelectedtableExportFilenameVariable
+   */
+  saveAsExcelFile(fileName) {
+    if (fileName == undefined) {
+      fileName = this.SelectedTableExportFilenameVariable;
+    }
     Promise.resolve(/*! import() */).then(__webpack_require__.bind(__webpack_require__, /*! xlsx */ 80574)).then(xlsx => {
-      const worksheet = xlsx.utils.json_to_sheet(this.dataTable.filteredValue);
+      // if a filtered is applied use filteredValue else use all values
+      let rowData = this.dataTable.filteredValue || this.dataTable.value;
+      if (this.exportAllColumns) {
+        // change name of data fields to header to be consistent with the other exports on this component
+        rowData = rowData.map(row => {
+          let output = {};
+          this.SelectedTableData.availableColumns.forEach(key => output[key.value.header] = row[key.value.field]);
+          return output;
+        });
+      } else {
+        // gets only the current/visible columns for export and also changes data field name to the header name
+        rowData = rowData.map(row => {
+          let output = {};
+          this.SelectedTableData.tableColumns.forEach(key => output[key.header] = row[key.field]);
+          return output;
+        });
+      }
+      let worksheet = xlsx.utils.json_to_sheet(rowData);
       const workbook = {
         Sheets: {
           'data': worksheet
@@ -11459,19 +11521,12 @@ let TableComponent = (_class = class TableComponent extends _app_base_component_
         bookType: 'xlsx',
         type: 'array'
       });
-      this.saveAsExcelFile(excelBuffer, this.SelectedNetworkExportFilenameVariable);
-    });
-    this.ShowTableExportPane = !this.ShowTableExportPane;
-  }
-  // XXXXX need to revist; this function is called when exporting table and currently exporting table does not work
-  saveAsExcelFile(buffer, fileName) {
-    Promise.resolve(/*! import() */).then(__webpack_require__.t.bind(__webpack_require__, /*! file-saver */ 94327, 23)).then(FileSaver => {
       const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
       const EXCEL_EXTENSION = '.xlsx';
-      const data = new Blob([buffer], {
+      const data = new Blob([excelBuffer], {
         type: EXCEL_TYPE
       });
-      FileSaver.saveAs(data, fileName + EXCEL_EXTENSION);
+      file_saver__WEBPACK_IMPORTED_MODULE_5__(data, fileName + EXCEL_EXTENSION);
     });
   }
   /**
@@ -11708,33 +11763,33 @@ let TableComponent = (_class = class TableComponent extends _app_base_component_
     }
   }
 }, _class.ctorParameters = () => [{
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_5__.Injector
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_6__.Injector
 }, {
-  type: golden_layout__WEBPACK_IMPORTED_MODULE_6__.ComponentContainer,
+  type: golden_layout__WEBPACK_IMPORTED_MODULE_7__.ComponentContainer,
   decorators: [{
-    type: _angular_core__WEBPACK_IMPORTED_MODULE_5__.Inject,
+    type: _angular_core__WEBPACK_IMPORTED_MODULE_6__.Inject,
     args: [_app_base_component_directive__WEBPACK_IMPORTED_MODULE_4__.BaseComponentDirective.GoldenLayoutContainerInjectionToken]
   }]
 }, {
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_5__.ElementRef
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_6__.ElementRef
 }, {
-  type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_7__.EventManager
+  type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__.EventManager
 }, {
   type: _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_2__.CommonService
 }], _class.propDecorators = {
   DisplayGlobalSettingsDialogEvent: [{
-    type: _angular_core__WEBPACK_IMPORTED_MODULE_5__.Output
+    type: _angular_core__WEBPACK_IMPORTED_MODULE_6__.Output
   }],
   dataTable: [{
-    type: _angular_core__WEBPACK_IMPORTED_MODULE_5__.ViewChild,
+    type: _angular_core__WEBPACK_IMPORTED_MODULE_6__.ViewChild,
     args: ['dt']
   }]
 }, _class);
-TableComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_8__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_5__.Component)({
+TableComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_9__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_6__.Component)({
   selector: 'TableComponent',
   template: _table_plugin_component_html_ngResource__WEBPACK_IMPORTED_MODULE_0__,
   styles: [(_table_plugin_component_less_ngResource__WEBPACK_IMPORTED_MODULE_1___default())]
-}), (0,tslib__WEBPACK_IMPORTED_MODULE_8__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_5__.Injector, golden_layout__WEBPACK_IMPORTED_MODULE_6__.ComponentContainer, _angular_core__WEBPACK_IMPORTED_MODULE_5__.ElementRef, _angular_platform_browser__WEBPACK_IMPORTED_MODULE_7__.EventManager, _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_2__.CommonService])], TableComponent);
+}), (0,tslib__WEBPACK_IMPORTED_MODULE_9__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_6__.Injector, golden_layout__WEBPACK_IMPORTED_MODULE_7__.ComponentContainer, _angular_core__WEBPACK_IMPORTED_MODULE_6__.ElementRef, _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__.EventManager, _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_2__.CommonService])], TableComponent);
 
 (function (TableComponent) {
   TableComponent.componentTypeName = 'Table';
@@ -18354,7 +18409,7 @@ var ___CSS_LOADER_API_NO_SOURCEMAP_IMPORT___ = __webpack_require__(/*! ../../../
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ 40479);
 var ___CSS_LOADER_EXPORT___ = ___CSS_LOADER_API_IMPORT___(___CSS_LOADER_API_NO_SOURCEMAP_IMPORT___);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ":host {\n  position: absolute;\n  overflow: hidden;\n  z-index: 1 !important;\n}\n#tool-btn-container {\n  display: flex !important;\n}\n.tool-btn {\n  height: 30px;\n  width: 30px !important;\n  display: block !important;\n}\n.data-types {\n  width: auto !important;\n  margin: 0 20px;\n}\n:host ::ng-deep .ui-table-customers {\n  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);\n}\n:host ::ng-deep .ui-table-customers .customer-badge {\n  border-radius: 2px;\n  padding: 0.25em 0.5em;\n  text-transform: uppercase;\n  font-weight: 700;\n  font-size: 12px;\n  letter-spacing: 0.3px;\n}\n:host ::ng-deep .ui-table-customers .customer-badge.status-qualified {\n  background-color: #C8E6C9;\n  color: #256029;\n}\n:host ::ng-deep .ui-table-customers .customer-badge.status-unqualified {\n  background-color: #FFCDD2;\n  color: #C63737;\n}\n:host ::ng-deep .ui-table-customers .customer-badge.status-negotiation {\n  background-color: #FEEDAF;\n  color: #8A5340;\n}\n:host ::ng-deep .ui-table-customers .customer-badge.status-new {\n  background-color: #B3E5FC;\n  color: #23547B;\n}\n:host ::ng-deep .ui-table-customers .customer-badge.status-renewal {\n  background-color: #ECCFFF;\n  color: #694382;\n}\n:host ::ng-deep .ui-table-customers .customer-badge.status-proposal {\n  background-color: #FFD8B2;\n  color: #805B36;\n}\n:host ::ng-deep .ui-table-customers .flag {\n  vertical-align: middle;\n  width: 30px;\n  height: 20px;\n}\n:host ::ng-deep .ui-table-customers .ui-multiselect-representative-option {\n  display: inline-block;\n  vertical-align: middle;\n}\n:host ::ng-deep .ui-table-customers .ui-multiselect-representative-option img {\n  vertical-align: middle;\n  width: 24px;\n}\n:host ::ng-deep .ui-table-customers .ui-multiselect-representative-option span {\n  margin-top: 0.125em;\n  vertical-align: middle;\n  margin-left: 0.5em;\n}\n:host ::ng-deep .ui-table-customers .ui-paginator .ui-dropdown {\n  float: left;\n}\n:host ::ng-deep .ui-table-customers .ui-paginator .ui-paginator-current {\n  float: right;\n}\n:host ::ng-deep .ui-table-customers .ui-progressbar {\n  height: 8px;\n  background-color: #D8DADC;\n}\n:host ::ng-deep .ui-table-customers .ui-progressbar .ui-progressbar-value {\n  background-color: #00ACAD;\n}\n:host ::ng-deep .ui-table-customers .ui-column-filter {\n  display: block;\n}\n:host ::ng-deep .ui-table-customers .ui-column-filter input {\n  width: 100%;\n}\n:host ::ng-deep .ui-table-customers .ui-table-globalfilter-container {\n  float: right;\n}\n:host ::ng-deep .ui-table-customers .ui-table-globalfilter-container input {\n  width: 200px;\n}\n:host ::ng-deep .ui-table-customers .ui-datepicker {\n  min-width: 25em;\n}\n:host ::ng-deep .ui-table-customers .ui-datepicker td {\n  font-weight: 400;\n}\n:host ::ng-deep .ui-table-customers .ui-table-caption {\n  border: 0 none;\n  padding: 12px;\n  text-align: left;\n  font-size: 20px;\n}\n:host ::ng-deep .ui-table-customers .ui-paginator {\n  border: 0 none;\n  padding: 1em;\n}\n:host ::ng-deep .ui-table-customers .ui-table-thead > tr > th {\n  border: 0 none;\n  text-align: left;\n}\n:host ::ng-deep .ui-table-customers .ui-table-thead > tr > th.ui-filter-column {\n  border-top: 1px solid #c8c8c8;\n}\n:host ::ng-deep .ui-table-customers .ui-table-thead > tr > th:first-child {\n  width: 5em;\n  text-align: center;\n}\n:host ::ng-deep .ui-table-customers .ui-table-thead > tr > th:last-child {\n  width: 8em;\n  text-align: center;\n}\n:host ::ng-deep .ui-table-customers .ui-table-tbody > tr > td {\n  border: 0 none;\n  cursor: auto;\n}\n:host ::ng-deep .ui-table-customers .ui-table-tbody > tr > td:first-child {\n  width: 3em;\n  text-align: center;\n}\n:host ::ng-deep .ui-table-customers .ui-table-tbody > tr > td:last-child {\n  width: 8em;\n  text-align: center;\n}\n:host ::ng-deep .ui-table-customers .ui-dropdown-label:not(.ui-placeholder) {\n  text-transform: uppercase;\n}\n:host ::ng-deep .ui-table-customers .ui-table-tbody > tr > td .ui-column-title {\n  display: none;\n}\n.item {\n  display: inline-block;\n  background: blue;\n}\n.filterType {\n  background: transparent;\n  border-color: transparent;\n  border-width: 0px;\n  border: 0px solid transparent;\n  border-style: inset;\n  outline-style: dashed;\n  outline-color: transparent;\n}\n/* Responsive */\n@media screen and (max-width: 64em) {\n  :host ::ng-deep .ui-table.ui-table-customers .ui-table-thead > tr > th,\n  :host ::ng-deep .ui-table.ui-table-customers .ui-table-tfoot > tr > td {\n    display: none !important;\n  }\n  :host ::ng-deep .ui-table.ui-table-customers .ui-table-tbody > tr > td {\n    text-align: left;\n    display: block;\n    border: 0 none !important;\n    width: 100% !important;\n    float: left;\n    clear: left;\n    border: 0 none;\n  }\n  :host ::ng-deep .ui-table.ui-table-customers .ui-table-tbody > tr > td .ui-column-title {\n    padding: 0.4em;\n    min-width: 30%;\n    display: inline-block;\n    margin: -0.4em 1em -0.4em -0.4em;\n    font-weight: bold;\n  }\n}\n.table-wrapper {\n  padding: 70px 20px 10px 20px;\n}\n/* Button appearance on hover */\n.btn-icon:hover {\n  transform: scale(1.1);\n  /* Slight enlarge on hover */\n  background-color: rgba(0, 0, 0, 0.1);\n  /* Subtle background color on hover */\n}\n.btn-icon {\n  margin-right: 10px;\n  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);\n  background: white;\n}\n.flaticon-settings:before {\n  font-weight: 800 !important;\n}\n.flaticon-download:before {\n  font-weight: 800 !important;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ":host {\n  position: absolute;\n  overflow: hidden;\n  z-index: 1 !important;\n}\n#tool-btn-container {\n  display: flex !important;\n}\n.tool-btn {\n  height: 30px;\n  display: block !important;\n}\n.data-types {\n  width: auto !important;\n  margin: 0 20px;\n}\n:host ::ng-deep .ui-table-customers {\n  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);\n}\n:host ::ng-deep .ui-table-customers .customer-badge {\n  border-radius: 2px;\n  padding: 0.25em 0.5em;\n  text-transform: uppercase;\n  font-weight: 700;\n  font-size: 12px;\n  letter-spacing: 0.3px;\n}\n:host ::ng-deep .ui-table-customers .customer-badge.status-qualified {\n  background-color: #C8E6C9;\n  color: #256029;\n}\n:host ::ng-deep .ui-table-customers .customer-badge.status-unqualified {\n  background-color: #FFCDD2;\n  color: #C63737;\n}\n:host ::ng-deep .ui-table-customers .customer-badge.status-negotiation {\n  background-color: #FEEDAF;\n  color: #8A5340;\n}\n:host ::ng-deep .ui-table-customers .customer-badge.status-new {\n  background-color: #B3E5FC;\n  color: #23547B;\n}\n:host ::ng-deep .ui-table-customers .customer-badge.status-renewal {\n  background-color: #ECCFFF;\n  color: #694382;\n}\n:host ::ng-deep .ui-table-customers .customer-badge.status-proposal {\n  background-color: #FFD8B2;\n  color: #805B36;\n}\n:host ::ng-deep .ui-table-customers .flag {\n  vertical-align: middle;\n  width: 30px;\n  height: 20px;\n}\n:host ::ng-deep .ui-table-customers .ui-multiselect-representative-option {\n  display: inline-block;\n  vertical-align: middle;\n}\n:host ::ng-deep .ui-table-customers .ui-multiselect-representative-option img {\n  vertical-align: middle;\n  width: 24px;\n}\n:host ::ng-deep .ui-table-customers .ui-multiselect-representative-option span {\n  margin-top: 0.125em;\n  vertical-align: middle;\n  margin-left: 0.5em;\n}\n:host ::ng-deep .ui-table-customers .ui-paginator .ui-dropdown {\n  float: left;\n}\n:host ::ng-deep .ui-table-customers .ui-paginator .ui-paginator-current {\n  float: right;\n}\n:host ::ng-deep .ui-table-customers .ui-progressbar {\n  height: 8px;\n  background-color: #D8DADC;\n}\n:host ::ng-deep .ui-table-customers .ui-progressbar .ui-progressbar-value {\n  background-color: #00ACAD;\n}\n:host ::ng-deep .ui-table-customers .ui-column-filter {\n  display: block;\n}\n:host ::ng-deep .ui-table-customers .ui-column-filter input {\n  width: 100%;\n}\n:host ::ng-deep .ui-table-customers .ui-table-globalfilter-container {\n  float: right;\n}\n:host ::ng-deep .ui-table-customers .ui-table-globalfilter-container input {\n  width: 200px;\n}\n:host ::ng-deep .ui-table-customers .ui-datepicker {\n  min-width: 25em;\n}\n:host ::ng-deep .ui-table-customers .ui-datepicker td {\n  font-weight: 400;\n}\n:host ::ng-deep .ui-table-customers .ui-table-caption {\n  border: 0 none;\n  padding: 12px;\n  text-align: left;\n  font-size: 20px;\n}\n:host ::ng-deep .ui-table-customers .ui-paginator {\n  border: 0 none;\n  padding: 1em;\n}\n:host ::ng-deep .ui-table-customers .ui-table-thead > tr > th {\n  border: 0 none;\n  text-align: left;\n}\n:host ::ng-deep .ui-table-customers .ui-table-thead > tr > th.ui-filter-column {\n  border-top: 1px solid #c8c8c8;\n}\n:host ::ng-deep .ui-table-customers .ui-table-thead > tr > th:first-child {\n  width: 5em;\n  text-align: center;\n}\n:host ::ng-deep .ui-table-customers .ui-table-thead > tr > th:last-child {\n  width: 8em;\n  text-align: center;\n}\n:host ::ng-deep .ui-table-customers .ui-table-tbody > tr > td {\n  border: 0 none;\n  cursor: auto;\n}\n:host ::ng-deep .ui-table-customers .ui-table-tbody > tr > td:first-child {\n  width: 3em;\n  text-align: center;\n}\n:host ::ng-deep .ui-table-customers .ui-table-tbody > tr > td:last-child {\n  width: 8em;\n  text-align: center;\n}\n:host ::ng-deep .ui-table-customers .ui-dropdown-label:not(.ui-placeholder) {\n  text-transform: uppercase;\n}\n:host ::ng-deep .ui-table-customers .ui-table-tbody > tr > td .ui-column-title {\n  display: none;\n}\n.item {\n  display: inline-block;\n  background: blue;\n}\n.filterType {\n  background: transparent;\n  border-color: transparent;\n  border-width: 0px;\n  border: 0px solid transparent;\n  border-style: inset;\n  outline-style: dashed;\n  outline-color: transparent;\n}\n/* Responsive */\n@media screen and (max-width: 64em) {\n  :host ::ng-deep .ui-table.ui-table-customers .ui-table-thead > tr > th,\n  :host ::ng-deep .ui-table.ui-table-customers .ui-table-tfoot > tr > td {\n    display: none !important;\n  }\n  :host ::ng-deep .ui-table.ui-table-customers .ui-table-tbody > tr > td {\n    text-align: left;\n    display: block;\n    border: 0 none !important;\n    width: 100% !important;\n    float: left;\n    clear: left;\n    border: 0 none;\n  }\n  :host ::ng-deep .ui-table.ui-table-customers .ui-table-tbody > tr > td .ui-column-title {\n    padding: 0.4em;\n    min-width: 30%;\n    display: inline-block;\n    margin: -0.4em 1em -0.4em -0.4em;\n    font-weight: bold;\n  }\n}\n.table-wrapper {\n  padding: 70px 20px 10px 20px;\n}\n/* Button appearance on hover */\n.btn-icon:hover {\n  transform: scale(1.1);\n  /* Slight enlarge on hover */\n  background-color: rgba(0, 0, 0, 0.1);\n  /* Subtle background color on hover */\n}\n.btn-icon {\n  margin-right: 10px;\n  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);\n  background: white;\n}\n.flaticon-settings:before {\n  font-weight: 800 !important;\n}\n.flaticon-download:before {\n  font-weight: 800 !important;\n}\n", ""]);
 // Exports
 module.exports = ___CSS_LOADER_EXPORT___.toString();
 
@@ -18735,7 +18790,7 @@ module.exports = "﻿﻿<div class=\"m-content\">\r\n    <div id=\"tool-btn-cont
 /***/ ((module) => {
 
 "use strict";
-module.exports = "﻿﻿<div class=\"table-wrapper\">\r\n    <div id=\"tool-btn-container\" class=\"m-portlet\">\r\n        <span class=\"tool-btn\" style=\"overflow: visible; position: relative; width: 110px; display: inline;\">\r\n            <a title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openSettings()\"><i class=\"flaticon-settings primary\"></i></a>\r\n        </span>\r\n        <span  class=\"tool-btn\" style=\"overflow: visible; position: relative; width: 110px; display: inline;\">\r\n            <a title=\"Export Screen\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openExport()\"><i class=\"flaticon-download primary\"></i></a>\r\n        </span>\r\n        <span class=\"data-types\" id=\"dataType\" style=\"overflow: visible; position: relative; width: 110px; display: inline;\">\r\n            <p-selectButton #dataSet [options]=\"dataSetView\" [(ngModel)]=\"dataSetViewSelected\" (onOptionClick)=\"openSelectDataSetScreen($event)\"></p-selectButton>\r\n        </span>\r\n        <p-multiSelect [options]=\"SelectedTableData.availableColumns\" [(ngModel)]=\"SelectedTableData.tableColumns\" [showToggleAll]=false></p-multiSelect>\r\n    </div>\r\n\r\n<div class=\"row align-items-center\">\r\n    <!-- [busyIf]=\"primengTableHelper.isLoading\" -->\r\n    <div class=\"primeng-datatable-container\">\r\n        <p-table #dt *ngIf=\"IsDataAvailable == true && SelectedTableData\" \r\n            [value]=\"SelectedTableData.data\" \r\n            [rowHover]=\"true\"\r\n            [rows]=\"selectedRows\" \r\n            [showCurrentPageReport]=\"true\"\r\n            [rowsPerPageOptions]=\"[10,25,50,75,100, { showAll: 'All' }]\" \r\n            [loading]=\"loading\" \r\n            [paginator]=\"true\" \r\n            [filterDelay]=\"1000\"\r\n            (onFilter)=\"onFilter($event)\" \r\n            selectionMode=\"{{TableType === 'node' ? 'multiple' : null}}\"\r\n            [(selection)]=\"SelectedTableData.dataSelection\" \r\n            (onRowSelect)=\"onRowSelect($event)\"\r\n            (onRowUnselect)=\"onRowUnselect($event)\" \r\n            [scrollable]=\"true\"\r\n            [scrollHeight]=\"scrollHeight\"\r\n            [tableStyle]=\"tableStyle\"\r\n            ScrollWidth=\"100%\"\r\n            [resizableColumns]=\"true\" \r\n            columnResizeMode=\"expand\"     \r\n            [columns]=\"SelectedTableData.tableColumns\">\r\n            <!-- [responsive]=\"true\"  -->\r\n            <!-- [autoLayout]=\"true\" \r\n            styleClass=\"ui-table-responsive\"  -->\r\n            <ng-template pTemplate=\"colgroup\" let-columns>\r\n                <colgroup>\r\n                    <col *ngFor=\"let col of SelectedTableData.tableColumns\">\r\n                </colgroup>\r\n            </ng-template>\r\n            <ng-template pTemplate=\"header\">\r\n                <tr [pSelectableRow]=\"datarow\">\r\n                    <th style=\"width: 150px; border: none\" pSortableColumn=\"{{col.field}}\" *ngFor=\"let col of SelectedTableData.tableColumns\">\r\n                        {{col.header}}<p-sortIcon field=\"{{col.field}}\"></p-sortIcon>\r\n                    </th>\r\n                </tr>\r\n                <tr>\r\n                    <th style=\"width: 150px; border: none\"  *ngFor=\"let col of SelectedTableData.tableColumns\">\r\n                        <div class=\"wrapper\">\r\n                            <select class=\"filterType\" [(ngModel)]=\"col.filterType\" (change)=\"onTableFilter(col)\">\r\n                                <option *ngFor=\"let filterType of filterTypes\" [ngValue]=\"filterType.value\">{{filterType.label}}\r\n                                </option>\r\n                            </select>\r\n                            <input class=\"item\" pInputText type=\"text\" (input)=\"onTableFilter(col)\"\r\n                                [(ngModel)]=\"col.filterValue\" class=\"p-column-filter\" style=\"width:100%;\">\r\n                        </div>\r\n                    </th>\r\n                </tr>\r\n\r\n            </ng-template>\r\n            <ng-template pTemplate=\"body\" let-datarow>\r\n                <tr class=\"ui-selectable-row\" [pSelectableRow]=\"datarow\">\r\n                    <td style=\"width: 150px\"  *ngFor=\"let col of SelectedTableData.tableColumns\">\r\n                        {{datarow[col.field]}}\r\n                    </td>\r\n                </tr>\r\n            </ng-template>\r\n        </p-table>\r\n    </div>\r\n</div>\r\n\r\n<div class=\"m-content\" *ngIf=\"IsDataAvailable == false\">\r\n    <div id=\"file-panel\" class=\"container-fluid\" style=\"height:500px;\">\r\n        <div id=\"file-prompt\" class=\"d-flex justify-content-center\">\r\n            <h1><b>Please add data files to load...</b></h1>\r\n            <br />\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n\r\n<p-dialog id=\"table-settings-pane\" [(visible)]=\"ShowTableSettingsPane\" header=\"Table Settings\"\r\n    [style]=\"{width: '45vw', height:'300px'}\">\r\n    <div class=\"modal-dialog\" role=\"document\">\r\n        <div class=\"modal-content\">\r\n            <div class=\"modal-body\">\r\n                <tabset class=\"tab-container tabbable-line\" style='width: 100%;'>\r\n                    <tab heading=\"{{'Table' | localize}}\" [active]=\"true\" customClass=\"m-tabs__item\">\r\n                        <div class=\"tab-pane fade show active\" id=\"table-node-settings\" role=\"tabpanel\"\r\n                            aria-labelledby=\"nodes-tab\">\r\n                            <div class=\"tab-content\">\r\n                                <div class=\"tab-pane fade show active\" role=\"tabpanel\" aria-labelledby=\"table-tab\">\r\n                                    <div class=\"form-group row\"\r\n                                        title=\"What size would you like the Table's font to be?\">\r\n                                        <div class=\"col-4\"><label for=\"table-font-size\">Text Size</label></div>\r\n                                        <div class=\"col-8\"><input type=\"range\" class=\"custom-range\" id=\"table-font-size\"\r\n                                                min=\"6\" value=\"14\" max=\"72\" step=\"1\"\r\n                                                [(ngModel)]=\"SelectedTextSizeVariable\"\r\n                                                (ngModelChange)=\"onDataChange($event)\"></div>\r\n                                    </div>\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n                    </tab>\r\n                </tabset>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</p-dialog>\r\n\r\n\r\n<p-dialog id=\"network-export-modal\" [(visible)]=\"ShowTableExportPane\" header=\"Export Table\"\r\n    [style]=\"{width: '30vw', height:'150px'}\">\r\n    <div class=\"modal-dialog\" role=\"document\">\r\n        <div class=\"modal-content\">\r\n            <div class=\"modal-body\" style='width: 400px; height: 100%;'>\r\n                <div class=\"form-group row\">\r\n                    <div class=\"col-9\">\r\n                        <input type=\"text\" id=\"network-export-filename\" class=\"form-control form-control-sm\"\r\n                            placeholder=\"Filename\" [(ngModel)]=\"SelectedNetworkExportFilenameVariable\">\r\n                    </div>\r\n                    <div class=\"col-3\">\r\n                        <p-dropdown id=\"network-export-filetype\" [options]=\"NetworkExportFileTypeList\"\r\n                            [(ngModel)]=\"SelectedNetworkExportFileTypeListVariable\" appendTo=\"body\"></p-dropdown>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\"modal-footer\">\r\n                <button type=\"button\" class=\"btn btn-error\"\r\n                    (click)=\"ShowTableExportPane = !ShowTableExportPane\">Cancel</button>\r\n                <button type=\"button\" id=\"network-export\" class=\"btn btn-primary\"\r\n                    (click)=\"exportVisualization($event)\">Export</button>\r\n            </div>\r\n        </div><!-- /.modal-content -->\r\n    </div><!-- /.modal-dialog -->\r\n</p-dialog><!-- /.modal -->\r\n</div>";
+module.exports = "﻿﻿<div class=\"table-wrapper\">\r\n    <div id=\"tool-btn-container\" class=\"m-portlet\">\r\n        <span class=\"tool-btn\" style=\"overflow: visible; position: relative; display: inline;\">\r\n            <a title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openSettings()\"><i class=\"flaticon-settings primary\"></i></a>\r\n        </span>\r\n        <span  class=\"tool-btn\" style=\"overflow: visible; position: relative; width: 80px; display: inline;\">\r\n            <a title=\"Export Screen\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openExport()\"><i class=\"flaticon-download primary\"></i></a>\r\n        </span>\r\n        <span class=\"data-types\" id=\"dataType\" style=\"overflow: visible; position: relative; width: 110px; display: inline;\">\r\n            <p-selectButton #dataSet [options]=\"dataSetView\" [(ngModel)]=\"dataSetViewSelected\" (onOptionClick)=\"openSelectDataSetScreen($event)\"></p-selectButton>\r\n        </span>\r\n        <p-multiSelect [options]=\"SelectedTableData.availableColumns\" [(ngModel)]=\"SelectedTableData.tableColumns\" [showToggleAll]=false></p-multiSelect>\r\n    </div>\r\n\r\n<div class=\"row align-items-center\">\r\n    <!-- [busyIf]=\"primengTableHelper.isLoading\" -->\r\n    <div class=\"primeng-datatable-container\">\r\n        <p-table #dt *ngIf=\"IsDataAvailable == true && SelectedTableData\" \r\n            [value]=\"SelectedTableData.data\" \r\n            [rowHover]=\"true\"\r\n            [rows]=\"selectedRows\" \r\n            [showCurrentPageReport]=\"true\"\r\n            [rowsPerPageOptions]=\"[10,25,50,75,100, { showAll: 'All' }]\" \r\n            [loading]=\"loading\" \r\n            [paginator]=\"true\" \r\n            [filterDelay]=\"1000\"\r\n            (onFilter)=\"onFilter($event)\" \r\n            selectionMode=\"{{TableType === 'node' ? 'multiple' : null}}\"\r\n            [(selection)]=\"SelectedTableData.dataSelection\" \r\n            (onRowSelect)=\"onRowSelect($event)\"\r\n            (onRowUnselect)=\"onRowUnselect($event)\" \r\n            [scrollable]=\"true\"\r\n            [scrollHeight]=\"scrollHeight\"\r\n            [tableStyle]=\"tableStyle\"\r\n            ScrollWidth=\"100%\"\r\n            [resizableColumns]=\"true\" \r\n            columnResizeMode=\"expand\"     \r\n            [columns]=\"SelectedTableData.tableColumns\">\r\n            <!-- [responsive]=\"true\"  -->\r\n            <!-- [autoLayout]=\"true\" \r\n            styleClass=\"ui-table-responsive\"  -->\r\n            <ng-template pTemplate=\"colgroup\" let-columns>\r\n                <colgroup>\r\n                    <col *ngFor=\"let col of SelectedTableData.tableColumns\">\r\n                </colgroup>\r\n            </ng-template>\r\n            <ng-template pTemplate=\"header\">\r\n                <tr [pSelectableRow]=\"datarow\">\r\n                    <th style=\"width: 150px; border: none\" pSortableColumn=\"{{col.field}}\" *ngFor=\"let col of SelectedTableData.tableColumns\">\r\n                        {{col.header}}<p-sortIcon field=\"{{col.field}}\"></p-sortIcon>\r\n                    </th>\r\n                </tr>\r\n                <tr>\r\n                    <th style=\"width: 150px; border: none\"  *ngFor=\"let col of SelectedTableData.tableColumns\">\r\n                        <div class=\"wrapper\">\r\n                            <select class=\"filterType\" [(ngModel)]=\"col.filterType\" (change)=\"onTableFilter(col)\">\r\n                                <option *ngFor=\"let filterType of filterTypes\" [ngValue]=\"filterType.value\">{{filterType.label}}\r\n                                </option>\r\n                            </select>\r\n                            <input class=\"item\" pInputText type=\"text\" (input)=\"onTableFilter(col)\"\r\n                                [(ngModel)]=\"col.filterValue\" class=\"p-column-filter\" style=\"width:100%;\">\r\n                        </div>\r\n                    </th>\r\n                </tr>\r\n\r\n            </ng-template>\r\n            <ng-template pTemplate=\"body\" let-datarow>\r\n                <tr class=\"ui-selectable-row\" [pSelectableRow]=\"datarow\">\r\n                    <td style=\"width: 150px\"  *ngFor=\"let col of SelectedTableData.tableColumns\">\r\n                        {{datarow[col.field]}}\r\n                    </td>\r\n                </tr>\r\n            </ng-template>\r\n        </p-table>\r\n    </div>\r\n</div>\r\n\r\n<div class=\"m-content\" *ngIf=\"IsDataAvailable == false\">\r\n    <div id=\"file-panel\" class=\"container-fluid\" style=\"height:500px;\">\r\n        <div id=\"file-prompt\" class=\"d-flex justify-content-center\">\r\n            <h1><b>Please add data files to load...</b></h1>\r\n            <br />\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n\r\n<p-dialog id=\"table-settings-pane\" [(visible)]=\"ShowTableSettingsPane\" header=\"Table Settings\"\r\n    [style]=\"{width: '45vw', height:'300px'}\">\r\n    <div class=\"modal-dialog\" role=\"document\">\r\n        <div class=\"modal-content\">\r\n            <div class=\"modal-body\">\r\n                <tabset class=\"tab-container tabbable-line\" style='width: 100%;'>\r\n                    <tab heading=\"{{'Table' | localize}}\" [active]=\"true\" customClass=\"m-tabs__item\">\r\n                        <div class=\"tab-pane fade show active\" id=\"table-node-settings\" role=\"tabpanel\"\r\n                            aria-labelledby=\"nodes-tab\">\r\n                            <div class=\"tab-content\">\r\n                                <div class=\"tab-pane fade show active\" role=\"tabpanel\" aria-labelledby=\"table-tab\">\r\n                                    <div class=\"form-group row\"\r\n                                        title=\"What size would you like the Table's font to be?\">\r\n                                        <div class=\"col-4\"><label for=\"table-font-size\">Text Size</label></div>\r\n                                        <div class=\"col-8\"><input type=\"range\" class=\"custom-range\" id=\"table-font-size\"\r\n                                                min=\"6\" value=\"14\" max=\"72\" step=\"1\"\r\n                                                [(ngModel)]=\"SelectedTextSizeVariable\"\r\n                                                (ngModelChange)=\"onDataChange($event)\"></div>\r\n                                    </div>\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n                    </tab>\r\n                </tabset>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</p-dialog>\r\n\r\n\r\n<p-dialog [(visible)]=\"ShowTableExportPane\" header=\"Export Table\">\r\n    <div class=\"modal-dialog\" role=\"document\">\r\n        <div class=\"modal-content\">\r\n            <div class=\"modal-body\" style='width: 400px; height: 100%;'>\r\n                <div class=\"form-group row\">\r\n                    <div class=\"col-8\">\r\n                        <input type=\"text\" style=\"height:42px\" class=\"form-control form-control-sm\"\r\n                            placeholder=\"Filename\" [(ngModel)]=\"SelectedTableExportFilenameVariable\">\r\n                    </div>\r\n                    <div class=\"col-4\">\r\n                        <p-dropdown [options]=\"TableExportFileTypeList\"\r\n                            [(ngModel)]=\"SelectedTableExportFileTypeListVariable\" appendTo=\"body\"></p-dropdown>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group row\" style=\"margin-top: 10px;\" title=\"Do you want to export all the columns in the data or just the currently selected columns?\">\r\n                    <div class=\"col-6\"><label>Columns to Export</label></div>\r\n                    <div class=\"col-6\">\r\n                        <p-selectButton style=\"float: right;\" [options]=\"exportColumnOptions\" [(ngModel)]=\"exportAllColumns\"></p-selectButton>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\"modal-footer\">\r\n                <button type=\"button\" class=\"btn btn-error\"\r\n                    (click)=\"ShowTableExportPane = !ShowTableExportPane\">Cancel</button>\r\n                <button type=\"button\" class=\"btn btn-primary\"\r\n                    (click)=\"exportVisualization()\">Export</button>\r\n            </div>\r\n        </div><!-- /.modal-content -->\r\n    </div><!-- /.modal-dialog -->\r\n</p-dialog><!-- /.modal -->\r\n</div>";
 
 /***/ }),
 
