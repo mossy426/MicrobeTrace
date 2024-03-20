@@ -1842,12 +1842,41 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     }
   }
 
+  onAmbiguityStrategyChanged() {
+    this.commonService.session.style.widgets['ambiguity-resolution-strategy'] = this.SelectedAmbiguityResolutionStrategyVariable;
+  }
+
+  onAmbiguityThresholdChanged() {
+    this.commonService.session.style.widgets['ambiguity-threshold'] = this.SelectedAmbiguityThresholdVariable;
+  }
+
   generateSequences() {
     $('#file-prompt').remove();
     $('#launch').prop('disabled', false).focus();
     this.processFile(new File([Papa.unparse(this.commonService.generateSeqs('gen-' + this.visuals.microbeTrace.commonService.session.meta.readyTime + '-', this.SelectedGenerateNumberVariable, 20))], 'generatedNodes.csv'));
   }
 
+  applyStyleFileSettings() {
+    if (this.SelectedDefaultDistanceMetricVariable != this.commonService.session.style.widgets['default-distance-metric']){
+      this.SelectedDefaultDistanceMetricVariable = this.commonService.session.style.widgets['default-distance-metric'].toLowerCase();
+    }
+
+    if (this.SelectedAmbiguityResolutionStrategyVariable != this.commonService.session.style.widgets['ambiguity-resolution-strategy']){
+        this.SelectedAmbiguityResolutionStrategyVariable = this.commonService.session.style.widgets['ambiguity-resolution-strategy'];
+    }
+
+    if (this.SelectedAmbiguityThresholdVariable = this.commonService.session.style.widgets['ambiguity-threshold']) {
+      this.SelectedAmbiguityThresholdVariable = this.commonService.session.style.widgets['ambiguity-threshold'];
+    }
+
+    if (this.SelectedDefaultDistanceThresholdVariable != this.commonService.session.style.widgets['link-threshold']){
+        this.SelectedDefaultDistanceThresholdVariable = this.commonService.session.style.widgets['link-threshold'];
+    }
+
+    if (this.SelectedDefaultViewVariable != this.commonService.session.style.widgets['default-view']){
+      this.SelectedDefaultViewVariable = this.commonService.session.style.widgets['default-view'];
+    }
+  }
 }
 
 export namespace FilesComponent {

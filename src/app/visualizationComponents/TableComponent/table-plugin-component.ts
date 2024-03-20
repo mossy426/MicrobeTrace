@@ -471,6 +471,12 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
     updateVisualization() {
         //Not Relevant
     }
+
+    applyStyleFileSettings() {
+        //this.widgets = window.context.commonService.session.style.widgets;
+        //this.loadSettings();
+    }
+
     updateLinkColor() {
         //Not Relevant
     }

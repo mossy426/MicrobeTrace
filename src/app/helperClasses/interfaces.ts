@@ -1,6 +1,10 @@
 export interface MicobeTraceNextPluginEvents{
     updateNodeColors();
     updateVisualization();
+    /**
+     * This function is called when a style file is loaded; Implement for each view according to which settings need to be updated and functions called
+     */
+    applyStyleFileSettings();
     updateLinkColor();
     openRefreshScreen();
     onRecallSession();

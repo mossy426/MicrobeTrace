@@ -3385,6 +3385,11 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         }    
     }
 
+    applyStyleFileSettings() {
+        this.widgets = window.context.commonService.session.style.widgets;
+        this.loadSettings();
+    }
+
     ngOnDestroy(): void {
         //this.context.twoD.widgets['node-label-variable'] = 'None';
     }

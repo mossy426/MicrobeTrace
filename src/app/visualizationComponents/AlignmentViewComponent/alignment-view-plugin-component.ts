@@ -3,6 +3,7 @@ import { EventManager } from '@angular/platform-browser';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { MicrobeTraceNextVisuals } from '@app/microbe-trace-next-plugin-visuals';
 import { CommonService } from '@app/contactTraceCommonServices/common.service';
+import { window } from 'ngx-bootstrap';
 import { DialogSettings } from '../../helperClasses/dialogSettings';
 import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
 import { ComponentContainer } from 'golden-layout';
@@ -954,8 +955,30 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   updateLinkColor() { }
 
   updateVisualization() {
-    
   }
+
+  // function is called when style file is applied
+  applyStyleFileSettings() {
+    this.widgets = window.context.commonService.session.style.widgets;
+
+    this.labelArray = this.getData(this.nodesWithSeq, ['index', this.widgets['alignView-labelField']]);
+
+    // sets different variables relating to size and display
+    this.onAlignmentTopChange()
+
+    if (this.widgets['alignView-colorSchemeName'] == 'n' || this.widgets['alignView-colorSchemeName'] == 'a') {
+      this.useCustomColorScheme = false;
+    } else {
+      this.useCustomColorScheme = true;
+    }
+    this.onSelectedColorChanged(true)
+
+    // updates spanWidth, spanHeight, rightWidth, leftWidth, fontSize, and then updates alignment
+    this.onSelectedSizeChanged()
+
+    // updates shows or hides minimap and then updates view heights
+    this.updateMiniMapVisibility()
+}
 
   openRefreshScreen() {
     

@@ -160,6 +160,23 @@ export class CommonService extends AppComponentBase implements OnInit {
             '3DNet-node-radius-variable': 'None',
             'align-sw': false,
             'align-none': true,
+            'alignView-charSetting': 'hide',
+            'alignView-colorSchemeName': 'n',
+            'alignView-customColorScheme': {
+                'A': '#ccff00',
+                'C': '#ffff00',
+                'G': '#ff9900',
+                'T': '#ff6600',
+                'ambig': '#ffffff',
+            },
+            'alignView-labelField': '_id',
+            'alignView-rulerMinorInterval': 20,
+            'alignView-selectedSize': 'l',
+            'alignView-showMiniMap': true,
+            'alignView-sortField': 'index',
+            'alignView-spanWidth': 10,
+            'alignView-spanHeight': 16,
+            'alignView-topDisplay': 'logo',
             'ambiguity-resolution-strategy': 'AVERAGE',
             'ambiguity-threshold': 0.015,
             'background-color': '#ffffff',
@@ -1006,6 +1023,8 @@ export class CommonService extends AppComponentBase implements OnInit {
         window.context.commonService.createLinkColorMap();
         window.context.commonService.createNodeColorMap()
         window.context.commonService.createPolygonColorMap();
+
+        // finds id s in template/html where id=widget name, updated the value to the new value in the style file
         let $id = null;
         for (let id in window.context.commonService.session.style.widgets) {
             $id = $("#" + id);
@@ -1013,10 +1032,26 @@ export class CommonService extends AppComponentBase implements OnInit {
                 if (window.context.commonService.includes(["radio", "checkbox"], ($id[0].type))) {
                     if (window.context.commonService.session.style.widgets[id]) $id.trigger("click");
                 } else {
-                    $id.val(window.context.commonService.session.style.widgets[id]);
+                    if (id == 'default-distance-metric') {
+                        $id.val(window.context.commonService.session.style.widgets[id].toLowerCase());
+                        $("#" + id+'2').val(window.context.commonService.session.style.widgets[id].toLowerCase());
+                    } else {
+                        $id.val(window.context.commonService.session.style.widgets[id]);
+                    }                    
                 }
             }
         }
+
+        this.visuals.microbeTrace.applyStyleFileSettings();
+        if (this.visuals.filesPlugin) {
+            this.visuals.filesPlugin.applyStyleFileSettings();
+        }
+
+        this.visuals.microbeTrace.homepageTabs.forEach(tab => {
+            if (tab.componentRef && tab.componentRef.instance.updateVisualization) {
+                tab.componentRef.instance.applyStyleFileSettings();
+            }
+        })
 
         // TODO: See if this is needed
         // Need session applied variable since this will break restoring full microbe trace file vs loading a style file

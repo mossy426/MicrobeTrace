@@ -418,6 +418,13 @@ updateNodeColors() {
 updateVisualization() {
   //Not Relevant
 }
+
+applyStyleFileSettings() {
+  // if this components gets widget or any settings saved in style file (commonService.session.style) need to update here
+  // so loading a new file will update the visualization 
+  //this.widgets = window.context.commonService.session.style.widgets;
+}
+
 updateLinkColor() {
   //Not Relevant
 }
