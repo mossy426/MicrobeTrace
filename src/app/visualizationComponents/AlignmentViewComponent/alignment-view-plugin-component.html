@@ -3,8 +3,8 @@
         <div class="left">  
             <div style="text-align: center;" [style.width.px]="leftWidth">
                 <div id='miniMapTitle' class="title" title="Mini Map of entire length for all the sequences. Click to move to an area of the viewer.">Mini Map</div>
-                <div id='alignmnetTopTitle' class="title" style="height: 100px; padding-top: 22px;"></div>
-                <div class="title" style="height: 43px;">Ruler</div>
+                <div id='alignmnetTopTitle' class="title" style="height: 100px; line-height: 100px;"></div>
+                <div class="title" style="height: 43px; line-height: 43px;" title="Number of Nucleotides from the start of the sequence">Ruler</div>
                 <div style="height: 17px;"></div>
             </div>
             <div class="canvasLabels" [style.height.px]="canvasViewHeight-17" [style.width.px]="leftWidth" #canvasLabels (scroll)="canvasHolder.scrollTop=canvasLabels.scrollTop">
@@ -79,13 +79,13 @@
             <p-accordionTab style="color:#495057" header="Layout">
                 <div #layoutControls>
                     <div class="form-group row" title="Show or Hide the Mini Map">
-                        <div class="col-4"><label>Show MiniMap</label></div>
+                        <div class="col-4"><label>Show Mini-Map</label></div>
                         <div class="col-8">
                             <p-selectButton [options]="showHideOptions" [(ngModel)]="this.widgets['alignView-showMiniMap']" (onChange)="updateMiniMapVisibility()"></p-selectButton>
                         </div>
                     </div>
                     <div class="form-group row" title="Switch between a Bar Plot representation or a Logo representation of the nucleotides present at each position">
-                        <div class="col-4"><label>Show Logo</label></div>
+                        <div class="col-4"><label>Show Logo/Bar Plot</label></div>
                         <div class="col-8">
                             <p-selectButton [options]="alignmentTopDisplayOptions"
                                 [(ngModel)]="this.widgets['alignView-topDisplay']" (onChange)="onAlignmentTopChange()"></p-selectButton>

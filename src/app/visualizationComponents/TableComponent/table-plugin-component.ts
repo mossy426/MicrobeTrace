@@ -9,6 +9,7 @@ import { MicrobeTraceNextVisuals } from '../../microbe-trace-next-plugin-visuals
 import { SelectItem } from 'primeng/api';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { ComponentContainer } from 'golden-layout';
+import * as saveAs from 'file-saver';
 
 
 
@@ -25,16 +26,22 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
 
     @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
 
-    SelectedNetworkExportFilenameVariable: string = "";
+    SelectedTableExportFilenameVariable: string = "";
 
-    NetworkExportFileTypeList: any = [
+    TableExportFileTypeList: any = [
         { label: 'xlsx', value: 'xlsx' },
+        { label: 'csv', value: 'csv' }
     ];
+    exportColumnOptions: any = [
+        { label: 'All', value: true },
+        { label: 'Current', value: false }
+    ];
+    exportAllColumns: boolean = false;
 
     dataSetView: SelectItem[];
     dataSetViewSelected: string;
     
-    SelectedNetworkExportFileTypeListVariable: string = "png";
+    SelectedTableExportFileTypeListVariable: string = "csv";
 
     SelectedTextSizeVariable: any = 14;
 
@@ -62,6 +69,10 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         {label:'>', value: 'gt'},
         {label:'>=', value: 'gte'},
     ];
+
+    scrollHeight: string;
+    tableStyle;
+    selectedRows = 10;
 
     private visuals: MicrobeTraceNextVisuals;
 
@@ -115,37 +126,95 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
                 this.visuals.tableComp.setSelectedNodes();
             }
         });
+
+        // offsets: 70 table-wrapper padding-top, 60 p-paginator, 10 table-wrapper padding-bottom
+        this.scrollHeight = ($('tableComponent').height() - 70 - 60 - 10) + 'px';
+        let width = ($('tableComponent').width() - 20) + 'px';
+        this.tableStyle = {
+            'max-width' : width,
+            'display': 'block'
+        }
     }
 
-    exportVisualization(event) {
-        import("xlsx").then(xlsx => {
-            const worksheet = xlsx.utils.json_to_sheet(this.dataTable.filteredValue);
-            const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
-            const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-            this.saveAsExcelFile(excelBuffer, this.SelectedNetworkExportFilenameVariable);
-        });
+    /**
+     * Exports table
+     * 
+     * For exporting as excel file it calls this.saveAsExcelFile();
+     * 
+     * For exporting as a csv it uses exportCSV() which is built into primeNG table object
+     */
+    exportVisualization() {
+        if (this.SelectedTableExportFileTypeListVariable == 'xlsx') {
+            this.saveAsExcelFile();
+        } else {
+            this.dataTable.exportFilename = this.SelectedTableExportFilenameVariable;
+            
+            if (this.exportAllColumns) {
+                let temp = this.SelectedTableData.tableColumns;
+                let temp2 = [];
+                this.SelectedTableData.availableColumns.forEach(column => temp2.push(column.value))
+                this.dataTable.columns = temp2;
+                this.dataTable.exportCSV()
+                this.dataTable.columns = temp;
+            } else {
+                this.dataTable.exportCSV()
+            }
+        }
 
         this.ShowTableExportPane = !this.ShowTableExportPane;
     }
 
-    saveAsExcelFile(buffer: any, fileName: string): void {
-        import("file-saver").then(FileSaver => {
+    /**
+     * Allows users to export the table as an excel file
+     * @param fileName optional if not given will use this.SelectedtableExportFilenameVariable
+     */
+    saveAsExcelFile( fileName?: string): void {
+        if (fileName == undefined) {
+            fileName = this.SelectedTableExportFilenameVariable
+        }
+        import("xlsx").then(xlsx => {
+            // if a filtered is applied use filteredValue else use all values
+            let rowData = this.dataTable.filteredValue || this.dataTable.value;
+            if (this.exportAllColumns) {
+                // change name of data fields to header to be consistent with the other exports on this component
+                rowData = rowData.map((row) => {
+                    let output = {}
+                    this.SelectedTableData.availableColumns.forEach((key) => output[key.value.header] = row[key.value.field])
+                    return output;
+                })
+            } else {
+                // gets only the current/visible columns for export and also changes data field name to the header name
+                rowData = rowData.map((row) => {
+                    let output = {}
+                    this.SelectedTableData.tableColumns.forEach((key) => output[key.header] = row[key.field])
+                    return output;
+                })
+            }
+
+            let worksheet = xlsx.utils.json_to_sheet(rowData) ; 
+            const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] }
+            const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
             const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
             const EXCEL_EXTENSION = '.xlsx';
-            const data: Blob = new Blob([buffer], {
-                type: EXCEL_TYPE
-            });
-            FileSaver.saveAs(data, fileName + EXCEL_EXTENSION);
+            const data: Blob = new Blob([excelBuffer], { type: EXCEL_TYPE });
+            saveAs(data, fileName + EXCEL_EXTENSION);
         });
     }
 
+    /**
+     * Called first when filter is applied it applys filter to this.dataTable to update this.dataTable.filterValue
+     * @param col 
+     */
     onTableFilter(col){
         this.dataTable.filter(col.filterValue, col.field, col.filterType);
     }
 
+    /**
+     * Called second when a filter is applied, it updates values sotred in commonService.session.data and this.selectedRows if needed
+     * @param event 
+     */
     onFilter(event) {
         let filteredValues = [];
-
         switch (this.visuals.tableComp.TableType) {
             case 'node':
                 filteredValues = this.visuals.tableComp.commonService.session.data.nodes.filter(x => event.filteredValue.find(y => y.index === x.index));
@@ -164,8 +233,14 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         this.visuals.tableComp.commonService.session.data[this.visuals.tableComp.TableType + 'FilteredValues'] = filteredValues;
 
         this.visuals.microbeTrace.publishFilterDataChange();
+
+        // updates number of rows when filter is changed (without there is a visual bug when removing a filter)
+        if ($('.p-paginator-rpp-options span').text() == 'All') {
+            this.selectedRows = event.filteredValue.length;
+        }
     }
 
+    // XXXXX changing font size in settings pane currently calls this function
     onDataChange(event) {
 
     }
@@ -174,14 +249,28 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         //Nothing to do here
     }
 
+    /**
+     * Function is called when a user selects a row by clicking on it.
+     * It calls nodeSelect(event, true), which updates commonService.session.data.nodes/nodeFilteredValues
+     * to be selected for the row/node and also emits a 'node-selected' event
+     */
     onRowSelect(event) {
         this.nodeSelect(event, true);
     }
 
+    /**
+     * Function is called when a user unselects a row.
+     * It calls nodeSelect(event, false), which updates commonService.session.data.nodes/nodeFilteredValues
+     * to be selected for the row/node and also emits a 'node-selected' event
+     */
     onRowUnselect(event) {
         this.nodeSelect(event, false);
     }
 
+    /**
+     * Called when a node is selected/unselected by clicking on a row. This function updates
+     * commonService.session.data.nodes/nodeFilteredValues to be selected for the row/node and also emits a 'node-selected' event
+     */
     nodeSelect(event: any, isSelect: boolean) {
         if(event.data === undefined) return;
 
@@ -197,10 +286,15 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         window.dispatchEvent(new Event('node-selected'));
     }
 
+    /**
+     * Update variables (such as TableType, selectedTableData) needed to update the contents of the table
+     * @param type The type of data (node, link, cluster) to create table with
+     */
     createTable(type: any = "node") {
         type = type.toLowerCase();
         this.visuals.tableComp.TableType = type;
 
+        // checks if data for tableData exists in TableDatas, if not, creates a new TableData object and adds it to TableDatas
         let tableData: TableData | undefined = this.TableDatas.find(x => x.tableType === type);
         const isNewTableData: boolean = tableData == undefined;
         if (isNewTableData) {
@@ -297,6 +391,9 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         this.visuals.tableComp.setSelectedNodes();
     }
 
+    /**
+     * If this.TableType == 'node' update the node TableData.dataSelection to the nodes that are selected in commonService.session.data.nodes
+     */
     setSelectedNodes() {
         if (this.visuals.tableComp.TableType === 'node') {
             const foundTableData = this.TableDatas.find(x => x.tableType === 'node');
@@ -307,11 +404,16 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         }
     }
 
-    capitalize(s) {
+    /**
+     * @param s string
+     * @returns s but with first letter capitatlized, if s is not string type returns empty string
+     */
+    capitalize(s): string {
         if (typeof s !== 'string') return ''
         return s.charAt(0).toUpperCase() + s.slice(1)
     }
 
+    // XXXXX need to revisit for changing text size in table; currently unable to change size of text and changing the setting calls onDataChange()
     resetTextsize() {
         let s: any = $('#table-font-size').val();
         $('#table').css({
@@ -320,10 +422,16 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         });
     }
 
+    /**
+     * Opens settings pane for table component
+     */
     openSettings() {
         this.visuals.tableComp.ShowTableSettingsPane = !this.visuals.tableComp.ShowTableSettingsPane;
     }
 
+    /**
+     * Opens export pane for table component
+     */
     openExport() {
         this.visuals.tableComp.ShowTableExportPane = !this.visuals.tableComp.ShowTableExportPane;
     }
@@ -341,9 +449,16 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
 
     }
 
+    /**
+     * This function is called when the type of data to display in the table is changed (Nodes, Links, Cluster)
+     * @param e event
+     */
     openSelectDataSetScreen(e: any) {
-
         this.visuals.tableComp.createTable(e.option.value);
+        // after changing table type sometimes there is a visual bug that the following code fixes
+        if ($('.p-paginator-rpp-options span').text() == 'All') {
+            this.selectedRows = this.SelectedTableData.data.length;
+        }
     }
 
     onLoadNewData() {
@@ -356,6 +471,12 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
     updateVisualization() {
         //Not Relevant
     }
+
+    applyStyleFileSettings() {
+        //this.widgets = window.context.commonService.session.style.widgets;
+        //this.loadSettings();
+    }
+
     updateLinkColor() {
         //Not Relevant
     }
@@ -363,6 +484,9 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
     onRecallSession() {
     }
 
+    /**
+     * Called before the comonent is destroyed; it save tableColumns for each node, link, and cluster in commonService.session.data
+     */
     ngOnDestroy(): void {
 
         let foundTableData = this.TableDatas.find(x => x.tableType === 'node');

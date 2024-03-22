@@ -3,6 +3,7 @@ import { EventManager } from '@angular/platform-browser';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { MicrobeTraceNextVisuals } from '@app/microbe-trace-next-plugin-visuals';
 import { CommonService } from '@app/contactTraceCommonServices/common.service';
+import { window } from 'ngx-bootstrap';
 import { DialogSettings } from '../../helperClasses/dialogSettings';
 import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
 import { ComponentContainer } from 'golden-layout';
@@ -424,7 +425,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     if (this.longestSeqLength < this.rightWidth && this.nodesWithSeq.length <= 100) {
       this.seqArrayShortened = this.seqArray
       $('#miniMap').css({'width': this.longestSeqLength+'px', 'height': this.nodesWithSeq.length+'px'})
-      $('#miniMapTitle').css({'height': (this.nodesWithSeq.length+16)+'px'})
+      $('#miniMapTitle').css({'height': (this.nodesWithSeq.length+16)+'px', 'line-height': (this.nodesWithSeq.length+16)+'px'})
       return; 
     }
 
@@ -443,7 +444,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     })
 
     $('#miniMap').css({'width': Math.ceil(this.longestSeqLength/scaleFactorLength)+'px', 'height': Math.ceil(this.nodesWithSeq.length/scaleFactorNumber)+'px'})
-    $('#miniMapTitle').css({'height': Math.ceil(this.nodesWithSeq.length/scaleFactorNumber+16)+'px'})
+    $('#miniMapTitle').css({'height': Math.ceil(this.nodesWithSeq.length/scaleFactorNumber+16)+'px', 'line-height': Math.ceil(this.nodesWithSeq.length/scaleFactorNumber+16)+'px'})
   }
 
   /**
@@ -785,9 +786,9 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    */
   onAlignmentTopChange() {
     if (this.widgets['alignView-topDisplay'] == 'barplot') {
-      $('#alignmnetTopTitle').text('Bar Plot');
+      $('#alignmnetTopTitle').text('Bar Plot').prop('title', 'Barplot representation of the sequences that shows the proportion of each nucleotide at each position.');
     } else {
-      $('#alignmnetTopTitle').text('Logo');
+      $('#alignmnetTopTitle').text('Logo').prop('title', 'Logo representation of the sequences that shows the proportion of each nucleotide at each position.');
     }
   }
 
@@ -954,8 +955,30 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   updateLinkColor() { }
 
   updateVisualization() {
-    
   }
+
+  // function is called when style file is applied
+  applyStyleFileSettings() {
+    this.widgets = window.context.commonService.session.style.widgets;
+
+    this.labelArray = this.getData(this.nodesWithSeq, ['index', this.widgets['alignView-labelField']]);
+
+    // sets different variables relating to size and display
+    this.onAlignmentTopChange()
+
+    if (this.widgets['alignView-colorSchemeName'] == 'n' || this.widgets['alignView-colorSchemeName'] == 'a') {
+      this.useCustomColorScheme = false;
+    } else {
+      this.useCustomColorScheme = true;
+    }
+    this.onSelectedColorChanged(true)
+
+    // updates spanWidth, spanHeight, rightWidth, leftWidth, fontSize, and then updates alignment
+    this.onSelectedSizeChanged()
+
+    // updates shows or hides minimap and then updates view heights
+    this.updateMiniMapVisibility()
+}
 
   openRefreshScreen() {
     

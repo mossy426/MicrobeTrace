@@ -246,7 +246,7 @@
                                             <label for="cluster-minimum-size">Minimum Cluster Size</label>
                                         </div>
                                         <div class="col-8">
-                                            <input type="number" class="form-control form-control-sm" id="cluster-minimum-size" min="1" value="1" step="1" [(ngModel)]="SelectedClusterMinimumSizeVariable" (ngModelChange)="onMinimumClusterSizeChanged()">
+                                            <input type="number" class="form-control form-control-sm" min="1" value="1" step="1" [(ngModel)]="SelectedClusterMinimumSizeVariable" (ngModelChange)="onMinimumClusterSizeChanged()">
                                         </div>
                                     </div>
                                     <div id="filtering-wrapper">
@@ -343,7 +343,7 @@
                                     <div class="form-group row" title="Load an existing MicrobeTrace style file">
                                         <div class="col-4">Apply Style</div>
                                         <div class="col-8">
-                                            <input type="file" id="apply-style" class="d-none" [(ngModel)]="SelectedApplyStyleVariable" (ngModelChange)="updateGlobalSettingsModel()">
+                                            <input type="file" id="apply-style" class="d-none" accept=".style" [(ngModel)]="SelectedApplyStyleVariable" (change)="onApplyStyle($event)">
                                             <label class="custom-file-label" for="apply-style">Choose MicrobeTrace Style File</label>
                                         </div>
                                     </div>
@@ -420,11 +420,14 @@
 
                     <div class="modal-body">
                         <div class="form-group row" title="What would you like to call this session?">
-                            <div class="col">
-                                <input type="text" id="stash-name" class="form-control form-control-sm" [(ngModel)]="saveFileName" placeholder="Name your session!">
+                            <div class="col-7">
+                                <input style="height:42px" type="text" id="stash-name" class="form-control form-control-sm" [(ngModel)]="saveFileName" placeholder="Name your session!">
+                            </div>
+                            <div class="col-5">
+                                <p-dropdown [options]="saveFileTypeOptions" [(ngModel)]="selectedSaveFileType" appendTo="body"></p-dropdown>
                             </div>
                         </div>
-                        <div class="form-group row" title="Should MicrobeTrace compress this save file?">
+                        <div *ngIf="selectedSaveFileType=='session'" class="form-group row" title="Should MicrobeTrace compress this save file?">
                             <div class="col">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="checkbox" id="save-file-compress" checked>

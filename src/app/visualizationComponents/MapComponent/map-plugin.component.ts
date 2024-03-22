@@ -1428,6 +1428,11 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
         this.drawLinks();
     }
 
+    applyStyleFileSettings() {
+        this.loadSettings();
+        //this.widgets = window.context.commonService.session.style.widgets;
+    }
+
     updateLinkColor() {
         this.drawLinks();
     }

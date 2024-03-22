@@ -91,14 +91,17 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     auspiceUrlVal: string = '';
 
     saveFileName: string = '';
+    saveByCluster: boolean = false;
+    saveFileTypeOptions = [
+        { label: 'session', value: 'session'},
+        { label: 'style', value: 'style'}
+    ];
+    selectedSaveFileType: string = 'session';
 
     searchField: string = '';
     searchText: string = '';
 
-    saveByCluster: boolean = false;
-
     private subscription: Subscription;
-
 
     // posts: BlockchainProofHashDto[] = new Array<BlockchainProofHashDto>();
     // Blockchaindata: BlockchainProofHashDto = new BlockchainProofHashDto();
@@ -754,17 +757,39 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     /**
      * Reads the file and applies the style to MicrobeTrace session.style
      * 
-     * XXXXX Not currently executed in the code XXXXX
      */
     public onApplyStyle( file: any ){
-        if(this.commonService.debugMode) {
-            console.log('applying style');
+        $('.custom-file-label').text(this.SelectedApplyStyleVariable.substring(12))
+        let reader = new FileReader();
+        reader.onload = e => {
+            this.commonService.applyStyle(JSON.parse((e as any).target.result)); 
         }
-        if (this.files.length > 0) {
-            let reader = new FileReader();
-            reader.onload = e => this.commonService.applyStyle(JSON.parse((e as any).target.result));
-            reader.readAsText(this.files[0]);
-          }
+        reader.readAsText(file.target.files[0]);
+    }
+
+    applyStyleFileSettings() {
+        this.widgets = window.context.commonService.session.style.widgets;
+
+        if (this.SelectedClusterMinimumSizeVariable != this.widgets['cluster-minimum-size']){
+            this.SelectedClusterMinimumSizeVariable = this.widgets['cluster-minimum-size'];
+            this.onMinimumClusterSizeChanged();
+            // not triggering render clus-vis correctly, may be relate to bug with onMinimumClusterSizeChanged()
+        }
+
+        if (this.SelectedColorNodesByVariable != this.widgets['node-color-variable']){
+            this.SelectedColorNodesByVariable = this.widgets['node-color-variable'];
+            this.onColorNodesByChanged();
+        }
+        
+        if (this.SelectedColorLinksByVariable != this.widgets['link-color-variable']){
+            this.SelectedColorLinksByVariable = this.widgets['link-color-variable'];
+            this.onColorLinksByChanged();
+        }
+
+        if (this.SelectedBackgroundColorVariable != this.widgets['background-color']){
+            this.SelectedBackgroundColorVariable = this.widgets['background-color'];
+            this.onBackgroundChanged();
+        }
     }
 
 
@@ -2185,6 +2210,13 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     DisplayStashDialog(saveStash: string) {
         switch (saveStash) {
             case "Save": {
+
+                if (this.selectedSaveFileType == 'style') {
+                    let data = JSON.stringify(this.commonService.session.style);
+                    let blob = new Blob([data], { type: "application/json;charset=utf-8" });
+                    saveAs(blob, this.saveFileName+'.style')
+                    return;
+                }
 
                 let zip = new JSZip();
 
