@@ -1,4 +1,4 @@
-﻿﻿<div class="table-wrapper">
+﻿<div class="table-wrapper">
     <div id="tool-btn-container" class="m-portlet">
         <span class="tool-btn" style="overflow: visible; position: relative; display: inline;">
             <a title="Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings()"><i class="flaticon-settings primary"></i></a>
@@ -32,10 +32,12 @@
             [scrollable]="true"
             [scrollHeight]="scrollHeight"
             [tableStyle]="tableStyle"
+            [styleClass]="selectedSize"
             ScrollWidth="100%"
             [resizableColumns]="true" 
             columnResizeMode="expand"     
-            [columns]="SelectedTableData.tableColumns">
+            [columns]="SelectedTableData.tableColumns"
+            [reorderableColumns]="true">
             <!-- [responsive]="true"  -->
             <!-- [autoLayout]="true" 
             styleClass="ui-table-responsive"  -->
@@ -46,7 +48,7 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr [pSelectableRow]="datarow">
-                    <th style="width: 150px; border: none" pSortableColumn="{{col.field}}" *ngFor="let col of SelectedTableData.tableColumns">
+                    <th style="width: 150px; border: none" pSortableColumn="{{col.field}}" pReorderableColumn *ngFor="let col of SelectedTableData.tableColumns">
                         {{col.header}}<p-sortIcon field="{{col.field}}"></p-sortIcon>
                     </th>
                 </tr>
@@ -98,11 +100,15 @@
                                 <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="table-tab">
                                     <div class="form-group row"
                                         title="What size would you like the Table's font to be?">
-                                        <div class="col-4"><label for="table-font-size">Text Size</label></div>
-                                        <div class="col-8"><input type="range" class="custom-range" id="table-font-size"
+                                        <div class="col-4"><label for="table-font-size">Size</label></div>
+                                        <div class="col-8">
+                                            <p-selectButton [options]="sizes" [(ngModel)]="selectedSize" [multiple]="false" optionLabel="name" optionValue="class"></p-selectButton>
+                                            <!--input type="range" class="custom-range" id="table-font-size"
                                                 min="6" value="14" max="72" step="1"
                                                 [(ngModel)]="SelectedTextSizeVariable"
-                                                (ngModelChange)="onDataChange($event)"></div>
+                                                (ngModelChange)="onDataChange($event)"-->
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>

@@ -70,6 +70,13 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         {label:'>=', value: 'gte'},
     ];
 
+    selectedSize = '';
+    sizes = [
+        { name: 'Small', class: 'p-datatable-sm' },
+        { name: 'Normal', class: '' },
+        { name: 'Large',  class: 'p-datatable-lg' }
+    ];
+
     scrollHeight: string;
     tableStyle;
     selectedRows = 10;
@@ -229,10 +236,11 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
 
         this.visuals.tableComp.SelectedTableData.filter = event.filters;
 
-        this.visuals.tableComp.commonService.session.data[this.visuals.tableComp.TableType + 'Filter'] = event.filters;
+        // these lines can used to update nodes/data used for other views; publishFilterDataChange() calls onFilterDataChange for each view 
+        // onFilterDataChange will need to be updated for implimenting this; also a bug in labeling by index sometimes changes the numbering of nodes
+        /*this.visuals.tableComp.commonService.session.data[this.visuals.tableComp.TableType + 'Filter'] = event.filters;
         this.visuals.tableComp.commonService.session.data[this.visuals.tableComp.TableType + 'FilteredValues'] = filteredValues;
-
-        this.visuals.microbeTrace.publishFilterDataChange();
+        this.visuals.microbeTrace.publishFilterDataChange(); */
 
         // updates number of rows when filter is changed (without there is a visual bug when removing a filter)
         if ($('.p-paginator-rpp-options span').text() == 'All') {
@@ -420,6 +428,12 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
             'font-size': s + 'px',
             'line-height': s / 10
         });
+    }
+    
+    reorderColumns() {
+        let temp = this.SelectedTableData.tableColumns[2]
+        this.SelectedTableData.tableColumns[2] = this.SelectedTableData.tableColumns[3];
+        this.SelectedTableData.tableColumns[3] = temp;
     }
 
     /**

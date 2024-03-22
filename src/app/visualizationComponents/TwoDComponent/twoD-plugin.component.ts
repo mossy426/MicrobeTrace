@@ -3407,7 +3407,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     onFilterDataChange(){
         console.log('render filter change');
-         this.render(false);
+        // render doesn't do anything unless this.isLoading == true; so need to ensure that before call render
+        this.render(false);
     }
 
     /**

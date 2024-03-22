@@ -3008,6 +3008,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         // this.goldenLayout.componentInstances[1].onLoadNewData();
         this.homepageTabs.forEach(tab => {
+            // componentRef.instance.onLoadNewData ?
             if (tab.componentRef &&
                 tab.componentRef.onLoadNewData) {
                 tab.componentRef.onLoadNewData();
@@ -3020,8 +3021,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         // this.goldenLayout.componentInstances[1].onFilterDataChange();
         this.homepageTabs.forEach(tab => {
             if (tab.componentRef &&
-                tab.componentRef.onFilterDataChange) {
-                tab.componentRef.onFilterDataChange();
+                tab.componentRef.instance.onFilterDataChange) {
+                tab.componentRef.instance.onFilterDataChange();
             }
         })
     }
