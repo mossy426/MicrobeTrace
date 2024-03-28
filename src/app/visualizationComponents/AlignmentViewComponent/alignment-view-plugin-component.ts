@@ -182,6 +182,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     // updates shows or hides minimap and then updates view heights
     this.updateMiniMapVisibility()
 
+    this.container.on('resize', () => { this.goldenLayoutComponentResize()})
   }
 
   // General
@@ -978,7 +979,12 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
 
     // updates shows or hides minimap and then updates view heights
     this.updateMiniMapVisibility()
-}
+  }
+
+  goldenLayoutComponentResize() {
+    this.updateViewHeights()
+    this.rightWidth = this.calculateRightWidth()
+  }
 
   openRefreshScreen() {
     

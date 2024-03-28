@@ -98,6 +98,8 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
 
         this.visuals = commonService.visuals;
         this.commonService.visuals.tableComp = this;
+
+        container.on('resize', () => { this.goldenLayoutComponentResize()})
     }
 
     ngOnInit() {
@@ -136,11 +138,11 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
 
         // offsets: 70 table-wrapper padding-top, 60 p-paginator, 10 table-wrapper padding-bottom
         this.scrollHeight = ($('tableComponent').height() - 70 - 60 - 10) + 'px';
-        let width = ($('tableComponent').width() - 20) + 'px';
+        let width = ($('tableComponent').width() - 23) + 'px';
         this.tableStyle = {
             'max-width' : width,
             'display': 'block'
-        }
+        }        
     }
 
     /**
@@ -468,7 +470,7 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
      * @param e event
      */
     openSelectDataSetScreen(e: any) {
-        this.visuals.tableComp.createTable(e.option.value);
+        this.visuals.tableComp.createTable(e.value);
         // after changing table type sometimes there is a visual bug that the following code fixes
         if ($('.p-paginator-rpp-options span').text() == 'All') {
             this.selectedRows = this.SelectedTableData.data.length;
@@ -496,6 +498,15 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
     }
 
     onRecallSession() {
+    }
+
+    goldenLayoutComponentResize() {
+        this.scrollHeight = ($('tableComponent').height() - 70 - 60 - 10) + 'px';
+        let width = ($('tableComponent').width() - 23) + 'px';
+        this.tableStyle = {
+            'width' : width,
+            'display': 'block'
+        }
     }
 
     /**
