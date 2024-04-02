@@ -153,7 +153,7 @@ public refresh(): void {
     .call(d3.axisBottom(this.x).tickSize(8).tickPadding(8).tickFormat(tickFormat))
     .attr("text-anchor", null)
     .selectAll("text")
-    .attr("x", 6);
+    .attr("x", -25);
 
   this.svg.append("g")
     .attr("class", "axis axis--y")
@@ -220,6 +220,12 @@ private setupEventListeners(): void {
   $('#timeline-speed').on('change', () => {
     this.setTimer();
   });
+
+  this.container.on('resize', () => { this.goldenLayoutComponentResize() })
+}
+
+goldenLayoutComponentResize() {
+  this.refresh();
 }
 
 // Handle the change event of the date field

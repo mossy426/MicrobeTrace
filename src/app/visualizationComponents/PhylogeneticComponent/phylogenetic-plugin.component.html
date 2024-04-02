@@ -12,7 +12,7 @@
     </div>
     <div class="m-portlet__body" style="height: 100%;">
         <br />
-        <div className="phylocanvas" id="phylocanvas" style="height: 800px; cursor: grab;"></div>
+        <div className="phylocanvas" id="phylocanvas" style="cursor: grab;"></div>
         <div id="phyloTooltip"></div>
     </div>
 </div>
@@ -23,7 +23,7 @@
               [positionTop]="PhylogeneticTreeExportDialogSettings.top" 
               [(visible)]="PhylogeneticTreeExportDialogSettings.isVisible"  
               [contentStyle]="{'overflow': 'visible'}"
-              header="Phylogenetic Tree Settings" 
+              header="Phylogenetic Tree Settings" appendTo="body"
               >
               <tabset class="tab-container tabbable-line">
               <tab heading="{{'Tree' | localize}}" [active]="true" customClass="m-tabs__item">
@@ -160,7 +160,7 @@
     <div id="rotate" class="dropdown-item">Rotate</div>
     <div id="flip" class="dropdown-item">Flip</div>
 </div>
-<p-dialog id="network-export-modal" [(visible)]="ShowPhylogeneticExportPane" header="Export Phylogenetic Tree" class="dialogSize" (onHide)="onCloseExport()">
+<p-dialog id="network-export-modal" [(visible)]="ShowPhylogeneticExportPane" header="Export Phylogenetic Tree" class="dialogSize" (onHide)="onCloseExport()" appendTo="body">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body" style='min-width: 500px; height: 100%;'>

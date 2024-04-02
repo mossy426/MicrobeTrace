@@ -779,7 +779,8 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * Opens settings pane
    */
   openSettings() {
-    this.alignmentDialogSettings.isVisible ? this.alignmentDialogSettings.setVisibility(false) : this.alignmentDialogSettings.setVisibility(true);
+    //this.alignmentDialogSettings.isVisible ? this.alignmentDialogSettings.setVisibility(false) : this.alignmentDialogSettings.setVisibility(true);
+    this.alignmentDialogSettings.isVisible = !this.alignmentDialogSettings.isVisible
   }
 
   /**

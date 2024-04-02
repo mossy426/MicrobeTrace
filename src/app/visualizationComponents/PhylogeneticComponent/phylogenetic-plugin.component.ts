@@ -312,8 +312,17 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
       that.updateNodeColors();
 
   });
+
+    this.goldenLayoutComponentResize()
     this.openTree();
 
+    this.container.on('resize', () => { this.goldenLayoutComponentResize() })
+
+  }
+
+  goldenLayoutComponentResize() {
+    $('#phylocanvas').height($('phylogeneticcomponent').height()-19);
+    $('#phylocanvas').width($('phylogeneticcomponent').width()-1)
   }
 
   InitView() {

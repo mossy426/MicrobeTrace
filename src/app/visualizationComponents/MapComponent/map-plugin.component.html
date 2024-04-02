@@ -61,7 +61,7 @@
 
 
 <p-dialog id="map-settings-pane" [position]="NodeMapSettingsExportDialogSettings.mapRight" [(visible)]="NodeMapSettingsExportDialogSettings.isVisible"
-    header="Geospatial Settings" [contentStyle]="{'max-height': '70vh'}">
+    header="Geospatial Settings" [contentStyle]="{'max-height': '70vh'}" appendTo="body">
     <tabset class="tab-container tabbable-line">
         <tab heading="{{'Data' | localize}}" customClass="m-tabs__item">
             <!-- <div class="form-group row">
@@ -330,7 +330,7 @@
 
 
 <p-dialog id="network-export-modal" [(visible)]="ShowGEOMapExportPane" header="Export Geospatial Data"
-    (onHide)="onCloseExport()">
+    (onHide)="onCloseExport()" appendTo="body">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body" style='min-width: 400px; height: 100%;'>

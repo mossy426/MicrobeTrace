@@ -563,3 +563,19 @@ body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active, body .ui-tab
 .ui-table-scrollable-body {
     max-height: 665px;
 }
+
+body {
+    .p-accordion-tab:not(.p-accordion-tab-active) {
+        .p-toggleable-content {
+        height: 0;
+        overflow: hidden;
+        }
+    }
+    
+    .p-accordion-tab.p-accordion-tab-active {
+        .p-toggleable-content {
+        height: auto !important;
+        overflow: auto !important;
+        }
+    }
+}
