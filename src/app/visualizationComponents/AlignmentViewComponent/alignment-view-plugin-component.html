@@ -74,7 +74,7 @@
 </div>
 
 <div class="view-controls">
-    <p-dialog id="alignment-settings-pane" [(visible)]="alignmentDialogSettings.isVisible" appendTo="body" header="Alignment View Settings" >
+    <p-dialog *ngIf="viewActive" id="alignment-settings-pane" [(visible)]="alignmentDialogSettings.isVisible" appendTo="body" header="Alignment View Settings" >
         <p-accordion>
             <p-accordionTab style="color:#495057" header="Layout">
                 <div #layoutControls>
@@ -181,8 +181,7 @@
     </p-dialog>
 </div>
 
-<p-dialog id="alignment-export-modal" [(visible)]="ShowAlignExportPane" appendTo="body" header="Export Alignment View"
-    (onHide)="ShowAlignExportPane = false">
+<p-dialog *ngIf="viewActive" id="alignment-export-modal" [(visible)]="ShowAlignExportPane" appendTo="body" header="Export Alignment View">
     <tabset class="tab-container tabbable-line">
         <tab heading="{{'Images' | localize}}" [active]="true" customClass="m-tabs__item">
             <div class="modal-dialog" role="document">

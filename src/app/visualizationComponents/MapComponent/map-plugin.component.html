@@ -60,7 +60,7 @@
 </div>
 
 
-<p-dialog id="map-settings-pane" [position]="NodeMapSettingsExportDialogSettings.mapRight" [(visible)]="NodeMapSettingsExportDialogSettings.isVisible"
+<p-dialog *ngIf="viewActive" id="map-settings-pane" [position]="NodeMapSettingsExportDialogSettings.mapRight" [(visible)]="NodeMapSettingsExportDialogSettings.isVisible"
     header="Geospatial Settings" [contentStyle]="{'max-height': '70vh'}" appendTo="body">
     <tabset class="tab-container tabbable-line">
         <tab heading="{{'Data' | localize}}" customClass="m-tabs__item">
@@ -329,7 +329,7 @@
 </p-dialog>
 
 
-<p-dialog id="network-export-modal" [(visible)]="ShowGEOMapExportPane" header="Export Geospatial Data"
+<p-dialog *ngIf="viewActive" id="network-export-modal" [(visible)]="ShowGEOMapExportPane" header="Export Geospatial Data"
     (onHide)="onCloseExport()" appendTo="body">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

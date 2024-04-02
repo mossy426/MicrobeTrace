@@ -1,4 +1,4 @@
-﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, ViewChild, OnDestroy, ElementRef, Inject } from '@angular/core';
+﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, ViewChild, ChangeDetectorRef, OnDestroy, ElementRef, Inject } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { EventManager } from '@angular/platform-browser';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
@@ -26,6 +26,7 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
 
     @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
 
+    viewActive: boolean = true;
     SelectedTableExportFilenameVariable: string = "";
 
     TableExportFileTypeList: any = [
@@ -91,6 +92,7 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
     constructor(injector: Injector,
         @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
         elRef: ElementRef,
+        private cdref: ChangeDetectorRef,
         private eventManager: EventManager,
         private commonService: CommonService) {
 
@@ -100,6 +102,14 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         this.commonService.visuals.tableComp = this;
 
         container.on('resize', () => { this.goldenLayoutComponentResize()})
+        this.container.on('hide', () => { 
+            this.viewActive = false; 
+            this.cdref.detectChanges();
+        })
+        this.container.on('show', () => { 
+            this.viewActive = true; 
+            this.cdref.detectChanges();
+        })
     }
 
     ngOnInit() {

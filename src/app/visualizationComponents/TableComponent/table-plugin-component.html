@@ -92,7 +92,7 @@
 </div>
 
 
-<p-dialog id="table-settings-pane" [(visible)]="ShowTableSettingsPane" header="Table Settings" [style]="{width: '400px', height:'250px'}" appendTo="body">
+<p-dialog *ngIf="viewActive" id="table-settings-pane" [(visible)]="ShowTableSettingsPane" header="Table Settings" [style]="{width: '400px', height:'250px'}" appendTo="body">
     <tabset class="tab-container tabbable-line" style='width: 100%;'>
         <tab heading="{{'Table' | localize}}" [active]="true" customClass="m-tabs__item">
             <div class="tab-pane fade show active" id="table-node-settings" role="tabpanel"aria-labelledby="nodes-tab">
@@ -113,7 +113,7 @@
 </p-dialog>
 
 
-<p-dialog [(visible)]="ShowTableExportPane" header="Export Table" appendTo="body">
+<p-dialog *ngIf="viewActive" [(visible)]="ShowTableExportPane" header="Export Table" appendTo="body">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body" style='width: 400px; height: 100%;'>

@@ -64,6 +64,7 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
 
     @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
 
+    viewActive: boolean = true;
     svgStyle: {} = {
         'height': '0px',
         'width': '1000px'
@@ -293,6 +294,14 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
         });
 
         this.container.on('resize', () => { this.lmap.invalidateSize() })
+        this.container.on('hide', () => { 
+            this.viewActive = false; 
+            this.cdref.detectChanges();
+        })
+        this.container.on('show', () => { 
+            this.viewActive = true; 
+            this.cdref.detectChanges();
+        })
     }
 
 

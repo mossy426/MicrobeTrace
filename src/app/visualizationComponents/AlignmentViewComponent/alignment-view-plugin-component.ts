@@ -22,6 +22,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   // General Settings
   alignmentDialogSettings: DialogSettings = new DialogSettings('#alignment-settings-pane', false)
   ShowAlignExportPane: boolean = false;
+  viewActive: boolean = true;
 
   showHideOptions: any = [
     { label: 'Show', value: true },
@@ -183,6 +184,14 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     this.updateMiniMapVisibility()
 
     this.container.on('resize', () => { this.goldenLayoutComponentResize()})
+    this.container.on('hide', () => { 
+      this.viewActive = false; 
+      this.cdref.detectChanges();
+    })
+    this.container.on('show', () => { 
+      this.viewActive = true; 
+      this.cdref.detectChanges();
+    })
   }
 
   // General

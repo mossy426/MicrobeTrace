@@ -18,7 +18,7 @@
 </div>
 <div class="view-controls">
 
-    <p-dialog id="phylotree-settings-pane" 
+    <p-dialog *ngIf="viewActive" id="phylotree-settings-pane" 
               [positionLeft]="PhylogeneticTreeExportDialogSettings.left" 
               [positionTop]="PhylogeneticTreeExportDialogSettings.top" 
               [(visible)]="PhylogeneticTreeExportDialogSettings.isVisible"  
@@ -160,7 +160,7 @@
     <div id="rotate" class="dropdown-item">Rotate</div>
     <div id="flip" class="dropdown-item">Flip</div>
 </div>
-<p-dialog id="network-export-modal" [(visible)]="ShowPhylogeneticExportPane" header="Export Phylogenetic Tree" class="dialogSize" (onHide)="onCloseExport()" appendTo="body">
+<p-dialog *ngIf="viewActive" id="network-export-modal" [(visible)]="ShowPhylogeneticExportPane" header="Export Phylogenetic Tree" class="dialogSize" (onHide)="onCloseExport()" appendTo="body">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body" style='min-width: 500px; height: 100%;'>
