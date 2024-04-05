@@ -73,6 +73,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     dragging : boolean = false;
 
     isLoading : boolean = true;
+    viewActive: boolean = true;
     
     //Polygon Tab
     SelectedPolygonLabelVariable: string = "None";
@@ -205,6 +206,15 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 const showState: boolean = this.widgets['network-gridlines-show'];
                 this.drawGridlines(showState);
             });
+
+            this.container.on('hide', () => { 
+                this.viewActive = false; 
+                this.cdref.detectChanges();
+            })
+            this.container.on('show', () => { 
+                this.viewActive = true; 
+                this.cdref.detectChanges();
+            })
     }
 
     ngOnInit() {
@@ -3407,7 +3417,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     onFilterDataChange(){
         console.log('render filter change');
-         this.render(false);
+        // render doesn't do anything unless this.isLoading == true; so need to ensure that before call render
+        this.render(false);
     }
 
     /**

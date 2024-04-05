@@ -671,7 +671,6 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
       $('#loadCancelButton').slideDown();
       // abp.notify.warn('If you stare long enough, you can reverse the DNA Molecule\'s spin direction');
     }, 20000);
-
     const nFiles = this.visuals.microbeTrace.commonService.session.files.length - 1;
     const check = nFiles > 0;
 
@@ -1722,9 +1721,8 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
   }
 
   /**
-   * Async function that reads sequencing data from fasta files
+   * Async function that reads sequencing data from fasta files or from csv/excel files with sequence data
    * 
-   * XXXXX Not currently working with sequences from csv file XXXXX
    * @returns An array of sequencing objects [{id, seq},]
    */
   async readFastas() {
@@ -1741,15 +1739,16 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     for(let j = 0; j < nodeFilesWithSeqs.length; j++){
       if (nodeFilesWithSeqs[j].extension == "csv") {
         let csv = nodeFilesWithSeqs[j];
+        let seqLabel = csv['field2']
           await Papa.parse(csv.contents, {
             header: true,
             skipEmptyLines: true,
             complete: output => {
               output.data.forEach((node) => {
-                if (node.seq != '' || node.seq != undefined || node.seq != null ) {
+                if (node[seqLabel] != '' || node[seqLabel] != undefined || node[seqLabel] != null ) {
                   data = data.concat({
                     'id': node.id,
-                    'seq': node.seq
+                    'seq': node[seqLabel]
                   })
                 }
               })
@@ -1757,14 +1756,21 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
       // TODO: Cannot presently preview sequences in Node XLSX tables.
       } else {
         let file = nodeFilesWithSeqs[j]
+        let seqLabel = file['field2']
         let workbook = XLSX.read(file.contents, { type: 'array' });
-        let data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+        let dataJSON = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
         let headers = [];
-        data.forEach(row => {
+        dataJSON.forEach(row => {
           Object.keys(row).forEach(key => {
             const safeKey = this.visuals.microbeTrace.commonService.filterXSS(key);
             if (!this.visuals.microbeTrace.commonService.includes(headers, safeKey)) headers.push(safeKey);
           });
+          if ( row[seqLabel] != '' || row[seqLabel] != undefined || row[seqLabel] != null ) {
+            data = data.concat({
+              'id': row['id'],
+              'seq': row[seqLabel]
+            })  
+          }
         });
           //addTableTile(headers, this);
       }

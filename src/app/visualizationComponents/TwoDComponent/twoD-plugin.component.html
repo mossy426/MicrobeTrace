@@ -91,9 +91,9 @@
 
 
 <div class="view-controls">
-    <p-dialog id="network-settings-pane" 
+    <p-dialog *ngIf="viewActive" id="network-settings-pane" 
                 [(visible)]="Node2DNetworkExportDialogSettings.isVisible"  
-                header="2D Network Settings" 
+                header="2D Network Settings" appendTo="body"
                 >
         <tabset class="tab-container tabbable-line">
             <tab heading="{{'Nodes' | localize}}" [active]="true" customClass="m-tabs__item">
@@ -567,7 +567,7 @@
 
 
 
-<p-dialog id="network-export-modal" [(visible)]="Show2DExportPane" header="Export Network Image" class="dialogSize" (onHide)="onCloseExport()">
+<p-dialog *ngIf="viewActive" id="network-export-modal" [(visible)]="Show2DExportPane" header="Export Network Image" class="dialogSize" (onHide)="onCloseExport()" appendTo="body">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
                 <div class="modal-body" style='min-width: 400px; height: 100%;'>

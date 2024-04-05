@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, ChangeDetectorRef, Inject, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { MicobeTraceNextPluginEvents } from '@app/helperClasses/interfaces';
@@ -21,7 +21,8 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
   @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
 
   @ViewChild('timeline') timelineElement: ElementRef;
-  
+  viewActive: boolean = true;
+
   private visuals: MicrobeTraceNextVisuals;
 
   FieldList: SelectItem[] = [];
@@ -52,6 +53,7 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
     private commonService: CommonService,
     @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer,
     elRef: ElementRef,
+    private cdref: ChangeDetectorRef
     ) {
 
       super(elRef.nativeElement);
@@ -153,7 +155,7 @@ public refresh(): void {
     .call(d3.axisBottom(this.x).tickSize(8).tickPadding(8).tickFormat(tickFormat))
     .attr("text-anchor", null)
     .selectAll("text")
-    .attr("x", 6);
+    .attr("x", -25);
 
   this.svg.append("g")
     .attr("class", "axis axis--y")
@@ -220,6 +222,20 @@ private setupEventListeners(): void {
   $('#timeline-speed').on('change', () => {
     this.setTimer();
   });
+
+  this.container.on('resize', () => { this.goldenLayoutComponentResize() })
+  this.container.on('hide', () => { 
+    this.viewActive = false; 
+    this.cdref.detectChanges();
+  })
+this.container.on('show', () => { 
+    this.viewActive = true; 
+    this.cdref.detectChanges();
+  })
+}
+
+goldenLayoutComponentResize() {
+  this.refresh();
 }
 
 // Handle the change event of the date field

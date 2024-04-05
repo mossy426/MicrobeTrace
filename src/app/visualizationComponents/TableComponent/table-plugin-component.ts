@@ -1,4 +1,4 @@
-﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, ViewChild, OnDestroy, ElementRef, Inject } from '@angular/core';
+﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit, ViewChild, ChangeDetectorRef, OnDestroy, ElementRef, Inject } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { EventManager } from '@angular/platform-browser';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
@@ -26,6 +26,7 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
 
     @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
 
+    viewActive: boolean = true;
     SelectedTableExportFilenameVariable: string = "";
 
     TableExportFileTypeList: any = [
@@ -70,6 +71,13 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         {label:'>=', value: 'gte'},
     ];
 
+    selectedSize = '';
+    sizes = [
+        { name: 'Small', class: 'p-datatable-sm' },
+        { name: 'Normal', class: '' },
+        { name: 'Large',  class: 'p-datatable-lg' }
+    ];
+
     scrollHeight: string;
     tableStyle;
     selectedRows = 10;
@@ -84,6 +92,7 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
     constructor(injector: Injector,
         @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
         elRef: ElementRef,
+        private cdref: ChangeDetectorRef,
         private eventManager: EventManager,
         private commonService: CommonService) {
 
@@ -91,6 +100,16 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
 
         this.visuals = commonService.visuals;
         this.commonService.visuals.tableComp = this;
+
+        container.on('resize', () => { this.goldenLayoutComponentResize()})
+        this.container.on('hide', () => { 
+            this.viewActive = false; 
+            this.cdref.detectChanges();
+        })
+        this.container.on('show', () => { 
+            this.viewActive = true; 
+            this.cdref.detectChanges();
+        })
     }
 
     ngOnInit() {
@@ -129,11 +148,11 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
 
         // offsets: 70 table-wrapper padding-top, 60 p-paginator, 10 table-wrapper padding-bottom
         this.scrollHeight = ($('tableComponent').height() - 70 - 60 - 10) + 'px';
-        let width = ($('tableComponent').width() - 20) + 'px';
+        let width = ($('tableComponent').width() - 23) + 'px';
         this.tableStyle = {
             'max-width' : width,
             'display': 'block'
-        }
+        }        
     }
 
     /**
@@ -229,10 +248,11 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
 
         this.visuals.tableComp.SelectedTableData.filter = event.filters;
 
-        this.visuals.tableComp.commonService.session.data[this.visuals.tableComp.TableType + 'Filter'] = event.filters;
+        // these lines can used to update nodes/data used for other views; publishFilterDataChange() calls onFilterDataChange for each view 
+        // onFilterDataChange will need to be updated for implimenting this; also a bug in labeling by index sometimes changes the numbering of nodes
+        /*this.visuals.tableComp.commonService.session.data[this.visuals.tableComp.TableType + 'Filter'] = event.filters;
         this.visuals.tableComp.commonService.session.data[this.visuals.tableComp.TableType + 'FilteredValues'] = filteredValues;
-
-        this.visuals.microbeTrace.publishFilterDataChange();
+        this.visuals.microbeTrace.publishFilterDataChange(); */
 
         // updates number of rows when filter is changed (without there is a visual bug when removing a filter)
         if ($('.p-paginator-rpp-options span').text() == 'All') {
@@ -421,6 +441,12 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
             'line-height': s / 10
         });
     }
+    
+    reorderColumns() {
+        let temp = this.SelectedTableData.tableColumns[2]
+        this.SelectedTableData.tableColumns[2] = this.SelectedTableData.tableColumns[3];
+        this.SelectedTableData.tableColumns[3] = temp;
+    }
 
     /**
      * Opens settings pane for table component
@@ -454,7 +480,7 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
      * @param e event
      */
     openSelectDataSetScreen(e: any) {
-        this.visuals.tableComp.createTable(e.option.value);
+        this.visuals.tableComp.createTable(e.value);
         // after changing table type sometimes there is a visual bug that the following code fixes
         if ($('.p-paginator-rpp-options span').text() == 'All') {
             this.selectedRows = this.SelectedTableData.data.length;
@@ -482,6 +508,15 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
     }
 
     onRecallSession() {
+    }
+
+    goldenLayoutComponentResize() {
+        this.scrollHeight = ($('tableComponent').height() - 70 - 60 - 10) + 'px';
+        let width = ($('tableComponent').width() - 23) + 'px';
+        this.tableStyle = {
+            'width' : width,
+            'display': 'block'
+        }
     }
 
     /**

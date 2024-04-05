@@ -6,8 +6,8 @@
     </span>
 </div>
 
-<p-dialog id="timeline-settings-pane" [(visible)]="ShowEpiSettingsPane" header="Epi Settings"
-    [style]="{width: '45vw', height:'300px'}">
+<p-dialog *ngIf="viewActive" id="timeline-settings-pane" [(visible)]="ShowEpiSettingsPane" header="Epi Settings"
+    [style]="{width: '45vw', height:'300px'}" appendTo="body">
                 <tabset class="tab-container tabbable-line" style='width: 100%;'>
                     <tab heading="{{'Epi Curve' | localize}}" [active]="true" customClass="m-tabs__item">
                         <div class="tab-pane fade show active" id="table-node-settings" role="tabpanel"

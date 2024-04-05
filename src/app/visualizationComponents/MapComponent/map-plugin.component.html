@@ -60,8 +60,8 @@
 </div>
 
 
-<p-dialog id="map-settings-pane" [position]="NodeMapSettingsExportDialogSettings.mapRight" [(visible)]="NodeMapSettingsExportDialogSettings.isVisible"
-    header="Geospatial Settings" [contentStyle]="{'max-height': '70vh'}">
+<p-dialog *ngIf="viewActive" id="map-settings-pane" [position]="NodeMapSettingsExportDialogSettings.mapRight" [(visible)]="NodeMapSettingsExportDialogSettings.isVisible"
+    header="Geospatial Settings" [contentStyle]="{'max-height': '70vh'}" appendTo="body">
     <tabset class="tab-container tabbable-line">
         <tab heading="{{'Data' | localize}}" customClass="m-tabs__item">
             <!-- <div class="form-group row">
@@ -288,7 +288,7 @@
                     <label for="map-node-jitter">Jitter</label>
                     <button id="map-node-jitter-reroll" class="btn btn-light btn-sm">Reroll</button>
                 </div>
-                <div class="col-8"><input type="range" class="custom-range" id="map-node-jitter" min="-2" max="4"
+                <div class="col-8"><input type="range" class="custom-range" id="map-node-jitter" min="-2" max="2"
                         step="0.01" value="-2" [(ngModel)]="SelectedNodeJitterVariable"
                         (ngModelChange)="onNodeJitterChange($event)"></div>
             </div>
@@ -329,8 +329,8 @@
 </p-dialog>
 
 
-<p-dialog id="network-export-modal" [(visible)]="ShowGEOMapExportPane" header="Export Geospatial Data"
-    (onHide)="onCloseExport()">
+<p-dialog *ngIf="viewActive" id="network-export-modal" [(visible)]="ShowGEOMapExportPane" header="Export Geospatial Data"
+    (onHide)="onCloseExport()" appendTo="body">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body" style='min-width: 400px; height: 100%;'>

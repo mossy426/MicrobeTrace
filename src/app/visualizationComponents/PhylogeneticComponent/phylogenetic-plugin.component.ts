@@ -32,6 +32,7 @@ import { ComponentContainer } from 'golden-layout';
 export class PhylogeneticComponent extends BaseComponentDirective implements OnInit {
 
   @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
+  viewActive: boolean = true;
   svgStyle: {} = {
     height: '0px',
     width: '1000px'
@@ -312,8 +313,24 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
       that.updateNodeColors();
 
   });
+
+    this.goldenLayoutComponentResize()
     this.openTree();
 
+    this.container.on('resize', () => { this.goldenLayoutComponentResize() })
+    this.container.on('hide', () => { 
+      this.viewActive = false; 
+      this.cdref.detectChanges();
+    })
+    this.container.on('show', () => { 
+      this.viewActive = true; 
+      this.cdref.detectChanges();
+    })
+  }
+
+  goldenLayoutComponentResize() {
+    $('#phylocanvas').height($('phylogeneticcomponent').height()-19);
+    $('#phylocanvas').width($('phylogeneticcomponent').width()-1)
   }
 
   InitView() {

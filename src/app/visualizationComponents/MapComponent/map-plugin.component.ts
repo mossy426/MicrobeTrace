@@ -64,6 +64,7 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
 
     @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
 
+    viewActive: boolean = true;
     svgStyle: {} = {
         'height': '0px',
         'width': '1000px'
@@ -111,6 +112,7 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
 
     SelectedNetworkExportScaleVariable: any = 1;
     SelectedNetworkExportQualityVariable: any = 0.92;
+    // view implementation of 2D to calculate resolution before export
     CalculatedResolutionWidth: any = 1918;
     CalculatedResolutionHeight: any = 909;
     CalculatedResolution: any = ((this.CalculatedResolutionWidth * this.SelectedNetworkExportScaleVariable) + " x " + (this.CalculatedResolutionHeight * this.SelectedNetworkExportScaleVariable) + "px");
@@ -286,12 +288,20 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
         let that = this;
 
         $( document ).on( "node-selected", function( ) {
-
-            that.drawNodes();
+            //update this?
+            that.drawNodes(false);
 
         });
 
-
+        this.container.on('resize', () => { this.lmap.invalidateSize() })
+        this.container.on('hide', () => { 
+            this.viewActive = false; 
+            this.cdref.detectChanges();
+        })
+        this.container.on('show', () => { 
+            this.viewActive = true; 
+            this.cdref.detectChanges();
+        })
     }
 
 
@@ -409,6 +419,9 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
         }
     }
 
+    /**
+     * Calls clearAllMarkers_Leftlet() which removes all nodes from map and remove _jlat and _jlon value for each node
+     */
     clearAllMarkers() {
         this.clearAllMarkers_Leaflet();
     }
@@ -421,6 +434,9 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
         this.markers = [];
     }
 
+    /**
+     * Removes all nodes from map and remove _jlat and _jlon value for each node
+     */
     clearAllMarkers_Leaflet() {
         this.layers.removeNodes();
         this.nodes.forEach(node => {
@@ -449,41 +465,45 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
         let dataFound: boolean = false;
 
         let that = this;
-            this.matchCoordinates(function () {
-                that.rerollNodes();
-                that.drawLinks();
-                that.drawNodes();
-                that.resetStack();
-                // that.visuals.gisMap.lmap.flyToBounds(that.layers.nodes().getBounds());
-              }, false);
+        // XXX check if reroll is need for drawNodes()
+        this.matchCoordinates(function () {
+            that.drawNodes();
+            that.drawLinks();
+            that.resetStack();
+            // that.visuals.gisMap.lmap.flyToBounds(that.layers.nodes().getBounds());
+            }, false);
 
     }
 
 
-
+    /**
+     * Updates where to show or hide nodes on the Map
+     * @param e 'Show' | 'Hide'
+     */
     onMapNodeShowHideChange(e) {
         this.SelectedNodesTypeVariable = e;
 
         if (e == "Show") {
-
             this.commonService.session.style.widgets['map-node-show'] = true;
-            this.drawNodes();
+            this.drawNodes(false);
+            //this.drawLinks();
         }
         else {
-
             this.commonService.session.style.widgets['map-node-show'] = false;
-            this.clearAllMarkers();
+            this.layers.removeNodes();
         }
     }
 
-
+    /**
+     * Updates where to show or hide links on the Map
+     * @param e 'Show' | 'Hide'
+     */
     onMapLinksShowHideChange(e) {
         this.SelectedLinksTypeVariable = e;
 
         if (e == "Show") {
-
             this.commonService.session.style.widgets['map-link-show'] = true;
-            this.drawNodes();
+            this.drawNodes(false);
             if (this.layers.nodes().bringToFront && this.commonService.session.style.widgets['map-node-show']) {
                 this.layers.nodes().bringToFront();
             }
@@ -630,18 +650,24 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
         }
     }
 
-
+    /**
+     * Updates nodes to be collapsing or not and updates the value of the widget['map-collapsing-on']
+     */
     onNodeCollapsingChange(e) {
         if (this.SelectedNodeCollapsingTypeVariable == "On") {
             this.commonService.session.style.widgets['map-collapsing-on'] = true;
-            this.drawNodes();
+            this.drawNodes(false);
         }
         else {
             this.commonService.session.style.widgets['map-collapsing-on'] = false;
-            this.drawNodes();
+            this.drawNodes(false);
         }
     }
 
+    /**
+     * revisit if nodes need to be rerolled or not
+     * @param e 
+     */
     onGeospatialTypeChange(e) {
         if (this.SelectedGeospatialTypeVariable == "On") {
             this.commonService.session.style.widgets['map-geospatial-type-on'] = true;
@@ -655,18 +681,24 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
         }
     }
 
+    /**
+     * Updates transparency of the nodes and the value of the widget['map-node-transparency']
+     */
     onNodeTransparencyChange(e) {
         this.commonService.session.style.widgets['map-node-transparency'] = e;
-        this.drawNodes();
+        this.drawNodes(false);
     }
 
 
+    /**
+     * updates node and link positions after rerolling nodes and also updates the value of the widget['map-node-jitter']
+     * @param e 
+     */
     onNodeJitterChange(e) {
         this.commonService.session.style.widgets['map-node-jitter'] = e;
-
-        this.jitter();
-        this.drawLinks();
+        
         this.drawNodes();
+        this.drawLinks();
     }
 
 
@@ -675,7 +707,9 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
     }
 
 
-
+    /**
+     * Updates transparency of the link and the value of the widget['map-link-transparency']
+     */
     onLinkTransparencyChange(e) {
         this.commonService.session.style.widgets['map-link-transparency'] = e;
         this.drawLinks();
@@ -1096,13 +1130,24 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
         };
     }
 
-    drawNodes() {
-        this.drawLeafletMapNodes();
+    /**
+     * Calls drawLeafletMapNodes() which removes all previous nodes from map, updates _j, _theta, _jlat, _jlon for each node
+     */
+    drawNodes(rerollNodes=true) {
+        this.drawLeafletMapNodes(rerollNodes);
     }
 
-    drawLeafletMapNodes() {
-        this.clearAllMarkers();
-        this.rerollNodes();
+    /**
+     * Updates map by redrawing nodes
+     * @param rerollNodes if true rerolls node positioning
+     */
+    drawLeafletMapNodes(rerollNodes) {
+        if (rerollNodes) {
+            this.clearAllMarkers();
+            this.rerollNodes();
+        } else {
+            this.layers.removeNodes();
+        }
 
         if (!this.commonService.session.style.widgets['map-node-show']) return;
 
@@ -1142,6 +1187,9 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
         }
     }
 
+    /**
+     * Draws nodes on the map
+     */
     drawLeafletMapNodesList() {
         var fillcolor = this.commonService.session.style.widgets['node-color'],
             colorVariable = this.commonService.session.style.widgets['node-color-variable'],
@@ -1180,6 +1228,9 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
         }
     }
 
+    /**
+     * Draws links on the map
+    */
     drawLinks() {
         this.layers.removeLinks();
     
@@ -1321,9 +1372,12 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
 
         //Foreground Layers, in order:
         if (this.layers.links && this.commonService.session.style.widgets['map-link-show']) this.layers.links.bringToFront();
-        if (this.layers.nodes() && this.commonService.session.style.widgets['map-node-show']) this.drawNodes(); //This did not work with clusters//this.layers.nodes().bringToFront();
+        if (this.layers.nodes() && this.commonService.session.style.widgets['map-node-show']) this.drawNodes(false); //This did not work with clusters//this.layers.nodes().bringToFront();
     }
 
+    /**
+     * Updates _jlon and _jLat for each node using _theta & _j values from each node and widget['map-node-jitter']
+     */
     jitter() {
         //debugger;
         var v = this.commonService.session.style.widgets['map-node-jitter'] == -2 ? 0 : Math.pow(2, this.commonService.session.style.widgets['map-node-jitter']);
@@ -1335,6 +1389,9 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
         }
     }
 
+    /**
+     * Updates _theta and _j for each node. Then calls jitter() which uses those values to upate _jlon and _jlat
+     */
     rerollNodes() {
         //debugger;
 
@@ -1419,12 +1476,12 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
     }
 
     updateNodeColors() {
-        this.drawNodes();
+        this.drawNodes(false);
         this.drawLinks();
     }
 
     updateVisualization() {
-        this.drawNodes();
+        this.drawNodes(false);
         this.drawLinks();
     }
 
