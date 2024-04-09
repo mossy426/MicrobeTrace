@@ -694,8 +694,10 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
      * updates node and link positions after rerolling nodes and also updates the value of the widget['map-node-jitter']
      * @param e 
      */
-    onNodeJitterChange(e) {
-        this.commonService.session.style.widgets['map-node-jitter'] = e;
+    onNodeJitterChange(e?) {
+        if (e) {
+            this.commonService.session.style.widgets['map-node-jitter'] = e;
+        }
         
         this.drawNodes();
         this.drawLinks();
@@ -1205,6 +1207,7 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
 
             let circleMarker: CircleWithData = L.circleMarker(L.latLng(d._jlat, d._jlon), {
                 color: d.selected ? selectedColor : '#ffffff',
+                opacity: opacity,
                 fillColor: colorVariable == 'None' ? fillcolor : this.commonService.temp.style.nodeColorMap(d[colorVariable]),
                 fillOpacity: opacity,
             });
@@ -1309,8 +1312,8 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
             d3.select(this.mapTooltip)
                 .html(htmlText)
                 .style('position', 'absolute')
-                .style('left', (e.originalEvent.pageX - 250) + 'px')
-                .style('top', (e.originalEvent.pageY - 150) + 'px')
+                .style('left', (e.containerPoint.x - 50) + 'px')
+                .style('top', (e.containerPoint.y - 50) + 'px')
                 .style('visibility', 'visible')
                 .style('z-index', 1001)
                 .transition().duration(100)
@@ -1352,6 +1355,16 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
         d.selected = !d.selected;
 
         window.dispatchEvent(new Event('node-selected'));
+    }
+
+    /**
+     * @returns an array [X, Y] of the position of mouse relative to alignment view. Global position (i.e. d3.event.pageX) doesn't work for a dashboard
+     */  
+    getRelativeMousePosition(e) {
+        let rect = document.querySelector('mapcomponent').getBoundingClientRect();
+        let X = e.pageX - rect.left;
+        let Y = e.pageY - rect.top; 
+        return [X, Y];
     }
 
     resetStack() {

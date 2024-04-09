@@ -407,9 +407,14 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     let adjX = this.spanWidth/2 - (e.offsetX % this.spanWidth)
     let offsetX = x + adjX -50;
     
-    // offsetY
-    let rect = document.querySelector('#alignmentTop').getBoundingClientRect();
-    let offsetY = rect.top - 10;
+    // offsetY = 151 (51 offset + 100 height) + height of minimap (number of seq/scaleFactor + 26 for padding, border, margin)
+    let offsetY;
+    if (this.widgets['alignView-showMiniMap']) {
+      let scaleFactorNumber = (this.nodesWithSeq.length <= 100)? 1: Math.ceil(this.nodesWithSeq.length/100)
+      offsetY = 151 + Math.ceil(this.nodesWithSeq.length/scaleFactorNumber+26)
+    } else {
+      offsetY = 151;
+    }
 
     let htmlString = this.tabulate(index);
     $('#tooltipAlign').html(htmlString)

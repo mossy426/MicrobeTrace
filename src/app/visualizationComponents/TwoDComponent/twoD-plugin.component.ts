@@ -2780,12 +2780,10 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      * Updates link-tooltip-variable and SelectedLinkTooltipVariable to update what tooltip displays for links
      */
     onLinkTooltipVariableChange(e) {
-
-        let selectedValue = e;
-
-        if (!Array.isArray(selectedValue)) {
-            selectedValue = [selectedValue];
+        if (!Array.isArray(e)) {
+            e = [e];
         }
+        e = e.filter(item => item !== 'None')
     
         this.widgets['link-tooltip-variable'] = e;
         this.visuals.twoD.SelectedLinkTooltipVariable = this.widgets['link-tooltip-variable'];
