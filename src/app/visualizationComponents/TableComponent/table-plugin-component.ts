@@ -101,15 +101,6 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         this.visuals = commonService.visuals;
         this.commonService.visuals.tableComp = this;
 
-        container.on('resize', () => { this.goldenLayoutComponentResize()})
-        this.container.on('hide', () => { 
-            this.viewActive = false; 
-            this.cdref.detectChanges();
-        })
-        this.container.on('show', () => { 
-            this.viewActive = true; 
-            this.cdref.detectChanges();
-        })
     }
 
     ngOnInit() {
@@ -134,7 +125,7 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
 
         $( document ).on( "node-selected", function( ) {
 
-            if (that.visuals.microbeTrace.homepageTabs.find(x => x.isActive && x.label === 'Table')) {
+            if (that.viewActive) {
                 that.visuals.tableComp.setSelectedNodes();
             }
 
@@ -152,7 +143,18 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         this.tableStyle = {
             'max-width' : width,
             'display': 'block'
-        }        
+        }
+        
+        this.container.on('resize', () => { this.goldenLayoutComponentResize()})
+        this.container.on('hide', () => { 
+            this.viewActive = false; 
+            this.cdref.detectChanges();
+        })
+        this.container.on('show', () => { 
+            this.viewActive = true; 
+            this.setSelectedNodes();
+            this.cdref.detectChanges();
+        })
     }
 
     /**
@@ -303,7 +305,8 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
                 .forEach(x => x.selected = isSelect);
         }
 
-        window.dispatchEvent(new Event('node-selected'));
+        $(document).trigger('node-selected')
+        //window.dispatchEvent(new Event('node-selected'));
     }
 
     /**

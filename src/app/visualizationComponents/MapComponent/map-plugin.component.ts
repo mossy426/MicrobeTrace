@@ -504,9 +504,6 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
         if (e == "Show") {
             this.commonService.session.style.widgets['map-link-show'] = true;
             this.drawNodes(false);
-            if (this.layers.nodes().bringToFront && this.commonService.session.style.widgets['map-node-show']) {
-                this.layers.nodes().bringToFront();
-            }
             this.drawLinks();
         }
         else {
@@ -1294,6 +1291,15 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
     
         this.layers.links = featureGroup(features);
         this.lmap.addLayer(this.layers.links);
+
+        if (this.commonService.session.style.widgets['map-node-show']) {
+            if (this.commonService.session.style.widgets['map-collapsing-on']) {
+                // Not sure how to move collapsed nodes to front with bringToFront(), they use markerClusterGroup (from leaflet.markercluster plugin) instead of featureGroup (from base leaflet)
+                this.drawNodes(false)
+            } else {
+                this.layers.featureGroup.bringToFront();
+            }
+        }
     }
     
 
@@ -1344,17 +1350,20 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
             .on('end', () => tooltip.style('z-index', -1));
     }
 
+    /**
+     * Clicking on a node updates that status of node selected properties. Other nodes will be unselected and then triggers a document node-selected event
+     */
     clickHandler(e) {
         var node = e.sourceTarget.data;
-        var d = this.visuals.gisMap.commonService.session.data.nodes.find(d => d.id == node.id);
+        var d = this.visuals.gisMap.commonService.session.data.nodes.find(d => d._id == node._id);
         if (!e.originalEvent.ctrlKey) {
             this.visuals.gisMap.commonService.session.data.nodes
-                .filter(node => node.id !== d.id)
+                .filter(node => node._id !== d._id)
                 .forEach(node => node.selected = false);
         }
         d.selected = !d.selected;
-
-        window.dispatchEvent(new Event('node-selected'));
+        $(document).trigger('node-selected')
+        //window.dispatchEvent(new Event('node-selected'));
     }
 
     /**
@@ -1385,7 +1394,13 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
 
         //Foreground Layers, in order:
         if (this.layers.links && this.commonService.session.style.widgets['map-link-show']) this.layers.links.bringToFront();
-        if (this.layers.nodes() && this.commonService.session.style.widgets['map-node-show']) this.drawNodes(false); //This did not work with clusters//this.layers.nodes().bringToFront();
+        if (this.layers.nodes() && this.commonService.session.style.widgets['map-node-show']) {
+            if (this.commonService.session.style.widgets['map-collapsing-on']) {
+                this.drawNodes(false); //This did not work with clusters//this.layers.nodes().bringToFront();
+            } else {
+                this.layers.nodes().bringToFront()
+            }
+        }
     }
 
     /**
