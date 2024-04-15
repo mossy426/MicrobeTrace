@@ -4147,11 +4147,11 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
               target: '' + safeLink[file.field2],
               origin: origin,
               visible: true,
-              directed: file.field3 != 'distance' ? true : false,
-              bidirectional: file.field3 != 'distance' ? true : false,
-              distance: file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]),
-              hasDistance: file.field3 != 'distance' ? false : true,
-              distanceOrigin: file.field3 != 'distance' ? '' : file.name
+              directed: file.field3 == 'None' ? true : false,
+              bidirectional: file.field3 == 'None' ? true : false,
+              distance: file.field3 == 'None' ? 0 : parseFloat(safeLink[file.field3]),
+              hasDistance: file.field3 == 'None' ? false : true,
+              distanceOrigin: file.field3 == 'None' ? '' : file.name
             }, safeLink), check);
           } else {
             // console.log("distance is: ", file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]))
@@ -4172,10 +4172,10 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
               target: '' + safeLink[file.field2],
               origin: origin,
               visible: true,
-              directed: file.field3 != 'distance' ? true : false,
-              distance: file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]),
-              hasDistance: file.field3 != 'distance' ? false : true,
-              distanceOrigin: file.field3 != 'distance' ? '' : file.name
+              directed: file.field3 == 'None' ? true : false,
+              distance: file.field3 == 'None' ? 0 : parseFloat(safeLink[file.field3]),
+              hasDistance: file.field3 == 'None' ? false : true,
+              distanceOrigin: file.field3 == 'None' ? '' : file.name
             }, safeLink), check);
           }
           //  console.log('matrixx1: ',  JSON.stringify(window.context.commonService.temp.matrix));
@@ -12174,6 +12174,8 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     this.DisplayGlobalSettingsDialogEvent = new _angular_core__WEBPACK_IMPORTED_MODULE_7__.EventEmitter();
     this.viewActive = true;
     this.FieldList = [];
+    this.binSizes = ['Day', 'Week', 'Month', 'Quarter', 'Year'];
+    this.SelectBinSize = 'week';
     this.ShowEpiSettingsPane = false;
     this.cumulative = false;
     this.margin = {
@@ -12203,6 +12205,8 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
         });
       }
     });
+    this.commonService.session.style.widgets["epi-timeline-date-field"] = "Diagnosis date";
+    this.SelectedDateFieldVariable = "Diagnosis date";
   }
   ngAfterViewInit() {
     // this.initializeD3Chart();
@@ -12234,8 +12238,10 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     }
     this.timeDomainStart = Math.min(...times);
     this.timeDomainEnd = Math.max(...times);
+    //let xxx = d3.bin().thresholds(20);
     this.x = d3__WEBPACK_IMPORTED_MODULE_4__.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]);
     this.y = d3__WEBPACK_IMPORTED_MODULE_4__.scaleLinear().range([this.height, 0]);
+    //this.histogram = d3.histogram().value(d => d[field as string]).domain(this.x.domain()).thresholds(this.x.ticks(10));
     this.histogram = d3__WEBPACK_IMPORTED_MODULE_4__.histogram().value(d => d[field]).domain(this.x.domain()).thresholds(d3__WEBPACK_IMPORTED_MODULE_4__.thresholdScott);
     this.svg = d3__WEBPACK_IMPORTED_MODULE_4__.select(this.timelineElement.nativeElement).append("svg").attr("width", this.width + this.margin.left + this.margin.right).attr("height", this.height + this.margin.top + this.margin.bottom);
     const epiCurve = this.svg.append("g").classed("timeline-epi-curve", true).attr("transform", `translate(${this.margin.left}, 0)`);
@@ -19172,7 +19178,7 @@ module.exports = "﻿<div class=\"table-wrapper\">\r\n    <div id=\"tool-btn-con
 /***/ ((module) => {
 
 "use strict";
-module.exports = "<div #timeline id=\"timeline\"></div>\r\n\r\n<div id=\"tool-btn-container\" class=\"m-portlet\">\r\n    <span style=\"overflow: visible; position: relative; width: 110px;\">\r\n        <a title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openSettings()\"><i class=\"flaticon-settings primary\"></i></a>\r\n    </span>\r\n</div>\r\n\r\n<p-dialog *ngIf=\"viewActive\" id=\"timeline-settings-pane\" [(visible)]=\"ShowEpiSettingsPane\" header=\"Epi Settings\"\r\n    [style]=\"{width: '45vw', height:'300px'}\" appendTo=\"body\">\r\n                <tabset class=\"tab-container tabbable-line\" style='width: 100%;'>\r\n                    <tab heading=\"{{'Epi Curve' | localize}}\" [active]=\"true\" customClass=\"m-tabs__item\">\r\n                        <div class=\"tab-pane fade show active\" id=\"table-node-settings\" role=\"tabpanel\"\r\n                            aria-labelledby=\"nodes-tab\">\r\n                            <div class=\"tab-content\">\r\n                                <div class=\"tab-pane fade show active\" role=\"tabpanel\">\r\n                                    <div class=\"form-group row\">\r\n                                      <div class=\"col-4\">\r\n                                        <label>Date Field</label>\r\n                                      </div>\r\n                                      <div class=\"col-8\">\r\n                                        <p-dropdown id=\"epi-timeline-date-field\" [options]=\"FieldList\" appendTo=\"body\"  [(ngModel)]=\"SelectedDateFieldVariable\" (ngModelChange)=\"onDateFieldChange($event)\"></p-dropdown>\r\n                                    </div>\r\n                                    </div>\r\n                                    <div class=\"form-group row\">\r\n                                      <div class=\"col-4\">Epi Curve</div>\r\n                                      <div class=\"col-8\">\r\n                                        <div class=\"btn-group btn-group-toggle w-100\">\r\n                                          <label class=\"btn btn-light btn-sm col\" [class.active]=\"!cumulative\">\r\n                                            <input type=\"radio\" name=\"timeline-cumulation\" (click)=\"setCumulative(false)\">\r\n                                            Noncumulative\r\n                                          </label>\r\n                                          <label class=\"btn btn-light btn-sm col\" [class.active]=\"cumulative\">\r\n                                            <input type=\"radio\" name=\"timeline-cumulation\" (click)=\"setCumulative(true)\">\r\n                                            Cumulative\r\n                                          </label>\r\n                                        </div>\r\n                                      </div>\r\n                                    </div>\r\n                                  </div>\r\n                            </div>\r\n                        </div>\r\n                    </tab>\r\n                </tabset>\r\n</p-dialog>\r\n";
+module.exports = "<div #timeline id=\"timeline\"></div>\r\n\r\n<div id=\"tool-btn-container\" class=\"m-portlet\">\r\n    <span style=\"overflow: visible; position: relative; width: 110px;\">\r\n        <a title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openSettings()\"><i class=\"flaticon-settings primary\"></i></a>\r\n    </span>\r\n</div>\r\n\r\n<p-dialog *ngIf=\"viewActive\" id=\"timeline-settings-pane\" [(visible)]=\"ShowEpiSettingsPane\" header=\"Epi Settings\"\r\n    [style]=\"{width: '45vw', height:'300px'}\" appendTo=\"body\">\r\n                <tabset class=\"tab-container tabbable-line\" style='width: 100%;'>\r\n                    <tab heading=\"{{'Epi Curve' | localize}}\" [active]=\"true\" customClass=\"m-tabs__item\">\r\n                        <div class=\"tab-pane fade show active\" id=\"table-node-settings\" role=\"tabpanel\"\r\n                            aria-labelledby=\"nodes-tab\">\r\n                            <div class=\"tab-content\">\r\n                                <div class=\"tab-pane fade show active\" role=\"tabpanel\">\r\n                                    <div class=\"form-group row\">\r\n                                      <div class=\"col-4\">\r\n                                        <label>Date Field</label>\r\n                                      </div>\r\n                                      <div class=\"col-8\">\r\n                                        <p-dropdown id=\"epi-timeline-date-field\" [options]=\"FieldList\" appendTo=\"body\"  [(ngModel)]=\"SelectedDateFieldVariable\" (ngModelChange)=\"onDateFieldChange($event)\"></p-dropdown>\r\n                                    </div>\r\n                                    </div>\r\n                                    <!--div class=\"form-group row\">\r\n                                      <div class=\"col-4\">\r\n                                        <label>Bin Size</label>\r\n                                      </div>\r\n                                      <div class=\"col-8\">\r\n                                        <p-dropdown id=\"epi-timeline-date-field\" [options]=\"binSizes\" appendTo=\"body\"  [(ngModel)]=\"SelectedBinSize\" (ngModelChange)=\"onDateFieldChange($event)\"></p-dropdown>\r\n                                      </div>\r\n                                    </div-->\r\n                                    <div class=\"form-group row\">\r\n                                      <div class=\"col-4\">Epi Curve</div>\r\n                                      <div class=\"col-8\">\r\n                                        <div class=\"btn-group btn-group-toggle w-100\">\r\n                                          <label class=\"btn btn-light btn-sm col\" [class.active]=\"!cumulative\">\r\n                                            <input type=\"radio\" name=\"timeline-cumulation\" (click)=\"setCumulative(false)\">\r\n                                            Noncumulative\r\n                                          </label>\r\n                                          <label class=\"btn btn-light btn-sm col\" [class.active]=\"cumulative\">\r\n                                            <input type=\"radio\" name=\"timeline-cumulation\" (click)=\"setCumulative(true)\">\r\n                                            Cumulative\r\n                                          </label>\r\n                                        </div>\r\n                                      </div>\r\n                                    </div>\r\n                                  </div>\r\n                            </div>\r\n                        </div>\r\n                    </tab>\r\n                </tabset>\r\n</p-dialog>\r\n";
 
 /***/ }),
 
