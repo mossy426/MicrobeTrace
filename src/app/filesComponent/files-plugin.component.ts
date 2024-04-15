@@ -815,11 +815,11 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
                target: '' + safeLink[file.field2],
                origin: origin,
                visible: true,
-               directed : file.field3 != 'distance' ? true : false,
-               bidirectional: file.field3 != 'distance' ? true : false,
-               distance: file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]),
-               hasDistance : file.field3 != 'distance' ? false : true,
-               distanceOrigin: file.field3 != 'distance' ? '' : file.name
+               directed : file.field3 == 'None' ? true : false,
+               bidirectional: file.field3 == 'None' ? true : false,
+               distance: file.field3 == 'None' ? 0 : parseFloat(safeLink[file.field3]),
+               hasDistance : file.field3 == 'None' ? false : true,
+               distanceOrigin: file.field3 == 'None' ? '' : file.name
              }, safeLink), check);
 
          } else {
@@ -843,10 +843,10 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
                target: '' + safeLink[file.field2],
                origin: origin,
                visible: true,
-               directed : file.field3 != 'distance' ? true : false,
-               distance: file.field3 != 'distance' ? 0 : parseFloat(safeLink[file.field3]),
-               hasDistance : file.field3 != 'distance' ? false : true,
-               distanceOrigin: file.field3 != 'distance' ? '' : file.name
+               directed : file.field3 == 'None' ? true : false,
+               distance: file.field3 == 'None' ? 0 : parseFloat(safeLink[file.field3]),
+               hasDistance : file.field3 == 'None' ? false : true,
+               distanceOrigin: file.field3 == 'None' ? '' : file.name
              }, safeLink), check);
          }  
 

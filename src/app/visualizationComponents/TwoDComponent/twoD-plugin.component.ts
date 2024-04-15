@@ -1876,14 +1876,13 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      * @param n 
      */
     clickHandler(n) {
-
         //console.log('event: ',d3.event)
         if (d3.event && d3.event.key === "Shift") {
             this.visuals.twoD.commonService.session.data.nodes.find(node => node._id == n._id).selected = !n.selected;
         } else {
             this.visuals.twoD.commonService.session.data.nodes.forEach(node => {
                 if (node._id == n._id) {
-                    node.selected = !n.selected;
+                    node.selected = !node.selected;
                 } else {
                     node.selected = false;
                 }
@@ -2780,12 +2779,10 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      * Updates link-tooltip-variable and SelectedLinkTooltipVariable to update what tooltip displays for links
      */
     onLinkTooltipVariableChange(e) {
-
-        let selectedValue = e;
-
-        if (!Array.isArray(selectedValue)) {
-            selectedValue = [selectedValue];
+        if (!Array.isArray(e)) {
+            e = [e];
         }
+        e = e.filter(item => item !== 'None')
     
         this.widgets['link-tooltip-variable'] = e;
         this.visuals.twoD.SelectedLinkTooltipVariable = this.widgets['link-tooltip-variable'];

@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, Inject, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Injector, Inject, ElementRef, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { EventManager } from '@angular/platform-browser';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { MicrobeTraceNextVisuals } from '@app/microbe-trace-next-plugin-visuals';
@@ -17,7 +17,7 @@ import { svgAsPngUri } from 'save-svg-as-png';
   templateUrl: './alignment-view-plugin-component.html',
   styleUrls: ['./alignment-view-plugin-component.scss']
 })
-export class AlignmentViewComponent extends BaseComponentDirective implements OnInit, MicobeTraceNextPluginEvents {
+export class AlignmentViewComponent extends BaseComponentDirective implements OnInit, AfterViewInit, MicobeTraceNextPluginEvents {
 
   // General Settings
   alignmentDialogSettings: DialogSettings = new DialogSettings('#alignment-settings-pane', false)
@@ -181,7 +181,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     this.shortenNodesWithSeq();
 
     // updates shows or hides minimap and then updates view heights
-    this.updateMiniMapVisibility()
+    this.updateMiniMapVisibility();    
 
     this.container.on('resize', () => { this.goldenLayoutComponentResize()})
     this.container.on('hide', () => { 
@@ -192,6 +192,10 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
       this.viewActive = true; 
       this.cdref.detectChanges();
     })
+  }
+
+  ngAfterViewInit(): void {
+    this.highlightRows();
   }
 
   // General
@@ -407,9 +411,14 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     let adjX = this.spanWidth/2 - (e.offsetX % this.spanWidth)
     let offsetX = x + adjX -50;
     
-    // offsetY
-    let rect = document.querySelector('#alignmentTop').getBoundingClientRect();
-    let offsetY = rect.top - 10;
+    // offsetY = 151 (51 offset + 100 height) + height of minimap (number of seq/scaleFactor + 26 for padding, border, margin)
+    let offsetY;
+    if (this.widgets['alignView-showMiniMap']) {
+      let scaleFactorNumber = (this.nodesWithSeq.length <= 100)? 1: Math.ceil(this.nodesWithSeq.length/100)
+      offsetY = 151 + Math.ceil(this.nodesWithSeq.length/scaleFactorNumber+26)
+    } else {
+      offsetY = 151;
+    }
 
     let htmlString = this.tabulate(index);
     $('#tooltipAlign').html(htmlString)
@@ -785,6 +794,36 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   }
 
   /**
+   * Replaces search function and better incorporates with all node-selected events and not node-selected from search
+   */
+  highlightRows() {
+    $('.canvasLabels div').removeClass('searchHighlight2')
+    let nodes = this.getData(this.nodesWithSeq, ['index', 'selected']);
+    let selectedNodes = nodes.filter(node => node.selected);
+
+    if (selectedNodes.length == 0) {
+      return;
+    }
+
+    for (let node of selectedNodes) {
+      //let element = $('.canvasLabels div').get(index);
+      let element = $(`.canvasLabels div[data-index="${node.index}"]`)
+      $(element).addClass('searchHighlight2')
+    }
+    let firstPositionSelected = nodes.indexOf(selectedNodes[0])
+
+    // need to scroll if necessary
+    let scroll = $('.canvasLabels').scrollTop();
+    let topIndex = scroll/this.spanHeight;
+    topIndex = (topIndex%1 > .2) ? Math.ceil(topIndex) : Math.floor(topIndex)
+    let bottomIndex = Math.floor((this.canvasViewHeight-20) / this.spanHeight + topIndex -1);
+    if (firstPositionSelected < topIndex || firstPositionSelected > bottomIndex) {
+        let scrollPos = (firstPositionSelected)*this.spanHeight -5
+        $('.canvasLabels').scrollTop(scrollPos)
+    }
+  }
+
+  /**
    * Opens settings pane
    */
   openSettings() {
@@ -908,7 +947,8 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     let that = this;
 
     $(document).on( "node-selected", function( ) {  
-      that.search($('#search').val() as string, $('#search-field').val() as string)
+      //that.search($('#search').val() as string, $('#search-field').val() as string)
+      that.highlightRows();
     });
 
   }
@@ -919,12 +959,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   onLabelFieldChange() {
     this.labelArray = this.getData(this.nodesWithSeq, ['index', this.widgets['alignView-labelField']])
     
-    if ($('#search').val() != "") {
-      let that = this;
-      setTimeout(
-        () => that.search($('#search').val() as string, $('#search-field').val() as string),
-        10)
-    }
+    setTimeout(()=>this.highlightRows(), 1);
   }
 
   /**
