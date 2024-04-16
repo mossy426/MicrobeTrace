@@ -2363,7 +2363,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     getAuspiceName(url: string) {
       const split = url.split('=');
-      const nameParts = split[1].split('/');
+      console.log(split);
+      const nameParts = split.length>1 ? split[1].split('/') : split[0].split('/');
       return nameParts.join('_');
       return 'auspice_import_via_url';
     }

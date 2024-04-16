@@ -67,6 +67,7 @@ export default class AuspiceHandler {
   }
 
   public parseAuspice = (auspiceTree) => {
+    console.log(auspiceTree);
     return this.recurseChildren(auspiceTree.tree);
   }
 
@@ -157,8 +158,10 @@ export default class AuspiceHandler {
       if (metadata.hasOwnProperty('geo_resolutions')) {
         for (let i=0; i<metadata.geo_resolutions.length; i++) {
           const deme = node[metadata.geo_resolutions[i].key];
-          node.latitude = metadata.geo_resolutions[i].demes[deme].latitude;
-          node.longtude = metadata.geo_resolutions[i].demes[deme].longitude;
+          if (deme) {
+            node.latitude = metadata.geo_resolutions[i].demes[deme].latitude;
+            node.longtude = metadata.geo_resolutions[i].demes[deme].longitude;
+          }
         }
       }
       newNodes.push(node);
