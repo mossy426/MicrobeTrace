@@ -7,6 +7,8 @@ import * as d3 from 'd3';
 import moment from 'moment';
 import { MicrobeTraceNextVisuals } from '@app/microbe-trace-next-plugin-visuals';
 
+import * as saveAs from 'file-saver';
+import { saveSvgAsPng } from 'save-svg-as-png';
 import { window, TabsetComponent } from 'ngx-bootstrap';
 import { SelectItem } from 'primeng/api';
 
@@ -20,18 +22,32 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
 
   @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
 
-  @ViewChild('timeline') timelineElement: ElementRef;
+  @ViewChild('epiCurve') epiCurveElement: ElementRef;
+  @ViewChild('epiCurveSVG') epiCurveSVGElement: ElementRef;
   viewActive: boolean = true;
 
   private visuals: MicrobeTraceNextVisuals;
 
   FieldList: SelectItem[] = [];
   SelectedDateFieldVariable;
+  binSizes = ['Day', 'Week', 'Month', 'Quarter', 'Year']
+  SelectedBinSize = 'Month';
+  useNodeColorsOptions = [true, false]
+  useNodeColors: boolean = false;
+  SelectedNodeColorVariable;
+  tickInterval;
 
   ShowEpiSettingsPane: boolean = false;
+  ShowEpiExportPane: boolean = false;
+  EpiExportFileName: string = "";
+  EpiExportFileType: string = "png";
+  SelectedNetworkExportScaleVariable: any = 1;
+  SelectedNetworkExportQualityVariable: any = 0.92;
+  CalculatedResolution: string;
+
   cumulative = false;
   private svg;
-  private margin = { top: 50, left: 20, right: 20, bottom: 30 };
+  private margin = { top: 5, left: 25, right: 25, bottom: 50 };
   private width; // Default width, adjust as necessary
   private height; // Default height, adjust as necessary
   private middle;
@@ -48,6 +64,8 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
   private vnodes = []; // Replace with your actual data
   private timeDomainStart;
   private timeDomainEnd;
+
+  // XXXX: implement background color??, epicurve style: currently have stacked, try side by side or overlay
 
   constructor(
     private commonService: CommonService,
@@ -76,6 +94,16 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
         }
 
     });
+
+    this.commonService.session.style.widgets["epi-timeline-date-field"] = 'Diagnosis date'
+    this.useNodeColors = false;
+    this.SelectedNodeColorVariable = '#1f77b4';
+    this.tickInterval = 1;
+
+    this.SelectedDateFieldVariable = this.commonService.session.style.widgets["epi-timeline-date-field"];
+    if (this.commonService.session.style.widgets["epi-timeline-date-field"] || !this.FieldList.includes(this.commonService.session.style.widgets["epi-timeline-date-field"])) {
+      this.ShowEpiSettingsPane = true;
+    }
     
  }
 
@@ -87,13 +115,21 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
   console.log(this.commonService.session.style.widgets["node-color"]);
  }
   
-
+/**
+ * Clears previous histogram/epi curve and creates a new one
+ */
 public refresh(): void {
-  const wrapper = $(this.timelineElement.nativeElement).empty().parent();
-  const tickFormat = d3.timeFormat("%Y-%m-%d");
+  $('#epiCurveSVG').empty()
+  const wrapper = $(this.epiCurveElement.nativeElement).parent();
+  $('#epiCurve').height(wrapper.height() - 50);
+  
   this.width = wrapper.width() - this.margin.left - this.margin.right;
-  this.height = wrapper.height() - this.margin.top - this.margin.bottom;
+  // height represents the height of y axis
+  this.height = wrapper.height() - this.margin.top - this.margin.bottom - 50;
   this.middle = this.height / 2;
+  if (this.height < 0) {
+    return;
+  }
 
   const field = this.SelectedDateFieldVariable;
   let times = [];
@@ -111,35 +147,54 @@ public refresh(): void {
   if (times.length < 2) {
     times = [new Date(2000, 1, 1), new Date()];
   }
-  this.timeDomainStart = Math.min(...times);
-  this.timeDomainEnd = Math.max(...times);
+
+  // updates this.timeDomainStart and this.timeDomainInterval and returns the bin interval
+  let binInterval = this.calculateBinInterval(times);
+  if (binInterval == 0) {
+    return;
+  }
 
   this.x = d3.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]);
   this.y = d3.scaleLinear().range([this.height, 0]);
 
-  this.histogram = d3.histogram().value(d => d[field as string]).domain(this.x.domain()).thresholds(d3.thresholdScott);
+  this.histogram = d3.histogram().value(d => d[field as string]).domain(this.x.domain()).thresholds(binInterval);
 
-  this.svg = d3.select(this.timelineElement.nativeElement)
-    .append("svg")
+  this.svg = d3.select(this.epiCurveSVGElement.nativeElement)
     .attr("width", this.width + this.margin.left + this.margin.right)
-    .attr("height", this.height + this.margin.top + this.margin.bottom);
+    .attr("height", this.height + this.margin.top + this.margin.bottom)
+    .attr("transform", `translate(0, ${this.margin.top})`);
+    
 
   const epiCurve = this.svg.append("g")
-    .classed("timeline-epi-curve", true)
+    .classed("epiCurve-epi-curve", true)
     .attr("transform", `translate(${this.margin.left}, 0)`);
 
-  const bins = this.histogram(this.vnodes);
+  let bins = this.histogram(this.vnodes);
+  
+  let colorVariable = this.commonService.session.style.widgets['node-color-variable'];
+  let nodeColorKeys;
+  if (colorVariable != 'None' && this.useNodeColors) {
+    nodeColorKeys = this.commonService.session.style.nodeColorsTableKeys[colorVariable].map(value => value=='null' ? null: value);
+  } 
 
-  if (!this.commonService.session.style.widgets["timeline-noncumulative"]) {
-    let sum = 0;
-    bins.forEach(bin => {
-      sum += bin.length;
-      bin.length = sum;
-    });
-  }
+  let maxCount = 0;
+  [maxCount, bins] = this.updateBins(bins, colorVariable, nodeColorKeys);
+  
 
-  this.y.domain([0, d3.max(bins, d => d.length)]);
+  this.y.domain([0, maxCount])//d3.max(bins, d => d.length)]);
 
+  if (this.useNodeColors && colorVariable != 'None') {
+    nodeColorKeys.forEach((value, ind) =>{
+      epiCurve.selectAll(`rect${ind}`)
+      .data(bins)
+      .enter()
+      .append("rect")
+      .attr("transform", d => `translate(${this.x(d.x0)}, ${this.y(d.height[ind])})`)
+      .attr("width", d => this.x(d.x1) - this.x(d.x0))
+      .attr("height", d => this.height - this.y(d.length2[ind]))
+      .attr("fill", this.commonService.temp.style.nodeColorMap(value) )
+    })
+  } else {
   epiCurve.selectAll("rect")
     .data(bins)
     .enter()
@@ -147,15 +202,18 @@ public refresh(): void {
     .attr("transform", d => `translate(${this.x(d.x0)}, ${this.y(d.length)})`)
     .attr("width", d => this.x(d.x1) - this.x(d.x0))
     .attr("height", d => this.height - this.y(d.length))
-    .attr("fill",this.commonService.session.style.widgets["node-color"]);
+    .attr("fill", this.useNodeColors ? this.commonService.session.style.widgets["node-color"] : this.SelectedNodeColorVariable);
+  }
+
+  let [xAxis, xLabelOffset] = this.configureXAxisSettings();
 
   this.svg.append("g")
     .attr("class", "axis axis--x")
     .attr("transform", `translate(${this.margin.left}, ${this.height})`)
-    .call(d3.axisBottom(this.x).tickSize(8).tickPadding(8).tickFormat(tickFormat))
-    .attr("text-anchor", null)
+    .call(xAxis)
+    .attr("text-anchor", "center")
     .selectAll("text")
-    .attr("x", -25);
+    .attr("x", xLabelOffset);
 
   this.svg.append("g")
     .attr("class", "axis axis--y")
@@ -165,7 +223,22 @@ public refresh(): void {
     .selectAll("text")
     .attr("x", 6);
 
-  this.brush = d3.brushX()
+  this.svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "center")
+    .attr("x", this.width/2)
+    .attr("y", this.height + 40)
+    .text(`${this.commonService.capitalize(this.SelectedDateFieldVariable)} (${this.SelectedBinSize=='Day'? 'Dai': this.SelectedBinSize}ly)`);
+
+  this.svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "center")
+    .attr("y", 15)
+    .attr("x", -this.middle-this.margin.top-this.margin.bottom)
+    .attr("transform", "rotate(-90)")
+    .text("Number of Cases");
+
+  /*this.brush = d3.brushX()
     .extent([[0, 0], [this.width, this.height]])
     .on("start brush", () => {
       this.selection = d3.brushSelection(this.brushG.node());
@@ -190,7 +263,7 @@ public refresh(): void {
     .attr("class", "brush")
     .attr("transform", "translate(" + this.margin.left + ",0)")
     .call(this.brush);
-
+    */
 
   }
 
@@ -207,15 +280,15 @@ private setupEventListeners(): void {
   });
 
 
-  $('[name="timeline-cumulation"]').on('change', () => {
+  /*$('[name="timeline-cumulation"]').on('change', () => {
     console.log('cum 1');
     this.cumulative = $("#timeline-noncumulative").is(":checked");
     this.commonService.session.style.widgets["timeline-noncumulative"] =  $("#timeline-noncumulative").is(":checked");
     this.refresh();
-  });
+  });*/
 
   $(window).on('node-color-change', () => {
-    this.svg.selectAll(".timeline-epi-curve rect")
+    this.svg.selectAll(".epiCurve-epi-curve rect")
       .attr("fill", this.commonService.session.style.widgets["node-color-variable"]);
   });
 
@@ -228,14 +301,135 @@ private setupEventListeners(): void {
     this.viewActive = false; 
     this.cdref.detectChanges();
   })
-this.container.on('show', () => { 
+  this.container.on('show', () => { 
     this.viewActive = true; 
     this.cdref.detectChanges();
   })
 }
 
+/**
+ * Updates this.timeDomainStart and this.timeDomainEnd based on dates and this.SelectedBinSize;
+ * 
+ * @param times array of date objects
+ * @returns return a d3 time range such as d3.timeMonth.range()
+ */
+calculateBinInterval(times) {
+  if (this.SelectedBinSize == 'Day') {
+    this.timeDomainStart = d3.timeDay(Math.min(...times));
+    this.timeDomainEnd = d3.timeDay.ceil(Math.max(...times));
+    return d3.timeDay.range(this.timeDomainStart, this.timeDomainEnd);
+  } else   if (this.SelectedBinSize == 'Week') {
+    this.timeDomainStart = d3.timeMonday(Math.min(...times));
+    this.timeDomainEnd = d3.timeMonday.ceil(Math.max(...times));
+    return d3.timeMonday.range(this.timeDomainStart, this.timeDomainEnd);
+  } else   if (this.SelectedBinSize == 'Month') {
+    this.timeDomainStart = d3.timeMonth(Math.min(...times));
+    this.timeDomainEnd = d3.timeMonth.ceil(Math.max(...times));
+    return d3.timeMonth.range(this.timeDomainStart, this.timeDomainEnd);
+  } else   if (this.SelectedBinSize == 'Quarter') {
+    this.timeDomainStart = d3.timeMonth(Math.min(...times), 3);
+    this.timeDomainEnd = d3.timeMonth.ceil(Math.max(...times), 3);
+    // for quarter we may need to update earliest month so that quarters are consistant (always start on Jan, April, July, or October)
+    if ([1, 2].includes(this.timeDomainStart.getMonth())){
+      this.timeDomainStart.setMonth(0);
+    } else if ([4,5].includes(this.timeDomainStart.getMonth())) {
+      this.timeDomainStart.setMonth(3);
+    } else if ([7,8].includes(this.timeDomainStart.getMonth())) {
+      this.timeDomainStart.setMonth(6);
+    } else if ([10,11].includes(this.timeDomainStart.getMonth())) {
+      this.timeDomainStart.setMonth(9);
+    }
+    return d3.timeMonth.range(this.timeDomainStart, this.timeDomainEnd, 3);
+  } else   if (this.SelectedBinSize == 'Year') {
+    this.timeDomainStart = d3.timeYear(Math.min(...times));
+    this.timeDomainEnd = d3.timeYear.ceil(Math.max(...times));
+    return d3.timeYear.range(this.timeDomainStart, this.timeDomainEnd);
+  } else {
+    alert("Invalid bin size selected");
+    return 0;
+  }
+
+}
+
+/**
+ * @returns updated bins with new attributes. bin.length2 is array of height of each group (ie. 'M', 'F') needed for that bin interval, bin.height represents the offset of that group.
+ * 
+ * Also returns maxCount which is used for setting y axis max value
+ */
+updateBins(bins, colorVariable, nodeColorKeys) {
+  let maxCount = 0;
+  // cumulative with multiple colors per column
+  if (this.useNodeColors && !this.commonService.session.style.widgets["timeline-noncumulative"] && colorVariable != 'None') {
+    //heights represents the size of each rect, offset represent the offset of each rect
+    let heights = new Array(nodeColorKeys.length).fill(0);
+    let offsets = new Array(nodeColorKeys.length).fill(0);
+    bins.forEach(bin => {
+      bin.length2 = [];
+      bin.height = [];
+      nodeColorKeys.forEach((value, ind) => {
+        let currentCount = bin.filter((obj)=> obj[colorVariable]==value).length
+        heights[ind] += currentCount;
+        bin.length2.push(heights[ind]);
+        offsets[ind] = bin.length2.reduce((paritalSum, a)=> paritalSum+a,0);
+        bin.height.push(offsets[ind]);
+        
+      })
+      maxCount += bin.length;
+    })
+    // noncumulative with multiple colors per column
+  } else if (this.useNodeColors && colorVariable != 'None') {
+    bins.forEach(bin => {
+      bin.length2 = [];
+      bin.height = [];
+      nodeColorKeys.forEach(value => {
+        bin.length2.push(bin.filter((obj)=> obj[colorVariable]==value).length);
+        bin.height.push(bin.length2.reduce((paritalSum, a)=> paritalSum+a,0));
+      })
+      if (bin.length > maxCount) maxCount = bin.length
+    })
+  // else if (useNodeColor == False || (useNodeColor && colorVariable=='None')) and using cumulative
+  // cumulative with one color 
+  } else if (!this.commonService.session.style.widgets["timeline-noncumulative"]) {
+    bins.forEach(bin => {
+      maxCount += bin.length;
+      bin.length = maxCount;
+    });
+    // noncumulative with one color
+  } else {
+    bins.forEach(bin => {
+      if (bin.length > maxCount) maxCount = bin.length
+    })
+  }
+
+  return [maxCount, bins]
+}
+
+/**
+ * 
+ * @return xAxis which is used to determine the interval and label for xAxis ticks and xLabelOffet which determine how much to shift each label
+ */
+configureXAxisSettings() {
+  let xAxis;
+  let numberOfDays = d3.timeDay.count(this.timeDomainStart, this.timeDomainEnd);
+  let xLabelOffset = -10;
+  if (this.SelectedBinSize=='Year') {
+    xAxis = d3.axisBottom(this.x).ticks(d3.timeYear).tickFormat(d3.timeFormat("%Y"));
+  } else if (numberOfDays<366) {
+    xAxis = d3.axisBottom(this.x).ticks(d3.timeMonth.every(this.tickInterval)).tickFormat(d3.timeFormat("%b %Y"))
+    xLabelOffset = -25;
+  } else if (this.SelectedBinSize=='Quarter') {
+    xAxis = d3.axisBottom(this.x).ticks(d3.timeMonth.every(this.tickInterval < 3 ? this.tickInterval*3: 12)).tickFormat(d => d <= d3.timeYear(d) ? d.getFullYear() : null)
+  } else {
+    xAxis = d3.axisBottom(this.x).ticks(d3.timeMonth.every(this.tickInterval)).tickFormat(d => d <= d3.timeYear(d) ? d.getFullYear() : null)
+  }
+  return [xAxis, xLabelOffset]
+}
+
 goldenLayoutComponentResize() {
   this.refresh();
+  if (this.ShowEpiExportPane && this.EpiExportFileType!='svg') {
+    this.setCalculatedResolution();
+  }
 }
 
 // Handle the change event of the date field
@@ -244,7 +438,34 @@ onDateFieldChange(event: any) {
   this.refresh();
 }
 
+onBinSizeChange() {
+  if (this.SelectedBinSize=='Year') {
+    $('#epi-tick-size').slideUp();
+  } else {
+    if (this.SelectedBinSize=='Quarter') {
+      this.tickInterval = 1;
+    }
+    $('#epi-tick-size').slideDown();
+  }
+  this.refresh();
+}
 
+onUseNodeColorChange() {
+  if (this.useNodeColors) {
+    $('#epi-color-select').slideUp();
+  } else {
+    $('#epi-color-select').slideDown();
+  }
+  this.refresh();
+}
+
+onTickIntevalChange() {
+  this.refresh()
+}
+
+onNodeColorChanged() {
+  this.refresh();
+}
 
 openSettings() {
   this.visuals.epiCurve.ShowEpiSettingsPane = !this.visuals.epiCurve.ShowEpiSettingsPane;
@@ -258,6 +479,33 @@ setCumulative(value: boolean): void {
   this.refresh();
 }
 
+
+/**
+ * Sets CalculatedResolution variable to string such as '1250 x 855px'. Only called when export is first opened
+ */
+setCalculatedResolution() {
+  let [width, height] = this.getImageDimensions();
+  console.log(width, height);
+  this.CalculatedResolution = (Math.round(width * this.SelectedNetworkExportScaleVariable) + " x " + Math.round(height * this.SelectedNetworkExportScaleVariable) + "px");
+}
+
+  /**
+   * Updates CalculatedResolution variable to string such as '1250 x 855px' based on ImageDimensions and SelectedNetworkExportScaleVariable. 
+   * This is called anytime SelectedNetworkExportScaleVariable is updated.
+   */
+  updateCalculatedResolution() {
+    let [width, height] = this.getImageDimensions();
+    this.CalculatedResolution = (Math.round(width * this.SelectedNetworkExportScaleVariable) + " x " + Math.round(height * this.SelectedNetworkExportScaleVariable) + "px");
+    this.cdref.detectChanges();
+}
+
+/**
+ * @returns an array [width, height] of the svg image
+ */
+  getImageDimensions() {
+    let parent = this.svg.node();
+    return [parent.clientWidth, parent.clientHeight] 
+  }
 
 private startTimeline(): void {
   this.isPlaying = true;
@@ -429,7 +677,7 @@ private propagate(): void {
 // }
 
 updateNodeColors() {
-  //Not Relevant
+  this.refresh();
 }
 updateVisualization() {
   //Not Relevant
@@ -449,7 +697,143 @@ onRecallSession() {
 }
 
 openExport() {
-  // this.visuals.tableComp.ShowTableExportPane = !this.visuals.tableComp.ShowTableExportPane;
+  this.setCalculatedResolution();
+  this.ShowEpiExportPane = !this.ShowEpiExportPane;
+}
+
+exportVisualization() {
+  console.log(`${this.EpiExportFileName}.${this.EpiExportFileType}`);
+  let epiCurve = this.epiCurveSVGElement.nativeElement;
+  //let $epiCurve = $(this.epiCurve);
+
+  // add microbeTrace logo as a watermark
+  /*let watermark = d3.select(epiCurve).append('image')
+      .attr('xlink:href', this.commonService.watermark)
+      .attr('height', 128)
+      .attr('width', 128)
+      .attr('x', 35)
+      .attr('y', 35)
+      .style('opacity', $('#network-export-opacity').val());
+  */
+
+  // add node color table
+  // node color table not need if all nodes are same color
+  let nodeLegend: any = false;
+  if (this.commonService.session.style.widgets['node-color-variable']!= 'None' && this.useNodeColors) {
+    let [addNodeColorTable, Xoffset, Yoffset] = this.nodeColorTableInView();
+    if (addNodeColorTable) {
+      let nodeColorKeys = this.commonService.session.style.nodeColorsTableKeys[this.commonService.session.style.widgets['node-color-variable']].map(value => value=='null' ? null: value);
+      var columns = [];
+      columns.push('Node ' + this.commonService.titleize(this.commonService.session.style.widgets["node-color-variable"]));
+      columns.push('Color');
+      var data = [];
+      nodeColorKeys.forEach((value, i) => {
+          let line = {
+              Node: this.commonService.titleize("" + value),
+              Color: '<div  style="margin-left:5px; width:40px;height:12px;background:' + this.commonService.temp.style.nodeColorMap(value)  +'"> </div>'
+          }
+          data.push(line);
+      })
+  
+      let nodeWrapper = null;
+  
+      this.commonService.currentNodeTableElement.subscribe((element) => {
+          if(element){
+              nodeWrapper = element;
+              } else {
+              console.error('currentNodeTableElement is null');
+              }                // You can now interact with this.myElement
+      });
+      nodeLegend = this.tabulate2(data, columns, nodeWrapper, epiCurve, 200,false); 
+    }
+  }
+
+  if (this.EpiExportFileType == 'svg') {
+      let content = this.commonService.unparseSVG(this.epiCurveSVGElement.nativeElement);
+      let blob = new Blob([content], { type: 'image/svg+xml;charset=utf-8' });
+      saveAs(blob, this.EpiExportFileName + '.' + this.EpiExportFileType);
+      //if (watermark){          watermark.remove();      }
+      //if (nodeLegend){          nodeLegend.remove(); }
+  } else {
+      saveSvgAsPng(this.epiCurveSVGElement.nativeElement, this.EpiExportFileName + '.' + this.EpiExportFileType, {
+          scale: this.SelectedNetworkExportScaleVariable,
+          backgroundColor: this.commonService.session.style.widgets['background-color'],
+          encoderType: 'image/' + this.EpiExportFileType,
+          //encoderOptions: this.SelectedNetworkExportQualityVariable
+      }).then(() => {
+          //if (watermark){              watermark.remove();          }
+          //if (nodeLegend){              nodeLegend.remove();          }
+
+      });
+  }
+  this.ShowEpiExportPane = false;
+}
+
+/**
+ * XXXX To be implemented: the idea is to determine is node color table is in bounds of view;
+ * if it is return true and x and y offsets to be used to place node color table on view when exporting 
+ */
+nodeColorTableInView() {
+  let Xoffset = 0, Yoffset = 0;
+  return [false, Xoffset, Yoffset];
+}
+
+/**
+ * Converts table such as node color table, link color table or node symbol table from dialog window into element on twoD network svg when
+ * getting ready to export.
+ * @param data Object[] containing information in the table, such as color, count, node/groupLabel
+ * @param columns string array of table column names
+ * @param wrapper HTMLElement of table
+ * @param container HTMLElement of entive svg/network
+ * @param topOffset number
+ * @param leftOffset boolean
+ * @returns foreignObject that can be removed later by foreignObjectName.remove()
+ */
+tabulate2 = (data, columns, wrapper, container, topOffset: number, leftOffset: boolean) => {
+
+  console.log('wrapper: ', wrapper);
+  console.log('left: ', wrapper.offsetLeft);
+  let containerWidth = container.getBBox().width;
+  let rightPosition = containerWidth - wrapper.offsetWidth;        
+  console.log('right: ', rightPosition);
+
+  let foreignObj = d3.select(container).append("svg:foreignObject")
+    .attr("x", (leftOffset) ? rightPosition : wrapper.offsetLeft)
+    .attr("y", wrapper.offsetTop + topOffset)
+    .attr("width", wrapper.offsetWidth)
+    .attr("height", wrapper.offsetHeight);
+  let body = foreignObj 
+    .append("xhtml:body")
+    .append("table")
+    .style('position', 'absolute')
+    .style('top', '0')
+    .style('width', '100%')
+    .style('height', '100%')
+    .attr('cellpadding', '1px')
+    .attr("class", "table-bordered");
+    // .html(nodeColorTable.innerHTML); SVG doesn't translate
+  let thead = body.append("thead"),
+      tbody = body.append("tbody");
+  thead.append("tr")
+    .selectAll("th")
+    .data(columns)
+    .enter()
+    .append("th")
+    .text(function(column) { return column; });
+  let rows = tbody.selectAll("tr")
+    .data(data)
+    .enter()
+    .append("tr");
+  let cells = rows.selectAll("td")
+    .data(function(row) {
+      return columns.map(function(column) {
+          return {column: column, value: row[column.split(" ")[0]]};
+      });
+    })
+    .enter()
+    .append("td")
+    .html(function(d) { return d.value; });
+  return foreignObj;
 }
 
 openRefreshScreen() {

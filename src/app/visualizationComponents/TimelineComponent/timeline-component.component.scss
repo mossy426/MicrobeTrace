@@ -4,29 +4,26 @@
     z-index: 1 !important;
   }
 
-  #timeline {
+  #epiCurve {
     padding-top: 50px;
   }
-  #timeline .axis--grid .domain {
+  #epiCurve .axis--grid .domain {
     fill: #ddd;
     stroke: none;
   }
   
-  #timeline .axis--x .domain,
-  #timeline .axis--grid .tick line {
+  #epiCurve .axis--x .domain,
+  #epiCurve .axis--grid .tick line {
     stroke: #fff;
   }
   
-  #timeline .axis--grid .tick--minor line {
+  #epiCurve .axis--grid .tick--minor line {
     stroke-opacity: 0.5;
   }
-  #timeline-date-field {
+  #epiCurve-date-field {
     width: auto;
   }
   
-  #epi-timeline-date-field {
-    width: auto;
-  }
 
    /* Button appearance on hover */
  .btn-icon:hover {
