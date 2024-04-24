@@ -1838,7 +1838,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             this.DisplayUrlDialog("Open");
             this.continueClicked();
             this.displayUrlDialog = false;
-            this.displayMTDialog = true;
+            //this.displayMTDialog = true;
             // this.DisplayMTDialog("Open");
             /**
             this.commonService.openAuspiceUrl(this.auspiceUrlVal)
