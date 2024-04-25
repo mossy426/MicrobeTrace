@@ -1719,27 +1719,33 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   getDM() {
     let start = Date.now();
     return new Promise(resolve => {
-      let labels = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes.map(d => d._id);
-      labels = labels.sort();
-      let metric = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-sort-variable"];
-      const n = labels.length;
-      let dm = new Array(n);
-      let m = new Array(n);
-      for (let i = 0; i < n; i++) {
-        dm[i] = new Array(n);
-        dm[i][i] = 0;
-        let source = labels[i];
-        let row = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.matrix[source];
-        if (!row) {
-          console.error('Incompletely populated temp.matrix! Couldn\'t find ' + source);
-          continue;
-        }
-        for (let j = 0; j < i; j++) {
-          let link = row[labels[j]];
-          if (link) {
-            dm[i][j] = dm[j][i] = link[metric];
-          } else {
-            dm[i][j] = dm[j][i] = null;
+      let dm = '';
+      if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.newick) {
+        let treeObj = patristic__WEBPACK_IMPORTED_MODULE_2__.parseNewick(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.newick);
+        dm = treeObj.toMatrix();
+      } else {
+        let labels = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes.map(d => d._id);
+        labels = labels.sort();
+        let metric = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-sort-variable"];
+        const n = labels.length;
+        dm = new Array(n);
+        let m = new Array(n);
+        for (let i = 0; i < n; i++) {
+          dm[i] = new Array(n);
+          dm[i][i] = 0;
+          let source = labels[i];
+          let row = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.matrix[source];
+          if (!row) {
+            console.error('Incompletely populated temp.matrix! Couldn\'t find ' + source);
+            continue;
+          }
+          for (let j = 0; j < i; j++) {
+            let link = row[labels[j]];
+            if (link) {
+              dm[i][j] = dm[j][i] = link[metric];
+            } else {
+              dm[i][j] = dm[j][i] = null;
+            }
           }
         }
       }
@@ -1757,6 +1763,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     return new Promise(resolve => {
       if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.treeObj) {
         resolve(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.treeObj.toNewick());
+      } else if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.newick) {
+        resolve(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.newick);
       } else {
         let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
         ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.getDM().then(dm => {
@@ -4456,6 +4464,7 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
         let links = 0;
         let newLinks = 0;
         let newNodes = 0;
+        this.visuals.microbeTrace.commonService.session.data.newickString = file.contents;
         const tree = patristic__WEBPACK_IMPORTED_MODULE_9__.parseNewick(file.contents);
         let m = tree.toMatrix(),
           matrix = m.matrix,
@@ -6387,7 +6396,7 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
       if (cachedLSV) {
         if (cachedLSV === 'snps') {
           this.metric = 'snps';
-          this.threshold = '16';
+          this.threshold = '7';
           $('#ambiguities-menu').hide();
         } else {
           this.metric = 'tn93';
@@ -11221,14 +11230,25 @@ let PhylogeneticComponent = (_class = class PhylogeneticComponent extends _app_b
         this.styleTree();
       } else {
       */
-      const newickString = this.commonService.computeTree();
-      newickString.then(x => {
-        const tree = this.buildTree(x);
+      //@ts-ignore
+      if (this.visuals.phylogenetic.commonService.session.data.hasOwnProperty("newickString") && this.visuals.phylogenetic.commonService.session.data.newickString) {
+        //@ts-ignore
+        let newickString = this.visuals.phylogenetic.commonService.session.data.newickString;
+        const tree = this.buildTree(newickString);
         this.tree = tree;
         this.commonService.visuals.phylogenetic.tree = tree;
         this.hideTooltip();
         this.styleTree();
-      });
+      } else {
+        let newickString = this.commonService.computeTree();
+        newickString.then(x => {
+          const tree = this.buildTree(x);
+          this.tree = tree;
+          this.commonService.visuals.phylogenetic.tree = tree;
+          this.hideTooltip();
+          this.styleTree();
+        });
+      }
       // }
     };
 
