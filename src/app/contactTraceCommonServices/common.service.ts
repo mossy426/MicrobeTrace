@@ -1677,32 +1677,36 @@ export class CommonService extends AppComponentBase implements OnInit {
     getDM(): Promise<any> {
         let start = Date.now();
         return new Promise(resolve => {
-
-            let labels = window.context.commonService.session.data.nodes.map(d => d._id);
-            labels = labels.sort();
-            let metric = window.context.commonService.session.style.widgets['link-sort-variable'];
-            const n = labels.length;
-            let dm = new Array(n);
-            let m = new Array(n);
-            for (let i = 0; i < n; i++) {
-                dm[i] = new Array(n);
-                dm[i][i] = 0;
-                let source = labels[i];
-                let row = window.context.commonService.temp.matrix[source];
-                if (!row) {
-                    console.error('Incompletely populated temp.matrix! Couldn\'t find ' + source);
-                    continue;
-                }
-                for (let j = 0; j < i; j++) {
-                    let link = row[labels[j]];
-                    if (link) {
-                        dm[i][j] = dm[j][i] = link[metric];
-                    } else {
-                        dm[i][j] = dm[j][i] = null;
+            let dm : any = '';
+            if (window.context.commonService.session.data.newick){
+                let treeObj = patristic.parseNewick(window.context.commonService.session.data.newick);
+                dm = treeObj.toMatrix();
+            } else {
+                let labels = window.context.commonService.session.data.nodes.map(d => d._id);
+                labels = labels.sort();
+                let metric = window.context.commonService.session.style.widgets['link-sort-variable'];
+                const n = labels.length;
+                dm = new Array(n);
+                let m = new Array(n);
+                for (let i = 0; i < n; i++) {
+                    dm[i] = new Array(n);
+                    dm[i][i] = 0;
+                    let source = labels[i];
+                    let row = window.context.commonService.temp.matrix[source];
+                    if (!row) {
+                        console.error('Incompletely populated temp.matrix! Couldn\'t find ' + source);
+                        continue;
+                    }
+                    for (let j = 0; j < i; j++) {
+                        let link = row[labels[j]];
+                        if (link) {
+                            dm[i][j] = dm[j][i] = link[metric];
+                        } else {
+                            dm[i][j] = dm[j][i] = null;
+                        }
                     }
                 }
             }
-
             // console.log('matrixx: ',  JSON.stringify(window.context.commonService.temp.matrix));
 
             if(this.debugMode) {
@@ -1721,6 +1725,8 @@ export class CommonService extends AppComponentBase implements OnInit {
 
           if (window.context.commonService.treeObj) {
             resolve(window.context.commonService.treeObj.toNewick());
+          } else if(window.context.commonService.session.data.newick){
+            resolve(window.context.commonService.session.data.newick);
           } else {
             let computer: WorkerModule = new WorkerModule();
             window.context.commonService.getDM().then(dm => {

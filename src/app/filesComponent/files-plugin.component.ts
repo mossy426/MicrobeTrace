@@ -1156,6 +1156,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
         let links = 0;
         let newLinks = 0;
         let newNodes = 0;
+        this.visuals.microbeTrace.commonService.session.data.newickString = file.contents;
         const tree = patristic.parseNewick(file.contents);
         let m = tree.toMatrix(), matrix = m.matrix, labels = m.ids.map(this.visuals.microbeTrace.commonService.filterXSS), n = labels.length;
         for (let i = 0; i < n; i++) {

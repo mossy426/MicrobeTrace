@@ -355,7 +355,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             if (cachedLSV) {
                 if (cachedLSV === 'snps') {
                    this.metric = 'snps';
-                   this.threshold = '16';
+                   this.threshold = '7';
                    $('#ambiguities-menu').hide();
                 } else {
                    this.metric = 'tn93';
