@@ -12,7 +12,7 @@
 </div>
 
 <p-dialog *ngIf="viewActive" id="epiCurve-settings-pane" [(visible)]="ShowEpiSettingsPane" header="Epi Settings"
-    [style]="{width: '400px', height:'490px'}" appendTo="body">
+    [style]="{width: '500px', height:'490px'}" appendTo="body">
   <tabset class="tab-container tabbable-line" style='width: 100%;'>
     <tab heading="{{'Epi Curve' | localize}}" [active]="true" customClass="m-tabs__item">
       <div class="tab-pane fade show active" id="table-node-settings" role="tabpanel" aria-labelledby="nodes-tab">
@@ -20,10 +20,51 @@
           <div class="tab-pane fade show active" role="tabpanel">
             <div class="form-group row">
               <div class="col-4">
-                <label>Date Field</label>
+                <label>Graph Type</label>
               </div>
               <div class="col-8">
+                <p-dropdown [options]="graphTypes" appendTo="body"  [(ngModel)]="selectedGraphType" (ngModelChange)="onGraphTypeChange()"></p-dropdown>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-4">
+                <label>Date Field</label>
+              </div>  
+              <div class="col-6" style="padding-right: 5px">
                 <p-dropdown id="epiCurve-date-field" [options]="FieldList" appendTo="body"  [(ngModel)]="SelectedDateFieldVariable" (ngModelChange)="onDateFieldChange($event)"></p-dropdown>
+              </div>
+              <div class="col-2" style="padding: 0px 15px 0px 10px">
+                <input type="color" id="node-color" class="form-control" style="padding: 5px 8px;" [(ngModel)]="SelectedNodeColorVariable" (change)="onNodeColorChanged()" *ngIf="!useNodeColors || selectedGraphType!='Single Date Field'">
+              </div>  
+            </div>
+            <div class="form-group row additionalDateField">
+              <div class="col-4">
+                <label>Date Field 2</label>
+              </div>
+              <div class="col-6" style="padding-right: 5px">
+                <p-dropdown id="epiCurve-date-field" [options]="FieldList" appendTo="body"  [(ngModel)]="SelectedDateFieldVariable2" (ngModelChange)="refresh()"></p-dropdown>
+              </div>
+              <div class="col-2" style="padding: 0px 15px 0px 10px">
+                <input type="color" id="node-color" class="form-control" style="padding: 5px 8px;" [(ngModel)]="SelectedNodeColorVariable2" (change)="onNodeColorChanged()">
+              </div>
+            </div>
+            <div class="form-group row additionalDateField">
+              <div class="col-4">
+                <label>Date Field 3</label>
+              </div>
+              <div class="col-6" style="padding-right: 5px">
+                <p-dropdown id="epiCurve-date-field" [options]="FieldList" appendTo="body"  [(ngModel)]="SelectedDateFieldVariable3" (ngModelChange)="refresh()"></p-dropdown>
+              </div>
+              <div class="col-2" style="padding: 0px 15px 0px 10px">
+                <input type="color" id="node-color" class="form-control" style="padding: 5px 8px;" [(ngModel)]="SelectedNodeColorVariable3" (change)="onNodeColorChanged()">
+              </div>
+            </div>
+            <div class="form-group row" id="useNodeColorRow">
+              <div class="col-4">
+                <label>Use Node Colors</label>
+              </div>
+              <div class="col-6">
+                <p-selectButton [options]="useNodeColorsOptions" [(ngModel)]="useNodeColors" (ngModelChange)="onUseNodeColorChange()"></p-selectButton>
               </div>
             </div>
             <div class="form-group row">
@@ -57,20 +98,15 @@
                 </div>
               </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row" id="useNodeColorRow">
               <div class="col-4">
-                <label>Use Node Colors</label>
+                <label>Legend Position</label>
               </div>
               <div class="col-8">
-                <p-selectButton [options]="useNodeColorsOptions" [(ngModel)]="useNodeColors" (ngModelChange)="onUseNodeColorChange()"></p-selectButton>
+                <p-selectButton [options]="legendPositionOptions" [(ngModel)]="selectedLegendPosition" (ngModelChange)="onLegendPositionChange()"></p-selectButton>
               </div>
             </div>
-            <div class="form-group row" id="epi-color-select">
-              <div class="col-4"><label for="node-color">Color</label></div>
-              <div class="col-8">
-                  <input type="color" id="node-color" class="form-control form-control-sm" value="#1f77b4" [(ngModel)]="SelectedNodeColorVariable" (change)="onNodeColorChanged()">
-              </div>
-            </div>
+
           </div>
         </div>
       </div>

@@ -30,12 +30,21 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
 
   FieldList: SelectItem[] = [];
   SelectedDateFieldVariable;
+  SelectedDateFieldVariable2;
+  SelectedDateFieldVariable3;
   binSizes = ['Day', 'Week', 'Month', 'Quarter', 'Year']
   SelectedBinSize = 'Month';
   useNodeColorsOptions = [true, false]
-  useNodeColors: boolean = false;
+  useNodeColors: boolean = true;
   SelectedNodeColorVariable;
+  SelectedNodeColorVariable2;
+  SelectedNodeColorVariable3;
   tickInterval;
+
+  graphTypes = ['Single Date Field', 'Multi: Side by Side', 'Multi: Overlay']
+  selectedGraphType = 'Multi: Overlay';
+  legendPositionOptions = ['Hide', 'Left', 'Right', 'Bottom']
+  selectedLegendPosition = 'Left'
 
   ShowEpiSettingsPane: boolean = false;
   ShowEpiExportPane: boolean = false;
@@ -65,8 +74,6 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
   private timeDomainStart;
   private timeDomainEnd;
 
-  // XXXX: implement background color??, epicurve style: currently have stacked, try side by side or overlay
-
   constructor(
     private commonService: CommonService,
     @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer,
@@ -95,12 +102,20 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
 
     });
 
-    this.commonService.session.style.widgets["epi-timeline-date-field"] = 'Diagnosis date'
     this.useNodeColors = false;
-    this.SelectedNodeColorVariable = '#1f77b4';
+    this.SelectedNodeColorVariable = '#f5d742';
+    this.SelectedNodeColorVariable2 = '#f20fff';
+    this.SelectedNodeColorVariable3 = '#20ff1a';
     this.tickInterval = 1;
 
+    this.SelectedDateFieldVariable = 'None';
+    this.SelectedDateFieldVariable2 = 'None';
+    this.SelectedDateFieldVariable3 = 'None';
+
+    //this.commonService.session.style.widgets["epi-timeline-date-field"] = 'ipstart';
     this.SelectedDateFieldVariable = this.commonService.session.style.widgets["epi-timeline-date-field"];
+    //this.SelectedDateFieldVariable2 = 'ipend';
+    //this.SelectedDateFieldVariable3 = 'Diagnosis date'
     if (this.commonService.session.style.widgets["epi-timeline-date-field"] || !this.FieldList.includes(this.commonService.session.style.widgets["epi-timeline-date-field"])) {
       this.ShowEpiSettingsPane = true;
     }
@@ -111,42 +126,29 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
 
   // this.initializeD3Chart();
   this.setupEventListeners();
+  this.onGraphTypeChange(false);
   this.refresh();
   console.log(this.commonService.session.style.widgets["node-color"]);
  }
   
 /**
- * Clears previous histogram/epi curve and creates a new one
+ * Clears previous histogram/epi curve and creates a new one; calls refresh multi if needed
  */
 public refresh(): void {
+  if (this.selectedGraphType=='Multi: Overlay' || this.selectedGraphType=='Multi: Side by Side') {
+    this.refreshMulti();
+    return;
+  }
+
   $('#epiCurveSVG').empty()
-  const wrapper = $(this.epiCurveElement.nativeElement).parent();
-  $('#epiCurve').height(wrapper.height() - 50);
-  
-  this.width = wrapper.width() - this.margin.left - this.margin.right;
-  // height represents the height of y axis
-  this.height = wrapper.height() - this.margin.top - this.margin.bottom - 50;
-  this.middle = this.height / 2;
+
+  this.updateSizes();
   if (this.height < 0) {
     return;
   }
 
   const field = this.SelectedDateFieldVariable;
-  let times = [];
-  this.vnodes = JSON.parse(JSON.stringify(this.commonService.session.data.nodes));
-  this.vnodes.forEach(d => {
-    const time = moment(d[field as string]); // Cast 'field' as string
-    if (time.isValid()) {
-      d[field as string] = time.toDate(); // Cast 'field' as string
-      times.push(d[field as string]); // Cast 'field' as string
-    } else {
-      d[field as string] = null; // Cast 'field' as string
-    }
-  });
-
-  if (times.length < 2) {
-    times = [new Date(2000, 1, 1), new Date()];
-  }
+  let times = this.getTimes([field]);
 
   // updates this.timeDomainStart and this.timeDomainInterval and returns the bin interval
   let binInterval = this.calculateBinInterval(times);
@@ -154,7 +156,7 @@ public refresh(): void {
     return;
   }
 
-  this.x = d3.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]);
+  this.x = d3.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]).nice();
   this.y = d3.scaleLinear().range([this.height, 0]);
 
   this.histogram = d3.histogram().value(d => d[field as string]).domain(this.x.domain()).thresholds(binInterval);
@@ -162,12 +164,12 @@ public refresh(): void {
   this.svg = d3.select(this.epiCurveSVGElement.nativeElement)
     .attr("width", this.width + this.margin.left + this.margin.right)
     .attr("height", this.height + this.margin.top + this.margin.bottom)
-    .attr("transform", `translate(0, ${this.margin.top})`);
+    //.attr("transform", `translate(0, ${this.margin.top})`);
     
 
   const epiCurve = this.svg.append("g")
     .classed("epiCurve-epi-curve", true)
-    .attr("transform", `translate(${this.margin.left}, 0)`);
+    .attr("transform", `translate(${this.margin.left}, 5)`);
 
   let bins = this.histogram(this.vnodes);
   
@@ -181,9 +183,11 @@ public refresh(): void {
   [maxCount, bins] = this.updateBins(bins, colorVariable, nodeColorKeys);
   
 
-  this.y.domain([0, maxCount])//d3.max(bins, d => d.length)]);
+  this.y.domain([0, maxCount]).nice()//d3.max(bins, d => d.length)]);
 
   if (this.useNodeColors && colorVariable != 'None') {
+    let nodeColors = [];
+
     nodeColorKeys.forEach((value, ind) =>{
       epiCurve.selectAll(`rect${ind}`)
       .data(bins)
@@ -193,23 +197,185 @@ public refresh(): void {
       .attr("width", d => this.x(d.x1) - this.x(d.x0))
       .attr("height", d => this.height - this.y(d.length2[ind]))
       .attr("fill", this.commonService.temp.style.nodeColorMap(value) )
+
+      nodeColors.push(this.commonService.temp.style.nodeColorMap(value));
     })
+    this.generateLegend(epiCurve, nodeColors,nodeColorKeys)
   } else {
-  epiCurve.selectAll("rect")
-    .data(bins)
-    .enter()
-    .append("rect")
-    .attr("transform", d => `translate(${this.x(d.x0)}, ${this.y(d.length)})`)
-    .attr("width", d => this.x(d.x1) - this.x(d.x0))
-    .attr("height", d => this.height - this.y(d.length))
-    .attr("fill", this.useNodeColors ? this.commonService.session.style.widgets["node-color"] : this.SelectedNodeColorVariable);
+    let color = this.useNodeColors ? this.commonService.session.style.widgets["node-color"] : this.SelectedNodeColorVariable;
+    epiCurve.selectAll("rect")
+      .data(bins)
+      .enter()
+      .append("rect")
+      .attr("transform", d => `translate(${this.x(d.x0)}, ${this.y(d.length)})`)
+      .attr("width", d => this.x(d.x1) - this.x(d.x0))
+      .attr("height", d => this.height - this.y(d.length))
+      .attr("fill", color);
+
+    this.generateLegend(epiCurve, [color] ,[this.SelectedDateFieldVariable])
   }
 
+  this.updateAxes();
+} 
+
+/**
+ * Updated version of refresh that works for multiple date fields to generate the epi curve graph
+ * Calls refresh() instead if needed
+ */
+private refreshMulti(): void {
+  if (this.selectedGraphType=='Single Date Field') {
+    this.refresh();
+    return;
+  }
+
+  $('#epiCurveSVG').empty()
+
+  this.updateSizes();
+  if (this.height < 0) {
+    return;
+  }
+
+  let fields = [];
+  let colors = [];
+  [this.SelectedDateFieldVariable, this.SelectedDateFieldVariable2, this.SelectedDateFieldVariable3].forEach((dateField, ind) => {
+    if (dateField != 'None') {
+      fields.push(dateField);
+      colors.push([this.SelectedNodeColorVariable, this.SelectedNodeColorVariable2, this.SelectedNodeColorVariable3][ind])
+    }
+  })
+
+  if (fields.length == 0) {
+    return;
+  }
+  // current implementation of times is only used to calculate min and max time of all data given when setting up x axis and bins; there isn't a current need to link times by datapoint with times
+  let times = this.getTimes(fields);
+
+  // updates this.timeDomainStart and this.timeDomainInterval and returns the bin interval
+  let binInterval = this.calculateBinInterval(times);
+  if (binInterval == 0) {
+    return;
+  }
+
+  this.x = d3.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]).nice();
+  this.y = d3.scaleLinear().range([this.height, 0]);
+
+  this.histogram = d3.histogram().domain(this.x.domain()).thresholds(binInterval);
+
+  this.svg = d3.select(this.epiCurveSVGElement.nativeElement)
+    .attr("width", this.width + this.margin.left + this.margin.right)
+    .attr("height", this.height + this.margin.top + this.margin.bottom)
+    .attr("transform", `translate(0, ${this.margin.top})`);
+    
+
+  const epiCurve = this.svg.append("g")
+    .classed("epiCurve-epi-curve", true)
+    .attr("transform", `translate(${this.margin.left}, 5)`);
+
+  let maxCount = 0;
+  let bins = [];
+  fields.forEach((field) => {
+    if (field != 'None') {
+      let currentCount = 0;
+      let currentbin = this.histogram(this.vnodes.map((d) => d[field]).filter(value => value != null));
+      [currentCount, currentbin] = this.updateBins(currentbin);
+      bins.push(currentbin)
+      if (currentCount > maxCount) maxCount = currentCount;
+    }
+  })
+
+  this.y.domain([0, maxCount]).nice();
+
+  if (this.selectedGraphType == 'Multi: Overlay') {
+    fields.forEach((_, ind) => {
+        epiCurve.selectAll(`rect${ind}`)
+        .data(bins[ind])
+        .enter()
+        .append("rect")
+        .attr("transform", d => `translate(${this.x(d.x0)}, ${this.y(d.length)})`)
+        .attr("width", d => this.x(d.x1) - this.x(d.x0))
+        .attr("height", d => this.height - this.y(d.length))
+        .attr("fill", colors[ind])
+        .attr("opacity", 0.6);
+    })
+
+  } else {
+    let numberOfBins = fields.length;
+    let width;
+    let xOffset = [];
+    if (numberOfBins == 1) {
+      width = (d) => this.x(d.x1)- this.x(d.x0);
+      xOffset = [
+        function(d, c) {return c.x(d.x0)}
+      ]
+    } else if (numberOfBins == 2) {
+      width = (d) => (this.x(d.x1)- this.x(d.x0))/2
+      xOffset = [
+        function(d, c) {return c.x(d.x0)},
+        function(d, c) {return c.x(d.x0)+(c.x(d.x1) - c.x(d.x0))/2}
+      ]
+    } else {
+      width = (d) => (this.x(d.x1)- this.x(d.x0))/3;
+      xOffset = [
+        function(d, c) { return c.x(d.x0)},
+        function(d, c) { return c.x(d.x0)+(c.x(d.x1) - c.x(d.x0))/3},
+        function(d, c) { return c.x(d.x0)+2*(c.x(d.x1) - c.x(d.x0))/3}
+      ]
+    }
+    
+    let that = this;
+
+    fields.forEach((_, ind) => {
+        epiCurve.selectAll(`rect${ind}`)
+        .data(bins[ind])
+        .enter()
+        .append("rect")
+        .attr("transform", d => `translate(${xOffset[ind](d, that)}, ${this.y(d.length)})`)
+        .attr("width", width)
+        .attr("height", d => this.height - this.y(d.length))
+        .attr("fill", colors[ind]);
+    });
+  }
+
+  this.updateAxes();
+  this.generateLegend(epiCurve, colors, fields)
+} 
+
+updateSizes() {
+  const wrapper = $(this.epiCurveElement.nativeElement).parent();
+  $('#epiCurve').height(wrapper.height() - 50);
+  this.width = wrapper.width() - this.margin.left - this.margin.right;
+  // height represents the height of y axis
+  this.height = wrapper.height() - this.margin.top - this.margin.bottom - 50;
+  this.middle = this.height / 2;
+}
+
+getTimes(fields) {
+  let times = [];
+  this.vnodes = JSON.parse(JSON.stringify(this.commonService.session.data.nodes));
+  this.vnodes.forEach(d => {
+    fields.forEach(field => {
+      const time = moment(d[field as string]); // Cast 'field' as string
+      if (time.isValid()) {
+        d[field as string] = time.toDate();
+        times.push(d[field as string]); // Cast 'field' as string
+      } else {
+        d[field as string] = null; // Cast 'field' as string
+      }
+    })
+  });
+
+  if (times.length < 2) {
+    times = [new Date(2000, 1, 1), new Date()];
+  }
+  return times;
+}
+
+updateAxes() {
   let [xAxis, xLabelOffset] = this.configureXAxisSettings();
 
   this.svg.append("g")
     .attr("class", "axis axis--x")
-    .attr("transform", `translate(${this.margin.left}, ${this.height})`)
+    .attr("transform", `translate(${this.margin.left}, ${this.height+5})`)
     .call(xAxis)
     .attr("text-anchor", "center")
     .selectAll("text")
@@ -217,7 +383,7 @@ public refresh(): void {
 
   this.svg.append("g")
     .attr("class", "axis axis--y")
-    .attr("transform", `translate(${this.margin.left}, 0)`)
+    .attr("transform", `translate(${this.margin.left}, 5)`)
     .call(d3.axisLeft(this.y))
     .attr("text-anchor", null)
     .selectAll("text")
@@ -228,7 +394,7 @@ public refresh(): void {
     .attr("text-anchor", "center")
     .attr("x", this.width/2)
     .attr("y", this.height + 40)
-    .text(`${this.commonService.capitalize(this.SelectedDateFieldVariable)} (${this.SelectedBinSize=='Day'? 'Dai': this.SelectedBinSize}ly)`);
+    .text(`Date (${this.SelectedBinSize=='Day'? 'Dai': this.SelectedBinSize}ly Bins)`);
 
   this.svg.append("text")
     .attr("class", "y label")
@@ -265,7 +431,53 @@ public refresh(): void {
     .call(this.brush);
     */
 
+}
+
+generateLegend(epiCurve, colors, fieldNames) {
+  let xOffset = 50; // default for left position
+  if (this.selectedLegendPosition == 'Hide') {
+    return;
+  } else if (this.selectedLegendPosition == 'Bottom') {
+    let prevLength = 0;
+    let rowCount = 0;
+    let y = this.height + 50;
+    if (this.selectedGraphType=='Single Date Field' && this.useNodeColors && this.commonService.session.style.widgets['node-color-variable'] != 'None') {
+      let field = this.commonService.capitalize(this.commonService.session.style.widgets['node-color-variable']);
+      epiCurve.append("text").attr("x", 70).attr("y", y).text(field + ': ').style("font-size", "15px").attr("alignment-baseline","middle")
+      prevLength += field.length + 3;
+    }
+    fieldNames.forEach((name, i) => {
+      let nLength = name==null ? 7: name.length
+      let baseX = 70+40*(rowCount) + prevLength*7.5;
+      if (baseX+24+nLength*3 > this.width-70) {
+        rowCount = 0;
+        y += 30;
+        prevLength = 0;
+        baseX = 70;
+      }
+
+      epiCurve.append("circle").attr("cx", baseX).attr("cy", y).attr("r", 6).style("fill", colors[i])
+      epiCurve.append("text").attr("x", baseX+10).attr("y", y).text(this.commonService.capitalize(name==null? '(Empty)': name)).style("font-size", "15px").attr("alignment-baseline","middle")
+
+      prevLength += nLength;
+      rowCount += 1;
+    })
+    return;
+  } else if (this.selectedLegendPosition == 'Right') {
+    xOffset = this.width - 120;
   }
+  let count = 0;
+  if (this.selectedGraphType=='Single Date Field' && this.useNodeColors && this.commonService.session.style.widgets['node-color-variable'] != 'None') {
+    let field = this.commonService.capitalize(this.commonService.session.style.widgets['node-color-variable']);
+    epiCurve.append("text").attr("x", xOffset).attr("y", 30).text(field + ': ').style("font-size", "15px").attr("alignment-baseline","middle")
+    count += 1;
+  }
+  fieldNames.forEach((name, i) => {
+    epiCurve.append("circle").attr("cx",xOffset).attr("cy",30*(count+1)).attr("r", 6).style("fill", colors[i])
+    epiCurve.append("text").attr("x", xOffset+20).attr("y", 30*(count+1)).text(this.commonService.capitalize(name==null? '(Empty)': name)).style("font-size", "15px").attr("alignment-baseline","middle")
+    count += 1;
+  })
+}
 
 private setupEventListeners(): void {
 
@@ -314,21 +526,24 @@ private setupEventListeners(): void {
  * @returns return a d3 time range such as d3.timeMonth.range()
  */
 calculateBinInterval(times) {
+  let minTime = Math.min(...times);
+  let maxTime = Math.max(...times);
+
   if (this.SelectedBinSize == 'Day') {
-    this.timeDomainStart = d3.timeDay(Math.min(...times));
-    this.timeDomainEnd = d3.timeDay.ceil(Math.max(...times));
+    this.timeDomainStart = d3.timeMonth(minTime);
+    this.timeDomainEnd = d3.timeMonth.ceil(maxTime);
     return d3.timeDay.range(this.timeDomainStart, this.timeDomainEnd);
   } else   if (this.SelectedBinSize == 'Week') {
-    this.timeDomainStart = d3.timeMonday(Math.min(...times));
-    this.timeDomainEnd = d3.timeMonday.ceil(Math.max(...times));
+    this.timeDomainStart = d3.timeMonth(minTime);
+    this.timeDomainEnd = d3.timeMonth.ceil(maxTime);
     return d3.timeMonday.range(this.timeDomainStart, this.timeDomainEnd);
   } else   if (this.SelectedBinSize == 'Month') {
-    this.timeDomainStart = d3.timeMonth(Math.min(...times));
-    this.timeDomainEnd = d3.timeMonth.ceil(Math.max(...times));
+    this.timeDomainStart = d3.timeMonth(minTime);
+    this.timeDomainEnd = d3.timeMonth.ceil(maxTime);
     return d3.timeMonth.range(this.timeDomainStart, this.timeDomainEnd);
   } else   if (this.SelectedBinSize == 'Quarter') {
-    this.timeDomainStart = d3.timeMonth(Math.min(...times), 3);
-    this.timeDomainEnd = d3.timeMonth.ceil(Math.max(...times), 3);
+    this.timeDomainStart = d3.timeMonth(minTime, 3);
+    this.timeDomainEnd = d3.timeMonth.ceil(maxTime, 3);
     // for quarter we may need to update earliest month so that quarters are consistant (always start on Jan, April, July, or October)
     if ([1, 2].includes(this.timeDomainStart.getMonth())){
       this.timeDomainStart.setMonth(0);
@@ -341,8 +556,8 @@ calculateBinInterval(times) {
     }
     return d3.timeMonth.range(this.timeDomainStart, this.timeDomainEnd, 3);
   } else   if (this.SelectedBinSize == 'Year') {
-    this.timeDomainStart = d3.timeYear(Math.min(...times));
-    this.timeDomainEnd = d3.timeYear.ceil(Math.max(...times));
+    this.timeDomainStart = d3.timeYear(minTime);
+    this.timeDomainEnd = d3.timeYear.ceil(maxTime);
     return d3.timeYear.range(this.timeDomainStart, this.timeDomainEnd);
   } else {
     alert("Invalid bin size selected");
@@ -356,7 +571,7 @@ calculateBinInterval(times) {
  * 
  * Also returns maxCount which is used for setting y axis max value
  */
-updateBins(bins, colorVariable, nodeColorKeys) {
+updateBins(bins, colorVariable='None', nodeColorKeys=undefined) {
   let maxCount = 0;
   // cumulative with multiple colors per column
   if (this.useNodeColors && !this.commonService.session.style.widgets["timeline-noncumulative"] && colorVariable != 'None') {
@@ -450,6 +665,17 @@ onBinSizeChange() {
   this.refresh();
 }
 
+onGraphTypeChange(refresh=true) {
+  if (this.selectedGraphType == 'Multi: Overlay' || this.selectedGraphType == 'Multi: Side by Side') {
+    $('#useNodeColorRow').slideUp();
+    $('.additionalDateField').slideDown();
+  } else {
+    $('.additionalDateField').slideUp();
+    $('#useNodeColorRow').slideDown();
+  }
+  if (refresh) this.refresh();
+}
+
 onUseNodeColorChange() {
   if (this.useNodeColors) {
     $('#epi-color-select').slideUp();
@@ -467,12 +693,20 @@ onNodeColorChanged() {
   this.refresh();
 }
 
+onLegendPositionChange() {
+  if (this.selectedLegendPosition == 'Bottom') {
+    this.margin.bottom = 100;
+  } else {
+    this.margin.bottom = 50;
+  }
+  this.refresh();
+}
+
 openSettings() {
   this.visuals.epiCurve.ShowEpiSettingsPane = !this.visuals.epiCurve.ShowEpiSettingsPane;
 }
 
 setCumulative(value: boolean): void {
-  console.log('set cum2 ');
   this.cumulative = value;
   this.commonService.session.style.widgets["timeline-noncumulative"] =  !value;
 
@@ -485,7 +719,6 @@ setCumulative(value: boolean): void {
  */
 setCalculatedResolution() {
   let [width, height] = this.getImageDimensions();
-  console.log(width, height);
   this.CalculatedResolution = (Math.round(width * this.SelectedNetworkExportScaleVariable) + " x " + Math.round(height * this.SelectedNetworkExportScaleVariable) + "px");
 }
 
@@ -702,8 +935,7 @@ openExport() {
 }
 
 exportVisualization() {
-  console.log(`${this.EpiExportFileName}.${this.EpiExportFileType}`);
-  let epiCurve = this.epiCurveSVGElement.nativeElement;
+  //let epiCurve = this.epiCurveSVGElement.nativeElement;
   //let $epiCurve = $(this.epiCurve);
 
   // add microbeTrace logo as a watermark
@@ -718,18 +950,18 @@ exportVisualization() {
 
   // add node color table
   // node color table not need if all nodes are same color
-  let nodeLegend: any = false;
+  /*let nodeLegend: any = false;
   if (this.commonService.session.style.widgets['node-color-variable']!= 'None' && this.useNodeColors) {
     let [addNodeColorTable, Xoffset, Yoffset] = this.nodeColorTableInView();
     if (addNodeColorTable) {
       let nodeColorKeys = this.commonService.session.style.nodeColorsTableKeys[this.commonService.session.style.widgets['node-color-variable']].map(value => value=='null' ? null: value);
       var columns = [];
-      columns.push('Node ' + this.commonService.titleize(this.commonService.session.style.widgets["node-color-variable"]));
+      columns.push('Node ' + this.commonService.capitalize(this.commonService.session.style.widgets["node-color-variable"]));
       columns.push('Color');
       var data = [];
       nodeColorKeys.forEach((value, i) => {
           let line = {
-              Node: this.commonService.titleize("" + value),
+              Node: this.commonService.capitalize("" + value),
               Color: '<div  style="margin-left:5px; width:40px;height:12px;background:' + this.commonService.temp.style.nodeColorMap(value)  +'"> </div>'
           }
           data.push(line);
@@ -746,7 +978,7 @@ exportVisualization() {
       });
       nodeLegend = this.tabulate2(data, columns, nodeWrapper, epiCurve, 200,false); 
     }
-  }
+  }*/
 
   if (this.EpiExportFileType == 'svg') {
       let content = this.commonService.unparseSVG(this.epiCurveSVGElement.nativeElement);
@@ -757,7 +989,7 @@ exportVisualization() {
   } else {
       saveSvgAsPng(this.epiCurveSVGElement.nativeElement, this.EpiExportFileName + '.' + this.EpiExportFileType, {
           scale: this.SelectedNetworkExportScaleVariable,
-          backgroundColor: this.commonService.session.style.widgets['background-color'],
+          backgroundColor: "#ffffff",
           encoderType: 'image/' + this.EpiExportFileType,
           //encoderOptions: this.SelectedNetworkExportQualityVariable
       }).then(() => {
@@ -773,10 +1005,10 @@ exportVisualization() {
  * XXXX To be implemented: the idea is to determine is node color table is in bounds of view;
  * if it is return true and x and y offsets to be used to place node color table on view when exporting 
  */
-nodeColorTableInView() {
+/*nodeColorTableInView() {
   let Xoffset = 0, Yoffset = 0;
   return [false, Xoffset, Yoffset];
-}
+}*/
 
 /**
  * Converts table such as node color table, link color table or node symbol table from dialog window into element on twoD network svg when
@@ -789,7 +1021,7 @@ nodeColorTableInView() {
  * @param leftOffset boolean
  * @returns foreignObject that can be removed later by foreignObjectName.remove()
  */
-tabulate2 = (data, columns, wrapper, container, topOffset: number, leftOffset: boolean) => {
+/*tabulate2 = (data, columns, wrapper, container, topOffset: number, leftOffset: boolean) => {
 
   console.log('wrapper: ', wrapper);
   console.log('left: ', wrapper.offsetLeft);
@@ -834,7 +1066,7 @@ tabulate2 = (data, columns, wrapper, container, topOffset: number, leftOffset: b
     .append("td")
     .html(function(d) { return d.value; });
   return foreignObj;
-}
+}*/
 
 openRefreshScreen() {
 
