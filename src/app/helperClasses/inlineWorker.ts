@@ -17,7 +17,8 @@ export class InlineWorker {
 
         if (WORKER_ENABLED) {
             let urls = ["https://raw.githubusercontent.com/CDCgov/patristic/master/dist/patristic.js",
-            "https://raw.githubusercontent.com/CDCgov/tn93.js/master/dist/tn93.js"];
+            "https://raw.githubusercontent.com/CDCgov/tn93.js/master/dist/tn93.js",
+            "https://raw.githubusercontent.com/CDCgov/bioseq-js/master/dist/bioseq.js"];
             let functionBody = "";
             for (let i=0; i<urls.length; i++){
                 let request = new XMLHttpRequest();
@@ -34,6 +35,11 @@ export class InlineWorker {
                     let start = returnValue.indexOf("\n");
                     let finish = returnValue.indexOf("if(typeof exports !== 'undefined'){");
                     functionBody += returnValue.substring(start + 1, finish);
+                }
+                else if (i === 2){
+                    let start = returnValue.indexOf("var bioseq");
+                    let finish = returnValue.indexOf("return bioseq");
+                    functionBody += returnValue.substring(start, finish);
                 }
                 else {
                     functionBody += returnValue;

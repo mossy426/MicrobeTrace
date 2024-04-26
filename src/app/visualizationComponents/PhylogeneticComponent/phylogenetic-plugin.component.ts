@@ -168,14 +168,26 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
       this.styleTree();
     } else {
     */
-      const newickString = this.commonService.computeTree();
-      newickString.then((x) => {
-        const tree = this.buildTree(x);
+      //@ts-ignore
+      if (this.visuals.phylogenetic.commonService.session.data.hasOwnProperty("newickString") && this.visuals.phylogenetic.commonService.session.data.newickString) {
+        //@ts-ignore
+        let newickString = this.visuals.phylogenetic.commonService.session.data.newickString;
+        const tree = this.buildTree(newickString);
         this.tree = tree;
         this.commonService.visuals.phylogenetic.tree = tree;
         this.hideTooltip();
         this.styleTree();
-      });
+      } else {
+          let newickString = this.commonService.computeTree();
+          newickString.then((x) => {
+            const tree = this.buildTree(x);
+            this.tree = tree;
+            this.commonService.visuals.phylogenetic.tree = tree;
+            this.hideTooltip();
+            this.styleTree();
+        });
+      }
+
    // }
   }
 

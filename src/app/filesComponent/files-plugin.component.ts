@@ -621,6 +621,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
    */
   launchClick() {
 
+    console.log(this.displayloadingInformationModal);
     const thresholdOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"];
     const metricOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["default-distance-metric"];
     const ambiguityOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["ambiguity-resolution-strategy"];
@@ -666,7 +667,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
     $('#launch').prop('disabled', true);
 
     $('#loading-information').html('');
-
+    console.log(this.displayloadingInformationModal);
     this.visuals.microbeTrace.commonService.temp.messageTimeout = setTimeout(() => {
       $('#loadCancelButton').slideDown();
       // abp.notify.warn('If you stare long enough, you can reverse the DNA Molecule\'s spin direction');
@@ -698,12 +699,25 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
           this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'snps';
           this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable = 'snps';
           $('#default-distance-metric').val('SNPs').trigger('change');
-          $('#default-distance-threshold', '#link-threshold').attr('step', 1).val(16).trigger('change');
-          this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = 16;
-          this.SelectedDefaultDistanceThresholdVariable = '16';
-          this.onLinkThresholdChange('16');
-          this.visuals.microbeTrace.SelectedLinkThresholdVariable = '16';
-          this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 16;
+
+          console.log(auspiceData["tree"]["children"][0]);
+          // This is a bizarre line, but I need to check if the div values are more or less than one. The first one is always zero, so we need to go to the second one
+          if(auspiceData["tree"]["children"][0]["data"]["div"] > 0 && auspiceData["tree"]["children"][0]["data"]["div"] < 1){
+            console.log(this.displayloadingInformationModal);
+            $('#default-distance-threshold', '#link-threshold').attr('step', 1).val(0.015).trigger('change');
+            this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = 0.015;
+            this.SelectedDefaultDistanceThresholdVariable = '0.015';
+            this.onLinkThresholdChange('0.015');
+            this.visuals.microbeTrace.SelectedLinkThresholdVariable = '0.015';
+            this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 0.015;
+          } else {
+            $('#default-distance-threshold', '#link-threshold').attr('step', 1).val(7).trigger('change');
+            this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = 7;
+            this.SelectedDefaultDistanceThresholdVariable = '7';
+            this.onLinkThresholdChange('7');
+            this.visuals.microbeTrace.SelectedLinkThresholdVariable = '7';
+            this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 7;
+          }
           this.visuals.microbeTrace.commonService.session.meta.startTime = Date.now();
           this.visuals.microbeTrace.commonService.session.data.tree = auspiceData['tree'];
           this.visuals.microbeTrace.commonService.session.data.newickString = auspiceData['newick'];
@@ -1142,6 +1156,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
         let links = 0;
         let newLinks = 0;
         let newNodes = 0;
+        this.visuals.microbeTrace.commonService.session.data.newickString = file.contents;
         const tree = patristic.parseNewick(file.contents);
         let m = tree.toMatrix(), matrix = m.matrix, labels = m.ids.map(this.visuals.microbeTrace.commonService.filterXSS), n = labels.length;
         for (let i = 0; i < n; i++) {

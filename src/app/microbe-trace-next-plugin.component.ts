@@ -355,7 +355,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             if (cachedLSV) {
                 if (cachedLSV === 'snps') {
                    this.metric = 'snps';
-                   this.threshold = '16';
+                   this.threshold = '7';
                    $('#ambiguities-menu').hide();
                 } else {
                    this.metric = 'tn93';
@@ -1838,7 +1838,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             this.DisplayUrlDialog("Open");
             this.continueClicked();
             this.displayUrlDialog = false;
-            this.displayMTDialog = true;
+            //this.displayMTDialog = true;
             // this.DisplayMTDialog("Open");
             /**
             this.commonService.openAuspiceUrl(this.auspiceUrlVal)
@@ -2363,7 +2363,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     getAuspiceName(url: string) {
       const split = url.split('=');
-      const nameParts = split[1].split('/');
+      console.log(split);
+      const nameParts = split.length>1 ? split[1].split('/') : split[0].split('/');
       return nameParts.join('_');
       return 'auspice_import_via_url';
     }
