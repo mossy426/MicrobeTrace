@@ -617,6 +617,7 @@ export class CommonService extends AppComponentBase implements OnInit {
                 newNode._id = newNode.id;
             }
         }
+        newNode._id = newNode._id.trim();
 
         if (window.context.commonService.session.data.nodeExclusions.indexOf(newNode._id) > -1) {
             return 0;
@@ -658,6 +659,9 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         const serv = window.context.commonService;
         const matrix = serv.temp.matrix;
+
+        newLink.source = newLink.source.trim();
+        newLink.target = newLink.target.trim();
 
         if (!matrix[newLink.source]) {
             matrix[newLink.source] = {};
