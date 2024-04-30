@@ -896,6 +896,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         newNode._id = newNode.id;
       }
     }
+    newNode._id = newNode._id.trim();
     if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeExclusions.indexOf(newNode._id) > -1) {
       return 0;
     }
@@ -927,6 +928,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   addLink(newLink, check = true) {
     const serv = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService;
     const matrix = serv.temp.matrix;
+    newLink.source = newLink.source.trim();
+    newLink.target = newLink.target.trim();
     if (!matrix[newLink.source]) {
       matrix[newLink.source] = {};
     }
@@ -12272,10 +12275,10 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     this.SelectedDateFieldVariable = 'None';
     this.SelectedDateFieldVariable2 = 'None';
     this.SelectedDateFieldVariable3 = 'None';
-    //this.commonService.session.style.widgets["epi-timeline-date-field"] = 'ipstart';
+    this.commonService.session.style.widgets["epi-timeline-date-field"] = 'ipstart';
     this.SelectedDateFieldVariable = this.commonService.session.style.widgets["epi-timeline-date-field"];
-    //this.SelectedDateFieldVariable2 = 'ipend';
-    //this.SelectedDateFieldVariable3 = 'Diagnosis date'
+    this.SelectedDateFieldVariable2 = 'ipend';
+    this.SelectedDateFieldVariable3 = 'Diagnosis date';
     if (this.commonService.session.style.widgets["epi-timeline-date-field"] || !this.FieldList.includes(this.commonService.session.style.widgets["epi-timeline-date-field"])) {
       this.ShowEpiSettingsPane = true;
     }
@@ -12307,7 +12310,7 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     if (binInterval == 0) {
       return;
     }
-    this.x = d3__WEBPACK_IMPORTED_MODULE_4__.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]).nice();
+    this.x = d3__WEBPACK_IMPORTED_MODULE_4__.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]); //.nice();
     this.y = d3__WEBPACK_IMPORTED_MODULE_4__.scaleLinear().range([this.height, 0]);
     this.histogram = d3__WEBPACK_IMPORTED_MODULE_4__.histogram().value(d => d[field]).domain(this.x.domain()).thresholds(binInterval);
     this.svg = d3__WEBPACK_IMPORTED_MODULE_4__.select(this.epiCurveSVGElement.nativeElement).attr("width", this.width + this.margin.left + this.margin.right).attr("height", this.height + this.margin.top + this.margin.bottom);
@@ -12368,7 +12371,7 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     if (binInterval == 0) {
       return;
     }
-    this.x = d3__WEBPACK_IMPORTED_MODULE_4__.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]).nice();
+    this.x = d3__WEBPACK_IMPORTED_MODULE_4__.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]); //.nice();
     this.y = d3__WEBPACK_IMPORTED_MODULE_4__.scaleLinear().range([this.height, 0]);
     this.histogram = d3__WEBPACK_IMPORTED_MODULE_4__.histogram().domain(this.x.domain()).thresholds(binInterval);
     this.svg = d3__WEBPACK_IMPORTED_MODULE_4__.select(this.epiCurveSVGElement.nativeElement).attr("width", this.width + this.margin.left + this.margin.right).attr("height", this.height + this.margin.top + this.margin.bottom).attr("transform", `translate(0, ${this.margin.top})`);
