@@ -67,10 +67,16 @@ export class DialogSettings {
         }
 
         if (this.isVisible) {
-            const domRect = this.getDomRect();
+            // sometimes getDomRect throws an error, need to revisit when we decide to revisit saving the locations of tables on show/hide
+            try {
+                const domRect = this.getDomRect();
 
-            this.stateBeforeExport.top = domRect.top;
-            this.stateBeforeExport.left = domRect.left;
+                this.stateBeforeExport.top = domRect.top;
+                this.stateBeforeExport.left = domRect.left;
+            } catch {
+                this.stateBeforeExport.top = 100;
+                this.stateBeforeExport.left = 100;  
+            }
         }
 
         this.isVisible = false;

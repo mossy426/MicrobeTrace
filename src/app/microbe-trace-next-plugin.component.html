@@ -79,8 +79,8 @@
             [position]="GlobalSettingsLinkColorDialogSettings.linkLeft" 
             [(visible)]="GlobalSettingsLinkColorDialogSettings.isVisible"  
             [style]="{'z-index': '1'}"
-            (onShow)="SelectedLinkColorTableTypesVariable='Show'"
-            (onHide)="SelectedLinkColorTableTypesVariable='Hide'"
+            (onShow)="showLinkColorTable()"
+            (onHide)="hideLinkColorTable()"
             >
             <ng-template pTemplate="header">
                 <div style="display: flex; justify-content: space-between; width: 100%;">
@@ -109,9 +109,9 @@
         <p-dialog id="global-settings-node-color-table" 
             [position]="GlobalSettingsNodeColorDialogSettings.nodeLeft" 
             [(visible)]="GlobalSettingsNodeColorDialogSettings.isVisible"  
-            (onShow)="SelectedNodeColorTableTypesVariable='Show'"
-            (onHide)="SelectedNodeColorTableTypesVariable='Hide'"
-                    >
+            (onShow)="showNodeColorTable()"
+            (onHide)="hideNodeColorTable()"      
+                    >       
             <ng-template pTemplate="header">
                 <div style="display: flex; justify-content: space-between; width: 100%;">
                     <span>Node Color Table</span>
@@ -297,7 +297,7 @@
                                     <div id="node-color-table-row" [hidden]="!ShowGlobalSettingsNodeColorTable" class="form-group row" title="Should MicrobeTrace display the table of colors?">
                                         <div class="col-4"><label>Nodes Color Table</label></div>
                                         <div class="col-8">
-                                            <p-selectButton hidde [options]="NodeColorTableTypes" [(ngModel)]="SelectedNodeColorTableTypesVariable" (onChange)="onNodeColorTableChanged()"></p-selectButton>
+                                            <p-selectButton [options]="NodeColorTableTypes" [(ngModel)]="SelectedNodeColorTableTypesVariable" (onChange)="onNodeColorTableChanged()"></p-selectButton>
                                         </div>
                                     </div>
 

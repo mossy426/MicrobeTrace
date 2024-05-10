@@ -844,7 +844,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         }
     }
 
-
+    /**
+     * Updates this.commonService.GlobalSettingsModel.SelectedNodeColorTableTypesVariable and 
+     * then hides the node color table or calls onColorNodesByChanged
+     */
     onNodeColorTableChanged() {
 
         if(this.commonService.debugMode) {
@@ -860,7 +863,30 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         }
     }
 
-
+    /**
+     * @param table 'node' | 'link'
+     * @returns boolean of whether the table should be visible based on the table and which view is active
+     * This is just one factor to determine whether to show or hide table, also color by variable and show/hide state
+     */
+    checkActiveView(table: string) {
+        if (table == 'node') {
+            for (let view in this.commonService.visuals) {
+                if (['twoD', 'gisMap', 'phylogenetic'].includes(view) && this.commonService.visuals[view].viewActive) {
+                    return true;
+                }
+            }
+            return false;
+        } else if (table == 'link') {
+            for (let view in this.commonService.visuals) {
+                if (['twoD', 'gisMap'].includes(view) && this.commonService.visuals[view].viewActive) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return false;
+        }
+    }
 
     onShowStatisticsChanged() {
 
@@ -893,6 +919,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.publishUpdateNodeColors();
     }
 
+    /**
+     * calls updateNodeColors() for each view
+     */
     publishUpdateNodeColors() {
         this.homepageTabs.forEach(tab => {
             if (tab.componentRef &&
@@ -940,10 +969,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         if (!this.GlobalSettingsLinkColorDialogSettings.isVisible) {
 
-            if (this.SelectedColorLinksByVariable != "None") {
+            if (this.SelectedColorLinksByVariable != "None" && this.checkActiveView('link')) {
+                this.SelectedLinkColorTableTypesVariable = "Show";
                 this.GlobalSettingsLinkColorDialogSettings.setVisibility(true);
                 this.cachedGlobalSettingsLinkColorVisibility = this.GlobalSettingsLinkColorDialogSettings.isVisible;
-                this.SelectedLinkColorTableTypesVariable = "Show";
+                
                 this.cdref.detectChanges();
             }
         }
@@ -970,7 +1000,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             this.publishUpdateLinkColor();
         }
         else {
-
+            $('#link-color-table').empty();
             $('#link-color-value-row').slideDown();
             $('#link-color-table-row').slideUp();
             this.SelectedLinkColorTableTypesVariable='Hide';
@@ -1344,6 +1374,37 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     }
 
+    showNodeColorTable() {
+        if (this.SelectedNodeColorTableTypesVariable !=' Show') {
+            this.SelectedNodeColorTableTypesVariable='Show';
+            this.onNodeColorTableChanged();
+        };
+    }
+
+    hideNodeColorTable() {
+        if (this.SelectedNodeColorTableTypesVariable != 'Hide') {
+           this.SelectedNodeColorTableTypesVariable='Hide';
+           this.onNodeColorTableChanged()
+        }
+    }
+
+    showLinkColorTable() {
+        if (this.SelectedLinkColorTableTypesVariable !=' Show') {
+            this.SelectedLinkColorTableTypesVariable='Show';
+            this.onLinkColorTableChanged();
+        }
+    }
+
+    hideLinkColorTable() {
+        if (this.SelectedLinkColorTableTypesVariable != 'Hide') {
+           this.SelectedLinkColorTableTypesVariable='Hide';
+           this.onNodeColorTableChanged()
+        }
+    }
+
+    /**
+     * Called when SelectedColorNodesByVariable (keeps track of what variable to use to color nodes by) is changed.
+     */
     onColorNodesByChanged() {
 
         this.commonService.GlobalSettingsModel.SelectedColorNodesByVariable = this.SelectedColorNodesByVariable;
@@ -1351,7 +1412,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         if (!this.GlobalSettingsNodeColorDialogSettings.isVisible) {
 
-            if (this.SelectedColorNodesByVariable != "None") {
+            if (this.SelectedColorNodesByVariable != "None" && this.checkActiveView('node')) {
+                this.SelectedNodeColorTableTypesVariable = 'Show';
                 this.GlobalSettingsNodeColorDialogSettings.setVisibility(true);
                 this.cachedGlobalSettingsNodeColorVisibility = this.GlobalSettingsNodeColorDialogSettings.isVisible;
 
@@ -1379,17 +1441,16 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
             this.visuals.microbeTrace.publishUpdateNodeColors();
 
+        // if color nodes by equals None, then hide node color table
         } else {
-
+            $('#node-color-table').empty();
             $('#node-color-value-row').slideDown();
             $('#node-color-table-row').slideUp();
             this.SelectedNodeColorTableTypesVariable='Hide';
             this.onNodeColorTableChanged();
             
             this.visuals.microbeTrace.publishUpdateNodeColors();
-
         }
-
     }
 
     generateNodeColorTable(tableId: string, isEditable: boolean = true) {
@@ -1876,12 +1937,31 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         });
 
         this._goldenLayoutHostComponent.TabChangedEvent.subscribe((v) => {
-            if(v === "Files" || v === "Epi Curve" || v === "Alignment View") {
+            if (v === "Files" || v === "Epi Curve" || v === "Alignment View" || v == "Table") {
                 this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
                 this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
             } else {
-                this.GlobalSettingsLinkColorDialogSettings.setVisibility(true);
-                this.GlobalSettingsNodeColorDialogSettings.setVisibility(true);
+                if (this.SelectedColorNodesByVariable == 'None') {
+                    this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
+                } else {
+                    this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
+                    this.GlobalSettingsNodeColorDialogSettings.setVisibility(true);  
+                }
+                if (this.SelectedColorLinksByVariable == 'None' || v === "Phylogenetic Tree") {
+                    this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
+                } else {
+                    this.GlobalSettingsLinkColorDialogSettings.setVisibility(true);
+                }
+            }
+            if (this.GlobalSettingsNodeColorDialogSettings.isVisible && this.SelectedNodeColorTableTypesVariable == 'Hide') {
+                this.SelectedNodeColorTableTypesVariable = 'Show';
+            } else if (!this.GlobalSettingsNodeColorDialogSettings.isVisible && this.SelectedNodeColorTableTypesVariable == 'Show') {
+                this.SelectedNodeColorTableTypesVariable = 'Hide';
+            }
+            if (this.GlobalSettingsLinkColorDialogSettings.isVisible && this.SelectedLinkColorTableTypesVariable == 'Hide') {
+                this.SelectedLinkColorTableTypesVariable = 'Show';
+            } else if (!this.GlobalSettingsLinkColorDialogSettings.isVisible && this.SelectedLinkColorTableTypesVariable == 'Show') {
+                this.SelectedLinkColorTableTypesVariable = 'Hide';
             }
         });
         }, 0);
@@ -2868,7 +2948,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 this.showSorting = false;
 
                 // this.GlobalSettingsDialogSettings.setVisibility(false);
-                this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
+                //this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
                 this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
 
                 break;
