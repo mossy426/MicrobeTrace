@@ -654,7 +654,7 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
 
   showTooltip = (d) => {
     if (this.SelectedLeafTooltipShowVariable) {
-      const htmlValue: any = this.SelectedLeafTooltipVariable;
+      let htmlValue: any = this.SelectedLeafTooltipVariable;
 
       let [X, Y] = this.getRelativeMousePosition();
 
@@ -662,8 +662,15 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
 
       const leftVal = X + 8;
       const topVal = Y - 28;
+      let node = this.commonService.session.data.nodes.find(n => n.id === d[0].data.id);
+      if (node === undefined){ 
+        node = this.commonService.session.data.nodes.find(n => n._id === d[0].data.id);
+        if (htmlValue === "id")
+          htmlValue = "_id";
+      }
+      console.log(node);
       d3.select('#phyloTooltip')
-        .html(d[0].data[htmlValue])
+        .html(node[htmlValue])
         .style('position', 'absolute')
         .style('display', 'block')
         .style('left', `${leftVal}px`)
