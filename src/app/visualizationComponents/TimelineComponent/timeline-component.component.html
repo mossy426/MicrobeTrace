@@ -11,165 +11,153 @@
   </span>
 </div>
 
-<p-dialog *ngIf="viewActive" id="epiCurve-settings-pane" [(visible)]="ShowEpiSettingsPane" header="Epi Settings"
-    [style]="{width: '500px', height:'490px'}" appendTo="body">
-  <tabset class="tab-container tabbable-line" style='width: 100%;'>
-    <tab heading="{{'Epi Curve' | localize}}" [active]="true" customClass="m-tabs__item">
-      <div class="tab-pane fade show active" id="table-node-settings" role="tabpanel" aria-labelledby="nodes-tab">
-        <div class="tab-content">
-          <div class="tab-pane fade show active" role="tabpanel">
-            <div class="form-group row">
-              <div class="col-4">
-                <label>Graph Type</label>
-              </div>
-              <div class="col-8">
-                <p-dropdown [options]="graphTypes" appendTo="body"  [(ngModel)]="selectedGraphType" (ngModelChange)="onGraphTypeChange()"></p-dropdown>
-              </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-4">
-                <label>Date Field</label>
-              </div>  
-              <div class="col-6" style="padding-right: 5px">
-                <p-dropdown id="epiCurve-date-field" [options]="FieldList" appendTo="body"  [(ngModel)]="SelectedDateFieldVariable" (ngModelChange)="onDateFieldChange($event)"></p-dropdown>
-              </div>
-              <div class="col-2" style="padding: 0px 15px 0px 10px">
-                <input type="color" id="node-color" class="form-control" style="padding: 5px 8px;" [(ngModel)]="SelectedNodeColorVariable" (change)="onNodeColorChanged()" *ngIf="!useNodeColors || selectedGraphType!='Single Date Field'">
-              </div>  
-            </div>
-            <div class="form-group row additionalDateField">
-              <div class="col-4">
-                <label>Date Field 2</label>
-              </div>
-              <div class="col-6" style="padding-right: 5px">
-                <p-dropdown id="epiCurve-date-field" [options]="FieldList" appendTo="body"  [(ngModel)]="SelectedDateFieldVariable2" (ngModelChange)="refresh()"></p-dropdown>
-              </div>
-              <div class="col-2" style="padding: 0px 15px 0px 10px">
-                <input type="color" id="node-color" class="form-control" style="padding: 5px 8px;" [(ngModel)]="SelectedNodeColorVariable2" (change)="onNodeColorChanged()">
-              </div>
-            </div>
-            <div class="form-group row additionalDateField">
-              <div class="col-4">
-                <label>Date Field 3</label>
-              </div>
-              <div class="col-6" style="padding-right: 5px">
-                <p-dropdown id="epiCurve-date-field" [options]="FieldList" appendTo="body"  [(ngModel)]="SelectedDateFieldVariable3" (ngModelChange)="refresh()"></p-dropdown>
-              </div>
-              <div class="col-2" style="padding: 0px 15px 0px 10px">
-                <input type="color" id="node-color" class="form-control" style="padding: 5px 8px;" [(ngModel)]="SelectedNodeColorVariable3" (change)="onNodeColorChanged()">
-              </div>
-            </div>
-            <div class="form-group row" id="useNodeColorRow">
-              <div class="col-4">
-                <label>Use Node Colors</label>
-              </div>
-              <div class="col-6">
-                <p-selectButton [options]="useNodeColorsOptions" [(ngModel)]="useNodeColors" (ngModelChange)="onUseNodeColorChange()"></p-selectButton>
-              </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-4">
-                <label>Bin Size</label>
-              </div>
-              <div class="col-8">
-                <p-dropdown id="epiCurve-date-field" [options]="binSizes" appendTo="body"  [(ngModel)]="SelectedBinSize" (ngModelChange)="onBinSizeChange()"></p-dropdown>
-              </div>
-            </div>
-            <div class="form-group row" title="What interval to display ticks on x axis" id="epi-tick-size">
-              <div class="col-4">
-                  <label for="cluster-minimum-size">Tick Interval</label>
-              </div>
-              <div class="col-8">
-                  <input type="number" class="form-control form-control-sm" min="1" max="4" step="1" [(ngModel)]="tickInterval" (ngModelChange)="onTickIntevalChange()">
-              </div>
+<p-dialog *ngIf="viewActive" id="epiCurve-settings-pane" [(visible)]="ShowEpiSettingsPane" header="Epi Curve Settings"
+  [style]="{width: '500px', height:'490px'}" appendTo="body">
+  <div class="tab-pane fade show active" id="table-node-settings" role="tabpanel" aria-labelledby="nodes-tab">
+    <div class="tab-content">
+      <div class="tab-pane fade show active" role="tabpanel">
+        <div class="form-group row">
+          <div class="col-4">
+            <label>Graph Type</label>
           </div>
-            <div class="form-group row">
-              <div class="col-4">Epi Curve</div>
-              <div class="col-8">
-                <div class="btn-group btn-group-toggle w-100">
-                  <label class="btn btn-light btn-sm col" [class.active]="!cumulative">
-                    <input type="radio" name="epiCurve-cumulation" (click)="setCumulative(false)">
-                    Noncumulative
-                  </label>
-                  <label class="btn btn-light btn-sm col" [class.active]="cumulative">
-                    <input type="radio" name="epiCurve-cumulation" (click)="setCumulative(true)">
-                    Cumulative
-                  </label>
-                </div>
-              </div>
+          <div class="col-8">
+            <p-dropdown [options]="graphTypes" appendTo="body"  [(ngModel)]="selectedGraphType" (ngModelChange)="onGraphTypeChange()"></p-dropdown>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-4">
+            <label>Date Field</label>
+          </div>  
+          <div class="col-6" style="padding-right: 5px">
+            <p-dropdown id="epiCurve-date-field" [options]="FieldList" appendTo="body"  [(ngModel)]="SelectedDateFieldVariable" (ngModelChange)="onDateFieldChange(0)"></p-dropdown>
+          </div>
+          <div class="col-2" style="padding: 0px 15px 0px 10px" *ngIf="selectedGraphType!='Single Date Field' || widgets['epiCurve-stackColorBy'] == 'None'">
+            <input type="color" id="epi-color-select" class="form-control" style="padding: 5px 8px;" [(ngModel)]="widgets['epiCurve-colors'][0]" (change)="onNodeColorChanged()">
+          </div>  
+        </div>
+        <div class="form-group row additionalDateField" *ngIf="selectedGraphType!='Single Date Field'">
+          <div class="col-4">
+            <label>Date Field 2</label>
+          </div>
+          <div class="col-6" style="padding-right: 5px">
+            <p-dropdown id="epiCurve-date-field" [options]="FieldList" appendTo="body"  [(ngModel)]="SelectedDateFieldVariable2" (ngModelChange)="onDateFieldChange(1)"></p-dropdown>
+          </div>
+          <div class="col-2" style="padding: 0px 15px 0px 10px">
+            <input type="color" id="node-color" class="form-control" style="padding: 5px 8px;" [(ngModel)]="widgets['epiCurve-colors'][1]" (change)="onNodeColorChanged()">
+          </div>
+        </div>
+        <div class="form-group row additionalDateField" *ngIf="selectedGraphType!='Single Date Field'">
+          <div class="col-4">
+            <label>Date Field 3</label>
+          </div>
+          <div class="col-6" style="padding-right: 5px">
+            <p-dropdown id="epiCurve-date-field" [options]="FieldList" appendTo="body"  [(ngModel)]="SelectedDateFieldVariable3" (ngModelChange)="onDateFieldChange(2)"></p-dropdown>
+          </div>
+          <div class="col-2" style="padding: 0px 15px 0px 10px">
+            <input type="color" id="node-color" class="form-control" style="padding: 5px 8px;" [(ngModel)]="widgets['epiCurve-colors'][2]" (change)="onNodeColorChanged()">
+          </div>
+        </div>
+        <div class="form-group row" id="useNodeColorRow" *ngIf="selectedGraphType=='Single Date Field'">
+          <div class="col-4">
+            <label>Stack Color By</label>
+          </div>
+          <div class="col-6" style="padding-right: 5px">
+            <p-dropdown id="epiCurve-date-field" [options]="FieldListStack" appendTo="body"  [(ngModel)]="this.widgets['epiCurve-stackColorBy']" (ngModelChange)="onUseNodeColorChange()"></p-dropdown>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-4">
+            <label>Bin Size</label>
+          </div>
+          <div class="col-8">
+            <p-dropdown id="epiCurve-date-field" [options]="binSizes" appendTo="body"  [(ngModel)]="widgets['epiCurve-binSize']" (ngModelChange)="onBinSizeChange()"></p-dropdown>
+          </div>
+        </div>
+        <div class="form-group row" title="What interval to display ticks on x axis" id="epi-tick-size">
+          <div class="col-4">
+              <label for="cluster-minimum-size">Tick Interval</label>
+          </div>
+          <div class="col-8">
+              <input type="number" class="form-control form-control-sm" min="1" max="4" step="1" [(ngModel)]="tickInterval" (ngModelChange)="onTickIntevalChange()">
+          </div>
+      </div>
+        <div class="form-group row">
+          <div class="col-4">Epi Curve</div>
+          <div class="col-8">
+            <div class="btn-group btn-group-toggle w-100">
+              <label class="btn btn-light btn-sm col" [class.active]="!widgets['epiCurve-cumulative']">
+                <input type="radio" name="epiCurve-cumulation" (click)="setCumulative(false)">
+                Noncumulative
+              </label>
+              <label class="btn btn-light btn-sm col" [class.active]="widgets['epiCurve-cumulative']">
+                <input type="radio" name="epiCurve-cumulation" (click)="setCumulative(true)">
+                Cumulative
+              </label>
             </div>
-            <div class="form-group row" id="useNodeColorRow">
-              <div class="col-4">
-                <label>Legend Position</label>
-              </div>
-              <div class="col-8">
-                <p-selectButton [options]="legendPositionOptions" [(ngModel)]="selectedLegendPosition" (ngModelChange)="onLegendPositionChange()"></p-selectButton>
-              </div>
-            </div>
-
+          </div>
+        </div>
+        <div class="form-group row" id="useNodeColorRow">
+          <div class="col-4">
+            <label>Legend Position</label>
+          </div>
+          <div class="col-8">
+            <p-selectButton [options]="legendPositionOptions" [(ngModel)]="widgets['epiCurve-legendPosition']" (ngModelChange)="onLegendPositionChange()"></p-selectButton>
           </div>
         </div>
       </div>
-    </tab>
-  </tabset>
+    </div>
+  </div>
 </p-dialog>
 
 <p-dialog *ngIf="viewActive" id="epi-export-modal" [(visible)]="ShowEpiExportPane" appendTo="body" header="Export Epi Curve">
-  <tabset class="tab-container tabbable-line">
-      <tab heading="{{'Images' | localize}}" [active]="true" customClass="m-tabs__item">
-          <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                  <div class="modal-body" style='min-width: 400px; height: 100%;'>
-                      <div class="form-group row">
-                          <div class="col-9">
-                              <input type="text" class="form-control form-control-sm"
-                                  placeholder="Filename" [(ngModel)]="EpiExportFileName">
-                          </div>
-                          <div class="col-3">
-                              <select [(ngModel)]="EpiExportFileType" class="form-control form-control-sm">
-                                  <option>svg</option>
-                                  <option>png</option>
-                              </select>
-                          </div>
-                      </div>
-                      <div [hidden]="EpiExportFileType=='svg'">
-                        <p-accordion>
-                            <p-accordionTab style="color:#495057" header="Advanced">
-                                <div id="network-export-advanced">
-                                    <div class="form-group row">
-                                        <div class="col-3">
-                                            <label for="network-export-scale">Scale</label>
-                                        </div>
-                                        <div class="col-9">
-                                            <input type="number" id="network-export-scale" class="form-control form-control-sm" min="0" max="2" step="0.1" value="1" [(ngModel)]="SelectedNetworkExportScaleVariable" (ngModelChange)="updateCalculatedResolution()">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-3">Resolution</div>
-                                        <div id="network-export-dimensions" class="col-9 text-right">{{CalculatedResolution}}</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <label for="network-export-quality">Quality</label>
-                                        </div>
-                                        <div class="col-9">
-                                            <input type="range" class="custom-range" id="network-export-quality" min="0" max="1.0" value="0.92" step="0.01" [(ngModel)]="SelectedNetworkExportQualityVariable">
-                                        </div>
-                                    </div>
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-body" style='min-width: 400px; height: 100%;'>
+              <div class="form-group row">
+                  <div class="col-9">
+                      <input type="text" class="form-control form-control-sm" placeholder="Filename" [(ngModel)]="EpiExportFileName">
+                  </div>
+                  <div class="col-3">
+                      <select [(ngModel)]="EpiExportFileType" class="form-control form-control-sm">
+                          <option>svg</option>
+                          <option>png</option>
+                      </select>
+                  </div>
+              </div>
+              <div [hidden]="EpiExportFileType=='svg'">
+                <p-accordion>
+                    <p-accordionTab style="color:#495057" header="Advanced">
+                        <div id="network-export-advanced">
+                            <div class="form-group row">
+                                <div class="col-3">
+                                    <label for="network-export-scale">Scale</label>
                                 </div>
-                            </p-accordionTab>
-                        </p-accordion>
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-error"
-                          (click)="ShowEpiExportPane = false">Cancel</button>
-                      <button type="button" class="btn btn-primary" style="background-color: #495057;"
-                          (click)="exportVisualization()">Export</button>
-                  </div>
-              </div><!-- /.modal-content -->
-          </div><!-- /.modal-dialog -->
-      </tab>
-  </tabset>
+                                <div class="col-9">
+                                    <input type="number" id="network-export-scale" class="form-control form-control-sm" min="0" max="2" step="0.1" value="1" [(ngModel)]="SelectedNetworkExportScaleVariable" (ngModelChange)="updateCalculatedResolution()">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-3">Resolution</div>
+                                <div id="network-export-dimensions" class="col-9 text-right">{{CalculatedResolution}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <label for="network-export-quality">Quality</label>
+                                </div>
+                                <div class="col-9">
+                                    <input type="range" class="custom-range" id="network-export-quality" min="0" max="1.0" value="0.92" step="0.01" [(ngModel)]="SelectedNetworkExportQualityVariable">
+                                </div>
+                            </div>
+                        </div>
+                    </p-accordionTab>
+                </p-accordion>
+            </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-error" (click)="ShowEpiExportPane = false">Cancel</button>
+              <button type="button" class="btn btn-primary" (click)="exportVisualization()">Export</button>
+          </div>
+      </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
 </p-dialog><!-- /.modal -->
 

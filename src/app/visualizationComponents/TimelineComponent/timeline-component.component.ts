@@ -26,25 +26,20 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
   @ViewChild('epiCurveSVG') epiCurveSVGElement: ElementRef;
   viewActive: boolean = true;
 
+  widgets: object;
   private visuals: MicrobeTraceNextVisuals;
 
   FieldList: SelectItem[] = [];
+  FieldListStack: SelectItem[] = [];
   SelectedDateFieldVariable;
   SelectedDateFieldVariable2;
   SelectedDateFieldVariable3;
   binSizes = ['Day', 'Week', 'Month', 'Quarter', 'Year']
-  SelectedBinSize = 'Month';
-  useNodeColorsOptions = [true, false]
-  useNodeColors: boolean = true;
-  SelectedNodeColorVariable;
-  SelectedNodeColorVariable2;
-  SelectedNodeColorVariable3;
   tickInterval;
 
   graphTypes = ['Single Date Field', 'Multi: Side by Side', 'Multi: Overlay']
-  selectedGraphType = 'Multi: Overlay';
+  selectedGraphType = 'Single Date Field';
   legendPositionOptions = ['Hide', 'Left', 'Right', 'Bottom']
-  selectedLegendPosition = 'Left'
 
   ShowEpiSettingsPane: boolean = false;
   ShowEpiExportPane: boolean = false;
@@ -54,7 +49,8 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
   SelectedNetworkExportQualityVariable: any = 0.92;
   CalculatedResolution: string;
 
-  cumulative = false;
+  private localColorMap = (x) => {}
+
   private svg;
   private margin = { top: 5, left: 25, right: 25, bottom: 50 };
   private width; // Default width, adjust as necessary
@@ -84,16 +80,26 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
       super(elRef.nativeElement);
       this.visuals = commonService.visuals;
       this.commonService.visuals.epiCurve = this;
+      this.widgets = this.commonService.session.style.widgets;
+
+      this.setDefaultsWidgets();
 
   }
   ngOnInit() {
 
     // populate this.twoD.FieldList with [None, ...nodeFields]
     this.visuals.epiCurve.FieldList = [];
+    this.visuals.epiCurve.FieldListStack = [];
     this.visuals.epiCurve.FieldList.push({ label: "None", value: "None" });
+    this.visuals.epiCurve.FieldListStack.push({ label: "None", value: 'None'}, { label: "Node Color", value: "Node Color"});
     this.visuals.epiCurve.commonService.session.data['nodeFields'].map((d, i) => {
         if (d != 'seq' && d != 'sequence') {
             this.visuals.epiCurve.FieldList.push(
+                {
+                    label: this.visuals.epiCurve.commonService.capitalize(d.replace("_", "")),
+                    value: d
+                });
+              this.visuals.epiCurve.FieldListStack.push(
                 {
                     label: this.visuals.epiCurve.commonService.capitalize(d.replace("_", "")),
                     value: d
@@ -102,33 +108,67 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
 
     });
 
-    this.useNodeColors = false;
-    this.SelectedNodeColorVariable = '#f5d742';
-    this.SelectedNodeColorVariable2 = '#f20fff';
-    this.SelectedNodeColorVariable3 = '#20ff1a';
     this.tickInterval = 1;
+    this.updateSettingsRows();    
+ }
 
-    this.SelectedDateFieldVariable = 'None';
-    this.SelectedDateFieldVariable2 = 'None';
-    this.SelectedDateFieldVariable3 = 'None';
-
-    //this.commonService.session.style.widgets["epi-timeline-date-field"] = 'ipstart';
-    this.SelectedDateFieldVariable = this.commonService.session.style.widgets["epi-timeline-date-field"];
-    //this.SelectedDateFieldVariable2 = 'ipend';
-    //this.SelectedDateFieldVariable3 = 'Diagnosis date'
-    if (this.commonService.session.style.widgets["epi-timeline-date-field"] || !this.FieldList.includes(this.commonService.session.style.widgets["epi-timeline-date-field"])) {
-      this.ShowEpiSettingsPane = true;
+  setDefaultsWidgets() {
+    // graphType
+    if (this.widgets['epiCurve-graphType'] == undefined) {
+      this.widgets['epiCurve-graphType'] = 'Single Date Field';
     }
-    
+    this.selectedGraphType = this.widgets['epiCurve-graphType'];
+
+    // date fields
+    if (this.widgets['epiCurve-date-fields'] == undefined) {
+      this.widgets['epiCurve-date-fields'] = ['None', 'None', 'None']
+    } else if (this.widgets['epiCurve-date-fields'].length < 3) {
+      while (this.widgets['epiCurve-date-fields']< 3) {
+        this.widgets['epiCurve-date-fields'].push('None')
+      }
+    }
+    this.SelectedDateFieldVariable = this.widgets['epiCurve-date-fields'][0];
+    this.SelectedDateFieldVariable2 = this.widgets['epiCurve-date-fields'][1];
+    this.SelectedDateFieldVariable3 = this.widgets['epiCurve-date-fields'][2];
+
+    // colors
+    if (this.widgets['epiCurve-colors'] == undefined) {
+      this.widgets['epiCurve-colors'] = ['#f5d742', '#f20fff', '#20ff1a'];
+    }
+
+    // stackColorBy field
+    if (this.widgets['epiCurve-stackColorBy'] == undefined) {
+      this.widgets['epiCurve-stackColorBy'] = 'None';
+    }
+
+    // binSize
+    if (this.widgets['epiCurve-binSize'] == undefined) {
+      this.widgets['epiCurve-binSize'] = 'Month'
+    }
+
+    //
+    if (this.widgets['epiCurve-cumulative'] == undefined) {
+      this.widgets['epiCurve-cumulative'] = false;
+    }
+
+    // legendPosition
+    if (this.widgets['epiCurve-legendPosition'] == undefined) {
+      this.widgets['epiCurve-legendPosition'] = 'Left';
+    }
  }
 
  ngAfterViewInit() {
 
   // this.initializeD3Chart();
   this.setupEventListeners();
-  this.onGraphTypeChange(false);
+
+  if (this.widgets['epiCurve-legendPosition'] == 'Bottom') {
+    this.margin.bottom = 100;
+  } else {
+    this.margin.bottom = 50;
+  }
+  
   this.refresh();
-  console.log(this.commonService.session.style.widgets["node-color"]);
  }
   
 /**
@@ -137,6 +177,8 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
 public refresh(): void {
   if (this.selectedGraphType=='Multi: Overlay' || this.selectedGraphType=='Multi: Side by Side') {
     this.refreshMulti();
+    return;
+  } else if (this.SelectedDateFieldVariable == 'None') {
     return;
   }
 
@@ -156,7 +198,7 @@ public refresh(): void {
     return;
   }
 
-  this.x = d3.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]).nice();
+  this.x = d3.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]);
   this.y = d3.scaleLinear().range([this.height, 0]);
 
   this.histogram = d3.histogram().value(d => d[field as string]).domain(this.x.domain()).thresholds(binInterval);
@@ -175,17 +217,20 @@ public refresh(): void {
   
   let colorVariable = this.commonService.session.style.widgets['node-color-variable'];
   let nodeColorKeys;
-  if (colorVariable != 'None' && this.useNodeColors) {
+  if (colorVariable != 'None' && this.widgets['epiCurve-stackColorBy'] == 'Node Color') {
     nodeColorKeys = this.commonService.session.style.nodeColorsTableKeys[colorVariable].map(value => value=='null' ? null: value);
-  } 
+    this.localColorMap = this.commonService.temp.style.nodeColorMap;
+  } else if (this.widgets['epiCurve-stackColorBy'] != 'None') {
+    nodeColorKeys = this.updateLocalColorMap();
+  }
 
   let maxCount = 0;
-  [maxCount, bins] = this.updateBins(bins, colorVariable, nodeColorKeys);
+  [maxCount, bins] = this.updateBins(bins, this.widgets['epiCurve-stackColorBy'] == 'Node Color' ? colorVariable : this.widgets['epiCurve-stackColorBy'], nodeColorKeys);
   
 
   this.y.domain([0, maxCount]).nice()//d3.max(bins, d => d.length)]);
 
-  if (this.useNodeColors && colorVariable != 'None') {
+  if ((colorVariable != 'None' && this.widgets['epiCurve-stackColorBy'] == 'Node Color') || (this.widgets['epiCurve-stackColorBy'] != 'None' && this.widgets['epiCurve-stackColorBy'] != 'Node Color')) {
     let nodeColors = [];
 
     nodeColorKeys.forEach((value, ind) =>{
@@ -196,13 +241,13 @@ public refresh(): void {
       .attr("transform", d => `translate(${this.x(d.x0)}, ${this.y(d.height[ind])})`)
       .attr("width", d => this.x(d.x1) - this.x(d.x0))
       .attr("height", d => this.height - this.y(d.length2[ind]))
-      .attr("fill", this.commonService.temp.style.nodeColorMap(value) )
+      .attr("fill", this.localColorMap(value) )
 
-      nodeColors.push(this.commonService.temp.style.nodeColorMap(value));
+      nodeColors.push(this.localColorMap(value));
     })
     this.generateLegend(epiCurve, nodeColors,nodeColorKeys)
   } else {
-    let color = this.useNodeColors ? this.commonService.session.style.widgets["node-color"] : this.SelectedNodeColorVariable;
+    let color = this.widgets['epiCurve-stackColorBy'] == 'None' ? this.widgets['epiCurve-colors'][0] : this.widgets["node-color"];
     epiCurve.selectAll("rect")
       .data(bins)
       .enter()
@@ -226,6 +271,8 @@ private refreshMulti(): void {
   if (this.selectedGraphType=='Single Date Field') {
     this.refresh();
     return;
+  } else if (this.SelectedDateFieldVariable == 'None' && this.SelectedDateFieldVariable2 == 'None' && this.SelectedDateFieldVariable3 == 'None') {
+    return;
   }
 
   $('#epiCurveSVG').empty()
@@ -240,7 +287,7 @@ private refreshMulti(): void {
   [this.SelectedDateFieldVariable, this.SelectedDateFieldVariable2, this.SelectedDateFieldVariable3].forEach((dateField, ind) => {
     if (dateField != 'None') {
       fields.push(dateField);
-      colors.push([this.SelectedNodeColorVariable, this.SelectedNodeColorVariable2, this.SelectedNodeColorVariable3][ind])
+      colors.push(this.widgets["epiCurve-colors"][ind])
     }
   })
 
@@ -256,7 +303,7 @@ private refreshMulti(): void {
     return;
   }
 
-  this.x = d3.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]).nice();
+  this.x = d3.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]);
   this.y = d3.scaleLinear().range([this.height, 0]);
 
   this.histogram = d3.histogram().domain(this.x.domain()).thresholds(binInterval);
@@ -340,6 +387,22 @@ private refreshMulti(): void {
   this.generateLegend(epiCurve, colors, fields)
 } 
 
+/**
+ * Return an array of unique options for nodes[this.widgets['epiCurve-stackColorBy']] and then also used that information to update localColorMap function
+ */
+updateLocalColorMap() {
+  let nodeColorTableKeys = [];
+  this.commonService.session.data.nodes.forEach((node) => {
+    if (!node.visible) return;
+    if (!nodeColorTableKeys.some(value => value == node[this.widgets['epiCurve-stackColorBy']])) {
+      nodeColorTableKeys.push(node[this.widgets['epiCurve-stackColorBy']])
+    }
+  })
+  this.localColorMap = d3.scaleOrdinal(this.commonService.session.style.nodeColors).domain(nodeColorTableKeys);
+
+  return nodeColorTableKeys;
+}
+
 updateSizes() {
   const wrapper = $(this.epiCurveElement.nativeElement).parent();
   $('#epiCurve').height(wrapper.height() - 50);
@@ -394,7 +457,7 @@ updateAxes() {
     .attr("text-anchor", "center")
     .attr("x", this.width/2)
     .attr("y", this.height + 40)
-    .text(`Date (${this.SelectedBinSize=='Day'? 'Dai': this.SelectedBinSize}ly Bins)`);
+    .text(`Date (${this.widgets['epiCurve-binSize']=='Day'? 'Dai': this.widgets['epiCurve-binSize']}ly Bins)`);
 
   this.svg.append("text")
     .attr("class", "y label")
@@ -435,19 +498,23 @@ updateAxes() {
 
 generateLegend(epiCurve, colors, fieldNames) {
   let xOffset = 50; // default for left position
-  if (this.selectedLegendPosition == 'Hide') {
+  if (this.widgets['epiCurve-legendPosition'] == 'Hide') {
     return;
-  } else if (this.selectedLegendPosition == 'Bottom') {
+  } else if (this.widgets['epiCurve-legendPosition'] == 'Bottom') {
     let prevLength = 0;
     let rowCount = 0;
     let y = this.height + 50;
-    if (this.selectedGraphType=='Single Date Field' && this.useNodeColors && this.commonService.session.style.widgets['node-color-variable'] != 'None') {
+    if (this.selectedGraphType=='Single Date Field' && this.widgets['epiCurve-stackColorBy'] == 'Node Color' && this.commonService.session.style.widgets['node-color-variable'] != 'None') {
       let field = this.commonService.capitalize(this.commonService.session.style.widgets['node-color-variable']);
       epiCurve.append("text").attr("x", 70).attr("y", y).text(field + ': ').style("font-size", "15px").attr("alignment-baseline","middle")
       prevLength += field.length + 3;
+    } else if (this.selectedGraphType=='Single Date Field' && this.widgets['epiCurve-stackColorBy'] != 'Node Color' && this.widgets['epiCurve-stackColorBy'] != 'None') {
+      epiCurve.append("text").attr("x", 70).attr("y", y).text(this.widgets['epiCurve-stackColorBy'] + ': ').style("font-size", "15px").attr("alignment-baseline","middle")
+      prevLength += this.widgets['epiCurve-stackColorBy'].length + 3;
     }
     fieldNames.forEach((name, i) => {
-      let nLength = name==null ? 7: name.length
+      // this first section calculates the location for each item/name in the legend
+      let nLength = name==null ? 7: name.toString().length
       let baseX = 70+40*(rowCount) + prevLength*7.5;
       if (baseX+24+nLength*3 > this.width-70) {
         rowCount = 0;
@@ -457,24 +524,27 @@ generateLegend(epiCurve, colors, fieldNames) {
       }
 
       epiCurve.append("circle").attr("cx", baseX).attr("cy", y).attr("r", 6).style("fill", colors[i])
-      epiCurve.append("text").attr("x", baseX+10).attr("y", y).text(this.commonService.capitalize(name==null? '(Empty)': name)).style("font-size", "15px").attr("alignment-baseline","middle")
+      epiCurve.append("text").attr("x", baseX+10).attr("y", y).text(this.commonService.capitalize(name==null? '(Empty)': name.toString())).style("font-size", "15px").attr("alignment-baseline","middle")
 
       prevLength += nLength;
       rowCount += 1;
     })
     return;
-  } else if (this.selectedLegendPosition == 'Right') {
+  } else if (this.widgets['epiCurve-legendPosition'] == 'Right') {
     xOffset = this.width - 120;
   }
   let count = 0;
-  if (this.selectedGraphType=='Single Date Field' && this.useNodeColors && this.commonService.session.style.widgets['node-color-variable'] != 'None') {
+  if (this.selectedGraphType=='Single Date Field' && this.widgets['epiCurve-stackColorBy'] == 'Node Color' && this.commonService.session.style.widgets['node-color-variable'] != 'None') {
     let field = this.commonService.capitalize(this.commonService.session.style.widgets['node-color-variable']);
     epiCurve.append("text").attr("x", xOffset).attr("y", 30).text(field + ': ').style("font-size", "15px").attr("alignment-baseline","middle")
+    count += 1;
+  } else if (this.selectedGraphType=='Single Date Field' && this.widgets['epiCurve-stackColorBy'] != 'Node Color' && this.widgets['epiCurve-stackColorBy'] != 'None') {
+    epiCurve.append("text").attr("x", xOffset).attr("y", 30).text(this.widgets['epiCurve-stackColorBy'] + ': ').style("font-size", "15px").attr("alignment-baseline","middle")
     count += 1;
   }
   fieldNames.forEach((name, i) => {
     epiCurve.append("circle").attr("cx",xOffset).attr("cy",30*(count+1)).attr("r", 6).style("fill", colors[i])
-    epiCurve.append("text").attr("x", xOffset+20).attr("y", 30*(count+1)).text(this.commonService.capitalize(name==null? '(Empty)': name)).style("font-size", "15px").attr("alignment-baseline","middle")
+    epiCurve.append("text").attr("x", xOffset+20).attr("y", 30*(count+1)).text(this.commonService.capitalize(name==null? '(Empty)': name.toString())).style("font-size", "15px").attr("alignment-baseline","middle")
     count += 1;
   })
 }
@@ -490,14 +560,6 @@ private setupEventListeners(): void {
       this.startTimeline();
     }
   });
-
-
-  /*$('[name="timeline-cumulation"]').on('change', () => {
-    console.log('cum 1');
-    this.cumulative = $("#timeline-noncumulative").is(":checked");
-    this.commonService.session.style.widgets["timeline-noncumulative"] =  $("#timeline-noncumulative").is(":checked");
-    this.refresh();
-  });*/
 
   $(window).on('node-color-change', () => {
     this.svg.selectAll(".epiCurve-epi-curve rect")
@@ -520,7 +582,7 @@ private setupEventListeners(): void {
 }
 
 /**
- * Updates this.timeDomainStart and this.timeDomainEnd based on dates and this.SelectedBinSize;
+ * Updates this.timeDomainStart and this.timeDomainEnd based on dates and this.widgets['epiCurve-binSize'];
  * 
  * @param times array of date objects
  * @returns return a d3 time range such as d3.timeMonth.range()
@@ -529,19 +591,19 @@ calculateBinInterval(times) {
   let minTime = Math.min(...times);
   let maxTime = Math.max(...times);
 
-  if (this.SelectedBinSize == 'Day') {
+  if (this.widgets['epiCurve-binSize'] == 'Day') {
     this.timeDomainStart = d3.timeMonth(minTime);
     this.timeDomainEnd = d3.timeMonth.ceil(maxTime);
     return d3.timeDay.range(this.timeDomainStart, this.timeDomainEnd);
-  } else   if (this.SelectedBinSize == 'Week') {
+  } else if (this.widgets['epiCurve-binSize'] == 'Week') {
     this.timeDomainStart = d3.timeMonth(minTime);
     this.timeDomainEnd = d3.timeMonth.ceil(maxTime);
     return d3.timeMonday.range(this.timeDomainStart, this.timeDomainEnd);
-  } else   if (this.SelectedBinSize == 'Month') {
+  } else if (this.widgets['epiCurve-binSize'] == 'Month') {
     this.timeDomainStart = d3.timeMonth(minTime);
     this.timeDomainEnd = d3.timeMonth.ceil(maxTime);
     return d3.timeMonth.range(this.timeDomainStart, this.timeDomainEnd);
-  } else   if (this.SelectedBinSize == 'Quarter') {
+  } else if (this.widgets['epiCurve-binSize'] == 'Quarter') {
     this.timeDomainStart = d3.timeMonth(minTime, 3);
     this.timeDomainEnd = d3.timeMonth.ceil(maxTime, 3);
     // for quarter we may need to update earliest month so that quarters are consistant (always start on Jan, April, July, or October)
@@ -555,7 +617,7 @@ calculateBinInterval(times) {
       this.timeDomainStart.setMonth(9);
     }
     return d3.timeMonth.range(this.timeDomainStart, this.timeDomainEnd, 3);
-  } else   if (this.SelectedBinSize == 'Year') {
+  } else if (this.widgets['epiCurve-binSize'] == 'Year') {
     this.timeDomainStart = d3.timeYear(minTime);
     this.timeDomainEnd = d3.timeYear.ceil(maxTime);
     return d3.timeYear.range(this.timeDomainStart, this.timeDomainEnd);
@@ -574,7 +636,7 @@ calculateBinInterval(times) {
 updateBins(bins, colorVariable='None', nodeColorKeys=undefined) {
   let maxCount = 0;
   // cumulative with multiple colors per column
-  if (this.useNodeColors && !this.commonService.session.style.widgets["timeline-noncumulative"] && colorVariable != 'None') {
+  if (this.widgets['epiCurve-stackColorBy'] != 'None' && this.widgets['epiCurve-cumulative'] && colorVariable != 'None') { //useNodeColors
     //heights represents the size of each rect, offset represent the offset of each rect
     let heights = new Array(nodeColorKeys.length).fill(0);
     let offsets = new Array(nodeColorKeys.length).fill(0);
@@ -592,7 +654,7 @@ updateBins(bins, colorVariable='None', nodeColorKeys=undefined) {
       maxCount += bin.length;
     })
     // noncumulative with multiple colors per column
-  } else if (this.useNodeColors && colorVariable != 'None') {
+  } else if (this.widgets['epiCurve-stackColorBy'] != 'None' && colorVariable != 'None') {
     bins.forEach(bin => {
       bin.length2 = [];
       bin.height = [];
@@ -604,7 +666,7 @@ updateBins(bins, colorVariable='None', nodeColorKeys=undefined) {
     })
   // else if (useNodeColor == False || (useNodeColor && colorVariable=='None')) and using cumulative
   // cumulative with one color 
-  } else if (!this.commonService.session.style.widgets["timeline-noncumulative"]) {
+  } else if (this.widgets['epiCurve-cumulative']) {
     bins.forEach(bin => {
       maxCount += bin.length;
       bin.length = maxCount;
@@ -627,12 +689,12 @@ configureXAxisSettings() {
   let xAxis;
   let numberOfDays = d3.timeDay.count(this.timeDomainStart, this.timeDomainEnd);
   let xLabelOffset = -10;
-  if (this.SelectedBinSize=='Year') {
+  if (this.widgets['epiCurve-binSize'] == 'Year') {
     xAxis = d3.axisBottom(this.x).ticks(d3.timeYear).tickFormat(d3.timeFormat("%Y"));
   } else if (numberOfDays<366) {
     xAxis = d3.axisBottom(this.x).ticks(d3.timeMonth.every(this.tickInterval)).tickFormat(d3.timeFormat("%b %Y"))
     xLabelOffset = -25;
-  } else if (this.SelectedBinSize=='Quarter') {
+  } else if (this.widgets['epiCurve-binSize'] == 'Quarter') {
     xAxis = d3.axisBottom(this.x).ticks(d3.timeMonth.every(this.tickInterval < 3 ? this.tickInterval*3: 12)).tickFormat(d => d <= d3.timeYear(d) ? d.getFullYear() : null)
   } else {
     xAxis = d3.axisBottom(this.x).ticks(d3.timeMonth.every(this.tickInterval)).tickFormat(d => d <= d3.timeYear(d) ? d.getFullYear() : null)
@@ -648,16 +710,23 @@ goldenLayoutComponentResize() {
 }
 
 // Handle the change event of the date field
-onDateFieldChange(event: any) {
-  this.commonService.session.style.widgets["epi-timeline-date-field"] = event;
+onDateFieldChange(index: number) {
+  if (index == 0) {
+    this.widgets["epiCurve-date-fields"][index] = this.SelectedDateFieldVariable;
+  } else if (index == 1) {
+    this.widgets["epiCurve-date-fields"][index] = this.SelectedDateFieldVariable2;
+  } else if (index == 2) {
+    this.widgets["epiCurve-date-fields"][index] = this.SelectedDateFieldVariable3;
+  }
+
   this.refresh();
 }
 
 onBinSizeChange() {
-  if (this.SelectedBinSize=='Year') {
+  if (this.widgets['epiCurve-binSize'] == 'Year') {
     $('#epi-tick-size').slideUp();
   } else {
-    if (this.SelectedBinSize=='Quarter') {
+    if (this.widgets['epiCurve-binSize'] == 'Quarter') {
       this.tickInterval = 1;
     }
     $('#epi-tick-size').slideDown();
@@ -665,22 +734,36 @@ onBinSizeChange() {
   this.refresh();
 }
 
+updateSettingsRows() {
+  this.ShowEpiSettingsPane = true;
+  setTimeout(() => {
+    if (this.selectedGraphType == 'Multi: Overlay' || this.selectedGraphType == 'Multi: Side by Side') {
+      $('#useNodeColorRow').slideUp();
+      $('.additionalDateField').slideDown();
+      //$('#epi-color-select').slideUp();
+    } else {
+      $('.additionalDateField').slideUp();
+      $('#useNodeColorRow').slideDown();
+      if (this.widgets['epiCurve-stackColorBy'] == 'None') {
+        $('#epi-color-select').slideDown();
+      }
+    }
+    //this.ShowEpiSettingsPane = false;
+  }, 0)
+}
+
 onGraphTypeChange(refresh=true) {
-  if (this.selectedGraphType == 'Multi: Overlay' || this.selectedGraphType == 'Multi: Side by Side') {
-    $('#useNodeColorRow').slideUp();
-    $('.additionalDateField').slideDown();
-  } else {
-    $('.additionalDateField').slideUp();
-    $('#useNodeColorRow').slideDown();
-  }
+  this.updateSettingsRows();
+
+  this.widgets['epiCurve-graphType'] = this.selectedGraphType;
   if (refresh) this.refresh();
 }
 
 onUseNodeColorChange() {
-  if (this.useNodeColors) {
-    $('#epi-color-select').slideUp();
-  } else {
+  if (this.widgets['epiCurve-stackColorBy'] == 'None') {
     $('#epi-color-select').slideDown();
+  } else {
+    $('#epi-color-select').slideUp();
   }
   this.refresh();
 }
@@ -694,7 +777,7 @@ onNodeColorChanged() {
 }
 
 onLegendPositionChange() {
-  if (this.selectedLegendPosition == 'Bottom') {
+  if (this.widgets['epiCurve-legendPosition'] == 'Bottom') {
     this.margin.bottom = 100;
   } else {
     this.margin.bottom = 50;
@@ -707,8 +790,7 @@ openSettings() {
 }
 
 setCumulative(value: boolean): void {
-  this.cumulative = value;
-  this.commonService.session.style.widgets["timeline-noncumulative"] =  !value;
+  this.widgets['epiCurve-cumulative'] = value;
 
   this.refresh();
 }
@@ -917,9 +999,11 @@ updateVisualization() {
 }
 
 applyStyleFileSettings() {
-  // if this components gets widget or any settings saved in style file (commonService.session.style) need to update here
-  // so loading a new file will update the visualization 
-  //this.widgets = window.context.commonService.session.style.widgets;
+  this.widgets = window.context.commonService.session.style.widgets;
+  this.setDefaultsWidgets();
+  
+  this.updateSettingsRows()
+  this.onLegendPositionChange()
 }
 
 updateLinkColor() {
@@ -935,138 +1019,20 @@ openExport() {
 }
 
 exportVisualization() {
-  //let epiCurve = this.epiCurveSVGElement.nativeElement;
-  //let $epiCurve = $(this.epiCurve);
-
-  // add microbeTrace logo as a watermark
-  /*let watermark = d3.select(epiCurve).append('image')
-      .attr('xlink:href', this.commonService.watermark)
-      .attr('height', 128)
-      .attr('width', 128)
-      .attr('x', 35)
-      .attr('y', 35)
-      .style('opacity', $('#network-export-opacity').val());
-  */
-
-  // add node color table
-  // node color table not need if all nodes are same color
-  /*let nodeLegend: any = false;
-  if (this.commonService.session.style.widgets['node-color-variable']!= 'None' && this.useNodeColors) {
-    let [addNodeColorTable, Xoffset, Yoffset] = this.nodeColorTableInView();
-    if (addNodeColorTable) {
-      let nodeColorKeys = this.commonService.session.style.nodeColorsTableKeys[this.commonService.session.style.widgets['node-color-variable']].map(value => value=='null' ? null: value);
-      var columns = [];
-      columns.push('Node ' + this.commonService.capitalize(this.commonService.session.style.widgets["node-color-variable"]));
-      columns.push('Color');
-      var data = [];
-      nodeColorKeys.forEach((value, i) => {
-          let line = {
-              Node: this.commonService.capitalize("" + value),
-              Color: '<div  style="margin-left:5px; width:40px;height:12px;background:' + this.commonService.temp.style.nodeColorMap(value)  +'"> </div>'
-          }
-          data.push(line);
-      })
-  
-      let nodeWrapper = null;
-  
-      this.commonService.currentNodeTableElement.subscribe((element) => {
-          if(element){
-              nodeWrapper = element;
-              } else {
-              console.error('currentNodeTableElement is null');
-              }                // You can now interact with this.myElement
-      });
-      nodeLegend = this.tabulate2(data, columns, nodeWrapper, epiCurve, 200,false); 
-    }
-  }*/
-
   if (this.EpiExportFileType == 'svg') {
       let content = this.commonService.unparseSVG(this.epiCurveSVGElement.nativeElement);
       let blob = new Blob([content], { type: 'image/svg+xml;charset=utf-8' });
       saveAs(blob, this.EpiExportFileName + '.' + this.EpiExportFileType);
-      //if (watermark){          watermark.remove();      }
-      //if (nodeLegend){          nodeLegend.remove(); }
   } else {
       saveSvgAsPng(this.epiCurveSVGElement.nativeElement, this.EpiExportFileName + '.' + this.EpiExportFileType, {
           scale: this.SelectedNetworkExportScaleVariable,
           backgroundColor: "#ffffff",
           encoderType: 'image/' + this.EpiExportFileType,
           //encoderOptions: this.SelectedNetworkExportQualityVariable
-      }).then(() => {
-          //if (watermark){              watermark.remove();          }
-          //if (nodeLegend){              nodeLegend.remove();          }
-
       });
   }
   this.ShowEpiExportPane = false;
 }
-
-/**
- * XXXX To be implemented: the idea is to determine is node color table is in bounds of view;
- * if it is return true and x and y offsets to be used to place node color table on view when exporting 
- */
-/*nodeColorTableInView() {
-  let Xoffset = 0, Yoffset = 0;
-  return [false, Xoffset, Yoffset];
-}*/
-
-/**
- * Converts table such as node color table, link color table or node symbol table from dialog window into element on twoD network svg when
- * getting ready to export.
- * @param data Object[] containing information in the table, such as color, count, node/groupLabel
- * @param columns string array of table column names
- * @param wrapper HTMLElement of table
- * @param container HTMLElement of entive svg/network
- * @param topOffset number
- * @param leftOffset boolean
- * @returns foreignObject that can be removed later by foreignObjectName.remove()
- */
-/*tabulate2 = (data, columns, wrapper, container, topOffset: number, leftOffset: boolean) => {
-
-  console.log('wrapper: ', wrapper);
-  console.log('left: ', wrapper.offsetLeft);
-  let containerWidth = container.getBBox().width;
-  let rightPosition = containerWidth - wrapper.offsetWidth;        
-  console.log('right: ', rightPosition);
-
-  let foreignObj = d3.select(container).append("svg:foreignObject")
-    .attr("x", (leftOffset) ? rightPosition : wrapper.offsetLeft)
-    .attr("y", wrapper.offsetTop + topOffset)
-    .attr("width", wrapper.offsetWidth)
-    .attr("height", wrapper.offsetHeight);
-  let body = foreignObj 
-    .append("xhtml:body")
-    .append("table")
-    .style('position', 'absolute')
-    .style('top', '0')
-    .style('width', '100%')
-    .style('height', '100%')
-    .attr('cellpadding', '1px')
-    .attr("class", "table-bordered");
-    // .html(nodeColorTable.innerHTML); SVG doesn't translate
-  let thead = body.append("thead"),
-      tbody = body.append("tbody");
-  thead.append("tr")
-    .selectAll("th")
-    .data(columns)
-    .enter()
-    .append("th")
-    .text(function(column) { return column; });
-  let rows = tbody.selectAll("tr")
-    .data(data)
-    .enter()
-    .append("tr");
-  let cells = rows.selectAll("td")
-    .data(function(row) {
-      return columns.map(function(column) {
-          return {column: column, value: row[column.split(" ")[0]]};
-      });
-    })
-    .enter()
-    .append("td")
-    .html(function(d) { return d.value; });
-  return foreignObj;
-}*/
 
 openRefreshScreen() {
 
