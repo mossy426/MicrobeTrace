@@ -12313,11 +12313,10 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     this.DisplayGlobalSettingsDialogEvent = new _angular_core__WEBPACK_IMPORTED_MODULE_9__.EventEmitter();
     this.viewActive = true;
     this.FieldList = [];
+    this.FieldListStack = [];
     this.binSizes = ['Day', 'Week', 'Month', 'Quarter', 'Year'];
-    this.useNodeColorsOptions = [true, false];
-    this.useNodeColors = true;
     this.graphTypes = ['Single Date Field', 'Multi: Side by Side', 'Multi: Overlay'];
-    this.selectedGraphType = 'Multi: Overlay';
+    this.selectedGraphType = 'Single Date Field';
     this.legendPositionOptions = ['Hide', 'Left', 'Right', 'Bottom'];
     this.ShowEpiSettingsPane = false;
     this.ShowEpiExportPane = false;
@@ -12325,7 +12324,7 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     this.EpiExportFileType = "png";
     this.SelectedNetworkExportScaleVariable = 1;
     this.SelectedNetworkExportQualityVariable = 0.92;
-    this.cumulative = false;
+    this.localColorMap = x => {};
     this.margin = {
       top: 5,
       left: 25,
@@ -12343,9 +12342,17 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
   ngOnInit() {
     // populate this.twoD.FieldList with [None, ...nodeFields]
     this.visuals.epiCurve.FieldList = [];
+    this.visuals.epiCurve.FieldListStack = [];
     this.visuals.epiCurve.FieldList.push({
       label: "None",
       value: "None"
+    });
+    this.visuals.epiCurve.FieldListStack.push({
+      label: "None",
+      value: 'None'
+    }, {
+      label: "Node Color",
+      value: "Node Color"
     });
     this.visuals.epiCurve.commonService.session.data['nodeFields'].map((d, i) => {
       if (d != 'seq' && d != 'sequence') {
@@ -12353,44 +12360,62 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
           label: this.visuals.epiCurve.commonService.capitalize(d.replace("_", "")),
           value: d
         });
+        this.visuals.epiCurve.FieldListStack.push({
+          label: this.visuals.epiCurve.commonService.capitalize(d.replace("_", "")),
+          value: d
+        });
       }
     });
-    this.useNodeColors = false;
     this.tickInterval = 1;
-    this.SelectedDateFieldVariable = 'None';
-    this.SelectedDateFieldVariable2 = 'None';
-    this.SelectedDateFieldVariable3 = 'None';
-    this.commonService.session.style.widgets["epi-timeline-date-field"] = 'ipstart';
-    this.SelectedDateFieldVariable = this.commonService.session.style.widgets["epi-timeline-date-field"];
-    this.SelectedDateFieldVariable2 = 'ipend';
-    this.SelectedDateFieldVariable3 = 'Diagnosis date';
-    if (this.commonService.session.style.widgets["epi-timeline-date-field"] || !this.FieldList.includes(this.commonService.session.style.widgets["epi-timeline-date-field"])) {
-      this.ShowEpiSettingsPane = true;
-    }
+    this.updateSettingsRows();
   }
   setDefaultsWidgets() {
-    //size
+    // graphType
+    if (this.widgets['epiCurve-graphType'] == undefined) {
+      this.widgets['epiCurve-graphType'] = 'Single Date Field';
+    }
+    this.selectedGraphType = this.widgets['epiCurve-graphType'];
+    // date fields
+    if (this.widgets['epiCurve-date-fields'] == undefined) {
+      this.widgets['epiCurve-date-fields'] = ['None', 'None', 'None'];
+    } else if (this.widgets['epiCurve-date-fields'].length < 3) {
+      while (this.widgets['epiCurve-date-fields'] < 3) {
+        this.widgets['epiCurve-date-fields'].push('None');
+      }
+    }
+    this.SelectedDateFieldVariable = this.widgets['epiCurve-date-fields'][0];
+    this.SelectedDateFieldVariable2 = this.widgets['epiCurve-date-fields'][1];
+    this.SelectedDateFieldVariable3 = this.widgets['epiCurve-date-fields'][2];
+    // colors
     if (this.widgets['epiCurve-colors'] == undefined) {
       this.widgets['epiCurve-colors'] = ['#f5d742', '#f20fff', '#20ff1a'];
     }
-    //bin
+    // stackColorBy field
+    if (this.widgets['epiCurve-stackColorBy'] == undefined) {
+      this.widgets['epiCurve-stackColorBy'] = 'None';
+    }
+    // binSize
     if (this.widgets['epiCurve-binSize'] == undefined) {
       this.widgets['epiCurve-binSize'] = 'Month';
     }
-    //legendPosition
-    if (this.widgets['epiCurve-legendPosition'] == undefined) {
-      this.widgets['epiCurve-legendPosition'] = 'Left';
-    }
+    //
     if (this.widgets['epiCurve-cumulative'] == undefined) {
       this.widgets['epiCurve-cumulative'] = false;
+    }
+    // legendPosition
+    if (this.widgets['epiCurve-legendPosition'] == undefined) {
+      this.widgets['epiCurve-legendPosition'] = 'Left';
     }
   }
   ngAfterViewInit() {
     // this.initializeD3Chart();
     this.setupEventListeners();
-    this.onGraphTypeChange(false);
+    if (this.widgets['epiCurve-legendPosition'] == 'Bottom') {
+      this.margin.bottom = 100;
+    } else {
+      this.margin.bottom = 50;
+    }
     this.refresh();
-    console.log(this.commonService.session.style.widgets["node-color"]);
   }
   /**
    * Clears previous histogram/epi curve and creates a new one; calls refresh multi if needed
@@ -12398,6 +12423,8 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
   refresh() {
     if (this.selectedGraphType == 'Multi: Overlay' || this.selectedGraphType == 'Multi: Side by Side') {
       this.refreshMulti();
+      return;
+    } else if (this.SelectedDateFieldVariable == 'None') {
       return;
     }
     $('#epiCurveSVG').empty();
@@ -12412,7 +12439,7 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     if (binInterval == 0) {
       return;
     }
-    this.x = d3__WEBPACK_IMPORTED_MODULE_4__.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]); //.nice();
+    this.x = d3__WEBPACK_IMPORTED_MODULE_4__.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]);
     this.y = d3__WEBPACK_IMPORTED_MODULE_4__.scaleLinear().range([this.height, 0]);
     this.histogram = d3__WEBPACK_IMPORTED_MODULE_4__.histogram().value(d => d[field]).domain(this.x.domain()).thresholds(binInterval);
     this.svg = d3__WEBPACK_IMPORTED_MODULE_4__.select(this.epiCurveSVGElement.nativeElement).attr("width", this.width + this.margin.left + this.margin.right).attr("height", this.height + this.margin.top + this.margin.bottom);
@@ -12421,21 +12448,24 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     let bins = this.histogram(this.vnodes);
     let colorVariable = this.commonService.session.style.widgets['node-color-variable'];
     let nodeColorKeys;
-    if (colorVariable != 'None' && this.useNodeColors) {
+    if (colorVariable != 'None' && this.widgets['epiCurve-stackColorBy'] == 'Node Color') {
       nodeColorKeys = this.commonService.session.style.nodeColorsTableKeys[colorVariable].map(value => value == 'null' ? null : value);
+      this.localColorMap = this.commonService.temp.style.nodeColorMap;
+    } else if (this.widgets['epiCurve-stackColorBy'] != 'None') {
+      nodeColorKeys = this.updateLocalColorMap();
     }
     let maxCount = 0;
-    [maxCount, bins] = this.updateBins(bins, colorVariable, nodeColorKeys);
+    [maxCount, bins] = this.updateBins(bins, this.widgets['epiCurve-stackColorBy'] == 'Node Color' ? colorVariable : this.widgets['epiCurve-stackColorBy'], nodeColorKeys);
     this.y.domain([0, maxCount]).nice(); //d3.max(bins, d => d.length)]);
-    if (this.useNodeColors && colorVariable != 'None') {
+    if (colorVariable != 'None' && this.widgets['epiCurve-stackColorBy'] == 'Node Color' || this.widgets['epiCurve-stackColorBy'] != 'None' && this.widgets['epiCurve-stackColorBy'] != 'Node Color') {
       let nodeColors = [];
       nodeColorKeys.forEach((value, ind) => {
-        epiCurve.selectAll(`rect${ind}`).data(bins).enter().append("rect").attr("transform", d => `translate(${this.x(d.x0)}, ${this.y(d.height[ind])})`).attr("width", d => this.x(d.x1) - this.x(d.x0)).attr("height", d => this.height - this.y(d.length2[ind])).attr("fill", this.commonService.temp.style.nodeColorMap(value));
-        nodeColors.push(this.commonService.temp.style.nodeColorMap(value));
+        epiCurve.selectAll(`rect${ind}`).data(bins).enter().append("rect").attr("transform", d => `translate(${this.x(d.x0)}, ${this.y(d.height[ind])})`).attr("width", d => this.x(d.x1) - this.x(d.x0)).attr("height", d => this.height - this.y(d.length2[ind])).attr("fill", this.localColorMap(value));
+        nodeColors.push(this.localColorMap(value));
       });
       this.generateLegend(epiCurve, nodeColors, nodeColorKeys);
     } else {
-      let color = this.useNodeColors ? this.widgets["node-color"] : this.widgets["epiCurve-colors"][0];
+      let color = this.widgets['epiCurve-stackColorBy'] == 'None' ? this.widgets['epiCurve-colors'][0] : this.widgets["node-color"];
       epiCurve.selectAll("rect").data(bins).enter().append("rect").attr("transform", d => `translate(${this.x(d.x0)}, ${this.y(d.length)})`).attr("width", d => this.x(d.x1) - this.x(d.x0)).attr("height", d => this.height - this.y(d.length)).attr("fill", color);
       this.generateLegend(epiCurve, [color], [this.SelectedDateFieldVariable]);
     }
@@ -12448,6 +12478,8 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
   refreshMulti() {
     if (this.selectedGraphType == 'Single Date Field') {
       this.refresh();
+      return;
+    } else if (this.SelectedDateFieldVariable == 'None' && this.SelectedDateFieldVariable2 == 'None' && this.SelectedDateFieldVariable3 == 'None') {
       return;
     }
     $('#epiCurveSVG').empty();
@@ -12473,7 +12505,7 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     if (binInterval == 0) {
       return;
     }
-    this.x = d3__WEBPACK_IMPORTED_MODULE_4__.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]); //.nice();
+    this.x = d3__WEBPACK_IMPORTED_MODULE_4__.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]);
     this.y = d3__WEBPACK_IMPORTED_MODULE_4__.scaleLinear().range([this.height, 0]);
     this.histogram = d3__WEBPACK_IMPORTED_MODULE_4__.histogram().domain(this.x.domain()).thresholds(binInterval);
     this.svg = d3__WEBPACK_IMPORTED_MODULE_4__.select(this.epiCurveSVGElement.nativeElement).attr("width", this.width + this.margin.left + this.margin.right).attr("height", this.height + this.margin.top + this.margin.bottom).attr("transform", `translate(0, ${this.margin.top})`);
@@ -12527,6 +12559,20 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     }
     this.updateAxes();
     this.generateLegend(epiCurve, colors, fields);
+  }
+  /**
+   * Return an array of unique options for nodes[this.widgets['epiCurve-stackColorBy']] and then also used that information to update localColorMap function
+   */
+  updateLocalColorMap() {
+    let nodeColorTableKeys = [];
+    this.commonService.session.data.nodes.forEach(node => {
+      if (!node.visible) return;
+      if (!nodeColorTableKeys.some(value => value == node[this.widgets['epiCurve-stackColorBy']])) {
+        nodeColorTableKeys.push(node[this.widgets['epiCurve-stackColorBy']]);
+      }
+    });
+    this.localColorMap = d3__WEBPACK_IMPORTED_MODULE_4__.scaleOrdinal(this.commonService.session.style.nodeColors).domain(nodeColorTableKeys);
+    return nodeColorTableKeys;
   }
   updateSizes() {
     const wrapper = $(this.epiCurveElement.nativeElement).parent();
@@ -12597,13 +12643,17 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
       let prevLength = 0;
       let rowCount = 0;
       let y = this.height + 50;
-      if (this.selectedGraphType == 'Single Date Field' && this.useNodeColors && this.commonService.session.style.widgets['node-color-variable'] != 'None') {
+      if (this.selectedGraphType == 'Single Date Field' && this.widgets['epiCurve-stackColorBy'] == 'Node Color' && this.commonService.session.style.widgets['node-color-variable'] != 'None') {
         let field = this.commonService.capitalize(this.commonService.session.style.widgets['node-color-variable']);
         epiCurve.append("text").attr("x", 70).attr("y", y).text(field + ': ').style("font-size", "15px").attr("alignment-baseline", "middle");
         prevLength += field.length + 3;
+      } else if (this.selectedGraphType == 'Single Date Field' && this.widgets['epiCurve-stackColorBy'] != 'Node Color' && this.widgets['epiCurve-stackColorBy'] != 'None') {
+        epiCurve.append("text").attr("x", 70).attr("y", y).text(this.widgets['epiCurve-stackColorBy'] + ': ').style("font-size", "15px").attr("alignment-baseline", "middle");
+        prevLength += this.widgets['epiCurve-stackColorBy'].length + 3;
       }
       fieldNames.forEach((name, i) => {
-        let nLength = name == null ? 7 : name.length;
+        // this first section calculates the location for each item/name in the legend
+        let nLength = name == null ? 7 : name.toString().length;
         let baseX = 70 + 40 * rowCount + prevLength * 7.5;
         if (baseX + 24 + nLength * 3 > this.width - 70) {
           rowCount = 0;
@@ -12612,7 +12662,7 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
           baseX = 70;
         }
         epiCurve.append("circle").attr("cx", baseX).attr("cy", y).attr("r", 6).style("fill", colors[i]);
-        epiCurve.append("text").attr("x", baseX + 10).attr("y", y).text(this.commonService.capitalize(name == null ? '(Empty)' : name)).style("font-size", "15px").attr("alignment-baseline", "middle");
+        epiCurve.append("text").attr("x", baseX + 10).attr("y", y).text(this.commonService.capitalize(name == null ? '(Empty)' : name.toString())).style("font-size", "15px").attr("alignment-baseline", "middle");
         prevLength += nLength;
         rowCount += 1;
       });
@@ -12621,14 +12671,17 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
       xOffset = this.width - 120;
     }
     let count = 0;
-    if (this.selectedGraphType == 'Single Date Field' && this.useNodeColors && this.commonService.session.style.widgets['node-color-variable'] != 'None') {
+    if (this.selectedGraphType == 'Single Date Field' && this.widgets['epiCurve-stackColorBy'] == 'Node Color' && this.commonService.session.style.widgets['node-color-variable'] != 'None') {
       let field = this.commonService.capitalize(this.commonService.session.style.widgets['node-color-variable']);
       epiCurve.append("text").attr("x", xOffset).attr("y", 30).text(field + ': ').style("font-size", "15px").attr("alignment-baseline", "middle");
+      count += 1;
+    } else if (this.selectedGraphType == 'Single Date Field' && this.widgets['epiCurve-stackColorBy'] != 'Node Color' && this.widgets['epiCurve-stackColorBy'] != 'None') {
+      epiCurve.append("text").attr("x", xOffset).attr("y", 30).text(this.widgets['epiCurve-stackColorBy'] + ': ').style("font-size", "15px").attr("alignment-baseline", "middle");
       count += 1;
     }
     fieldNames.forEach((name, i) => {
       epiCurve.append("circle").attr("cx", xOffset).attr("cy", 30 * (count + 1)).attr("r", 6).style("fill", colors[i]);
-      epiCurve.append("text").attr("x", xOffset + 20).attr("y", 30 * (count + 1)).text(this.commonService.capitalize(name == null ? '(Empty)' : name)).style("font-size", "15px").attr("alignment-baseline", "middle");
+      epiCurve.append("text").attr("x", xOffset + 20).attr("y", 30 * (count + 1)).text(this.commonService.capitalize(name == null ? '(Empty)' : name.toString())).style("font-size", "15px").attr("alignment-baseline", "middle");
       count += 1;
     });
   }
@@ -12642,12 +12695,6 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
         this.startTimeline();
       }
     });
-    /*$('[name="timeline-cumulation"]').on('change', () => {
-      console.log('cum 1');
-      this.cumulative = $("#timeline-noncumulative").is(":checked");
-      this.commonService.session.style.widgets["timeline-noncumulative"] =  $("#timeline-noncumulative").is(":checked");
-      this.refresh();
-    });*/
     $(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_8__.window).on('node-color-change', () => {
       this.svg.selectAll(".epiCurve-epi-curve rect").attr("fill", this.commonService.session.style.widgets["node-color-variable"]);
     });
@@ -12718,7 +12765,8 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
   updateBins(bins, colorVariable = 'None', nodeColorKeys = undefined) {
     let maxCount = 0;
     // cumulative with multiple colors per column
-    if (this.useNodeColors && this.widgets['epiCurve-cumulative'] && colorVariable != 'None') {
+    if (this.widgets['epiCurve-stackColorBy'] != 'None' && this.widgets['epiCurve-cumulative'] && colorVariable != 'None') {
+      //useNodeColors
       //heights represents the size of each rect, offset represent the offset of each rect
       let heights = new Array(nodeColorKeys.length).fill(0);
       let offsets = new Array(nodeColorKeys.length).fill(0);
@@ -12735,7 +12783,7 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
         maxCount += bin.length;
       });
       // noncumulative with multiple colors per column
-    } else if (this.useNodeColors && colorVariable != 'None') {
+    } else if (this.widgets['epiCurve-stackColorBy'] != 'None' && colorVariable != 'None') {
       bins.forEach(bin => {
         bin.length2 = [];
         bin.height = [];
@@ -12787,8 +12835,14 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     }
   }
   // Handle the change event of the date field
-  onDateFieldChange(event) {
-    this.commonService.session.style.widgets["epi-timeline-date-field"] = event;
+  onDateFieldChange(index) {
+    if (index == 0) {
+      this.widgets["epiCurve-date-fields"][index] = this.SelectedDateFieldVariable;
+    } else if (index == 1) {
+      this.widgets["epiCurve-date-fields"][index] = this.SelectedDateFieldVariable2;
+    } else if (index == 2) {
+      this.widgets["epiCurve-date-fields"][index] = this.SelectedDateFieldVariable3;
+    }
     this.refresh();
   }
   onBinSizeChange() {
@@ -12802,21 +12856,33 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     }
     this.refresh();
   }
+  updateSettingsRows() {
+    this.ShowEpiSettingsPane = true;
+    setTimeout(() => {
+      if (this.selectedGraphType == 'Multi: Overlay' || this.selectedGraphType == 'Multi: Side by Side') {
+        $('#useNodeColorRow').slideUp();
+        $('.additionalDateField').slideDown();
+        //$('#epi-color-select').slideUp();
+      } else {
+        $('.additionalDateField').slideUp();
+        $('#useNodeColorRow').slideDown();
+        if (this.widgets['epiCurve-stackColorBy'] == 'None') {
+          $('#epi-color-select').slideDown();
+        }
+      }
+      //this.ShowEpiSettingsPane = false;
+    }, 0);
+  }
   onGraphTypeChange(refresh = true) {
-    if (this.selectedGraphType == 'Multi: Overlay' || this.selectedGraphType == 'Multi: Side by Side') {
-      $('#useNodeColorRow').slideUp();
-      $('.additionalDateField').slideDown();
-    } else {
-      $('.additionalDateField').slideUp();
-      $('#useNodeColorRow').slideDown();
-    }
+    this.updateSettingsRows();
+    this.widgets['epiCurve-graphType'] = this.selectedGraphType;
     if (refresh) this.refresh();
   }
   onUseNodeColorChange() {
-    if (this.useNodeColors) {
-      $('#epi-color-select').slideUp();
-    } else {
+    if (this.widgets['epiCurve-stackColorBy'] == 'None') {
       $('#epi-color-select').slideDown();
+    } else {
+      $('#epi-color-select').slideUp();
     }
     this.refresh();
   }
@@ -13017,9 +13083,10 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     //Not Relevant
   }
   applyStyleFileSettings() {
-    // if this components gets widget or any settings saved in style file (commonService.session.style) need to update here
-    // so loading a new file will update the visualization 
-    //this.widgets = window.context.commonService.session.style.widgets;
+    this.widgets = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_8__.window.context.commonService.session.style.widgets;
+    this.setDefaultsWidgets();
+    this.updateSettingsRows();
+    this.onLegendPositionChange();
   }
   updateLinkColor() {
     //Not Relevant
@@ -13030,134 +13097,23 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     this.ShowEpiExportPane = !this.ShowEpiExportPane;
   }
   exportVisualization() {
-    //let epiCurve = this.epiCurveSVGElement.nativeElement;
-    //let $epiCurve = $(this.epiCurve);
-    // add microbeTrace logo as a watermark
-    /*let watermark = d3.select(epiCurve).append('image')
-        .attr('xlink:href', this.commonService.watermark)
-        .attr('height', 128)
-        .attr('width', 128)
-        .attr('x', 35)
-        .attr('y', 35)
-        .style('opacity', $('#network-export-opacity').val());
-    */
-    // add node color table
-    // node color table not need if all nodes are same color
-    /*let nodeLegend: any = false;
-    if (this.commonService.session.style.widgets['node-color-variable']!= 'None' && this.useNodeColors) {
-      let [addNodeColorTable, Xoffset, Yoffset] = this.nodeColorTableInView();
-      if (addNodeColorTable) {
-        let nodeColorKeys = this.commonService.session.style.nodeColorsTableKeys[this.commonService.session.style.widgets['node-color-variable']].map(value => value=='null' ? null: value);
-        var columns = [];
-        columns.push('Node ' + this.commonService.capitalize(this.commonService.session.style.widgets["node-color-variable"]));
-        columns.push('Color');
-        var data = [];
-        nodeColorKeys.forEach((value, i) => {
-            let line = {
-                Node: this.commonService.capitalize("" + value),
-                Color: '<div  style="margin-left:5px; width:40px;height:12px;background:' + this.commonService.temp.style.nodeColorMap(value)  +'"> </div>'
-            }
-            data.push(line);
-        })
-    
-        let nodeWrapper = null;
-    
-        this.commonService.currentNodeTableElement.subscribe((element) => {
-            if(element){
-                nodeWrapper = element;
-                } else {
-                console.error('currentNodeTableElement is null');
-                }                // You can now interact with this.myElement
-        });
-        nodeLegend = this.tabulate2(data, columns, nodeWrapper, epiCurve, 200,false);
-      }
-    }*/
     if (this.EpiExportFileType == 'svg') {
       let content = this.commonService.unparseSVG(this.epiCurveSVGElement.nativeElement);
       let blob = new Blob([content], {
         type: 'image/svg+xml;charset=utf-8'
       });
       file_saver__WEBPACK_IMPORTED_MODULE_6__(blob, this.EpiExportFileName + '.' + this.EpiExportFileType);
-      //if (watermark){          watermark.remove();      }
-      //if (nodeLegend){          nodeLegend.remove(); }
     } else {
       (0,save_svg_as_png__WEBPACK_IMPORTED_MODULE_7__.saveSvgAsPng)(this.epiCurveSVGElement.nativeElement, this.EpiExportFileName + '.' + this.EpiExportFileType, {
         scale: this.SelectedNetworkExportScaleVariable,
         backgroundColor: "#ffffff",
         encoderType: 'image/' + this.EpiExportFileType
         //encoderOptions: this.SelectedNetworkExportQualityVariable
-      }).then(() => {
-        //if (watermark){              watermark.remove();          }
-        //if (nodeLegend){              nodeLegend.remove();          }
       });
     }
+
     this.ShowEpiExportPane = false;
   }
-  /**
-   * XXXX To be implemented: the idea is to determine is node color table is in bounds of view;
-   * if it is return true and x and y offsets to be used to place node color table on view when exporting
-   */
-  /*nodeColorTableInView() {
-    let Xoffset = 0, Yoffset = 0;
-    return [false, Xoffset, Yoffset];
-  }*/
-  /**
-   * Converts table such as node color table, link color table or node symbol table from dialog window into element on twoD network svg when
-   * getting ready to export.
-   * @param data Object[] containing information in the table, such as color, count, node/groupLabel
-   * @param columns string array of table column names
-   * @param wrapper HTMLElement of table
-   * @param container HTMLElement of entive svg/network
-   * @param topOffset number
-   * @param leftOffset boolean
-   * @returns foreignObject that can be removed later by foreignObjectName.remove()
-   */
-  /*tabulate2 = (data, columns, wrapper, container, topOffset: number, leftOffset: boolean) => {
-  
-    console.log('wrapper: ', wrapper);
-    console.log('left: ', wrapper.offsetLeft);
-    let containerWidth = container.getBBox().width;
-    let rightPosition = containerWidth - wrapper.offsetWidth;
-    console.log('right: ', rightPosition);
-  
-    let foreignObj = d3.select(container).append("svg:foreignObject")
-      .attr("x", (leftOffset) ? rightPosition : wrapper.offsetLeft)
-      .attr("y", wrapper.offsetTop + topOffset)
-      .attr("width", wrapper.offsetWidth)
-      .attr("height", wrapper.offsetHeight);
-    let body = foreignObj
-      .append("xhtml:body")
-      .append("table")
-      .style('position', 'absolute')
-      .style('top', '0')
-      .style('width', '100%')
-      .style('height', '100%')
-      .attr('cellpadding', '1px')
-      .attr("class", "table-bordered");
-      // .html(nodeColorTable.innerHTML); SVG doesn't translate
-    let thead = body.append("thead"),
-        tbody = body.append("tbody");
-    thead.append("tr")
-      .selectAll("th")
-      .data(columns)
-      .enter()
-      .append("th")
-      .text(function(column) { return column; });
-    let rows = tbody.selectAll("tr")
-      .data(data)
-      .enter()
-      .append("tr");
-    let cells = rows.selectAll("td")
-      .data(function(row) {
-        return columns.map(function(column) {
-            return {column: column, value: row[column.split(" ")[0]]};
-        });
-      })
-      .enter()
-      .append("td")
-      .html(function(d) { return d.value; });
-    return foreignObj;
-  }*/
   openRefreshScreen() {}
   onLoadNewData() {
     throw new Error('Method not implemented.');
@@ -19850,7 +19806,7 @@ module.exports = "﻿<div class=\"table-wrapper\">\r\n    <div id=\"tool-btn-con
 /***/ ((module) => {
 
 "use strict";
-module.exports = "<div #epiCurve id=\"epiCurve\">\r\n  <svg #epiCurveSVG id=\"epiCurveSVG\"></svg>\r\n</div>\r\n\r\n<div id=\"tool-btn-container\" class=\"m-portlet\">\r\n    <span style=\"overflow: visible; position: relative;\">\r\n        <a title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openSettings()\"><i class=\"flaticon-settings primary\"></i></a>\r\n    </span>\r\n    <span style=\"overflow: visible; position: relative;\">\r\n      <a title=\"Export Screen\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openExport()\"><i class=\"flaticon-download primary\"></i></a>\r\n  </span>\r\n</div>\r\n\r\n<p-dialog *ngIf=\"viewActive\" id=\"epiCurve-settings-pane\" [(visible)]=\"ShowEpiSettingsPane\" header=\"Epi Curve Settings\"\r\n  [style]=\"{width: '500px', height:'490px'}\" appendTo=\"body\">\r\n  <div class=\"tab-pane fade show active\" id=\"table-node-settings\" role=\"tabpanel\" aria-labelledby=\"nodes-tab\">\r\n    <div class=\"tab-content\">\r\n      <div class=\"tab-pane fade show active\" role=\"tabpanel\">\r\n        <div class=\"form-group row\">\r\n          <div class=\"col-4\">\r\n            <label>Graph Type</label>\r\n          </div>\r\n          <div class=\"col-8\">\r\n            <p-dropdown [options]=\"graphTypes\" appendTo=\"body\"  [(ngModel)]=\"selectedGraphType\" (ngModelChange)=\"onGraphTypeChange()\"></p-dropdown>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group row\">\r\n          <div class=\"col-4\">\r\n            <label>Date Field</label>\r\n          </div>  \r\n          <div class=\"col-6\" style=\"padding-right: 5px\">\r\n            <p-dropdown id=\"epiCurve-date-field\" [options]=\"FieldList\" appendTo=\"body\"  [(ngModel)]=\"SelectedDateFieldVariable\" (ngModelChange)=\"onDateFieldChange($event)\"></p-dropdown>\r\n          </div>\r\n          <div class=\"col-2\" style=\"padding: 0px 15px 0px 10px\">\r\n            <input type=\"color\" id=\"node-color\" class=\"form-control\" style=\"padding: 5px 8px;\" [(ngModel)]=\"widgets['epiCurve-colors'][0]\" (change)=\"onNodeColorChanged()\" *ngIf=\"!useNodeColors || selectedGraphType!='Single Date Field'\">\r\n          </div>  \r\n        </div>\r\n        <div class=\"form-group row additionalDateField\">\r\n          <div class=\"col-4\">\r\n            <label>Date Field 2</label>\r\n          </div>\r\n          <div class=\"col-6\" style=\"padding-right: 5px\">\r\n            <p-dropdown id=\"epiCurve-date-field\" [options]=\"FieldList\" appendTo=\"body\"  [(ngModel)]=\"SelectedDateFieldVariable2\" (ngModelChange)=\"refresh()\"></p-dropdown>\r\n          </div>\r\n          <div class=\"col-2\" style=\"padding: 0px 15px 0px 10px\">\r\n            <input type=\"color\" id=\"node-color\" class=\"form-control\" style=\"padding: 5px 8px;\" [(ngModel)]=\"widgets['epiCurve-colors'][1]\" (change)=\"onNodeColorChanged()\">\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group row additionalDateField\">\r\n          <div class=\"col-4\">\r\n            <label>Date Field 3</label>\r\n          </div>\r\n          <div class=\"col-6\" style=\"padding-right: 5px\">\r\n            <p-dropdown id=\"epiCurve-date-field\" [options]=\"FieldList\" appendTo=\"body\"  [(ngModel)]=\"SelectedDateFieldVariable3\" (ngModelChange)=\"refresh()\"></p-dropdown>\r\n          </div>\r\n          <div class=\"col-2\" style=\"padding: 0px 15px 0px 10px\">\r\n            <input type=\"color\" id=\"node-color\" class=\"form-control\" style=\"padding: 5px 8px;\" [(ngModel)]=\"widgets['epiCurve-colors'][2]\" (change)=\"onNodeColorChanged()\">\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group row\" id=\"useNodeColorRow\">\r\n          <div class=\"col-4\">\r\n            <label>Use Node Colors</label>\r\n          </div>\r\n          <div class=\"col-6\">\r\n            <p-selectButton [options]=\"useNodeColorsOptions\" [(ngModel)]=\"useNodeColors\" (ngModelChange)=\"onUseNodeColorChange()\"></p-selectButton>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group row\">\r\n          <div class=\"col-4\">\r\n            <label>Bin Size</label>\r\n          </div>\r\n          <div class=\"col-8\">\r\n            <p-dropdown id=\"epiCurve-date-field\" [options]=\"binSizes\" appendTo=\"body\"  [(ngModel)]=\"widgets['epiCurve-binSize']\" (ngModelChange)=\"onBinSizeChange()\"></p-dropdown>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group row\" title=\"What interval to display ticks on x axis\" id=\"epi-tick-size\">\r\n          <div class=\"col-4\">\r\n              <label for=\"cluster-minimum-size\">Tick Interval</label>\r\n          </div>\r\n          <div class=\"col-8\">\r\n              <input type=\"number\" class=\"form-control form-control-sm\" min=\"1\" max=\"4\" step=\"1\" [(ngModel)]=\"tickInterval\" (ngModelChange)=\"onTickIntevalChange()\">\r\n          </div>\r\n      </div>\r\n        <div class=\"form-group row\">\r\n          <div class=\"col-4\">Epi Curve</div>\r\n          <div class=\"col-8\">\r\n            <div class=\"btn-group btn-group-toggle w-100\">\r\n              <label class=\"btn btn-light btn-sm col\" [class.active]=\"!widgets['epiCurve-cumulative']\">\r\n                <input type=\"radio\" name=\"epiCurve-cumulation\" (click)=\"setCumulative(false)\">\r\n                Noncumulative\r\n              </label>\r\n              <label class=\"btn btn-light btn-sm col\" [class.active]=\"widgets['epiCurve-cumulative']\">\r\n                <input type=\"radio\" name=\"epiCurve-cumulation\" (click)=\"setCumulative(true)\">\r\n                Cumulative\r\n              </label>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group row\" id=\"useNodeColorRow\">\r\n          <div class=\"col-4\">\r\n            <label>Legend Position</label>\r\n          </div>\r\n          <div class=\"col-8\">\r\n            <p-selectButton [options]=\"legendPositionOptions\" [(ngModel)]=\"widgets['epiCurve-legendPosition']\" (ngModelChange)=\"onLegendPositionChange()\"></p-selectButton>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</p-dialog>\r\n\r\n<p-dialog *ngIf=\"viewActive\" id=\"epi-export-modal\" [(visible)]=\"ShowEpiExportPane\" appendTo=\"body\" header=\"Export Epi Curve\">\r\n  <div class=\"modal-dialog\" role=\"document\">\r\n      <div class=\"modal-content\">\r\n          <div class=\"modal-body\" style='min-width: 400px; height: 100%;'>\r\n              <div class=\"form-group row\">\r\n                  <div class=\"col-9\">\r\n                      <input type=\"text\" class=\"form-control form-control-sm\" placeholder=\"Filename\" [(ngModel)]=\"EpiExportFileName\">\r\n                  </div>\r\n                  <div class=\"col-3\">\r\n                      <select [(ngModel)]=\"EpiExportFileType\" class=\"form-control form-control-sm\">\r\n                          <option>svg</option>\r\n                          <option>png</option>\r\n                      </select>\r\n                  </div>\r\n              </div>\r\n              <div [hidden]=\"EpiExportFileType=='svg'\">\r\n                <p-accordion>\r\n                    <p-accordionTab style=\"color:#495057\" header=\"Advanced\">\r\n                        <div id=\"network-export-advanced\">\r\n                            <div class=\"form-group row\">\r\n                                <div class=\"col-3\">\r\n                                    <label for=\"network-export-scale\">Scale</label>\r\n                                </div>\r\n                                <div class=\"col-9\">\r\n                                    <input type=\"number\" id=\"network-export-scale\" class=\"form-control form-control-sm\" min=\"0\" max=\"2\" step=\"0.1\" value=\"1\" [(ngModel)]=\"SelectedNetworkExportScaleVariable\" (ngModelChange)=\"updateCalculatedResolution()\">\r\n                                </div>\r\n                            </div>\r\n                            <div class=\"form-group row\">\r\n                                <div class=\"col-3\">Resolution</div>\r\n                                <div id=\"network-export-dimensions\" class=\"col-9 text-right\">{{CalculatedResolution}}</div>\r\n                            </div>\r\n                            <div class=\"row\">\r\n                                <div class=\"col-3\">\r\n                                    <label for=\"network-export-quality\">Quality</label>\r\n                                </div>\r\n                                <div class=\"col-9\">\r\n                                    <input type=\"range\" class=\"custom-range\" id=\"network-export-quality\" min=\"0\" max=\"1.0\" value=\"0.92\" step=\"0.01\" [(ngModel)]=\"SelectedNetworkExportQualityVariable\">\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n                    </p-accordionTab>\r\n                </p-accordion>\r\n            </div>\r\n          </div>\r\n          <div class=\"modal-footer\">\r\n              <button type=\"button\" class=\"btn btn-error\" (click)=\"ShowEpiExportPane = false\">Cancel</button>\r\n              <button type=\"button\" class=\"btn btn-primary\" (click)=\"exportVisualization()\">Export</button>\r\n          </div>\r\n      </div><!-- /.modal-content -->\r\n  </div><!-- /.modal-dialog -->\r\n</p-dialog><!-- /.modal -->\r\n\r\n";
+module.exports = "<div #epiCurve id=\"epiCurve\">\r\n  <svg #epiCurveSVG id=\"epiCurveSVG\"></svg>\r\n</div>\r\n\r\n<div id=\"tool-btn-container\" class=\"m-portlet\">\r\n    <span style=\"overflow: visible; position: relative;\">\r\n        <a title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openSettings()\"><i class=\"flaticon-settings primary\"></i></a>\r\n    </span>\r\n    <span style=\"overflow: visible; position: relative;\">\r\n      <a title=\"Export Screen\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openExport()\"><i class=\"flaticon-download primary\"></i></a>\r\n  </span>\r\n</div>\r\n\r\n<p-dialog *ngIf=\"viewActive\" id=\"epiCurve-settings-pane\" [(visible)]=\"ShowEpiSettingsPane\" header=\"Epi Curve Settings\"\r\n  [style]=\"{width: '500px', height:'490px'}\" appendTo=\"body\">\r\n  <div class=\"tab-pane fade show active\" id=\"table-node-settings\" role=\"tabpanel\" aria-labelledby=\"nodes-tab\">\r\n    <div class=\"tab-content\">\r\n      <div class=\"tab-pane fade show active\" role=\"tabpanel\">\r\n        <div class=\"form-group row\">\r\n          <div class=\"col-4\">\r\n            <label>Graph Type</label>\r\n          </div>\r\n          <div class=\"col-8\">\r\n            <p-dropdown [options]=\"graphTypes\" appendTo=\"body\"  [(ngModel)]=\"selectedGraphType\" (ngModelChange)=\"onGraphTypeChange()\"></p-dropdown>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group row\">\r\n          <div class=\"col-4\">\r\n            <label>Date Field</label>\r\n          </div>  \r\n          <div class=\"col-6\" style=\"padding-right: 5px\">\r\n            <p-dropdown id=\"epiCurve-date-field\" [options]=\"FieldList\" appendTo=\"body\"  [(ngModel)]=\"SelectedDateFieldVariable\" (ngModelChange)=\"onDateFieldChange(0)\"></p-dropdown>\r\n          </div>\r\n          <div class=\"col-2\" style=\"padding: 0px 15px 0px 10px\" *ngIf=\"selectedGraphType!='Single Date Field' || widgets['epiCurve-stackColorBy'] == 'None'\">\r\n            <input type=\"color\" id=\"epi-color-select\" class=\"form-control\" style=\"padding: 5px 8px;\" [(ngModel)]=\"widgets['epiCurve-colors'][0]\" (change)=\"onNodeColorChanged()\">\r\n          </div>  \r\n        </div>\r\n        <div class=\"form-group row additionalDateField\" *ngIf=\"selectedGraphType!='Single Date Field'\">\r\n          <div class=\"col-4\">\r\n            <label>Date Field 2</label>\r\n          </div>\r\n          <div class=\"col-6\" style=\"padding-right: 5px\">\r\n            <p-dropdown id=\"epiCurve-date-field\" [options]=\"FieldList\" appendTo=\"body\"  [(ngModel)]=\"SelectedDateFieldVariable2\" (ngModelChange)=\"onDateFieldChange(1)\"></p-dropdown>\r\n          </div>\r\n          <div class=\"col-2\" style=\"padding: 0px 15px 0px 10px\">\r\n            <input type=\"color\" id=\"node-color\" class=\"form-control\" style=\"padding: 5px 8px;\" [(ngModel)]=\"widgets['epiCurve-colors'][1]\" (change)=\"onNodeColorChanged()\">\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group row additionalDateField\" *ngIf=\"selectedGraphType!='Single Date Field'\">\r\n          <div class=\"col-4\">\r\n            <label>Date Field 3</label>\r\n          </div>\r\n          <div class=\"col-6\" style=\"padding-right: 5px\">\r\n            <p-dropdown id=\"epiCurve-date-field\" [options]=\"FieldList\" appendTo=\"body\"  [(ngModel)]=\"SelectedDateFieldVariable3\" (ngModelChange)=\"onDateFieldChange(2)\"></p-dropdown>\r\n          </div>\r\n          <div class=\"col-2\" style=\"padding: 0px 15px 0px 10px\">\r\n            <input type=\"color\" id=\"node-color\" class=\"form-control\" style=\"padding: 5px 8px;\" [(ngModel)]=\"widgets['epiCurve-colors'][2]\" (change)=\"onNodeColorChanged()\">\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group row\" id=\"useNodeColorRow\" *ngIf=\"selectedGraphType=='Single Date Field'\">\r\n          <div class=\"col-4\">\r\n            <label>Stack Color By</label>\r\n          </div>\r\n          <div class=\"col-6\" style=\"padding-right: 5px\">\r\n            <p-dropdown id=\"epiCurve-date-field\" [options]=\"FieldListStack\" appendTo=\"body\"  [(ngModel)]=\"this.widgets['epiCurve-stackColorBy']\" (ngModelChange)=\"onUseNodeColorChange()\"></p-dropdown>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group row\">\r\n          <div class=\"col-4\">\r\n            <label>Bin Size</label>\r\n          </div>\r\n          <div class=\"col-8\">\r\n            <p-dropdown id=\"epiCurve-date-field\" [options]=\"binSizes\" appendTo=\"body\"  [(ngModel)]=\"widgets['epiCurve-binSize']\" (ngModelChange)=\"onBinSizeChange()\"></p-dropdown>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group row\" title=\"What interval to display ticks on x axis\" id=\"epi-tick-size\">\r\n          <div class=\"col-4\">\r\n              <label for=\"cluster-minimum-size\">Tick Interval</label>\r\n          </div>\r\n          <div class=\"col-8\">\r\n              <input type=\"number\" class=\"form-control form-control-sm\" min=\"1\" max=\"4\" step=\"1\" [(ngModel)]=\"tickInterval\" (ngModelChange)=\"onTickIntevalChange()\">\r\n          </div>\r\n      </div>\r\n        <div class=\"form-group row\">\r\n          <div class=\"col-4\">Epi Curve</div>\r\n          <div class=\"col-8\">\r\n            <div class=\"btn-group btn-group-toggle w-100\">\r\n              <label class=\"btn btn-light btn-sm col\" [class.active]=\"!widgets['epiCurve-cumulative']\">\r\n                <input type=\"radio\" name=\"epiCurve-cumulation\" (click)=\"setCumulative(false)\">\r\n                Noncumulative\r\n              </label>\r\n              <label class=\"btn btn-light btn-sm col\" [class.active]=\"widgets['epiCurve-cumulative']\">\r\n                <input type=\"radio\" name=\"epiCurve-cumulation\" (click)=\"setCumulative(true)\">\r\n                Cumulative\r\n              </label>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group row\" id=\"useNodeColorRow\">\r\n          <div class=\"col-4\">\r\n            <label>Legend Position</label>\r\n          </div>\r\n          <div class=\"col-8\">\r\n            <p-selectButton [options]=\"legendPositionOptions\" [(ngModel)]=\"widgets['epiCurve-legendPosition']\" (ngModelChange)=\"onLegendPositionChange()\"></p-selectButton>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</p-dialog>\r\n\r\n<p-dialog *ngIf=\"viewActive\" id=\"epi-export-modal\" [(visible)]=\"ShowEpiExportPane\" appendTo=\"body\" header=\"Export Epi Curve\">\r\n  <div class=\"modal-dialog\" role=\"document\">\r\n      <div class=\"modal-content\">\r\n          <div class=\"modal-body\" style='min-width: 400px; height: 100%;'>\r\n              <div class=\"form-group row\">\r\n                  <div class=\"col-9\">\r\n                      <input type=\"text\" class=\"form-control form-control-sm\" placeholder=\"Filename\" [(ngModel)]=\"EpiExportFileName\">\r\n                  </div>\r\n                  <div class=\"col-3\">\r\n                      <select [(ngModel)]=\"EpiExportFileType\" class=\"form-control form-control-sm\">\r\n                          <option>svg</option>\r\n                          <option>png</option>\r\n                      </select>\r\n                  </div>\r\n              </div>\r\n              <div [hidden]=\"EpiExportFileType=='svg'\">\r\n                <p-accordion>\r\n                    <p-accordionTab style=\"color:#495057\" header=\"Advanced\">\r\n                        <div id=\"network-export-advanced\">\r\n                            <div class=\"form-group row\">\r\n                                <div class=\"col-3\">\r\n                                    <label for=\"network-export-scale\">Scale</label>\r\n                                </div>\r\n                                <div class=\"col-9\">\r\n                                    <input type=\"number\" id=\"network-export-scale\" class=\"form-control form-control-sm\" min=\"0\" max=\"2\" step=\"0.1\" value=\"1\" [(ngModel)]=\"SelectedNetworkExportScaleVariable\" (ngModelChange)=\"updateCalculatedResolution()\">\r\n                                </div>\r\n                            </div>\r\n                            <div class=\"form-group row\">\r\n                                <div class=\"col-3\">Resolution</div>\r\n                                <div id=\"network-export-dimensions\" class=\"col-9 text-right\">{{CalculatedResolution}}</div>\r\n                            </div>\r\n                            <div class=\"row\">\r\n                                <div class=\"col-3\">\r\n                                    <label for=\"network-export-quality\">Quality</label>\r\n                                </div>\r\n                                <div class=\"col-9\">\r\n                                    <input type=\"range\" class=\"custom-range\" id=\"network-export-quality\" min=\"0\" max=\"1.0\" value=\"0.92\" step=\"0.01\" [(ngModel)]=\"SelectedNetworkExportQualityVariable\">\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n                    </p-accordionTab>\r\n                </p-accordion>\r\n            </div>\r\n          </div>\r\n          <div class=\"modal-footer\">\r\n              <button type=\"button\" class=\"btn btn-error\" (click)=\"ShowEpiExportPane = false\">Cancel</button>\r\n              <button type=\"button\" class=\"btn btn-primary\" (click)=\"exportVisualization()\">Export</button>\r\n          </div>\r\n      </div><!-- /.modal-content -->\r\n  </div><!-- /.modal-dialog -->\r\n</p-dialog><!-- /.modal -->\r\n\r\n";
 
 /***/ }),
 
