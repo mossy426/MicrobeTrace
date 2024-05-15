@@ -79,6 +79,8 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
     { label: 'Dendrogram', value: 'dendrogram' },
   ];
   SelectedTreeTypeVariable = 'weighted';  // 'weighted';
+  SelectedVerticalStretchVariable = 1;
+  SelectedHorizontalStretchVariable = 1;
 
 
   // Leaves Tab
@@ -187,6 +189,20 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
             this.styleTree();
         });
       }
+      // d3.select('svg#network').exit().remove();
+      // this.visuals.phylogenetic.svg = d3.select('svg#network').append('g');
+
+    this.LeafLabelFieldList.push({ label: 'None', value: 'None' });
+    console.log("getting node fields")
+    this.commonService.session.data['nodeFields'].map((d, i) => {
+
+      this.visuals.phylogenetic.LeafLabelFieldList.push(
+        {
+          label: this.visuals.phylogenetic.commonService.capitalize(d.replace('_', '')),
+          value: d
+        });
+    });
+    console.log(this.visuals.phylogenetic.LeafLabelFieldList);
 
    // }
   }
@@ -326,6 +342,7 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
 
   });
 
+    
     this.goldenLayoutComponentResize()
     this.openTree();
 
@@ -420,10 +437,40 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
 
   onLeafLabelVariableChange(event) {
     this.SelectedLeafLabelVariable = event;
+    let labelVar = event;
+    this.tree.eachLeafLabel(label => {
+      d3.select(label).text(data => {
+        let id = data.data.id;
+        let node = this.commonService.session.network.nodes.find(node => node._id == id);
+        return node[labelVar];
+      }).attr('dx', 8)
+    });
   }
 
   onLeafTooltipVariableChange(event) {
     this.SelectedLeafTooltipVariable = event;
+    let labelVar = event;
+    this.tree.eachLeafNode((circle, data) => {
+        let node = this.commonService.session.data.nodes.find(d => d.id === data.data.id);
+        if (node === undefined) 
+          node = this.commonService.session.data.nodes.find(d => d._id === data.data.id);
+        d3.select(circle)
+          .attr('title', node[labelVar]);
+      });
+  }
+
+  onHorizontalStretchChange(event) {
+    let cached = this.tree.animation;
+    this.tree.setAnimation(0);
+    this.tree.setHStretch(this.SelectedHorizontalStretchVariable);
+    this.tree.setAnimation(cached);
+  }
+
+  onVerticalStretchChange(event) {
+    let cached = this.tree.animation;
+    this.tree.setAnimation(0);
+    this.tree.setVStretch(this.SelectedVerticalStretchVariable);
+    this.tree.setAnimation(cached);
   }
 
   onBranchLabelShowChange(event) {
@@ -607,7 +654,7 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
 
   showTooltip = (d) => {
     if (this.SelectedLeafTooltipShowVariable) {
-      const htmlValue: any = this.SelectedLeafTooltipVariable;
+      let htmlValue: any = this.SelectedLeafTooltipVariable;
 
       let [X, Y] = this.getRelativeMousePosition();
 
@@ -615,8 +662,15 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
 
       const leftVal = X + 8;
       const topVal = Y - 28;
+      let node = this.commonService.session.data.nodes.find(n => n.id === d[0].data.id);
+      if (node === undefined){ 
+        node = this.commonService.session.data.nodes.find(n => n._id === d[0].data.id);
+        if (htmlValue === "id")
+          htmlValue = "_id";
+      }
+      console.log(node);
       d3.select('#phyloTooltip')
-        .html(d[0].data[htmlValue])
+        .html(node[htmlValue])
         .style('position', 'absolute')
         .style('display', 'block')
         .style('left', `${leftVal}px`)
