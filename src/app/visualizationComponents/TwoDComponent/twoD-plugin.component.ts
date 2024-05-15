@@ -3516,11 +3516,11 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
          //Links|Width Max
          this.SelectedLinkWidthMax = this.widgets['link-width-max'];
-         this.onLinkWidthMaxChange(this.SelectedLinkWidthByVariable);
+         this.onLinkWidthMaxChange(this.SelectedLinkWidthMax);
  
          //Links|Width Min
          this.SelectedLinkWidthMin = this.widgets['link-width-min'];
-         this.onLinkWidthMinChange(this.SelectedLinkWidthByVariable);
+         this.onLinkWidthMinChange(this.SelectedLinkWidthMin);
 
         //Links|Length
         this.SelectedLinkLengthVariable = this.widgets['link-length'];

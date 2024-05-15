@@ -797,6 +797,15 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
             if(key === "distance") {
               // console.log('key is distance');
               link[key] = parseFloat(link[key]);
+            } else if (key === 'origin') {
+              // related to zenhub#810: link list csv was exported from table view and unable to be loaded correctly; this code create a new linkField when it runs into field called origin 
+              link['originColumnFromFile'] = link['origin']
+              safeLink['originColumnFromFile'] = link['originColumnFromFile'];
+              link['origin'] = origin;
+
+              if (!this.visuals.microbeTrace.commonService.includes(this.visuals.microbeTrace.commonService.session.data.linkFields, 'originColumnFromFile')) {
+                this.visuals.microbeTrace.commonService.session.data.linkFields.push('originColumnFromFile');
+              }
             }
             
             safeLink[key] = link[key];

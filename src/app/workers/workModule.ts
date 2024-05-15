@@ -195,12 +195,20 @@ export class WorkerModule implements OnInit {
       const matrix = e.matrix;
 
       console.log('parsingggg');
-      // @ts-ignore
-      const RNJ = parseMatrix(matrix, e.labels);
-      console.log('Tree Compute time: ', (Date.now() - start).toLocaleString(), 'ms');
-      start = Date.now();
-      const encoder = new TextEncoder();
-      const output = encoder.encode(JSON.stringify(RNJ.toObject())).buffer;
+      let output;
+      // related to zenhub#810, one issue related to this dataset not loading was the parseMatrix leading to a call stack exceeded error 
+      try {
+        // @ts-ignore
+        const RNJ = parseMatrix(matrix, e.labels);
+        console.log('Tree Compute time: ', (Date.now() - start).toLocaleString(), 'ms');
+        start = Date.now();
+        const encoder = new TextEncoder();
+        output = encoder.encode(JSON.stringify(RNJ.toObject())).buffer;
+      } catch {
+        console.log('unable to compute tree');
+        const encoder = new TextEncoder();
+        output = encoder.encode(JSON.stringify({})).buffer;
+      }
 
 
       let response = {};

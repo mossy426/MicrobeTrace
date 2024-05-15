@@ -660,8 +660,16 @@ export class CommonService extends AppComponentBase implements OnInit {
         const serv = window.context.commonService;
         const matrix = serv.temp.matrix;
 
-        newLink.source = newLink.source.trim();
-        newLink.target = newLink.target.trim();
+        if (typeof newLink.source == 'number') {
+            newLink.source = newLink.source.toString().trim()
+        } else {
+            newLink.source = newLink.source.trim();
+        }
+        if (typeof newLink.target == 'number') {
+            newLink.target = newLink.target.toString().trim()
+        } else {
+            newLink.target = newLink.target.trim();
+        } 
 
         if (!matrix[newLink.source]) {
             matrix[newLink.source] = {};
