@@ -326,7 +326,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
       //debugger;
 
-      const lsv = e.data ? e.data : 'TN93';
+      const lsv = e.data ? e.data : 'tn93';
       this.visuals.microbeTrace.commonService.localStorageService.setItem('default-distance-metric', lsv);
       $('#default-distance-metric').val(lsv);
       console.log(lsv);
@@ -334,9 +334,9 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
         $('#ambiguities-row').slideUp();
         $('#default-distance-threshold, #link-threshold')
           .attr('step', 1)
-          .val(16);
-        this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"] = 16;
-        this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 16;
+          .val(7);
+        this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"] = 7;
+        this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 7;
         console.log('default-distance-metric change file-plugin.component.ts snps');
         this.visuals.microbeTrace.onLinkThresholdChanged();
       } else {
@@ -692,17 +692,17 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
         this.visuals.microbeTrace.commonService.applyAuspice(file.contents).then(auspiceData => {
           this.visuals.microbeTrace.commonService.clearData();
           this.visuals.microbeTrace.commonService.session = this.visuals.microbeTrace.commonService.sessionSkeleton();
-          this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
-          this.visuals.microbeTrace.metric = 'snps';
-          this.SelectedDefaultDistanceMetricVariable = 'snps';
-          this.onDistanceMetricChange('snps');
-          this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'snps';
-          this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable = 'snps';
-          $('#default-distance-metric').val('SNPs').trigger('change');
 
           console.log(auspiceData["tree"]["children"][0]);
           // This is a bizarre line, but I need to check if the div values are more or less than one. The first one is always zero, so we need to go to the second one
           if(auspiceData["tree"]["children"][0]["data"]["div"] > 0 && auspiceData["tree"]["children"][0]["data"]["div"] < 1){
+            this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'tn93';
+            this.visuals.microbeTrace.metric = 'tn93';
+            this.SelectedDefaultDistanceMetricVariable = 'tn93';
+            this.onDistanceMetricChange('tn93');
+            this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'tn93';
+            this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable = 'tn93';
+            $('#default-distance-metric').val('tn93').trigger('change');
             console.log(this.displayloadingInformationModal);
             $('#default-distance-threshold', '#link-threshold').attr('step', 1).val(0.015).trigger('change');
             this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = 0.015;
@@ -711,6 +711,13 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
             this.visuals.microbeTrace.SelectedLinkThresholdVariable = '0.015';
             this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedLinkThresholdVariable = 0.015;
           } else {
+            this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
+            this.visuals.microbeTrace.metric = 'snps';
+            this.SelectedDefaultDistanceMetricVariable = 'snps';
+            this.onDistanceMetricChange('snps');
+            this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'snps';
+            this.visuals.microbeTrace.commonService.GlobalSettingsModel.SelectedDistanceMetricVariable = 'snps';
+            $('#default-distance-metric').val('SNPs').trigger('change');
             $('#default-distance-threshold', '#link-threshold').attr('step', 1).val(7).trigger('change');
             this.visuals.microbeTrace.commonService.session.style.widgets['link-threshold'] = 7;
             this.SelectedDefaultDistanceThresholdVariable = '7';
@@ -1814,7 +1821,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
   /**
    * Updates SelectedDefaultDistanceThresholdVariable, microbeTrace.SelectedLinkThresholdVariable, and link-threshold widget values.
    * Then calls microbeTrace.onLinkThresholdChanged clusters, nodes, and links as well as visualizations and statistics
-   * @param {string} e string representation of link threshold such as '16'
+   * @param {string} e string representation of link threshold such as '7'
    */
   onLinkThresholdChange = (e) => {
     if(this.commonService.debugMode) {
@@ -1842,21 +1849,21 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
       }
       $('#default-distance-threshold, #link-threshold')
         .attr('step', 1)
-        .val(16)
+        .val(7)
         .trigger('change');
 
         $("#ambiguities-row").slideUp();
       this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
       this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'snps';
       this.visuals.microbeTrace.onDistanceMetricChanged();
-      this.onLinkThresholdChange('16');
+      this.onLinkThresholdChange('7');
     } else {
       $('#default-distance-threshold, #link-threshold')
         .attr('step', 0.001)
         .val(0.015)
         .trigger('change');
         $("#ambiguities-row").slideDown();
-      this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'TN93';
+      this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'tn93';
       this.visuals.microbeTrace.SelectedDistanceMetricVariable = 'tn93';
       this.visuals.microbeTrace.onDistanceMetricChanged();
       this.onLinkThresholdChange('0.015');
