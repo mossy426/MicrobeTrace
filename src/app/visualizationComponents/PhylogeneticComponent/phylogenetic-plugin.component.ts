@@ -501,9 +501,6 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
   onBranchNodeSizeChange(event) {
     console.log(`We're in the change function, the event is ${event}`);
     this.SelectedBranchNodeSizeVariable = event;
-    this.tree.eachBranchNode((node, data) => {
-      d3.select(node).attr("r", event);
-    });
     this.styleTree();
   }
 
