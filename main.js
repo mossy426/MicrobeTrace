@@ -297,9 +297,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "CommonService": () => (/* binding */ CommonService)
 /* harmony export */ });
 /* harmony import */ var _home_reagank_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@angular-devkit/build-angular/node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js */ 49671);
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! tslib */ 70655);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/core */ 94650);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs */ 591);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! tslib */ 70655);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/core */ 94650);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! rxjs */ 591);
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3 */ 92925);
 /* harmony import */ var patristic__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! patristic */ 78457);
 /* harmony import */ var patristic__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(patristic__WEBPACK_IMPORTED_MODULE_2__);
@@ -310,14 +310,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ngx-bootstrap */ 11109);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! moment */ 15439);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _workers_workModule__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../workers/workModule */ 87634);
-/* harmony import */ var _shared_utils_local_storage_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @shared/utils/local-storage.service */ 3469);
-/* harmony import */ var _app_helperClasses_auspiceHandler__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @app/helperClasses/auspiceHandler */ 60817);
-/* harmony import */ var _shared_common_app_component_base__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @shared/common/app-component-base */ 40506);
-/* harmony import */ var _microbe_trace_next_plugin_visuals__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../microbe-trace-next-plugin-visuals */ 57643);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/common/http */ 80529);
+/* harmony import */ var _nodeColors__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./nodeColors */ 88740);
+/* harmony import */ var _workers_workModule__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../workers/workModule */ 87634);
+/* harmony import */ var _shared_utils_local_storage_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @shared/utils/local-storage.service */ 3469);
+/* harmony import */ var _app_helperClasses_auspiceHandler__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @app/helperClasses/auspiceHandler */ 60817);
+/* harmony import */ var _shared_common_app_component_base__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @shared/common/app-component-base */ 40506);
+/* harmony import */ var _microbe_trace_next_plugin_visuals__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../microbe-trace-next-plugin-visuals */ 57643);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/common/http */ 80529);
 
 var _class;
+
 
 
 
@@ -340,7 +342,7 @@ var _class;
 
 // import { GoldenLayoutService } from '@embedded-enterprises/ng6-golden-layout';
 // import { ConsoleReporter } from 'jasmine';
-let CommonService = (_class = class CommonService extends _shared_common_app_component_base__WEBPACK_IMPORTED_MODULE_10__.AppComponentBase {
+let CommonService = (_class = class CommonService extends _shared_common_app_component_base__WEBPACK_IMPORTED_MODULE_11__.AppComponentBase {
   setLinkTableElement(element) {
     this.linkElementSource.next(element);
   }
@@ -367,13 +369,13 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     this.localStorageService = localStorageService;
     this.visuals = visuals;
     this.http = http;
-    this.LoadViewEvent = new _angular_core__WEBPACK_IMPORTED_MODULE_12__.EventEmitter();
+    this.LoadViewEvent = new _angular_core__WEBPACK_IMPORTED_MODULE_13__.EventEmitter();
     this.decoder = new TextDecoder('utf-8');
     this.r01 = Math.random;
     // Set this to true to enable the debug mode/console logs to appear
     this.debugMode = false;
-    this.linkElementSource = new rxjs__WEBPACK_IMPORTED_MODULE_13__.BehaviorSubject(null);
-    this.nodeElementSource = new rxjs__WEBPACK_IMPORTED_MODULE_13__.BehaviorSubject(null);
+    this.linkElementSource = new rxjs__WEBPACK_IMPORTED_MODULE_14__.BehaviorSubject(null);
+    this.nodeElementSource = new rxjs__WEBPACK_IMPORTED_MODULE_14__.BehaviorSubject(null);
     this.currentLinkTableElement = this.linkElementSource.asObservable();
     this.currentNodeTableElement = this.nodeElementSource.asObservable();
     this.GlobalSettingsModel = {
@@ -676,7 +678,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           linkColors: d3__WEBPACK_IMPORTED_MODULE_1__.schemePaired,
           linkValueNames: {},
           nodeAlphas: [1],
-          nodeColors: [d3__WEBPACK_IMPORTED_MODULE_1__.schemeCategory10[0]].concat(d3__WEBPACK_IMPORTED_MODULE_1__.schemeCategory10.slice(2)),
+          nodeColors: _nodeColors__WEBPACK_IMPORTED_MODULE_7__.longColorList,
+          //nodeColors: [d3.schemeCategory10[0]].concat(d3.schemeCategory10.slice(2)),
           nodeColorsTable: {},
           nodeColorsTableHistory: {
             'null': '#EAE553'
@@ -1357,7 +1360,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   }
   applyAuspice(auspice) {
     return new Promise(resolve => {
-      const auspiceHandler = new _app_helperClasses_auspiceHandler__WEBPACK_IMPORTED_MODULE_9__["default"](ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService);
+      const auspiceHandler = new _app_helperClasses_auspiceHandler__WEBPACK_IMPORTED_MODULE_10__["default"](ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService);
       const auspiceData = auspiceHandler.run(auspice);
       resolve(auspiceData);
     });
@@ -1394,7 +1397,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    */
   parseFASTA(text) {
     return new Promise(resolve => {
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_8__.WorkerModule();
       let response = computer.compute_parse_fastaWorker.postMessage(text);
       computer.compute_parse_fastaWorker.onmessage().subscribe(response => {
         let nodes = JSON.parse(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.decode(new Uint8Array(response.data.nodes)));
@@ -1416,7 +1419,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       const origin = [file.name];
       let nn = 0,
         nl = 0;
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_8__.WorkerModule();
       computer.compute_parse_csv_matrixWorker.postMessage(file.contents);
       computer.compute_parse_csv_matrixWorker.onmessage = response => {
         const data = JSON.parse(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.decode(new Uint8Array(response.data.data)));
@@ -1557,7 +1560,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       }
       let n = params.nodes.length;
       let referenceLength = params.reference.length;
-      let aligner = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let aligner = new _workers_workModule__WEBPACK_IMPORTED_MODULE_8__.WorkerModule();
       aligner.compute_align_swWorker.postMessage(params);
       aligner.compute_align_swWorker.onmessage().subscribe(response => {
         let subset = JSON.parse(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.decode(new Uint8Array(response.data.nodes)));
@@ -1590,7 +1593,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   computeConsensus(nodes = null) {
     if (!nodes) nodes = this.session.data.nodes.filter(d => d.seq);
     return new Promise(resolve => {
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_8__.WorkerModule();
       computer.compute_consensusWorker.postMessage({
         data: nodes
       });
@@ -1612,7 +1615,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       let nodes = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes;
       let subset = nodes.filter(d => d.seq);
       const subsetLength = subset.length;
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_8__.WorkerModule();
       computer.compute_ambiguity_countsWorker.postMessage(subset);
       computer.compute_ambiguity_countsWorker.onmessage().subscribe(response => {
         console.log("Ambiguity Count Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
@@ -1660,7 +1663,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         }
       }
       let subsetLength = subset.length;
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_8__.WorkerModule();
       computer.compute_consensusWorker.postMessage({
         data: {
           consensus: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.consensus,
@@ -1689,7 +1692,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   computeLinks(subset) {
     return new Promise(resolve => {
       let k = 0;
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_8__.WorkerModule();
       computer.compute_linksWorker.postMessage({
         nodes: subset,
         metric: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-distance-metric"],
@@ -1777,7 +1780,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       } else if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.newick) {
         resolve(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.newick);
       } else {
-        let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+        let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_8__.WorkerModule();
         ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.getDM().then(dm => {
           computer.compute_treeWorker.postMessage({
             // labels: Object.keys(window.context.commonService.temp.matrix).sort(), <- This doesn't work because temp.matrix retains blank objects
@@ -1799,7 +1802,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   }
   computeDirectionality() {
     return new Promise(resolve => {
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_8__.WorkerModule();
       computer.compute_directionalityWorker.postMessage({
         links: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.links,
         tree: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.tree
@@ -1829,7 +1832,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   }
   computeMST() {
     return new Promise((resolve, reject) => {
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_8__.WorkerModule();
       computer.compute_mstWorker.postMessage({
         links: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.links,
         matrix: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.matrix,
@@ -1859,7 +1862,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   }
   computeNN() {
     return new Promise((resolve, reject) => {
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_8__.WorkerModule();
       computer.compute_nnWorker.postMessage({
         links: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.links,
         matrix: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.matrix,
@@ -1890,7 +1893,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   computeTriangulation() {
     return new Promise((resolve, reject) => {
       const metric = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-sort-variable"];
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_8__.WorkerModule();
       ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.getDM().then(dm => {
         computer.compute_triangulationWorker.postMessage({
           matrix: dm
@@ -3422,22 +3425,37 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     });
   }
 }, _class.ctorParameters = () => [{
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_12__.Injector
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_13__.Injector
 }, {
-  type: _shared_utils_local_storage_service__WEBPACK_IMPORTED_MODULE_8__.LocalStorageService
+  type: _shared_utils_local_storage_service__WEBPACK_IMPORTED_MODULE_9__.LocalStorageService
 }, {
-  type: _microbe_trace_next_plugin_visuals__WEBPACK_IMPORTED_MODULE_11__.MicrobeTraceNextVisuals
+  type: _microbe_trace_next_plugin_visuals__WEBPACK_IMPORTED_MODULE_12__.MicrobeTraceNextVisuals
 }, {
-  type: _angular_common_http__WEBPACK_IMPORTED_MODULE_14__.HttpClient
+  type: _angular_common_http__WEBPACK_IMPORTED_MODULE_15__.HttpClient
 }], _class.propDecorators = {
   LoadViewEvent: [{
-    type: _angular_core__WEBPACK_IMPORTED_MODULE_12__.Output
+    type: _angular_core__WEBPACK_IMPORTED_MODULE_13__.Output
   }]
 }, _class);
-CommonService = (0,tslib__WEBPACK_IMPORTED_MODULE_15__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_12__.Directive)(), (0,_angular_core__WEBPACK_IMPORTED_MODULE_12__.Injectable)({
+CommonService = (0,tslib__WEBPACK_IMPORTED_MODULE_16__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_13__.Directive)(), (0,_angular_core__WEBPACK_IMPORTED_MODULE_13__.Injectable)({
   providedIn: 'root'
-}), (0,tslib__WEBPACK_IMPORTED_MODULE_15__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_12__.Injector, _shared_utils_local_storage_service__WEBPACK_IMPORTED_MODULE_8__.LocalStorageService, _microbe_trace_next_plugin_visuals__WEBPACK_IMPORTED_MODULE_11__.MicrobeTraceNextVisuals, _angular_common_http__WEBPACK_IMPORTED_MODULE_14__.HttpClient])], CommonService);
+}), (0,tslib__WEBPACK_IMPORTED_MODULE_16__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_13__.Injector, _shared_utils_local_storage_service__WEBPACK_IMPORTED_MODULE_9__.LocalStorageService, _microbe_trace_next_plugin_visuals__WEBPACK_IMPORTED_MODULE_12__.MicrobeTraceNextVisuals, _angular_common_http__WEBPACK_IMPORTED_MODULE_15__.HttpClient])], CommonService);
 
+
+/***/ }),
+
+/***/ 88740:
+/*!**********************************************************!*\
+  !*** ./src/app/contactTraceCommonServices/nodeColors.ts ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "longColorList": () => (/* binding */ longColorList)
+/* harmony export */ });
+let longColorList = ["#000003", "#FFFF00", "#1CE6FF", "#FF34FF", "#FF4A46", "#008941", "#006FA6", "#A30059", "#FFDBE5", "#7A4900", "#0000A6", "#63FFAC", "#B79762", "#004D43", "#8FB0FF", "#997D87", "#5A0007", "#809693", "#FEFFE6", "#1B4400", "#4FC601", "#3B5DFF", "#4A3B53", "#FF2F80", "#61615A", "#BA0900", "#6B7900", "#00C2A0", "#FFAA92", "#FF90C9", "#B903AA", "#D16100", "#DDEFFF", "#000035", "#7B4F4B", "#A1C299", "#300018", "#0AA6D8", "#013349", "#00846F", "#372101", "#FFB500", "#C2FFED", "#A079BF", "#CC0744", "#C0B9B2", "#C2FF99", "#001E09", "#00489C", "#6F0062", "#0CBD66", "#EEC3FF", "#456D75", "#B77B68", "#7A87A1", "#788D66", "#885578", "#FAD09F", "#FF8A9A", "#D157A0", "#BEC459", "#456648", "#0086ED", "#886F4C", "#34362D", "#B4A8BD", "#00A6AA", "#452C2C", "#636375", "#A3C8C9", "#FF913F", "#938A81", "#575329", "#00FECF", "#B05B6F", "#8CD0FF", "#3B9700", "#04F757", "#C8A1A1", "#1E6E00", "#7900D7", "#A77500", "#6367A9", "#A05837", "#6B002C", "#772600", "#D790FF", "#9B9700", "#549E79", "#FFF69F", "#201625", "#72418F", "#BC23FF", "#99ADC0", "#3A2465", "#922329", "#5B4534", "#FDE8DC", "#404E55", "#0089A3", "#CB7E98", "#A4E804", "#324E72", "#6A3A4C", "#83AB58", "#001C1E", "#D1F7CE", "#004B28", "#C8D0F6", "#A3A489", "#806C66", "#222800", "#BF5650", "#E83000", "#66796D", "#DA007C", "#FF1A59", "#8ADBB4", "#1E0200", "#5B4E51", "#C895C5", "#320033", "#FF6832", "#66E1D3", "#CFCDAC", "#D0AC94", "#7ED379", "#012C58", "#7A7BFF", "#D68E01", "#353339", "#78AFA1", "#FEB2C6", "#75797C", "#837393", "#943A4D", "#B5F4FF", "#D2DCD5", "#9556BD", "#6A714A", "#001325", "#02525F", "#0AA3F7", "#E98176", "#DBD5DD", "#5EBCD1", "#3D4F44", "#7E6405", "#02684E", "#962B75", "#8D8546", "#9695C5", "#E773CE", "#D86A78", "#3E89BE", "#CA834E", "#518A87", "#5B113C", "#55813B", "#E704C4", "#00005F", "#A97399", "#4B8160", "#59738A", "#FF5DA7", "#F7C9BF", "#643127", "#513A01", "#6B94AA", "#51A058", "#A45B02", "#1D1702", "#E20027", "#E7AB63", "#4C6001", "#9C6966", "#64547B", "#97979E", "#006A66", "#391406", "#F4D749", "#0045D2", "#006C31", "#DDB6D0", "#7C6571", "#9FB2A4", "#00D891", "#15A08A", "#BC65E9", "#FFFFFE", "#C6DC99", "#203B3C", "#671190", "#6B3A64", "#F5E1FF", "#FFA0F2", "#CCAA35", "#374527", "#8BB400", "#797868", "#C6005A", "#3B000A", "#C86240", "#29607C", "#402334", "#7D5A44", "#CCB87C", "#B88183", "#AA5199", "#B5D6C3", "#A38469", "#9F94F0", "#A74571", "#B894A6", "#71BB8C", "#00B433", "#789EC9", "#6D80BA", "#953F00", "#5EFF03", "#E4FFFC", "#1BE177", "#BCB1E5", "#76912F", "#003109", "#0060CD", "#D20096", "#895563", "#29201D", "#5B3213", "#A76F42", "#89412E", "#1A3A2A", "#494B5A", "#A88C85", "#F4ABAA", "#A3F3AB", "#00C6C8", "#EA8B66", "#958A9F", "#BDC9D2", "#9FA064", "#BE4700", "#658188", "#83A485", "#453C23", "#47675D", "#3A3F00", "#061203", "#DFFB71", "#868E7E", "#98D058", "#6C8F7D", "#D7BFC2", "#3C3E6E", "#D83D66", "#2F5D9B", "#6C5E46", "#D25B88", "#5B656C", "#00B57F", "#545C46", "#866097", "#365D25", "#252F99", "#00CCFF", "#674E60", "#FC009C", "#92896B"];
 
 /***/ }),
 
@@ -11418,8 +11436,8 @@ let PhylogeneticComponent = (_class = class PhylogeneticComponent extends _app_b
       d3__WEBPACK_IMPORTED_MODULE_8__.select(label).style('font-size', `${this.SelectedBranchLabelSizeVariable}px`);
     };
     this.styleBranchNode = (node, data) => {
-      d3__WEBPACK_IMPORTED_MODULE_8__.select(node).attr('r', this.SelectedLeafNodeSizeVariable);
-      d3__WEBPACK_IMPORTED_MODULE_8__.select(node).style('fill', this.SelectedLeafNodeColorVariable);
+      d3__WEBPACK_IMPORTED_MODULE_8__.select(node).attr('r', this.SelectedBranchNodeSizeVariable);
+      d3__WEBPACK_IMPORTED_MODULE_8__.select(node).style('fill', this.SelectedBranchNodeColorVariable);
     };
     this.styleBranchDistance = (label, data) => {
       d3__WEBPACK_IMPORTED_MODULE_8__.select(label).style('font-size', `${this.SelectedBranchDistanceSizeVariable}px`);
@@ -11688,7 +11706,11 @@ let PhylogeneticComponent = (_class = class PhylogeneticComponent extends _app_b
     this.tree.setBranchNodes(event);
   }
   onBranchNodeSizeChange(event) {
+    console.log(`We're in the change function, the event is ${event}`);
     this.SelectedBranchNodeSizeVariable = event;
+    this.tree.eachBranchNode((node, data) => {
+      d3__WEBPACK_IMPORTED_MODULE_8__.select(node).attr("r", event);
+    });
     this.styleTree();
   }
   onBranchTooltipShowChange(event) {
