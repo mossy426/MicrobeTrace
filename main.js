@@ -11708,9 +11708,6 @@ let PhylogeneticComponent = (_class = class PhylogeneticComponent extends _app_b
   onBranchNodeSizeChange(event) {
     console.log(`We're in the change function, the event is ${event}`);
     this.SelectedBranchNodeSizeVariable = event;
-    this.tree.eachBranchNode((node, data) => {
-      d3__WEBPACK_IMPORTED_MODULE_8__.select(node).attr("r", event);
-    });
     this.styleTree();
   }
   onBranchTooltipShowChange(event) {
