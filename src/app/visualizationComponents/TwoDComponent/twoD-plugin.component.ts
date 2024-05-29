@@ -2557,12 +2557,18 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                         $('#node-symbol-table-row').slideDown();
                     }
 
+                    if (!this.ShowNodeSymbolWrapper) {
+                        this.ShowNodeSymbolWrapper = true;
+                    }
                 // No shape by variable selected
                 // show shape, hide table 
                 } else {
 
                     $('#node-symbol-row').slideDown();
                     $('#node-symbol-table-row').slideUp();
+                    if (this.ShowNodeSymbolWrapper) {
+                        this.ShowNodeSymbolWrapper = false;
+                    }
                     this.onNodeSymbolTableChange('Hide');
 
                 }
@@ -2853,20 +2859,29 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this.visuals.twoD.svg.select('g.links').selectAll('line').attr('opacity', opacity);
     }
 
+    updateLinkWidthRows(e) {
+        if (e == 'None') {
+            setTimeout(() => {
+                $('#link-reciprocalthickness-row').slideUp();
+                $('#link-max-width-row').slideUp();
+                $('#link-min-width-row').slideUp();
+                $('#link-width-row').slideDown();
+            }, 5)
+        } else {
+            setTimeout(() => {
+                $('#link-reciprocalthickness-row').css('display', 'flex');
+                $('#link-max-width-row').css('display', 'flex');
+                $('#link-min-width-row').css('display', 'flex');
+                $('#link-width-row').slideUp();
+            }, 5)
+        }
+    }
+
     /**
      * Updates link-width-variable widget and updates link width; Also cause min, max and reciprocal link width row to appear/disappear
      */
     onLinkWidthVariableChange(e) {
-        if (e == 'None') {
-            $('#link-reciprocalthickness-row').slideUp();
-            $('#link-max-width-row').slideUp();
-            $('#link-min-width-row').slideUp();
-
-        } else {
-            $('#link-reciprocalthickness-row').css('display', 'flex');
-            $('#link-max-width-row').css('display', 'flex');
-            $('#link-min-width-row').css('display', 'flex');
-        }
+        this.updateLinkWidthRows(e);
         this.widgets['link-width-variable'] = e;
         this.visuals.twoD.scaleLinkWidth();
     }
@@ -3101,7 +3116,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
         Array.from(nodes._groups).forEach((x: any)=>{
             x.forEach(y=>{
-                if(!this.visuals.twoD.commonService.session.data.nodes.find(z => y.__data__.index === z.index)){
+                if(!this.visuals.twoD.commonService.session.data.nodes.find(z => y.__data__.index == z.index)){
                     y.style['opacity'] = 0;
                 }
             })
@@ -3297,7 +3312,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     openSettings() {
         (this.visuals.twoD.Node2DNetworkExportDialogSettings.isVisible) ? this.visuals.twoD.Node2DNetworkExportDialogSettings.setVisibility(false) : this.visuals.twoD.Node2DNetworkExportDialogSettings.setVisibility(true);
        this.visuals.twoD.ShowStatistics = !this.visuals.twoD.Show2DSettingsPane;
-
+       this.updateLinkWidthRows(this.SelectedLinkWidthByVariable);
     }
 
     /**
@@ -3465,6 +3480,9 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this.onNodeTooltipVariableChange(this.SelectedNodeTooltipVariable);
 
         //Nodes|Shape By Table
+        if (this.widgets['node-symbol-variable'] != undefined && this.widgets['node-symbol-variable'] != 'None') {
+            this.widgets["node-symbol-table-visible"] = 'Show';
+        }
         this.SelectedNetworkTableTypeVariable = this.widgets["node-symbol-table-visible"];
         this.onNodeSymbolTableChange(this.SelectedNetworkTableTypeVariable);
 
@@ -3485,6 +3503,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this.SelectedNodeRadiusSizeVariable = this.widgets['node-radius'].toString();
         this.onNodeRadiusChange(this.SelectedNodeRadiusSizeVariable);
 
+        this.nodeBorderWidth = this.widgets['node-border-width']
 
         //Links|Tooltip
         this.SelectedLinkTooltipVariable = this.widgets['link-tooltip-variable'];

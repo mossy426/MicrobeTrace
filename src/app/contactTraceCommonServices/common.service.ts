@@ -2037,6 +2037,46 @@ export class CommonService extends AppComponentBase implements OnInit {
             }
             window.context.commonService.launchView(window.context.commonService.session.style.widgets['default-view']);
             //window.context.commonService.launchView('Alignment View');
+            delayFunction(10, loadOtherViews)
+            function convertName(s: string) {
+                // can't do alignment view yet;
+                if (s == 'geo_map') {
+                    return 'Map';
+                } else if (s == 'table') {
+                    return 'Table'
+                } else if (s == 'timeline') {
+                    return 'Epi Curve' 
+                } else if (s == '2d_network') {
+                    return '2D Network'
+                } else if (s == 'sequences') {
+                    //return 'Alignment View';
+                    return false;
+                } else if (s == 'phylogenetic_tree') {
+                    return 'Phylogenetic Tree'
+                } else {
+                    console.log(`view ${s} is not currently defined`);
+                    return false;
+                }
+            }
+            async function delayFunction(x, callback) {
+                await new Promise(resolve => setTimeout(resolve, x)).then(() => {
+                    callback();
+                })
+            }
+            async function loadOtherViews() {
+                window.context.commonService.session.layout.content.forEach(async view => {
+                    let viewName = convertName(view.type)
+                    if (view.type == window.context.commonService.session.style.widgets['default-view']) {
+                        return;
+                    } else if (viewName){
+                        window.context.commonService.visuals.microbeTrace.Viewclick(viewName);
+                    }
+                    if (viewName == 'Epi Curve') {
+                        window.context.commonService.visuals.epiCurve.viewActive = false;
+                    }
+                })
+                window.context.commonService.visuals.microbeTrace.Viewclick(convertName( window.context.commonService.session.style.widgets['default-view']))
+            }
 
         }, 1000);
         

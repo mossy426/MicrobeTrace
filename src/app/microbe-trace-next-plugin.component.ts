@@ -778,6 +778,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         if (this.SelectedColorNodesByVariable != this.widgets['node-color-variable']){
             this.SelectedColorNodesByVariable = this.widgets['node-color-variable'];
+            this.getGlobalSettingsData();
             this.onColorNodesByChanged();
         }
         
@@ -1416,8 +1417,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 this.SelectedNodeColorTableTypesVariable = 'Show';
                 this.GlobalSettingsNodeColorDialogSettings.setVisibility(true);
                 this.cachedGlobalSettingsNodeColorVisibility = this.GlobalSettingsNodeColorDialogSettings.isVisible;
+                let prevColorNodesByVariable = this.SelectedColorNodesByVariable;
 
+                // this detect changes leads to SelectedColorNodesByVariable being set to default value when loading MT files that have both 2D and map view
                 this.cdref.detectChanges();
+                if (prevColorNodesByVariable != this.SelectedColorNodesByVariable) this.SelectedColorNodesByVariable = prevColorNodesByVariable;
             }
         }
 
@@ -3036,6 +3040,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     loadSettings() {
+        this.getGlobalSettingsData();
 
         //Filtering|Prune With
         this.SelectedPruneWityTypesVariable = this.visuals.microbeTrace.commonService.session.style.widgets["link-show-nn"] ? "Nearest Neighbor" : "None";

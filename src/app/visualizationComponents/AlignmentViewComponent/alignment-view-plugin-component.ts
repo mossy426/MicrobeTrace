@@ -151,7 +151,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     this.nodesWithSeq = [];
     this.seqArray = [];
     this.commonService.session.data.nodes.forEach((node, index) => {
-      if (node.seq != null){
+      if (node.seq != null && node.seq != "" && node.seq != "null"){
         this.nodesWithSeq.push(index);
         this.seqArray.push(node.seq.toUpperCase());
         if (node.seq.length > this.longestSeqLength) {

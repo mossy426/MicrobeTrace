@@ -52,7 +52,7 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
   private localColorMap = (x) => {}
 
   private svg;
-  private margin = { top: 5, left: 25, right: 25, bottom: 50 };
+  private margin = { top: 5, left: 45, right: 20, bottom: 50 };
   private width; // Default width, adjust as necessary
   private height; // Default height, adjust as necessary
   private middle;
@@ -121,7 +121,11 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
 
     // date fields
     if (this.widgets['epiCurve-date-fields'] == undefined) {
-      this.widgets['epiCurve-date-fields'] = ['None', 'None', 'None']
+      if (this.widgets['epi-timeline-date-field'] != undefined) {
+        this.widgets['epiCurve-date-fields'] = [this.widgets['epi-timeline-date-field'], 'None', 'None']
+      } else {
+        this.widgets['epiCurve-date-fields'] = ['None', 'None', 'None']
+      }
     } else if (this.widgets['epiCurve-date-fields'].length < 3) {
       while (this.widgets['epiCurve-date-fields']< 3) {
         this.widgets['epiCurve-date-fields'].push('None')
@@ -172,7 +176,7 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
  }
   
 /**
- * Clears previous histogram/epi curve and creates a new one; calls refresh multi if needed
+ * Clears previous histogram/epi curve and creates a new one; calls refreshMulti if needed
  */
 public refresh(): void {
   if (this.selectedGraphType=='Multi: Overlay' || this.selectedGraphType=='Multi: Side by Side') {
@@ -450,7 +454,7 @@ updateAxes() {
     .call(d3.axisLeft(this.y))
     .attr("text-anchor", null)
     .selectAll("text")
-    .attr("x", 6);
+    .attr("x", -20);
 
   this.svg.append("text")
     .attr("class", "x label")
