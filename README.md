@@ -1,4 +1,5 @@
 # Microbetrace
+![image](https://user-images.githubusercontent.com/33426295/150403131-0468f0be-2539-4f2d-88ee-0fb7d4fd411c.png)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.0.
 
