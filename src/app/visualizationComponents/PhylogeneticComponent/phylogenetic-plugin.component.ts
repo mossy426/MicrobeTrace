@@ -258,8 +258,8 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
   }
 
   styleBranchNode = (node, data) => {
-    d3.select(node).attr('r', this.SelectedLeafNodeSizeVariable);
-    d3.select(node).style('fill', this.SelectedLeafNodeColorVariable);
+    d3.select(node).attr('r', this.SelectedBranchNodeSizeVariable);
+    d3.select(node).style('fill', this.SelectedBranchNodeColorVariable);
   }
 
   styleBranchDistance = (label, data) => {
@@ -499,6 +499,7 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
   }
 
   onBranchNodeSizeChange(event) {
+    console.log(`We're in the change function, the event is ${event}`);
     this.SelectedBranchNodeSizeVariable = event;
     this.styleTree();
   }

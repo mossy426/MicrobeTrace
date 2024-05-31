@@ -1295,34 +1295,34 @@ export class CommonService extends AppComponentBase implements OnInit {
      * @returns 
      */
     auspiceCallBack(auspiceData) {
-    window.context.commonService.clearData();
-    window.context.commonService.session = window.context.commonService.sessionSkeleton();
-    window.context.commonService.session.meta.startTime = Date.now();
-    window.context.commonService.session.data.tree = auspiceData['tree'];
-    window.context.commonService.session.data.newickString = auspiceData['newick'];
-    let nodeCount = 0;
-    auspiceData['nodes'].forEach(node => {
-        if (!/NODE0*/.exec(node.id)) {
-        const nodeKeys = Object.keys(node);
-        nodeKeys.forEach( key => {
-            if (window.context.commonService.session.data.nodeFields.indexOf(key) === -1) {
-            window.context.commonService.session.data.nodeFields.push(key);
+        window.context.commonService.clearData();
+        window.context.commonService.session = window.context.commonService.sessionSkeleton();
+        window.context.commonService.session.meta.startTime = Date.now();
+        window.context.commonService.session.data.tree = auspiceData['tree'];
+        window.context.commonService.session.data.newickString = auspiceData['newick'];
+        let nodeCount = 0;
+        auspiceData['nodes'].forEach(node => {
+            if (!/NODE0*/.exec(node.id)) {
+            const nodeKeys = Object.keys(node);
+            nodeKeys.forEach( key => {
+                if (window.context.commonService.session.data.nodeFields.indexOf(key) === -1) {
+                window.context.commonService.session.data.nodeFields.push(key);
+                }
+                if (! node.hasOwnProperty('origin') ) {
+                node.origin = [];
+                }
+                nodeCount += window.context.commonService.addNode(node, true);
+            });
             }
-            if (! node.hasOwnProperty('origin') ) {
-            node.origin = [];
-            }
-            nodeCount += window.context.commonService.addNode(node, true);
         });
-        }
-    });
-    let linkCount = 0;
-    auspiceData['links'].forEach(link => {
-        linkCount += window.context.commonService.addLink(link, true);
-    });
-    window.context.commonService.runHamsters();
-    // this.showMessage(` - Parsed ${nodeCount} New Nodes and ${linkCount} new Links from Auspice file.`);
-    this.processData();
-    return nodeCount;
+        let linkCount = 0;
+        auspiceData['links'].forEach(link => {
+            linkCount += window.context.commonService.addLink(link, true);
+        });
+        window.context.commonService.runHamsters();
+        // this.showMessage(` - Parsed ${nodeCount} New Nodes and ${linkCount} new Links from Auspice file.`);
+        this.processData();
+        return nodeCount;
     };
 
     /**

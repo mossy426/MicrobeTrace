@@ -2804,6 +2804,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     DisplayGlobalSettingsDialog(activeTab = "Styling") {
 
+        console.log(this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric']);
         this.visuals.microbeTrace.getGlobalSettingsData();
 
         this.visuals.microbeTrace.GlobalSettingsDialogSettings.setVisibility(true);
@@ -3118,24 +3119,24 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     /**
-     * Updates default-distance-metric widget and this.SelectedLinkThresholdVariable (16 for snps, 0.015 for TN93).
+     * Updates default-distance-metric widget and this.SelectedLinkThresholdVariable (7 for snps, 0.015 for TN93).
      * Calls onLinkThresholdChanged to updated links
      */
   onDistanceMetricChanged = () => {
     if (this.SelectedDistanceMetricVariable.toLowerCase() === 'snps') {
       $('#default-distance-threshold, #link-threshold')
         .attr('step', 1)
-        .val(16)
+        .val(7)
         .trigger('change');
       this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'snps';
-      this.SelectedLinkThresholdVariable = '16';
+      this.SelectedLinkThresholdVariable = '7';
       this.onLinkThresholdChanged();
     } else {
       $('#default-distance-threshold, #link-threshold')
         .attr('step', 0.001)
         .val(0.015)
         .trigger('change');
-      this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'TN93';
+      this.visuals.microbeTrace.commonService.session.style.widgets['default-distance-metric'] = 'tn93';
       this.SelectedLinkThresholdVariable = '0.015';
       this.onLinkThresholdChanged();
     }
