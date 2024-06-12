@@ -8,6 +8,8 @@ import { TableComponent } from "./visualizationComponents/TableComponent/table-p
 import { PhylogeneticComponent } from "./visualizationComponents/PhylogeneticComponent/phylogenetic-plugin.component";
 import { TimelineComponent } from "./visualizationComponents/TimelineComponent/timeline-component.component";
 import { AlignmentViewComponent } from "./visualizationComponents/AlignmentViewComponent/alignment-view-plugin-component";
+import { GanttComponent } from "./visualizationComponents/GanttComponent/gantt-plugin.component";
+import { GanttChartComponent } from "./visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component";
 
 @Injectable({
     providedIn: 'root',
@@ -20,5 +22,7 @@ export class MicrobeTraceNextVisuals {
     public tableComp: TableComponent;
     public epiCurve: TimelineComponent;
     public phylogenetic: PhylogeneticComponent;
-    public alignment: AlignmentViewComponent
+    public alignment: AlignmentViewComponent;
+    public gantt: GanttComponent;
+    public ganttChart: GanttChartComponent;
 }

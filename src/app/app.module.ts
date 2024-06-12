@@ -58,7 +58,10 @@ import { DndDirective } from '@shared/dnd.directive';
 import {MatSelectModule} from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
+import { GanttComponent } from './visualizationComponents/GanttComponent/gantt-plugin.component';
+import { GanttChartComponent } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component';
+import { GcChartBaseComponent } from './visualizationComponents/GanttComponent/gantt-chart/gc-chart-base/gc-chart-base.component';
+import { GanttChartService } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service';
 
 
 // It is required to have JQuery as global in the window object.
@@ -88,6 +91,9 @@ export class TestedComponent {
     PhylogeneticComponent,
     TimelineComponent,
     AlignmentViewComponent,
+    GcChartBaseComponent,
+    GanttChartComponent,
+    GanttComponent,
   ],
   imports: [
     BrowserModule,
@@ -149,7 +155,8 @@ export class TestedComponent {
     AppSessionService,
     AppUiCustomizationService,
     AppUrlService,
-    GoldenLayoutComponentService
+    GanttChartService,
+    GoldenLayoutComponentService,
   ],
   bootstrap: [AppComponent]
 })
