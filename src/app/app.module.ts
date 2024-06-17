@@ -58,6 +58,7 @@ import { DndDirective } from '@shared/dnd.directive';
 import {MatSelectModule} from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CrosstabComponent } from './visualizationComponents/CrosstabComponent/crosstab-plugin.component';
 
 
 
@@ -88,6 +89,7 @@ export class TestedComponent {
     PhylogeneticComponent,
     TimelineComponent,
     AlignmentViewComponent,
+    CrosstabComponent,
   ],
   imports: [
     BrowserModule,
