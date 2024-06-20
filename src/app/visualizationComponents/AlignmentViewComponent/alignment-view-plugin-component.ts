@@ -218,7 +218,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     if (this.widgets['alignView-customColorScheme'] == undefined) {
       this.widgets['alignView-customColorScheme'] = {
         'A': '#ccff00',
-        'C': '#ffff00',
+        'C': '#f0e442',
         'G': '#ff9900',
         'T': '#ff6600',
         'ambig': '#ffffff',
@@ -542,6 +542,81 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     this.positionMatrix = this.proportionMatrix.map(calculatePosition)
   }
 
+  /**
+   * Similar to caclulating the proportion, but gaps and ambiguous nucleotides are separated
+   */
+  calculateAdvancedProportion() {
+        // count matrix: [ [#A, #C, #G, #T, gaps, #N, #R, #Y, #K, #M, #S, #W, #B, #D, #H, #V #other]-for each location, ... ]
+        let countMatrix = [];
+    
+        for (let i =0; i<this.longestSeqLength; i++) {
+          countMatrix.push(Array(17).fill(0)); // update this
+        }
+    
+        for (let seq of this.seqArray) {
+          for (let i=0; i< seq.length; i++) {
+            let nt = seq[i];
+            switch (nt) {
+              case 'A':
+                countMatrix[i][0] += 1;
+                break;
+              case 'C':
+                countMatrix[i][1] += 1;
+                break;
+              case 'G':
+                countMatrix[i][2] += 1;
+                break;
+              case 'T':
+                countMatrix[i][3] += 1;
+                break; 
+              case '-':
+                countMatrix[i][4] += 1;
+                break;
+              case 'N':
+                countMatrix[i][5] += 1;
+                break;
+              case 'R':
+                countMatrix[i][6] += 1;
+                break;
+              case 'Y':
+                countMatrix[i][7] += 1;
+                break;
+              case 'K':
+                countMatrix[i][8] += 1;
+                break;
+              case 'M':
+                countMatrix[i][9] += 1;
+                break;
+              case 'S':
+                countMatrix[i][10] += 1;
+                break; 
+              case 'W':
+                countMatrix[i][11] += 1;
+                break;
+              case 'B':
+                countMatrix[i][12] += 1;
+                break;
+              case 'D':
+                countMatrix[i][13] += 1;
+                break; 
+              case 'H':
+                countMatrix[i][14] += 1;
+                break;
+              case 'V':
+                countMatrix[i][15] += 1;
+                break; 
+              default:
+                countMatrix[i][16] += 1;
+            }
+          } 
+        }
+
+        function calcProportion(value) {
+          let sum = value.reduce((acc, cur) => acc + cur, 0)
+          return value.map(current => current/sum);
+        }
+        return countMatrix.map(calcProportion)
+  }
 
   // Layout Positioning
 
@@ -681,7 +756,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     if (this.widgets['alignView-colorSchemeName'] == 'n') {
       this.colorScheme = {
         'A': '#ccff00',
-        'C': '#ffff00',
+        'C': '#f0e442',
         'G': '#ff9900',
         'T': '#ff6600',
         'ambig': '#ffffff',
@@ -1125,20 +1200,104 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   /**
    * Exports sequencing data (id + seq string) as fasta or mega file
    */
-  exportData() {
+  exportData(includeConsensus=false) {
     if (this.AlignmentExportFileTypeData == 'fasta') {
       let data = this.getData(this.nodesWithSeq, ['_id', 'seq'])
-      let blob = new Blob([data.map(node => ">" + node._id + "\r\n" + node.seq).join("\r\n")])
+      let consensusString = includeConsensus? '>consensus\r\n' + this.getConsensus(this.proportionMatrix) + "\r\n":'';
+      let blob = new Blob([consensusString, data.map(node => ">" + node._id + "\r\n" + node.seq).join("\r\n")])
       //saveAs(blob, 'hi.fasta')
       saveAs(blob, this.AlignmentExportFileName+'.fasta')
     } else if (this.AlignmentExportFileTypeData == 'mega') {
       let data = this.getData(this.nodesWithSeq, ['_id', 'seq'])
       let headers = "#mega\r\n!Title " + this.AlignmentExportFileName + ";\r\n!Format\r\n\tDataType=DNA CodeTable=Standard\r\n\tIdentical=. Missing=? Indel=-;\r\n\r\n"
-      let blob = new Blob([headers, data.map(node => "#" + node._id + "\r\n" + node.seq).join("\r\n")])
+      let consensusString = includeConsensus? '#consensus\r\n' + this.getConsensus(this.proportionMatrix) + "\r\n" : '';
+      let blob = new Blob([headers, consensusString, data.map(node => "#" + node._id + "\r\n" + node.seq).join("\r\n")])
       saveAs(blob, this.AlignmentExportFileName+'.meg')
     }
   }
 
+  exportDataTable(option='basic', includeConsensus) {
+    // basic 5 number for each position     // may not use basic option but keeping it for now
+    // advances includes proportion for gaps and each ambiguous nucleotide option
+    // [A, C, G, T, #other/ambig]
+    let csvString;
+    if (option == 'basic') {
+      let csvHeader = 'A,C,G,T,other (including gap and abiguous)\n';
+      csvString = csvHeader + this.proportionMatrix.map(innerArray => innerArray.join(',')).join('\n');
+    } else if (includeConsensus) {
+      let csvHeader = 'consensus,consensus meme,A,C,G,T,gap,N,R,Y,K,M,S,W,B,D,H,V,other\n';
+      let proportionMatrix = this.calculateAdvancedProportion();
+      let consensus = this.getConsensus(proportionMatrix, 'meme')
+      let consensusInterator = getNextPosition(consensus);
+      csvString = csvHeader + proportionMatrix.map((innerArray) => {
+        let chars = consensusInterator.next().value;
+        return chars.charAt(0)+',' + chars + ',' + innerArray.join(',')
+      }).join('\n');
+    } else {
+      let csvHeader = 'A,C,G,T,gap,N,R,Y,K,M,S,W,B,D,H,V,other\n';
+      let proportionMatrix = this.calculateAdvancedProportion();
+      csvString = csvHeader + proportionMatrix.map((innerArray) => innerArray.join(',')).join('\n');
+    }
+    function* getNextPosition(input) {
+      for (let i = 0; i < input.length; i++) {
+        const char = input[i];
+        if (input[i+1] === '[') {
+            // Yield the character and everything in the brackets
+            let bracketContent = '';
+            while (input[i] !== ']') {
+                bracketContent += input[i];
+                i++;
+            }
+            bracketContent += ']';
+            yield bracketContent;
+        } else {
+            // Yield individual characters
+            yield char;
+        }
+      }
+    }
+
+    let blob = new Blob([csvString], { type: 'text/csv' })
+    saveAs(blob, this.AlignmentExportFileName + '.csv')
+  }
+
+  getConsensus(proportionMatrix, option='plurality') {
+    console.log("Get consensus")
+    let consensusSeq = '';
+    if (option == 'plurality') {
+
+      let index2NT = ['A', 'C', 'G', 'T', '-']
+      proportionMatrix.forEach((row) => {
+        let maxPos = row.indexOf(Math.max(...row));
+        if (maxPos > 4) {consensusSeq += 'N'}
+        else {consensusSeq += index2NT[maxPos];}
+      })
+  
+      return consensusSeq;
+
+    } else if (option == 'meme') {
+      let index2NT = ['A','C','G','T','-','N','R','Y','K','M','S','W','B','D','H','V', 'invalid']; // what to do with invalid char
+      proportionMatrix.forEach((row) => {
+        let nonZeroIndexes = [];
+        row.forEach((value, index) => {
+          if (value > 0) nonZeroIndexes.push(index);
+        })
+        nonZeroIndexes.sort(compareIndices);
+        function compareIndices(a,b) {
+          return row[b] - row[a]
+        }
+        nonZeroIndexes.forEach((index, pos) => {
+          if (pos == 1) {
+            consensusSeq += '['
+          }
+          consensusSeq += index2NT[index]
+        })
+        if (nonZeroIndexes.length > 1) consensusSeq+=']'
+      })
+
+      return consensusSeq;
+    }
+  }
 }
 
 export namespace AlignmentViewComponent {
