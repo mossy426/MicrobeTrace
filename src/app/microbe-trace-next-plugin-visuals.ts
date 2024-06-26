@@ -9,7 +9,6 @@ import { PhylogeneticComponent } from "./visualizationComponents/PhylogeneticCom
 import { TimelineComponent } from "./visualizationComponents/TimelineComponent/timeline-component.component";
 import { AlignmentViewComponent } from "./visualizationComponents/AlignmentViewComponent/alignment-view-plugin-component";
 import { GanttComponent } from "./visualizationComponents/GanttComponent/gantt-plugin.component";
-import { GanttChartComponent } from "./visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component";
 
 @Injectable({
     providedIn: 'root',
@@ -24,5 +23,4 @@ export class MicrobeTraceNextVisuals {
     public phylogenetic: PhylogeneticComponent;
     public alignment: AlignmentViewComponent;
     public gantt: GanttComponent;
-    public ganttChart: GanttChartComponent;
 }

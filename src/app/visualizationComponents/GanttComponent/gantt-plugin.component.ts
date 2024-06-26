@@ -16,7 +16,6 @@ import { CustomShapes } from '@app/helperClasses/customShapes';
 import * as d3 from 'd3';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { ComponentContainer } from 'golden-layout';
-import { GanttChartComponent } from './gantt-chart/gantt-chart.component';
 import { GanttChartService } from './gantt-chart/gantt-chart.service';
 
 
@@ -45,8 +44,10 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
   halfWidth: any = null;
   halfHeight: any = null;
   visuals: any = null;
+  nodeIds: string[] = [];
+  FieldList: SelectItem[] = [];
 
-  ganttChartData = [
+  ganttChartData: any = [
     {
       name: 'Market Team',
       timelines: {
@@ -109,30 +110,46 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
       }
     }
   ];
+
+  GanttExportDialogSettings: DialogSettings = new DialogSettings('#gantt-settings-pane', false);
+
   constructor(injector: Injector,
               private eventManager: EventManager,
               public commonService: CommonService,
               @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
               elRef: ElementRef,
               ganttChartService: GanttChartService,
-              ganttChartComponent: GanttChartComponent,
               private cdref: ChangeDetectorRef) {
 
     super(elRef.nativeElement);
 
-    console.log("Trying to create GanttComponent instance");
-
     this.visuals = commonService.visuals;
-    // this.commonService.visuals.gantt
+    this.commonService.visuals.gantt = this;
   }
 
-  openSettings(): void {}
+  openSettings(): void {
+    this.visuals.gantt.GanttExportDialogSettings.setVisibility(true);
+  }
   openExport(): void {}
   openCenter(): void {}
 
   ngOnInit(): void {
     console.log("Trying to init gantt");
     let that = this;
+
+    this.commonService.session.data['nodeFields'].map((d, i) => {
+
+      this.visuals.gantt.FieldList.push(
+        {
+          label: this.visuals.gantt.commonService.capitalize(d.replace('_', '')),
+          value: d
+        });
+    });
+
+    this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
+    this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
+    this.nodeIds = this.getNodeIds(); 
+    console.log(this.nodeIds);
     
     this.goldenLayoutComponentResize()
 
@@ -145,11 +162,42 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
       this.viewActive = true; 
       this.cdref.detectChanges();
     })
+
+    const newEntry = this.makeGanttEntry("testdate", "ipstart", "ipend")
+    this.ganttChartData = [newEntry];
+
   }
 
   goldenLayoutComponentResize() {
     $('#gantt-plugin').height($('ganttcomponent').height()-19);
     $('#gantt-plugin').width($('ganttcomponent').width()-1)
+  }
+
+  clearGanttEntries(): void {
+    this.ganttChartData = [];
+  }
+
+  makeGanttEntry(dateName: string, startVariable: string, endVariable: string): Object {
+    const timeline = {};
+
+    this.nodeIds.forEach( (element: string) => {
+      const nodeData = this.visuals.gantt.commonService.session.data.nodes.filter(x => x._id == element)
+      const startDate = nodeData[0][startVariable];
+      const endDate = nodeData[0][endVariable];
+      const regExp: RegExp = /^.{5,10}$/;
+      if (startDate && endDate && regExp.exec(startDate) && regExp.exec(endDate)) {
+        const entry = [{ from: startDate, to: endDate }]
+        timeline[element] = entry;
+      }
+    })
+
+    const ganttEntry = {name: dateName, timelines: timeline};
+    return ganttEntry;
+  }
+
+  getNodeIds(): string[] {
+    const idSet: string[] = this.visuals.gantt.commonService.session.data.nodes.map(x=>x._id);
+    return idSet;
   }
     
 }

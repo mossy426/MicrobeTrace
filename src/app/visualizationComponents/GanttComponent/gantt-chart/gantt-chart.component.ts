@@ -14,15 +14,22 @@ export class GanttChartComponent implements OnInit, OnChanges {
   @Input() width: number;
   @Input() colorScheme = 'colorful';
   @Input() customColorScheme: string[] = [];
+  @Input() height: number;
 
   componentID;
   xPadding = 60;
   yPadding = this.xPadding / 2;
-  height: number;
   phaseTimelines;
 
   setDimensions() {
     if (this.width) this.height = this.width - this.xPadding;
+    else if (this.height) {
+      const host = this.currentElement.nativeElement;
+      if (host.parentNode != null) {
+        const dims = host.parentNode.getBoundingClientRect();
+        this.width = dims.width;
+      }
+    }
     else {
       const host = this.currentElement.nativeElement;
       if (host.parentNode != null) {
@@ -31,10 +38,10 @@ export class GanttChartComponent implements OnInit, OnChanges {
         this.height = this.width - this.xPadding;
       }
     }
-    // console.log('---set dimensions---');
-    // console.log('width: ' + this.width);
-    // console.log('height: ' + this.height);
-    // console.log('--------------------');
+    console.log('---set dimensions---');
+    console.log('width: ' + this.width);
+    console.log('height: ' + this.height);
+    console.log('--------------------');
   }
 
   setColors() {
