@@ -33,7 +33,6 @@ export class GoldenLayoutComponentService {
   }
 
   createComponent(componentTypeJsonValue: JsonValue, container: ComponentContainer) {
-    console.log(`Trying to make ${componentTypeJsonValue as string}`)
     const componentType = this._componentTypeMap.get(componentTypeJsonValue as string);
     if (componentType === undefined) {
       throw new Error('Unknown component type')

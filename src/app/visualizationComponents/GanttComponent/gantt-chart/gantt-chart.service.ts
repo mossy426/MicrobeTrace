@@ -19,6 +19,7 @@ export class GanttChartService {
   yPadding: number;
   componentID: number;
   data: any;
+  ganttOpacity = "0.9";
 
   rectWidth: number;
   rectHeight: number;
@@ -98,16 +99,13 @@ export class GanttChartService {
     this.xPadding = xPadding;
     this.yPadding = yPadding;
     this.data = data;
-    // console.log('service color scheme: ' + this.colorScheme)
-
-    const froms = [];
-    const tos = [];
+    const froms: any = [];
+    const tos: any = [];
     const phases = new Set();
     this.ganttTeams = [];
     // this.setColors();
-    // console.log(this.data);
     for (const team of this.data) {
-      this.ganttTeams.push({name: team.name, color: team.color});
+      this.ganttTeams.push({name: team.name, color: team.color, opacity: team.opacity});
       for (const phase of Object.keys(team.timelines)) {
         phases.add(phase);
         for (const timeline of team.timelines[phase]) {
@@ -118,15 +116,11 @@ export class GanttChartService {
     }
     this.ganttPhases = Array.from(phases);
 
-    // console.log('phase timelines: ');
-    // console.log(this.phaseTimelines);
-
-    const minDate = froms.reduce((a, b) => new Date(a) < new Date(b) ? a : b );
-    const maxDate = tos.reduce((a, b) => new Date(a) > new Date(b) ? a : b );
+    const minDate = froms.filter(x => x !== null && x!=="null").reduce((a, b) => new Date(a) < new Date(b) ? a : b );
+    const maxDate = tos.filter(x=>x!==null && x!=="null").reduce((a, b) => new Date(a) > new Date(b) ? a : b );
 
     this.ganttMinDate = minDate;
     this.ganttMaxDate = maxDate;
-    // console.log(this.ganttMinDate + ' - ' + this.ganttMaxDate);
     const noOfLines = Math.ceil(this.data.length / 3);
     this.height = this.ganttPhases.length * 60 + this.yPadding * 3 + 100 + 40 + 30 * noOfLines;
 
@@ -135,10 +129,8 @@ export class GanttChartService {
         (new Date(this.ganttMaxDate).getTime()
         - new Date(this.ganttMinDate).getTime()
         ) / (oneDay)));
-    // console.log('Date Range: ');
-    // console.log(this.ganttDateRange);
     this.minX = 0;
-    // this.maxX = this.ganttDateRange;
+    this.maxX = this.ganttDateRange;
     let flag = 0;
     let qts = 1;
     let gridPrecisionX = 0;
@@ -179,5 +171,7 @@ export class GanttChartService {
     console.log('yPadding: ' + this.yPadding);
     console.log('rectWidth: ' + this.rectWidth);
     console.log('rectHeight: ' + this.rectHeight);
+    console.log('ganttMinDate: ' + this.ganttMinDate);
+    console.log('ganttMaxDate: ' + this.ganttMaxDate);
   }
 }

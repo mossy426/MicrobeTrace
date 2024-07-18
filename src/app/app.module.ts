@@ -60,7 +60,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { GanttComponent } from './visualizationComponents/GanttComponent/gantt-plugin.component';
 import { GanttChartComponent } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component';
-import { GcChartBaseComponent } from './visualizationComponents/GanttComponent/gantt-chart/gc-chart-base/gc-chart-base.component';
 import { GanttChartService } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service';
 
 
@@ -91,7 +90,6 @@ export class TestedComponent {
     PhylogeneticComponent,
     TimelineComponent,
     AlignmentViewComponent,
-    GcChartBaseComponent,
     GanttChartComponent,
     GanttComponent,
   ],

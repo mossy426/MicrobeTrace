@@ -400,7 +400,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     addComponent( component: string ) {
 
-        console.log(`Trying to add ${component}`);
         // const componentType = this._selectedRegisteredComponentTypeName;
         const goldenLayoutComponent = this._goldenLayoutHostComponent.goldenLayout.newComponent(component);
 
@@ -1402,7 +1401,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     hideLinkColorTable() {
         if (this.SelectedLinkColorTableTypesVariable != 'Hide') {
            this.SelectedLinkColorTableTypesVariable='Hide';
-           this.onNodeColorTableChanged()
+           this.onLinkColorTableChanged()
         }
     }
 
