@@ -55,6 +55,8 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * y position (top) for each base at each postion in sequence
    */
   positionMatrix;
+  proportionMatrixAA;
+  positionMatrixAA;
 
   // Layout
   //showMiniMap: boolean; // replaced with this.widgets['alignView-showMiniMap']
@@ -69,8 +71,16 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     { label: 'Minimum', value: 'min'},
     { label: 'Hide', value: 'hide' }
   ];
+  seqTypeOptions = [
+    { label: 'Nucleotides', value: 'nt'},
+    { label: 'Codons', value: 'codon'},
+    { label: 'Amino Acids', value: 'aa'}
+  ];
+  selectedSeqType = 'nt';
+  startPos = 1;
   //rulerMinorInterval: number = 20; replaced with this.widgets['alignView-rulerMinorInterval']
   rulerIntervalOptions = [0, 10, 20, 25, 50]
+  translationSetting = 'Maintain Codons'
 
   // Sizing
   // spanWidth and spanHeight values are duplicated in the widgets; I didn't replace because these are used through the template in loops and I was concerned that
@@ -240,7 +250,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     }
 
     if (this.widgets['alignView-topDisplay'] == undefined) {
-      this.widgets['alignView-topDisplay'] = 'logo';
+      this.widgets['alignView-topDisplay'] = 'barplot';
     }
 
     if (this.widgets['alignView-rulerMinorInterval'] == undefined) {
@@ -249,9 +259,9 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
 
     // main canvas
     if (this.widgets['alignView-charSetting'] == undefined) {
-      this.widgets['alignView-charSetting'] = 'hide';
+      this.widgets['alignView-charSetting'] = 'show';
     }
-
+    this.widgets['alignView-charSetting'] = 'show';
   }
 
   /**
@@ -272,6 +282,19 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     } else {
       return indexList.map(index => this.commonService.session.data.nodes[index][field])
     }
+  }
+
+  /**
+   * Updates the value of this.longestSeqLength
+   */
+  updateLongestSeqLength() {
+    let longestSeq = 0;
+    this.seqArray.forEach((seq) => {
+      if (seq.length > longestSeq) {
+        longestSeq = seq.length
+      }
+    })
+    this.longestSeqLength = longestSeq;
   }
 
   /**
@@ -543,6 +566,132 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   }
 
   /**
+   * Generates and returns the proportion matrix from Amino Acid sequence
+   */
+    calculateProportionAminoAcids() {
+      // count matrix: [ [#A, #R, #N, #D, #C, #E, #Q, #G, #H, #I, #L, #K, #M, #F, #P, #S, #T, #W, #Y, #V, #*, #-, #X]-for each location, ... ]
+      let countMatrix = [];
+  
+      for (let i =0; i<this.longestSeqLength; i++) {
+        countMatrix.push(Array(23).fill(0));
+      }
+  
+      for (let seq of this.seqArray) {
+        for (let i=0; i< seq.length; i++) {
+          let nt = seq[i];
+          switch (nt) {
+            case 'A':
+              countMatrix[i][0] += 1;
+              break;
+            case 'R':
+              countMatrix[i][1] += 1;
+              break;
+            case 'N':
+              countMatrix[i][2] += 1;
+              break;
+            case 'D':
+              countMatrix[i][3] += 1;
+              break; 
+            case 'C':
+              countMatrix[i][4] += 1;
+              break;
+            case 'E':
+              countMatrix[i][5] += 1;
+              break;
+            case 'Q':
+              countMatrix[i][6] += 1;
+              break;
+            case 'G':
+              countMatrix[i][7] += 1;
+              break;
+            case 'H':
+              countMatrix[i][8] += 1;
+              break;
+            case 'I':
+              countMatrix[i][9] += 1;
+              break;
+            case 'L':
+              countMatrix[i][10] += 1;
+              break; 
+            case 'K':
+              countMatrix[i][11] += 1;
+              break;
+            case 'M':
+              countMatrix[i][12] += 1;
+              break;
+            case 'F':
+              countMatrix[i][13] += 1;
+              break; 
+            case 'P':
+              countMatrix[i][14] += 1;
+              break;
+            case 'S':
+              countMatrix[i][15] += 1;
+              break; 
+            case 'T':
+              countMatrix[i][16] += 1;
+              break; 
+            case 'W':
+              countMatrix[i][17] += 1;
+              break; 
+            case 'Y':
+              countMatrix[i][18] += 1;
+              break; 
+            case 'V':
+              countMatrix[i][19] += 1;
+              break; 
+            case '*':
+              countMatrix[i][20] += 1;
+              break; 
+            case '-':
+              countMatrix[i][21] += 1;
+              break; 
+            case 'X':
+              countMatrix[i][22] += 1;
+              break; 
+            default:
+              countMatrix[i][22] += 1;
+          }
+        } 
+      }
+
+      function calcProportion(value) {
+        let sum = value.reduce((acc, cur) => acc + cur, 0)
+        return value.map(current => current/sum);
+      }
+      return countMatrix.map(calcProportion)
+}
+
+  /**
+   * Generates and returns the position Matrix from Amino Acid proportion matrix
+   */
+  calculatePositionMatrixAminoAcids() {
+    let count = 0;
+    let output = [];
+      //let index2NT = ['A', 'R', 'N', 'D', 'C', 'E', 'Q', 'G', 'H', 'I', 'L', 'K', 'M', 'F', 'P', 'S', 'T', 'W', 'Y', 'V', '*', '-', 'X'];
+      this.proportionMatrixAA.forEach((row) => {
+        let nonZeroIndexes = [];
+        row.forEach((value, index) => {
+          if (value > 0 && index < 20) nonZeroIndexes.push(index);
+        })
+        nonZeroIndexes.sort(compareIndices);
+        function compareIndices(a,b) {
+          return row[b] - row[a]
+        }
+        count += 1;
+        let temp = new Array(23).fill(0);
+        let y = (row[22]+row[21]+row[20])*100;        
+        for (let index of nonZeroIndexes) {
+          temp[index] = y;
+          y += row[index]*100
+        }
+        output.push(temp);
+      })
+
+    return output;
+  }
+
+  /**
    * Similar to caclulating the proportion, but gaps and ambiguous nucleotides are separated
    */
   calculateAdvancedProportion() {
@@ -616,6 +765,234 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
           return value.map(current => current/sum);
         }
         return countMatrix.map(calcProportion)
+  }
+
+  /** returns Math.floor(i); allows for it to be called from within the template */
+  floor(i) {
+    return Math.floor(i)
+  }
+
+  /**
+   * @param i position
+   * @returns the x pos for the elements in the barplot/logo/ruler based on the startPos and selectedSeqType
+   */
+  xPos(i) {
+    if (this.selectedSeqType == 'codon' && i < this.startPos) {
+      return 0
+    } else if (this.selectedSeqType=='codon') {
+      return this.spanWidth*(i-this.startPos+1+Math.floor((i-this.startPos+1)/3))
+    } else {
+      return this.spanWidth*i;
+    }
+  }
+
+  /** Calculates the need with of SVG image based on selectedSeqType and the length of the sequences */
+  getSVGWidth() {
+    if (this.selectedSeqType == 'nt') {
+      return this.spanWidth*this.proportionMatrix.length+17
+    } else if (this.selectedSeqType == 'codon') {
+      let length = this.proportionMatrix.length
+      return this.spanWidth*(length+Math.floor(length/3))+17
+    } else {
+      return this.spanWidth*this.proportionMatrixAA.length+17
+    }
+  }
+
+  /** Updates Alignment View when type of sequence is changed */
+  onSeqTypeChange() {
+    if (this.selectedSeqType=='nt') {
+      this.startPos = 1;
+      this.revert2NT();
+    } else if (this.selectedSeqType == 'codon') {
+      this.NT2Codon(this.startPos-1);
+    } else {
+      this.convertToAASequence(this.startPos-1);
+    }
+  }
+
+  /** Returns a lookup table for converting NTs to Amino Acids. Doesn't account for ambiguity. USe checkAmbiguousCodons() to convert a codon
+   * with ambiguous nucleotides into an Amino Acid
+   */
+  getNT2AATable() {
+    return {
+      'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S', 'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 
+      'TAT': 'Y', 'TAC': 'Y', 'TAA': '*', 'TAG': '*', 'TGT': 'C', 'TGC': 'C', 'TGA': '*', 'TGG': 'W',
+      'CTT': 'L', 'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
+      'CAT': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R', 
+      'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M', 'ACT': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T',
+      'AAT': 'N', 'AAC': 'N', 'AAA': 'K', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R', 
+      'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V', 'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
+      'GAT': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G'
+    }
+  }
+
+  /** Converts the nucleotide sequence for each node into an amino acid sequence, based on startPos and , then updates the view */
+  convertToAASequence(startPos=0) {
+    let NT2AA_table = this.getNT2AATable();
+
+    this.seqArray = this.getData(this.nodesWithSeq, 'seq');
+
+    this.updateLongestSeqLength();
+    let AAarray = [];
+    let NT_check = /^[ACGT]+$/;
+    
+    this.seqArray.forEach(seq => {
+      if (this.translationSetting=='Maintain Codons') {
+        let aaString = ''
+        for (let i=startPos; i< seq.length; i += 3) {
+          let codon = seq.substring(i, i+3);
+          if (NT_check.test(codon)) {
+            aaString += NT2AA_table[codon];
+          } else if (codon == '---') {
+            aaString += '-'
+          } else {
+            aaString += this.checkAmbiguousCodons(codon, NT2AA_table);
+          }
+        }
+        AAarray.push(aaString);
+      } else {
+        let aaString = '';
+        let gapCount = 0;
+        let codon = '';
+        for (let i=startPos; i < seq.length; i++) {
+          let nt = seq.charAt(i);
+          if (nt == '-') {
+            gapCount += 1;
+          } else {
+            codon += nt;
+          }
+
+          if (gapCount == 3) {
+            aaString += '-';
+            gapCount = 0;
+          } else if (codon.length == 3) {
+            if (NT_check.test(codon)) {
+              aaString += NT2AA_table[codon]
+            } else {
+              let aa = this.checkAmbiguousCodons(codon, NT2AA_table);
+              aaString += aa;
+            } 
+            codon = '';
+          }
+        }
+        AAarray.push(aaString);
+      }     
+    })
+    this.seqArray = AAarray;
+    this.colorScheme =   {
+      A: '#33cc00',
+      R: '#cc0000',
+      N: '#6600cc',
+      D: '#0033ff',
+      C: '#ffff00',
+      Q: '#6600cc',
+      E: '#0033ff',
+      G: '#33cc00',
+      H: '#009900',
+      I: '#33cc00',
+      L: '#33cc00',
+      K: '#cc0000',
+      M: '#33cc00',
+      F: '#009900',
+      P: '#33cc00',
+      S: '#0099ff',
+      T: '#0099ff',
+      W: '#009900',
+      Y: '#009900',
+      V: '#33cc00',
+      X: '#ffffff'
+    }
+
+    this.updateAlignment();
+    this.updateLongestSeqLength();
+    this.shortenNodesWithSeq();
+    this.proportionMatrixAA = this.calculateProportionAminoAcids();
+    this.positionMatrixAA = this.calculatePositionMatrixAminoAcids();
+    this.updateMiniMap();
+  }
+
+  /** Converts a codon into an amino acid, tries to resolve ambiguous nucleotides; Return amino acid, X for ambiguous amino acid, or - if codon.length != 3 */
+  checkAmbiguousCodons(codon: string, NT2AA_table=this.getNT2AATable()) {
+    let ambiguousCheck = /^[ACGTNRYKMSWBDHV]+$/
+    if (codon.length != 3) {
+      return '-'
+    } else if (!ambiguousCheck.test(codon)) {
+      return 'X'
+    }
+
+    let positionPossibilities = [];
+    for (let i=0; i<3; i++) {
+      let currentNT = codon.charAt(i);
+      if (currentNT == 'A' || currentNT == 'C' || currentNT == 'G' || currentNT == 'T') {
+        positionPossibilities.push([currentNT])
+      } else if (currentNT == 'W') {
+        positionPossibilities.push(['A', 'T'])
+      } else if (currentNT == 'S') {
+        positionPossibilities.push(['C', 'G'])
+      } else if (currentNT == 'M') {
+        positionPossibilities.push(['A', 'C'])
+      } else if (currentNT == 'K') {
+        positionPossibilities.push(['G', 'T'])
+      } else if (currentNT == 'R') {
+        positionPossibilities.push(['A', 'G'])
+      } else if (currentNT == 'Y') {
+        positionPossibilities.push(['C', 'T'])
+      } else if (currentNT == 'B') {
+        positionPossibilities.push(['C', 'G', 'T'])
+      } else if (currentNT == 'D') {
+        positionPossibilities.push(['A', 'G', 'T'])
+      } else if (currentNT == 'H') {
+        positionPossibilities.push(['A', 'C', 'T'])
+      } else if (currentNT == 'V') {
+        positionPossibilities.push(['A','C', 'G'])
+      } else if (currentNT == 'N') {
+        positionPossibilities.push(['A', 'C', 'G', 'T'])
+      }
+    }
+    let possibleCodons = [];
+    positionPossibilities[0].forEach(nt0 => {
+      positionPossibilities[1].forEach(nt1 => {
+        positionPossibilities[2].forEach(nt2 => {
+          possibleCodons.push(nt0+nt1+nt2);
+        })
+      })
+    })
+
+    let possibleAA = NT2AA_table[possibleCodons[0]];
+    for (let i=1; i<possibleCodons.length; i++) {
+      let AA = NT2AA_table[possibleCodons[i]]
+      if (possibleAA != AA) {
+        return 'X'
+      }
+    }
+
+    return possibleAA;
+  }
+
+  /** Reverts the view back to the original sequence view */
+  revert2NT() {
+    this.seqArray = this.getData(this.nodesWithSeq, 'seq');
+    this.updateLongestSeqLength();
+    this.shortenNodesWithSeq();
+    this.onSelectedColorChanged();
+  }
+
+  /** Converts the sequence into a codons by introducing spaces every 3NTs and then updates the view */
+  NT2Codon(start) {
+    let newSeqs = []
+    this.seqArray = this.getData(this.nodesWithSeq, 'seq');
+    this.seqArray.forEach(seq => {
+      let codons = []
+      for (let i=start; i<seq.length; i+= 3) {
+        codons.push(seq.slice(i, i+3));
+      }
+      newSeqs.push(codons.join(' '));
+    })
+
+    this.seqArray = newSeqs;
+    this.updateLongestSeqLength();
+    this.shortenNodesWithSeq();
+    this.onSelectedColorChanged();
   }
 
   // Layout Positioning
@@ -753,34 +1130,61 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * @param skipUpdateAlignment set to true during ngOnInit to skip this.updateAlignment() and if statement for this.updateMiniMap()
    */
   onSelectedColorChanged(skipUpdateAlignment=false) {
-    if (this.widgets['alignView-colorSchemeName'] == 'n') {
-      this.colorScheme = {
-        'A': '#ccff00',
-        'C': '#f0e442',
-        'G': '#ff9900',
-        'T': '#ff6600',
-        'ambig': '#ffffff',
-      }
-      this.useCustomColorScheme = false;
-    } else if (this.widgets['alignView-colorSchemeName'] == 'a') {
-      this.colorScheme = {
-        'A': '#009E73',
-        'C': '#F0E442',
-        'G': '#E69F00',
-        'T': '#D55E00',
-        'ambig': '#ffffff',
+    if (this.selectedSeqType != 'aa') {
+      if (this.widgets['alignView-colorSchemeName'] == 'n') {
+        this.colorScheme = {
+          'A': '#ccff00',
+          'C': '#f0e442',
+          'G': '#ff9900',
+          'T': '#ff6600',
+          'ambig': '#ffffff',
         }
         this.useCustomColorScheme = false;
+      } else if (this.widgets['alignView-colorSchemeName'] == 'a') {
+        this.colorScheme = {
+          'A': '#009E73',
+          'C': '#F0E442',
+          'G': '#E69F00',
+          'T': '#D55E00',
+          'ambig': '#ffffff',
+          }
+          this.useCustomColorScheme = false;
+      } else {
+        this.colorScheme = {
+          'A': this.widgets['alignView-customColorScheme']['A'],
+          'C': this.widgets['alignView-customColorScheme']['C'],
+          'G': this.widgets['alignView-customColorScheme']['G'],
+          'T': this.widgets['alignView-customColorScheme']['T'],
+          'ambig': this.widgets['alignView-customColorScheme']['ambig'],
+          }
+        this.useCustomColorScheme = true;
+      }
     } else {
-      this.colorScheme = {
-        'A': this.widgets['alignView-customColorScheme']['A'],
-        'C': this.widgets['alignView-customColorScheme']['C'],
-        'G': this.widgets['alignView-customColorScheme']['G'],
-        'T': this.widgets['alignView-customColorScheme']['T'],
-        'ambig': this.widgets['alignView-customColorScheme']['ambig'],
-        }
-      this.useCustomColorScheme = true;
-
+      this.useCustomColorScheme = false;
+      this.colorScheme =   {
+        A: '#33cc00',
+        R: '#cc0000',
+        N: '#6600cc',
+        D: '#0033ff',
+        C: '#ffff00',
+        Q: '#6600cc',
+        E: '#0033ff',
+        G: '#33cc00',
+        H: '#009900',
+        I: '#33cc00',
+        L: '#33cc00',
+        K: '#cc0000',
+        M: '#33cc00',
+        F: '#009900',
+        P: '#33cc00',
+        S: '#0099ff',
+        T: '#0099ff',
+        W: '#009900',
+        Y: '#009900',
+        V: '#33cc00',
+        X: '#ffffff'
+      }
+      
     }
 
     if (skipUpdateAlignment == false) {
@@ -809,6 +1213,55 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * @returns the value (hexvalue) from colorScheme based on the index given
    */
   fillColor(index:number) {
+    if (this.selectedSeqType == 'aa') {
+      switch (index) {
+        //['A', 'R', 'N', 'D', 'C', 'E', 'Q', 'G', 'H', 'I', 'L', 'K', 'M', 'F', 'P', 'S', 'T', 'W', 'Y', 'V', '*', '-', 'X']
+        case 0:
+          return this.colorScheme['A']
+        case 1:
+          return this.colorScheme['R']
+        case 2:
+          return this.colorScheme['N']
+        case 3:
+          return this.colorScheme['D']
+        case 4:
+          return this.colorScheme['C']
+        case 5:
+          return this.colorScheme['E']
+        case 6:
+          return this.colorScheme['Q']
+        case 7:
+          return this.colorScheme['G']
+        case 8:
+          return this.colorScheme['H']
+        case 9:
+          return this.colorScheme['I']
+        case 10:
+          return this.colorScheme['L']
+        case 11:
+          return this.colorScheme['K']
+        case 12:
+          return this.colorScheme['M']
+        case 13:
+          return this.colorScheme['F']
+        case 14:
+          return this.colorScheme['P']
+        case 15:
+          return this.colorScheme['S']
+        case 16:
+          return this.colorScheme['T']
+        case 17:
+          return this.colorScheme['W']
+        case 18:
+          return this.colorScheme['Y']
+        case 19:
+          return this.colorScheme['V']
+        case 22:
+          return this.colorScheme['X']
+        default:
+          return this.colorScheme['X']
+      }
+    }
     if (index == 0) {
       return this.colorScheme['A'];
     } else if (index == 1) {
@@ -955,6 +1408,7 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
   * @returns an HTML string with a table representation of the data
   */
   tabulate(index) {
+    let dataType = this.selectedSeqType == 'aa' ? 'AA': 'NT'
 
     let tableHtml = `
         <style>
@@ -979,25 +1433,49 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
             background-color: #fff;
         }
         </style>
-        <div>Position: ${index}</div>
-        <table id="tooltip-table"><thead><th>NT</th><th> % </th></thead><tbody>`;
+        <div>Position: ${index+1}</div>
+        <table id="tooltip-table"><thead><th>${dataType}</th><th> % </th></thead><tbody>`;
 
-        let data = this.proportionMatrix[index]
-        for (let i = 0; i<5; i++) {
-          tableHtml += '<tr>';
-          if (i == 0) {
-            tableHtml += '<td>A</td><td>' + (data[i]*100).toFixed(1) + '%</td>';
-          } else if (i == 1) {
-            tableHtml += '<td>C</td><td>' + (data[i]*100).toFixed(1) + '%</td>';
-          } else if (i == 2) {
-            tableHtml += '<td>G</td><td>' + (data[i]*100).toFixed(1) + '%</td>';
-          } else if (i == 3) {
-            tableHtml += '<td>T</td><td>' + (data[i]*100).toFixed(1) + '%</td>';
-          } else {
-            tableHtml += '<td>other</td><td>' + (data[i]*100).toFixed(1) + '%</td>'
+        
+        if (this.selectedSeqType == 'aa') {
+          let data = this.proportionMatrixAA[index];
+          let nonZeroIndexes = [];
+          let index2NT = ['A', 'R', 'N', 'D', 'C', 'E', 'Q', 'G', 'H', 'I', 'L', 'K', 'M', 'F', 'P', 'S', 'T', 'W', 'Y', 'V', 'STOP', 'GAP', 'UNK'];
+          data.forEach((value, index) => {
+            if (value > 0) nonZeroIndexes.push(index);
+          })
+          nonZeroIndexes.sort(compareIndices);
+          function compareIndices(a,b) {
+            return data[b] - data[a]
           }
-          tableHtml += '</tr>';
-            
+          let numberOfRows = Math.min(4, nonZeroIndexes.length)
+          let sum = 0;
+          for (let i = 0; i< numberOfRows; i++) {
+            let AAindex = nonZeroIndexes[i];
+            tableHtml += `<tr><td>${index2NT[AAindex]}</td><td>`+(data[AAindex]*100).toFixed(1) +'%</td>';
+            sum += data[AAindex];
+          }
+          if (sum <= 0.99) {
+            tableHtml += `<tr><td>Other</td><td>`+((1-sum)*100).toFixed(1) +'%</td>';
+          }
+          
+        } else {
+          for (let i = 0; i<5; i++) {
+            let data = this.proportionMatrix[index]
+            tableHtml += '<tr>';
+            if (i == 0) {
+              tableHtml += '<td>A</td><td>' + (data[i]*100).toFixed(1) + '%</td>';
+            } else if (i == 1) {
+              tableHtml += '<td>C</td><td>' + (data[i]*100).toFixed(1) + '%</td>';
+            } else if (i == 2) {
+              tableHtml += '<td>G</td><td>' + (data[i]*100).toFixed(1) + '%</td>';
+            } else if (i == 3) {
+              tableHtml += '<td>T</td><td>' + (data[i]*100).toFixed(1) + '%</td>';
+            } else {
+              tableHtml += '<td>other</td><td>' + (data[i]*100).toFixed(1) + '%</td>'
+            }
+            tableHtml += '</tr>';
+          } 
         }
         
     tableHtml += '</tbody></table>';
@@ -1201,16 +1679,24 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
    * Exports sequencing data (id + seq string) as fasta or mega file
    */
   exportData(includeConsensus=false) {
+    let data, consensus, megaFormat;
+    if (this.selectedSeqType == 'aa') {
+      let labels = this.getData(this.nodesWithSeq, '_id')
+      data = labels.map((id, index) => ({ '_id': id, seq: this.seqArray[index] }));
+      consensus = includeConsensus? this.getConsensus(this.proportionMatrixAA, 'plurality', 'aa') : '';
+      megaFormat = 'DataType=Protein Missing=X Indel=-;\r\n\r\n'
+    } else {
+      data = this.getData(this.nodesWithSeq, ['_id', 'seq']);
+      consensus = includeConsensus? this.getConsensus(this.proportionMatrix) : '';
+      megaFormat = 'DataType=DNA CodeTable=Standard\r\n\tIdentical=. Missing=? Indel=-;\r\n\r\n'
+    }
     if (this.AlignmentExportFileTypeData == 'fasta') {
-      let data = this.getData(this.nodesWithSeq, ['_id', 'seq'])
-      let consensusString = includeConsensus? '>consensus\r\n' + this.getConsensus(this.proportionMatrix) + "\r\n":'';
+      let consensusString = includeConsensus? '>consensus\r\n' + consensus + "\r\n":'';
       let blob = new Blob([consensusString, data.map(node => ">" + node._id + "\r\n" + node.seq).join("\r\n")])
-      //saveAs(blob, 'hi.fasta')
       saveAs(blob, this.AlignmentExportFileName+'.fasta')
     } else if (this.AlignmentExportFileTypeData == 'mega') {
-      let data = this.getData(this.nodesWithSeq, ['_id', 'seq'])
-      let headers = "#mega\r\n!Title " + this.AlignmentExportFileName + ";\r\n!Format\r\n\tDataType=DNA CodeTable=Standard\r\n\tIdentical=. Missing=? Indel=-;\r\n\r\n"
-      let consensusString = includeConsensus? '#consensus\r\n' + this.getConsensus(this.proportionMatrix) + "\r\n" : '';
+      let headers = "#mega\r\n!Title " + this.AlignmentExportFileName + ";\r\n!Format\r\n\t" + megaFormat;
+      let consensusString = includeConsensus? '#consensus\r\n' + consensus + "\r\n" : '';
       let blob = new Blob([headers, consensusString, data.map(node => "#" + node._id + "\r\n" + node.seq).join("\r\n")])
       saveAs(blob, this.AlignmentExportFileName+'.meg')
     }
@@ -1225,18 +1711,36 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
       let csvHeader = 'A,C,G,T,other (including gap and abiguous)\n';
       csvString = csvHeader + this.proportionMatrix.map(innerArray => innerArray.join(',')).join('\n');
     } else if (includeConsensus) {
-      let csvHeader = 'consensus,consensus meme,A,C,G,T,gap,N,R,Y,K,M,S,W,B,D,H,V,other\n';
-      let proportionMatrix = this.calculateAdvancedProportion();
-      let consensus = this.getConsensus(proportionMatrix, 'meme')
+      let csvHeader;
+      let proportionMatrix;
+      let consensus;
+      if (this.selectedSeqType =='aa') {
+        csvHeader = 'position,consensus,"consensus ambiguities (most prevalent AA outside of brackets, other AAs found at this position inside brackets)",A,R,N,D,C,E,Q,G,H,I,L,K,M,F,P,S,T,W,Y,V,stop,gap,ambiguous\n';
+        proportionMatrix = this.proportionMatrixAA;
+        consensus = this.getConsensus(proportionMatrix, 'meme', 'aa')
+      } else {
+        csvHeader = 'position,consensus,"consensus ambiguities (most prevalent NT outside of brackets, other NTs found at this position inside brackets)",A,C,G,T,gap,N,R,Y,K,M,S,W,B,D,H,V,other\n';
+        proportionMatrix= this.calculateAdvancedProportion();
+        consensus = this.getConsensus(proportionMatrix, 'meme')
+      }
+       
       let consensusInterator = getNextPosition(consensus);
-      csvString = csvHeader + proportionMatrix.map((innerArray) => {
+      csvString = csvHeader + proportionMatrix.map((innerArray,pos) => {
         let chars = consensusInterator.next().value;
-        return chars.charAt(0)+',' + chars + ',' + innerArray.join(',')
+        return (pos+1) + ',' + chars.charAt(0)+',' + chars + ',' + innerArray.join(',')
       }).join('\n');
     } else {
-      let csvHeader = 'A,C,G,T,gap,N,R,Y,K,M,S,W,B,D,H,V,other\n';
-      let proportionMatrix = this.calculateAdvancedProportion();
-      csvString = csvHeader + proportionMatrix.map((innerArray) => innerArray.join(',')).join('\n');
+      let proportionMatrix;
+      let csvHeader;
+      if (this.selectedSeqType == 'aa') {
+        csvHeader = 'position,A,R,N,D,C,E,Q,G,H,I,L,K,M,F,P,S,T,W,Y,V,stop,gap,ambiguous\n';
+        proportionMatrix = this.proportionMatrixAA;
+      } else {
+        csvHeader = 'position,A,C,G,T,gap,N,R,Y,K,M,S,W,B,D,H,V,other\n';
+        proportionMatrix = this.calculateAdvancedProportion();
+      }
+
+      csvString = csvHeader + proportionMatrix.map((innerArray,pos) => (pos+1)+ ',' + innerArray.join(',')).join('\n');
     }
     function* getNextPosition(input) {
       for (let i = 0; i < input.length; i++) {
@@ -1261,22 +1765,26 @@ export class AlignmentViewComponent extends BaseComponentDirective implements On
     saveAs(blob, this.AlignmentExportFileName + '.csv')
   }
 
-  getConsensus(proportionMatrix, option='plurality') {
-    console.log("Get consensus")
+  /** Gets the consensus sequence of a NT or AA sequence, defined by most common char at a position (not based on meeting a threshold);
+   * 
+   * Option: 
+   ** 'pluratily' returns just the sequence of most common bases
+   ** 'meme' return the most common base, then adds other bases found at that position in brackets.
+   * 
+   * Given all A at first 1, and 70% C and 30% A at 2nd pos, plurality returns 'AC', 'meme' returns 'AC[A]'
+   */
+  getConsensus(proportionMatrix, option='plurality', seq='nt') {
     let consensusSeq = '';
     if (option == 'plurality') {
-
-      let index2NT = ['A', 'C', 'G', 'T', '-']
+      let index2NT = seq == 'nt' ? ['A', 'C', 'G', 'T', '-'] : ['A', 'R', 'N', 'D', 'C', 'E', 'Q', 'G', 'H', 'I', 'L', 'K', 'M', 'F', 'P', 'S', 'T', 'W', 'Y', 'V', '*', '-', 'X']
       proportionMatrix.forEach((row) => {
         let maxPos = row.indexOf(Math.max(...row));
-        if (maxPos > 4) {consensusSeq += 'N'}
+        if (maxPos > 4 && seq=='nt') {consensusSeq += 'N'}
         else {consensusSeq += index2NT[maxPos];}
       })
-  
       return consensusSeq;
-
     } else if (option == 'meme') {
-      let index2NT = ['A','C','G','T','-','N','R','Y','K','M','S','W','B','D','H','V', 'invalid']; // what to do with invalid char
+      let index2NT = seq == 'nt' ?  ['A','C','G','T','-','N','R','Y','K','M','S','W','B','D','H','V', 'invalid'] : ['A', 'R', 'N', 'D', 'C', 'E', 'Q', 'G', 'H', 'I', 'L', 'K', 'M', 'F', 'P', 'S', 'T', 'W', 'Y', 'V', '*', '-', 'X'];
       proportionMatrix.forEach((row) => {
         let nonZeroIndexes = [];
         row.forEach((value, index) => {
