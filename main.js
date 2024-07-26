@@ -78,38 +78,38 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "AppModule": () => (/* binding */ AppModule),
 /* harmony export */   "TestedComponent": () => (/* binding */ TestedComponent)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! tslib */ 70655);
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @angular/platform-browser */ 11481);
-/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! @angular/platform-browser/animations */ 84934);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @angular/core */ 94650);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! tslib */ 70655);
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @angular/platform-browser */ 11481);
+/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @angular/platform-browser/animations */ 84934);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @angular/core */ 94650);
 /* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app-routing.module */ 90158);
 /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app.component */ 55041);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jquery */ 58259);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! @angular/common/http */ 80529);
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @angular/forms */ 24006);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @angular/common/http */ 80529);
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! @angular/forms */ 24006);
 /* harmony import */ var _shared_utils_utils_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @shared/utils/utils.module */ 27955);
 /* harmony import */ var ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ngx-bootstrap */ 11109);
 /* harmony import */ var _golden_layout_component_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./golden-layout-component.service */ 90893);
 /* harmony import */ var _golden_layout_host_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./golden-layout-host.component */ 42027);
-/* harmony import */ var primeng_table__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! primeng/table */ 41765);
-/* harmony import */ var primeng_fileupload__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! primeng/fileupload */ 13388);
-/* harmony import */ var primeng_listbox__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! primeng/listbox */ 38433);
-/* harmony import */ var primeng_radiobutton__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! primeng/radiobutton */ 50613);
-/* harmony import */ var primeng_calendar__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! primeng/calendar */ 70585);
-/* harmony import */ var primeng_paginator__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! primeng/paginator */ 29061);
-/* harmony import */ var primeng_progressbar__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! primeng/progressbar */ 78235);
-/* harmony import */ var primeng_confirmdialog__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! primeng/confirmdialog */ 32137);
-/* harmony import */ var primeng_dropdown__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! primeng/dropdown */ 82210);
-/* harmony import */ var primeng_accordion__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! primeng/accordion */ 32174);
-/* harmony import */ var primeng_sidebar__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! primeng/sidebar */ 23214);
-/* harmony import */ var primeng_multiselect__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! primeng/multiselect */ 65722);
-/* harmony import */ var primeng_slider__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! primeng/slider */ 78177);
-/* harmony import */ var primeng_tabview__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! primeng/tabview */ 58783);
-/* harmony import */ var primeng_selectbutton__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! primeng/selectbutton */ 85362);
-/* harmony import */ var primeng_tree__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! primeng/tree */ 14323);
-/* harmony import */ var primeng_dialog__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! primeng/dialog */ 77729);
-/* harmony import */ var primeng_orderlist__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! primeng/orderlist */ 65900);
+/* harmony import */ var primeng_table__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! primeng/table */ 41765);
+/* harmony import */ var primeng_fileupload__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! primeng/fileupload */ 13388);
+/* harmony import */ var primeng_listbox__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! primeng/listbox */ 38433);
+/* harmony import */ var primeng_radiobutton__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! primeng/radiobutton */ 50613);
+/* harmony import */ var primeng_calendar__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! primeng/calendar */ 70585);
+/* harmony import */ var primeng_paginator__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! primeng/paginator */ 29061);
+/* harmony import */ var primeng_progressbar__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! primeng/progressbar */ 78235);
+/* harmony import */ var primeng_confirmdialog__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! primeng/confirmdialog */ 32137);
+/* harmony import */ var primeng_dropdown__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! primeng/dropdown */ 82210);
+/* harmony import */ var primeng_accordion__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! primeng/accordion */ 32174);
+/* harmony import */ var primeng_sidebar__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! primeng/sidebar */ 23214);
+/* harmony import */ var primeng_multiselect__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! primeng/multiselect */ 65722);
+/* harmony import */ var primeng_slider__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! primeng/slider */ 78177);
+/* harmony import */ var primeng_tabview__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! primeng/tabview */ 58783);
+/* harmony import */ var primeng_selectbutton__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! primeng/selectbutton */ 85362);
+/* harmony import */ var primeng_tree__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! primeng/tree */ 14323);
+/* harmony import */ var primeng_dialog__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! primeng/dialog */ 77729);
+/* harmony import */ var primeng_orderlist__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! primeng/orderlist */ 65900);
 /* harmony import */ var _microbe_trace_next_plugin_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./microbe-trace-next-plugin.component */ 87097);
 /* harmony import */ var _shared_common_session_app_session_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @shared/common/session/app-session.service */ 34845);
 /* harmony import */ var _shared_common_ui_app_ui_customization_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @shared/common/ui/app-ui-customization.service */ 87940);
@@ -122,20 +122,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _visualizationComponents_TableComponent_table_plugin_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./visualizationComponents/TableComponent/table-plugin-component */ 31209);
 /* harmony import */ var _visualizationComponents_MapComponent_map_plugin_component__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./visualizationComponents/MapComponent/map-plugin.component */ 53605);
 /* harmony import */ var _visualizationComponents_AlignmentViewComponent_alignment_view_plugin_component__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./visualizationComponents/AlignmentViewComponent/alignment-view-plugin-component */ 37536);
-/* harmony import */ var _asymmetrik_ngx_leaflet__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! @asymmetrik/ngx-leaflet */ 76651);
-/* harmony import */ var _asymmetrik_ngx_leaflet_markercluster__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! @asymmetrik/ngx-leaflet-markercluster */ 46597);
-/* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! @angular/material/button */ 4859);
-/* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! @angular/material/input */ 284);
-/* harmony import */ var _angular_material_menu__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! @angular/material/menu */ 28255);
-/* harmony import */ var _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! @angular/material/toolbar */ 83683);
-/* harmony import */ var _angular_material_slider__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! @angular/material/slider */ 87314);
+/* harmony import */ var _asymmetrik_ngx_leaflet__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! @asymmetrik/ngx-leaflet */ 76651);
+/* harmony import */ var _asymmetrik_ngx_leaflet_markercluster__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! @asymmetrik/ngx-leaflet-markercluster */ 46597);
+/* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! @angular/material/button */ 4859);
+/* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! @angular/material/input */ 284);
+/* harmony import */ var _angular_material_menu__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! @angular/material/menu */ 28255);
+/* harmony import */ var _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! @angular/material/toolbar */ 83683);
+/* harmony import */ var _angular_material_slider__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! @angular/material/slider */ 87314);
 /* harmony import */ var _shared_dnd_directive__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @shared/dnd.directive */ 7015);
-/* harmony import */ var _angular_material_select__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! @angular/material/select */ 84385);
-/* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! @angular/material/icon */ 97392);
-/* harmony import */ var _angular_material_progress_spinner__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! @angular/material/progress-spinner */ 51572);
+/* harmony import */ var _angular_material_select__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! @angular/material/select */ 84385);
+/* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! @angular/material/icon */ 97392);
+/* harmony import */ var _angular_material_progress_spinner__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! @angular/material/progress-spinner */ 51572);
 /* harmony import */ var _visualizationComponents_CrosstabComponent_crosstab_plugin_component__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./visualizationComponents/CrosstabComponent/crosstab-plugin.component */ 66324);
 /* harmony import */ var _visualizationComponents_AggregateComponent_aggregate_component__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./visualizationComponents/AggregateComponent/aggregate.component */ 45624);
-/* harmony import */ var _visualizationComponents_AggregateComponent_aggregateFieldNameTransform_pipe__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./visualizationComponents/AggregateComponent/aggregateFieldNameTransform.pipe */ 42386);
 var _class;
 
 
@@ -197,39 +196,38 @@ var _class;
 
 
 
-
 // It is required to have JQuery as global in the window object.
 window['$'] = jquery__WEBPACK_IMPORTED_MODULE_2__;
 let TestedComponent = (_class = class TestedComponent {
   constructor() {}
 }, _class.ctorParameters = () => [], _class);
-TestedComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_23__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_24__.Component)({
+TestedComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_22__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_23__.Component)({
   template: `<h1>Test2</h1>`,
   selector: `app-tested`
-}), (0,tslib__WEBPACK_IMPORTED_MODULE_23__.__metadata)("design:paramtypes", [])], TestedComponent);
+}), (0,tslib__WEBPACK_IMPORTED_MODULE_22__.__metadata)("design:paramtypes", [])], TestedComponent);
 
 let AppModule = class AppModule {};
-AppModule = (0,tslib__WEBPACK_IMPORTED_MODULE_23__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_24__.NgModule)({
+AppModule = (0,tslib__WEBPACK_IMPORTED_MODULE_22__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_23__.NgModule)({
   declarations: [_app_component__WEBPACK_IMPORTED_MODULE_1__.AppComponent, _microbe_trace_next_plugin_component__WEBPACK_IMPORTED_MODULE_7__.MicrobeTraceNextHomeComponent, _filesComponent_files_plugin_component__WEBPACK_IMPORTED_MODULE_11__.FilesComponent, _visualizationComponents_TwoDComponent_twoD_plugin_component__WEBPACK_IMPORTED_MODULE_14__.TwoDComponent, _visualizationComponents_TableComponent_table_plugin_component__WEBPACK_IMPORTED_MODULE_16__.TableComponent, _golden_layout_host_component__WEBPACK_IMPORTED_MODULE_6__.GoldenLayoutHostComponent, _visualizationComponents_MapComponent_map_plugin_component__WEBPACK_IMPORTED_MODULE_17__.MapComponent, TestedComponent, _shared_dnd_directive__WEBPACK_IMPORTED_MODULE_19__.DndDirective, _visualizationComponents_PhylogeneticComponent_phylogenetic_plugin_component__WEBPACK_IMPORTED_MODULE_12__.PhylogeneticComponent, _visualizationComponents_TimelineComponent_timeline_component_component__WEBPACK_IMPORTED_MODULE_13__.TimelineComponent, _visualizationComponents_AlignmentViewComponent_alignment_view_plugin_component__WEBPACK_IMPORTED_MODULE_18__.AlignmentViewComponent, _visualizationComponents_CrosstabComponent_crosstab_plugin_component__WEBPACK_IMPORTED_MODULE_20__.CrosstabComponent, _visualizationComponents_AggregateComponent_aggregate_component__WEBPACK_IMPORTED_MODULE_21__.AggregateComponent],
-  imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_25__.BrowserModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_26__.BrowserAnimationsModule, _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule,
+  imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_24__.BrowserModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_25__.BrowserAnimationsModule, _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule,
   //ngCommon.CommonModule,
-  _angular_forms__WEBPACK_IMPORTED_MODULE_27__.FormsModule,
+  _angular_forms__WEBPACK_IMPORTED_MODULE_26__.FormsModule,
   // GoldenLayoutModule.forRoot(config),
-  _angular_common_http__WEBPACK_IMPORTED_MODULE_28__.HttpClientModule, _angular_material_button__WEBPACK_IMPORTED_MODULE_29__.MatButtonModule, _angular_material_input__WEBPACK_IMPORTED_MODULE_30__.MatInputModule, _angular_material_menu__WEBPACK_IMPORTED_MODULE_31__.MatMenuModule, _angular_material_slider__WEBPACK_IMPORTED_MODULE_32__.MatSliderModule, _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_33__.MatToolbarModule, _angular_material_select__WEBPACK_IMPORTED_MODULE_34__.MatSelectModule, _angular_material_progress_spinner__WEBPACK_IMPORTED_MODULE_35__.MatProgressSpinnerModule, _angular_material_icon__WEBPACK_IMPORTED_MODULE_36__.MatIconModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_28__.HttpClientJsonpModule, ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.ModalModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.TooltipModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.TabsModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.BsDropdownModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.PopoverModule.forRoot(), primeng_fileupload__WEBPACK_IMPORTED_MODULE_37__.FileUploadModule,
+  _angular_common_http__WEBPACK_IMPORTED_MODULE_27__.HttpClientModule, _angular_material_button__WEBPACK_IMPORTED_MODULE_28__.MatButtonModule, _angular_material_input__WEBPACK_IMPORTED_MODULE_29__.MatInputModule, _angular_material_menu__WEBPACK_IMPORTED_MODULE_30__.MatMenuModule, _angular_material_slider__WEBPACK_IMPORTED_MODULE_31__.MatSliderModule, _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_32__.MatToolbarModule, _angular_material_select__WEBPACK_IMPORTED_MODULE_33__.MatSelectModule, _angular_material_progress_spinner__WEBPACK_IMPORTED_MODULE_34__.MatProgressSpinnerModule, _angular_material_icon__WEBPACK_IMPORTED_MODULE_35__.MatIconModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_27__.HttpClientJsonpModule, ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.ModalModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.TooltipModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.TabsModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.BsDropdownModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.PopoverModule.forRoot(), primeng_fileupload__WEBPACK_IMPORTED_MODULE_36__.FileUploadModule,
   // AbpModule,
   _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule, _shared_utils_utils_module__WEBPACK_IMPORTED_MODULE_3__.UtilsModule,
   //AppCommonModule.forRoot(),
   // ServiceProxyModule,
-  primeng_table__WEBPACK_IMPORTED_MODULE_38__.TableModule, primeng_listbox__WEBPACK_IMPORTED_MODULE_39__.ListboxModule, primeng_radiobutton__WEBPACK_IMPORTED_MODULE_40__.RadioButtonModule, primeng_calendar__WEBPACK_IMPORTED_MODULE_41__.CalendarModule, primeng_paginator__WEBPACK_IMPORTED_MODULE_42__.PaginatorModule,
+  primeng_table__WEBPACK_IMPORTED_MODULE_37__.TableModule, primeng_listbox__WEBPACK_IMPORTED_MODULE_38__.ListboxModule, primeng_radiobutton__WEBPACK_IMPORTED_MODULE_39__.RadioButtonModule, primeng_calendar__WEBPACK_IMPORTED_MODULE_40__.CalendarModule, primeng_paginator__WEBPACK_IMPORTED_MODULE_41__.PaginatorModule,
   //PrimeNgFileUploadModule,
-  primeng_progressbar__WEBPACK_IMPORTED_MODULE_43__.ProgressBarModule,
+  primeng_progressbar__WEBPACK_IMPORTED_MODULE_42__.ProgressBarModule,
   //PerfectScrollbarModule,
   _metronic_app_core_core_module__WEBPACK_IMPORTED_MODULE_15__.CoreModule,
   //NgxChartsModule,
   //TextMaskModule,
   //ImageCropperModule,
-  primeng_confirmdialog__WEBPACK_IMPORTED_MODULE_44__.ConfirmDialogModule, primeng_dropdown__WEBPACK_IMPORTED_MODULE_45__.DropdownModule, primeng_tabview__WEBPACK_IMPORTED_MODULE_46__.TabViewModule, primeng_selectbutton__WEBPACK_IMPORTED_MODULE_47__.SelectButtonModule, primeng_tree__WEBPACK_IMPORTED_MODULE_48__.TreeModule, primeng_dialog__WEBPACK_IMPORTED_MODULE_49__.DialogModule, primeng_accordion__WEBPACK_IMPORTED_MODULE_50__.AccordionModule, primeng_sidebar__WEBPACK_IMPORTED_MODULE_51__.SidebarModule, primeng_multiselect__WEBPACK_IMPORTED_MODULE_52__.MultiSelectModule, primeng_slider__WEBPACK_IMPORTED_MODULE_53__.SliderModule, _asymmetrik_ngx_leaflet__WEBPACK_IMPORTED_MODULE_54__.LeafletModule, _asymmetrik_ngx_leaflet_markercluster__WEBPACK_IMPORTED_MODULE_55__.LeafletMarkerClusterModule, primeng_orderlist__WEBPACK_IMPORTED_MODULE_56__.OrderListModule, _visualizationComponents_AggregateComponent_aggregateFieldNameTransform_pipe__WEBPACK_IMPORTED_MODULE_22__.aggregateFieldNameTransform],
-  exports: [primeng_selectbutton__WEBPACK_IMPORTED_MODULE_47__.SelectButtonModule],
+  primeng_confirmdialog__WEBPACK_IMPORTED_MODULE_43__.ConfirmDialogModule, primeng_dropdown__WEBPACK_IMPORTED_MODULE_44__.DropdownModule, primeng_tabview__WEBPACK_IMPORTED_MODULE_45__.TabViewModule, primeng_selectbutton__WEBPACK_IMPORTED_MODULE_46__.SelectButtonModule, primeng_tree__WEBPACK_IMPORTED_MODULE_47__.TreeModule, primeng_dialog__WEBPACK_IMPORTED_MODULE_48__.DialogModule, primeng_accordion__WEBPACK_IMPORTED_MODULE_49__.AccordionModule, primeng_sidebar__WEBPACK_IMPORTED_MODULE_50__.SidebarModule, primeng_multiselect__WEBPACK_IMPORTED_MODULE_51__.MultiSelectModule, primeng_slider__WEBPACK_IMPORTED_MODULE_52__.SliderModule, _asymmetrik_ngx_leaflet__WEBPACK_IMPORTED_MODULE_53__.LeafletModule, _asymmetrik_ngx_leaflet_markercluster__WEBPACK_IMPORTED_MODULE_54__.LeafletMarkerClusterModule, primeng_orderlist__WEBPACK_IMPORTED_MODULE_55__.OrderListModule],
+  exports: [primeng_selectbutton__WEBPACK_IMPORTED_MODULE_46__.SelectButtonModule],
   providers: [_shared_common_session_app_session_service__WEBPACK_IMPORTED_MODULE_8__.AppSessionService, _shared_common_ui_app_ui_customization_service__WEBPACK_IMPORTED_MODULE_9__.AppUiCustomizationService, _shared_common_nav_app_url_service__WEBPACK_IMPORTED_MODULE_10__.AppUrlService, _golden_layout_component_service__WEBPACK_IMPORTED_MODULE_5__.GoldenLayoutComponentService],
   bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_1__.AppComponent]
 })], AppModule);
@@ -2036,9 +2034,10 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           console.log('launching view: ', ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-view"]);
         }
         ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.launchView(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-view"]);
-        //window.context.commonService.launchView('Alignment View');
-        //setTimeout(() => { $('#sampleDataOverlay').click()}, 100)
-        delayFunction(10, loadOtherViews);
+        //window.context.commonService.launchView('Aggregate');
+        //setTimeout(() => { $('#overlay button').click()}, 100)
+        // currently loading all views isn't ready and is leading to bugs where default data is seeping in when new data is loaded
+        //delayFunction(10, loadOtherViews) 
         function convertName(s) {
           // can't do alignment view yet;
           if (s == 'geo_map') {
@@ -8730,16 +8729,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "AggregateComponent": () => (/* binding */ AggregateComponent)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! tslib */ 70655);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! tslib */ 70655);
 /* harmony import */ var _aggregate_component_html_ngResource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./aggregate.component.html?ngResource */ 45224);
 /* harmony import */ var _aggregate_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./aggregate.component.scss?ngResource */ 26461);
 /* harmony import */ var _aggregate_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_aggregate_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 94650);
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/platform-browser */ 11481);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/core */ 94650);
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/platform-browser */ 11481);
 /* harmony import */ var _app_base_component_directive__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @app/base-component.directive */ 75738);
 /* harmony import */ var _app_contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @app/contactTraceCommonServices/common.service */ 37822);
-/* harmony import */ var golden_layout__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! golden-layout */ 10478);
+/* harmony import */ var golden_layout__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! golden-layout */ 10478);
+/* harmony import */ var papaparse__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! papaparse */ 13028);
+/* harmony import */ var papaparse__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(papaparse__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var jszip__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! jszip */ 25650);
+/* harmony import */ var jszip__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(jszip__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! file-saver */ 94327);
+/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var xlsx__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! xlsx */ 80574);
+/* harmony import */ var pdfmake_build_pdfmake_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! pdfmake/build/pdfmake.js */ 54641);
+/* harmony import */ var pdfmake_build_pdfmake_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(pdfmake_build_pdfmake_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var pdfmake_build_vfs_fonts_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! pdfmake/build/vfs_fonts.js */ 58493);
 var _class;
+
+
+
+
+
+
 
 
 
@@ -8758,6 +8773,7 @@ let AggregateComponent = (_class = class AggregateComponent extends _app_base_co
     this.commonService = commonService;
     this.container = container;
     this.cdref = cdref;
+    this.SelectedDataTables = [];
     this.fieldOptions = [{
       label: 'Node',
       value: 'nodes',
@@ -8771,70 +8787,70 @@ let AggregateComponent = (_class = class AggregateComponent extends _app_base_co
       value: 'clusters',
       items: []
     }];
-    this.SelectedDataFields = ['Node-subtype', 'Link-cluster', 'Clus-nodes'];
-    this.SelectedDataFields2 = [{
-      value: 'Node-subtype',
-      number: 0
-    }, {
-      value: 'Link-cluster',
-      number: 1
-    }, {
-      value: 'Clus-nodes',
-      number: 2
-    }];
+    this.SelectedDataFields = [];
     this.viewActive = true;
     this.settingsOpen = false;
     this.exportOpen = false;
+    this.SelectedAggregateExportFilename = '';
+    this.AggregateExportFileTypeList = [{
+      label: 'xlsx',
+      value: 'xlsx'
+    }, {
+      label: 'csv.zip',
+      value: 'csv.zip'
+    }, {
+      label: 'json',
+      value: 'json'
+    }, {
+      label: 'pdf',
+      value: 'pdf'
+    }];
+    this.SelectedAggregateExportFileType = 'pdf';
     this.visuals = commonService.visuals;
     this.visuals.aggregate = this;
     this.widgets = this.commonService.session.style.widgets;
     this.updateFieldOptions();
   }
+  // XXX need to fix this XXX
   ngOnInit() {
-    console.log('we made it');
-    this.SelectedDataTables = [{
-      label: '',
-      data: [],
-      tableColumns: []
-    }, {
-      label: '',
-      data: [],
-      tableColumns: []
-    }, {
-      label: '',
-      data: [],
-      tableColumns: []
-    }];
-    this.updateTable(0);
-    this.updateTable(1);
-    this.updateTable(2);
+    this.SelectedDataFields.forEach((field, index) => {
+      this.SelectedDataTables.push({
+        label: '',
+        data: [],
+        tableColumns: []
+      });
+      this.updateTable(index);
+    });
+    this.updateViewHeight();
+    this.updateTableColWidth();
+    this.container.on('resize', () => {
+      this.updateViewHeight();
+      this.updateTableColWidth();
+    });
+    this.container.on('hide', () => {
+      this.viewActive = false;
+      this.cdref.detectChanges();
+    });
+    this.container.on('show', () => {
+      this.viewActive = true;
+      this.cdref.detectChanges();
+    });
+  }
+  ngAfterViewInit() {
+    this.updateTableColWidth();
   }
   updateTable(i) {
-    let dataset = this.SelectedDataFields[i].substring(0, 4);
-    let field = this.SelectedDataFields[i].substring(5);
-    console.log(this.SelectedDataFields[i], dataset, field);
-    let updatedTable = this.updateTable2(dataset, field);
-    /*if (dataset == 'Node') {
-      updatedTable = this.updateTable2(dataset, field)
-    } else if (dataset == 'Link') {
-      updatedTable = this.updateTable2(dataset, field)
-    } else {
-      updatedTable =  this.updateTable2(dataset, field)
-    }*/
-    this.SelectedDataTables[i] = updatedTable;
-  }
-  /**
-   * Generates the table by counting the data. Converts the counts into proportions if needed
-   */
-  updateTable2(dataset, field) {
+    let fullField = this.SelectedDataFields[i].split('-');
+    let dataset = fullField[0];
+    let field = fullField.slice(1).join('-');
     let tableColumns;
     let total = 0;
     let rawdata;
     if (dataset == 'Node') {
       rawdata = this.commonService.getVisibleNodes();
       tableColumns = [{
-        field: 'col1',
-        header: field
+        field: 'groupName',
+        header: 'Grouped By ' + this.commonService.capitalize(field)
       }, {
         field: 'count',
         header: 'Number of Nodes'
@@ -8845,8 +8861,8 @@ let AggregateComponent = (_class = class AggregateComponent extends _app_base_co
     } else if (dataset == 'Link') {
       rawdata = this.commonService.getVisibleLinks();
       tableColumns = [{
-        field: 'col1',
-        header: field
+        field: 'groupName',
+        header: 'Grouped By ' + this.commonService.capitalize(field)
       }, {
         field: 'count',
         header: 'Number of Links'
@@ -8857,8 +8873,8 @@ let AggregateComponent = (_class = class AggregateComponent extends _app_base_co
     } else {
       rawdata = this.commonService.getVisibleClusters();
       tableColumns = [{
-        field: 'col1',
-        header: field
+        field: 'groupName',
+        header: 'Grouped By ' + this.commonService.capitalize(field)
       }, {
         field: 'count',
         header: 'Number of Clusters'
@@ -8870,28 +8886,40 @@ let AggregateComponent = (_class = class AggregateComponent extends _app_base_co
     // populate count array [{}, {}, ...] where each item/object is a row
     var data = [];
     rawdata.forEach(row => {
-      var match = data.find(arow => arow.col1 == row[field]);
+      var match = data.find(arow => arow.groupName == row[field]);
       if (match) {
         match['count']++;
       } else {
         data.push({
-          col1: row[field],
+          groupName: row[field],
           count: 1
         });
       }
       total++;
     });
     data.forEach(row => {
-      row['percent'] = Math.round(row['count'] / total * 100000) / 1000; //'//.toLocaleString() + '%'
-      if (row.col1 == null) {
-        row.col1 = 'null';
+      row['percent'] = row['count'] * 100 / total;
+      if (row.groupName == null) {
+        row.groupName = 'null';
       }
     });
-    return {
+    this.SelectedDataTables[i] = {
       label: dataset + '-' + field,
       data: data,
       tableColumns: tableColumns
     };
+  }
+  updateViewHeight() {
+    this.viewHeight = $(".aggregate-wrapper").parent().height() - 70;
+  }
+  updateTableColWidth() {
+    let width = $('#tablesContainer').width() - 40;
+    width = width > 700 ? width * .7 : width;
+    this.tableStyle = {
+      'width': width + 'px',
+      'display': 'block'
+    };
+    $('th').width(width / 3);
   }
   addTable() {
     this.SelectedDataFields.push('Node-selected');
@@ -8901,6 +8929,7 @@ let AggregateComponent = (_class = class AggregateComponent extends _app_base_co
       tableColumns: []
     });
     this.updateTable(this.SelectedDataTables.length - 1);
+    setTimeout(() => this.updateTableColWidth(), 0);
     this.orderList.cd.detectChanges();
   }
   deleteTable(i) {
@@ -8929,9 +8958,15 @@ let AggregateComponent = (_class = class AggregateComponent extends _app_base_co
       this.fieldOptions[2]['items'].push({
         short_label: this.commonService.capitalize(d.replace("_", "")),
         label: `Cluster-${this.commonService.capitalize(d.replace("_", ""))}`,
-        value: `Clus-${d}`
+        value: `Cluster-${d}`
       });
     });
+  }
+  formatTableTitle(inputString) {
+    let fullField = inputString.split('-');
+    let datasetName = this.commonService.capitalize(fullField[0]);
+    let colGroupName = this.commonService.capitalize(fullField.slice(1).join('-'));
+    return datasetName + " " + colGroupName;
   }
   updateNodeColors() {}
   updateLinkColor() {}
@@ -8948,9 +8983,112 @@ let AggregateComponent = (_class = class AggregateComponent extends _app_base_co
   openExport() {
     console.log("open export pushed");
     this.exportOpen = true;
-    //this.SelectedDataTables.pop();
   }
-
+  exportVisualization() {
+    console.log(this.SelectedAggregateExportFilename + '.' + this.SelectedAggregateExportFileType);
+    if (this.SelectedAggregateExportFileType == 'csv.zip') {
+      let zip = new (jszip__WEBPACK_IMPORTED_MODULE_5___default())();
+      this.SelectedDataTables.forEach(table => {
+        let tmpData = table.data.map(item => {
+          let colGroupName = table.label.split('-').slice(1).join('-');
+          return {
+            [colGroupName]: item.groupName,
+            'count': item.count,
+            'percent': item.percent + '%'
+          };
+        });
+        zip.file(table.label + '.csv', papaparse__WEBPACK_IMPORTED_MODULE_4__.unparse(tmpData));
+        console.log(papaparse__WEBPACK_IMPORTED_MODULE_4__.unparse(tmpData));
+      });
+      zip.generateAsync({
+        type: 'blob'
+      }).then(content => file_saver__WEBPACK_IMPORTED_MODULE_6__(content, this.SelectedAggregateExportFilename + '.zip'));
+    } else if (this.SelectedAggregateExportFileType == 'xlsx') {
+      let wb = xlsx__WEBPACK_IMPORTED_MODULE_9__.utils.book_new();
+      this.SelectedDataTables.forEach(table => {
+        let tmpData = table.data.map(item => {
+          let colGroupName = table.label.split('-').slice(1).join('-');
+          return {
+            [colGroupName]: item.groupName,
+            'count': item.count,
+            'percent': item.percent + '%'
+          };
+        });
+        let ws = xlsx__WEBPACK_IMPORTED_MODULE_9__.utils.json_to_sheet(tmpData);
+        xlsx__WEBPACK_IMPORTED_MODULE_9__.utils.book_append_sheet(wb, ws, table.label);
+      });
+      xlsx__WEBPACK_IMPORTED_MODULE_9__.writeFile(wb, this.SelectedAggregateExportFilename + '.xlsx');
+    } else if (this.SelectedAggregateExportFileType == 'json') {
+      let outputData = [];
+      this.SelectedDataTables.forEach(table => {
+        let fullField = table.label.split('-');
+        let datasetName = fullField[0];
+        let colGroupName = fullField.slice(1).join('-');
+        let tmpData = table.data.map(item => {
+          return {
+            [colGroupName]: item.groupName,
+            'n': item.count,
+            'percent': item.percent + '%'
+          };
+        });
+        outputData.push({
+          "dataset": datasetName.toLowerCase(),
+          "column": colGroupName,
+          data: tmpData
+        });
+      });
+      let blob = new Blob([JSON.stringify(outputData)], {
+        type: "application/json;charset=utf-8"
+      });
+      file_saver__WEBPACK_IMPORTED_MODULE_6__(blob, this.SelectedAggregateExportFilename + '.json');
+    } else if (this.SelectedAggregateExportFileType == 'pdf') {
+      (pdfmake_build_pdfmake_js__WEBPACK_IMPORTED_MODULE_7___default().vfs) = pdfmake_build_vfs_fonts_js__WEBPACK_IMPORTED_MODULE_8__.pdfMake.vfs;
+      pdfmake_build_pdfmake_js__WEBPACK_IMPORTED_MODULE_7___default().createPdf({
+        content: [{
+          image: this.commonService.watermark
+        }, {
+          text: "Cluster Aggregation Snapshot",
+          style: "header",
+          alignment: "center"
+        }, this.SelectedDataTables.map(table => {
+          let fullField = table.label.split('-');
+          let datasetName = fullField[0];
+          let colGroupName = fullField.slice(1).join('-');
+          let tmpData = table.data.map(item => {
+            let colGroupName = table.label.split('-').slice(1).join('-');
+            return {
+              [colGroupName]: item.groupName,
+              'count': item.count,
+              'percent': item.percent.toFixed(2) + '%'
+            };
+          });
+          return {
+            style: "paddedTable",
+            table: {
+              headerRow: 1,
+              widths: ["*", "*", "*"],
+              body: [[`${this.commonService.capitalize(colGroupName)}`, `Number of ${datasetName}s`, `Percent of Total ${datasetName}s`]].concat(tmpData.map(Object.values))
+            }
+          };
+        })],
+        footer: function (currentPage, pageCount) {
+          return [{
+            text: `Page ${currentPage.toString()} of ${pageCount}`,
+            alignment: "center"
+          }];
+        },
+        styles: {
+          header: {
+            fontSize: 22,
+            bold: true
+          },
+          paddedTable: {
+            margin: [10, 10, 10, 10]
+          }
+        }
+      }).download(this.SelectedAggregateExportFilename + '.pdf');
+    }
+  }
   reordered(e) {
     console.log('reordered ', this.SelectedDataFields, e);
     let updatedTableOrder = [];
@@ -8968,77 +9106,44 @@ let AggregateComponent = (_class = class AggregateComponent extends _app_base_co
     console.log(e);
     this.SelectedDataFields[i] = e.value;
     console.log(`After: ${this.SelectedDataFields[0]}, ${this.SelectedDataFields[1]}, ${this.SelectedDataFields[2]}`);
-    //to ${this.SelectedDataFields[i]}`)
     this.updateTable(i);
+    setTimeout(() => this.updateTableColWidth(), 0);
   }
 }, _class.ctorParameters = () => [{
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_4__.Injector
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Injector
 }, {
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_4__.Renderer2
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Renderer2
 }, {
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_4__.ElementRef
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.ElementRef
 }, {
-  type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__.EventManager
+  type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_11__.EventManager
 }, {
   type: _app_contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_3__.CommonService
 }, {
-  type: golden_layout__WEBPACK_IMPORTED_MODULE_6__.ComponentContainer,
+  type: golden_layout__WEBPACK_IMPORTED_MODULE_12__.ComponentContainer,
   decorators: [{
-    type: _angular_core__WEBPACK_IMPORTED_MODULE_4__.Inject,
+    type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Inject,
     args: [_app_base_component_directive__WEBPACK_IMPORTED_MODULE_2__.BaseComponentDirective.GoldenLayoutContainerInjectionToken]
   }]
 }, {
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_4__.ElementRef
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.ElementRef
 }, {
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_4__.ChangeDetectorRef
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.ChangeDetectorRef
 }], _class.propDecorators = {
   orderList: [{
-    type: _angular_core__WEBPACK_IMPORTED_MODULE_4__.ViewChild,
+    type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.ViewChild,
     args: ['orderList']
   }]
 }, _class);
-AggregateComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_7__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_4__.Component)({
+AggregateComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_13__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_10__.Component)({
   selector: 'AggregateComponent',
   template: _aggregate_component_html_ngResource__WEBPACK_IMPORTED_MODULE_0__,
   styles: [(_aggregate_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1___default())]
-}), (0,tslib__WEBPACK_IMPORTED_MODULE_7__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_4__.Injector, _angular_core__WEBPACK_IMPORTED_MODULE_4__.Renderer2, _angular_core__WEBPACK_IMPORTED_MODULE_4__.ElementRef, _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__.EventManager, _app_contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_3__.CommonService, golden_layout__WEBPACK_IMPORTED_MODULE_6__.ComponentContainer, _angular_core__WEBPACK_IMPORTED_MODULE_4__.ElementRef, _angular_core__WEBPACK_IMPORTED_MODULE_4__.ChangeDetectorRef])], AggregateComponent);
+}), (0,tslib__WEBPACK_IMPORTED_MODULE_13__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_10__.Injector, _angular_core__WEBPACK_IMPORTED_MODULE_10__.Renderer2, _angular_core__WEBPACK_IMPORTED_MODULE_10__.ElementRef, _angular_platform_browser__WEBPACK_IMPORTED_MODULE_11__.EventManager, _app_contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_3__.CommonService, golden_layout__WEBPACK_IMPORTED_MODULE_12__.ComponentContainer, _angular_core__WEBPACK_IMPORTED_MODULE_10__.ElementRef, _angular_core__WEBPACK_IMPORTED_MODULE_10__.ChangeDetectorRef])], AggregateComponent);
 
 (function (AggregateComponent) {
   AggregateComponent.componentTypeName = 'Aggregate';
 })(AggregateComponent || (AggregateComponent = {}));
-
-/***/ }),
-
-/***/ 42386:
-/*!************************************************************************************************!*\
-  !*** ./src/app/visualizationComponents/AggregateComponent/aggregateFieldNameTransform.pipe.ts ***!
-  \************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "aggregateFieldNameTransform": () => (/* binding */ aggregateFieldNameTransform)
-/* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ 70655);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ 94650);
-
-
-let aggregateFieldNameTransform = class aggregateFieldNameTransform {
-  transform(value) {
-    let s = value.substring(0, 4);
-    if (s == "Clus") {
-      s = 'Cluster';
-    }
-    s = s + ' ' + value.substring(5);
-    return s;
-  }
-};
-aggregateFieldNameTransform = (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_1__.Pipe)({
-  standalone: true,
-  name: 'aggregateFieldNameTransform'
-})], aggregateFieldNameTransform);
-
 
 /***/ }),
 
@@ -10921,18 +11026,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "CrosstabComponent": () => (/* binding */ CrosstabComponent)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! tslib */ 70655);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! tslib */ 70655);
 /* harmony import */ var _crosstab_plugin_component_html_ngResource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./crosstab-plugin.component.html?ngResource */ 35836);
 /* harmony import */ var _crosstab_plugin_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./crosstab-plugin.component.scss?ngResource */ 27952);
 /* harmony import */ var _crosstab_plugin_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_crosstab_plugin_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/core */ 94650);
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/platform-browser */ 11481);
-/* harmony import */ var golden_layout__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! golden-layout */ 10478);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/core */ 94650);
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/platform-browser */ 11481);
+/* harmony import */ var golden_layout__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! golden-layout */ 10478);
 /* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! file-saver */ 94327);
 /* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var ngx_bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ngx-bootstrap */ 11109);
-/* harmony import */ var _app_base_component_directive__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @app/base-component.directive */ 75738);
-/* harmony import */ var _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../contactTraceCommonServices/common.service */ 37822);
+/* harmony import */ var pdfmake_build_pdfmake_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! pdfmake/build/pdfmake.js */ 54641);
+/* harmony import */ var pdfmake_build_pdfmake_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(pdfmake_build_pdfmake_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var pdfmake_build_vfs_fonts_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! pdfmake/build/vfs_fonts.js */ 58493);
+/* harmony import */ var _app_base_component_directive__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @app/base-component.directive */ 75738);
+/* harmony import */ var _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../contactTraceCommonServices/common.service */ 37822);
 var _class;
 
 
@@ -10945,7 +11053,9 @@ var _class;
 
 
 
-let CrosstabComponent = (_class = class CrosstabComponent extends _app_base_component_directive__WEBPACK_IMPORTED_MODULE_4__.BaseComponentDirective {
+
+
+let CrosstabComponent = (_class = class CrosstabComponent extends _app_base_component_directive__WEBPACK_IMPORTED_MODULE_6__.BaseComponentDirective {
   constructor(injector, renderer, elem, eventManager, commonService, container, elRef, cdref) {
     super(elRef.nativeElement);
     this.renderer = renderer;
@@ -10987,6 +11097,12 @@ let CrosstabComponent = (_class = class CrosstabComponent extends _app_base_comp
     }, {
       label: 'csv',
       value: 'csv'
+    }, {
+      label: 'json',
+      value: 'json'
+    }, {
+      label: 'pdf',
+      value: 'pdf'
     }];
     this.selectedSize = '';
     this.sizes = [{
@@ -11341,11 +11457,78 @@ let CrosstabComponent = (_class = class CrosstabComponent extends _app_base_comp
   exportVisualization() {
     if (this.SelectedCrossTabExportFileType == 'xlsx') {
       this.saveAsExcelFile();
-    } else {
+    } else if (this.SelectedCrossTabExportFileType == 'csv') {
       this.dataTable.exportFilename = this.SelectedCrossTabExportFilename;
       this.dataTable.value.push(this.totalRow);
       this.dataTable.exportCSV();
       this.dataTable.value.pop();
+    } else if (this.SelectedCrossTabExportFileType == 'json') {
+      let keys = Object.keys(this.SelectedTableData.data[0]);
+      let data = this.SelectedTableData.data.map(row => {
+        let output = {};
+        keys.forEach(key => {
+          if (key == 'Total') return;else if (row[key] == 'null') {
+            output[key] = null;
+          } else {
+            output[key] = row[key];
+          }
+        });
+        return output;
+      });
+      let blob = new Blob([JSON.stringify(data)], {
+        type: "application/json;charset=utf-8"
+      });
+      file_saver__WEBPACK_IMPORTED_MODULE_2__(blob, this.SelectedCrossTabExportFilename + '.json');
+    } else {
+      let columns = ['col'];
+      this.SelectedTableData.tableColumns.forEach(col => {
+        if (col.header != '') {
+          columns.push(col.header);
+        }
+      });
+      let dataBody = [this.SelectedTableData.tableColumns.map(col => {
+        if (col.header == '') return this.commonService.capitalize(this.yVariable);
+        return this.commonService.capitalize(col.header);
+      })].concat(this.SelectedTableData.data.map(formatData)).concat([formatData(this.totalRow)]);
+      function formatData(dataRow) {
+        return columns.map(header => dataRow[header]);
+      }
+      (pdfmake_build_pdfmake_js__WEBPACK_IMPORTED_MODULE_4___default().vfs) = pdfmake_build_vfs_fonts_js__WEBPACK_IMPORTED_MODULE_5__.pdfMake.vfs;
+      pdfmake_build_pdfmake_js__WEBPACK_IMPORTED_MODULE_4___default().createPdf({
+        content: [{
+          image: this.commonService.watermark
+        }, {
+          text: "Cluster Crosstab Snapshot:",
+          style: "header",
+          alignment: "center"
+        }, {
+          text: `${this.commonService.capitalize(this.xVariable)} vs ${this.commonService.capitalize(this.yVariable)}`,
+          style: "fontSize: 18",
+          alignment: "center"
+        }, {
+          style: "paddedTable",
+          table: {
+            headerRows: 1,
+            widths: this.SelectedTableData.tableColumns.map(col => "*"),
+            body: dataBody
+          }
+        }],
+        footer: function (currentPage, pageCount) {
+          return [{
+            text: `Page ${currentPage.toString()} of ${pageCount}`,
+            alignment: "center"
+          }];
+        },
+        styles: {
+          header: {
+            fontSize: 22,
+            bold: true
+          },
+          paddedTable: {
+            margin: [10, 10, 10, 10]
+          }
+        }
+      }).download(this.SelectedCrossTabExportFilename + '.pdf');
     }
     this.exportOpen = !this.exportOpen;
   }
@@ -11390,36 +11573,36 @@ let CrosstabComponent = (_class = class CrosstabComponent extends _app_base_comp
     };
   }
 }, _class.ctorParameters = () => [{
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_6__.Injector
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_8__.Injector
 }, {
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_6__.Renderer2
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_8__.Renderer2
 }, {
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_6__.ElementRef
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_8__.ElementRef
 }, {
-  type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_7__.EventManager
+  type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_9__.EventManager
 }, {
-  type: _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_5__.CommonService
+  type: _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_7__.CommonService
 }, {
-  type: golden_layout__WEBPACK_IMPORTED_MODULE_8__.ComponentContainer,
+  type: golden_layout__WEBPACK_IMPORTED_MODULE_10__.ComponentContainer,
   decorators: [{
-    type: _angular_core__WEBPACK_IMPORTED_MODULE_6__.Inject,
-    args: [_app_base_component_directive__WEBPACK_IMPORTED_MODULE_4__.BaseComponentDirective.GoldenLayoutContainerInjectionToken]
+    type: _angular_core__WEBPACK_IMPORTED_MODULE_8__.Inject,
+    args: [_app_base_component_directive__WEBPACK_IMPORTED_MODULE_6__.BaseComponentDirective.GoldenLayoutContainerInjectionToken]
   }]
 }, {
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_6__.ElementRef
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_8__.ElementRef
 }, {
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_6__.ChangeDetectorRef
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_8__.ChangeDetectorRef
 }], _class.propDecorators = {
   dataTable: [{
-    type: _angular_core__WEBPACK_IMPORTED_MODULE_6__.ViewChild,
+    type: _angular_core__WEBPACK_IMPORTED_MODULE_8__.ViewChild,
     args: ['dt']
   }]
 }, _class);
-CrosstabComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_9__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_6__.Component)({
+CrosstabComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_8__.Component)({
   selector: 'CrosstabComponent',
   template: _crosstab_plugin_component_html_ngResource__WEBPACK_IMPORTED_MODULE_0__,
   styles: [(_crosstab_plugin_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1___default())]
-}), (0,tslib__WEBPACK_IMPORTED_MODULE_9__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_6__.Injector, _angular_core__WEBPACK_IMPORTED_MODULE_6__.Renderer2, _angular_core__WEBPACK_IMPORTED_MODULE_6__.ElementRef, _angular_platform_browser__WEBPACK_IMPORTED_MODULE_7__.EventManager, _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_5__.CommonService, golden_layout__WEBPACK_IMPORTED_MODULE_8__.ComponentContainer, _angular_core__WEBPACK_IMPORTED_MODULE_6__.ElementRef, _angular_core__WEBPACK_IMPORTED_MODULE_6__.ChangeDetectorRef])], CrosstabComponent);
+}), (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_8__.Injector, _angular_core__WEBPACK_IMPORTED_MODULE_8__.Renderer2, _angular_core__WEBPACK_IMPORTED_MODULE_8__.ElementRef, _angular_platform_browser__WEBPACK_IMPORTED_MODULE_9__.EventManager, _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_7__.CommonService, golden_layout__WEBPACK_IMPORTED_MODULE_10__.ComponentContainer, _angular_core__WEBPACK_IMPORTED_MODULE_8__.ElementRef, _angular_core__WEBPACK_IMPORTED_MODULE_8__.ChangeDetectorRef])], CrosstabComponent);
 
 (function (CrosstabComponent) {
   CrosstabComponent.componentTypeName = 'Crosstab';
@@ -21032,7 +21215,7 @@ var ___CSS_LOADER_API_NO_SOURCEMAP_IMPORT___ = __webpack_require__(/*! ../../../
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ 40479);
 var ___CSS_LOADER_EXPORT___ = ___CSS_LOADER_API_IMPORT___(___CSS_LOADER_API_NO_SOURCEMAP_IMPORT___);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ":host {\n  position: absolute;\n  overflow: hidden;\n  z-index: 1 !important;\n  padding: 1px;\n}\n\n:host ::ng-deep .p-accordion-tab:not(.p-accordion-tab-active) .p-toggleable-content {\n  height: 0;\n  overflow: hidden;\n}\n:host ::ng-deep .p-accordion-tab.p-accordion-tab-active .p-toggleable-content {\n  height: auto !important;\n  overflow: auto !important;\n}\n\n.aggregate-wrapper {\n  padding: 70px 20px 10px 20px;\n}\n\n/* Button appearance on hover */\n.btn-icon:hover {\n  transform: scale(1.1); /* Slight enlarge on hover */\n  background-color: rgba(0, 0, 0, 0.1); /* Subtle background color on hover */\n}\n\n.btn-icon {\n  margin-right: 10px;\n  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);\n}\n\n.flaticon-settings:before {\n  font-weight: 800 !important;\n}\n\n.flaticon-pin:before {\n  font-weight: 800 !important;\n}\n\n.flaticon-download:before {\n  font-weight: 800 !important;\n}\n\n.deleteButton button {\n  background-color: transparent;\n  color: #ef4444;\n  border-color: transparent;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ":host {\n  position: absolute;\n  overflow: hidden;\n  z-index: 1 !important;\n  padding: 1px;\n}\n\n:host ::ng-deep .p-accordion-tab:not(.p-accordion-tab-active) .p-toggleable-content {\n  height: 0;\n  overflow: hidden;\n}\n:host ::ng-deep .p-accordion-tab.p-accordion-tab-active .p-toggleable-content {\n  height: auto !important;\n  overflow: auto !important;\n}\n\n.aggregate-wrapper {\n  padding: 50px 20px 5px 20px;\n}\n\n/* Button appearance on hover */\n.btn-icon:hover {\n  transform: scale(1.1); /* Slight enlarge on hover */\n  background-color: rgba(0, 0, 0, 0.1); /* Subtle background color on hover */\n}\n\n.btn-icon {\n  margin-right: 10px;\n  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);\n}\n\n.flaticon-settings:before {\n  font-weight: 800 !important;\n}\n\n.flaticon-pin:before {\n  font-weight: 800 !important;\n}\n\n.flaticon-download:before {\n  font-weight: 800 !important;\n}", ""]);
 // Exports
 module.exports = ___CSS_LOADER_EXPORT___.toString();
 
@@ -21513,7 +21696,7 @@ module.exports = "﻿﻿<div class=\"m-content\">\r\n\r\n    <div id=\"file-pane
 /***/ ((module) => {
 
 "use strict";
-module.exports = "<div class=\"m-content\">   \r\n    <div class=\"m-portlet m-portlet--mobile\" style=\"height:100%;\">\r\n\r\n        <mat-toolbar id=\"top-toolbar\" class=\"nav-bar\">\r\n                <div class=\"navbar-logo\">\r\n                    <span class=\"microbe-font\">Microbe</span>\r\n                    <span class=\"trace-font\">Trace</span>\r\n                    <span><img alt=\"microbetrace\" class=\"mt-icon-toolbar\" [src]=\"appRootUrl() + 'assets/images/Logo.png'\"></span>\r\n                  </div>\r\n                  <div class=\"menu-items\">\r\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"fileMenu\"><i class=\"far nav-icon flaticon-file-1\"></i>File<span class=\"dropdown-symbol\">&#9660;</span></button>\r\n                    <mat-menu #fileMenu=\"matMenu\" overlapTrigger=\"false\">\r\n                      <!-- <button mat-menu-item (click)=\"FileClick('Stash Session')\">Stash</button> -->\r\n                      <!-- <button mat-menu-item (click)=\"FileClick('Recall Session')\">Recall</button> -->\r\n                      <button mat-menu-item (click)=\"FileClick('Save Session')\">Save</button>\r\n                      <!-- <button mat-menu-item (click)=\"FileClick('Open Session')\">Open</button> -->\r\n                      <button mat-menu-item (click)=\"FileClick('Open URL')\">Open URL</button>\r\n                      <button mat-menu-item (click)=\"FileClick('Add Data')\">Add Data</button>\r\n                      <!-- <button mat-menu-item (click)=\"FileClick('New Session')\">New</button> -->\r\n                    </mat-menu>\r\n                    <button class=\"navbar-item\" (click)=\"DisplayGlobalSettingsDialog()\" mat-button><i class=\"far nav-icon flaticon-cogwheel-2\"></i>Settings</button>\r\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"viewMenu\"><i class=\"far nav-icon flaticon-web\"></i>View<span class=\"dropdown-symbol\">&#9660;</span></button>\r\n                    <mat-menu #viewMenu=\"matMenu\" overlapTrigger=\"false\">\r\n                      <button mat-menu-item (click)=\"Viewclick('2D Network')\">2D Network</button>\r\n                      <button mat-menu-item (click)=\"Viewclick('Table')\">Table</button>\r\n                      <button mat-menu-item (click)=\"Viewclick('Map')\">Map</button>\r\n                      <button mat-menu-item (click)=\"Viewclick('Epi Curve')\">Epi Curve</button>\r\n                      <button mat-menu-item (click)=\"Viewclick('Phylogenetic Tree')\">Phylogenetic Tree</button>\r\n                      <button mat-menu-item (click)=\"Viewclick('Alignment View')\">Alignment View</button>\r\n                      <button mat-menu-item (click)=\"Viewclick('Crosstab')\">CrossTab</button>\r\n                      <!--button mat-menu-item (click)=\"Viewclick('Aggregate')\">Aggregate</button-->\r\n                    </mat-menu>\r\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"windowMenu\"><i class=\"far nav-icon flaticon-web\"></i>Window<span class=\"dropdown-symbol\">&#9660;</span></button>\r\n                    <mat-menu #windowMenu=\"matMenu\" overlapTrigger=\"false\">\r\n                      <button mat-menu-item (click)=\"WindowClick('Reload Screen')\">Reload</button>\r\n                      <button mat-menu-item (click)=\"WindowClick('Fullscreen')\">Fullscreen</button>\r\n                    </mat-menu>\r\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"helpMenu\"><i class=\"far nav-icon flaticon-questions-circular-button\"></i>Help<span class=\"dropdown-symbol\">&#9660;</span></button>\r\n                    <mat-menu #helpMenu=\"matMenu\" overlapTrigger=\"false\">\r\n                      <a href=\"https://github.com/CDCgov/MicrobeTrace/wiki\" class=\"dropdown-item ifOnline\" target=\"_blank\" rel=\"noreferrer noopener\" mat-menu-item>Help</a>\r\n                      <a href=\"https://github.com/CDCgov/MicrobeTrace/issues/new\" class=\"dropdown-item ifOnline\" target=\"_blank\" rel=\"noreferrer noopener\" mat-menu-item>Report Bug</a>\r\n                      <button (click)=\"HelpClick('About')\" mat-menu-item>About</button>\r\n                    </mat-menu>\r\n                    <!-- <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"langMenu\"><i class=\"far nav-icon flaticon-earth-globe\"></i>Language<span class=\"dropdown-symbol\">&#9660;</span></button>\r\n                    <mat-menu #langMenu=\"matMenu\" overlapTrigger=\"false\">\r\n                      <button mat-menu-item >English</button>\r\n                      <button mat-menu-item >Spanish</button>\r\n                    </mat-menu> -->\r\n                  </div>\r\n            <div id=\"search-form\" class=\"form-inline navbar-form\">\r\n                <label for=\"search\">Search</label>\r\n                <div class=\"autocomplete-wrapper\">\r\n                    <input type=\"search\" id=\"search\" class=\"form-control form-control-sm\" (input)=\"onSearch()\" [(ngModel)]=\"searchText\" placeholder=\"Nodes\">\r\n                    <ul id=\"search-results\"></ul>\r\n                </div>\r\n            <button id=\"casesensitivebutton\" (click)=\"onCaseSensitiveChange()\" type=\"button\" class=\"btn btn-light btn-sm\" data-toggle=\"button\" aria-pressed=\"false\" autocomplete=\"off\" title=\"Match Case\">\r\n                <span>C</span>\r\n            </button>     \r\n            <button id=\"wholewordbutton\" type=\"button\" (click)=\"onWholeWordChange()\" class=\"btn btn-light btn-sm\" data-toggle=\"button\" aria-pressed=\"false\" autocomplete=\"off\" title=\"Match Whole Word\">\r\n                <span>W</span>\r\n            </button>      \r\n        \r\n            <select [(ngModel)]=\"searchField\" (ngModelChange)=\"onSearchFieldChange($event)\" id=\"search-field\"  class=\"form-control form-control-sm nodeValues\">\r\n                <option val=\"id\">ID</option>\r\n            </select>\r\n            </div> \r\n          </mat-toolbar>\r\n\r\n        <div id=\"visualwrapper\" class=\"kt-container  kt-grid__item kt-grid__item--fluid \" style=\"margin: 6px 6px 0 6px;\">\r\n            <div class=\"kt-portlet kt-portlet--mobile\" style=\"height:100%\">\r\n                <div class=\"kt-portlet__head kt-portlet__head--lg\" style=\"height:100%\">\r\n                    <div class=\"m-portlet__body\" style=\"flex: 1 100%; max-width:100%; height:100%\">\r\n                        <!-- TODO: Add back or replace-->\r\n                        <!-- <golden-layout-root #goldenLayout></golden-layout-root> -->\r\n                        <app-golden-layout-host #goldenLayoutHost></app-golden-layout-host>             \r\n                    </div>\r\n                </div>\r\n            </div>\r\n\r\n        <p-dialog class=\"table-z-index\" id=\"global-settings-link-color-table\" \r\n            [position]=\"GlobalSettingsLinkColorDialogSettings.linkLeft\" \r\n            [(visible)]=\"GlobalSettingsLinkColorDialogSettings.isVisible\"  \r\n            [style]=\"{'z-index': '1'}\"\r\n            (onShow)=\"showLinkColorTable()\"\r\n            (onHide)=\"hideLinkColorTable()\"\r\n            >\r\n            <ng-template pTemplate=\"header\">\r\n                <div style=\"display: flex; justify-content: space-between; width: 100%;\">\r\n                    <span>Link Color Table</span>\r\n                    <span style=\"overflow: visible; position: relative;\">\r\n                        <button title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"toggleColorTableSettings('link-color')\"><i class=\"pi pi-cog\"></i></button>\r\n                        <div id=\"linkColorTableSettings\" class=\"dropdown-menu\" style=\"display: none;\">\r\n                            <button id=\"linkColorCounts\" class=\"dropdown-item\" (click)=\"toggleColorTableColumns('link-color', 'tableCounts')\">\r\n                                <span>Show Counts</span>\r\n                                <i [className]=\"this.widgets['link-color-table-counts'] ? 'pi pi-check' : 'pi pi-times'\" style=\"line-height: 1.5\"></i>\r\n                            </button>\r\n                            <button id=\"linkColorFrequencies\" class=\"dropdown-item\" (click)=\"toggleColorTableColumns('link-color', 'tableFreq')\">\r\n                                <span>Show Frequencies</span>\r\n                                <i [className]=\"this.widgets['link-color-table-frequencies'] ? 'pi pi-check' : 'pi pi-times'\" style=\"line-height: 1.5\"></i>\r\n                            </button>\r\n                        </div>\r\n                    </span>\r\n                </div>\r\n            </ng-template>\r\n            <div style=\"max-height: 50vh\">\r\n                <table id=\"link-color-table\" style=\"width:100%;height:100%;\"></table>\r\n            </div>\r\n        </p-dialog>\r\n\r\n\r\n        <p-dialog id=\"global-settings-node-color-table\" \r\n            [position]=\"GlobalSettingsNodeColorDialogSettings.nodeLeft\" \r\n            [(visible)]=\"GlobalSettingsNodeColorDialogSettings.isVisible\"  \r\n            (onShow)=\"showNodeColorTable()\"\r\n            (onHide)=\"hideNodeColorTable()\"      \r\n                    >       \r\n            <ng-template pTemplate=\"header\">\r\n                <div style=\"display: flex; justify-content: space-between; width: 100%;\">\r\n                    <span>Node Color Table</span>\r\n                    <span style=\"overflow: visible; position: relative;\">\r\n                        <button title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"toggleColorTableSettings('node-color')\"><i class=\"pi pi-cog\"></i></button>\r\n                        <div id=\"nodeColorTableSettings\" class=\"dropdown-menu\" style=\"display: none;\">\r\n                            <button id=\"nodeColorCounts\" class=\"dropdown-item\" (click)=\"toggleColorTableColumns('node-color', 'tableCounts')\">\r\n                                <span>Show Counts</span>\r\n                                <i [className]=\"this.widgets['node-color-table-counts'] ? 'pi pi-check' : 'pi pi-times'\" style=\"line-height: 1.5\"></i>\r\n                            </button>\r\n                            <button id=\"nodeColorFrequencies\" class=\"dropdown-item\" (click)=\"toggleColorTableColumns('node-color', 'tableFreq')\">\r\n                                <span>Show Frequencies</span>\r\n                                <i [className]=\"this.widgets['node-color-table-frequencies'] ? 'pi pi-check' : 'pi pi-times'\" style=\"line-height: 1.5\"></i>\r\n                            </button>\r\n                        </div>\r\n                    </span>\r\n                </div>\r\n            </ng-template>\r\n            <div style=\"max-height: 50vh\">\r\n                <table id=\"node-color-table\" style=\"width:100%;height:100%;\"></table>\r\n            </div>\r\n        </p-dialog>\r\n        </div>\r\n    \r\n        <div id=\"overlay\" appDnd (fileDropped)=\"prepareFilesLists($event)\"> <!--id=\"sampleDataOverlay\"-->\r\n            <input class=\"dnd-input\" type=\"file\" #fileDropRef id=\"fileDropRef\" multiple (change)=\"prepareFilesLists($event.target.files)\" />\r\n            <div class=\"welcome-msg\">\r\n                <div id=\"welcome-title\" class=\"top\">\r\n                    <span class=\"primary\">Welcome to </span>\r\n                    <span class=\"microbe primary\">Microbe</span>\r\n                    <span class=\"primary\">Trace&#8482;</span>\r\n                    <!-- <span><img class=\"mt-icon\" src=\"../../assets/images/Logo.png\"></span> -->\r\n                    <!-- Swap/Uncomment when building productions -->\r\n                    <span><img alt=\"microbetrace\" class=\"mt-icon\" [src]=\"appRootUrl() + 'assets/images/Logo.png'\"></span>\r\n                </div>\r\n                <div id=\"welcome-description\" class=\"bottom primary\">The Visualization Multitool for Molecular Epidemiology and Bioinformatics</div>\r\n            </div>\r\n            <div id=\"add-data-container\" class=\"add-data-container\">\r\n                <div class=\"files-msg\">\r\n                    <span class=\"primary\">Click </span>\r\n                    <a class=\"here-link primary\" for=\"fileDropRef\">here</a>\r\n                    <span class=\"primary\"> or Drag & Drop files to load data</span>\r\n                </div>\r\n                <div class=\"add-btns primary\">\r\n                    <!-- TODO: add back in when recall is ready-->\r\n                    <!-- <button mat-raised-button color=\"primary\" class=\"recall\" (click)=\"recallClicked()\">Recall Previous Session</button> -->\r\n                    <button mat-raised-button color=\"primary\" (click)=\"continueClicked()\">Continue with Sample Dataset</button>\r\n                </div>\r\n            </div>\r\n            <!-- <div id=\"onload-container\" class=\"launch-options-container primary\">\r\n                <span class=\"onload-bold\">Onload Settings:</span>\r\n                <span>Distance Metric: <span class=\"option-value\" [matMenuTriggerFor]=\"metricMenu\">{{metric}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\r\n                <span id=\"ambiguities-menu\">Ambiguities: <span class=\"option-value\" [matMenuTriggerFor]=\"ambiMenu\">{{ambiguity}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\r\n                <span>View to Launch: <span class=\"option-value\" [matMenuTriggerFor]=\"viewMenuBottom\">{{launchView}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\r\n                <span class=\"threshold-option\">Link Threshold: \r\n                    <form class=\"threshold-input\">\r\n                    <mat-form-field class=\"threshold-input-length\">\r\n                        <mat-label></mat-label>\r\n                      <input matInput (input)=\"updateThreshold($event)\" [value]=\"threshold\">\r\n                    </mat-form-field>\r\n                  </form>\r\n                </span>\r\n            </div>\r\n            <mat-menu #metricMenu=\"matMenu\"overlapTrigger=\"false\">\r\n                <button mat-menu-item (click)=\"updateMetric('TN93')\">TN93</button>\r\n                <button mat-menu-item (click)=\"updateMetric('SNPs')\">SNPs</button>\r\n            </mat-menu>\r\n            <mat-menu #ambiMenu=\"matMenu\" overlapTrigger=\"false\">\r\n                <button mat-menu-item (click)=\"updateAmbiguity('Average')\">Average</button>\r\n                <button mat-menu-item (click)=\"updateAmbiguity('Resolve')\">Resolve</button>\r\n                <button mat-menu-item (click)=\"updateAmbiguity('Skip')\">Skip</button>\r\n                <button mat-menu-item (click)=\"updateAmbiguity('GapMM')\">GapMM</button>\r\n                <button mat-menu-item (click)=\"updateAmbiguity('HIV-Trace -g')\">HIV-Trace -g</button>\r\n            </mat-menu>\r\n            <mat-menu #viewMenuBottom=\"matMenu\" overlapTrigger=\"false\">\r\n                <button mat-menu-item (click)=\"updateLaunchView('2D Network')\">2D Network</button>\r\n                <button mat-menu-item (click)=\"updateLaunchView('Table')\">Table</button>\r\n                <button mat-menu-item (click)=\"updateLaunchView('Map')\">Bubbles</button>\r\n                <button mat-menu-item (click)=\"updateLaunchView('Phylogenetic Tree')\">Phylogenetic Tree</button>\r\n            </mat-menu> -->\r\n        </div>\r\n\r\n\r\n        <p-dialog id=\"ledger-loader-modal\" [(visible)]=\"displayLedgerLoaderDialog\" header=\"Blockchain Ledgers\" styleClass=\"ui-dialog\" [contentStyle]=\"{'max-height':'50vh'}\">\r\n\r\n            <div class=\"position-relative\" #ledgerloadDiv>\r\n                <div class=\"loader\">\r\n                    <i class=\"fa fa-spinner fa-spin\" style=\"font-size:40px;z-index:1;display:none;\" #ledgerloader></i>\r\n                </div>\r\n            </div>\r\n\r\n            <div style=\"min-height: 100px;\">\r\n                <p-tree [value]=\"ledgerOptions\" selectionMode=\"checkbox\"  [filter]=\"true\" [(selection)]=\"ledgerOptionSelected\" *ngIf=\"ledgerOptions && ledgerOptions.length > 0\" scrollHeight=\"flex\"></p-tree>\r\n            </div>\r\n\r\n            <div class=\"modal-footer\">\r\n                <button type=\"button\" class=\"btn btn-error\" (click)=\"ToggleDisplayLedgerLoaderDialog()\">Cancel</button>\r\n                <button type=\"button\" id=\"stash-data2\" class=\"btn btn-primary\" (click)=\"DisplayLedgerLoaderDialog('Load')\" [disabled]=\"!ledgerOptionSelected || ledgerOptionSelected.length === 0\">Load</button>\r\n            </div>\r\n\r\n        </p-dialog><!-- /.modal -->\r\n        \r\n\r\n\r\n        <p-dialog id=\"global-settings-modal\" \r\n                    [(visible)]=\"GlobalSettingsDialogSettings.isVisible\"  \r\n                    header=\"Global Settings\" >\r\n            <div class=\"modal-dialog\" role=\"document\">\r\n                <div class=\"modal-content\">\r\n                    <div class=\"modal-body\">\r\n                        <tabset #globalSettingsTab class=\"tab-container tabbable-line\" style='width: 100%; height: 100%;'>\r\n                            <tab heading=\"{{'Filtering' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\r\n\r\n                                <div id=\"filtering-config\" role=\"tabpanel\" aria-labelledby=\"filtering-tab\">\r\n                                    <div class=\"form-group row\" title=\"By what metric would you like to measure distance?\">\r\n                                        <div class=\"col-4\">Distance Metric</div>\r\n                                        <div class=\"col-8\">\r\n                                            <select id=\"default-distance-metric\" class=\"form-control form-control-sm mr-5\" [(ngModel)]=\"SelectedDistanceMetricVariable\" (ngModelChange)=\"onDistanceMetricChanged()\">\r\n                                                <option value=\"tn93\">TN93</option>\r\n                                                <option value=\"snps\">SNPs</option>\r\n                                            </select>\r\n                                        </div>\r\n                                    </div>\r\n                                    <div class=\"form-group row\" title=\"By what algorithm would you like to prune links from the network?\">\r\n                                        <div class=\"col-4\">Prune With</div>\r\n                                        <div class=\"col-8\">\r\n                                            <p-selectButton [options]=\"PruneWityTypes\" [(ngModel)]=\"SelectedPruneWityTypesVariable\" (onChange)=\"onPruneWithTypesChanged()\"></p-selectButton>\r\n                                        </div>\r\n                                    </div>                                    \r\n                                    <div class=\"form-group row\" title=\"What's the minimum number of nodes a cluster must have in order to be visible?\">\r\n                                        <div class=\"col-4\">\r\n                                            <label for=\"cluster-minimum-size\">Minimum Cluster Size</label>\r\n                                        </div>\r\n                                        <div class=\"col-8\">\r\n                                            <input type=\"number\" class=\"form-control form-control-sm\" min=\"1\" value=\"1\" step=\"1\" [(ngModel)]=\"SelectedClusterMinimumSizeVariable\" (ngModelChange)=\"onMinimumClusterSizeChanged()\">\r\n                                        </div>\r\n                                    </div>\r\n                                    <div id=\"filtering-wrapper\">\r\n                                        <div class=\"form-group row\" title=\"By what variable would you like to prune links from the network?\">\r\n                                            <div class=\"col-4\"><label for=\"link-sort-variable\">Filter Links on</label></div>\r\n                                            <div class=\"col-8\">\r\n                                                <p-dropdown id=\"link-sort-variable\" [options]=\"ToolTipFieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedLinkSortVariable\" (onChange)=\"onLinkSortChanged()\"></p-dropdown>\r\n                                            </div>\r\n                                        </div>\r\n                                        <div class=\"form-group row\" id=\"filtering-threshold\" title=\"What's the maximum genetic distance you're willing to call a link?\">\r\n                                            <div class=\"col-4\"><label for=\"link-threshold\">Filtering Threshold</label></div>\r\n                                            <div class=\"col-8\"><svg id=\"link-threshold-sparkline\" #linkThresholdSparkline style=\"width: 280px; height: 48px;\"></svg></div>\r\n                                            <div class=\"col-8  offset-4\">\r\n                                                <input type=\"number\" class=\"form-control form-control-sm\" id=\"link-threshold\" min=\"-1\" value=\"1\" step=\"0.001\" [(ngModel)]=\"SelectedLinkThresholdVariable\" (ngModelChange)=\"onLinkThresholdChanged()\">\r\n                                            </div>\r\n                                        </div>\r\n                                        <div class=\"form-group row\" title=\"Click to reveal all hidden elements of the network.\">\r\n                                            <div class=\"col-4\"><label for=\"reveal-all\">Reveal</label></div>\r\n                                            <div class=\"col-8\">\r\n                                              <button type=\"button\" id=\"reveal-all\" (click)=\"revealClicked()\" class=\"btn btn-light btn-sm w-100\">Everything</button>\r\n                                            </div>\r\n                                          </div>\r\n                                    </div>\r\n                                    <div class=\"form-group row\" hidden title=\"Click to reveal all hidden elements of the network.\">\r\n                                        <div class=\"col-4\"><label for=\"RevealAllTab\">Reveal</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <p-selectButton [options]=\"RevealTypes\" [(ngModel)]=\"SelectedRevealTypesVariable\" (onChange)=\"updateGlobalSettingsModel()\"></p-selectButton>\r\n                                        </div>\r\n                                    </div>\r\n                                    <hr>\r\n                                    <div class=\"form-group row\" title=\"Display a table of overview statistics for the network\">\r\n                                        <div class=\"col-4\">Statistics</div>\r\n                                        <div class=\"col-8\">\r\n                                            <!-- <p-selectButton [options]=\"StatisticsTypes\" [(ngModel)]=\"SelectedStatisticsTypesVariable\" (onChange)=\"onShowStatisticsChanged()\"></p-selectButton> -->\r\n                                        </div>\r\n                                    </div>\r\n                                </div>\r\n                            </tab>\r\n                            <tab heading=\"{{'Styling' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\r\n\r\n                                <div id=\"style-config\" role=\"tabpanel\" aria-labelledby=\"style-tab\">\r\n                                    <div class=\"form-group row\" title=\"By what variable nodes be colored?\">\r\n                                        <div class=\"col-4\"><label for=\"node-color-variable\">Color Nodes By</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <p-dropdown id=\"node-color-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedColorNodesByVariable\" (onChange)=\"onColorNodesByChanged()\"></p-dropdown>\r\n                                        </div>\r\n                                    </div>\r\n                                    <div id=\"node-color-table-row\" [hidden]=\"!ShowGlobalSettingsNodeColorTable\" class=\"form-group row\" title=\"Should MicrobeTrace display the table of colors?\">\r\n                                        <div class=\"col-4\"><label>Nodes Color Table</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <p-selectButton [options]=\"NodeColorTableTypes\" [(ngModel)]=\"SelectedNodeColorTableTypesVariable\" (onChange)=\"onNodeColorTableChanged()\"></p-selectButton>\r\n                                        </div>\r\n                                    </div>\r\n\r\n\r\n                                    <div id=\"node-color-value-row\" class=\"form-group row\" title=\"What color should the nodes be?\">\r\n                                        <div class=\"col-4\"><label for=\"node-color\">Nodes</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <input type=\"color\" id=\"node-color\" class=\"form-control form-control-sm\" value=\"#1f77b4\" [(ngModel)]=\"SelectedNodeColorVariable\" (ngModelChange)=\"onNodeColorChanged()\">\r\n                                        </div>\r\n                                    </div>\r\n                                    <div class=\"form-group row\" title=\"By what variable should links be colored?\">\r\n                                        <div class=\"col-4\"><label for=\"link-color-variable\">Color Links By</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <p-dropdown id=\"link-tooltip-variable\" [options]=\"ToolTipFieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedColorLinksByVariable\" (onChange)=\"onColorLinksByChanged()\"></p-dropdown>\r\n                                        </div>\r\n                                    </div>\r\n                                    <div id=\"link-color-table-row\" [hidden]=\"!ShowGlobalSettingsLinkColorTable\"  class=\"form-group row\" title=\"Should MicrobeTrace display the table of colors?\">\r\n                                        <div class=\"col-4\"><label>Link Color Table</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <p-selectButton [options]=\"LinkColorTableTypes\" [(ngModel)]=\"SelectedLinkColorTableTypesVariable\" (onChange)=\"onLinkColorTableChanged()\"></p-selectButton>\r\n                                        </div>\r\n                                    </div>\r\n\r\n                                    <div id=\"link-color-value-row\" class=\"form-group row\" title=\"What color should the links be?\">\r\n                                        <div class=\"col-4\"><label for=\"link-color\">Links</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <input type=\"color\" id=\"link-color\" class=\"form-control form-control-sm\" [(ngModel)]=\"SelectedLinkColorVariable\" (ngModelChange)=\"onLinkColorChanged()\">\r\n                                        </div>\r\n                                    </div>\r\n\r\n                                    <div class=\"form-group row\" title=\"What color should denote selection?\">\r\n                                        <div class=\"col-4\"><label for=\"selected-color\">Selected</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <input type=\"color\" id=\"selected-color\" class=\"form-control form-control-sm\" value=\"#ff8300\" [(ngModel)]=\"SelectedColorVariable\" (ngModelChange)=\"updateGlobalSettingsModel()\">\r\n                                        </div>\r\n                                    </div>\r\n                                    <div class=\"form-group row\" title=\"What color should the background be?\">\r\n                                        <div class=\"col-4\"><label for=\"background-color\">Background</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <input type=\"color\" id=\"background-color\" class=\"form-control form-control-sm\" value=\"#ffffff\" [(ngModel)]=\"SelectedBackgroundColorVariable\" (ngModelChange)=\"onBackgroundChanged()\">\r\n                                        </div>\r\n                                    </div>\r\n                                    <div class=\"form-group row\" title=\"Load an existing MicrobeTrace style file\">\r\n                                        <div class=\"col-4\">Apply Style</div>\r\n                                        <div class=\"col-8\">\r\n                                            <input type=\"file\" id=\"apply-style\" class=\"d-none\" accept=\".style\" [(ngModel)]=\"SelectedApplyStyleVariable\" (change)=\"onApplyStyle($event)\">\r\n                                            <label class=\"custom-file-label\" for=\"apply-style\">Choose MicrobeTrace Style File</label>\r\n                                        </div>\r\n                                    </div>\r\n                                </div>\r\n                            </tab>\r\n\r\n                            <tab heading=\"{{'Timeline' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\r\n                                <div id=\"timeline-config\" role=\"tabpanel\" aria-labelledby=\"timeline-tab\">\r\n                                    <div class=\"form-group row\" title=\"By what variable timeline applied?\">\r\n                                        <div class=\"col-4\"><label for=\"node-timeline-variable\">Timeline By</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <p-dropdown id=\"node-timeline-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedTimelineVariable\" (onChange)=\"onTimelineChanged($event.value)\"></p-dropdown>\r\n                                        </div>\r\n                                      </div>\r\n                                </div> \r\n                            </tab>\r\n                        </tabset>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n\r\n            <div class=\"modal-footer\">\r\n                <div class=\"btn-group\" data-toggle=\"buttons\">\r\n                    <button type=\"button\" class=\"btn btn-primary\" (click)=\"GlobalSettingsDialogSettings.setVisibility(false)\">Done</button>\r\n                </div>\r\n            </div>\r\n        </p-dialog><!-- /.modal -->\r\n\r\n        <p-dialog id=\"session-recall-modal\" [(visible)]=\"displayRecallStashDialog\" header=\"Recall Stash\">\r\n            <div class=\"modal-dialog\" role=\"document\">\r\n                <div class=\"modal-content\">\r\n                    <div #stashes id=\"recall-stashes-available\" class=\"table-sm\"></div>\r\n\r\n                    <div class=\"modal-footer\">\r\n                        <button *ngIf=\"!HideThisForNow\" type=\"button\" class=\"btn btn-danger\" id=\"recall-delete-stash\" (click)=\"DisplayRecallStashDialog('Delete')\">Delete</button>\r\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayRecallStashDialog('Cancel')\">Cancel</button>\r\n                        <button type=\"button\" class=\"btn btn-success\" id=\"recall-load-stash\" (click)=\"DisplayRecallStashDialog('Recall')\">Recall</button>\r\n                    </div>\r\n                </div><!-- /.modal-content -->\r\n            </div><!-- /.modal-dialog -->\r\n        </p-dialog><!-- /.modal -->\r\n\r\n        <p-dialog id=\"open-auspice-url\" [(visible)]=\"displayUrlDialog\" header=\"Open Auspice JSON via URL\">\r\n            <div class=\"modal-dialog\" role=\"document\">\r\n                <div class=\"modal-content\">\r\n                    <div class=\"modal-body\">\r\n                        <input type=\"text\" id=\"auspice-url\" class=\"form-control form-control-sm\" [(ngModel)]=\"auspiceUrlVal\" placeholder=\"URL of Auspice JSON to open\" />\r\n                    </div>\r\n                    <div class=\"modal-footer\">\r\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayUrlDialog('Cancel')\">Cancel</button>\r\n                        <button type=\"button\" class=\"btn btn-success\" id=\"url-open-button\" (click)=\"DisplayUrlDialog('Open')\">Open</button>\r\n                    </div>\r\n                </div><!-- /.modal-content -->\r\n            </div><!-- /.modal-dialog -->\r\n        </p-dialog><!-- /.modal -->\r\n\r\n        <p-dialog id=\"open-old-mt\" [(visible)]=\"displayMTDialog\" header=\"Open Auspice JSON in classic MicrobeTrace\">\r\n            <div class=\"modal-dialog\" role=\"document\">\r\n                <div class=\"modal-content\">\r\n                    <div class=\"modal-body\">\r\n                        Welcome to the newest version of MicrobeTrace! If you'd like to open your auspice JSON file in the previous version of MicrobeTrace, please click this link: <br />\r\n                        <a href=\"https://microbetrace.cdc.gov/MicrobeTrace/?url={{auspiceUrlVal}}\">https://microbetrace.cdc.gov/MicrobeTrace/?url={{auspiceUrlVal}}</a>\r\n                    </div>\r\n                    <div class=\"modal-footer\">\r\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayMTDialog('Cancel')\">Close</button>\r\n                    </div>\r\n                </div><!-- /.modal-content -->\r\n            </div><!-- /.modal-dialog -->\r\n        </p-dialog><!-- /.modal -->\r\n\r\n        <p-dialog id=\"session-stash-modal\" [(visible)]=\"displayStashDialog\" header=\"Save Session\">\r\n            <div class=\"modal-dialog\" role=\"document\">\r\n                <div class=\"modal-content\">\r\n\r\n                    <div class=\"modal-body\">\r\n                        <div class=\"form-group row\" title=\"What would you like to call this session?\">\r\n                            <div class=\"col-7\">\r\n                                <input style=\"height:42px\" type=\"text\" id=\"stash-name\" class=\"form-control form-control-sm\" [(ngModel)]=\"saveFileName\" placeholder=\"Name your session!\">\r\n                            </div>\r\n                            <div class=\"col-5\">\r\n                                <p-dropdown [options]=\"saveFileTypeOptions\" [(ngModel)]=\"selectedSaveFileType\" appendTo=\"body\"></p-dropdown>\r\n                            </div>\r\n                        </div>\r\n                        <div *ngIf=\"selectedSaveFileType=='session'\" class=\"form-group row\" title=\"Should MicrobeTrace compress this save file?\">\r\n                            <div class=\"col\">\r\n                                <div class=\"form-check form-check-inline\">\r\n                                    <input class=\"form-check-input\" type=\"checkbox\" id=\"save-file-compress\" checked>\r\n                                    <label class=\"form-check-label\" for=\"save-file-compress\">Compress?</label>\r\n                                  </div>\r\n                              <div id=\"cluster-checkbox-container\" class=\"form-check form-check-inline\">\r\n                                <input class=\"form-check-input\" [(ngModel)]=\"saveByCluster\" type=\"checkbox\" id=\"save-file-cluster\">\r\n                                <label class=\"form-check-label\" for=\"save-file-cluster\">By Cluster</label>\r\n                              </div>\r\n                            </div>\r\n                         </div>\r\n                    </div>\r\n                    <div class=\"modal-footer\">\r\n                        <button type=\"button\" class=\"btn btn-error\" (click)=\"DisplayStashDialog('Cancel')\">Cancel</button>\r\n                        <button type=\"button\" id=\"stash-data\" class=\"btn btn-primary\" (click)=\"DisplayStashDialog('Save')\" [disabled]=\"saveFileName === undefined || saveFileName === ''\">Save</button>\r\n                    </div>\r\n                </div><!-- /.modal-content -->\r\n            </div><!-- /.modal-dialog -->\r\n        </p-dialog><!-- /.modal -->\r\n\r\n\r\n        <p-dialog id=\"about-dialog\" [(visible)]=\"displayAbout\" header=\"About Microbetrace\">\r\n            <div class=\"modal-dialog modal-lg\" role=\"document\">\r\n                <div class=\"modal-content\">\r\n                    <div class=\"modal-body\">\r\n                        <h3>\r\n                            <span>{{\"MicrobeTrace\" | localize}} </span>\r\n                            <small>v<span id=\"version\">{{version}}</span></small>\r\n                        </h3>\r\n                        <p>\r\n                            MicrobeTrace is an interactive web application that renders existing data from high-risk contact networks\r\n                            in an easy-to-use Graphical User Interface (GUI). The network visualization can be customized according to\r\n                            supplemental data sources and mathematical inferences like the most probable transmission pathways.\r\n                            MicrobeTrace is a highly responsive, visual sequence analytics tool which can reduce the gap between data\r\n                            production and analytics and help you to discover, understand, and display relationships (links) between\r\n                            patients (nodes). MicrobeTrace can be deployed on laptops to locations without any Internet access, thereby\r\n                            reducing both the startup cost and analysis time and effort.\r\n                          </p>\r\n                          <p class=\"about-links\">\r\n                            <a href=\"https://github.com/CDCgov/MicrobeTrace/wiki\" target=\"_blank\" rel=\"noreferrer noopener\">\r\n                              Click Here to Learn More\r\n                            </a>\r\n                          </p>\r\n                          <p>\r\n                            MicrobeTrace was built by the Molecular Epidemiology and Bionformatics Team at the CDC in Atlanta.</p>\r\n                            <a class=\"about-links\" href=\"https://cdcgov.github.io/MEBT\" target=\"_blank\" rel=\"noreferrer noopener\" style=\"display: block;\">\r\n                              Click Here to See MEBT's Other Tools\r\n                            </a>\r\n                          \r\n                    </div>\r\n                    <div class=\"modal-footer\">\r\n                        <button type=\"button\" class=\"btn btn-success\" (click)=\"DisplayAbout()\">Close</button>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </p-dialog>\r\n\r\n        <div id=\"main-panel\" class=\"pane-container pane-horizontal\">\r\n            <noscript class=\"container-fluid\">\r\n              <div class=\"jumbotron\">\r\n                <h1>Sorry!</h1>\r\n                <p class=\"lead\">MicrobeTrace requires Javascript to run. Please <a href=\"https://www.enable-javascript.com/\">enable Javascript</a> and refresh MicrobeTrace.</p>\r\n              </div>\r\n            </noscript>\r\n            <div id=\"global-timeline-wrapper\" style=\"display: none;\">\r\n              <div id=\"global-timeline\" align=\"center\">\r\n                <div><button type=\"button\" id=\"timeline-play-button\" class=\"btn btn-light btn-sm\" (click)=\"playTimeline()\">{{playBtnText}}</button>\r\n                <span id=\"global-timeline-field\" contenteditable></span></div>\r\n                <!-- <svg></svg>\r\n                <mat-slider></mat-slider> -->\r\n              </div>  \r\n            </div>\r\n          </div>\r\n\r\n       \r\n        <!-- <p-dialog class=\"table-z-index\" id=\"global-settings-link-color-table\" \r\n                    [position]=\"GlobalSettingsLinkColorDialogSettings.linkLeft\" \r\n                    [(visible)]=\"GlobalSettingsLinkColorDialogSettings.isVisible\"  \r\n                    header=\"Link Color Table\" [style]=\"{'z-index': '1'}\"\r\n                    (onShow)=\"SelectedLinkColorTableTypesVariable='Show'\"\r\n                    (onHide)=\"SelectedLinkColorTableTypesVariable='Hide'\"\r\n                    >\r\n            <div class=\"col-12\" style=\"max-height: 50vh\">\r\n                <table id=\"link-color-table\" style=\"width:100%;height:100%;\"></table>\r\n            </div>\r\n        </p-dialog> -->\r\n\r\n        <div id=\"color-transparency-wrapper\">\r\n            <input type=\"range\" class=\"custom-range\" id=\"color-transparency\" min=\"0\" max=\"1\" step=\"0.05\" value=\"1\" >\r\n        </div>\r\n\r\n\r\n    </div>\r\n</div>\r\n";
+module.exports = "<div class=\"m-content\">   \r\n    <div class=\"m-portlet m-portlet--mobile\" style=\"height:100%;\">\r\n\r\n        <mat-toolbar id=\"top-toolbar\" class=\"nav-bar\">\r\n                <div class=\"navbar-logo\">\r\n                    <span class=\"microbe-font\">Microbe</span>\r\n                    <span class=\"trace-font\">Trace</span>\r\n                    <span><img alt=\"microbetrace\" class=\"mt-icon-toolbar\" [src]=\"appRootUrl() + 'assets/images/Logo.png'\"></span>\r\n                  </div>\r\n                  <div class=\"menu-items\">\r\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"fileMenu\"><i class=\"far nav-icon flaticon-file-1\"></i>File<span class=\"dropdown-symbol\">&#9660;</span></button>\r\n                    <mat-menu #fileMenu=\"matMenu\" overlapTrigger=\"false\">\r\n                      <!-- <button mat-menu-item (click)=\"FileClick('Stash Session')\">Stash</button> -->\r\n                      <!-- <button mat-menu-item (click)=\"FileClick('Recall Session')\">Recall</button> -->\r\n                      <button mat-menu-item (click)=\"FileClick('Save Session')\">Save</button>\r\n                      <!-- <button mat-menu-item (click)=\"FileClick('Open Session')\">Open</button> -->\r\n                      <button mat-menu-item (click)=\"FileClick('Open URL')\">Open URL</button>\r\n                      <button mat-menu-item (click)=\"FileClick('Add Data')\">Add Data</button>\r\n                      <!-- <button mat-menu-item (click)=\"FileClick('New Session')\">New</button> -->\r\n                    </mat-menu>\r\n                    <button class=\"navbar-item\" (click)=\"DisplayGlobalSettingsDialog()\" mat-button><i class=\"far nav-icon flaticon-cogwheel-2\"></i>Settings</button>\r\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"viewMenu\"><i class=\"far nav-icon flaticon-web\"></i>View<span class=\"dropdown-symbol\">&#9660;</span></button>\r\n                    <mat-menu #viewMenu=\"matMenu\" overlapTrigger=\"false\">\r\n                      <button mat-menu-item (click)=\"Viewclick('2D Network')\">2D Network</button>\r\n                      <button mat-menu-item (click)=\"Viewclick('Table')\">Table</button>\r\n                      <button mat-menu-item (click)=\"Viewclick('Map')\">Map</button>\r\n                      <button mat-menu-item (click)=\"Viewclick('Epi Curve')\">Epi Curve</button>\r\n                      <button mat-menu-item (click)=\"Viewclick('Phylogenetic Tree')\">Phylogenetic Tree</button>\r\n                      <button mat-menu-item (click)=\"Viewclick('Alignment View')\">Alignment View</button>\r\n                      <button mat-menu-item (click)=\"Viewclick('Crosstab')\">CrossTab</button>\r\n                      <button mat-menu-item (click)=\"Viewclick('Aggregate')\">Aggregate</button>\r\n                    </mat-menu>\r\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"windowMenu\"><i class=\"far nav-icon flaticon-web\"></i>Window<span class=\"dropdown-symbol\">&#9660;</span></button>\r\n                    <mat-menu #windowMenu=\"matMenu\" overlapTrigger=\"false\">\r\n                      <button mat-menu-item (click)=\"WindowClick('Reload Screen')\">Reload</button>\r\n                      <button mat-menu-item (click)=\"WindowClick('Fullscreen')\">Fullscreen</button>\r\n                    </mat-menu>\r\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"helpMenu\"><i class=\"far nav-icon flaticon-questions-circular-button\"></i>Help<span class=\"dropdown-symbol\">&#9660;</span></button>\r\n                    <mat-menu #helpMenu=\"matMenu\" overlapTrigger=\"false\">\r\n                      <a href=\"https://github.com/CDCgov/MicrobeTrace/wiki\" class=\"dropdown-item ifOnline\" target=\"_blank\" rel=\"noreferrer noopener\" mat-menu-item>Help</a>\r\n                      <a href=\"https://github.com/CDCgov/MicrobeTrace/issues/new\" class=\"dropdown-item ifOnline\" target=\"_blank\" rel=\"noreferrer noopener\" mat-menu-item>Report Bug</a>\r\n                      <button (click)=\"HelpClick('About')\" mat-menu-item>About</button>\r\n                    </mat-menu>\r\n                    <!-- <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"langMenu\"><i class=\"far nav-icon flaticon-earth-globe\"></i>Language<span class=\"dropdown-symbol\">&#9660;</span></button>\r\n                    <mat-menu #langMenu=\"matMenu\" overlapTrigger=\"false\">\r\n                      <button mat-menu-item >English</button>\r\n                      <button mat-menu-item >Spanish</button>\r\n                    </mat-menu> -->\r\n                  </div>\r\n            <div id=\"search-form\" class=\"form-inline navbar-form\">\r\n                <label for=\"search\">Search</label>\r\n                <div class=\"autocomplete-wrapper\">\r\n                    <input type=\"search\" id=\"search\" class=\"form-control form-control-sm\" (input)=\"onSearch()\" [(ngModel)]=\"searchText\" placeholder=\"Nodes\">\r\n                    <ul id=\"search-results\"></ul>\r\n                </div>\r\n            <button id=\"casesensitivebutton\" (click)=\"onCaseSensitiveChange()\" type=\"button\" class=\"btn btn-light btn-sm\" data-toggle=\"button\" aria-pressed=\"false\" autocomplete=\"off\" title=\"Match Case\">\r\n                <span>C</span>\r\n            </button>     \r\n            <button id=\"wholewordbutton\" type=\"button\" (click)=\"onWholeWordChange()\" class=\"btn btn-light btn-sm\" data-toggle=\"button\" aria-pressed=\"false\" autocomplete=\"off\" title=\"Match Whole Word\">\r\n                <span>W</span>\r\n            </button>      \r\n        \r\n            <select [(ngModel)]=\"searchField\" (ngModelChange)=\"onSearchFieldChange($event)\" id=\"search-field\"  class=\"form-control form-control-sm nodeValues\">\r\n                <option val=\"id\">ID</option>\r\n            </select>\r\n            </div> \r\n          </mat-toolbar>\r\n\r\n        <div id=\"visualwrapper\" class=\"kt-container  kt-grid__item kt-grid__item--fluid \" style=\"margin: 6px 6px 0 6px;\">\r\n            <div class=\"kt-portlet kt-portlet--mobile\" style=\"height:100%\">\r\n                <div class=\"kt-portlet__head kt-portlet__head--lg\" style=\"height:100%\">\r\n                    <div class=\"m-portlet__body\" style=\"flex: 1 100%; max-width:100%; height:100%\">\r\n                        <!-- TODO: Add back or replace-->\r\n                        <!-- <golden-layout-root #goldenLayout></golden-layout-root> -->\r\n                        <app-golden-layout-host #goldenLayoutHost></app-golden-layout-host>             \r\n                    </div>\r\n                </div>\r\n            </div>\r\n\r\n        <p-dialog class=\"table-z-index\" id=\"global-settings-link-color-table\" \r\n            [position]=\"GlobalSettingsLinkColorDialogSettings.linkLeft\" \r\n            [(visible)]=\"GlobalSettingsLinkColorDialogSettings.isVisible\"  \r\n            [style]=\"{'z-index': '1'}\"\r\n            (onShow)=\"showLinkColorTable()\"\r\n            (onHide)=\"hideLinkColorTable()\"\r\n            >\r\n            <ng-template pTemplate=\"header\">\r\n                <div style=\"display: flex; justify-content: space-between; width: 100%;\">\r\n                    <span>Link Color Table</span>\r\n                    <span style=\"overflow: visible; position: relative;\">\r\n                        <button title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"toggleColorTableSettings('link-color')\"><i class=\"pi pi-cog\"></i></button>\r\n                        <div id=\"linkColorTableSettings\" class=\"dropdown-menu\" style=\"display: none;\">\r\n                            <button id=\"linkColorCounts\" class=\"dropdown-item\" (click)=\"toggleColorTableColumns('link-color', 'tableCounts')\">\r\n                                <span>Show Counts</span>\r\n                                <i [className]=\"this.widgets['link-color-table-counts'] ? 'pi pi-check' : 'pi pi-times'\" style=\"line-height: 1.5\"></i>\r\n                            </button>\r\n                            <button id=\"linkColorFrequencies\" class=\"dropdown-item\" (click)=\"toggleColorTableColumns('link-color', 'tableFreq')\">\r\n                                <span>Show Frequencies</span>\r\n                                <i [className]=\"this.widgets['link-color-table-frequencies'] ? 'pi pi-check' : 'pi pi-times'\" style=\"line-height: 1.5\"></i>\r\n                            </button>\r\n                        </div>\r\n                    </span>\r\n                </div>\r\n            </ng-template>\r\n            <div style=\"max-height: 50vh\">\r\n                <table id=\"link-color-table\" style=\"width:100%;height:100%;\"></table>\r\n            </div>\r\n        </p-dialog>\r\n\r\n\r\n        <p-dialog id=\"global-settings-node-color-table\" \r\n            [position]=\"GlobalSettingsNodeColorDialogSettings.nodeLeft\" \r\n            [(visible)]=\"GlobalSettingsNodeColorDialogSettings.isVisible\"  \r\n            (onShow)=\"showNodeColorTable()\"\r\n            (onHide)=\"hideNodeColorTable()\"      \r\n                    >       \r\n            <ng-template pTemplate=\"header\">\r\n                <div style=\"display: flex; justify-content: space-between; width: 100%;\">\r\n                    <span>Node Color Table</span>\r\n                    <span style=\"overflow: visible; position: relative;\">\r\n                        <button title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"toggleColorTableSettings('node-color')\"><i class=\"pi pi-cog\"></i></button>\r\n                        <div id=\"nodeColorTableSettings\" class=\"dropdown-menu\" style=\"display: none;\">\r\n                            <button id=\"nodeColorCounts\" class=\"dropdown-item\" (click)=\"toggleColorTableColumns('node-color', 'tableCounts')\">\r\n                                <span>Show Counts</span>\r\n                                <i [className]=\"this.widgets['node-color-table-counts'] ? 'pi pi-check' : 'pi pi-times'\" style=\"line-height: 1.5\"></i>\r\n                            </button>\r\n                            <button id=\"nodeColorFrequencies\" class=\"dropdown-item\" (click)=\"toggleColorTableColumns('node-color', 'tableFreq')\">\r\n                                <span>Show Frequencies</span>\r\n                                <i [className]=\"this.widgets['node-color-table-frequencies'] ? 'pi pi-check' : 'pi pi-times'\" style=\"line-height: 1.5\"></i>\r\n                            </button>\r\n                        </div>\r\n                    </span>\r\n                </div>\r\n            </ng-template>\r\n            <div style=\"max-height: 50vh\">\r\n                <table id=\"node-color-table\" style=\"width:100%;height:100%;\"></table>\r\n            </div>\r\n        </p-dialog>\r\n        </div>\r\n    \r\n        <div id=\"overlay\" appDnd (fileDropped)=\"prepareFilesLists($event)\">\r\n            <input class=\"dnd-input\" type=\"file\" #fileDropRef id=\"fileDropRef\" multiple (change)=\"prepareFilesLists($event.target.files)\" />\r\n            <div class=\"welcome-msg\">\r\n                <div id=\"welcome-title\" class=\"top\">\r\n                    <span class=\"primary\">Welcome to </span>\r\n                    <span class=\"microbe primary\">Microbe</span>\r\n                    <span class=\"primary\">Trace&#8482;</span>\r\n                    <!-- <span><img class=\"mt-icon\" src=\"../../assets/images/Logo.png\"></span> -->\r\n                    <!-- Swap/Uncomment when building productions -->\r\n                    <span><img alt=\"microbetrace\" class=\"mt-icon\" [src]=\"appRootUrl() + 'assets/images/Logo.png'\"></span>\r\n                </div>\r\n                <div id=\"welcome-description\" class=\"bottom primary\">The Visualization Multitool for Molecular Epidemiology and Bioinformatics</div>\r\n            </div>\r\n            <div id=\"add-data-container\" class=\"add-data-container\">\r\n                <div class=\"files-msg\">\r\n                    <span class=\"primary\">Click </span>\r\n                    <a class=\"here-link primary\" for=\"fileDropRef\">here</a>\r\n                    <span class=\"primary\"> or Drag & Drop files to load data</span>\r\n                </div>\r\n                <div class=\"add-btns primary\">\r\n                    <!-- TODO: add back in when recall is ready-->\r\n                    <!-- <button mat-raised-button color=\"primary\" class=\"recall\" (click)=\"recallClicked()\">Recall Previous Session</button> -->\r\n                    <button mat-raised-button color=\"primary\" (click)=\"continueClicked()\">Continue with Sample Dataset</button>\r\n                </div>\r\n            </div>\r\n            <!-- <div id=\"onload-container\" class=\"launch-options-container primary\">\r\n                <span class=\"onload-bold\">Onload Settings:</span>\r\n                <span>Distance Metric: <span class=\"option-value\" [matMenuTriggerFor]=\"metricMenu\">{{metric}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\r\n                <span id=\"ambiguities-menu\">Ambiguities: <span class=\"option-value\" [matMenuTriggerFor]=\"ambiMenu\">{{ambiguity}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\r\n                <span>View to Launch: <span class=\"option-value\" [matMenuTriggerFor]=\"viewMenuBottom\">{{launchView}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\r\n                <span class=\"threshold-option\">Link Threshold: \r\n                    <form class=\"threshold-input\">\r\n                    <mat-form-field class=\"threshold-input-length\">\r\n                        <mat-label></mat-label>\r\n                      <input matInput (input)=\"updateThreshold($event)\" [value]=\"threshold\">\r\n                    </mat-form-field>\r\n                  </form>\r\n                </span>\r\n            </div>\r\n            <mat-menu #metricMenu=\"matMenu\"overlapTrigger=\"false\">\r\n                <button mat-menu-item (click)=\"updateMetric('TN93')\">TN93</button>\r\n                <button mat-menu-item (click)=\"updateMetric('SNPs')\">SNPs</button>\r\n            </mat-menu>\r\n            <mat-menu #ambiMenu=\"matMenu\" overlapTrigger=\"false\">\r\n                <button mat-menu-item (click)=\"updateAmbiguity('Average')\">Average</button>\r\n                <button mat-menu-item (click)=\"updateAmbiguity('Resolve')\">Resolve</button>\r\n                <button mat-menu-item (click)=\"updateAmbiguity('Skip')\">Skip</button>\r\n                <button mat-menu-item (click)=\"updateAmbiguity('GapMM')\">GapMM</button>\r\n                <button mat-menu-item (click)=\"updateAmbiguity('HIV-Trace -g')\">HIV-Trace -g</button>\r\n            </mat-menu>\r\n            <mat-menu #viewMenuBottom=\"matMenu\" overlapTrigger=\"false\">\r\n                <button mat-menu-item (click)=\"updateLaunchView('2D Network')\">2D Network</button>\r\n                <button mat-menu-item (click)=\"updateLaunchView('Table')\">Table</button>\r\n                <button mat-menu-item (click)=\"updateLaunchView('Map')\">Bubbles</button>\r\n                <button mat-menu-item (click)=\"updateLaunchView('Phylogenetic Tree')\">Phylogenetic Tree</button>\r\n            </mat-menu> -->\r\n        </div>\r\n\r\n\r\n        <p-dialog id=\"ledger-loader-modal\" [(visible)]=\"displayLedgerLoaderDialog\" header=\"Blockchain Ledgers\" styleClass=\"ui-dialog\" [contentStyle]=\"{'max-height':'50vh'}\">\r\n\r\n            <div class=\"position-relative\" #ledgerloadDiv>\r\n                <div class=\"loader\">\r\n                    <i class=\"fa fa-spinner fa-spin\" style=\"font-size:40px;z-index:1;display:none;\" #ledgerloader></i>\r\n                </div>\r\n            </div>\r\n\r\n            <div style=\"min-height: 100px;\">\r\n                <p-tree [value]=\"ledgerOptions\" selectionMode=\"checkbox\"  [filter]=\"true\" [(selection)]=\"ledgerOptionSelected\" *ngIf=\"ledgerOptions && ledgerOptions.length > 0\" scrollHeight=\"flex\"></p-tree>\r\n            </div>\r\n\r\n            <div class=\"modal-footer\">\r\n                <button type=\"button\" class=\"btn btn-error\" (click)=\"ToggleDisplayLedgerLoaderDialog()\">Cancel</button>\r\n                <button type=\"button\" id=\"stash-data2\" class=\"btn btn-primary\" (click)=\"DisplayLedgerLoaderDialog('Load')\" [disabled]=\"!ledgerOptionSelected || ledgerOptionSelected.length === 0\">Load</button>\r\n            </div>\r\n\r\n        </p-dialog><!-- /.modal -->\r\n        \r\n\r\n\r\n        <p-dialog id=\"global-settings-modal\" \r\n                    [(visible)]=\"GlobalSettingsDialogSettings.isVisible\"  \r\n                    header=\"Global Settings\" >\r\n            <div class=\"modal-dialog\" role=\"document\">\r\n                <div class=\"modal-content\">\r\n                    <div class=\"modal-body\">\r\n                        <tabset #globalSettingsTab class=\"tab-container tabbable-line\" style='width: 100%; height: 100%;'>\r\n                            <tab heading=\"{{'Filtering' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\r\n\r\n                                <div id=\"filtering-config\" role=\"tabpanel\" aria-labelledby=\"filtering-tab\">\r\n                                    <div class=\"form-group row\" title=\"By what metric would you like to measure distance?\">\r\n                                        <div class=\"col-4\">Distance Metric</div>\r\n                                        <div class=\"col-8\">\r\n                                            <select id=\"default-distance-metric\" class=\"form-control form-control-sm mr-5\" [(ngModel)]=\"SelectedDistanceMetricVariable\" (ngModelChange)=\"onDistanceMetricChanged()\">\r\n                                                <option value=\"tn93\">TN93</option>\r\n                                                <option value=\"snps\">SNPs</option>\r\n                                            </select>\r\n                                        </div>\r\n                                    </div>\r\n                                    <div class=\"form-group row\" title=\"By what algorithm would you like to prune links from the network?\">\r\n                                        <div class=\"col-4\">Prune With</div>\r\n                                        <div class=\"col-8\">\r\n                                            <p-selectButton [options]=\"PruneWityTypes\" [(ngModel)]=\"SelectedPruneWityTypesVariable\" (onChange)=\"onPruneWithTypesChanged()\"></p-selectButton>\r\n                                        </div>\r\n                                    </div>                                    \r\n                                    <div class=\"form-group row\" title=\"What's the minimum number of nodes a cluster must have in order to be visible?\">\r\n                                        <div class=\"col-4\">\r\n                                            <label for=\"cluster-minimum-size\">Minimum Cluster Size</label>\r\n                                        </div>\r\n                                        <div class=\"col-8\">\r\n                                            <input type=\"number\" class=\"form-control form-control-sm\" min=\"1\" value=\"1\" step=\"1\" [(ngModel)]=\"SelectedClusterMinimumSizeVariable\" (ngModelChange)=\"onMinimumClusterSizeChanged()\">\r\n                                        </div>\r\n                                    </div>\r\n                                    <div id=\"filtering-wrapper\">\r\n                                        <div class=\"form-group row\" title=\"By what variable would you like to prune links from the network?\">\r\n                                            <div class=\"col-4\"><label for=\"link-sort-variable\">Filter Links on</label></div>\r\n                                            <div class=\"col-8\">\r\n                                                <p-dropdown id=\"link-sort-variable\" [options]=\"ToolTipFieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedLinkSortVariable\" (onChange)=\"onLinkSortChanged()\"></p-dropdown>\r\n                                            </div>\r\n                                        </div>\r\n                                        <div class=\"form-group row\" id=\"filtering-threshold\" title=\"What's the maximum genetic distance you're willing to call a link?\">\r\n                                            <div class=\"col-4\"><label for=\"link-threshold\">Filtering Threshold</label></div>\r\n                                            <div class=\"col-8\"><svg id=\"link-threshold-sparkline\" #linkThresholdSparkline style=\"width: 280px; height: 48px;\"></svg></div>\r\n                                            <div class=\"col-8  offset-4\">\r\n                                                <input type=\"number\" class=\"form-control form-control-sm\" id=\"link-threshold\" min=\"-1\" value=\"1\" step=\"0.001\" [(ngModel)]=\"SelectedLinkThresholdVariable\" (ngModelChange)=\"onLinkThresholdChanged()\">\r\n                                            </div>\r\n                                        </div>\r\n                                        <div class=\"form-group row\" title=\"Click to reveal all hidden elements of the network.\">\r\n                                            <div class=\"col-4\"><label for=\"reveal-all\">Reveal</label></div>\r\n                                            <div class=\"col-8\">\r\n                                              <button type=\"button\" id=\"reveal-all\" (click)=\"revealClicked()\" class=\"btn btn-light btn-sm w-100\">Everything</button>\r\n                                            </div>\r\n                                          </div>\r\n                                    </div>\r\n                                    <div class=\"form-group row\" hidden title=\"Click to reveal all hidden elements of the network.\">\r\n                                        <div class=\"col-4\"><label for=\"RevealAllTab\">Reveal</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <p-selectButton [options]=\"RevealTypes\" [(ngModel)]=\"SelectedRevealTypesVariable\" (onChange)=\"updateGlobalSettingsModel()\"></p-selectButton>\r\n                                        </div>\r\n                                    </div>\r\n                                    <hr>\r\n                                    <div class=\"form-group row\" title=\"Display a table of overview statistics for the network\">\r\n                                        <div class=\"col-4\">Statistics</div>\r\n                                        <div class=\"col-8\">\r\n                                            <!-- <p-selectButton [options]=\"StatisticsTypes\" [(ngModel)]=\"SelectedStatisticsTypesVariable\" (onChange)=\"onShowStatisticsChanged()\"></p-selectButton> -->\r\n                                        </div>\r\n                                    </div>\r\n                                </div>\r\n                            </tab>\r\n                            <tab heading=\"{{'Styling' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\r\n\r\n                                <div id=\"style-config\" role=\"tabpanel\" aria-labelledby=\"style-tab\">\r\n                                    <div class=\"form-group row\" title=\"By what variable nodes be colored?\">\r\n                                        <div class=\"col-4\"><label for=\"node-color-variable\">Color Nodes By</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <p-dropdown id=\"node-color-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedColorNodesByVariable\" (onChange)=\"onColorNodesByChanged()\"></p-dropdown>\r\n                                        </div>\r\n                                    </div>\r\n                                    <div id=\"node-color-table-row\" [hidden]=\"!ShowGlobalSettingsNodeColorTable\" class=\"form-group row\" title=\"Should MicrobeTrace display the table of colors?\">\r\n                                        <div class=\"col-4\"><label>Nodes Color Table</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <p-selectButton [options]=\"NodeColorTableTypes\" [(ngModel)]=\"SelectedNodeColorTableTypesVariable\" (onChange)=\"onNodeColorTableChanged()\"></p-selectButton>\r\n                                        </div>\r\n                                    </div>\r\n\r\n\r\n                                    <div id=\"node-color-value-row\" class=\"form-group row\" title=\"What color should the nodes be?\">\r\n                                        <div class=\"col-4\"><label for=\"node-color\">Nodes</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <input type=\"color\" id=\"node-color\" class=\"form-control form-control-sm\" value=\"#1f77b4\" [(ngModel)]=\"SelectedNodeColorVariable\" (ngModelChange)=\"onNodeColorChanged()\">\r\n                                        </div>\r\n                                    </div>\r\n                                    <div class=\"form-group row\" title=\"By what variable should links be colored?\">\r\n                                        <div class=\"col-4\"><label for=\"link-color-variable\">Color Links By</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <p-dropdown id=\"link-tooltip-variable\" [options]=\"ToolTipFieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedColorLinksByVariable\" (onChange)=\"onColorLinksByChanged()\"></p-dropdown>\r\n                                        </div>\r\n                                    </div>\r\n                                    <div id=\"link-color-table-row\" [hidden]=\"!ShowGlobalSettingsLinkColorTable\"  class=\"form-group row\" title=\"Should MicrobeTrace display the table of colors?\">\r\n                                        <div class=\"col-4\"><label>Link Color Table</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <p-selectButton [options]=\"LinkColorTableTypes\" [(ngModel)]=\"SelectedLinkColorTableTypesVariable\" (onChange)=\"onLinkColorTableChanged()\"></p-selectButton>\r\n                                        </div>\r\n                                    </div>\r\n\r\n                                    <div id=\"link-color-value-row\" class=\"form-group row\" title=\"What color should the links be?\">\r\n                                        <div class=\"col-4\"><label for=\"link-color\">Links</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <input type=\"color\" id=\"link-color\" class=\"form-control form-control-sm\" [(ngModel)]=\"SelectedLinkColorVariable\" (ngModelChange)=\"onLinkColorChanged()\">\r\n                                        </div>\r\n                                    </div>\r\n\r\n                                    <div class=\"form-group row\" title=\"What color should denote selection?\">\r\n                                        <div class=\"col-4\"><label for=\"selected-color\">Selected</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <input type=\"color\" id=\"selected-color\" class=\"form-control form-control-sm\" value=\"#ff8300\" [(ngModel)]=\"SelectedColorVariable\" (ngModelChange)=\"updateGlobalSettingsModel()\">\r\n                                        </div>\r\n                                    </div>\r\n                                    <div class=\"form-group row\" title=\"What color should the background be?\">\r\n                                        <div class=\"col-4\"><label for=\"background-color\">Background</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <input type=\"color\" id=\"background-color\" class=\"form-control form-control-sm\" value=\"#ffffff\" [(ngModel)]=\"SelectedBackgroundColorVariable\" (ngModelChange)=\"onBackgroundChanged()\">\r\n                                        </div>\r\n                                    </div>\r\n                                    <div class=\"form-group row\" title=\"Load an existing MicrobeTrace style file\">\r\n                                        <div class=\"col-4\">Apply Style</div>\r\n                                        <div class=\"col-8\">\r\n                                            <input type=\"file\" id=\"apply-style\" class=\"d-none\" accept=\".style\" [(ngModel)]=\"SelectedApplyStyleVariable\" (change)=\"onApplyStyle($event)\">\r\n                                            <label class=\"custom-file-label\" for=\"apply-style\">Choose MicrobeTrace Style File</label>\r\n                                        </div>\r\n                                    </div>\r\n                                </div>\r\n                            </tab>\r\n\r\n                            <tab heading=\"{{'Timeline' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\r\n                                <div id=\"timeline-config\" role=\"tabpanel\" aria-labelledby=\"timeline-tab\">\r\n                                    <div class=\"form-group row\" title=\"By what variable timeline applied?\">\r\n                                        <div class=\"col-4\"><label for=\"node-timeline-variable\">Timeline By</label></div>\r\n                                        <div class=\"col-8\">\r\n                                            <p-dropdown id=\"node-timeline-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedTimelineVariable\" (onChange)=\"onTimelineChanged($event.value)\"></p-dropdown>\r\n                                        </div>\r\n                                      </div>\r\n                                </div> \r\n                            </tab>\r\n                        </tabset>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n\r\n            <div class=\"modal-footer\">\r\n                <div class=\"btn-group\" data-toggle=\"buttons\">\r\n                    <button type=\"button\" class=\"btn btn-primary\" (click)=\"GlobalSettingsDialogSettings.setVisibility(false)\">Done</button>\r\n                </div>\r\n            </div>\r\n        </p-dialog><!-- /.modal -->\r\n\r\n        <p-dialog id=\"session-recall-modal\" [(visible)]=\"displayRecallStashDialog\" header=\"Recall Stash\">\r\n            <div class=\"modal-dialog\" role=\"document\">\r\n                <div class=\"modal-content\">\r\n                    <div #stashes id=\"recall-stashes-available\" class=\"table-sm\"></div>\r\n\r\n                    <div class=\"modal-footer\">\r\n                        <button *ngIf=\"!HideThisForNow\" type=\"button\" class=\"btn btn-danger\" id=\"recall-delete-stash\" (click)=\"DisplayRecallStashDialog('Delete')\">Delete</button>\r\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayRecallStashDialog('Cancel')\">Cancel</button>\r\n                        <button type=\"button\" class=\"btn btn-success\" id=\"recall-load-stash\" (click)=\"DisplayRecallStashDialog('Recall')\">Recall</button>\r\n                    </div>\r\n                </div><!-- /.modal-content -->\r\n            </div><!-- /.modal-dialog -->\r\n        </p-dialog><!-- /.modal -->\r\n\r\n        <p-dialog id=\"open-auspice-url\" [(visible)]=\"displayUrlDialog\" header=\"Open Auspice JSON via URL\">\r\n            <div class=\"modal-dialog\" role=\"document\">\r\n                <div class=\"modal-content\">\r\n                    <div class=\"modal-body\">\r\n                        <input type=\"text\" id=\"auspice-url\" class=\"form-control form-control-sm\" [(ngModel)]=\"auspiceUrlVal\" placeholder=\"URL of Auspice JSON to open\" />\r\n                    </div>\r\n                    <div class=\"modal-footer\">\r\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayUrlDialog('Cancel')\">Cancel</button>\r\n                        <button type=\"button\" class=\"btn btn-success\" id=\"url-open-button\" (click)=\"DisplayUrlDialog('Open')\">Open</button>\r\n                    </div>\r\n                </div><!-- /.modal-content -->\r\n            </div><!-- /.modal-dialog -->\r\n        </p-dialog><!-- /.modal -->\r\n\r\n        <p-dialog id=\"open-old-mt\" [(visible)]=\"displayMTDialog\" header=\"Open Auspice JSON in classic MicrobeTrace\">\r\n            <div class=\"modal-dialog\" role=\"document\">\r\n                <div class=\"modal-content\">\r\n                    <div class=\"modal-body\">\r\n                        Welcome to the newest version of MicrobeTrace! If you'd like to open your auspice JSON file in the previous version of MicrobeTrace, please click this link: <br />\r\n                        <a href=\"https://microbetrace.cdc.gov/MicrobeTrace/?url={{auspiceUrlVal}}\">https://microbetrace.cdc.gov/MicrobeTrace/?url={{auspiceUrlVal}}</a>\r\n                    </div>\r\n                    <div class=\"modal-footer\">\r\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayMTDialog('Cancel')\">Close</button>\r\n                    </div>\r\n                </div><!-- /.modal-content -->\r\n            </div><!-- /.modal-dialog -->\r\n        </p-dialog><!-- /.modal -->\r\n\r\n        <p-dialog id=\"session-stash-modal\" [(visible)]=\"displayStashDialog\" header=\"Save Session\">\r\n            <div class=\"modal-dialog\" role=\"document\">\r\n                <div class=\"modal-content\">\r\n\r\n                    <div class=\"modal-body\">\r\n                        <div class=\"form-group row\" title=\"What would you like to call this session?\">\r\n                            <div class=\"col-7\">\r\n                                <input style=\"height:42px\" type=\"text\" id=\"stash-name\" class=\"form-control form-control-sm\" [(ngModel)]=\"saveFileName\" placeholder=\"Name your session!\">\r\n                            </div>\r\n                            <div class=\"col-5\">\r\n                                <p-dropdown [options]=\"saveFileTypeOptions\" [(ngModel)]=\"selectedSaveFileType\" appendTo=\"body\"></p-dropdown>\r\n                            </div>\r\n                        </div>\r\n                        <div *ngIf=\"selectedSaveFileType=='session'\" class=\"form-group row\" title=\"Should MicrobeTrace compress this save file?\">\r\n                            <div class=\"col\">\r\n                                <div class=\"form-check form-check-inline\">\r\n                                    <input class=\"form-check-input\" type=\"checkbox\" id=\"save-file-compress\" checked>\r\n                                    <label class=\"form-check-label\" for=\"save-file-compress\">Compress?</label>\r\n                                  </div>\r\n                              <div id=\"cluster-checkbox-container\" class=\"form-check form-check-inline\">\r\n                                <input class=\"form-check-input\" [(ngModel)]=\"saveByCluster\" type=\"checkbox\" id=\"save-file-cluster\">\r\n                                <label class=\"form-check-label\" for=\"save-file-cluster\">By Cluster</label>\r\n                              </div>\r\n                            </div>\r\n                         </div>\r\n                    </div>\r\n                    <div class=\"modal-footer\">\r\n                        <button type=\"button\" class=\"btn btn-error\" (click)=\"DisplayStashDialog('Cancel')\">Cancel</button>\r\n                        <button type=\"button\" id=\"stash-data\" class=\"btn btn-primary\" (click)=\"DisplayStashDialog('Save')\" [disabled]=\"saveFileName === undefined || saveFileName === ''\">Save</button>\r\n                    </div>\r\n                </div><!-- /.modal-content -->\r\n            </div><!-- /.modal-dialog -->\r\n        </p-dialog><!-- /.modal -->\r\n\r\n\r\n        <p-dialog id=\"about-dialog\" [(visible)]=\"displayAbout\" header=\"About Microbetrace\">\r\n            <div class=\"modal-dialog modal-lg\" role=\"document\">\r\n                <div class=\"modal-content\">\r\n                    <div class=\"modal-body\">\r\n                        <h3>\r\n                            <span>{{\"MicrobeTrace\" | localize}} </span>\r\n                            <small>v<span id=\"version\">{{version}}</span></small>\r\n                        </h3>\r\n                        <p>\r\n                            MicrobeTrace is an interactive web application that renders existing data from high-risk contact networks\r\n                            in an easy-to-use Graphical User Interface (GUI). The network visualization can be customized according to\r\n                            supplemental data sources and mathematical inferences like the most probable transmission pathways.\r\n                            MicrobeTrace is a highly responsive, visual sequence analytics tool which can reduce the gap between data\r\n                            production and analytics and help you to discover, understand, and display relationships (links) between\r\n                            patients (nodes). MicrobeTrace can be deployed on laptops to locations without any Internet access, thereby\r\n                            reducing both the startup cost and analysis time and effort.\r\n                          </p>\r\n                          <p class=\"about-links\">\r\n                            <a href=\"https://github.com/CDCgov/MicrobeTrace/wiki\" target=\"_blank\" rel=\"noreferrer noopener\">\r\n                              Click Here to Learn More\r\n                            </a>\r\n                          </p>\r\n                          <p>\r\n                            MicrobeTrace was built by the Molecular Epidemiology and Bionformatics Team at the CDC in Atlanta.</p>\r\n                            <a class=\"about-links\" href=\"https://cdcgov.github.io/MEBT\" target=\"_blank\" rel=\"noreferrer noopener\" style=\"display: block;\">\r\n                              Click Here to See MEBT's Other Tools\r\n                            </a>\r\n                          \r\n                    </div>\r\n                    <div class=\"modal-footer\">\r\n                        <button type=\"button\" class=\"btn btn-success\" (click)=\"DisplayAbout()\">Close</button>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </p-dialog>\r\n\r\n        <div id=\"main-panel\" class=\"pane-container pane-horizontal\">\r\n            <noscript class=\"container-fluid\">\r\n              <div class=\"jumbotron\">\r\n                <h1>Sorry!</h1>\r\n                <p class=\"lead\">MicrobeTrace requires Javascript to run. Please <a href=\"https://www.enable-javascript.com/\">enable Javascript</a> and refresh MicrobeTrace.</p>\r\n              </div>\r\n            </noscript>\r\n            <div id=\"global-timeline-wrapper\" style=\"display: none;\">\r\n              <div id=\"global-timeline\" align=\"center\">\r\n                <div><button type=\"button\" id=\"timeline-play-button\" class=\"btn btn-light btn-sm\" (click)=\"playTimeline()\">{{playBtnText}}</button>\r\n                <span id=\"global-timeline-field\" contenteditable></span></div>\r\n                <!-- <svg></svg>\r\n                <mat-slider></mat-slider> -->\r\n              </div>  \r\n            </div>\r\n          </div>\r\n\r\n       \r\n        <!-- <p-dialog class=\"table-z-index\" id=\"global-settings-link-color-table\" \r\n                    [position]=\"GlobalSettingsLinkColorDialogSettings.linkLeft\" \r\n                    [(visible)]=\"GlobalSettingsLinkColorDialogSettings.isVisible\"  \r\n                    header=\"Link Color Table\" [style]=\"{'z-index': '1'}\"\r\n                    (onShow)=\"SelectedLinkColorTableTypesVariable='Show'\"\r\n                    (onHide)=\"SelectedLinkColorTableTypesVariable='Hide'\"\r\n                    >\r\n            <div class=\"col-12\" style=\"max-height: 50vh\">\r\n                <table id=\"link-color-table\" style=\"width:100%;height:100%;\"></table>\r\n            </div>\r\n        </p-dialog> -->\r\n\r\n        <div id=\"color-transparency-wrapper\">\r\n            <input type=\"range\" class=\"custom-range\" id=\"color-transparency\" min=\"0\" max=\"1\" step=\"0.05\" value=\"1\" >\r\n        </div>\r\n\r\n\r\n    </div>\r\n</div>\r\n";
 
 /***/ }),
 
@@ -21524,7 +21707,7 @@ module.exports = "<div class=\"m-content\">   \r\n    <div class=\"m-portlet m-p
 /***/ ((module) => {
 
 "use strict";
-module.exports = "<div class=\"aggregate-wrapper\">\n    <div id=\"tool-btn-container\" class=\"m-portlet\">\n        <span style=\"overflow: visible; position: relative; width: 110px;\">\n          <a title=\"Open Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openSettings()\"><i class=\"flaticon-settings primary\"></i></a>\n        </span>\n        <span style=\"overflow: visible; position: relative; width: 110px;\">\n          <a title=\"Export Crosstab Data\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openExport()\"><i class=\"flaticon-download primary\"></i></a>\n        </span>\n    </div>\n\n    <div class=\"row align-items-center\" *ngFor=\"let table of SelectedDataTables; let i = index\">\n        <div class=\"primeng-datatable-container\">\n            <p-table\n              [value]=\"table.data\"\n              [columns]=\"table.tableColumns\"\n              [resizableColumns]=\"true\"\n              [styleClass]=\"selectedSize\"\n              [scrollable]=\"true\"\n              [scrollHeight]=\"scrollHeight\"\n              [tableStyle]=\"tableStyle\"\n              ScrollWidth=\"100%\">\n              <ng-template pTemplate=\"caption\">\n                <div>Table of {{ SelectedDataFields[i] | aggregateFieldNameTransform }}</div>\n              </ng-template>\n              <ng-template pTemplate=\"header\" let-columns>\n                <tr>\n                  <th *ngFor=\"let col of table.tableColumns\" pSortableColumn=\"{{col.field}}\" pReorderableColumn>\n                    {{ col.header}} <p-sortIcon field=\"{{col.field}}\"></p-sortIcon>\n                  </th>\n                </tr>\n              </ng-template>\n              <ng-template pTemplate=\"body\" let-rowData let-column=\"table.tableColumns\">\n                <tr>\n                  <td *ngFor=\"let col of table.tableColumns\">\n                    {{ rowData[col.field] }} <span *ngIf=\"col.field=='percent'\">%</span>\n                  </td>\n                </tr>\n              </ng-template>\n              <!--ng-template pTemplate=\"footer\">\n                <tr>Footer Here\n                  <td *ngFor=\"let col of SelectedTableData.tableColumns\">\n                    {{ totalRow[col.field] }}\n                  </td>\n                </tr>\n              </ng-template-->\n            </p-table>\n          </div>\n    </div>\n\n    <p-dialog *ngIf=\"viewActive\" [(visible)]=\"settingsOpen\" header=\"Aggregate Settings\" [contentStyle]=\"{'max-height': '70vh', 'width': '600px'}\" appendTo=\"body\">\n      <p-orderList #orderList [value]=\"SelectedDataFields\" [dragdrop]=\"true\" (onReorder)=\"reordered($event)\">\n        <ng-template let-i=\"index\" let-field pTemplate=\"item\">\n        <div style=\"display: flex;\">\n          <span class=\"col-3\">Table {{i+1}}</span>\n          <span class=\"col-7\">\n            <p-dropdown [options]=\"fieldOptions\"  [ngModel]=\"SelectedDataFields[i]\" (onChange)=\"updateDataField(i, $event)\" appendTo=\"body\" [group]=\"true\">\n              <ng-template let-group pTemplate=\"group\">\n                <span style=\"font-size: large; font-weight: bold;\">{{ group.label }}</span>\n              </ng-template>\n              <ng-template let-item pTemplate=\"item\">\n                <span>{{ item.short_label }}</span>\n              </ng-template>\n            </p-dropdown>\n          </span>\n          <span class=\"col-2\" *ngIf=\"SelectedDataFields.length > 1\">\n            <p-button icon=\"pi pi-times\" class=\"deleteButton\" (onClick)=\"deleteTable(i)\"/>\n          </span>\n        </div>\n      </ng-template>\n      </p-orderList>\n      <div class=\"form-group row\">\n        <p-button icon=\"pi pi-plus\" label=\"Add Table\" severity=\"danger\" (onClick)=\"addTable()\"/>\n      </div>\n      <!--div class=\"form-group row\" *ngFor=\"let field of SelectedDataFields; let i = index\" title=\"What data fields would you like to aggregate on?\">\n        <div class=\"col-3\">Table {{i+1}}</div>\n        <div class=\"col-7\">\n          <p-dropdown [options]=\"fieldOptions\"  [ngModel]=\"SelectedDataFields[i]\" (onChange)=\"updateDataField(i, $event)\" appendTo=\"body\" [group]=\"true\">\n            <ng-template let-group pTemplate=\"group\">\n              <span style=\"font-size: large; font-weight: bold;\">{{ group.label }}</span>\n            </ng-template>\n            <ng-template let-item pTemplate=\"item\">\n              <span>{{ item.short_label }}</span>\n            </ng-template>\n          </p-dropdown>\n        </div>\n        <div class=\"col-2\" *ngIf=\"SelectedDataFields.length > 1\">\n          <p-button icon=\"pi pi-times\" class=\"deleteButton\" (onClick)=\"deleteTable(i)\"/>\n        </div>\n      </div>\n    <div style=\"height: 10px;\"></div>\n    <div class=\"form-group row\">\n      <p-button icon=\"pi pi-plus\" label=\"Add Table\" severity=\"danger\" (onClick)=\"addTable()\"/>\n    </div-->\n  </p-dialog>\n\n  <p-dialog *ngIf=\"viewActive\" [(visible)]=\"exportOpen\" header=\"Aggregate Export\" [contentStyle]=\"{'max-height': '70vh', 'width': '600px'}\" appendTo=\"body\">\n    <p-orderList #orderList [value]=\"SelectedDataFields\" [dragdrop]=\"true\" (onReorder)=\"reordered($event)\">\n      <ng-template let-i=\"index\" let-field pTemplate=\"item\">\n      <div style=\"display: flex;\">\n        <span class=\"col-3\">Table {{i+1}}</span>\n        <span class=\"col-7\">\n          <p-dropdown [options]=\"fieldOptions\"  [ngModel]=\"SelectedDataFields[i]\" (onChange)=\"updateDataField(i, $event)\" appendTo=\"body\" [group]=\"true\">\n            <ng-template let-group pTemplate=\"group\">\n              <span style=\"font-size: large; font-weight: bold;\">{{ group.label }}</span>\n            </ng-template>\n            <ng-template let-item pTemplate=\"item\">\n              <span>{{ item.short_label }}</span>\n            </ng-template>\n          </p-dropdown>\n        </span>\n        <span class=\"col-2\" *ngIf=\"SelectedDataFields.length > 1\">\n          <p-button icon=\"pi pi-times\" class=\"deleteButton\" (onClick)=\"deleteTable(i)\"/>\n        </span>\n      </div>\n    </ng-template>\n    </p-orderList>\n    <div class=\"form-group row\">\n      <p-button icon=\"pi pi-plus\" label=\"Add Table\" severity=\"danger\" (onClick)=\"addTable()\"/>\n    </div>\n</p-dialog>\n</div>\n";
+module.exports = "<div class=\"aggregate-wrapper\">\n    <div id=\"tool-btn-container\" class=\"m-portlet\">\n        <span style=\"overflow: visible; position: relative; width: 110px;\">\n          <a title=\"Open Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openSettings()\"><i class=\"flaticon-settings primary\"></i></a>\n        </span>\n        <span style=\"overflow: visible; position: relative; width: 110px;\">\n          <a title=\"Export Crosstab Data\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openExport()\"><i class=\"flaticon-download primary\"></i></a>\n        </span>\n    </div>\n    <div style=\"overflow-y: auto; padding: 0px 20px;\" [style.height.px]=\"viewHeight\" id=\"tablesContainer\">\n      <div class=\"row align-items-center\" *ngFor=\"let table of SelectedDataTables; let i = index\" style=\"margin: 20px 0px; justify-content: center;\">\n        <p-table\n          [value]=\"table.data\"\n          [columns]=\"table.tableColumns\"\n          styleClass=\"p-datatable-sm p-datatable-gridlines\"\n          [tableStyle]=\"tableStyle\">\n          <ng-template pTemplate=\"caption\">\n            <div style=\"display: flex; justify-content: center; font-weight: bold; font-size: large;\">Table of {{ formatTableTitle(SelectedDataFields[i])}} </div>\n          </ng-template>\n          <ng-template pTemplate=\"header\" let-columns>\n            <tr>\n              <th *ngFor=\"let col of table.tableColumns\" pSortableColumn=\"{{col.field}}\">\n                {{ col.header}} <p-sortIcon field=\"{{col.field}}\"></p-sortIcon>\n              </th>\n            </tr>\n          </ng-template>\n          <ng-template pTemplate=\"body\" let-rowData let-column=\"table.tableColumns\">\n            <tr>\n              <td *ngFor=\"let col of table.tableColumns\">\n                {{ col.field=='percent' ? rowData['percent'].toFixed(2)+'%' : rowData[col.field] }}\n              </td>\n            </tr>\n          </ng-template>\n        </p-table>\n      </div>\n    </div>\n\n    <p-dialog *ngIf=\"viewActive\" [(visible)]=\"settingsOpen\" header=\"Aggregate Settings\" [contentStyle]=\"{'max-height': '70vh', 'width': '600px'}\" appendTo=\"body\">\n      <p-orderList id=\"aggregate-orderList\" #orderList [value]=\"SelectedDataFields\" [dragdrop]=\"true\" (onReorder)=\"reordered($event)\">\n        <ng-template let-i=\"index\" let-field pTemplate=\"item\">\n        <div style=\"display: flex;\">\n          <span class=\"col-3\">Table {{i+1}}</span>\n          <span class=\"col-7\">\n            <p-dropdown [options]=\"fieldOptions\"  [ngModel]=\"SelectedDataFields[i]\" (onChange)=\"updateDataField(i, $event)\" appendTo=\"body\" [group]=\"true\">\n              <ng-template let-group pTemplate=\"group\">\n                <span style=\"font-size: large; font-weight: bold;\">{{ group.label }}</span>\n              </ng-template>\n              <ng-template let-item pTemplate=\"item\">\n                <span>{{ item.short_label }}</span>\n              </ng-template>\n            </p-dropdown>\n          </span>\n          <span class=\"col-2\" *ngIf=\"SelectedDataFields.length > 1\">\n            <p-button icon=\"pi pi-times\" class=\"deleteButton\" (onClick)=\"deleteTable(i)\"/>\n          </span>\n        </div>\n      </ng-template>\n      </p-orderList>\n      <div class=\"form-group row\" style=\"justify-content: center;\">\n        <p-button icon=\"pi pi-plus\" label=\"Add Table\" severity=\"danger\" (onClick)=\"addTable()\"/>\n      </div>\n  </p-dialog>\n\n  <p-dialog *ngIf=\"viewActive\" [(visible)]=\"exportOpen\" header=\"Aggregate Export\" [contentStyle]=\"{'max-height': '70vh', 'width': '600px'}\" appendTo=\"body\">\n    <div class=\"modal-dialog\" role=\"document\">\n      <div class=\"modal-content\">\n          <div class=\"modal-body\" style='width: 100%; height: 100%;'>\n              <div class=\"form-group row\">\n                  <div class=\"col-9\">\n                    <input type=\"text\" style=\"height:42px\" class=\"form-control form-control-sm\"\n                        placeholder=\"Filename\" [(ngModel)]=\"SelectedAggregateExportFilename\">\n                  </div>\n                  <div class=\"col-3\">\n                    <p-dropdown [options]=\"AggregateExportFileTypeList\"\n                        [(ngModel)]=\"SelectedAggregateExportFileType\" appendTo=\"body\"></p-dropdown>\n                  </div>\n              </div>\n          </div>\n          <div class=\"modal-footer\">\n              <button type=\"button\" class=\"btn btn-error\" (click)=\"exportOpen = !exportOpen\">Cancel</button>\n              <button type=\"button\" class=\"btn btn-primary\" (click)=\"exportVisualization()\">Export</button>\n          </div>\n      </div><!-- /.modal-content -->\n  </div>\n</p-dialog>\n</div>\n";
 
 /***/ }),
 
