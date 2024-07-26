@@ -99,6 +99,7 @@
     "ngx-build-plus": "^9.0.0",
     "papaparse": "^5.4.1",
     "patristic": "^0.6.0",
+    "pdfmake": "^0.2.10",
     "phylocanvas": "^2.8.1",
     "phylocanvas-plugin-context-menu": "^3.11.0",
     "phylocanvas-plugin-history": "^2.1.1",

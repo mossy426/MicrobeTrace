@@ -2036,8 +2036,10 @@ export class CommonService extends AppComponentBase implements OnInit {
                 console.log('launching view: ',window.context.commonService.session.style.widgets['default-view']);
             }
             window.context.commonService.launchView(window.context.commonService.session.style.widgets['default-view']);
-            //window.context.commonService.launchView('Alignment View');
-            delayFunction(10, loadOtherViews)
+            //window.context.commonService.launchView('Aggregate');
+            //setTimeout(() => { $('#overlay button').click()}, 100)
+            // currently loading all views isn't ready and is leading to bugs where default data is seeping in when new data is loaded
+            //delayFunction(10, loadOtherViews) 
             function convertName(s: string) {
                 // can't do alignment view yet;
                 if (s == 'geo_map') {
@@ -2051,6 +2053,8 @@ export class CommonService extends AppComponentBase implements OnInit {
                 } else if (s == 'sequences') {
                     //return 'Alignment View';
                     return false;
+                    // need to add crosstab as well and fix alignment view; they are not being added to cs.session.layout.content;
+                    // on another note it doesn't close all previous view when new data is added from overlay
                 } else if (s == 'phylogenetic_tree') {
                     return 'Phylogenetic Tree'
                 } else {

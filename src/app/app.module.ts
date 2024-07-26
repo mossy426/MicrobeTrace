@@ -34,6 +34,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TreeModule } from 'primeng/tree';
 import { DialogModule } from 'primeng/dialog';
+import { OrderListModule } from 'primeng/orderlist';
 import { MicrobeTraceNextHomeComponent } from './microbe-trace-next-plugin.component';
 import { AppSessionService } from '@shared/common/session/app-session.service';
 import { AppUiCustomizationService } from '@shared/common/ui/app-ui-customization.service';
@@ -59,6 +60,7 @@ import {MatSelectModule} from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CrosstabComponent } from './visualizationComponents/CrosstabComponent/crosstab-plugin.component';
+import { AggregateComponent } from './visualizationComponents/AggregateComponent/aggregate.component';
 
 
 
@@ -90,6 +92,7 @@ export class TestedComponent {
     TimelineComponent,
     AlignmentViewComponent,
     CrosstabComponent,
+    AggregateComponent,
   ],
   imports: [
     BrowserModule,
@@ -142,7 +145,8 @@ export class TestedComponent {
     MultiSelectModule,
     SliderModule,
     LeafletModule,
-    LeafletMarkerClusterModule
+    LeafletMarkerClusterModule,
+    OrderListModule
   ],
   exports: [
     SelectButtonModule

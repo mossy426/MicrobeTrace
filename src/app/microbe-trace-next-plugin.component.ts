@@ -1941,7 +1941,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         });
 
         this._goldenLayoutHostComponent.TabChangedEvent.subscribe((v) => {
-            if (v === "Files" || v === "Epi Curve" || v === "Alignment View" || v == "Table" || v == "Crosstab") {
+            if (v === "Files" || v === "Epi Curve" || v === "Alignment View" || v == "Table" || v == "Crosstab" || v == "Aggregate") {
                 this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
                 this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
             } else {

@@ -5,6 +5,8 @@ import { SelectItem } from 'primeng/api';
 import { Table } from 'primeng/table';
 import * as saveAs from 'file-saver';
 import { window } from 'ngx-bootstrap';
+import pdfMake from 'pdfmake/build/pdfmake.js';
+import pdfFonts from 'pdfmake/build/vfs_fonts.js'
 
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
@@ -50,7 +52,9 @@ export class CrosstabComponent extends BaseComponentDirective implements OnInit,
   SelectedCrossTabExportFileType = 'csv';
   CrossTabExportFileTypeList: any = [
     { label: 'xlsx', value: 'xlsx' },
-    { label: 'csv', value: 'csv' }
+    { label: 'csv', value: 'csv' },
+    { label: 'json', value: 'json'},
+    { label: 'pdf', value: 'pdf'}
 ];
 
   fieldListDictionary: {
@@ -455,12 +459,86 @@ export class CrosstabComponent extends BaseComponentDirective implements OnInit,
   exportVisualization() {
     if (this.SelectedCrossTabExportFileType == 'xlsx') {
       this.saveAsExcelFile();
-  } else {
+  } else if (this.SelectedCrossTabExportFileType == 'csv') {
       this.dataTable.exportFilename = this.SelectedCrossTabExportFilename;
       this.dataTable.value.push(this.totalRow)
       this.dataTable.exportCSV()
       this.dataTable.value.pop()
-  }
+  } else if (this.SelectedCrossTabExportFileType == 'json') {
+    let keys = Object.keys(this.SelectedTableData.data[0])
+    let data = this.SelectedTableData.data.map(row => {
+      let output = {}
+      keys.forEach(key => {
+        if (key == 'Total') return;
+        else if (row[key] == 'null') {
+          output[key] = null;
+        } else {
+          output[key] = row[key]
+        }
+      })
+      return output;
+    })
+    let blob = new Blob([JSON.stringify(data)], { type: "application/json;charset=utf-8"});
+    saveAs(blob, this.SelectedCrossTabExportFilename +'.json');
+  } else {
+    let columns = ['col']
+    this.SelectedTableData.tableColumns.forEach(col => {
+      if (col.header != '') {
+        columns.push(col.header)
+      }
+    })
+
+    let dataBody = [this.SelectedTableData.tableColumns.map(col => {
+      if (col.header == '') return this.commonService.capitalize(this.yVariable)      
+      return this.commonService.capitalize(col.header);
+    })].concat(this.SelectedTableData.data.map(formatData)).concat([formatData(this.totalRow)]);
+    
+    function formatData(dataRow) {
+      return columns.map(header => dataRow[header])
+    }
+
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+      pdfMake.createPdf({
+        content: [ 
+          { image: this.commonService.watermark },
+          { 
+            text: "Cluster Crosstab Snapshot:",
+            style: "header",
+            alignment: "center"
+          },
+          {
+            text: `${this.commonService.capitalize(this.xVariable)} vs ${this.commonService.capitalize(this.yVariable)}`,
+            style: "fontSize: 18",
+            alignment: "center"
+          },
+          {
+            style: "paddedTable",
+            table: {
+              headerRows: 1,
+              widths: this.SelectedTableData.tableColumns.map(col => "*"),
+              body: dataBody,
+            }
+          }
+        ],
+        footer: function(currentPage, pageCount) {
+          return [
+            {
+              text: `Page ${currentPage.toString()} of ${pageCount}`,
+              alignment: "center"
+            }
+          ];
+        },
+        styles: {
+          header: {
+            fontSize: 22,
+            bold: true
+          },
+          paddedTable: {
+            margin: [10, 10, 10, 10]
+          }
+        }
+      }).download(this.SelectedCrossTabExportFilename + '.pdf');
+    }
 
   this.exportOpen = !this.exportOpen;
   }
