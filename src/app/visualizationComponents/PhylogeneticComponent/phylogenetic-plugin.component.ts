@@ -337,10 +337,8 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
     let that = this;
 
     $( document ).on( "node-selected", function( ) {
-
       that.updateNodeColors();
-
-  });
+    });
 
     
     this.goldenLayoutComponentResize()

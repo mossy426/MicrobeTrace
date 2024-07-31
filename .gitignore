@@ -50,6 +50,9 @@ testem.log
 # System Files
 *.swp
 .nfs*
+node_modules_angular
+node_modules_dev
+node_modules
 .DS_Store
 Thumbs.db
 slr/*

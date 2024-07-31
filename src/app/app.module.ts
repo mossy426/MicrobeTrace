@@ -62,6 +62,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CrosstabComponent } from './visualizationComponents/CrosstabComponent/crosstab-plugin.component';
 import { AggregateComponent } from './visualizationComponents/AggregateComponent/aggregate.component';
 
+import { GanttComponent } from './visualizationComponents/GanttComponent/gantt-plugin.component';
+import { GanttChartComponent } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component';
+import { GanttChartService } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service';
 
 
 // It is required to have JQuery as global in the window object.
@@ -93,6 +96,8 @@ export class TestedComponent {
     AlignmentViewComponent,
     CrosstabComponent,
     AggregateComponent,
+    GanttChartComponent,
+    GanttComponent,
   ],
   imports: [
     BrowserModule,
@@ -155,7 +160,8 @@ export class TestedComponent {
     AppSessionService,
     AppUiCustomizationService,
     AppUrlService,
-    GoldenLayoutComponentService
+    GanttChartService,
+    GoldenLayoutComponentService,
   ],
   bootstrap: [AppComponent]
 })

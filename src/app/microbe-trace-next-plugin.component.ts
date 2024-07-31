@@ -5,6 +5,9 @@ import { TwoDComponent } from './visualizationComponents/TwoDComponent/twoD-plug
 import { TableComponent } from './visualizationComponents/TableComponent/table-plugin-component';
 import { MapComponent } from './visualizationComponents/MapComponent/map-plugin.component';
 import { PhylogeneticComponent } from './visualizationComponents/PhylogeneticComponent/phylogenetic-plugin.component';
+import { GanttComponent } from './visualizationComponents/GanttComponent/gantt-plugin.component';
+import { GanttChartComponent } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component';
+import { GanttChartService } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service';
 import * as d3 from 'd3';
 import { window, TabsetComponent } from 'ngx-bootstrap';
 import { TabView } from 'primeng/tabview';
@@ -1399,7 +1402,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     hideLinkColorTable() {
         if (this.SelectedLinkColorTableTypesVariable != 'Hide') {
            this.SelectedLinkColorTableTypesVariable='Hide';
-           this.onNodeColorTableChanged()
+           this.onLinkColorTableChanged()
         }
     }
 
@@ -2066,6 +2069,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     private _removeGlView(view : string) {
+        console.log(`Removing ${view}`);
         this._goldenLayoutHostComponent.removeComponent(view);
         this.removeComponent(view);
     }
@@ -3013,6 +3017,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
             x.isActive = false;
         });
+
+        console.log
 
         // this.tabView.tabs.map(x => {
 
