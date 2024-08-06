@@ -242,6 +242,14 @@
                                         <div class="col-8">
                                             <p-selectButton [options]="PruneWityTypes" [(ngModel)]="SelectedPruneWityTypesVariable" (onChange)="onPruneWithTypesChanged()"></p-selectButton>
                                         </div>
+                                    </div>
+                                    <div id="filtering-epsilon-row" class="form-group row" style="display: none;" title="Select a value for epislon to add links back to minimum spanning network. See 'A Novel Network Representation of SARS-CoV-2 Sequencing Data' for algorithm details.">
+                                        <div class="col-4">
+                                            <label for="filtering-epsilon">Epsilon: {{ SelectedEpsilonValue }}</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input type="range" class="form-control form-control-sm" min="-8" max="2" step=".01" [(ngModel)]="widgets['filtering-epsilon']" (ngModelChange)="onEpsilonValueChange()">
+                                        </div>
                                     </div>                                    
                                     <div class="form-group row" title="What's the minimum number of nodes a cluster must have in order to be visible?">
                                         <div class="col-4">

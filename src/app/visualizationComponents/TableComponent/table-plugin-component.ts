@@ -50,7 +50,7 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
     ShowTableSettingsPane: boolean = false;
     IsDataAvailable: boolean = false;
     table: any;
-    meta: any = ['selected', 'visible', 'nn'];
+    meta: any = ['selected', 'visible']
     TableColumns: any[] = [];
     SelectableTableColumns: any[] = [];
     AvailableColumns: any[] = [];
@@ -354,7 +354,7 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
 
             const column = {
                 field: d,
-                header: this.visuals.tableComp.capitalize(d.replace("_", "")),
+                header: d== 'nn' ? 'Nearest Neighbor' : this.visuals.tableComp.capitalize(d.replace("_", "")),
                 filterValue: filterValue,
                 filterType: 'contains'
             };
