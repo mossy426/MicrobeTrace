@@ -65,6 +65,7 @@ import { AggregateComponent } from './visualizationComponents/AggregateComponent
 import { GanttComponent } from './visualizationComponents/GanttComponent/gantt-plugin.component';
 import { GanttChartComponent } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component';
 import { GanttChartService } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service';
+import { HeatmapComponent } from './visualizationComponents/HeatmapComponent/heatmap.component';
 
 
 // It is required to have JQuery as global in the window object.
@@ -98,6 +99,7 @@ export class TestedComponent {
     AggregateComponent,
     GanttChartComponent,
     GanttComponent,
+    HeatmapComponent,
   ],
   imports: [
     BrowserModule,
