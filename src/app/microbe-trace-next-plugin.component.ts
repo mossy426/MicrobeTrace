@@ -125,6 +125,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         { label: 'Nearest Neighbor', value: 'Nearest Neighbor' }
     ];
     SelectedPruneWityTypesVariable: string = 'None';
+    SelectedEpsilonValue: string;
 
 
     SelectedClusterMinimumSizeVariable: any = 0;
@@ -796,7 +797,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         }
     }
 
-
+    onEpsilonValueChange() {
+        this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"] =false;
+        this.onPruneWithTypesChanged(); 
+    }
 
     onPruneWithTypesChanged() {
 
@@ -805,29 +809,40 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         //debugger;
 
         if (this.visuals.microbeTrace.SelectedPruneWityTypesVariable == "None") {
+            $('#filtering-epsilon-row').slideUp();
             this.visuals.microbeTrace.commonService.session.style.widgets["link-show-nn"] = false;
             this.visuals.microbeTrace.commonService.updateNetwork();
 
             this.visuals.microbeTrace.updatedVisualization();
         }
         else {
+            this.SelectedEpsilonValue = Math.pow(10, this.widgets['filtering-epsilon']).toPrecision(3);
+            window.context.commonService.session.style.widgets["filtering-epsilon"] = this.widgets['filtering-epsilon'];
             this.visuals.microbeTrace.commonService.session.style.widgets["link-show-nn"] = true;
-
+            $('#filtering-epsilon-row').slideDown();
             // TODO:: Removed to fix nearest neighbor bug as it's unesscary as of now.  Remove later if it appears to not be neded.
-            // if(!this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]) {
-            //     this.visuals.microbeTrace.commonService.computeMST().then(this.visuals.microbeTrace.commonService.updateNetwork);
-            //     this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"] = true;
-            //     console.log('updated compute:' , this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]);
-            //   } else {
+            if(!this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]) {
+                this.visuals.microbeTrace.commonService.computeMST().then(() => {
+                    this.visuals.microbeTrace.commonService.updateNetwork();
+                    this.visuals.microbeTrace.updatedVisualization();
 
-            //     console.log('onPrun in else else');
+                    if ('tableComp' in this.commonService.visuals) {
+                        if (this.commonService.visuals.tableComp.dataSetViewSelected == 'Link') {
+                            this.commonService.visuals.tableComp.openSelectDataSetScreen({value: 'Link'});
+                        }
+                    }
+                });
+                 this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"] = true;
+                 console.log('updated compute:' , this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]);
+                 return;
+               } else {
 
-            //     this.visuals.microbeTrace.commonService.updateNetwork();
+                console.log('onPrun in else else');
 
-            //   }
+                this.visuals.microbeTrace.commonService.updateNetwork();
 
-            this.visuals.microbeTrace.commonService.updateNetwork();
-
+               }
+            //this.visuals.microbeTrace.commonService.updateNetwork();
 
             this.visuals.microbeTrace.updatedVisualization();
         }

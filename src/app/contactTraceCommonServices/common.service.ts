@@ -104,7 +104,7 @@ export class CommonService extends AppComponentBase implements OnInit {
                 'visible',
                 'cluster',
                 'origin',
-                'nearest neighbor',
+                'nn',
                 'directed'
             ],
             clusterFields: [
@@ -3524,34 +3524,29 @@ export class CommonService extends AppComponentBase implements OnInit {
 
                 if (link.hasDistance) {
 
-                visible = link[metric] <= threshold;
+                    visible = link[metric] <= threshold;
 
-                if (!visible) {
+                    if (!visible) {
 
                     // Only need to get distance origin and override if there are other files using a distance metric, otherwise the else code block below would be executed since the link would not have distance
-                    if (
-                        link.origin.length > 1 &&
-                        link.origin.filter(fileName => {
-                        const hasAuspice = /[Aa]uspice/.test(fileName);
-                        const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
-                        return fileName && !includesDistanceOrigin && !hasAuspice;
-                        }).length > 0
-                    ) {
-
-                        //if(link.index === 154630) {
-                        //    console.log('session viz 2');
-                        //}                        
-                        // Set visible and origin to only show the file outside of Distance
-                        link.origin = link.origin.filter(fileName => {
-                        const hasAuspice = /[Aa]uspice/.test(fileName);
-                        const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
-                        return fileName && !includesDistanceOrigin && !hasAuspice;
-                        });
-                        overrideNN = true;
-                        visible = true;
+                        if (
+                            link.origin.length > 1 &&
+                            link.origin.filter(fileName => {
+                            const hasAuspice = /[Aa]uspice/.test(fileName);
+                            const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
+                            return fileName && !includesDistanceOrigin && !hasAuspice;
+                            }).length > 0
+                        ) {
+                            // Set visible and origin to only show the file outside of Distance
+                            link.origin = link.origin.filter(fileName => {
+                            const hasAuspice = /[Aa]uspice/.test(fileName);
+                            const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
+                            return fileName && !includesDistanceOrigin && !hasAuspice;
+                            });
+                            overrideNN = true;
+                            visible = true;
+                        }
                     }
-                    }
-
                 } else {
 
                     // If has no distance, then link should be visible and unnaffected by NN
@@ -3566,8 +3561,8 @@ export class CommonService extends AppComponentBase implements OnInit {
                 visible = visible && link.nn;
                 // Keep link visible of not nearest neighbor, but still connected via an edge list
                 if (!visible && link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0) {
-                link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
-                visible = true;
+                    link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
+                    visible = true;
                 }
             }
 
