@@ -66,7 +66,7 @@ import { GanttComponent } from './visualizationComponents/GanttComponent/gantt-p
 import { GanttChartComponent } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component';
 import { GanttChartService } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service';
 import { HeatmapComponent } from './visualizationComponents/HeatmapComponent/heatmap.component';
-
+import { GoogleTagManagerModule } from 'angular-google-tag-manager';
 
 // It is required to have JQuery as global in the window object.
 window['$'] = $;
@@ -153,7 +153,8 @@ export class TestedComponent {
     SliderModule,
     LeafletModule,
     LeafletMarkerClusterModule,
-    OrderListModule
+    OrderListModule,
+    GoogleTagManagerModule.forRoot({id: 'G-0MWHB1NG2M',})
   ],
   exports: [
     SelectButtonModule

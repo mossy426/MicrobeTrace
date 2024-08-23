@@ -18,6 +18,7 @@ import { BaseComponentDirective } from '@app/base-component.directive';
 import { ComponentContainer } from 'golden-layout';
 import { GanttChartService } from './gantt-chart/gantt-chart.service';
 import { GanttChartComponent } from './gantt-chart/gantt-chart.component';
+import { GoogleTagManagerService } from 'angular-google-tag-manager';
 
 
 @Component({
@@ -97,7 +98,8 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
               @Inject(ViewContainerRef) ViewContainerRef, 
               elRef: ElementRef,
               ganttChartService: GanttChartService,
-              private cdref: ChangeDetectorRef) {
+              private cdref: ChangeDetectorRef,
+              private gtmService: GoogleTagManagerService) {
 
     super(elRef.nativeElement);
 
@@ -120,6 +122,13 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
   openCenter(): void {}
 
   ngOnInit(): void {
+
+    this.gtmService.pushTag({
+            event: "page_view",
+            page_location: "/gantt",
+            page_title: "Gantt Chart View"
+        });
+
     let that = this;
     this.nodeIds = this.getNodeIds();
     this.visuals.gantt.FieldList.push(

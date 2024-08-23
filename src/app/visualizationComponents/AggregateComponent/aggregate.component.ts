@@ -13,6 +13,7 @@ import * as saveAs from 'file-saver';
 import * as XLSX from 'xlsx';
 import pdfMake from 'pdfmake/build/pdfmake.js';
 import pdfFonts from 'pdfmake/build/vfs_fonts.js';
+import { GoogleTagManagerService } from 'angular-google-tag-manager';
 
 @Component({
   selector: 'AggregateComponent',
@@ -69,7 +70,8 @@ export class AggregateComponent extends BaseComponentDirective implements OnInit
     public commonService: CommonService,
     @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
     elRef: ElementRef,
-    private cdref: ChangeDetectorRef) {
+    private cdref: ChangeDetectorRef,
+    private gtmService: GoogleTagManagerService) {
 
       super(elRef.nativeElement);
 
@@ -82,6 +84,12 @@ export class AggregateComponent extends BaseComponentDirective implements OnInit
 
   // XXX need to fix this XXX
   ngOnInit(): void {
+
+    this.gtmService.pushTag({
+            event: "page_view",
+            page_location: "/aggregate",
+            page_title: "Aggregate View"
+        });
 
     this.SelectedDataFields.forEach((field, index) => {
       this.SelectedDataTables.push({label: '', data: [], tableColumns: []})

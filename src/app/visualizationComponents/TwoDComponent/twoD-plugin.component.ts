@@ -22,6 +22,7 @@ import { BaseComponentDirective } from '@app/base-component.directive';
 import { saveSvgAsPng } from 'save-svg-as-png';
 import { ComponentContainer } from 'golden-layout';
 import { MicrobeTraceNextHomeComponent } from '../../microbe-trace-next-plugin.component';
+import { GoogleTagManagerService } from 'angular-google-tag-manager';
 
 
 @Component({
@@ -194,7 +195,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
         elRef: ElementRef,
         private cdref: ChangeDetectorRef,
-        private clipboard: Clipboard) {
+        private clipboard: Clipboard,
+        private gtmService: GoogleTagManagerService) {
 
             super(elRef.nativeElement);
 
@@ -236,6 +238,11 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     InitView() {
 
+        this.gtmService.pushTag({
+            event: "page_view",
+            page_location: "/2d_network",
+            page_title: "2D Network View"
+        });
         this.visuals.twoD.IsDataAvailable = (this.visuals.twoD.commonService.session.data.nodes.length === 0 ? false : true);
         if (!this.widgets['default-distance-metric']) {
           this.widgets['default-distance-metric'] = 
