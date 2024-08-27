@@ -622,6 +622,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
   launchClick() {
 
     console.log(this.displayloadingInformationModal);
+    this.visuals.microbeTrace.commonService.updateLegacyNodeSymbols();
     const thresholdOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"];
     const metricOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["default-distance-metric"];
     const ambiguityOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["ambiguity-resolution-strategy"];
@@ -688,7 +689,6 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
     this.visuals.microbeTrace.commonService.session.meta.anySequences = this.visuals.microbeTrace.commonService.session.files.some(file => (file.format === "fasta") || (file.format === "node" && file.field2 !== "None"));
 
-    console.log('session files', this.visuals.microbeTrace.commonService.session.files);
     this.visuals.microbeTrace.commonService.session.files.forEach((file, fileNum) => {
       const start = Date.now();
       const origin = [file.name];

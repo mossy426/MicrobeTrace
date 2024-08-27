@@ -52,16 +52,16 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
   private localColorMap = (x) => {}
 
   private svg;
-  private margin = { top: 5, left: 25, right: 25, bottom: 50 };
+  private margin = { top: 5, left: 45, right: 20, bottom: 50 };
   private width; // Default width, adjust as necessary
   private height; // Default height, adjust as necessary
   private middle;
   private x;
   private y;
   private histogram;
-  private brush : any;
-  private brushG : any;
-  private selection: any;
+  private brush;
+  private brushG;
+  private selection;
   private timer;
   private tick = 0;
   private isPlaying = false;
@@ -121,7 +121,11 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
 
     // date fields
     if (this.widgets['epiCurve-date-fields'] == undefined) {
-      this.widgets['epiCurve-date-fields'] = ['None', 'None', 'None']
+      if (this.widgets['epi-timeline-date-field'] != undefined) {
+        this.widgets['epiCurve-date-fields'] = [this.widgets['epi-timeline-date-field'], 'None', 'None']
+      } else {
+        this.widgets['epiCurve-date-fields'] = ['None', 'None', 'None']
+      }
     } else if (this.widgets['epiCurve-date-fields'].length < 3) {
       while (this.widgets['epiCurve-date-fields']< 3) {
         this.widgets['epiCurve-date-fields'].push('None')
@@ -172,7 +176,7 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
  }
   
 /**
- * Clears previous histogram/epi curve and creates a new one; calls refresh multi if needed
+ * Clears previous histogram/epi curve and creates a new one; calls refreshMulti if needed
  */
 public refresh(): void {
   if (this.selectedGraphType=='Multi: Overlay' || this.selectedGraphType=='Multi: Side by Side') {
@@ -194,14 +198,15 @@ public refresh(): void {
 
   // updates this.timeDomainStart and this.timeDomainInterval and returns the bin interval
   let binInterval = this.calculateBinInterval(times);
-  // if (binInterval == 0) {
-  //   return;
-  // }
+  if (binInterval == 0) {
+    return;
+  }
 
   this.x = d3.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]);
   this.y = d3.scaleLinear().range([this.height, 0]);
 
-  // this.histogram = d3.histogram().value(d => d[field as string]).domain(this.x.domain()).thresholds(binInterval);
+  //@ts-ignore
+  this.histogram = d3.histogram().value(d => d[field as string]).domain(this.x.domain()).thresholds(binInterval);
 
   this.svg = d3.select(this.epiCurveSVGElement.nativeElement)
     .attr("width", this.width + this.margin.left + this.margin.right)
@@ -299,14 +304,15 @@ private refreshMulti(): void {
 
   // updates this.timeDomainStart and this.timeDomainInterval and returns the bin interval
   let binInterval = this.calculateBinInterval(times);
-  // if (binInterval == 0) {
-  //   return;
-  // }
+  if (binInterval == 0) {
+    return;
+  }
 
   this.x = d3.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]);
   this.y = d3.scaleLinear().range([this.height, 0]);
 
-  // this.histogram = d3.histogram().domain(this.x.domain()).thresholds(binInterval);
+  //@ts-ignore
+  this.histogram = d3.histogram().domain(this.x.domain()).thresholds(binInterval);
 
   this.svg = d3.select(this.epiCurveSVGElement.nativeElement)
     .attr("width", this.width + this.margin.left + this.margin.right)
@@ -435,40 +441,6 @@ getTimes(fields) {
 
 updateAxes() {
   let [xAxis, xLabelOffset] = this.configureXAxisSettings();
-  this.x = d3.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]);
-  this.y = d3.scaleLinear().range([this.height, 0]);
-
-  // this.histogram = d3.histogram().value(d => d[field as string]).domain(this.x.domain()).thresholds(d3.thresholdScott);
-
-  // this.svg = d3.select(this.timelineElement.nativeElement)
-  //   .append("svg")
-  //   .attr("width", this.width + this.margin.left + this.margin.right)
-  //   .attr("height", this.height + this.margin.top + this.margin.bottom);
-
-  const epiCurve = this.svg.append("g")
-    .classed("timeline-epi-curve", true)
-    .attr("transform", `translate(${this.margin.left}, 0)`);
-
-  const bins = this.histogram(this.vnodes);
-
-  if (!this.commonService.session.style.widgets["timeline-noncumulative"]) {
-    let sum = 0;
-    bins.forEach(bin => {
-      sum += bin.length;
-      bin.length = sum;
-    });
-  }
-
-  this.y.domain([0, d3.max(bins, d => (d as any).length)]);
-
-  epiCurve.selectAll("rect")
-    .data(bins)
-    .enter()
-    .append("rect")
-    .attr("transform", d => `translate(${this.x(d.x0)}, ${this.y(d.length)})`)
-    .attr("width", d => this.x(d.x1) - this.x(d.x0))
-    .attr("height", d => this.height - this.y(d.length))
-    .attr("fill",this.commonService.session.style.widgets["node-color"]);
 
   this.svg.append("g")
     .attr("class", "axis axis--x")
@@ -484,7 +456,7 @@ updateAxes() {
     .call(d3.axisLeft(this.y))
     .attr("text-anchor", null)
     .selectAll("text")
-    .attr("x", 6);
+    .attr("x", -20);
 
   this.svg.append("text")
     .attr("class", "x label")
@@ -512,14 +484,13 @@ updateAxes() {
       }
     })
     .on("end", function () {
-      // Pre D3
-      // this.selection = d3.brushSelection(this.brushG.node());
-      // if (!this.selection) return;
-      // if (this.selection[0] > 0) {
-      //   this.selection[0] = 0;
-      //   this.brushG.call(this.brush.move, this.selection);
-      //   this.propagate();
-      // }
+      this.selection = d3.brushSelection(this.brushG.node());
+      if (!this.selection) return;
+      if (this.selection[0] > 0) {
+        this.selection[0] = 0;
+        this.brushG.call(this.brush.move, this.selection);
+        this.propagate();
+      }
     });
 
     this.brushG = this.svg
@@ -623,44 +594,53 @@ private setupEventListeners(): void {
  * @returns return a d3 time range such as d3.timeMonth.range()
  */
 calculateBinInterval(times) {
-  return;
-  // let minTime = Math.min(...times);
-  // let maxTime = Math.max(...times);
+  let minTime = Math.min(...times);
+  let maxTime = Math.max(...times);
 
-  // if (this.widgets['epiCurve-binSize'] == 'Day') {
-  //   this.timeDomainStart = d3.timeMonth(minTime);
-  //   this.timeDomainEnd = d3.timeMonth.ceil(maxTime);
-  //   return d3.timeDay.range(this.timeDomainStart, this.timeDomainEnd);
-  // } else if (this.widgets['epiCurve-binSize'] == 'Week') {
-  //   this.timeDomainStart = d3.timeMonth(minTime);
-  //   this.timeDomainEnd = d3.timeMonth.ceil(maxTime);
-  //   return d3.timeMonday.range(this.timeDomainStart, this.timeDomainEnd);
-  // } else if (this.widgets['epiCurve-binSize'] == 'Month') {
-  //   this.timeDomainStart = d3.timeMonth(minTime);
-  //   this.timeDomainEnd = d3.timeMonth.ceil(maxTime);
-  //   return d3.timeMonth.range(this.timeDomainStart, this.timeDomainEnd);
-  // } else if (this.widgets['epiCurve-binSize'] == 'Quarter') {
-  //   this.timeDomainStart = d3.timeMonth(minTime, 3);
-  //   this.timeDomainEnd = d3.timeMonth.ceil(maxTime, 3);
-  //   // for quarter we may need to update earliest month so that quarters are consistant (always start on Jan, April, July, or October)
-  //   if ([1, 2].includes(this.timeDomainStart.getMonth())){
-  //     this.timeDomainStart.setMonth(0);
-  //   } else if ([4,5].includes(this.timeDomainStart.getMonth())) {
-  //     this.timeDomainStart.setMonth(3);
-  //   } else if ([7,8].includes(this.timeDomainStart.getMonth())) {
-  //     this.timeDomainStart.setMonth(6);
-  //   } else if ([10,11].includes(this.timeDomainStart.getMonth())) {
-  //     this.timeDomainStart.setMonth(9);
-  //   }
-  //   return d3.timeMonth.range(this.timeDomainStart, this.timeDomainEnd, 3);
-  // } else if (this.widgets['epiCurve-binSize'] == 'Year') {
-  //   // this.timeDomainStart = d3.timeYear(minTime);
-  //   // this.timeDomainEnd = d3.timeYear.ceil(maxTime);
-  //   return d3.timeYear.range(this.timeDomainStart, this.timeDomainEnd);
-  // } else {
-  //   alert("Invalid bin size selected");
-  //   return 0;
-  // }
+  if (this.widgets['epiCurve-binSize'] == 'Day') {
+    //@ts-ignore
+    this.timeDomainStart = d3.timeMonth(minTime);
+    //@ts-ignore
+    this.timeDomainEnd = d3.timeMonth.ceil(maxTime);
+    return d3.timeDay.range(this.timeDomainStart, this.timeDomainEnd);
+  } else if (this.widgets['epiCurve-binSize'] == 'Week') {
+    //@ts-ignore
+    this.timeDomainStart = d3.timeMonth(minTime);
+    //@ts-ignore
+    this.timeDomainEnd = d3.timeMonth.ceil(maxTime);
+    return d3.timeMonday.range(this.timeDomainStart, this.timeDomainEnd);
+  } else if (this.widgets['epiCurve-binSize'] == 'Month') {
+    //@ts-ignore
+    this.timeDomainStart = d3.timeMonth(minTime);
+    //@ts-ignore
+    this.timeDomainEnd = d3.timeMonth.ceil(maxTime);
+    return d3.timeMonth.range(this.timeDomainStart, this.timeDomainEnd);
+  } else if (this.widgets['epiCurve-binSize'] == 'Quarter') {
+    //@ts-ignore
+    this.timeDomainStart = d3.timeMonth(minTime, 3);
+    //@ts-ignore
+    this.timeDomainEnd = d3.timeMonth.ceil(maxTime, 3);
+    // for quarter we may need to update earliest month so that quarters are consistant (always start on Jan, April, July, or October)
+    if ([1, 2].includes(this.timeDomainStart.getMonth())){
+      this.timeDomainStart.setMonth(0);
+    } else if ([4,5].includes(this.timeDomainStart.getMonth())) {
+      this.timeDomainStart.setMonth(3);
+    } else if ([7,8].includes(this.timeDomainStart.getMonth())) {
+      this.timeDomainStart.setMonth(6);
+    } else if ([10,11].includes(this.timeDomainStart.getMonth())) {
+      this.timeDomainStart.setMonth(9);
+    }
+    return d3.timeMonth.range(this.timeDomainStart, this.timeDomainEnd, 3);
+  } else if (this.widgets['epiCurve-binSize'] == 'Year') {
+    //@ts-ignore
+    this.timeDomainStart = d3.timeYear(minTime);
+    //@ts-ignore
+    this.timeDomainEnd = d3.timeYear.ceil(maxTime);
+    return d3.timeYear.range(this.timeDomainStart, this.timeDomainEnd);
+  } else {
+    alert("Invalid bin size selected");
+    return 0;
+  }
 
 }
 
@@ -731,12 +711,13 @@ configureXAxisSettings() {
     xAxis = d3.axisBottom(this.x).ticks(d3.timeMonth.every(this.tickInterval)).tickFormat(d3.timeFormat("%b %Y"))
     xLabelOffset = -25;
   } else if (this.widgets['epiCurve-binSize'] == 'Quarter') {
-    // xAxis = d3.axisBottom(this.x).ticks(d3.timeMonth.every(this.tickInterval < 3 ? this.tickInterval*3: 12)).tickFormat(d => d <= d3.timeYear(d) ? d.getFullYear() : null)
+    xAxis = d3.axisBottom(this.x)
+      .ticks(d3.timeMonth.every(this.tickInterval < 3 ? this.tickInterval * 3 : 12))
+      .tickFormat((d: Date) => d <= d3.timeYear(d) ? d.getFullYear().toString() : null);
   } else {
-    xAxis = d3.axisBottom(this.x).ticks(d3.timeMonth.every(this.tickInterval)).tickFormat(d => {
-      const date = d as Date;  // Assert that d is a Date
-      return date <= d3.timeYear(date) ? date.getFullYear().toString() : '';
-  });
+    xAxis = d3.axisBottom(this.x)
+      .ticks(d3.timeMonth.every(this.tickInterval))
+      .tickFormat((d: Date) => d <= d3.timeYear(d) ? d.getFullYear().toString() : null);
   }
   return [xAxis, xLabelOffset]
 }

@@ -1036,6 +1036,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             this.visuals.microbeTrace.commonService.session.style.linkValueNames = {};
             
         let aggregates = this.visuals.microbeTrace.commonService.createLinkColorMap();
+        console.log('link aggregates: ', aggregates);
         let vlinks = this.visuals.microbeTrace.commonService.getVisibleLinks();
         let aggregateValues = Object.keys(aggregates);
 
@@ -1046,6 +1047,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             if (aggregates[value] == 0) {
                 return;
             }
+            console.log('link color aggregates value: ', aggregates[value]);
+            console.log('link color value: ', value);
+            console.log('link color map: ', this.visuals.microbeTrace.commonService.temp.style.linkColorMap);
+            console.log('link color map value: ', this.visuals.microbeTrace.commonService.temp.style.linkColorMap(value));
+
             // Grab color of link from session
             const color = this.visuals.microbeTrace.commonService.temp.style.linkColorMap(value);
 
@@ -1199,6 +1205,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             this.visuals.microbeTrace.commonService.updateStatistics();
             return;
         }
+
+        console.log('timeline variable: ', variable);
         if(!this.visuals.microbeTrace.commonService.temp.style.nodeColor) $("#node-color-variable").trigger("change");
 
         // let el: HTMLElement = this.pinBtn.nativeElement;
@@ -1240,10 +1248,14 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         vnodes = JSON.parse(JSON.stringify(this.visuals.microbeTrace.commonService.session.data.nodes));
         vnodes.forEach(d => {
             let time = moment(d[field]); 
+            console.log('time moment: ', time);
             if (time.isValid()) {
+                console.log('time moment value: ', d[field]);
             d[field] = time.toDate();
             times.push(d[field]);
             } else {
+                console.log('time moment not value: ', d[field]);
+
             d[field] = null;
             }
         });
@@ -1267,8 +1279,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         let startDate = timeDomainStart;
         let endDate = timeDomainEnd;
         var margin = {top:50, right:50, bottom:0, left:50},
-            width = ($('#network').parent().width() * 4 / 5) - margin.left - margin.right,
+            width = ($('#visualwrapper').width() * 4 / 5) - margin.left - margin.right,
             height = 200 - margin.top - margin.bottom;
+        console.log('time network width: ', $('#visualwrapper').width());
+        console.log('time width: ', width);
         var svgTimeline = d3.select("#global-timeline")
             .append("svg")
             .attr("width", width + margin.left + margin.right)

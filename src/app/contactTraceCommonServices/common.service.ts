@@ -236,6 +236,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             'link-color-table-frequencies': false,
             'link-color-variable': 'None',
             'link-directed': false,
+            'link-bidirectional': false,
             'link-label-variable': 'None',
             'link-label-decimal-length' : 3,
             'link-length': 0.125,
@@ -249,6 +250,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             "link-width-min":3,
             'link-width-variable': 'None',
             'link-width-reciprocal': true,
+            'link-origin-array-order': [],
             'map-basemap-show': false,
             'map-collapsing-on': true,
             'map-counties-show': false,
@@ -410,23 +412,23 @@ export class CommonService extends AppComponentBase implements OnInit {
                 linkColorsTableKeys: {},
                 nodeSymbols: [
                     'symbolCircle',
-                    'symbolCross',
+                    // 'symbolCross',
                     'symbolDiamond',
                     'symbolSquare',
-                    'symbolStar',
+                    // 'symbolStar',
                     'symbolTriangle',
-                    'symbolWye',
-                    'symbolTriangleDown',
-                    'symbolTriangleLeft',
-                    'symbolTriangleRight',
-                    'symbolDiamondAlt',
-                    'symbolDiamondSquare',
-                    'symbolPentagon',
-                    'symbolHexagon',
-                    'symbolHexagonAlt',
-                    'symbolOctagon',
-                    'symbolOctagonAlt',
-                    'symbolX'
+                    // 'symbolWye',
+                    // 'symbolTriangleDown',
+                    // 'symbolTriangleLeft',
+                    // 'symbolTriangleRight',
+                    // 'symbolDiamondAlt',
+                    // 'symbolDiamondSquare',
+                    // 'symbolPentagon',
+                    'symbolHexagon'
+                    // 'symbolHexagonAlt',
+                    // 'symbolOctagon',
+                    // 'symbolOctagonAlt',
+                    // 'symbolX'
                 ],
                 nodeSymbolsTable: {},
                 nodeSymbolsTableKeys: {},
@@ -534,6 +536,20 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         window.context.commonService.temp = window.context.commonService.tempSkeleton();
     }
+
+    /**
+     * Update Legacy Node Symbols if loading new files
+     */
+    updateLegacyNodeSymbols() {
+        window.context.commonService.session.style.nodeSymbols = [
+            'symbolCircle',
+            'symbolSquare',
+            'symbolTriangle',
+            'symbolHexagon',
+            'symbolDiamond'
+        ]
+    }
+
 
     /**
      * @returns a default node object
@@ -699,12 +715,103 @@ export class CommonService extends AppComponentBase implements OnInit {
         if (newLink.source == newLink.target) return 0;
         let linkIsNew = 1;
         let sdlinks = serv.session.data.links;
-        
-        // Always add the new link without merging
-        sdlinks.push(newLink);
-        matrix[newLink.source][newLink.target] = newLink;
-        matrix[newLink.target][newLink.source] = newLink;
+
+        if (matrix[newLink.source][newLink.target]) {
+            let oldLink = matrix[newLink.source][newLink.target];
+            let myorigin = this.uniq(newLink.origin.concat(oldLink.origin));
+            // console.log(JSON.stringify(myorigin));
+
+            // Ensure no empty origins
+            myorigin = myorigin.filter(origin => origin != '');
+
+            // Ensure new link keeps distance if already defined previously
+            if (oldLink.hasDistance) {
+                newLink.hasDistance = true;
+                newLink['distance'] = oldLink['distance'];
+                newLink.distanceOrigin = oldLink.distanceOrigin;
+            }
+
+            oldLink["origin"] = myorigin;
+            newLink["origin"] = myorigin;
+            // console.log("old link isL " + `${JSON.stringify(oldLink)} ${JSON.stringify(newLink)}`);
+
+            // Only override if new isn't directed and old may be, and ensure its in the right direction
+            if(oldLink.directed) {
+                newLink.directed = true;
+                newLink.source = oldLink.source;
+                newLink.target = oldLink.target;
+            }
+            
+
+            _.merge(oldLink, newLink);
+
+            if (oldLink.origin.length > 0) {
+                console.log('old link origin: ', oldLink.origin);
+                // Array order hasn't been set yet, so we need to set it
+                if (window.context.commonService.session.style.widgets['link-origin-array-order'].length == 0) {
+                    window.context.commonService.session.style.widgets['link-origin-array-order'] = oldLink.origin;
+                }
+
+                console.log('old link array order: ', window.context.commonService.session.style.widgets['link-origin-array-order']);
+
+
+                oldLink.origin = window.context.commonService.session.style.widgets['link-origin-array-order'];
+                console.log('old link origin: ', oldLink.origin);
+
+            }
+
+            // TODO remove when confident this function never causes issues - used to debug easier
+            // Object.assign(oldLink, newLink);
+            // Object.assign(newLink, oldLink);
+
+
+            if(newLink["bidirectional"]){
+                oldLink["bidirectional"] = true;
+            }
+
+            linkIsNew = 0;
+        } else if (serv.temp.matrix[newLink.target][newLink.source]) {
+            console.warn("This scope should be unreachable. If you're using this code, something's wrong.");
+            let oldLink = matrix[newLink.target][newLink.source];
+            let origin = this.uniq(newLink.origin.concat(oldLink.origin));
+            Object.assign(oldLink, newLink, { origin: origin });
+            linkIsNew = 0;
+        } else {
+
+             if (newLink.hasDistance) {
+                newLink = Object.assign({
+                index: sdlinks.length,
+                source: "",
+                target: "",
+                visible: false,
+                cluster: 1,
+                origin: [],
+                hasDistance: true
+                }, newLink);
+            } else {
+                newLink = Object.assign({
+                index: sdlinks.length,
+                source: "",
+                target: "",
+                visible: false,
+                cluster: 1,
+                origin: [],
+                hasDistance: false
+                }, newLink);
     
+            }
+               // Always add the new link without merging
+               sdlinks.push(newLink);
+               matrix[newLink.source][newLink.target] = newLink;
+               matrix[newLink.target][newLink.source] = newLink;
+
+               linkIsNew = 1;
+
+        }
+
+
+        
+       
         return linkIsNew;
 
         // TODO Remove when not needed
@@ -850,69 +957,6 @@ export class CommonService extends AppComponentBase implements OnInit {
         console.log('new links: ', links.slice(0, 500))
         return links.slice(0, 10000);
     }
-
-    public checkForDuplicateLinks(links: LinkDatum[]): void {
-        const linkSet = new Set<string>();
-        let duplicateCount = 0;
-    
-        links.forEach(link => {
-            // Create a normalized key for each link to handle both directions
-            const key = [link.source, link.target].sort().join('_');
-            if (linkSet.has(key)) {
-                console.log(`Duplicate link found: ${link.source} to ${link.target}`);
-                duplicateCount++;
-            } else {
-                linkSet.add(key);
-            }
-        });
-    
-        // console.log(`Total duplicates found: ${duplicateCount}`);
-    }
-
-    public convertToMicrobeTraceDataArray(graphData: GraphData): any {
-        const nodes = graphData.nodes.map((node) => ({
-            index: 0, // You'll need to manage the index values appropriately
-            id: node.id,
-            selected: false,
-            cluster: 0,
-            visible: true,
-            degree: 0,
-            origin: [],
-            gender: '',
-            transmission_risk: '',
-            subtype: '',
-            column13: null,
-            sequence: '',
-            _diff: 0,
-            cntdate: '',
-            exposurestart: null,
-            exposureend: null,
-            ipstart: null,
-            ipend: null,
-            age: 0,
-            zip: 0,
-            seq: ''
-        }));
-        
-        const links = graphData.links.map((link) => ({
-            index: 0, // You'll need to manage the index values appropriately
-            source: link.source,
-            target: link.target,
-            visible: 1,
-            cluster: 0,
-            origin: [],
-            distance: parseInt(link.chapter), // Assuming chapter is a string representation of a number
-            snps: null,
-            nn: false,
-            directed: null
-        }));
-        
-        return {
-            nodes: nodes,
-            links: links
-        };
-    }
-
 
 
     /**
@@ -2057,6 +2101,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     async runHamsters() {
 
+        console.log('running hamsters');
         if (!window.context.commonService.session.style.widgets['triangulate-false']) window.context.commonService.computeTriangulation();
         window.context.commonService.computeNN();
         await window.context.commonService.computeTree();
@@ -2621,6 +2666,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             while (i < n) {
                 l = links[i++];
                 if (!l.visible) continue;
+
+               
                 l.origin.forEach(o => {
                     if (o in aggregates) {
                         aggregates[o]++;
@@ -2628,6 +2675,14 @@ export class CommonService extends AppComponentBase implements OnInit {
                         aggregates[o] = 1;
                     }
                 });
+                 // If there are two origins then we need to add one for an overlay
+                 if (l.origin.length == 2) {  
+                    if ("Multi-Link" in aggregates) {
+                        aggregates["Multi-Link"] = aggregates["Multi-Link"] as number + 1;
+                    } else {
+                        aggregates["Multi-Link"] = 1;
+                    }
+                }
             }
         } else if (variable == 'source' || variable == 'target') {
             // first loop is to populates color in the same order as nodeColorMap would be
@@ -2662,6 +2717,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             let cycles = Math.ceil(values.length / window.context.commonService.session.style.linkColors.length);
             while (cycles-- > 0) colors = colors.concat(window.context.commonService.session.style.linkColors);
             window.context.commonService.session.style.linkColors = colors;
+            console.log('link colors: ', window.context.commonService.session.style.linkColors);
         }
 
         if (!window.context.commonService.session.style.linkAlphas) {
@@ -3613,51 +3669,74 @@ export class CommonService extends AppComponentBase implements OnInit {
 
             let link = links[i];
 
+            if((link.source === "KF773429" && link.target === "KF773430") || (link.source === "KF773430" && link.target === "KF773429")) {
+                console.log('setting link vis: ', _.cloneDeep(link));
+            }
 
 
             let visible = true;
             let overrideNN = false;
+
+            // Add back the distance origin if it was removed and the link has distance to it
+            if ( link.hasDistance && !link.origin.includes(link.distanceOrigin)) {
+                link.origin.push(link.distanceOrigin);
+            }
 
             // No distance value
             if (link[metric] == null) {
 
                 // If origin file exists for link outside of distance, keep visible
                 if (link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0) {
-                // Set visible and origin to only show the from the file outside of Distance
-                link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
-                overrideNN = true;
-                visible = true;
+                    // Set visible and origin to only show the from the file outside of Distance
+                    link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
+                    overrideNN = true;
+                    visible = true;
                 } else {
-                link.visible = false;
-                continue;
+                    link.visible = false;
+                    continue;
                 }
 
             } else {
 
                 if (link.hasDistance) {
 
-                visible = link[metric] <= threshold;
 
-                if (!visible) {
+                    visible = link[metric] < threshold;
 
-                    // Only need to get distance origin and override if there are other files using a distance metric, otherwise the else code block below would be executed since the link would not have distance
-                    if (
-                        link.origin.length > 1 &&
-                        link.origin.filter(fileName => {
-                        const hasAuspice = /[Aa]uspice/.test(fileName);
-                        const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
-                        return fileName && !includesDistanceOrigin && !hasAuspice;
-                        }).length > 0
-                    ) {
 
-                        link.origin = link.origin.filter(fileName => {
-                        const hasAuspice = /[Aa]uspice/.test(fileName);
-                        const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
-                        return fileName && !includesDistanceOrigin && !hasAuspice;
-                        });
-                        overrideNN = true;
-                        visible = true;
-                    }
+                    if (!visible) {
+
+                        // Only need to get distance origin and override if there are other files using a distance metric, otherwise the else code block below would be executed since the link would not have distance
+                        if (
+                            link.origin.length > 1 &&
+                            link.origin.filter(fileName => {
+                            const hasAuspice = /[Aa]uspice/.test(fileName);
+                            const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
+                            return fileName && !includesDistanceOrigin && !hasAuspice;
+                            }).length > 0
+                        ) {
+
+                            link.origin = link.origin.filter(fileName => {
+                            const hasAuspice = /[Aa]uspice/.test(fileName);
+                            const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
+                            return fileName && !includesDistanceOrigin && !hasAuspice;
+                            });
+
+                            overrideNN = true;
+                            visible = true;
+                        } 
+                        if (link.origin.length > 1) {
+                            link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
+                            visible = true;
+                        }
+
+
+                        // If the origin array has an origin left after filtering out and its not the distance origin, then we need to show it
+                        if (link.origin[0] !== link.distanceOrigin) {
+                            visible = true;
+                        }
+
+
                     }
 
                 } else {
@@ -3669,6 +3748,7 @@ export class CommonService extends AppComponentBase implements OnInit {
                 }
 
             }
+
 
             if (visible && showNN && !overrideNN) {
                 visible = visible && link.nn;
@@ -3683,6 +3763,10 @@ export class CommonService extends AppComponentBase implements OnInit {
             if (cluster && checkCluster) {
 
                 visible = visible && cluster.visible;
+            }
+
+            if(visible && link.origin.length > 1){
+                link.origin = window.context.commonService.session.style.widgets['link-origin-array-order'];
             }
 
             link.visible = visible;
