@@ -21,8 +21,11 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { saveSvgAsPng } from 'save-svg-as-png';
 import { ComponentContainer } from 'golden-layout';
-import { MicrobeTraceNextHomeComponent } from '../../microbe-trace-next-plugin.component';
 
+import { data, NodeDatum, LinkDatum, GraphData } from './data';
+import { GraphCircleLabel, Graph, GraphForceLayoutSettings, GraphLayoutType, GraphNode, GraphLink, GraphPanelConfig } from '@unovis/ts';
+
+import { nodes, links, NodeDatum2, LinkDatum2, panels } from './data2';
 
 @Component({
     selector: 'TwoDComponent',
@@ -39,6 +42,221 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         'width': '1000px'
     };
 
+    vizLoaded = true;
+
+    data;
+
+    data2: { nodes: NodeDatum2[]; links: LinkDatum2[] } = { nodes, links };
+
+    layoutParallelNodesPerColumn = 4;
+
+    layoutType2 = GraphLayoutType.Parallel;
+    layoutNodeGroup = (d: NodeDatum2): string => d.group;
+    layoutParallelNodeSubGroup = (d: NodeDatum2): string => d.id;
+    panels: GraphPanelConfig[] = panels;
+
+    layoutType = GraphLayoutType.Force;
+
+    containerHeight = 800; // or any other number you want
+  
+    graphData : GraphData = {
+        nodes :[],
+        links :[]
+    };
+
+    showParallel: boolean = false;
+
+    selectedNodeId = undefined;
+
+    forceLayoutSettings: any = {
+      fixNodePositionAfterSimulation: true,
+      linkDistance: this.getLinkDistance()
+    }
+
+    linkLabel = (l: LinkDatum): GraphCircleLabel => this.getLinkLabel(l)
+    nodeLabel = (n: NodeDatum) => this.getNodeLabel(n)
+    nodeShape = (n: NodeDatum) => this.getNodeShape(n)
+    linkStroke = (l: LinkDatum) => this.getLinkColor(l)
+    linkWidth = (l: LinkDatum) => this.getLinkWidth(l)
+    linkArrow = (l: LinkDatum) => this.getLinkArrow(l)
+    nodeFill = (n: NodeDatum) => this.getNodeColor(n)
+    nodeStroke = (n: NodeDatum) => this.getNodeStroke(n)
+    nodeSize =  (n: NodeDatum) => this.getNodeSize(n)
+    // onNodeSelectionBrush = (selectedNodes: GraphNode[], event: any)  => this.onSelectionBrush(selectedNodes)
+    // onNodeSelectionDrag = (selectedNodes: GraphNode[], event: any) => this.onSelectionDrag(selectedNodes)
+
+    onSelectionBrush(nodes: GraphNode[]) {
+        console.log('onSelectionNode: ', nodes);
+    }
+
+    onSelectionDrag(nodes: GraphNode[]) {
+        console.log('onSelectionDrag: ', nodes);
+    }
+
+    getLinkDistance() {
+        let dist = Math.random() * 100;
+        console.log('getLinkDistance: ',dist);
+        return dist;
+    }
+
+    events = {
+        [Graph.selectors.node]: {
+            click: (d: GraphNode) => {
+                console.log('selected node is: ', d);
+                this.selectedNodeId = d.id as string;
+                this._rerender();
+                // config.selectedNodeId = d.id
+                // Set the selected node id here, e.g.: config.selectedNodeId = d.id
+                // and trigger the component update if required by your UI framework
+             },
+             mouseover: (d: GraphNode, event: MouseEvent) => {
+                console.log('hovered node in: ', d);
+                this.showNodeTooltip(d, event);
+                // Perform actions on hover, such as highlighting or displaying additional information
+              },
+              mouseout: (d: GraphNode) => {
+                console.log('hovered node out: ', d);
+                this.hideTooltip();
+              },
+              brush: (selectedNodes: GraphNode[], event: any) => {
+                this.onSelectionBrush(selectedNodes);
+              },
+              drag: (selectedNodes: GraphNode[], event: any) => {
+                this.onSelectionDrag(selectedNodes);
+              }
+            
+        },
+        [Graph.selectors.link]: {
+             mouseover: (d: GraphLink, event: MouseEvent) => {
+                console.log('hovered link is: ', d);
+                this.showLinkTooltip(d, event);
+                // Perform actions on hover, such as highlighting or displaying additional information
+              },
+              mouseout: () => {
+                this.hideTooltip();
+              }
+            
+        },
+      }
+
+
+    getNodeSize( node : any ) {
+
+        let defaultSize = this.widgets['node-radius']; 
+        let size = defaultSize, med = defaultSize, oldrng, min, max;
+        let sizeVariable = this.widgets['node-radius-variable'];
+    
+
+        // console.log('in size: ', this.widgets['node-radius-variable'])
+        // console.log('in size 2: ', this.widgets['node-radius']);
+
+        // if (this.widgets['node-radius'] > 90) this.widgets['node-radius'] = 10;
+        // console.log('node index by size: ',this.widgets['node-radius-variable'] );
+        // console.log('node Radius Var: ', this.widgets['node-radius']);
+        if (this.widgets['node-radius-variable'] == 'None') {
+            return this.widgets['node-radius'];
+        } else {
+        
+            let v = node[sizeVariable];
+            
+            if (!this.isNumber(v)) v = this.nodeMid;
+    
+            // Check the type of v before calling linkScale
+    
+            // Ensure v is a number before using linkScale
+            if (typeof v === 'number') {
+                let scaleValue = this.nodeScale(v);
+                console.log('link scale', scaleValue);
+                return scaleValue;
+            } else {
+                console.error('v is not a number:', v);
+                return this.nodeScale; // Default to scalar if v is not a number
+            }
+
+        
+            // return this.visuals.twoD.commonService.temp.style.nodeColorMap(this.visuals.twoD.commonService.session.data.nodes[index][variable]);
+        }
+
+
+    }
+
+
+    getNodeStroke = (n: NodeDatum)  => {
+       
+        if(n.id == this.selectedNodeId) {
+            return this.widgets['selected-node-stroke-color'];
+        } else {
+            return '#000';
+        }
+        
+    }
+
+    nodeStrokeWidth = (n: NodeDatum)  => {
+        return this.nodeBorderWidth;
+    }
+
+    getLinkArrow = (link: any ) => {
+        return  this.widgets['link-directed'];
+    }
+
+
+    getNodeColor( node : any ) {
+
+        let variable = this.widgets['node-color-variable'];
+        let color = this.widgets['node-color'];
+
+        // Set cluster to group if showing paralell grouping
+        if(variable == "cluster" && this.showParallel) {
+            variable = "group";
+        }
+
+        return (variable == 'None') ? color : this.visuals.twoD.commonService.temp.style.nodeColorMap(node[variable]);
+
+    }
+
+    getLinkWidth( link: any ) {
+        let scalar = this.widgets['link-width'];
+        let variable = this.widgets['link-width-variable'];
+    
+        if (variable == 'None') return scalar;
+    
+        else {
+            let mid = (this.linkMax - this.linkMin) / 2 + this.linkMin;
+            let v = link[variable];
+            
+            console.log('link mid: ', mid);
+            console.log('link v1', v);
+    
+            if (!this.isNumber(v)) v = mid;
+            console.log('link v2', v);
+    
+            // Check the type of v before calling linkScale
+            console.log('typeof v:', typeof v);
+            console.log('linkMax:', this.linkMax);
+            console.log('linkMin:', this.linkMin);
+            console.log('linkScale domain:', this.linkScale.domain());
+            console.log('linkScale range:', this.linkScale.range());
+    
+            // Ensure v is a number before using linkScale
+            if (typeof v === 'number') {
+                let scaleValue = this.linkScale(v);
+                console.log('link scale', scaleValue);
+                return scaleValue;
+            } else {
+                console.error('v is not a number:', v);
+                return scalar; // Default to scalar if v is not a number
+            }
+        }
+    }
+
+    getLinkColor( link: any ) {
+        let variable = this.widgets['link-color-variable'];
+        let color = this.widgets['link-color'];
+
+        return (variable == 'None') ? color : this.visuals.twoD.commonService.temp.style.linkColorMap(link[variable]);
+
+    }
+
     private customShapes : CustomShapes = new CustomShapes();
 
     private symbolTableWrapper: HTMLElement | null = null;
@@ -46,14 +264,24 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     private nodeColorTableWrapper: HTMLElement | null = null;
 
 
+    linkMin: number = 3;
+    linkMax: number = 27;
+    linkScale : any;
+    visLinks : any;
+    linkMid : number = 1
 
+    nodeMin: number = 3;
+    nodeMax: number = 27;
+    nodeScale : any;
+    visNodes : any;
+    nodeMid : number = 1;
 
     ShowNetworkAttributes: boolean = false;
     ShowStatistics: boolean = true;
     Show2DExportPane: boolean = false;
     Show2DSettingsPane: boolean = false;
     IsDataAvailable: boolean = false;
-    svg: any = null;
+    // svg: any = null;
     widgets: object;
     halfWidth: any = null;
     halfHeight: any = null;
@@ -78,7 +306,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     //Polygon Tab
     SelectedPolygonLabelVariable: string = "None";
     SelectedPolygonColorVariable: string = "None";
-    SelectedPolygonLabelOrientationVariable: string = "Right";
+    SelectedPolygonLabelOrientationVariable: string = "top";
     SelectedPolygonLabelSizeVariable: number = 0.0;
     SelectedPolygonGatherValue: number = 0.0;
     CenterPolygonVariable: string = "None";
@@ -89,7 +317,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
     // Node Tab    
     SelectedNodeLabelVariable: string = "None";
-    SelectedNodeLabelOrientationVariable: string = "Right";
     SelectedNodeTooltipVariable: any = "None";
     SelectedNodeSymbolVariable: string = "None";
     SelectedNodeShapeVariable: string = "symbolCircle";
@@ -198,6 +425,9 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
             super(elRef.nativeElement);
 
+            // this.setExpanded(this.mainSite);
+
+
             this.visuals = commonService.visuals;
             this.commonService.visuals.twoD = this;
             this.widgets = this.commonService.session.style.widgets;
@@ -222,9 +452,14 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this.InitView();
     }
 
-    ngAfterViewInit() {
-
-    }
+    ngAfterViewInit(): void {
+        // Apply CSS variables programmatically
+        const root = document.documentElement;
+        root.style.setProperty('--vis-graph-brush-selection-opacity', '1');
+        root.style.setProperty('--vis-graph-brushed-node-stroke-color', '#ff0000');
+        root.style.setProperty('--vis-graph-brushed-node-label-text-color', '#00ff00');
+        root.style.setProperty('--vis-graph-brushed-node-icon-fill-color', '#0000ff');
+      }
 
     /** Initializes the view.
      * 
@@ -247,11 +482,20 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         // Use this method to prepare your variables before they're used in the template
         this.commonService.session.style.widgets['node-tooltip-variable'] = this.ensureArray(this.commonService.session.style.widgets['node-tooltip-variable']);
         this.commonService.session.style.widgets['link-tooltip-variable'] = this.ensureArray(this.commonService.session.style.widgets['link-tooltip-variable']);
+        let that = this;
 
         if (this.visuals.twoD.IsDataAvailable === true && this.visuals.twoD.zoom === null) {
 
-            d3.select('svg#network').exit().remove();
-            this.visuals.twoD.svg = d3.select('svg#network').append('g');
+            // PRE D3
+            d3.select('svg#viz-force')
+                .append('g')
+                .attr('class', 'horizontal-gridlines');
+
+            d3.select('svg#viz-force')
+                .append('g')
+                .attr('class', 'vertical-gridlines');
+            // d3.select('svg#network').exit().remove();
+            // this.visuals.twoD.svg = d3.select('svg#network').append('g');
 
             // populate this.twoD.FieldList with [None, ...nodeFields]
             this.visuals.twoD.FieldList = [];
@@ -319,139 +563,152 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 'min-width.%': 100,
             };
 
-            this.visuals.twoD.zoom = d3.zoom().on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3.event.transform));
+            // this.visuals.twoD.zoom = d3.zoom().on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3.event.transform));
             // this.visuals.twoD.brush = d3.brush();
             this.visuals.twoD.halfWidth = $('#network').parent().width() / 2;
             this.visuals.twoD.halfHeight = $('#network').parent().parent().parent().height() / 2;
-            this.visuals.twoD.transform = d3.zoomTransform(d3.select('svg#network').node());
-            //this.widgets = this.widgets;
+            this.containerHeight = this.visuals.twoD.halfHeight * 2 - 40;
 
-            let zoom = d3.zoom().filter(() => !this.ctrlPressed).on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3.event.transform));
-
-            let width = d3.select('svg#network').node().getBoundingClientRect().width;
-            let height = d3.select('svg#network').node().getBoundingClientRect().height;
-
-            let svgSelection = d3.select('svg#network');
-            let svgWidth = svgSelection.node().getBoundingClientRect().width;
-            let svgHeight = svgSelection.node().getBoundingClientRect().height;
-
-            this.visuals.twoD.brush = d3.brush()
-                .extent([[0, 0], [svgWidth, svgHeight]]) // Set the extent to cover the entire SVG
-                .on('start', () => {
-                    this.dragging = true;
-                    this.visuals.twoD.commonService.session.network.nodes.forEach(d => {
-                        if (d.visible) d._previouslySelected = d.selected;
-                    });
-                })
-                .on('brush', () => {
-
-                    let e = d3.event;
-                    if (e.sourceEvent.type == 'end') return;
-                    let selection0: any = this.visuals.twoD.transform.invert(e.selection[0]),
-                        selection1: any = this.visuals.twoD.transform.invert(e.selection[1]);
-
-
-                    //if (this.visuals.twoD.commonService.includes($(this).selection, null)) return;
-
-                    this.visuals.twoD.commonService.session.network.nodes.forEach(d => {
-
-                        let exp: any = ((selection0[0] <= d.x && d.x <= selection1[0] && selection0[1] <= d.y && d.y <= selection1[1]));
-
-                        d.selected = (d._previouslySelected ^ (exp)) == 1;
-                    });
-                })
-                .on('end', () => {
-                    this.dragging = false;
-                    if (d3.event.selection == null) return;
-                    this.visuals.twoD.commonService.session.network.nodes.forEach(d => delete d._previouslySelected);
-                    this.visuals.twoD.commonService.session.data.nodes.forEach(d => {
-                        let match = this.visuals.twoD.commonService.session.network.nodes.find(node => node._id == d._id);
-                        if (match) d.selected = match.selected;
-                    });
-
-
-                    this.visuals.twoD.render(true);
-                    console.log('render drag');
-                    $(document).trigger('node-selected');
-                });
-
-            d3.select('svg#network')
-                .html(null) //Let's make sure the canvas is blank.
-                .on('click', ()=>this.visuals.twoD.hideContextMenu())
-                .call(zoom);
-
-            d3.select('svg#network')
-                .append('g')
-                .attr('class', 'horizontal-gridlines');
-
-            d3.select('svg#network')
-                .append('g')
-                .attr('class', 'vertical-gridlines');
-
-            d3.select(window).on('keydown', () => {
-                const event: any = d3.event;
-                const keyToCheck = this.isMac ? 'metaKey' : 'ctrlKey';
+            let networkData = { 
+                nodes : this.visuals.twoD.commonService.getVisibleNodes(), 
+                links : this.visuals.twoD.commonService.getVisibleLinks()
+            }
             
-                if (event[keyToCheck] && !this.dragging) {
-                    this.ctrlPressed = true;
-                    this.toggleBrush(true);
-                }
-            });
+            this.data = this.visuals.twoD.commonService.convertToGraphDataArray(networkData);
+            // Now update panels
+            this.updatePanels();
+
+            console.log('data: ', this.data);
+            // PRE D3
+            // this.visuals.twoD.transform = d3.zoomTransform(d3.select('svg#network').node());
+
+            // let zoom = d3.zoom().filter(() => !this.ctrlPressed).on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3.event.transform));
+            // PRE D3
+
+            // let width = d3.select('svg#network').node().getBoundingClientRect().width;
+            // let height = d3.select('svg#network').node().getBoundingClientRect().height;
+            // PRE D3
+
+            // let svgSelection = d3.select('svg#network');
+            // let svgWidth = svgSelection.node().getBoundingClientRect().width;
+            // let svgHeight = svgSelection.node().getBoundingClientRect().height;
+
+            // this.visuals.twoD.brush = d3.brush()
+            //     .extent([[0, 0], [svgWidth, svgHeight]]) // Set the extent to cover the entire SVG
+            //     .on('start', () => {
+            //         this.dragging = true;
+            //         this.visuals.twoD.commonService.session.network.nodes.forEach(d => {
+            //             if (d.visible) d._previouslySelected = d.selected;
+            //         });
+            //     })
+            //     .on('brush', () => {
+
+            //         let e = d3.event;
+            //         if (e.sourceEvent.type == 'end') return;
+            //         let selection0: any = this.visuals.twoD.transform.invert(e.selection[0]),
+            //             selection1: any = this.visuals.twoD.transform.invert(e.selection[1]);
+
+
+            //         //if (this.visuals.twoD.commonService.includes($(this).selection, null)) return;
+
+            //         this.visuals.twoD.commonService.session.network.nodes.forEach(d => {
+
+            //             let exp: any = ((selection0[0] <= d.x && d.x <= selection1[0] && selection0[1] <= d.y && d.y <= selection1[1]));
+
+            //             d.selected = (d._previouslySelected ^ (exp)) == 1;
+            //         });
+            //     })
+            //     .on('end', () => {
+            //         this.dragging = false;
+            //         if (d3.event.selection == null) return;
+            //         this.visuals.twoD.commonService.session.network.nodes.forEach(d => delete d._previouslySelected);
+            //         this.visuals.twoD.commonService.session.data.nodes.forEach(d => {
+            //             let match = this.visuals.twoD.commonService.session.network.nodes.find(node => node._id == d._id);
+            //             if (match) d.selected = match.selected;
+            //         });
+
+
+            //         this.visuals.twoD.render(true);
+            //         console.log('render drag');
+            //         $(document).trigger('node-selected');
+            //     });
+
+            // d3.select('svg#network')
+            //     .html(null) //Let's make sure the canvas is blank.
+            //     .on('click', ()=>this.visuals.twoD.hideContextMenu())
+            //     .call(zoom);
+
+            // d3.select('svg#network')
+            //     .append('g')
+            //     .attr('class', 'horizontal-gridlines');
+
+            // d3.select('svg#network')
+            //     .append('g')
+            //     .attr('class', 'vertical-gridlines');
+
+            // d3.select(window).on('keydown', () => {
+            //     const event: any = d3.event;
+            //     const keyToCheck = this.isMac ? 'metaKey' : 'ctrlKey';
+            
+            //     if (event[keyToCheck] && !this.dragging) {
+            //         this.ctrlPressed = true;
+            //         this.toggleBrush(true);
+            //     }
+            // });
                 
-            d3.select(window).on('keyup', () => {
-                const event: any = d3.event;
-                const keyToCheck = this.isMac ? 'metaKey' : 'ctrlKey';
+            // d3.select(window).on('keyup', () => {
+            //     const event: any = d3.event;
+            //     const keyToCheck = this.isMac ? 'metaKey' : 'ctrlKey';
             
-                if (event[keyToCheck] && !this.dragging) {
-                    this.ctrlPressed = false;
-                    this.toggleBrush(false);
-                }
-            });
+            //     if (event[keyToCheck] && !this.dragging) {
+            //         this.ctrlPressed = false;
+            //         this.toggleBrush(false);
+            //     }
+            // });
 
 
-            this.visuals.twoD.svg = d3.select('svg#network').append('g');
+            // this.visuals.twoD.svg = d3.select('svg#network').append('g');
 
-            this.visuals.twoD.svg.append('g').attr('class', 'clusters');
-            this.visuals.twoD.svg.append('g').attr('class', 'links');
-            this.visuals.twoD.svg.append('g').attr('class', 'nodes');
-            this.visuals.twoD.svg.append('g').attr('class', 'clustersLabels');
+            // this.visuals.twoD.svg.append('g').attr('class', 'clusters');
+            // this.visuals.twoD.svg.append('g').attr('class', 'links');
+            // this.visuals.twoD.svg.append('g').attr('class', 'nodes');
+            // this.visuals.twoD.svg.append('g').attr('class', 'clustersLabels');
 
-            d3.select('svg#network')
-                .append('g')
-                .attr('class', 'brush')
-                .call(this.visuals.twoD.brush);
+            // d3.select('svg#network')
+            //     .append('g')
+            //     .attr('class', 'brush')
+            //     .call(this.visuals.twoD.brush);
 
-            this.visuals.twoD.svg.append('svg:defs').append('marker')
-                .attr('id', 'end-arrow')
-                .attr('viewBox', '0 0 10 10')
-                .attr('refX', 20)
-                .attr('refY', 5)
-                .attr('markerWidth', 4)
-                .attr('markerHeight', 4)
-                .attr('orient', 'auto')
-                .append('svg:path')
-                .attr('d', 'M0,0 L0,10 L10,5 z');
+            // this.visuals.twoD.svg.append('svg:defs').append('marker')
+            //     .attr('id', 'end-arrow')
+            //     .attr('viewBox', '0 0 10 10')
+            //     .attr('refX', 20)
+            //     .attr('refY', 5)
+            //     .attr('markerWidth', 4)
+            //     .attr('markerHeight', 4)
+            //     .attr('orient', 'auto')
+            //     .append('svg:path')
+            //     .attr('d', 'M0,0 L0,10 L10,5 z');
 
-            this.visuals.twoD.force = d3.forceSimulation()
-                .force('link', d3.forceLink()
-                    .id(d => d._id)
-                    .distance(l => l.origin.length * this.widgets['link-length'])
-                    .strength(this.widgets['network-link-strength'])
-                )
-                .force('charge', d3.forceManyBody()
-                    .strength(-this.widgets['node-charge'])
-                )
-                .force('gravity', forceAttract()
-                    .target([this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight])
-                    .strength(this.widgets['network-gravity'])
-                )
-                .force('center', d3.forceCenter(this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight));
+            // this.visuals.twoD.force = d3.forceSimulation()
+            //     .force('link', d3.forceLink()
+            //         .id(d => d._id)
+            //         .distance(l => l.origin.length * this.widgets['link-length'])
+            //         .strength(this.widgets['network-link-strength'])
+            //     )
+            //     .force('charge', d3.forceManyBody()
+            //         .strength(-this.widgets['node-charge'])
+            //     )
+            //     .force('gravity', forceAttract()
+            //         .target([this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight])
+            //         .strength(this.widgets['network-gravity'])
+            //     )
+            //     .force('center', d3.forceCenter(this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight));
 
-            if (this.widgets['network-friction']) this.visuals.twoD.force.velocityDecay(this.widgets['network-friction']);
+            // if (this.widgets['network-friction']) this.visuals.twoD.force.velocityDecay(this.widgets['network-friction']);
 
             // this.visuals.twoD.clipboard.on('success', ()=>this.hideContextMenu());
 
-            let that = this;
 
             // this.visuals.twoD.eventManager.addGlobalEventListener('window', 'node-color-change', () => {
 
@@ -491,46 +748,74 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             // });
 
             $( document ).on( "node-visibility", function( ) {
-                if (!that.isLoading) {
-                    console.log('render node-vis');
-                    that.isLoading = true;
-                    that.visuals.twoD.render(false);
-                    setTimeout(() => {
-                        that.isLoading = false;
-                      }, 1000);
-                }
+                console.log('123');
+                
+                // if (!that.isLoading) {
+                //     console.log('render node-vis');
+                //     that.isLoading = true;
+                //     that.visuals.twoD.render(false);
+                //     setTimeout(() => {
+                //         that.isLoading = false;
+                //       }, 1000);
+                // }
+                // let networkData = { 
+                //     nodes : that.visuals.twoD.commonService.getVisibleNodes(), 
+                //     links : that.visuals.twoD.commonService.getVisibleLinks()
+                // }
+                
+                // that.data = that.visuals.twoD.commonService.convertToGraphDataArray(networkData);
             });
 
             $( document ).on( "link-visibility", function( ) {
                 if (!that.isLoading) {
-                    console.log('render link-vis');
                     that.isLoading = true;
-                    that.visuals.twoD.render(false);
+            
+                    that._rerender();
+            
                     setTimeout(() => {
                         that.isLoading = false;
-                      }, 1000);
-                }            
+                    }, 1000);
+                }  
             });
 
             $( document ).on( "cluster-visibility", function( ) {
-                if (!that.isLoading) {
-                    console.log('render clus-vis');
-                    that.isLoading = true;
-                    that.visuals.twoD.render(true);
-                    setTimeout(() => {
-                        that.isLoading = false;
-                      }, 1000);
-                }            
+                // if (!that.isLoading) {
+                //     // console.log('render clus-vis');
+                //     that.isLoading = true;
+                //     that.visuals.twoD.render(true);
+                //     setTimeout(() => {
+                //         that.isLoading = false;
+                //       }, 1000);
+                // }     
+                
+                // let networkData = { 
+                //     nodes : that.visuals.twoD.commonService.getVisibleNodes(), 
+                //     links : that.visuals.twoD.commonService.getVisibleLinks()
+                // }
+                
+                // that.data = that.visuals.twoD.commonService.convertToGraphDataArray(networkData);
             });
 
             $( document ).on( "node-selected", function( ) {
                 if (!that.isLoading) {
-                    console.log('render node-sel');
-                    that.isLoading = true;
-                    that.visuals.twoD.render(true);
-                    setTimeout(() => {
-                        that.isLoading = false;
-                      }, 1000);
+                    let mtSelectedNode = that.commonService.getSelectedNode(that.commonService.getVisibleNodes());
+                    if (mtSelectedNode && mtSelectedNode.id) {
+                        that.selectedNodeId = mtSelectedNode.id;
+                    } else if (mtSelectedNode && !mtSelectedNode.id) {
+                        that.selectedNodeId = mtSelectedNode._id;
+                    }
+
+                    that._rerender();
+                    console.log('node-selected in 2d: ', that.selectedNodeId);
+
+                    console.log('node-selected in data: ', that.data.nodes.find(node => node.id == that.selectedNodeId));
+
+                    // console.log('render node-sel');
+                    // that.isLoading = true;
+                    // that.visuals.twoD.render(true);
+                    // setTimeout(() => {
+                    //     that.isLoading = false;
+                    //   }, 1000);
                 }            
             });
 
@@ -552,25 +837,30 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                     $('#node-symbol-variable').change(); //.trigger('change');
                 }
 
+                console.log('data2: ', this.data);
+
+
                 // Call render and then set isLoading to false to allo triggering of other renders
-                console.log('norm render');
+                // console.log('norm render');
                 this.visuals.twoD.render();
                 setTimeout(() => {
+                    console.log('data3: ', this.data);
+
                     this.isLoading = false;
-                  }, 1000);
+                  }, 8000);
 
 
             }, 1);
 
-            setTimeout(() =>{
-                // sometimes (~1/10) MT loads but twoD nodes are displayed offscreen - like the fit command isn't executed - DC
-                this.visuals.twoD.fit(undefined, undefined);
-                // Ensure brush is off
-                this.toggleBrush(false);
-                // Add a little force for effect in landing
-                this.visuals.twoD.force.alpha(1).alphaTarget(0).restart();
-            }
-                , 3000);
+            // setTimeout(() =>{
+            //     // sometimes (~1/10) MT loads but twoD nodes are displayed offscreen - like the fit command isn't executed - DC
+            //     this.visuals.twoD.fit(undefined, undefined);
+            //     // Ensure brush is off
+            //     this.toggleBrush(false);
+            //     // Add a little force for effect in landing
+            //     this.visuals.twoD.force.alpha(1).alphaTarget(0).restart();
+            // }
+            //     , 3000);
 
 
         }
@@ -589,16 +879,18 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             }
         }
 
+        
     /**
      * Toggle the pointer events of the brush and overlay element
      * 
      * @param {boolean} enable - If true, pointer events are enabled; otherwise, they are disabled
      */
     private toggleBrush(enable: boolean): void {
-        d3.select('svg#network g.brush')
-          .attr('pointer-events', enable ? 'all' : 'none')
-          .select('rect.overlay')
-          .attr('pointer-events', enable ? 'all' : 'none');
+        // PRE D3
+        // d3.select('svg#network g.brush')
+        //   .attr('pointer-events', enable ? 'all' : 'none')
+        //   .select('rect.overlay')
+        //   .attr('pointer-events', enable ? 'all' : 'none');
       }
 
     /**
@@ -624,13 +916,16 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     //     this.LoadDefaultVisualizationEvent.emit(e);
     // }
 
+   
+
     /**
      * @returns an array [X, Y] of the position of mouse relative to twodcomponent. Global position (i.e. d3.event.pageX) doesn't work for a dashboard
      */  
-    getRelativeMousePosition() {
-        let rect = d3.select('twodcomponent').node().getBoundingClientRect();
-        let X = d3.event.pageX - rect.left;
-        let Y = d3.event.pageY - rect.top; 
+    getRelativeMousePosition(event) {
+        // Get position based on container, which may be paralell viz or not
+        let rect = (!this.showParallel) ? document.getElementById('viz-force').getBoundingClientRect() : document.getElementById('viz-paralell').getBoundingClientRect()
+        const X = event['clientX'] - rect.left;
+        const Y = event['clientY'] - rect.top;
         return [X, Y];
     }
 
@@ -638,16 +933,16 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      * @returns an array [width, height] of the svg image
      */
     getImageDimensions() {
-        let parent = this.svg.node().parentElement;
-        return [parent.clientWidth, parent.clientHeight] 
+        // let parent = this.svg.node().parentElement;
+        // return [parent.clientWidth, parent.clientHeight] 
     }
 
     /**
      * Sets CalculatedResolution variable to string such as '1250 x 855px'. Only called when export is first opened
      */
     setCalculatedResolution() {
-        let [width, height] = this.getImageDimensions();
-        this.CalculatedResolution = (Math.round(width * this.SelectedNetworkExportScaleVariable) + " x " + Math.round(height * this.SelectedNetworkExportScaleVariable) + "px");
+        // let [width, height] = this.getImageDimensions();
+        // this.CalculatedResolution = (Math.round(width * this.SelectedNetworkExportScaleVariable) + " x " + Math.round(height * this.SelectedNetworkExportScaleVariable) + "px");
     }
 
     /**
@@ -655,9 +950,9 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      * This is called anytime SelectedNetworkExportScaleVariable is updated.
      */
     updateCalculatedResolution(event) {
-        let [width, height] = this.getImageDimensions();
-        this.CalculatedResolution = (Math.round(width * this.SelectedNetworkExportScaleVariable) + " x " + Math.round(height * this.SelectedNetworkExportScaleVariable) + "px");
-        this.cdref.detectChanges();
+        // let [width, height] = this.getImageDimensions();
+        // this.CalculatedResolution = (Math.round(width * this.SelectedNetworkExportScaleVariable) + " x " + Math.round(height * this.SelectedNetworkExportScaleVariable) + "px");
+        // this.cdref.detectChanges();
     }
 
     /**
@@ -724,58 +1019,60 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     exportWork() {
         let network = document.getElementById('network');
         let $network = $(network);
-        let watermark = d3.select(network).append('text')
-        .attr('xlink:href', this.visuals.twoD.commonService.watermark)
-        .attr('height', 128)
-        .attr('width', 128)
-        .attr('x', 10)
-        .style('opacity', $('#network-export-opacity').val());
-        let filetype = this.SelectedNetworkExportFileTypeListVariable, 
-            filename = this.SelectedNetworkExportFilenameVariable;
-        if (filetype == 'svg') {
+        // PRE D3
+
+        // let watermark = d3.select(network).append('text')
+        // .attr('xlink:href', this.visuals.twoD.commonService.watermark)
+        // .attr('height', 128)
+        // .attr('width', 128)
+        // .attr('x', 10)
+        // .style('opacity', $('#network-export-opacity').val());
+        // let filetype = this.SelectedNetworkExportFileTypeListVariable, 
+        //     filename = this.SelectedNetworkExportFilenameVariable;
+        // if (filetype == 'svg') {
            
-            network.style.height = '100%';
-            network.style.width = '100%';
-            let content = this.visuals.twoD.commonService.unparseSVG(network);
-            let blob = new Blob([content], { type: 'image/svg+xml;charset=utf-8' });
-            saveAs(blob, filename + '.' + filetype);
-            watermark.remove();
-            const style: any = this.svgStyle;
-            network.style.height = style.height;
-            network.style.width = style.width;
+        //     network.style.height = '100%';
+        //     network.style.width = '100%';
+        //     let content = this.visuals.twoD.commonService.unparseSVG(network);
+        //     let blob = new Blob([content], { type: 'image/svg+xml;charset=utf-8' });
+        //     saveAs(blob, filename + '.' + filetype);
+        //     watermark.remove();
+        //     const style: any = this.svgStyle;
+        //     network.style.height = style.height;
+        //     network.style.width = style.width;
             
-        } else {
-            setTimeout(() => {
-                const scale: number = this.visuals.twoD.SelectedNetworkExportScaleVariable;
-                const element = document.querySelector('TwoDComponent').parentElement;
-                domToImage.toBlob(element, {
-                    width: element.clientWidth * scale,
-                    height: element.clientHeight * scale,
-                    style: {
-                        transform: 'scale(' + scale + ')',
-                        transformOrigin: 'top left'
-                    },
-                    quality: this.visuals.twoD.SelectedNetworkExportQualityVariable
-                })
-                    .then((blob) => {
-                        saveAs(blob, filename + '.' + filetype);
+        // } else {
+        //     setTimeout(() => {
+        //         const scale: number = this.visuals.twoD.SelectedNetworkExportScaleVariable;
+        //         const element = document.querySelector('TwoDComponent').parentElement;
+        //         domToImage.toBlob(element, {
+        //             width: element.clientWidth * scale,
+        //             height: element.clientHeight * scale,
+        //             style: {
+        //                 transform: 'scale(' + scale + ')',
+        //                 transformOrigin: 'top left'
+        //             },
+        //             quality: this.visuals.twoD.SelectedNetworkExportQualityVariable
+        //         })
+        //             .then((blob) => {
+        //                 saveAs(blob, filename + '.' + filetype);
 
-                        watermark.remove();
-                        this.visuals.twoD.isExporting = false;
-                        // this.visuals.microbeTrace.clearTable("#node-symbol-table-bottom");
-                        // this.visuals.microbeTrace.clearTable("#node-color-table-bottom");
-                        // this.visuals.microbeTrace.clearTable("#link-color-table-bottom");
+        //                 watermark.remove();
+        //                 this.visuals.twoD.isExporting = false;
+        //                 // this.visuals.microbeTrace.clearTable("#node-symbol-table-bottom");
+        //                 // this.visuals.microbeTrace.clearTable("#node-color-table-bottom");
+        //                 // this.visuals.microbeTrace.clearTable("#link-color-table-bottom");
 
-                        // this.visuals.microbeTrace.GlobalSettingsDialogSettings.restoreStateAfterExport();
-                        // this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.restoreStateAfterExport();
-                        // this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.restoreStateAfterExport();
-                        // this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.restoreStateAfterExport();
-                        // this.visuals.twoD.PolygonColorTableWrapperDialogSettings.restoreStateAfterExport();
-                        // this.visuals.twoD.Node2DNetworkExportDialogSettings.restoreStateAfterExport();
-                    });
-            }, 1000);
+        //                 // this.visuals.microbeTrace.GlobalSettingsDialogSettings.restoreStateAfterExport();
+        //                 // this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.restoreStateAfterExport();
+        //                 // this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.restoreStateAfterExport();
+        //                 // this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.restoreStateAfterExport();
+        //                 // this.visuals.twoD.PolygonColorTableWrapperDialogSettings.restoreStateAfterExport();
+        //                 // this.visuals.twoD.Node2DNetworkExportDialogSettings.restoreStateAfterExport();
+        //             });
+        //     }, 1000);
            
-        }
+        // }
     }
 
     /**
@@ -784,15 +1081,15 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     exportWork2() {
         let network = document.getElementById('network');
         let $network = $(network);
-
+        // PRE D3
         // add microbeTrace logo as a watermark
-        let watermark = d3.select(network).append('image')
-            .attr('xlink:href', this.visuals.twoD.commonService.watermark)
-            .attr('height', 128)
-            .attr('width', 128)
-            .attr('x', 35)
-            .attr('y', 35)
-            .style('opacity', $('#network-export-opacity').val());
+        // let watermark = d3.select(network).append('image')
+        //     .attr('xlink:href', this.visuals.twoD.commonService.watermark)
+        //     .attr('height', 128)
+        //     .attr('width', 128)
+        //     .attr('x', 35)
+        //     .attr('y', 35)
+        //     .style('opacity', $('#network-export-opacity').val());
 
         let filetype = this.SelectedNetworkExportFileTypeListVariable; 
         let filename = this.SelectedNetworkExportFilenameVariable;
@@ -914,20 +1211,22 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             
         // add network statistics table
         let statsDiv = document.getElementById('network-statistics-wrapper');
-        let foreignObjStats = d3.select(network).append("svg:foreignObject")
-            .attr("x", statsDiv.offsetLeft)
-            .attr("y", statsDiv.offsetTop-10)
-            .attr("width", statsDiv.offsetWidth)
-            .attr("height", statsDiv.offsetHeight);
-        foreignObjStats.append("xhtml:body").html(statsDiv.innerHTML);
+        // PRE D3
+        // let foreignObjStats = d3.select(network).append("svg:foreignObject")
+        //     .attr("x", statsDiv.offsetLeft)
+        //     .attr("y", statsDiv.offsetTop-10)
+        //     .attr("width", statsDiv.offsetWidth)
+        //     .attr("height", statsDiv.offsetHeight);
+        // foreignObjStats.append("xhtml:body").html(statsDiv.innerHTML);
 
         if (filetype == 'svg') {
             let content = this.visuals.twoD.commonService.unparseSVG(network);
             let blob = new Blob([content], { type: 'image/svg+xml;charset=utf-8' });
             saveAs(blob, filename + '.' + filetype);
-            if (watermark){
-                watermark.remove();
-            }
+            // PRE D3
+            // if (watermark){
+            //     watermark.remove();
+            // }
             if (nodeLegend){
                 nodeLegend.remove();
             }
@@ -937,9 +1236,9 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             if (symbolLegend){
                 symbolLegend.remove();
             }
-            if (foreignObjStats){
-                foreignObjStats.remove();
-            }
+            // if (foreignObjStats){
+            //     foreignObjStats.remove();
+            // }
         } else {
             saveSvgAsPng(network, filename + '.' + filetype, {
                 scale: this.SelectedNetworkExportScaleVariable,
@@ -947,9 +1246,10 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 encoderType: 'image/' + filetype,
                 encoderOptions: this.SelectedNetworkExportQualityVariable
             }).then(() => {
-                if (watermark){
-                    watermark.remove();
-                }
+                // PRE D3
+                // if (watermark){
+                //     watermark.remove();
+                // }
                 if (nodeLegend){
                     nodeLegend.remove();
                 }
@@ -959,9 +1259,9 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 if (symbolLegend){
                     symbolLegend.remove();
                 }
-                if (foreignObjStats){
-                    foreignObjStats.remove();
-                }
+                // if (foreignObjStats){
+                //     foreignObjStats.remove();
+                // }
             });
         }
     }
@@ -985,43 +1285,48 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         let rightPosition = containerWidth - wrapper.offsetWidth;        
         console.log('right: ', rightPosition);
 
-        let foreignObj = d3.select(container).append("svg:foreignObject")
-          .attr("x", (leftOffset) ? rightPosition : wrapper.offsetLeft)
-          .attr("y", wrapper.offsetTop + topOffset)
-          .attr("width", wrapper.offsetWidth)
-          .attr("height", wrapper.offsetHeight);
-        let body = foreignObj 
-          .append("xhtml:body")
-          .append("table")
-          .style('position', 'absolute')
-          .style('top', '0')
-          .style('width', '100%')
-          .style('height', '100%')
-          .attr('cellpadding', '1px')
-          .attr("class", "table-bordered");
-          // .html(nodeColorTable.innerHTML); SVG doesn't translate
-        let thead = body.append("thead"),
-            tbody = body.append("tbody");
-        thead.append("tr")
-          .selectAll("th")
-          .data(columns)
-          .enter()
-          .append("th")
-          .text(function(column) { return column; });
-        let rows = tbody.selectAll("tr")
-          .data(data)
-          .enter()
-          .append("tr");
-        let cells = rows.selectAll("td")
-          .data(function(row) {
-            return columns.map(function(column) {
-                return {column: column, value: row[column.split(" ")[0]]};
-            });
-          })
-          .enter()
-          .append("td")
-          .html(function(d) { return d.value; });
-        return foreignObj;
+        // PRE D3
+
+        return null;
+        // let foreignObj = d3.select(container).append("svg:foreignObject")
+        //   .attr("x", (leftOffset) ? rightPosition : wrapper.offsetLeft)
+        //   .attr("y", wrapper.offsetTop + topOffset)
+        //   .attr("width", wrapper.offsetWidth)
+        //   .attr("height", wrapper.offsetHeight);
+
+        
+        // let body = foreignObj 
+        //   .append("xhtml:body")
+        //   .append("table")
+        //   .style('position', 'absolute')
+        //   .style('top', '0')
+        //   .style('width', '100%')
+        //   .style('height', '100%')
+        //   .attr('cellpadding', '1px')
+        //   .attr("class", "table-bordered");
+        //   // .html(nodeColorTable.innerHTML); SVG doesn't translate
+        // let thead = body.append("thead"),
+        //     tbody = body.append("tbody");
+        // thead.append("tr")
+        //   .selectAll("th")
+        //   .data(columns)
+        //   .enter()
+        //   .append("th")
+        //   .text(function(column) { return column; });
+        // let rows = tbody.selectAll("tr")
+        //   .data(data)
+        //   .enter()
+        //   .append("tr");
+        // let cells = rows.selectAll("td")
+        //   .data(function(row) {
+        //     return columns.map(function(column) {
+        //         return {column: column, value: row[column.split(" ")[0]]};
+        //     });
+        //   })
+        //   .enter()
+        //   .append("td")
+        //   .html(function(d) { return d.value; });
+        // return foreignObj;
       }
 
     /**
@@ -1041,297 +1346,184 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
         $("#numberOfSelectedNodes").text(this.visuals.twoD.commonService.session.data.nodes.filter(d => d.selected).length.toLocaleString());
 
-        const start = Date.now();
-        let newNodes = this.visuals.twoD.commonService.getVisibleNodes(true);
-        let oldNodes;
+        // const start = Date.now();
+        // let newNodes = this.visuals.twoD.commonService.getVisibleNodes(true);
+        // let oldNodes;
 
-        if(this.widgets["timeline-date-field"] != 'None')
-            oldNodes = this.visuals.twoD.commonService.session.network.timelineNodes;
-        else
-            oldNodes = this.visuals.twoD.commonService.session.network.nodes;
+        // if(this.widgets["timeline-date-field"] != 'None')
+        //     oldNodes = this.visuals.twoD.commonService.session.network.timelineNodes;
+        // else
+        //     oldNodes = this.visuals.twoD.commonService.session.network.nodes;
         
-        if (newNodes.length === 0 && this.widgets["timeline-date-field"] == 'None') return;
+        // if (newNodes.length === 0 && this.widgets["timeline-date-field"] == 'None') return;
 
         // match newNodes to oldNodes so that position variables can be updated in newNodes
-        newNodes.forEach((d, i) => {
-            let match = oldNodes.find(d2 =>  {
-                if(!d2.id) {
-                    d2.id = d2._id;
-                }
-                if(!d.id){
-                    d.id = d._id;
-                }
-                return d2.id == d.id
-            });            
-            if (match) {
-                ['x', 'y', 'fx', 'fy', 'vx', 'vy', 'fixed'].forEach(v => {
+        // newNodes.forEach((d, i) => {
+        //     let match = oldNodes.find(d2 =>  {
+        //         if(!d2.id) {
+        //             d2.id = d2._id;
+        //         }
+        //         if(!d.id){
+        //             d.id = d._id;
+        //         }
+        //         return d2.id == d.id
+        //     });            
+        //     if (match) {
+        //         ['x', 'y', 'fx', 'fy', 'vx', 'vy', 'fixed'].forEach(v => {
                     
-                    if (typeof match[v] != "undefined") {
-                        d[v] = match[v];
-                    } 
+        //             if (typeof match[v] != "undefined") {
+        //                 d[v] = match[v];
+        //             } 
 
-                });
-            }
-        });
+        //         });
+        //     }
+        // });
 
-        this.visuals.twoD.commonService.session.network.nodes = newNodes;
+        // this.visuals.twoD.commonService.session.network.nodes = newNodes;
 
+        // PRE D3
         // sets functionality for nodes, as well as node border and node text/label position
-        let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(newNodes, d => d._id)
-            .join(
-                enter => {
-                    let g = enter.append('g')
-                        .attr('tabindex', '0')
-                        .call(d3.drag() //A bunch of mouse handlers.
-                            .on('start', (x) => this.visuals.twoD.dragstarted(x))
-                            .on('drag', (x) => this.visuals.twoD.dragged(x))
-                            .on('end', (x) => this.visuals.twoD.dragended(x)))
-                        .on('mouseenter focusin', (x) => this.visuals.twoD.showNodeTooltip(x))
-                        .on('mouseout focusout', (x) => this.visuals.twoD.hideTooltip())
-                        .on('contextmenu', (x) => this.visuals.twoD.showContextMenu(x))
-                        .on('click', (x) => this.visuals.twoD.clickHandler(x))
-                        .on('keydown', n => {
-                            if (d3.event.code == 'Space') this.visuals.twoD.clickHandler(n);
-                            if (d3.event.shiftKey && d3.event.key == 'F10') this.visuals.twoD.showContextMenu(n);
-                        });
-                       g.append('path')
-                        .style('stroke', 'black')
-                        .style('stroke-width', '2px');
-                    g.append('text')
-                        .attr('dy', 5)
-                        .attr('dx', 8);
-                    return g;
-                }
-            );
+        // let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(newNodes, d => d._id)
+        //     .join(
+        //         enter => {
+        //             let g = enter.append('g')
+        //                 .attr('tabindex', '0')
+        //                 .call(d3.drag() //A bunch of mouse handlers.
+        //                     .on('start', (x) => this.visuals.twoD.dragstarted(x))
+        //                     .on('drag', (x) => this.visuals.twoD.dragged(x))
+        //                     .on('end', (x) => this.visuals.twoD.dragended(x)))
+        //                 .on('mouseenter focusin', (x) => this.visuals.twoD.showNodeTooltip(x))
+        //                 .on('mouseout focusout', (x) => this.visuals.twoD.hideTooltip())
+        //                 .on('contextmenu', (x) => this.visuals.twoD.showContextMenu(x))
+        //                 .on('click', (x) => this.visuals.twoD.clickHandler(x))
+        //                 .on('keydown', n => {
+        //                     if (d3.event.code == 'Space') this.visuals.twoD.clickHandler(n);
+        //                     if (d3.event.shiftKey && d3.event.key == 'F10') this.visuals.twoD.showContextMenu(n);
+        //                 });
+        //                g.append('path')
+        //                 .style('stroke', 'black')
+        //                 .style('stroke-width', '2px');
+        //             g.append('text')
+        //                 .attr('dy', 5)
+        //                 .attr('dx', 8);
+        //             return g;
+        //         }
+        //     );
 
         // updates node properties (color, shape, label, size, etc...)
-        this.visuals.twoD.redrawNodes();
-        this.visuals.twoD.redrawLabels();
-        this.visuals.twoD.redrawNodeBorder();
-        this.visuals.twoD.updateNodeColors();
+        // this.visuals.twoD.redrawNodes();
+        // this.visuals.twoD.redrawLabels();
+        // this.visuals.twoD.redrawNodeBorder();
+        // this.visuals.twoD.updateNodeColors();
 
         // sets link functionality
-        let vlinks = this.visuals.twoD.getVLinks();
-        let links = this.visuals.twoD.svg.select('g.links').selectAll('line').data(vlinks)
-            .join('line')
-            .attr('stroke-width', this.widgets['link-width'])
-            .attr('opacity', 1 - this.widgets['link-opacity'])
-            .on('mouseenter', (x) => this.visuals.twoD.showLinkTooltip(x))
-            .on('mouseout', (x) => this.visuals.twoD.hideTooltip());
+        // let vlinks = this.visuals.twoD.getVLinks();
+        // let links = this.visuals.twoD.svg.select('g.links').selectAll('line').data(vlinks)
+        //     .join('line')
+        //     .attr('stroke-width', this.widgets['link-width'])
+        //     .attr('opacity', 1 - this.widgets['link-opacity'])
+        //     .on('mouseenter', (x) => this.visuals.twoD.showLinkTooltip(x))
+        //     .on('mouseout', (x) => this.visuals.twoD.hideTooltip());
 
         // updates link color and width
-        this.visuals.twoD.updateLinkColor();
-        this.visuals.twoD.scaleLinkWidth();
+        // this.visuals.twoD.updateLinkColor();
+        // this.visuals.twoD.scaleLinkWidth();
 
         // defines link labels
-        let linklabels = this.visuals.twoD.svg.select('g.links').selectAll('text').data(vlinks)
-            .join('text')
-            .attr('text-anchor', 'middle')
-            .attr('dy', this.widgets['link-width'] + 2)
-            .text((l) => {
+        // let linklabels = this.visuals.twoD.svg.select('g.links').selectAll('text').data(vlinks)
+        //     .join('text')
+        //     .attr('text-anchor', 'middle')
+        //     .attr('dy', this.widgets['link-width'] + 2)
+        //     .text((l) => {
 
-                const labelValue = l[this.widgets['link-label-variable']];
+        //         const labelValue = l[this.widgets['link-label-variable']];
               
-                if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
+        //         if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
 
-                    if(this.widgets['default-distance-metric'] == 'snps') {
-                        return Math.round(parseFloat(labelValue));
-                    } else {
-                        return parseFloat(labelValue).toFixed(this.widgets['link-label-decimal-length']);
-                    }
+        //             if(this.widgets['default-distance-metric'] == 'snps') {
+        //                 return Math.round(parseFloat(labelValue));
+        //             } else {
+        //                 return parseFloat(labelValue).toFixed(this.widgets['link-label-decimal-length']);
+        //             }
 
-                } else {
-                    return labelValue;
-                }
-              });
+        //         } else {
+        //             return labelValue;
+        //         }
+        //       });
 
         /**
          * Updates node and link position, and position and angle of link label
          */
-        let layoutTick = () => {
-             nodes
-                .attr('transform', d => {
-                    var ew =
-                        d.fixed ?
-                            `translate(${d.fx}, ${d.fy})` :
-                            `translate(${d.x}, ${d.y})`;
+        // let layoutTick = () => {
+        //      nodes
+        //         .attr('transform', d => {
+        //             var ew =
+        //                 d.fixed ?
+        //                     `translate(${d.fx}, ${d.fy})` :
+        //                     `translate(${d.x}, ${d.y})`;
 
-                    return ew;
-                }
-                );
-            links
-                .attr('x1', l => l.source.x)
-                .attr('y1', l => l.source.y)
-                .attr('x2', l => l.target.x)
-                .attr('y2', l => l.target.y);
+        //             return ew;
+        //         }
+        //         );
+        //     links
+        //         .attr('x1', l => l.source.x)
+        //         .attr('y1', l => l.source.y)
+        //         .attr('x2', l => l.target.x)
+        //         .attr('y2', l => l.target.y);
 
 
-            if (this.widgets['link-label-variable'] !== 'None') {
-                linklabels
-                    .attr('x', l => (l.source.x + l.target.x) / 2)
-                    .attr('y', l => (l.source.y + l.target.y) / 2)
-                    .attr('transform', l => 'rotate(' +
-                        this.visuals.twoD.calcAngle(l.source, l.target) + ' ' +
-                        (l.source.x + l.target.x) / 2 + ' ' +
-                        (l.source.y + l.target.y) / 2 + ')'
-                    );
-            }
-        };
+        //     if (this.widgets['link-label-variable'] !== 'None') {
+        //         linklabels
+        //             .attr('x', l => (l.source.x + l.target.x) / 2)
+        //             .attr('y', l => (l.source.y + l.target.y) / 2)
+        //             .attr('transform', l => 'rotate(' +
+        //                 this.visuals.twoD.calcAngle(l.source, l.target) + ' ' +
+        //                 (l.source.x + l.target.x) / 2 + ' ' +
+        //                 (l.source.y + l.target.y) / 2 + ')'
+        //             );
+        //     }
+        // };
+        // this.visuals.twoD.force.nodes(this.visuals.twoD.commonService.session.network.nodes).on('tick', handleTick(this.widgets['polygons-show']));
+        // this.visuals.twoD.force.force('link').links(vlinks);
+        // this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+        // $('#node-symbol-variable').trigger('change');
 
-        let foci = this.widgets['polygons-foci'];
-        let gather = this.widgets['polygons-gather-force'];
-        let fill = this.widgets['polygon-color'] as any;
-        var opacity;
-        
-        if (this.widgets['polygons-color-show']) {
-            fill = d => this.visuals.twoD.commonService.temp.style.polygonColorMap(d.key);
-            opacity = (d) => this.visuals.twoD.commonService.temp.style.polygonAlphaMap(d.key);
-        } else {
-            opacity = 0.4;
-        }
+        // this.visuals.twoD.ShowStatistics = showStatistics;
+        // this.visuals.twoD.cdref.detectChanges();
 
-        d3.select('#network g.clusters').html(null);
-        d3.select('#network g.clustersLabels').html(null);
-        let groups = d3.nest().key(function(d) { return d[foci]; }).entries(newNodes).map(function(d) {
-                var key = d.key
-                var values = d.values.map(function(dd){
-                dd.foci = key;
-                return dd;
-                })
-                return {'key':key, 'values':values}
-            });
-        groups = groups.filter(group => group.values.length > 2 && group.key != 'null');  // remove group by empty
-        let groupPath = function(d) {
-            return "M" + 
-            d3.polygonHull(d.values.map(function(i) { return [i.x, i.y]; }))
-                .join("L")
-            + "Z";
-        }; 
-        let polygonTextCord = function(d) {
-            return d3.polygonHull(d.values.map(function(i) { return [i.x, i.y]; }));
-        };
-        let clusters = new Array(groups.length);  // The largest node for each cluster.
-        newNodes.forEach(d => {
-            let r =  d[foci];
-            let i = d.foci;
-            if (!clusters[i] || (r > clusters[i].radius)) 
-            clusters[i] = d;
-        })
-        /**
-         * Similar to layoutTick, but adds functionalities for polygons
-         * 
-         * Updates node and link position, and position and angle of link label.
-         * Adds polygons, polygon mouse handlers, and polygon labels
-         */
-        let polygonsTick = () => {
-            newNodes.forEach(function(o, i) {
-            o.y += (clusters[o.foci].y - o.y) * gather;
-            o.x += (clusters[o.foci].x - o.x) * gather;
-            });
-            nodes.attr('transform', d => `translate(${d.x}, ${d.y})`);
-            links
-            .attr('x1', l => l.source.x)
-            .attr('y1', l => l.source.y)
-            .attr('x2', l => l.target.x)
-            .attr('y2', l => l.target.y);
-            if (this.widgets['link-label-variable'] !== 'None') {
-            linklabels
-                .attr('x', l => (l.source.x + l.target.x) / 2)
-                .attr('y', l => (l.source.y + l.target.y) / 2)
-                .attr('transform', l => 'rotate(' +
-                this.calcAngle(l.source, l.target) + ' ' +
-                (l.source.x + l.target.x) / 2 + ' ' +
-                (l.source.y + l.target.y) / 2 + ')'
-                );
-            }
-            d3.select('#network g.clusters').selectAll('path')
-            .data(groups)
-            .attr("d", groupPath) 
-            .enter()
-            .insert("path", "circle")
-            .style("fill", fill)
-            .style("stroke", fill)
-            .style("stroke-width", 40)
-            .style("stroke-linejoin", "round")
-            .style("opacity", opacity)
-            .attr("d", groupPath);
-            d3.select('#network g.clusters').selectAll('path')
-            .call(d3.drag() //A bunch of mouse handlers.
-                    .on('start', (x) => this.visuals.twoD.polygonDragStarted(x))
-                    .on('drag', (x) => this.visuals.twoD.polygonDragged(x))
-                    .on('end', (x) =>  this.visuals.twoD.polygonDragEnded(x)))
+        // // Get the new SVG dimensions after the network is generated
+        // let newSvgWidth = d3.select('svg#network').node().getBoundingClientRect().width;
+        // let newSvgHeight = d3.select('svg#network').node().getBoundingClientRect().height;
 
-                    // (x) => this.visuals.twoD.dragstarted(x)
+        // // Update the brush extent
+        // this.visuals.twoD.brush.extent([[0, 0], [newSvgWidth, newSvgHeight]]);
 
-            if (this.widgets['polygons-label-show']) {
-
-            let g= d3.select('#network g.clustersLabels').text("").selectAll('text')
-                .data(groups)
-                .enter()
-                .append("text")
-                .attr('transform', function (d) { return "translate("+d3.polygonCentroid(polygonTextCord(d))+")"; })
-                .text(d => this.visuals.twoD.commonService.titleize("" + d.key));
-                
-                d3.select('#network g.clustersLabels').selectAll('text').attr("class","WashingT")
-                .call(d3.drag()
-                .on("start", this.visuals.twoD.polygonLabelDragStarted)
-                .on("drag", this.visuals.twoD.polygonLabelDragged)
-                .on("end", this.visuals.twoD.polygonLabelDragEnded));
-
-            this.redrawPolygonLabels();
-            }
-        }      
-        
-        if(this.widgets['polygons-show']) this.visuals.twoD.commonService.temp.polygonGroups = groups;
-        else delete this.visuals.twoD.commonService.temp.polygonGroups;
-
-        let handleTick = d => {
-            if(d) {
-                return polygonsTick;
-            }
-            else return layoutTick;		
-        }
-
-        this.visuals.twoD.force.nodes(this.visuals.twoD.commonService.session.network.nodes).on('tick', handleTick(this.widgets['polygons-show']));
-        this.visuals.twoD.force.force('link').links(vlinks);
-        this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
-        $('#node-symbol-variable').trigger('change');
-
-        this.visuals.twoD.ShowStatistics = showStatistics;
-        this.visuals.twoD.cdref.detectChanges();
-
-        // Get the new SVG dimensions after the network is generated
-        let newSvgWidth = d3.select('svg#network').node().getBoundingClientRect().width;
-        let newSvgHeight = d3.select('svg#network').node().getBoundingClientRect().height;
-
-        // Update the brush extent
-        this.visuals.twoD.brush.extent([[0, 0], [newSvgWidth, newSvgHeight]]);
-
-        // Recall the brush to apply the new extent
-        d3.select('g.brush').call(this.visuals.twoD.brush);
+        // // Recall the brush to apply the new extent
+        // d3.select('g.brush').call(this.visuals.twoD.brush);
     }
 
     };
 
+    // PRE D3
     /**
      * This function is called when a polygonLabel drag is started; it moves <text> element to last under g.clusterLabels and adds class polygonText to the element
      */
     polygonLabelDragStarted(d) {
-        d3.select(this).raise().attr("class", "polygonText");
+        // d3.select(this).raise().attr("class", "polygonText");
     }
     
     /**
      * Moves location of polygon label when it is dragged by updating transform="translate(x,y)"
      */
     polygonLabelDragged(d) {
-        d3.select(this).attr("transform", "translate(" + d3.event.x + "," + d3.event.y + ")");
+        // d3.select(this).attr("transform", "translate(" + d3.event.x + "," + d3.event.y + ")");
     }
 
     /**
      * This function is called when a polygonLabel drag is ended; it removes class polygonText from <text> element
      */
     polygonLabelDragEnded(d) {
-        d3.select(this).attr("class", "");
+        // d3.select(this).attr("class", "");
     }
 
     /**
@@ -1341,6 +1533,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      * to get table to appear. Also not sorting correctly with names XXXXX
      */
     updatePolygonColors() {
+        console.log('polycolors update')
         let polygonSort = $("<a style='cursor: pointer;'>&#8645;</a>").on("click", e => {
             this.widgets["polygon-color-table-counts-sort"] = "";
           if (this.widgets["polygon-color-table-name-sort"] === "ASC")
@@ -1395,8 +1588,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 that.visuals.twoD.commonService.temp.style.polygonColorMap = d3
                 .scaleOrdinal(that.visuals.twoD.commonService.session.style['polygonColors'])
                 .domain(values);
-                console.log('render poly color inside');
-                that.render();
+                that._rerender();
             });
           let alphainput = $("<a>⇳</a>").on("click", e => {
             $("#color-transparency-wrapper").css({
@@ -1406,15 +1598,13 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             });
             $("#color-transparency")
               .val(that.visuals.twoD.commonService.session.style['polygonAlphas'][i])
-              .one("change", function() {
+              .on("change", function() {
                 that.visuals.twoD.commonService.session.style['polygonAlphas'].splice(i, 1, parseFloat($(this).val() as string));
                 that.visuals.twoD.commonService.temp.style.polygonAlphaMap = d3
                   .scaleOrdinal(that.visuals.twoD.commonService.session.style['polygonAlphas'])
                   .domain(values);
                 $("#color-transparency-wrapper").fadeOut();
-                console.log('render poly color trans');
-
-                that.render();
+                that._rerender();
               });
           });
           let cell = $("<td></td>")
@@ -1431,14 +1621,16 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             "</tr>"
           ).append(cell);
           polygonColorTable.append(row);
+          
         });
         
-        this.visuals.twoD.commonService.temp.style.polygonColorMap = d3
-          .scaleOrdinal(this.visuals.twoD.commonService.session.style['polygonColors'])
-          .domain(values);
-          this.visuals.twoD.commonService.temp.style.polygonAlphaMap = d3
-          .scaleOrdinal(this.visuals.twoD.commonService.session.style['polygonAlphas'])
-          .domain(values);
+        // PRE D3
+        // this.visuals.twoD.commonService.temp.style.polygonColorMap = d3
+        //   .scaleOrdinal(this.visuals.twoD.commonService.session.style['polygonColors'])
+        //   .domain(values);
+        //   this.visuals.twoD.commonService.temp.style.polygonAlphaMap = d3
+        //   .scaleOrdinal(this.visuals.twoD.commonService.session.style['polygonAlphas'])
+        //   .domain(values);
   
         polygonColorTable
           .find("td")
@@ -1482,30 +1674,20 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             return $(row).children('td').eq(index).text();
         }
   
-        // this.sortable("#polygon-color-table", { items: "tr" });
-        
-        if (!this.isLoading) {
-            console.log('render update poly color');
-            this.isLoading = true;
-            this.visuals.twoD.render();
-            setTimeout(() => {
-                this.isLoading = false;
-              }, 2000);
-        }
       }
 
     /**
      * This function is called when polygon-show widget is updated from the template.
      * That widget controls whether polygons are shown or not
      * 
-     * XXXXX I think this function wasn't updated with the move to Angular; most of the code 
-     * seems redundant/unnecessary. I think only line needed is this.render(). XXXXX
      */
-    polygonsToggle(e) {
+    polygonsToggle(flag : boolean) {
         
-        this.widgets['polygons-show'] = e;
+        this.widgets['polygons-show'] = flag;
 
-        if(e) {
+        this.showParallel = flag;
+
+        if(flag) {
             if(this.widgets['polygons-color-show'] == true){
                 $('#polygons-color-show').click();
               } else {
@@ -1526,14 +1708,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             this.visuals.twoD.PolygonColorTableWrapperDialogSettings.setVisibility(false);
         }
 
-        if (!this.isLoading) {
-            console.log('render poly toggle');
-            this.isLoading = true;
-            this.render();
-            setTimeout(() => {
-                this.isLoading = false;
-              }, 1000);
-        }
     }
 
     /**
@@ -1549,10 +1723,11 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             $("#polygon-color-value-row").slideUp();
             $("#polygon-color-table-row").slideDown();
             this.visuals.twoD.PolygonColorTableWrapperDialogSettings.setVisibility(true);
-            this.visuals.twoD.updatePolygonColors();
+            // this.visuals.twoD.updatePolygonColors();
 
             setTimeout(() => {
                 this.visuals.twoD.updatePolygonColors();
+                this._rerender();
             }, 200);
 
         }
@@ -1563,15 +1738,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             $("#polygon-color-table").empty();
             this.visuals.twoD.PolygonColorTableWrapperDialogSettings.setVisibility(false);
 
-        }
-
-        if (!this.isLoading) {
-            console.log('render poly color toggle');
-            this.isLoading = true;
-            this.visuals.twoD.render();
-            setTimeout(() => {
-                this.isLoading = false;
-              }, 1000);
         }
     }
 
@@ -1585,8 +1751,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     onPolygonColorChanged(e) {
         this.widgets["polygon-color"] = e;
-        console.log('render poly color changed');
-        this.visuals.twoD.render();
+        this._rerender();
     }
 
     /**
@@ -1606,52 +1771,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             this.visuals.twoD.onPolygonColorTableChange('Hide')
         }
 
-        console.log('render poly color table toggle');
-        this.visuals.twoD.render();
+        this.visuals.twoD._rerender();
     }
-
-    /**
-     * Adds polygon labels an sets their size and orientation
-     */
-    redrawPolygonLabels() {
-        let nodes = d3.select('#network g.clustersLabels').selectAll('text');
-        let size = this.widgets['polygons-label-size'],
-          orientation = this.widgets['polygons-label-orientation'];
-
-        nodes
-          .style('font-size', size + 'px');
-        switch (orientation) {
-          case 'Left':
-            nodes
-              .attr('text-anchor', 'end')
-              .attr('dx', -8)
-              .attr('dy', (size - 4) / 2);
-            break;
-          case 'Top':
-            nodes
-              .attr('text-anchor', 'middle')
-              .attr('dx', 0)
-              .attr('dy', 4 - size);
-            break;
-          case 'Bottom':
-            nodes
-              .attr('text-anchor', 'middle')
-              .attr('dx', 0)
-              .attr('dy', size + 4);
-            break;
-          case 'Right':
-            nodes
-              .attr('text-anchor', 'start')
-              .attr('dx', 8)
-              .attr('dy', (size - 4) / 2);		  
-            break;
-          default: // 'Middle':
-            nodes
-              .attr('text-anchor', 'middle')
-              .attr('dx', 0)
-              .attr('dy', (size - 4) / 2);     
-        }
-      }
 
     private polygonNodeSelected = null;
 
@@ -1807,21 +1928,22 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      * @param n node/nodes
      */
     dragstarted(n) {
-        if (!d3.event.active) this.visuals.twoD.force.alphaTarget(0.3).restart();
+        
+        // if (!d3.event.active) this.visuals.twoD.force.alphaTarget(0.3).restart();
         function setNode(d) {
             d.fx = d.x;
             d.fy = d.y;
         }
-        this.visuals.twoD.multidrag = n.selected;
-        this.visuals.twoD.selected = this.visuals.twoD.svg.select('g.nodes')
-            .selectAll('g')
-            .data(this.visuals.twoD.commonService.session.network.nodes)
-            .filter(d => d.selected);
-        if (this.visuals.twoD.multidrag) {
-            this.visuals.twoD.selected.each(setNode);
-        } else {
-            setNode(n);
-        }
+        // this.visuals.twoD.multidrag = n.selected;
+        // this.visuals.twoD.selected = this.visuals.twoD.svg.select('g.nodes')
+        //     .selectAll('g')
+        //     .data(this.visuals.twoD.commonService.session.network.nodes)
+        //     .filter(d => d.selected);
+        // if (this.visuals.twoD.multidrag) {
+        //     this.visuals.twoD.selected.each(setNode);
+        // } else {
+        //     setNode(n);
+        // }
     };
 
     /**
@@ -1829,15 +1951,15 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      * @param n node/nodes
      */
     dragged(n) {
-        function updateNode(d) {
-            d.fx += d3.event.dx;
-            d.fy += d3.event.dy;
-        }
-        if (this.visuals.twoD.multidrag) {
-            this.visuals.twoD.selected.each(updateNode);
-        } else {
-            updateNode(n);
-        }
+        // function updateNode(d) {
+        //     d.fx += d3.event.dx;
+        //     d.fy += d3.event.dy;
+        // }
+        // if (this.visuals.twoD.multidrag) {
+        //     this.visuals.twoD.selected.each(updateNode);
+        // } else {
+        //     updateNode(n);
+        // }
     };
 
     /**
@@ -1845,30 +1967,30 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      * @param n node/nodes
      */
     dragended(n) {
-        if (!d3.event.active) this.visuals.twoD.force.alphaTarget(0);
-        let that = this;
-        function unsetNode(d) {
-            if (!d.fixed) {
-                d.fx = null;
-                d.fy = null;
-            } else {
-                // save node location back to temp network for pinned network
-                if(that.widgets["timeline-date-field"] != 'None') {
-                  let node = that.visuals.twoD.commonService.session.network.timelineNodes.find(d2 => d2._id == d._id);
-                  if(node) {
-                    node.x = d.x;
-                    node.y = d.y;
-                    node.fx = d.fx;
-                    node.fy = d.fy;
-                  }
-                }
-              }
-        }
-        if (this.visuals.twoD.multidrag) {
-            this.visuals.twoD.selected.each(unsetNode);
-        } else {
-            unsetNode(n);
-        }
+        // if (!d3.event.active) this.visuals.twoD.force.alphaTarget(0);
+        // let that = this;
+        // function unsetNode(d) {
+        //     if (!d.fixed) {
+        //         d.fx = null;
+        //         d.fy = null;
+        //     } else {
+        //         // save node location back to temp network for pinned network
+        //         if(that.widgets["timeline-date-field"] != 'None') {
+        //           let node = that.visuals.twoD.commonService.session.network.timelineNodes.find(d2 => d2._id == d._id);
+        //           if(node) {
+        //             node.x = d.x;
+        //             node.y = d.y;
+        //             node.fx = d.fx;
+        //             node.fy = d.fy;
+        //           }
+        //         }
+        //       }
+        // }
+        // if (this.visuals.twoD.multidrag) {
+        //     this.visuals.twoD.selected.each(unsetNode);
+        // } else {
+        //     unsetNode(n);
+        // }
     };
 
     /**
@@ -1877,21 +1999,32 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     clickHandler(n) {
         //console.log('event: ',d3.event)
-        if (d3.event && d3.event.key === "Shift") {
-            this.visuals.twoD.commonService.session.data.nodes.find(node => node._id == n._id).selected = !n.selected;
-        } else {
-            this.visuals.twoD.commonService.session.data.nodes.forEach(node => {
-                if (node._id == n._id) {
-                    node.selected = !node.selected;
-                } else {
-                    node.selected = false;
-                }
-            });
-        }
+        // if (d3.event && d3.event.key === "Shift") {
+        //     this.visuals.twoD.commonService.session.data.nodes.find(node => node._id == n._id).selected = !n.selected;
+        // } else {
+        //     this.visuals.twoD.commonService.session.data.nodes.forEach(node => {
+        //         if (node._id == n._id) {
+        //             node.selected = !node.selected;
+        //         } else {
+        //             node.selected = false;
+        //         }
+        //     });
+        // }
+        // if (d3.event && d3.event.key === "Shift") {
+        //     this.visuals.twoD.commonService.session.data.nodes.find(node => node._id == n._id).selected = !n.selected;
+        // } else {
+        //     this.visuals.twoD.commonService.session.data.nodes.forEach(node => {
+        //         if (node._id == n._id) {
+        //             node.selected = !n.selected;
+        //         } else {
+        //             node.selected = false;
+        //         }
+        //     });
+        // }
  
         // this.visuals.twoD.render(false);
 
-        $(document).trigger('node-selected');
+        // $(document).trigger('node-selected');
     };
 
     /**
@@ -1917,63 +2050,63 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      * @param d the node right clicked
      */
     showContextMenu(d) {
-        d3.event.preventDefault();
-        this.visuals.twoD.hideTooltip();
-        $('#copyID').attr('data-clipboard-text', d._id);
-        if (d.seq === null || d.seq === undefined || d.seq === "") {
-            $('#copySeq').prop('disabled', true);
-        } else {
-            $('#copySeq').prop('disabled', false).attr('data-clipboard-text', d.seq);
-        }
+        // d3.event.preventDefault();
+        // this.visuals.twoD.hideTooltip();
+        // $('#copyID').attr('data-clipboard-text', d._id);
+        // if (d.seq === null || d.seq === undefined || d.seq === "") {
+        //     $('#copySeq').prop('disabled', true);
+        // } else {
+        //     $('#copySeq').prop('disabled', false).attr('data-clipboard-text', d.seq);
+        // }
 
-        d3.select('#viewAttributes').on('click', () => {
+        // d3.select('#viewAttributes').on('click', () => {
 
-            this.visuals.twoD.ContextSelectedNodeAttributes = [];
+        //     this.visuals.twoD.ContextSelectedNodeAttributes = [];
 
-            this.visuals.twoD.hideContextMenu();
+        //     this.visuals.twoD.hideContextMenu();
 
-            this.visuals.twoD.ShowNetworkAttributes = true;
-            this.visuals.twoD.cdref.detectChanges();
+        //     this.visuals.twoD.ShowNetworkAttributes = true;
+        //     this.visuals.twoD.cdref.detectChanges();
 
-            let nd = this.visuals.twoD.commonService.session.data.nodes.find(nd => nd._id == d._id);
-            for (let attribute in nd) {
-                if (attribute[0] == '_' && attribute !== '_id' || attribute == 'data') continue; // DC: where is data being added as an attribute to each node should data be removed here
-                this.visuals.twoD.ContextSelectedNodeAttributes.push({attribute: this.visuals.twoD.commonService.titleize(attribute), value: d[attribute]});
-            }
+        //     let nd = this.visuals.twoD.commonService.session.data.nodes.find(nd => nd._id == d._id);
+        //     for (let attribute in nd) {
+        //         if (attribute[0] == '_' && attribute !== '_id' || attribute == 'data') continue; // DC: where is data being added as an attribute to each node should data be removed here
+        //         this.visuals.twoD.ContextSelectedNodeAttributes.push({attribute: this.visuals.twoD.commonService.titleize(attribute), value: d[attribute]});
+        //     }
 
-            this.visuals.twoD.ContextSelectedNodeAttributes = this.visuals.twoD.ContextSelectedNodeAttributes
-                .filter(x=>x.attribute !== "Seq" && x.value !== undefined && x.value !== null && x.value !== "" )
-                .concat(this.visuals.twoD.ContextSelectedNodeAttributes.filter(x=>x.attribute !== "Seq" && (x.value === undefined || x.value === null || x.value === "" )))
-                .concat(this.visuals.twoD.ContextSelectedNodeAttributes.filter(x=>x.attribute === "Seq"));
+        //     this.visuals.twoD.ContextSelectedNodeAttributes = this.visuals.twoD.ContextSelectedNodeAttributes
+        //         .filter(x=>x.attribute !== "Seq" && x.value !== undefined && x.value !== null && x.value !== "" )
+        //         .concat(this.visuals.twoD.ContextSelectedNodeAttributes.filter(x=>x.attribute !== "Seq" && (x.value === undefined || x.value === null || x.value === "" )))
+        //         .concat(this.visuals.twoD.ContextSelectedNodeAttributes.filter(x=>x.attribute === "Seq"));
 
-        }).node().focus();
-        if (d.fixed) {
-            $('#pinNode').text('Unpin Node').on('click', () => {
+        // }).node().focus();
+        // if (d.fixed) {
+        //     $('#pinNode').text('Unpin Node').on('click', () => {
 
-                d.fx = null;
-                d.fy = null;
-                d.fixed = false;
-                this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
-                this.visuals.twoD.hideContextMenu();
-            });
+        //         d.fx = null;
+        //         d.fy = null;
+        //         d.fixed = false;
+        //         this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+        //         this.visuals.twoD.hideContextMenu();
+        //     });
 
-        } else {
-            $('#pinNode').text('Pin Node').on('click', () => {
+        // } else {
+        //     $('#pinNode').text('Pin Node').on('click', () => {
 
-                d.fx = d.x;
-                d.fy = d.y;
-                d.fixed = true;
-                this.visuals.twoD.hideContextMenu();
-            });
-        }
+        //         d.fx = d.x;
+        //         d.fy = d.y;
+        //         d.fixed = true;
+        //         this.visuals.twoD.hideContextMenu();
+        //     });
+        // }
 
-        let [X, Y] = this.getRelativeMousePosition();
-        $('#context-menu').css({
-            'z-index': 1000,
-            'display': 'block',
-            'left': (X-200) + 'px',
-            'top': (Y+30) + 'px',
-        }).animate({ 'opacity': 1 }, 80);
+        // let [X, Y] = this.getRelativeMousePosition();
+        // $('#context-menu').css({
+        //     'z-index': 1000,
+        //     'display': 'block',
+        //     'left': (X-200) + 'px',
+        //     'top': (Y+30) + 'px',
+        // }).animate({ 'opacity': 1 }, 80);
     };
 
     /**
@@ -2062,63 +2195,71 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             }
         }
         // highlights current node and its neighbors
-        this.visuals.twoD.svg
-            .select('g.nodes')
-            .selectAll('g')
-            .selectAll('path')
-            .attr('opacity', d => this.visuals.twoD.commonService.includes(neighbors, d._id) ? 1 : .1);
+        // this.visuals.twoD.svg
+        //     .select('g.nodes')
+        //     .selectAll('g')
+        //     .selectAll('path')
+        //     .attr('opacity', d => this.visuals.twoD.commonService.includes(neighbors, d._id) ? 1 : .1);
         // hightlights all of current node's links
-        this.visuals.twoD.svg
-            .select('g.links')
-            .selectAll('line')
-            .data(links)
-            .attr('opacity', l => this.visuals.twoD.commonService.includes(lindices, l.index) ? .1 : 1);
+        // this.visuals.twoD.svg
+        //     .select('g.links')
+        //     .selectAll('line')
+        //     .data(links)
+        //     .attr('opacity', l => this.visuals.twoD.commonService.includes(lindices, l.index) ? .1 : 1);
     };
 
     /**
      * Gets data from current node needed for tooltip and displays it in the tooltip also hightlights neighbors if that option is selected
      * @param d a node
      */
-    showNodeTooltip(d) {
-        if (this.widgets['node-highlight']) 
-            this.visuals.twoD.highlightNeighbors(d);
+    showNodeTooltip(d, event) {
     
         // If no tooltip variable is selected, we shouldn't show a tooltip
-        if (this.widgets['node-tooltip-variable'].length > 0 && this.widgets['node-tooltip-variable'][0] == 'None') 
+        if (this.widgets['node-tooltip-variable'].length > 0 && this.widgets['node-tooltip-variable'][0] == 'None') {
+            if (this.widgets['node-highlight']) {
+                this.selectedNodeId = d.id;
+                this._rerender();
+            }
             return;
-
-        this.visuals.twoD.SelectedNodeTooltipVariable = this.widgets['node-tooltip-variable'];
-    
-        // Tooltip variables can be a single string or an array
-        let tooltipVariables = this.visuals.twoD.SelectedNodeTooltipVariable;
-        if (!Array.isArray(tooltipVariables)) {
-            tooltipVariables = [tooltipVariables];
         }
+        // this.visuals.twoD.SelectedNodeTooltipVariable = this.widgets['node-tooltip-variable'];
     
-        // Generate the HTML for the tooltip
-        let tooltipHtml = '';
-        if (tooltipVariables.length > 1) {
-            tooltipHtml = this.tabulate(tooltipVariables.map(variable => [this.titleize(variable), d[variable]]));
-        } else {
-            tooltipHtml = d[tooltipVariables[0]];
-        }
+        // // Tooltip variables can be a single string or an array
+        // let tooltipVariables = this.visuals.twoD.SelectedNodeTooltipVariable;
+        // if (!Array.isArray(tooltipVariables)) {
+        //     tooltipVariables = [tooltipVariables];
+        // }
+    
+        // // Generate the HTML for the tooltip
+        // let tooltipHtml = '';
+        // if (tooltipVariables.length > 1) {
+        //     tooltipHtml = this.tabulate(tooltipVariables.map(variable => [this.titleize(variable), d[variable]]));
+        // } else {
+        //     tooltipHtml = d[tooltipVariables[0]];
+        // }
 
-        let [X, Y] = this.getRelativeMousePosition();    
-        d3.select('#tooltip')
-            .html(tooltipHtml)
-            .style('position', 'absolute')
-            .style('left', (X + 10) + 'px')
-            .style('top', (Y - 10) + 'px')
-            .style('z-index', 1000)
-            .transition().duration(100)
-            .style('opacity', 1);
+        // let [X, Y] = this.getRelativeMousePosition(event);    
+        // d3.select('#tooltip')
+        //     .html(tooltipHtml)
+        //     .style('position', 'absolute')
+        //     .style('left', (X + 10) + 'px')
+        //     .style('top', (Y - 10) + 'px')
+        //     .style('z-index', 1000)
+        //     .transition().duration(100)
+        //     .style('opacity', 1);
+
+        if (this.widgets['node-highlight']) {
+            console.log('in flag: ');
+            this.selectedNodeId = d.id;
+            this._rerender();
+        }
     }
 
     /**
      * Gets data from current link needed for tooltip and displays it in the tooltip
      * @param d link
      */
-    showLinkTooltip(d) {
+    showLinkTooltip(d, event) {
         let v: any = this.visuals.twoD.SelectedLinkTooltipVariable;
 
         if (v == 'None') return;
@@ -2162,7 +2303,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             tooltipHtml = getData(d, tooltipVariables[0])
         }
 
-        let [X, Y] = this.getRelativeMousePosition();
+        let [X, Y] = this.getRelativeMousePosition(event);
         d3.select('#tooltip')
             .html(tooltipHtml)
             .style('position', 'absolute')
@@ -2178,16 +2319,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     hideTooltip() {
         if (this.widgets['node-highlight']) {
-            this.visuals.twoD.svg
-                .select('g.nodes')
-                .selectAll('g')
-                .selectAll('path')
-                .attr('opacity', 1);
-            let linkOpacity = 1 - this.widgets['link-opacity'];
-            this.visuals.twoD.svg
-                .select('g.links')
-                .selectAll('line')
-                .attr('opacity', linkOpacity);
+            this.selectedNodeId = undefined;
+            this._rerender();
         }
         let tooltip = d3.select('#tooltip');
         tooltip
@@ -2213,84 +2346,84 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
         //Things to track in the function:
         //* Shapes:
-        let type = d3[this.widgets['node-symbol']];
+        // let type = d3[this.widgets['node-symbol']];
         let symbolVariable = this.widgets['node-symbol-variable'];
        
-        // Custom Shape Selected
-        if (type === undefined) {
-            type = this.customShapes.shapes[this.widgets['node-symbol']];
-        }
+        // // Custom Shape Selected
+        // if (type === undefined) {
+        //     type = this.customShapes.shapes[this.widgets['node-symbol']];
+        // }
 
-        //* Sizes:
-        let defaultSize = this.widgets['node-radius'];
-        let size = defaultSize, med = defaultSize, oldrng, min, max;
-        let sizeVariable = this.widgets['node-radius-variable'];
-        let scale;
-        let nodes;
-        if (sizeVariable !== 'None') {
-            if (this.widgets["timeline-date-field"] == 'None') nodes = this.visuals.twoD.commonService.session.network.nodes;
-            else nodes = this.visuals.twoD.commonService.session.network.timelineNodes;
-            let n = this.visuals.twoD.commonService.session.network.nodes.length;
-            min = Number.MAX_VALUE;
-            max = Number.MIN_VALUE;
-            for (let i = 0; i < n; i++) {
-                let size = this.visuals.twoD.commonService.session.network.nodes[i][sizeVariable];
-                if (typeof size == 'undefined') continue;
-                if (size < min) min = size;
-                if (size > max) max = size;
-            }
-            oldrng = max - min;
-            med = oldrng / 2;
+        // //* Sizes:
+        // let defaultSize = this.widgets['node-radius'];
+        // let size = defaultSize, med = defaultSize, oldrng, min, max;
+        // let sizeVariable = this.widgets['node-radius-variable'];
+        // let scale;
+        // let nodes;
+        // if (sizeVariable !== 'None') {
+        //     if (this.widgets["timeline-date-field"] == 'None') nodes = this.visuals.twoD.commonService.session.network.nodes;
+        //     else nodes = this.visuals.twoD.commonService.session.network.timelineNodes;
+        //     let n = this.visuals.twoD.commonService.session.network.nodes.length;
+        //     min = Number.MAX_VALUE;
+        //     max = Number.MIN_VALUE;
+        //     for (let i = 0; i < n; i++) {
+        //         let size = this.visuals.twoD.commonService.session.network.nodes[i][sizeVariable];
+        //         if (typeof size == 'undefined') continue;
+        //         if (size < min) min = size;
+        //         if (size > max) max = size;
+        //     }
+        //     oldrng = max - min;
+        //     med = oldrng / 2;
 
-            let maxWidth = this.widgets['node-radius-max'];
-            let minWidth = this.widgets['node-radius-min'];
-            scale = d3.scaleLinear()
-            .domain([min, max])
-            .range([minWidth, maxWidth]);
-            }
+        //     let maxWidth = this.widgets['node-radius-max'];
+        //     let minWidth = this.widgets['node-radius-min'];
+        //     // scale = d3.scaleLinear()
+        //     // .domain([min, max])
+        //     // .range([minWidth, maxWidth]);
+        //     }
         
-        nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes);
+        // nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes);
 
-        // TODO: Hides table row by default if no symbol variable - clean up
-        if(symbolVariable === 'None') {
-            $('#node-symbol-table-row').slideUp();
-        }
+        // // TODO: Hides table row by default if no symbol variable - clean up
+        // if(symbolVariable === 'None') {
+        //     $('#node-symbol-table-row').slideUp();
+        // }
 
-        // console.log('nodes: ', nodes);
+        // // console.log('nodes: ', nodes);
 
-        let that = this;
+        // let that = this;
 
-        nodes.selectAll('path').each(function (d) {
+        // nodes.selectAll('path').each(function (d) {
 
-            if (symbolVariable !== 'None') {
+        //     if (symbolVariable !== 'None') {
 
-                type = d3[that.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
+        //         // type = d3[that.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
 
-                if (type === undefined) {
-                    type = that.customShapes.shapes[that.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
-                }
+        //         // if (type === undefined) {
+        //         //     type = that.customShapes.shapes[that.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
+        //         // }
     
-            } 
-            if (sizeVariable !== 'None') {
-              size = d[sizeVariable];
-              if (!that.isNumber(size)) size = med;
-              size = scale(size);
-            }
+        //     } 
+        //     if (sizeVariable !== 'None') {
+        //       size = d[sizeVariable];
+        //       if (!that.isNumber(size)) size = med;
+        //       size = scale(size);
+        //     }
 
-            d3.select(this).attr('d', d3.symbol().size(size).type(type));    
+        //     // d3.select(this).attr('d', d3.symbol().size(size).type(type));    
             
-          });
+        //   });
     };
 
     /**
      * redraws/updates node borders based on node-border-width
      */
     private redrawNodeBorder(){
-        let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes);
-        nodes
-          .selectAll('path')
-          .style('stroke', 'black')
-          .style('stroke-width', this.widgets['node-border-width']);
+        // let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes);
+        // nodes
+        //   .selectAll('path')
+        //   .style('stroke', 'black')
+        //   .style('stroke-width', this.widgets['node-border-width']);
       }
 
     /**
@@ -2298,67 +2431,49 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     redrawLabels() {
 
-        let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes).select('text'),
-            labelVar = this.widgets['node-label-variable'];
-        if (labelVar == 'None') {
-            nodes.text('');
-        } else {
-            let size = this.widgets['node-label-size'],
-                orientation = this.widgets['node-label-orientation'];
-            nodes
-                .text(n => n[labelVar])
-                .style('font-size', size + 'px');
-            switch (orientation) {
-                case 'Left':
-                    nodes
-                        .attr('text-anchor', 'end')
-                        .attr('dx', -8)
-                        .attr('dy', (size - 4) / 2);
-                    break;
-                case 'Top':
-                    nodes
-                        .attr('text-anchor', 'middle')
-                        .attr('dx', 0)
-                        .attr('dy', 4 - size);
-                    break;
-                case 'Bottom':
-                    nodes
-                        .attr('text-anchor', 'middle')
-                        .attr('dx', 0)
-                        .attr('dy', size + 4);
-                    break;
-                case 'Middle':
-                    nodes
-                        .attr('text-anchor', 'middle')
-                        .attr('dx', 0)
-                        .attr('dy', (size - 4) / 2);
-                    break;
-                default: //'right'
-                    nodes
-                        .attr('text-anchor', 'start')
-                        .attr('dx', 8)
-                        .attr('dy', (size - 4) / 2);
-            }
-        }
+        // let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes).select('text'),
+        //     labelVar = this.widgets['node-label-variable'];
+        // if (labelVar == 'None') {
+        //     nodes.text('');
+        // } else {
+        //     let size = this.widgets['node-label-size'],
+        //         orientation = this.widgets['node-label-orientation'];
+        //     nodes
+        //         .text(n => n[labelVar])
+        //         .style('font-size', size + 'px');
+        //     switch (orientation) {
+        //         case 'Left':
+        //             nodes
+        //                 .attr('text-anchor', 'end')
+        //                 .attr('dx', -8)
+        //                 .attr('dy', (size - 4) / 2);
+        //             break;
+        //         case 'Top':
+        //             nodes
+        //                 .attr('text-anchor', 'middle')
+        //                 .attr('dx', 0)
+        //                 .attr('dy', 4 - size);
+        //             break;
+        //         case 'Bottom':
+        //             nodes
+        //                 .attr('text-anchor', 'middle')
+        //                 .attr('dx', 0)
+        //                 .attr('dy', size + 4);
+        //             break;
+        //         case 'Middle':
+        //             nodes
+        //                 .attr('text-anchor', 'middle')
+        //                 .attr('dx', 0)
+        //                 .attr('dy', (size - 4) / 2);
+        //             break;
+        //         default: //'right'
+        //             nodes
+        //                 .attr('text-anchor', 'start')
+        //                 .attr('dx', 8)
+        //                 .attr('dy', (size - 4) / 2);
+        //     }
+        // }
     };
-
-    //Polygon Events
-
-    /**
-     * XXXXX Not sure functionality of this function; it is only called during loadSettings, not in template;
-     * also polygon-label-row is not found in the template; need to reevaluate if function is needed XXXXX
-     */
-    onPolygonLabelVariableChange(e) {
-
-        this.widgets['polygons-label-variable'] = e;
-        if (e == 'None') {
-            $('.polygon-label-row').slideUp();
-        } else {
-            $('.polygon-label-row').css('display', 'flex');
-        }
-        this.redrawPolygonLabels();
-        
-    }
 
     /**
      * This is called when the variable used to grouped by/created polygons is changed
@@ -2368,11 +2483,11 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     centerPolygons(e) {
 
         this.widgets['polygons-foci'] = e;
-        console.log('render center poly');
-        this.visuals.twoD.render();
+        this._rerender();
         if(this.widgets['polygons-color-show'] == true) {
           $("#polygon-color-table").empty();
           this.visuals.twoD.updatePolygonColors();
+        //   this._rerender();
         }
         
         if (e == 'None') {
@@ -2382,22 +2497,15 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             $('#color-polygons').css('display', 'flex');
             $('#polygon-color-value-row').slideUp();
           }
-
-    }
-
-    /**
-     * Updates polygon-label-size widget and then redraws polygon labels 
-     */
-    setPolygonLabelSize(size) {
-        this.widgets['polygons-label-size'] = parseFloat(size);
-        this.visuals.twoD.redrawPolygonLabels();
     }
 
     /**
      * Calls setPolygonLabelSize to update polygon-label-size widget and then redraws polygon labels
      */
     onPolygonLabelSizeChange(e) {
-        this.setPolygonLabelSize(e);
+        this.widgets['polygons-label-size'] = parseFloat(e);
+        document.documentElement.style.setProperty('--vis-graph-panel-label-font-size', e + 'px');
+        this.cdref.detectChanges();
     }
 
     /**
@@ -2405,17 +2513,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     onPolygonLabelOrientationChange(e) {
         this.widgets['polygons-label-orientation'] = e;
-        this.visuals.twoD.redrawPolygonLabels();
-    }
-
-    /**
-     * Updates polygons-gather-force and then renders the network again
-     */
-    onPolygonGatherChange(e) {
-        let v = parseFloat(e);
-        this.widgets['polygons-gather-force'] = v;
-        console.log('render poly gather');
-        this.visuals.twoD.render();
+        this._rerender();
     }
 
     /**
@@ -2425,40 +2523,13 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         if (e) {
             this.widgets['polygons-label-show'] = true;
             $('.polygons-label-row').slideDown();
-            console.log('render poly label show');
-            this.visuals.twoD.render();
         }
         else {
             this.widgets['polygons-label-show'] = false;
             $('.polygons-label-row').slideUp();
-            console.log('render poly label hide');
-            this.visuals.twoD.render();
         }
-    }
 
-    /**
-     * XXXXX Function not used/executed XXXXX
-     */
-    onPolygonShowChange(e) {
-        if (e == "Show") {
-            this.widgets['polygons-label-show'] = true;
-            $('.polygons-label-row').slideDown();
-            console.log('render poly show change');
-            this.visuals.twoD.render();
-             //If hidden by default, unhide to perform slide up and down
-            //  if(!this.ShowGlobalSettingsNodeColorTable){
-            //     this.ShowGlobalSettingsNodeColorTable = true;
-            // } else {
-            //     $('#node-color-table-row').slideDown();
-            // }
-        }
-        else {
-            this.widgets['polygons-label-show'] = false;
-            $('#node-color-value-row').slideDown();
-            $('#node-color-table-row').slideUp();
-            console.log('render poly hide change');
-            this.visuals.twoD.render();
-        }
+        this._rerender();
     }
 
 
@@ -2494,8 +2565,63 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         } else {
             $('.node-label-row').css('display', 'flex');
         }
-        this.redrawLabels();
+
+        this._rerender();
     }
+
+    /**
+     * Gets the label for a node based on node label variable
+     * @param node the node retrieve to get the value of the variable
+     */
+    getNodeLabel( node : any) {
+
+        // If no label variable then should be none
+        return (this.widgets['node-label-variable'] == 'None') ? '' : node[this.widgets['node-label-variable']];
+    
+    }
+
+    /**
+     * Gets the label for a link based on link label variable
+     * @param node the link we retrieve to get the value of the variable
+     */
+    getLinkLabel( link : any) {
+
+        // console.log('link variable: ',this.widgets['link-label-variable'] );
+        let labelVariable = this.widgets['link-label-variable'];
+        // If no label variable then should be none
+        if (labelVariable == 'None') {
+            return { text : ''};
+        } else {
+            // console.log('link variable2: ',this.visuals.twoD.commonService.session.data.links[index]);
+
+            if (labelVariable == 'source_id') {
+                return link['source']['id']
+            } else if (labelVariable == 'source_index') {
+                return link['source']['index']
+            } else if (labelVariable == 'target_id') {
+                return link['target']['id']
+            } else if(labelVariable == 'target_index') {
+                return link['target']['index']
+            } else if (labelVariable != 'distance') {
+                return { text : link[labelVariable] };
+            }
+            console.log('cluster link: ', link);
+            const labelValue = link[labelVariable];
+            if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
+                // console.log('is number');
+                if(this.widgets['default-distance-metric'] == 'snps') {
+                    return { text :  Math.round(parseFloat(labelValue))};
+                } else {
+                    return (labelValue != 0) ?  { text : parseFloat(labelValue).toFixed(this.widgets['link-label-decimal-length']) } : { text : ''};
+                }                
+            } else {
+
+                    return { text : labelValue};
+            }
+
+        }
+    }
+
 
     /**
      * Calls setNodeLabelSize to update label-size and redraw labels
@@ -2509,8 +2635,9 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     setNodeLabelSize(size) {
         this.widgets['node-label-size'] = parseFloat(size);
-        this.visuals.twoD.redrawLabels();
+        document.documentElement.style.setProperty('--vis-graph-node-label-font-size', `${this.SelectedNodeLabelSizeVariable}pt`);
     }
+    
 
     /**
      * Updates node-label-orientation and then redraws labels
@@ -2533,52 +2660,54 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         }
 
         this.widgets['node-tooltip-variable'] = selectedValue;
-        // removed redrawLabels because it doesn't have anything to do with tooltip
-        //this.visuals.twoD.redrawLabels();
+        
     }
 
     onNodeSymbolVariableChange(e, setVisibility = true) {
 
-            this.widgets['node-symbol-variable'] = this.SelectedNodeSymbolVariable;
+            // this.widgets['node-symbol-variable'] = this.SelectedNodeSymbolVariable;
 
 
             if(setVisibility){
                 this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.setVisibility(true);
                 this.visuals.twoD.SelectedNetworkTableTypeVariable = "Show";
-
-                if (this.SelectedNodeSymbolVariable !== 'None') {
-
-                    $('#node-symbol-row').slideUp();
-                    
-                    //If hidden by default, unhide to perform slide up and down
-                    if(!this.ShowNodeSymbolTable){
-                        this.ShowNodeSymbolTable = true;
-                    } else {
-                        $('#node-symbol-table-row').slideDown();
-                    }
-
-                // No shape by variable selected
-                // show shape, hide table 
-                } else {
-
-                    $('#node-symbol-row').slideDown();
-                    $('#node-symbol-table-row').slideUp();
-                    this.onNodeSymbolTableChange('Hide');
-
-                }
-    
             }
+            // if(e !== 'None' && setVisibility){
+            //     this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.setVisibility(true);
+            //     this.visuals.twoD.SelectedNetworkTableTypeVariable = "Show";
+
+            //     if (this.SelectedNodeSymbolVariable !== 'None') {
+
+            //         $('#node-symbol-row').slideUp();
+                    
+            //         //If hidden by default, unhide to perform slide up and down
+            //         if(!this.ShowNodeSymbolTable){
+            //             this.ShowNodeSymbolTable = true;
+            //         } else {
+            //             $('#node-symbol-table-row').slideDown();
+            //         }
+
+            //     // No shape by variable selected
+            //     // show shape, hide table 
+            //     } else {
+
+            //         $('#node-symbol-row').slideDown();
+            //         $('#node-symbol-table-row').slideUp();
+            //         this.onNodeSymbolTableChange('Hide');
+
+            //     }
+    
+            // }
 
 
-            this.visuals.twoD.cdref.detectChanges();
+            // this.visuals.twoD.cdref.detectChanges();
 
-            this.generateNodeSymbolSelectionTable("#node-symbol-table", e);
+            // this.generateNodeSymbolSelectionTable("#node-symbol-table", e);
             
-            this.visuals.twoD.redrawNodes();
 
     }
 
-    generateNodeSymbolSelectionTable(tableId: string, variable: string, isEditable: boolean = true) {
+    public generateNodeSymbolSelectionTable(tableId: string, variable: string, isEditable: boolean = true) {
         this.visuals.microbeTrace.clearTable(tableId);
 
         let symbolMapping: { key: string, value: string }[] = [
@@ -2654,26 +2783,27 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             return aggregates[b] - aggregates[a];
         });
         
-        this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
+        // this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
         
         values.forEach((v, i) => {
+            // PRE D3
 
-            let selector = $(`<select ${disabled}></select>`).append(options).val(this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v)).on('change',  (e) => {
-                this.visuals.twoD.commonService.session.style.nodeSymbols.splice(i, 1, (e.target as any).value);
-                this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
-                this.visuals.twoD.redrawNodes();
-            });        
-            let symbolText = symbolMapping.find(x => x.key === this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v));
+            // let selector = $(`<select ${disabled}></select>`).append(options).val(this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v)).on('change',  (e) => {
+            //     this.visuals.twoD.commonService.session.style.nodeSymbols.splice(i, 1, (e.target as any).value);
+            //     this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
+            //     this.visuals.twoD.redrawNodes();
+            // });        
+            // let symbolText = symbolMapping.find(x => x.key === this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v));
 
-            let cell = $('<td></td>').append(isEditable ? selector : symbolText ? symbolText.value : '');
-            let row = $(
-                '<tr>' +
-                `<td ${isEditable ? 'contenteditable' : ''}> ${this.visuals.twoD.commonService.titleize('' + v)} </td> ` +
-                (this.widgets['node-symbol-table-counts'] ? ('<td>' + aggregates[v] + '</td>') : '') +
-                (this.widgets['node-symbol-table-frequencies'] ? ('<td>' + (aggregates[v] / vnodes).toLocaleString() + '</td>') : '') +
-                '</tr>'
-            ).append(cell);
-            table.append(row);
+            // let cell = $('<td></td>').append(isEditable ? selector : symbolText ? symbolText.value : '');
+            // let row = $(
+            //     '<tr>' +
+            //     `<td ${isEditable ? 'contenteditable' : ''}> ${this.visuals.twoD.commonService.titleize('' + v)} </td> ` +
+            //     (this.widgets['node-symbol-table-counts'] ? ('<td>' + aggregates[v] + '</td>') : '') +
+            //     (this.widgets['node-symbol-table-frequencies'] ? ('<td>' + (aggregates[v] / vnodes).toLocaleString() + '</td>') : '') +
+            //     '</tr>'
+            // ).append(cell);
+            // table.append(row);
         });
 
 
@@ -2703,7 +2833,11 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
     }
 
-    onNodeRadiusVariableChange(e) {
+    public onNodeRadiusVariableChange(e) {
+
+        this.widgets['node-radius-variable'] = e;
+
+        // console.log('radius change: ', this.widgets['node-radius-variable']);
 
         if (e == 'None') {
             $('#node-max-radius-row').slideUp();
@@ -2715,41 +2849,173 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             $('#node-radius-row').slideUp();
           }
 
-        this.widgets['node-radius-variable'] = e;
-        this.visuals.twoD.redrawNodes();
+          this._rerender(); 
 
     }
 
     /**
      * Updates node-radius-max widget and redraws nodes
      */
-   onNodeRadiusMaxChange(e) {
+   public onNodeRadiusMaxChange(e) {
     this.widgets['node-radius-max'] = e;
-    this.visuals.twoD.redrawNodes();
+    this.updateMinMaxNode();
+    this._rerender();
    }
 
     /**
      * Updates node-radius-min widget and redraws nodes
      */
-   onNodeRadiusMinChange(e) {
-    this.widgets['node-radius-min'] = e;
-    this.visuals.twoD.redrawNodes();
+   public onNodeRadiusMinChange(e) {
+        this.widgets['node-radius-min'] = e;
+        this.updateMinMaxNode()
+        this._rerender();
    }
 
     /**
      * Updates node-border-width widget and redraws nodes
      */
-    onNodeBorderWidthChange(e) {
+    public onNodeBorderWidthChange(e) {
         this.widgets['node-border-width'] = e;
-        this.visuals.twoD.redrawNodeBorder();
+        this.updateMinMaxNode()
+        this._rerender();
     }
 
     /**
      * Updates node-radius widget and redraws nodes
      */
-    onNodeRadiusChange(e) {
+    public onNodeRadiusChange(e) {
+
         this.widgets['node-radius'] = e;
-        this.visuals.twoD.redrawNodes();
+
+        this._rerender();
+       
+    }
+
+    /**
+     * Rerenders whole data set by resetting data object
+     */
+    private _rerender() {
+
+        console.log('dist rerender')
+        if (this.data === undefined) {
+            return;
+        } 
+
+        let networkData = { 
+            nodes: this.visuals.twoD.commonService.getVisibleNodes(), 
+            links: this.visuals.twoD.commonService.getVisibleLinks()
+        };
+        
+        this.data = this.visuals.twoD.commonService.convertToGraphDataArray(networkData);
+
+        // document.documentElement.style.setProperty('--vis-graph-panel-fill-color', `${this.SelectedNodeLabelSizeVariable}pt`);
+
+        // Update the panels
+        this.updatePanels();
+
+    }
+
+      public updatePanels(): void {
+        if (this.layoutType2 === GraphLayoutType.Parallel) {
+          // Update nodes and generate new panels
+          const { updatedNodes, panels, groups } = this.commonService.updateNodesAndGeneratePanels(this.data);
+    
+          // Update data with updated nodes
+          this.data = {
+            ...this.data,
+            nodes: updatedNodes
+          };
+    
+          // Ensure panels are deep cloned
+          this.panels = JSON.parse(JSON.stringify(panels));
+
+          // Update polygonGroups
+          this.visuals.twoD.commonService.temp.polygonGroups = groups;
+        
+          // Use setTimeout to trigger change detection in the next tick
+          setTimeout(() => {
+            this.cdref.detectChanges();
+            this.cdref.markForCheck();
+          }, 0);
+        }
+      }
+
+    public getNodeShape( node : any ) {
+
+        //* Shapes:
+        let symbolVariable = this.widgets['node-symbol-variable'];
+
+        if(symbolVariable == "None") {
+            return this.widgets['node-symbol-variable'];
+        } else {
+
+        }
+
+        // // Custom Shape Selected
+        // if (type === undefined) {
+        //     type = this.customShapes.shapes[this.widgets['node-symbol']];
+        // }
+
+        // //* Sizes:
+        // let defaultSize = this.widgets['node-radius'];
+        // let size = defaultSize, med = defaultSize, oldrng, min, max;
+        // let sizeVariable = this.widgets['node-radius-variable'];
+        // let scale;
+        // let nodes;
+        // if (sizeVariable !== 'None') {
+        //     if (this.widgets["timeline-date-field"] == 'None') nodes = this.visuals.twoD.commonService.session.network.nodes;
+        //     else nodes = this.visuals.twoD.commonService.session.network.timelineNodes;
+        //     let n = this.visuals.twoD.commonService.session.network.nodes.length;
+        //     min = Number.MAX_VALUE;
+        //     max = Number.MIN_VALUE;
+        //     for (let i = 0; i < n; i++) {
+        //         let size = this.visuals.twoD.commonService.session.network.nodes[i][sizeVariable];
+        //         if (typeof size == 'undefined') continue;
+        //         if (size < min) min = size;
+        //         if (size > max) max = size;
+        //     }
+        //     oldrng = max - min;
+        //     med = oldrng / 2;
+
+        //     let maxWidth = this.widgets['node-radius-max'];
+        //     let minWidth = this.widgets['node-radius-min'];
+        //     // scale = d3.scaleLinear()
+        //     // .domain([min, max])
+        //     // .range([minWidth, maxWidth]);
+        //     }
+        
+        // nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes);
+
+        // // TODO: Hides table row by default if no symbol variable - clean up
+        // if(symbolVariable === 'None') {
+        //     $('#node-symbol-table-row').slideUp();
+        // }
+
+        // // console.log('nodes: ', nodes);
+
+        // let that = this;
+
+        // nodes.selectAll('path').each(function (d) {
+
+        //     if (symbolVariable !== 'None') {
+
+        //         // type = d3[that.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
+
+        //         // if (type === undefined) {
+        //         //     type = that.customShapes.shapes[that.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
+        //         // }
+    
+        //     } 
+        //     if (sizeVariable !== 'None') {
+        //       size = d[sizeVariable];
+        //       if (!that.isNumber(size)) size = med;
+        //       size = scale(size);
+        //     }
+
+        //     // d3.select(this).attr('d', d3.symbol().size(size).type(type));    
+            
+        //   });
+
     }
 
     /**
@@ -2757,7 +3023,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     onNodeSymbolChange(e) {
         this.widgets['node-symbol'] = e;
-        this.visuals.twoD.redrawNodes();
+        this._rerender();
     }
 
     /**
@@ -2787,9 +3053,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this.widgets['link-tooltip-variable'] = e;
         this.visuals.twoD.SelectedLinkTooltipVariable = this.widgets['link-tooltip-variable'];
         // not sure if redraw labels is necessary - it doesn't deal with link or tooltip
-        this.visuals.twoD.redrawLabels();
+        // this.visuals.twoD.redrawLabels();
 
-//TODO: umm.... do something here?
     }
 
     /**
@@ -2798,34 +3063,36 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     onLinkLabelVariableChange(e) {
         let label: any = e;
         this.widgets['link-label-variable'] = label;
-        if (label == 'None') {
-            this.visuals.twoD.svg.select('g.links').selectAll('text').text('');
-        } else {
-            this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.visuals.twoD.getLLinks()).text((l) => {
-                if (label == 'source_id') {
-                    return l['source']['id']
-                } else if (label == 'source_index') {
-                    return l['source']['index']
-                } else if (label == 'target_id') {
-                    return l['target']['id']
-                } else if(label == 'target_index') {
-                    return l['target']['index']
-                } else if (label != 'distance') {
-                    return l[this.widgets['link-label-variable']]
-                }
-                const labelValue = l[this.widgets['link-label-variable']];
-                if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
-                    if(this.widgets['default-distance-metric'] == 'snps') {
-                        return Math.round(parseFloat(labelValue));
-                    } else {
-                        return parseFloat(labelValue).toFixed(this.widgets['link-label-decimal-length']);
-                    }                
-                } else {
-                        return labelValue;
-                }
-              });
-            this.visuals.twoD.force.alpha(0.01).alphaTarget(0).restart();
-        }
+
+        this._rerender();
+        // if (label == 'None') {
+            // this.visuals.twoD.svg.select('g.links').selectAll('text').text('');
+        // } 
+        //     this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.visuals.twoD.getLLinks()).text((l) => {
+        //         if (label == 'source_id') {
+        //             return l['source']['id']
+        //         } else if (label == 'source_index') {
+        //             return l['source']['index']
+        //         } else if (label == 'target_id') {
+        //             return l['target']['id']
+        //         } else if(label == 'target_index') {
+        //             return l['target']['index']
+        //         } else if (label != 'distance') {
+        //             return l[this.widgets['link-label-variable']]
+        //         }
+        //         const labelValue = l[this.widgets['link-label-variable']];
+        //         if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
+        //             if(this.widgets['default-distance-metric'] == 'snps') {
+        //                 return Math.round(parseFloat(labelValue));
+        //             } else {
+        //                 return parseFloat(labelValue).toFixed(this.widgets['link-label-decimal-length']);
+        //             }                
+        //         } else {
+        //                 return labelValue;
+        //         }
+        //       });
+        //     this.visuals.twoD.force.alpha(0.01).alphaTarget(0).restart();
+        // }
     }
 
     /**
@@ -2833,24 +3100,27 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     onLinkDecimalVariableChange(e) {
         this.widgets['link-label-decimal-length'] = e;
-        this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.getLLinks()).text((l) => {
-            const labelValue = l[this.widgets['link-label-variable']];
+        this._rerender();
+        // this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.getLLinks()).text((l) => {
+        //     const labelValue = l[this.widgets['link-label-variable']];
               
-            if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
-                return parseFloat(labelValue).toFixed(this.widgets['link-label-decimal-length']);
-            } else {
-                return labelValue;
-            }
-          }); 
+        //     if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
+        //         return parseFloat(labelValue).toFixed(this.widgets['link-label-decimal-length']);
+        //     } else {
+        //         return labelValue;
+        //     }
+        //   }); 
     }
 
     /**
      * Updates link-opacity widget and the opacity for all links
      */
     onLinkOpacityChange(e) {
+        console.log('link opacity change')
         this.widgets['link-opacity'] = e;
         let opacity = 1 - e;
-        this.visuals.twoD.svg.select('g.links').selectAll('line').attr('opacity', opacity);
+        this._rerender();
+        // this.visuals.twoD.svg.select('g.links').selectAll('line').attr('opacity', opacity);
     }
 
     /**
@@ -2868,7 +3138,72 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             $('#link-min-width-row').css('display', 'flex');
         }
         this.widgets['link-width-variable'] = e;
-        this.visuals.twoD.scaleLinkWidth();
+        this.updateMinMaxLink();
+        this._rerender();
+    }
+
+    updateMinMaxNode(){
+
+        this.visNodes = this.commonService.getVisibleNodes();
+        let n = this.visNodes.length;
+        let maxWidth = this.widgets['node-radius-max'];
+        let minWidth = this.widgets['node-radius-min'];
+        console.log('minWidth: ', minWidth);
+        console.log('maxWidth: ', maxWidth);
+        let sizeVariable = this.widgets['node-radius-variable'];
+
+
+        this.nodeMin = Number.MAX_VALUE;
+        this.nodeMax = Number.MIN_VALUE;
+        for (let i = 0; i < n; i++) {
+          let size = this.visNodes[i][sizeVariable];
+          if (typeof size == 'undefined') continue;
+          if (size < this.nodeMin) this.nodeMin = size;
+          if (size > this.nodeMax) this.nodeMax = size;
+        }
+        
+        console.log('nodeMin: ', this.nodeMin);
+        console.log('nodeMax: ', this.nodeMax);
+        this.nodeMid = (this.nodeMax - this.nodeMin) / 2;
+
+        this.nodeScale = d3.scaleLinear()
+          .domain([this.nodeMin, this.nodeMax])
+          .range([minWidth, maxWidth]);
+    }
+
+    updateMinMaxLink(){
+        console.log('updating once');
+        let maxWidth = this.widgets['link-width-max'];
+        if (maxWidth == 'None') {
+            this.widgets['link-width-max'] = 15;
+            maxWidth = 15;
+        } 
+        let minWidth = this.widgets['link-width-min'];
+        if (minWidth == 'None') {
+            this.widgets['link-width-min'] = 0;
+            minWidth = 0;
+        }
+        let variable = this.widgets['link-width-variable'];
+
+        this.visLinks = this.getVLinks();
+        let n = this.visLinks.length;
+        this.linkMax = -Infinity;
+        this.linkMin = Infinity;
+        for (let i = 0; i < n; i++) {
+          let l = this.visLinks[i][variable];
+          if (!this.isNumber(l)) return;
+          if (l > this.linkMax) this.linkMax = l;
+          if (l < this.linkMin) this.linkMin = l;
+        }
+
+        console.log('link min: ', this.linkMin)
+        console.log('link max: ', this.linkMax);
+        this.linkScale = d3.scaleLinear()
+            .domain([this.linkMin, this.linkMax])
+            .range([minWidth, maxWidth]);
+        
+        console.log('linkScale1: ', this.linkScale);
+
     }
 
     /**
@@ -2892,6 +3227,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     onLinkWidthChange(e) {
         this.widgets['link-width'] = e;
         this.visuals.twoD.scaleLinkWidth();
+        this._rerender();
     }
 
     /**
@@ -2899,7 +3235,9 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     onLinkWidthMaxChange(e) {
         this.widgets['link-width-max'] = e;
-        this.visuals.twoD.scaleLinkWidth();
+        this.updateMinMaxLink(); 
+        this._rerender();
+
     }
 
     /**
@@ -2907,15 +3245,17 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     onLinkWidthMinChange(e) {
         this.widgets['link-width-min'] = e;
-        this.visuals.twoD.scaleLinkWidth();
+        this.updateMinMaxLink(); 
+        this._rerender();
+
     }
 
     /**
      * Updates link-length widget and link force distance
      */
     onLinkLengthChange(e) {
-        this.visuals.twoD.force.force('link').distance(e);
-        this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+        // this.visuals.twoD.force.force('link').distance(e);
+        // this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
         this.widgets['link-length'] = e;
     }
 
@@ -2924,13 +3264,15 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     onLinkDirectedUndirectedChange(e) {
         if (e == "Show") {
-            this.visuals.twoD.svg.select('g.links').selectAll('line').attr('marker-end', 'url(#end-arrow)');
+            // this.visuals.twoD.svg.select('g.links').selectAll('line').attr('marker-end', 'url(#end-arrow)');
             this.widgets['link-directed'] = true;
         }
         else {
-            this.visuals.twoD.svg.select('g.links').selectAll('line').attr('marker-end', null);
+            // this.visuals.twoD.svg.select('g.links').selectAll('line').attr('marker-end', null);
             this.widgets['link-directed'] = false;
         }
+
+        this._rerender();
     }
 
     /**
@@ -2950,50 +3292,60 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      * @param show wheither to show or hide gridlines
      */
     drawGridlines(show: boolean): void {
+        const container = document.getElementById('viz-force');
+    
+        // Ensure the container exists
+        if (!container) return;
+    
         // Reset width and height in case they have changed
-        this.visuals.twoD.halfWidth = ($('#network').parent().width() as number) / 2;
-        this.visuals.twoD.halfHeight = ($('#network').parent().parent().parent().height() as number) / 2;
+        this.visuals.twoD.halfWidth = container.parentElement.offsetWidth / 2;
+        this.visuals.twoD.halfHeight = container.parentElement.parentElement.parentElement.offsetHeight / 2;
+    
+        // Create or select horizontal gridlines group
+        let horizontalGridlinesGroup = container.querySelector('g.horizontal-gridlines') as SVGGElement;
+        if (!horizontalGridlinesGroup) {
+            horizontalGridlinesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            horizontalGridlinesGroup.classList.add('horizontal-gridlines');
+            container.querySelector('svg').insertBefore(horizontalGridlinesGroup, container.querySelector('svg').firstChild);
+        }
+    
+        // Create or select vertical gridlines group
+        let verticalGridlinesGroup = container.querySelector('g.vertical-gridlines') as SVGGElement;
+        if (!verticalGridlinesGroup) {
+            verticalGridlinesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            verticalGridlinesGroup.classList.add('vertical-gridlines');
+            container.querySelector('svg').insertBefore(verticalGridlinesGroup, container.querySelector('svg').firstChild);
+        }
+    
+        // Clear existing lines
+        horizontalGridlinesGroup.innerHTML = '';
+        verticalGridlinesGroup.innerHTML = '';
     
         if (show) {
-            let range = Math.ceil(Math.max(this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight) / 50);
-            let ords = Object.keys(new Array(range).fill(null)).map(parseFloat);
+            const range = Math.ceil(Math.max(this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight) / 50);
+            const ords = Array.from({ length: range }, (_, i) => i);
     
             // Horizontal lines
-            let horizontalLines = d3.select('#network g.horizontal-gridlines').selectAll('line').data(ords);
-    
-            // Exit selection: remove extra lines
-            horizontalLines.exit().remove();
-    
-            // Update selection: modify existing lines
-            horizontalLines.attr('x2', this.visuals.twoD.halfWidth * 2);
-    
-            // Enter selection: add new lines
-            horizontalLines.enter().append('line')
-                .attr('x1', 0)
-                .attr('x2', this.visuals.twoD.halfWidth * 2)
-                .attr('y1', function (d) { return d * 100; })
-                .attr('y2', function (d) { return d * 100; })
-                .attr('stroke', 'lightgray');
+            ords.forEach(d => {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', '0');
+                line.setAttribute('x2', (this.visuals.twoD.halfWidth * 2).toString());
+                line.setAttribute('y1', (d * 100).toString());
+                line.setAttribute('y2', (d * 100).toString());
+                line.setAttribute('stroke', 'lightgray');
+                horizontalGridlinesGroup.appendChild(line);
+            });
     
             // Vertical lines
-            let verticalLines = d3.select('#network g.vertical-gridlines').selectAll('line').data(ords);
-    
-            // Exit selection: remove extra lines
-            verticalLines.exit().remove();
-    
-            // Update selection: modify existing lines
-            verticalLines.attr('y2', this.visuals.twoD.halfHeight * 2);
-    
-            // Enter selection: add new lines
-            verticalLines.enter().append('line')
-                .attr('x1', function (d) { return d * 100; })
-                .attr('x2', function (d) { return d * 100; })
-                .attr('y1', 0)
-                .attr('y2', this.visuals.twoD.halfHeight * 2)
-                .attr('stroke', 'lightgray');
-        } else {
-            d3.select('#network g.horizontal-gridlines').html(null);
-            d3.select('#network g.vertical-gridlines').html(null);
+            ords.forEach(d => {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', (d * 100).toString());
+                line.setAttribute('x2', (d * 100).toString());
+                line.setAttribute('y1', '0');
+                line.setAttribute('y2', (this.visuals.twoD.halfHeight * 2).toString());
+                line.setAttribute('stroke', 'lightgray');
+                verticalGridlinesGroup.appendChild(line);
+            });
         }
     }
     
@@ -3017,8 +3369,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     onNodeChargeChange(e: number) {
 
-        this.visuals.twoD.force.force('charge').strength(-e);
-        this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+        // this.visuals.twoD.force.force('charge').strength(-e);
+        // this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
         this.widgets['node-charge'] = e;
     }
 
@@ -3028,8 +3380,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     onNetworkGravityChange(e: number) {
 
-        this.visuals.twoD.force.force('gravity').strength(e);
-        this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+        // this.visuals.twoD.force.force('gravity').strength(e);
+        // this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
         this.widgets['network-gravity'] = e;
     }
 
@@ -3039,8 +3391,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     onNetworkFrictionChange(e) {
 
-        this.visuals.twoD.force.velocityDecay(e);
-        this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+        // this.visuals.twoD.force.velocityDecay(e);
+        // this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
         this.widgets['network-friction'] = e;
     }
 
@@ -3052,8 +3404,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
         //console.log('st change: ', e);
         let v = parseFloat(e);
-        this.visuals.twoD.force.force('link').strength(v);
-        this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+        // this.visuals.twoD.force.force('link').strength(v);
+        // this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
         this.widgets['network-link-strength'] = e;
     }
 
@@ -3077,85 +3429,115 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         //debugger;
 
         let variable = this.widgets['node-color-variable'];
-        let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').select('path').data(this.visuals.twoD.commonService.session.network.nodes).classed('selected', d => d.selected);
-        let col = this.widgets['node-color'];
+        let color = this.widgets['node-color']
+        // let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').select('path').data(this.visuals.twoD.commonService.session.network.nodes).classed('selected', d => d.selected);
+        // let col = this.widgets['node-color'];
 
         let stroke = this.widgets['selected-node-stroke-color'];
         let stroke_width = parseInt(this.widgets['selected-node-stroke-width']);
 
+
         if (variable == 'None') {
 
-            nodes
-                .attr('fill', col).attr('opacity', 1);
+            this.data.nodes.forEach( x => {
+
+                x.color = color;
+
+            })
+
+
+            // nodes
+                // .attr('fill', col).attr('opacity', 1);
 
             // this.context.microbeTrace.clearTable("#node-color-table-bottom");
 
         } else {
-            nodes
-                .attr('fill', d => this.visuals.twoD.commonService.temp.style.nodeColorMap(d[variable]))
-                .attr('opacity', d => this.visuals.twoD.commonService.temp.style.nodeAlphaMap(d[variable]));
+
+            this.data.nodes.forEach( (x, index) => {
+
+                x.color = this.visuals.twoD.commonService.temp.style.nodeColorMap(this.visuals.twoD.commonService.session.data.nodes[index][variable]);
+                
+            })
+
+
+            // nodes
+            //     .attr('fill', d => this.visuals.twoD.commonService.temp.style.nodeColorMap(d[variable]))
+            //     .attr('opacity', d => this.visuals.twoD.commonService.temp.style.nodeAlphaMap(d[variable]));
 
             //  this.context.microbeTrace.generateNodeColorTable("#node-color-table-bottom", false);
         }
 
 
-        Array.from(nodes._groups).forEach((x: any)=>{
-            x.forEach(y=>{
-                if(!this.visuals.twoD.commonService.session.data.nodes.find(z => y.__data__.index === z.index)){
-                    y.style['opacity'] = 0;
-                }
-            })
-        })
+        // Array.from(nodes._groups).forEach((x: any)=>{
+        //     x.forEach(y=>{
+        //         if(!this.visuals.twoD.commonService.session.data.nodes.find(z => y.__data__.index === z.index)){
+        //             y.style['opacity'] = 0;
+        //         }
+        //     })
+        // })
+
+        
 
         let _selected: any = this.visuals.twoD.commonService.session.data.nodes.filter(d => d.selected);
+        // this.data.nodes.forEach( (x, index) => {
 
-        /*/
-         * Add a color that shows the node is selected.
-        /*/
+        //     x.color = this.visuals.twoD.commonService.temp.style.nodeColorMap(this.visuals.twoD.commonService.session.data.nodes[index][variable]);
+            
+        // })
 
-        if (_selected.length > 0) {
+        this._rerender();
+        this.cdref.markForCheck();
+        this.cdref.detectChanges();
 
-            Array.from(nodes._groups).filter(x => {
+        // (data: Datum, event: MouseEvent, i: number, els: (SVGElement | HTMLElement)[])
 
-                (<any>x).filter(y => {
+        // /*/
+        //  * Add a color that shows the node is selected.
+        // /*/
 
-                    /*/
-                     * Turn on the node(s) selected.
-                    /*/
-                    if (y['__data__'].selected == true) {
+        // if (_selected.length > 0) {
 
-                        y.style['stroke'] = stroke;
-                        y.style['strokeWidth'] = stroke_width;
+        //     Array.from(nodes._groups).filter(x => {
 
-                    }
-                    else {
-                        /*/
-                         * Otherwise, turn on the node(s) selected.
-                        /*/
+        //         (<any>x).filter(y => {
 
-                        y.style['stroke'] = "#000000";
-                        y.style['strokeWidth'] = this.widgets['node-border-width'];
-                    }
-                });
-            });
-        }
-        else {
+        //             /*/
+        //              * Turn on the node(s) selected.
+        //             /*/
+        //             if (y['__data__'].selected == true) {
+
+        //                 y.style['stroke'] = stroke;
+        //                 y.style['strokeWidth'] = stroke_width;
+
+        //             }
+        //             else {
+        //                 /*/
+        //                  * Otherwise, turn on the node(s) selected.
+        //                 /*/
+
+        //                 y.style['stroke'] = "#000000";
+        //                 y.style['strokeWidth'] = this.widgets['node-border-width'];
+        //             }
+        //         });
+        //     });
+        // }
+        // else {
 
 
-            Array.from(nodes._groups).filter(x => {
+        //     Array.from(nodes._groups).filter(x => {
 
-                (<any>x).filter(y => {
+        //         (<any>x).filter(y => {
 
-                    /*/
-                        * Otherwise, turn on the node(s) selected.
-                    /*/
+        //             /*/
+        //                 * Otherwise, turn on the node(s) selected.
+        //             /*/
 
-                    y.style['stroke'] = "#000000";
-                    y.style['strokeWidth'] = this.widgets['node-border-width'];
+        //             y.style['stroke'] = "#000000";
+        //             y.style['strokeWidth'] = this.widgets['node-border-width'];
 
-                });
-            });
-        }
+        //         });
+        //     });
+        // }
 
 
 
@@ -3167,91 +3549,92 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     updateLinkColor() {
 
-        let variable = this.widgets['link-color-variable'];
-        // console.log('updating variable: ',variable );
-        let links = this.visuals.twoD.svg.select('g.links').selectAll('line');
-        if (variable == 'None') {
-            let color = this.widgets['link-color'],
-                opacity = 1 - this.widgets['link-opacity'];
-            links
-                .attr('stroke', color)
-                .attr('opacity', opacity);
+        // let variable = this.widgets['link-color-variable'];
+        // // console.log('updating variable: ',variable );
+        // let links = this.visuals.twoD.svg.select('g.links').selectAll('line');
+        // if (variable == 'None') {
+        //     let color = this.widgets['link-color'],
+        //         opacity = 1 - this.widgets['link-opacity'];
+        //     links
+        //         .attr('stroke', color)
+        //         .attr('opacity', opacity);
 
-            // this.context.microbeTrace.clearTable("#link-color-table-bottom");
-        } else {
-            // this.context.microbeTrace.generateNodeLinkTable("#link-color-table-bottom", false);
-            if (variable == 'source' || variable == 'target') {
-                links
-                .data(this.getVLinks())
-                .attr('stroke', l => this.visuals.twoD.commonService.temp.style.linkColorMap(l[variable]['_id']))
-                .attr('opacity', l => this.visuals.twoD.commonService.temp.style.linkAlphaMap(l[variable]['_id']))
-                .attr('stroke-dasharray', l => {
-                    //This quirky little algorithm creates the dasharray code necessary to make dash-y links.
-                    let length = 15;
-                    let out = new Array(l.origins * 2);
-                    let ofs = new Array(l.origins).fill(1);
-                    let ons = new Array(l.origins).fill(0);
-                    ons[l.oNum] = 1;
-                    ofs[l.oNum] = 0;
-                    for (let i = 0; i < l.origins; i++) {
-                        out[2 * i] = ons[i] * length;
-                        out[2 * i + 1] = ofs[i] * length;
-                    }
-                    return out.join(', ');
-                });
-            } else {
-                links
-                    .data(this.getVLinks())
-                    .attr('stroke', l => this.visuals.twoD.commonService.temp.style.linkColorMap(l[variable]))
-                    .attr('opacity', l => this.visuals.twoD.commonService.temp.style.linkAlphaMap(l[variable]))
-                    .attr('stroke-dasharray', l => {
-                        //This quirky little algorithm creates the dasharray code necessary to make dash-y links.
-                        let length = 15;
-                        let out = new Array(l.origins * 2);
-                        let ofs = new Array(l.origins).fill(1);
-                        let ons = new Array(l.origins).fill(0);
-                        ons[l.oNum] = 1;
-                        ofs[l.oNum] = 0;
-                        for (let i = 0; i < l.origins; i++) {
-                            out[2 * i] = ons[i] * length;
-                            out[2 * i + 1] = ofs[i] * length;
-                        }
-                        return out.join(', ');
-                    });
-            }
-        }
+        //     // this.context.microbeTrace.clearTable("#link-color-table-bottom");
+        // } else {
+        //     // this.context.microbeTrace.generateNodeLinkTable("#link-color-table-bottom", false);
+        //     if (variable == 'source' || variable == 'target') {
+        //         links
+        //         .data(this.getVLinks())
+        //         .attr('stroke', l => this.visuals.twoD.commonService.temp.style.linkColorMap(l[variable]['_id']))
+        //         .attr('opacity', l => this.visuals.twoD.commonService.temp.style.linkAlphaMap(l[variable]['_id']))
+        //         .attr('stroke-dasharray', l => {
+        //             //This quirky little algorithm creates the dasharray code necessary to make dash-y links.
+        //             let length = 15;
+        //             let out = new Array(l.origins * 2);
+        //             let ofs = new Array(l.origins).fill(1);
+        //             let ons = new Array(l.origins).fill(0);
+        //             ons[l.oNum] = 1;
+        //             ofs[l.oNum] = 0;
+        //             for (let i = 0; i < l.origins; i++) {
+        //                 out[2 * i] = ons[i] * length;
+        //                 out[2 * i + 1] = ofs[i] * length;
+        //             }
+        //             return out.join(', ');
+        //         });
+        //     } else {
+        //         links
+        //             .data(this.getVLinks())
+        //             .attr('stroke', l => this.visuals.twoD.commonService.temp.style.linkColorMap(l[variable]))
+        //             .attr('opacity', l => this.visuals.twoD.commonService.temp.style.linkAlphaMap(l[variable]))
+        //             .attr('stroke-dasharray', l => {
+        //                 //This quirky little algorithm creates the dasharray code necessary to make dash-y links.
+        //                 let length = 15;
+        //                 let out = new Array(l.origins * 2);
+        //                 let ofs = new Array(l.origins).fill(1);
+        //                 let ons = new Array(l.origins).fill(0);
+        //                 ons[l.oNum] = 1;
+        //                 ofs[l.oNum] = 0;
+        //                 for (let i = 0; i < l.origins; i++) {
+        //                     out[2 * i] = ons[i] * length;
+        //                     out[2 * i + 1] = ofs[i] * length;
+        //                 }
+        //                 return out.join(', ');
+        //             });
+        //     }
+        // }
+        
+        this._rerender();
     };
 
     /**
      * Updates the width of the links using link-width, link-width-variable, link-width-max, link-width-min, and link-width-reciprocal
      */
     scaleLinkWidth() {
-        let scalar = this.widgets['link-width'];
-        let variable = this.widgets['link-width-variable'];
-        let vlinks = this.visuals.twoD.getVLinks();
-        let links = this.visuals.twoD.svg.select('g.links').selectAll('line').data(vlinks);
-        if (variable == 'None') return links.attr('stroke-width', scalar);
-        let n = vlinks.length;
-        let maxWidth = this.widgets['link-width-max'];
-        let minWidth = this.widgets['link-width-min'];
+        // let scalar = this.widgets['link-width'];
+        // let variable = this.widgets['link-width-variable'];
+        // let vlinks = this.visuals.twoD.getVLinks();
+        // if (variable == 'None') return  scalar;
+        // let n = vlinks.length;
+        // let maxWidth = this.widgets['link-width-max'];
+        // let minWidth = this.widgets['link-width-min'];
 
-        let max = -Infinity;
-        let min = Infinity;
-        for (let i = 0; i < n; i++) {
-            let l = vlinks[i][variable];
-            if (!this.visuals.twoD.isNumber(l)) return;
-            if (l > max) max = l;
-            if (l < min) min = l;
-        }
-        let mid = (max - min) / 2 + min;
-        let scale = d3.scaleLinear()
-            .domain(this.widgets['link-width-reciprocal'] ? [max, min] : [min, max])
-            .range([minWidth, maxWidth]);
-        links.attr('stroke-width', d => {
-            let v = d[variable];
-            if (!this.visuals.twoD.isNumber(v)) v = mid;
-            return scale(v);
-        });
+        // let max = -Infinity;
+        // let min = Infinity;
+        // for (let i = 0; i < n; i++) {
+        //     let l = vlinks[i][variable];
+        //     if (!this.visuals.twoD.isNumber(l)) return;
+        //     if (l > max) max = l;
+        //     if (l < min) min = l;
+        // }
+        // let mid = (max - min) / 2 + min;
+        // let scale = d3.scaleLinear()
+        //     .domain(this.widgets['link-width-reciprocal'] ? [max, min] : [min, max])
+        //     .range([minWidth, maxWidth]);
+        // links.attr('stroke-width', d => {
+        //     let v = d[variable];
+        //     if (!this.visuals.twoD.isNumber(v)) v = mid;
+        //     return scale(v);
+        // });
     };
 
     /**
@@ -3262,21 +3645,22 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     fit(thing, bounds) {
 
-        if (!bounds) bounds = this.visuals.twoD.svg.node().getBBox();
-        if (bounds.width == 0 || bounds.height == 0) return; // nothing to fit
-        let parent = this.visuals.twoD.svg.node().parentElement.parentElement,
-            midX = bounds.x + bounds.width / 2,
-            midY = bounds.y + bounds.height / 2;
-        let scale = 0.8 / Math.max(bounds.width / parent.clientWidth, bounds.height / parent.clientHeight);
-        const w = parent.clientWidth / 2 - midX*scale ;
-        const h = parent.clientHeight / 2 - midY*scale;
-        d3.select('svg#network')
-            .transition()
-            .duration(750)
-            .call(this.visuals.twoD.zoom.transform, d3.zoomIdentity
-                .translate(w, h)
-                //.translate(parent.parentNode.clientWidth / 2 - midX, parent.parentNode.clientHeight / 2 - midY)
-                .scale(scale));
+        // if (!bounds) bounds = this.visuals.twoD.svg.node().getBBox();
+        // if (bounds.width == 0 || bounds.height == 0) return; // nothing to fit
+        // let parent = this.visuals.twoD.svg.node().parentElement.parentElement,
+        //     midX = bounds.x + bounds.width / 2,
+        //     midY = bounds.y + bounds.height / 2;
+        // let scale = 0.8 / Math.max(bounds.width / parent.clientWidth, bounds.height / parent.clientHeight);
+        // const w = parent.clientWidth / 2 - midX*scale ;
+        // const h = parent.clientHeight / 2 - midY*scale;
+        // PRE D3
+        // d3.select('svg#network')
+        //     .transition()
+        //     .duration(750)
+        //     .call(this.visuals.twoD.zoom.transform, d3.zoomIdentity
+        //         .translate(w, h)
+        //         //.translate(parent.parentNode.clientWidth / 2 - midX, parent.parentNode.clientHeight / 2 - midY)
+        //         .scale(scale));
     };
 
     /**
@@ -3337,25 +3721,26 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     openPinAllNodes() {
 
-        let nodes = this.visuals.twoD.svg
-            .select('g.nodes')
-            .selectAll('g')
-            .data(this.visuals.twoD.commonService.session.network.nodes)
-            .select('path');
-        if (this.visuals.twoD.commonService.session.network.allPinned) {
-            nodes.each(function (d) {
-                delete d.fx;
-                delete d.fy;
-                d.fixed = false;
-            });
-            this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
-        } else {
-            nodes.each(function (d) {
-                d.fx = d.x;
-                d.fy = d.y;
-                d.fixed = true;
-            });
-        }
+        this.showParallel = !this.showParallel;
+        // let nodes = this.visuals.twoD.svg
+        //     .select('g.nodes')
+        //     .selectAll('g')
+        //     .data(this.visuals.twoD.commonService.session.network.nodes)
+        //     .select('path');
+        // if (this.visuals.twoD.commonService.session.network.allPinned) {
+        //     nodes.each(function (d) {
+        //         delete d.fx;
+        //         delete d.fy;
+        //         d.fixed = false;
+        //     });
+        //     this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+        // } else {
+        //     nodes.each(function (d) {
+        //         d.fx = d.x;
+        //         d.fy = d.y;
+        //         d.fixed = true;
+        //     });
+        // }
         this.visuals.twoD.commonService.session.network.allPinned = !this.visuals.twoD.commonService.session.network.allPinned;
     }
 
@@ -3383,12 +3768,12 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     updateVisualization() {
         if (!this.isLoading) {
-            console.log('render update vis');
-            this.isLoading = true;
-            this.render();
-            setTimeout(() => {
-                this.isLoading = false;
-              }, 1000);
+            // console.log('render update vis');
+            // this.isLoading = true;
+            // this.render();
+            // setTimeout(() => {
+            //     this.isLoading = false;
+            //   }, 1000);
         }    
     }
 
@@ -3415,7 +3800,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     onFilterDataChange(){
         console.log('render filter change');
         // render doesn't do anything unless this.isLoading == true; so need to ensure that before call render
-        this.render(false);
+       this._rerender();
     }
 
     /**
@@ -3425,15 +3810,10 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      * (ie. onPolygonLabelVariableChange, onPolygonLabelVariableChange, onPolygonLabelOrientationChange all call redrawPolygonLabels) XXXXX
      */
     loadSettings(){
-        //this.context.twoD.zoom = null;
-
-        //Polygons|Label
-        this.SelectedPolygonLabelVariable = this.widgets['polygons-label-variable'];
-        this.onPolygonLabelVariableChange(this.SelectedPolygonLabelVariable);
 
         //Polygons|Label Size
         this.SelectedPolygonLabelSizeVariable = this.widgets['polygons-label-size'];
-        this.setPolygonLabelSize(this.SelectedPolygonLabelSizeVariable);
+        this.onPolygonLabelSizeChange(this.SelectedPolygonLabelSizeVariable);
 
         //Node|Orientation
         this.SelectedPolygonLabelOrientationVariable = this.widgets['polygons-label-orientation'];
@@ -3453,11 +3833,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this.SelectedNodeLabelSizeVariable = this.widgets['node-label-size'];
         this.setNodeLabelSize(this.SelectedNodeLabelSizeVariable);
 
-        //Node|Orientation
-        this.SelectedNodeLabelOrientationVariable = this.widgets['node-label-orientation'];
-        this.onNodeLabelOrientationChange(this.SelectedNodeLabelOrientationVariable);
-
-        //Nodes|Tooltip
         if (!Array.isArray(this.widgets['node-tooltip-variable'])) {
             this.widgets['node-tooltip-variable'] = [this.widgets['node-tooltip-variable']];
         }
@@ -3555,6 +3930,9 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this.SelecetedNetworkLinkStrengthVariable = this.widgets['network-link-strength'];
         this.onNetworkFrictionChange(this.SelecetedNetworkLinkStrengthVariable);
 
+        if (this.widgets['polygon-label-orientation'] !== 'top' || this.widgets['polygon-label-orientation'] !== 'bottom') {
+            this.widgets['polygon-label-orientation'] = 'top';
+        }
 
          //Network|Polygon Orientation
          this.SelectedPolygonLabelOrientationVariable = this.widgets['polygon-label-orientation'];

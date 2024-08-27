@@ -51,6 +51,13 @@ p-dialog {
 //     flex: 0 0 auto;
 // }
 
+:root {
+    --vis-graph-brush-selection-opacity: 0.5; // Adjust the opacity value as needed
+    --vis-graph-brushed-node-stroke-color: #ff0000; // Adjust the color as needed
+    --vis-graph-brushed-node-label-text-color: #00ff00; // Adjust the color as needed
+    --vis-graph-brushed-node-icon-fill-color: #0000ff; // Adjust the color as needed
+  }
+
 .margin-left-5 {
     margin-left: 5px !important;
 }

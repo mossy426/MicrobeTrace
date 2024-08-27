@@ -14,6 +14,30 @@
   width: 99% !important; */ 
 }
 
+:root {
+  --vis-graph-brush-selection-opacity: 0.5; // Adjust the opacity value as needed
+  --vis-graph-brushed-node-stroke-color: #ff0000; // Adjust the color as needed
+  --vis-graph-brushed-node-label-text-color: #00ff00; // Adjust the color as needed
+  --vis-graph-brushed-node-icon-fill-color: #0000ff; // Adjust the color as needed
+}
+
+::ng-deep {
+  .css-1vv8bkf-link-arrow {
+    fill: #4e5f99;
+  }
+  .css-uryleg-label-background {
+    fill: transparent !important;
+  }
+
+  .css-14dxyvq-background {
+    fill: transparent !important;
+}
+
+}
+
+
+
+
 .network {
   margin-top: 0 !important;
   cursor: grab;
@@ -101,4 +125,9 @@
 
 #network-attribute-table tr:nth-child(odd) {
   background-color: #fff;
+}
+
+:root {
+  --vis-graph-link-label-background: black;
+  --vis-dark-graph-link-label-background: black;
 }

@@ -5,7 +5,7 @@ import * as patristic from 'patristic';
 import * as GoldenLayout from 'golden-layout';
 import * as Papa from 'papaparse';
 import * as _ from 'lodash';
-import { window } from 'ngx-bootstrap';
+// import { window } from 'ngx-bootstrap';
 import moment from 'moment';
 import { WorkerModule } from '../workers/workModule';
 import { LocalStorageService } from '@shared/utils/local-storage.service';
@@ -21,6 +21,12 @@ import { StashObjects, StashObject } from '../helperClasses/interfaces';
 import { MicrobeTraceNextVisuals } from '../microbe-trace-next-plugin-visuals';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { window } from 'ngx-bootstrap/utils';
+// import { MicrobeTraceLink, MicrobeTraceNode, MicrobeTraceSessionGraphData } from '@app/visualizationComponents/TwoDComponent/mockdata';
+import { GraphData, LinkDatum, NodeDatum } from '@app/visualizationComponents/TwoDComponent/data';
+import { group } from 'console';
+import { GraphNodeShape, GraphPanelConfig } from '@unovis/ts';
+
 // import { GoldenLayoutService } from '@embedded-enterprises/ng6-golden-layout';
 // import { ConsoleReporter } from 'jasmine';
 
@@ -85,6 +91,8 @@ export class CommonService extends AppComponentBase implements OnInit {
         return {
             nodes: [],
             links: [],
+            unoNodes: [],
+            unoLinks: [],
             clusters: [],
             nodeFields: [
                 'index',
@@ -276,10 +284,10 @@ export class CommonService extends AppComponentBase implements OnInit {
             'node-label-variable': 'None',
             'node-label-orientation': 'Right',
             'node-opacity' : 0,
-            'node-radius': 250,
+            'node-radius': 20,
             'node-radius-variable': 'None',
-            "node-radius-min": 250,
-            "node-radius-max": 4500,
+            "node-radius-min": 20,
+            "node-radius-max": 100,
             'node-symbol': 'symbolCircle',
             'node-symbol-table-counts': true,
             'node-symbol-table-frequencies': false,
@@ -379,7 +387,8 @@ export class CommonService extends AppComponentBase implements OnInit {
                 nodes: [],
                 timelineNodes: [],
                 initialLoad: false,
-                launched : false
+                launched : false,
+                
             },
             state: {
                 timeStart: 0,
@@ -657,20 +666,30 @@ export class CommonService extends AppComponentBase implements OnInit {
      */
     addLink(newLink: any, check: any = true): number {
 
+        if(newLink.source === "KF773571" && newLink.target === "KF773578"){
+            console.log('new link 1: ', JSON.stringify(newLink));
+            // console.log('new link 2: ', JSON.stringify(newLink));
+        }
+
+        if(newLink.source === "KF773430" && newLink.target === "KF773432"){
+            console.log('new link 2: ', JSON.stringify(newLink));
+            // console.log('new link 2: ', JSON.stringify(newLink));
+        }
+    
         const serv = window.context.commonService;
         const matrix = serv.temp.matrix;
-
+    
         if (typeof newLink.source == 'number') {
-            newLink.source = newLink.source.toString().trim()
+            newLink.source = newLink.source.toString().trim();
         } else {
             newLink.source = newLink.source.trim();
         }
         if (typeof newLink.target == 'number') {
-            newLink.target = newLink.target.toString().trim()
+            newLink.target = newLink.target.toString().trim();
         } else {
             newLink.target = newLink.target.trim();
-        } 
-
+        }
+    
         if (!matrix[newLink.source]) {
             matrix[newLink.source] = {};
         }
@@ -680,85 +699,17 @@ export class CommonService extends AppComponentBase implements OnInit {
         if (newLink.source == newLink.target) return 0;
         let linkIsNew = 1;
         let sdlinks = serv.session.data.links;
-        if (matrix[newLink.source][newLink.target]) {
-            let oldLink = matrix[newLink.source][newLink.target];
-            let myorigin = this.uniq(newLink.origin.concat(oldLink.origin));
-            // console.log(JSON.stringify(myorigin));
-
-            // Ensure no empty origins
-            myorigin = myorigin.filter(origin => origin != '');
-
-            // Ensure new link keeps distance if already defined previously
-            if (oldLink.hasDistance) {
-                newLink.hasDistance = true;
-                newLink['distance'] = oldLink['distance'];
-                newLink.distanceOrigin = oldLink.distanceOrigin;
-            }
-
-            oldLink["origin"] = myorigin;
-            newLink["origin"] = myorigin;
-            // console.log("old link isL " + `${JSON.stringify(oldLink)} ${JSON.stringify(newLink)}`);
-
-            // Only override if new isn't directed and old may be, and ensure its in the right direction
-            if(oldLink.directed) {
-                newLink.directed = true;
-                newLink.source = oldLink.source;
-                newLink.target = oldLink.target;
-            }
-            
-
-            _.merge(oldLink, newLink);
-
-            // TODO remove when confident this function never causes issues - used to debug easier
-            // Object.assign(oldLink, newLink);
-            // Object.assign(newLink, oldLink);
-
-
-            if(newLink["bidirectional"]){
-                oldLink["bidirectional"] = true;
-            }
-
-            linkIsNew = 0;
-        } else if (serv.temp.matrix[newLink.target][newLink.source]) {
-            console.warn("This scope should be unreachable. If you're using this code, something's wrong.");
-            let oldLink = matrix[newLink.target][newLink.source];
-            let origin = this.uniq(newLink.origin.concat(oldLink.origin));
-            Object.assign(oldLink, newLink, { origin: origin });
-            linkIsNew = 0;
-        } else {
-
-             if (newLink.hasDistance) {
-                newLink = Object.assign({
-                index: sdlinks.length,
-                source: "",
-                target: "",
-                visible: false,
-                cluster: 1,
-                origin: [],
-                hasDistance: true
-                }, newLink);
-            } else {
-                newLink = Object.assign({
-                index: sdlinks.length,
-                source: "",
-                target: "",
-                visible: false,
-                cluster: 1,
-                origin: [],
-                hasDistance: false
-                }, newLink);
-            }
-
-            matrix[newLink.source][newLink.target] = newLink;
-            matrix[newLink.target][newLink.source] = newLink;
-            sdlinks.push(newLink);
-
-            linkIsNew = 1;
-        }
+        
+        // Always add the new link without merging
+        sdlinks.push(newLink);
+        matrix[newLink.source][newLink.target] = newLink;
+        matrix[newLink.target][newLink.source] = newLink;
+    
+        return linkIsNew;
 
         // TODO Remove when not needed
         // window.context.commonService.session.data.linkFilteredValues = [...window.context.commonService.session.data.links];
-        return linkIsNew;
+        // return linkIsNew;
     };
 
     /**
@@ -780,6 +731,189 @@ export class CommonService extends AppComponentBase implements OnInit {
         }
         return out;
     }
+
+    public getSelectedNode(nodes: any[]): any {
+        return nodes.find(node => node.selected);
+    }
+    
+    /**
+     * This takes the information needed for twod network from microbetrace session file
+     */
+    // public legacyMicrobetraceAdapter (json : MicrobeTraceSessionGraphData) : GraphData {
+
+    //     let nodes : NodeDatum[] = json.nodes.map(x => {
+    //         return {
+    //             id: x.id,
+    //             color: ""
+    //         }
+    //     });
+
+    //     let links : LinkDatum[] = json.links.map(x => {
+    //         return {
+    //             source: x.source,
+    //             target: x.target,
+    //             chapter : String(x.distance)
+    //         }
+    //     });
+
+    //     return {
+    //         nodes : nodes,
+    //         links : links
+    //     }
+
+    // }
+
+    getColorByIndex( index : number ) {
+
+        let variable = window.context.commonService.session.style.widgets['node-color-variable'];
+        let color = window.context.commonService.session.style.widgets['node-color'];
+
+
+        if (variable == 'None') {
+
+            return color;
+
+        } else {
+
+            return window.context.commonService.temp.style.nodeColorMap( window.context.commonService.session.data.nodes[index][variable]);
+
+        }
+    }
+
+    public convertToGraphDataArray(microbeData: any): GraphData {
+        const nodes = microbeData.nodes.map((node) => ({
+          ...node, // Spread existing properties
+          id: node._id, // Ensure the id property is set correctly
+          group: node.cluster,
+          color: this.getColorByIndex(node.index) // Add or override the color property
+        }));
+      
+        const links = microbeData.links.map((link) => ({
+          ...link, // Spread existing properties
+          source: link.source, // Ensure source is correctly set
+          target: link.target, // Ensure target is correctly set
+          group: link.cluster ?? null, // Ensure group is set, default to null if undefined
+          chapter: link.distance ? link.distance.toString() : null // Convert distance to string for chapter
+        }));
+      
+        return {
+          nodes,
+          links
+        };
+      }
+      updateNodesAndGeneratePanels(graphData: any): { updatedNodes: any[], panels: any[], groups: any[] } {
+        // Update nodes with new group information based on foci
+        const updatedNodes = graphData.nodes.map(node => ({
+          ...node,
+          group: node[window.context.commonService.session.style.widgets['polygons-foci']] // Set the group property based on the foci
+        }));
+      
+        // Generate panels based on the updated nodes
+        const uniqueGroups = Array.from(new Set(updatedNodes.map(node => node.group)));
+      
+        const panels = uniqueGroups.map(group => {
+          const groupNodes = updatedNodes.filter(node => node.group === group);
+          const groupColor = window.context.commonService.temp.style.polygonColorMap(group) || '#000'; // Use color map or default color
+
+        //   window.context.commonService.temp.style.polygonColorMap(group[window.context.commonService.session.style.widgets['polygons-foci']]);
+
+          return {
+            nodes: groupNodes.map(node => node.id),
+            label: (window.context.commonService.session.style.widgets['polygons-label-show']) ? `${window.context.commonService.session.style.widgets['polygons-foci']} ${group}` : '',
+            labelPosition: (window.context.commonService.session.style.widgets['polygons-label-orientation']) ? window.context.commonService.session.style.widgets['polygons-label-orientation'] : 'top',
+            borderColor: groupColor,
+            borderWidth: 2,
+            fillColor: groupColor,
+            color: groupColor,
+            padding: 10,
+            dashedOutline: true,
+            // sideIconSymbol: '⚽',
+            // sideIconShape: GraphNodeShape.Circle,
+            // sideIconShapeStroke: '#777',
+            // sideIconCursor: 'pointer',
+            // sideIconFontSize: '24px',
+            // sideIconShapeSize: 50,
+          };
+        });
+
+        const groups = uniqueGroups.map(group => ({
+            key: group,
+            values: updatedNodes.filter(node => node.group === group)
+          }));
+      
+        return { updatedNodes, panels, groups };
+      }
+
+      public halveLinksArray(links: LinkDatum[]): LinkDatum[] {
+        const halfIndex = Math.ceil(links.length / 4); // Ensures that for an odd number of links, the larger half is returned
+        
+        console.log('new links: ', links.slice(0, 500))
+        return links.slice(0, 10000);
+    }
+
+    public checkForDuplicateLinks(links: LinkDatum[]): void {
+        const linkSet = new Set<string>();
+        let duplicateCount = 0;
+    
+        links.forEach(link => {
+            // Create a normalized key for each link to handle both directions
+            const key = [link.source, link.target].sort().join('_');
+            if (linkSet.has(key)) {
+                console.log(`Duplicate link found: ${link.source} to ${link.target}`);
+                duplicateCount++;
+            } else {
+                linkSet.add(key);
+            }
+        });
+    
+        // console.log(`Total duplicates found: ${duplicateCount}`);
+    }
+
+    public convertToMicrobeTraceDataArray(graphData: GraphData): any {
+        const nodes = graphData.nodes.map((node) => ({
+            index: 0, // You'll need to manage the index values appropriately
+            id: node.id,
+            selected: false,
+            cluster: 0,
+            visible: true,
+            degree: 0,
+            origin: [],
+            gender: '',
+            transmission_risk: '',
+            subtype: '',
+            column13: null,
+            sequence: '',
+            _diff: 0,
+            cntdate: '',
+            exposurestart: null,
+            exposureend: null,
+            ipstart: null,
+            ipend: null,
+            age: 0,
+            zip: 0,
+            seq: ''
+        }));
+        
+        const links = graphData.links.map((link) => ({
+            index: 0, // You'll need to manage the index values appropriately
+            source: link.source,
+            target: link.target,
+            visible: 1,
+            cluster: 0,
+            origin: [],
+            distance: parseInt(link.chapter), // Assuming chapter is a string representation of a number
+            snps: null,
+            nn: false,
+            directed: null
+        }));
+        
+        return {
+            nodes: nodes,
+            links: links
+        };
+    }
+
+
 
     /**
      * I think this function allows users to import an svg image into MT. Not sure if it currently works.
@@ -1005,6 +1139,8 @@ export class CommonService extends AppComponentBase implements OnInit {
      */
     processData() {
         let nodes = this.session.data.nodes;
+        console.log('processing data: ', nodes);
+
         window.context.commonService.session.data.nodeFilteredValues = nodes;
         //Add links for nodes with no edges
         // this.uniqueNodes.forEach(x => {
@@ -1054,7 +1190,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             }
         }
 
-        this.visuals.microbeTrace.applyStyleFileSettings();
+        // TODO uncomment if was meant to be
+        // this.visuals.microbeTrace.applyStyleFileSettings();
         if (this.visuals.filesPlugin) {
             this.visuals.filesPlugin.applyStyleFileSettings();
         }
@@ -2632,6 +2769,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             aggregates[d.key] = d.values.length;
         });
 
+
         let values = Object.keys(aggregates);
     
         if (window.context.commonService.session.style.widgets['polygon-color-table-counts-sort'] == 'ASC')
@@ -2694,6 +2832,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         window.context.commonService.session = window.context.commonService.sessionSkeleton();
 
+        console.log('reset called');
         window.context.commonService.session.files = files;
         window.context.commonService.session.meta = meta;
         //window.context.commonService.layout.unbind("stateChanged");
@@ -2712,13 +2851,24 @@ export class CommonService extends AppComponentBase implements OnInit {
      */
     resetData() {
 
+        console.log('launch reset');
+
         const newTempSkeleton = this.tempSkeleton();
 
         window.context.commonService.temp.matrix = newTempSkeleton.matrix;
         this.temp.trees = newTempSkeleton.trees;
 
+        console.log('session files1', JSON.stringify(this.visuals.microbeTrace.commonService.session.files));
+        console.log('session files2', JSON.stringify(window.context.commonService.session.files));
+
+
         const files = window.context.commonService.session.files.filter( obj => obj.name !== 'Demo_outbreak_NodeList.csv');
         const meta = window.context.commonService.session.meta;
+
+        console.log('session files3', JSON.stringify(this.visuals.microbeTrace.commonService.session.files));
+        console.log('session files4', JSON.stringify(window.context.commonService.session.files));
+
+
 
         const newSessionSkeleton = this.sessionSkeleton();
         this.session.data = newSessionSkeleton.data;
@@ -2727,7 +2877,12 @@ export class CommonService extends AppComponentBase implements OnInit {
         window.context.commonService.session.files = files;
         window.context.commonService.session.meta = meta;
         window.context.commonService.session.style.widgets = this.defaultWidgets();
+        
 
+        console.log('session data files: ', JSON.stringify(files));
+        console.log('session data matrix: ', JSON.stringify(window.context.commonService.temp.matrix));
+        console.log('session data nodes: ', JSON.stringify(this.session.data.nodes));
+        console.log('session data nodes common: ',  JSON.stringify(window.context.commonService.session.data.nodes));
         // default values are 'tn93' and 0.015, so not sure if this if statement is every true
         if (window.context.commonService.session.style.widgets['default-distance-metric'] !== 'snps' &&
           window.context.commonService.session.style.widgets['link-threshold'] >= 1) {
@@ -3451,16 +3606,17 @@ export class CommonService extends AppComponentBase implements OnInit {
             console.log(`Setting Link Visibility with ${metric} ${threshold} ${showNN}`);
         }
 
+        
+
         for (let i = 0; i < n; i++) {
+            
+
             let link = links[i];
+
+
 
             let visible = true;
             let overrideNN = false;
-
-            if (link.hasDistance && !link.origin.includes(link.distanceOrigin)) {
-                link.origin.push(link.distanceOrigin);
-            }
-
 
             // No distance value
             if (link[metric] == null) {
@@ -3494,10 +3650,6 @@ export class CommonService extends AppComponentBase implements OnInit {
                         }).length > 0
                     ) {
 
-                        //if(link.index === 154630) {
-                        //    console.log('session viz 2');
-                        //}                        
-                        // Set visible and origin to only show the file outside of Distance
                         link.origin = link.origin.filter(fileName => {
                         const hasAuspice = /[Aa]uspice/.test(fileName);
                         const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
@@ -3649,12 +3801,12 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         let bins = d3
             .histogram()
-            .domain(x.domain())
+            .domain((x as any).domain())
             .thresholds(x.ticks(ticks))(data);
 
         let y = d3
             .scaleLinear()
-            .domain([0, d3.max(bins, d => d.length)])
+            .domain([0, d3.max(bins, d => (d as any).length)])
             .range([height, 0]);
 
         let bar = svg
@@ -3675,7 +3827,7 @@ export class CommonService extends AppComponentBase implements OnInit {
          * Uses the position on the histogram to set the link thresehold value
          */
         function updateThreshold() {
-            let xc = d3.mouse(svg.node())[0];
+            let xc = (d3 as any).mouse(svg.node())[0];
             let decimalPlaces = (window.context.commonService.session.style.widgets['default-distance-metric'].toLowerCase() === "tn93") ? 3 : 0;
 
             window.context.commonService.session.style.widgets["link-threshold"] = (xc / width) * range * 1.05 + min;
@@ -3691,12 +3843,12 @@ export class CommonService extends AppComponentBase implements OnInit {
         });
 
         svg.on("mouseover", () => {
-            let xc = d3.mouse(svg.node())[0];
+            let xc = (d3 as any).mouse(svg.node())[0];
             $('#filtering-threshold').prop('title', "Whats the maximum genetic distance you're willing to call a link? " + ((window.context.commonService.session.style.widgets['default-distance-metric'].toLowerCase() === "tn93") ? ((xc / width) * range * 1.05 + min).toLocaleString() : Math.round(((xc / width) * range * 1.05 + min)).toLocaleString()));
           });
 
         svg.on("mousedown", () => {
-            d3.event.preventDefault();
+            (d3 as any).event.preventDefault();
             svg.on("mousemove", updateThreshold);
             svg.on("mouseup mouseleave", () => {
                 window.context.commonService.updateNetwork();
