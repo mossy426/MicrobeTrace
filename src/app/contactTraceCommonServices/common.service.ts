@@ -2658,16 +2658,17 @@ export class CommonService extends AppComponentBase implements OnInit {
         }
 
         let aggregates = {};
+        let multiLinkCount = 0; // Initialize Multi-Link count
         let links = window.context.commonService.getVisibleLinks();
         let i = 0,
             n = links.length,
             l;
+
         if (variable == "origin" || variable == "Origin") {
             while (i < n) {
                 l = links[i++];
                 if (!l.visible) continue;
 
-               
                 l.origin.forEach(o => {
                     if (o in aggregates) {
                         aggregates[o]++;
@@ -2675,29 +2676,12 @@ export class CommonService extends AppComponentBase implements OnInit {
                         aggregates[o] = 1;
                     }
                 });
-                 // If there are two origins then we need to add one for an overlay
-                 if (l.origin.length == 2) {  
-                    if ("Multi-Link" in aggregates) {
-                        aggregates["Multi-Link"] = aggregates["Multi-Link"] as number + 1;
-                    } else {
-                        aggregates["Multi-Link"] = 1;
-                    }
+
+                // Count Multi-Links separately
+                if (l.origin.length == 2) {  
+                    multiLinkCount++;
                 }
             }
-        } else if (variable == 'source' || variable == 'target') {
-            // first loop is to populates color in the same order as nodeColorMap would be
-            window.context.commonService.session.data.nodes.forEach((node) => {
-                aggregates[node._id] = 0;
-            })
-            window.context.commonService.session.data.links.forEach((link) => {
-                if (!link.visible) {return;}
-                let node = link[variable];
-                if (node in aggregates) {
-                    aggregates[node] ++;
-                } else {
-                    aggregates[node] = 1;
-                }
-            })
         } else {
             while (i < n) {
                 l = links[i++];
@@ -2710,6 +2694,26 @@ export class CommonService extends AppComponentBase implements OnInit {
                 }
             }
         }
+
+        // Add Multi-Link to aggregates if it exists
+        if (multiLinkCount > 0) {
+            aggregates["Duo-Link"] = multiLinkCount;
+        }
+
+        // Adjust counts for other links by subtracting Multi-Link count
+        Object.keys(aggregates).forEach(key => {
+            if (key !== "Duo-Link") {
+                aggregates[key] -= multiLinkCount; // Subtract Multi-Link count
+            }
+        });
+
+        // Ensure counts do not go below zero
+        Object.keys(aggregates).forEach(key => {
+            if (aggregates[key] < 0) {
+                aggregates[key] = 0;
+            }
+        });
+
         let values = Object.keys(aggregates);
         // adds more colors/alphas when they are less than length of values
         if (values.length > this.session.style.linkColors.length) {
@@ -2729,10 +2733,10 @@ export class CommonService extends AppComponentBase implements OnInit {
             );
         }
 
-        if ( window.context.commonService.session.style.widgets["node-timeline-variable"] == 'None') {
+        if (window.context.commonService.session.style.widgets["node-timeline-variable"] == 'None') {
             window.context.commonService.session.style.linkColorsTableKeys[variable] = values;
             window.context.commonService.session.style.linkColorsTable[variable] = linkColors;
-          } else {
+        } else {
       
             // During timeline mode, user Pause and switch to a different link varaible but linkColorsTableKeys[variable] is not available
             if(! window.context.commonService.session.style.linkColorsTableKeys[variable]) {
@@ -2798,8 +2802,8 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         // updates the function that defines which color and transparency value to use for each link
         window.context.commonService.temp.style.linkColorMap = d3
-            .scaleOrdinal(window.context.commonService.session.style.linkColors)
-            .domain(values);
+        .scaleOrdinal(window.context.commonService.session.style.linkColors)
+        .domain(values);
         window.context.commonService.temp.style.linkAlphaMap = d3
             .scaleOrdinal(window.context.commonService.session.style.linkAlphas)
             .domain(values);

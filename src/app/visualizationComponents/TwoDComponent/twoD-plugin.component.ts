@@ -279,8 +279,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         let alphaValue;
 
         if ((variable == 'Origin' || variable == 'origin') && link.origin.length > 1) {
-            finalColor = this.visuals.twoD.commonService.temp.style.linkColorMap("Multi-Link");
-            alphaValue =this.visuals.twoD.commonService.temp.style.linkAlphaMap("Multi-Link")
+            finalColor = this.visuals.twoD.commonService.temp.style.linkColorMap("Duo-Link");
+            alphaValue =this.visuals.twoD.commonService.temp.style.linkAlphaMap("Duo-Link")
             // this.visuals.twoD.commonService.temp.style.linkColorMap("Multi-Link"), alphaValue;
         } else {
             finalColor = (variable == 'None') ? color : this.visuals.twoD.commonService.temp.style.linkColorMap(link[variable]);
@@ -398,7 +398,10 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         { label: 'Show', value: 'Show' }
     ];
 
-
+    hideShowOptions: any = [
+        { label: 'Hide', value: false },
+        { label: 'Show', value: true }
+    ];
 
     bidirectionalOptions: any = [
         { label: 'Hide', value: 'Hide' },
