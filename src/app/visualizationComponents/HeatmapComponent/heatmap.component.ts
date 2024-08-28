@@ -1,22 +1,14 @@
-import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit,
-  ViewChild, ViewContainerRef, ElementRef, ChangeDetectorRef, OnDestroy, Inject } from '@angular/core';
-import { AppComponentBase } from '@shared/common/app-component-base';
+import { Injector, Component, Output, EventEmitter, 
+  ElementRef, ChangeDetectorRef, Inject } from '@angular/core';
 import { EventManager } from '@angular/platform-browser';
-import { MatMenu } from '@angular/material/menu';
 import { CommonService } from '@app/contactTraceCommonServices/common.service';
-import * as ClipboardJS from 'clipboard';
-import * as saveAs from 'file-saver';
-import * as domToImage from 'html-to-image';
-import { SelectItem } from 'primeng/api';
-import { DialogSettings } from '@app/helperClasses/dialogSettings';
-import { MicobeTraceNextPluginEvents } from '@app/helperClasses/interfaces';
 import * as _ from 'lodash';
-import { MicrobeTraceNextVisuals } from '@app/microbe-trace-next-plugin-visuals';
-import { CustomShapes } from '@app/helperClasses/customShapes';
-import * as d3 from 'd3';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { ComponentContainer } from 'golden-layout';
-//import * as Plotly from 'plotly';
+import * as Plotly from 'plotly.js';
+import { GoogleTagManagerService } from 'angular-google-tag-manager';
+import { DialogSettings } from '../../helperClasses/dialogSettings';
+
 @Component({
   selector: 'HeatmapComponent',
   templateUrl: './heatmap.component.html',
@@ -26,11 +18,15 @@ export class HeatmapComponent {
 
   @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
 
-  labels: String[];
-  xLabels: String[];
-  yLabels: String[];
-  matrix: Object;
+  labels: string[];
+  xLabels: string[];
+  yLabels: string[];
+  matrix: object;
   plot: any;
+  visuals: any;
+  nodeIds: object[];
+  viewActive: boolean;
+  HeatmapSettingsDialogSettings: DialogSettings = new DialogSettings('#heatmap-settings-pane', false);
 
   constructor(injector: Injector,
         private eventManager: EventManager,
@@ -38,8 +34,73 @@ export class HeatmapComponent {
         @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
         elRef: ElementRef,
         private cdref: ChangeDetectorRef,
-        private clipboard: Clipboard) {
+        private clipboard: Clipboard,
+        private gtmService: GoogleTagManagerService) {
+          this.visuals = commonService.visuals;
+          this.visuals.heatmap = this;
         }
+
+  openSettings(): void {
+    this.visuals.heatmap.HeatmapSettingsDialogSettings.setVisibility(true);
+  }
+  
+  openExport(): void {}
+  
+  openCenter(): void {}
+  
+  ngOnInit(): void {
+
+    this.gtmService.pushTag({
+            event: "page_view",
+            page_location: "/heatmap",
+            page_title: "Heatmap View"
+        });
+
+    this.nodeIds = this.getNodeIds();
+    this.visuals.heatmap.FieldList.push(
+      {
+        label: "None",
+        value: "",
+      }
+    )
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    this.commonService.session.data['nodeFields'].map((d, i) => {
+
+      this.visuals.gantt.FieldList.push(
+        {
+          label: this.visuals.gantt.commonService.capitalize(d.replace('_', '')),
+          value: d
+        });
+    });
+
+    this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
+    this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
+    
+
+    this.goldenLayoutComponentResize();
+
+    this.container.on('resize', () => { this.goldenLayoutComponentResize() })
+    this.container.on('hide', () => { 
+      this.viewActive = false; 
+      this.cdref.detectChanges();
+    })
+    this.container.on('show', () => { 
+      this.viewActive = true; 
+      this.cdref.detectChanges();
+    })
+  }
+
+  goldenLayoutComponentResize() {
+    $('#heatmap').height($('heatmapcomponent').height()-19);
+    $('#heatmap').width($('heatmapcomponent').width()-1)
+  }
+
+  getNodeIds(): object[] {
+
+    return [{}];
+
+  }
   
   /*
   redrawHeatmap() {

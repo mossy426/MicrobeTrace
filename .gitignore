@@ -46,6 +46,9 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+*.br
+*json.gz
+*csv.gz
 
 # System Files
 *.swp
@@ -57,3 +60,5 @@ node_modules
 Thumbs.db
 slr/*
 slr_linux.tgz
+.agignore
+

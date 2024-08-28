@@ -1,24 +1,16 @@
-import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit,
-  ViewChild, ViewContainerRef, ElementRef, ChangeDetectorRef, OnDestroy, Inject } from '@angular/core';
-import { AppComponentBase } from '@shared/common/app-component-base';
+import { Injector, Component, Output, EventEmitter, OnInit,
+  ViewChild, ViewContainerRef, ElementRef, ChangeDetectorRef, Inject } from '@angular/core';
 import { EventManager } from '@angular/platform-browser';
-import { MatMenu } from '@angular/material/menu';
 import { CommonService } from '@app/contactTraceCommonServices/common.service';
-import * as ClipboardJS from 'clipboard';
-import * as saveAs from 'file-saver';
-import * as domToImage from 'html-to-image';
 import { SelectItem } from 'primeng/api';
 import { DialogSettings } from '@app/helperClasses/dialogSettings';
-import { MicobeTraceNextPluginEvents } from '@app/helperClasses/interfaces';
 import * as _ from 'lodash';
-import { MicrobeTraceNextVisuals } from '@app/microbe-trace-next-plugin-visuals';
 import { CustomShapes } from '@app/helperClasses/customShapes';
-import * as d3 from 'd3';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { ComponentContainer } from 'golden-layout';
 import { GanttChartService } from './gantt-chart/gantt-chart.service';
-import { GanttChartComponent } from './gantt-chart/gantt-chart.component';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
+import { MicrobeTraceNextVisuals } from '../../microbe-trace-next-plugin-visuals';
 
 
 @Component({
@@ -30,12 +22,12 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
   @ViewChild('ganttContainer', {read: ViewContainerRef}) ganttContainer: ViewContainerRef;
   @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
   viewActive: boolean = true;
-  svgStyle: {} = {
+  svgStyle: object = {
     height: '0px',
     width: '1000px'
   };
 
-  ganttChartData: Object[] = [
+  ganttChartData: object[] = [
     {
       name: 'Market Team',
       color: '#EAC435',
@@ -74,18 +66,16 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
   ShowGanttSettingsPane = false;
   IsDataAvailable = true;
   svg: any = null;
-  settings: any = this.commonService.session.style.widgets;
-  halfWidth: any = null;
-  halfHeight: any = null;
-  visuals: any = null;
+  settings: object = this.commonService.session.style.widgets;
+  visuals: MicrobeTraceNextVisuals;
   nodeIds: string[] = [];
   FieldList: SelectItem[] = [];
-  ganttChartService: any = null;
+  ganttChartService: GanttChartService;
   GanttEntryName: string = "";
   GanttStartVariable: string = "";
   GanttEndVariable: string = "";
   GanttEntryColor: string = "#000000";
-  ganttEntries: Object[] = [];
+  ganttEntries: object[] = [];
 
   // ganttChartData: Object[] = [];
 
@@ -129,7 +119,6 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
             page_title: "Gantt Chart View"
         });
 
-    let that = this;
     this.nodeIds = this.getNodeIds();
     this.visuals.gantt.FieldList.push(
       {
@@ -138,6 +127,7 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
       }
     )
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this.commonService.session.data['nodeFields'].map((d, i) => {
 
       this.visuals.gantt.FieldList.push(
@@ -169,7 +159,7 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
     })
   }
 
-  makeBlankEntry(): Object {
+  makeBlankEntry(): object {
     const timelineEntry = [{from:"2000/01/01", to: "2024/12/31"}];
     const timelines = {};
     this.nodeIds.forEach( (element: string) => {
@@ -185,7 +175,7 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
     $('#gantt-plugin').width($('ganttcomponent').width()-1)
   }
 
-  makeGanttEntry(dateName: string, startVariable: string, endVariable: string, entryColor: string): Object {
+  makeGanttEntry(dateName: string, startVariable: string, endVariable: string, entryColor: string): object {
     const timeline = {};
 
     this.nodeIds.forEach( (element: string) => {
@@ -257,12 +247,13 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
     return idSet;
   }
 
-  listGanttEntries(): Object[] {
+  listGanttEntries(): object[] {
     return this.ganttEntries;
   }
 
 }
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace GanttComponent {
     export const componentTypeName = 'Gantt Chart';
 }
