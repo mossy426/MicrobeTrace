@@ -78,68 +78,74 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "AppModule": () => (/* binding */ AppModule),
 /* harmony export */   "TestedComponent": () => (/* binding */ TestedComponent)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! tslib */ 70655);
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! @angular/platform-browser */ 11481);
-/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! @angular/platform-browser/animations */ 84934);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @angular/core */ 94650);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! tslib */ 70655);
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! @angular/platform-browser */ 11481);
+/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! @angular/platform-browser/animations */ 84934);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! @angular/core */ 94650);
 /* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app-routing.module */ 90158);
 /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app.component */ 55041);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jquery */ 58259);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! @angular/common/http */ 80529);
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! @angular/forms */ 24006);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! @angular/common/http */ 80529);
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! @angular/forms */ 24006);
 /* harmony import */ var _shared_utils_utils_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @shared/utils/utils.module */ 27955);
-/* harmony import */ var ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ngx-bootstrap */ 11109);
-/* harmony import */ var _golden_layout_component_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./golden-layout-component.service */ 90893);
-/* harmony import */ var _golden_layout_host_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./golden-layout-host.component */ 42027);
-/* harmony import */ var primeng_table__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! primeng/table */ 41765);
-/* harmony import */ var primeng_fileupload__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! primeng/fileupload */ 13388);
-/* harmony import */ var primeng_listbox__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! primeng/listbox */ 38433);
-/* harmony import */ var primeng_radiobutton__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! primeng/radiobutton */ 50613);
-/* harmony import */ var primeng_calendar__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! primeng/calendar */ 70585);
-/* harmony import */ var primeng_paginator__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! primeng/paginator */ 29061);
-/* harmony import */ var primeng_progressbar__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! primeng/progressbar */ 78235);
-/* harmony import */ var primeng_confirmdialog__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! primeng/confirmdialog */ 32137);
-/* harmony import */ var primeng_dropdown__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! primeng/dropdown */ 82210);
-/* harmony import */ var primeng_accordion__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! primeng/accordion */ 32174);
-/* harmony import */ var primeng_sidebar__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! primeng/sidebar */ 23214);
-/* harmony import */ var primeng_multiselect__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! primeng/multiselect */ 65722);
-/* harmony import */ var primeng_slider__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! primeng/slider */ 78177);
-/* harmony import */ var primeng_tabview__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! primeng/tabview */ 58783);
-/* harmony import */ var primeng_selectbutton__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! primeng/selectbutton */ 85362);
-/* harmony import */ var primeng_tree__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! primeng/tree */ 14323);
-/* harmony import */ var primeng_dialog__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! primeng/dialog */ 77729);
-/* harmony import */ var primeng_orderlist__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! primeng/orderlist */ 65900);
-/* harmony import */ var _microbe_trace_next_plugin_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./microbe-trace-next-plugin.component */ 87097);
-/* harmony import */ var _shared_common_session_app_session_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @shared/common/session/app-session.service */ 34845);
-/* harmony import */ var _shared_common_ui_app_ui_customization_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @shared/common/ui/app-ui-customization.service */ 87940);
-/* harmony import */ var _shared_common_nav_app_url_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @shared/common/nav/app-url.service */ 33116);
-/* harmony import */ var _filesComponent_files_plugin_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./filesComponent/files-plugin.component */ 53710);
-/* harmony import */ var _visualizationComponents_PhylogeneticComponent_phylogenetic_plugin_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./visualizationComponents/PhylogeneticComponent/phylogenetic-plugin.component */ 23046);
-/* harmony import */ var _visualizationComponents_TimelineComponent_timeline_component_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./visualizationComponents/TimelineComponent/timeline-component.component */ 18011);
-/* harmony import */ var _visualizationComponents_TwoDComponent_twoD_plugin_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./visualizationComponents/TwoDComponent/twoD-plugin.component */ 36481);
-/* harmony import */ var _metronic_app_core_core_module__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @metronic/app/core/core.module */ 95760);
-/* harmony import */ var _visualizationComponents_TableComponent_table_plugin_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./visualizationComponents/TableComponent/table-plugin-component */ 31209);
-/* harmony import */ var _visualizationComponents_MapComponent_map_plugin_component__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./visualizationComponents/MapComponent/map-plugin.component */ 53605);
-/* harmony import */ var _visualizationComponents_AlignmentViewComponent_alignment_view_plugin_component__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./visualizationComponents/AlignmentViewComponent/alignment-view-plugin-component */ 37536);
-/* harmony import */ var _asymmetrik_ngx_leaflet__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! @asymmetrik/ngx-leaflet */ 76651);
-/* harmony import */ var _asymmetrik_ngx_leaflet_markercluster__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! @asymmetrik/ngx-leaflet-markercluster */ 46597);
-/* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! @angular/material/button */ 4859);
-/* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! @angular/material/input */ 284);
-/* harmony import */ var _angular_material_menu__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! @angular/material/menu */ 28255);
-/* harmony import */ var _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! @angular/material/toolbar */ 83683);
-/* harmony import */ var _angular_material_slider__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! @angular/material/slider */ 87314);
-/* harmony import */ var _shared_dnd_directive__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @shared/dnd.directive */ 7015);
-/* harmony import */ var _angular_material_select__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! @angular/material/select */ 84385);
-/* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! @angular/material/icon */ 97392);
-/* harmony import */ var _angular_material_progress_spinner__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! @angular/material/progress-spinner */ 51572);
-/* harmony import */ var _visualizationComponents_CrosstabComponent_crosstab_plugin_component__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./visualizationComponents/CrosstabComponent/crosstab-plugin.component */ 66324);
-/* harmony import */ var _visualizationComponents_AggregateComponent_aggregate_component__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./visualizationComponents/AggregateComponent/aggregate.component */ 45624);
-/* harmony import */ var _visualizationComponents_GanttComponent_gantt_plugin_component__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./visualizationComponents/GanttComponent/gantt-plugin.component */ 67698);
-/* harmony import */ var _visualizationComponents_GanttComponent_gantt_chart_gantt_chart_component__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component */ 84168);
-/* harmony import */ var _visualizationComponents_GanttComponent_gantt_chart_gantt_chart_service__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service */ 50322);
-/* harmony import */ var _visualizationComponents_HeatmapComponent_heatmap_component__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./visualizationComponents/HeatmapComponent/heatmap.component */ 2875);
-/* harmony import */ var angular_google_tag_manager__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! angular-google-tag-manager */ 29090);
+/* harmony import */ var _golden_layout_component_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./golden-layout-component.service */ 90893);
+/* harmony import */ var _golden_layout_host_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./golden-layout-host.component */ 42027);
+/* harmony import */ var primeng_table__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! primeng/table */ 41765);
+/* harmony import */ var primeng_fileupload__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! primeng/fileupload */ 13388);
+/* harmony import */ var primeng_listbox__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! primeng/listbox */ 38433);
+/* harmony import */ var primeng_radiobutton__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! primeng/radiobutton */ 50613);
+/* harmony import */ var primeng_calendar__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! primeng/calendar */ 70585);
+/* harmony import */ var primeng_paginator__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! primeng/paginator */ 29061);
+/* harmony import */ var primeng_progressbar__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! primeng/progressbar */ 78235);
+/* harmony import */ var primeng_confirmdialog__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! primeng/confirmdialog */ 32137);
+/* harmony import */ var primeng_dropdown__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! primeng/dropdown */ 82210);
+/* harmony import */ var primeng_accordion__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! primeng/accordion */ 32174);
+/* harmony import */ var primeng_sidebar__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! primeng/sidebar */ 23214);
+/* harmony import */ var primeng_multiselect__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! primeng/multiselect */ 65722);
+/* harmony import */ var primeng_slider__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! primeng/slider */ 78177);
+/* harmony import */ var primeng_tabview__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! primeng/tabview */ 58783);
+/* harmony import */ var primeng_selectbutton__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! primeng/selectbutton */ 85362);
+/* harmony import */ var primeng_tree__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! primeng/tree */ 14323);
+/* harmony import */ var primeng_dialog__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! primeng/dialog */ 77729);
+/* harmony import */ var primeng_orderlist__WEBPACK_IMPORTED_MODULE_65__ = __webpack_require__(/*! primeng/orderlist */ 65900);
+/* harmony import */ var _microbe_trace_next_plugin_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./microbe-trace-next-plugin.component */ 87097);
+/* harmony import */ var _shared_common_session_app_session_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @shared/common/session/app-session.service */ 34845);
+/* harmony import */ var _shared_common_ui_app_ui_customization_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @shared/common/ui/app-ui-customization.service */ 87940);
+/* harmony import */ var _shared_common_nav_app_url_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @shared/common/nav/app-url.service */ 33116);
+/* harmony import */ var _filesComponent_files_plugin_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./filesComponent/files-plugin.component */ 53710);
+/* harmony import */ var _visualizationComponents_PhylogeneticComponent_phylogenetic_plugin_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./visualizationComponents/PhylogeneticComponent/phylogenetic-plugin.component */ 23046);
+/* harmony import */ var _visualizationComponents_TimelineComponent_timeline_component_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./visualizationComponents/TimelineComponent/timeline-component.component */ 18011);
+/* harmony import */ var _visualizationComponents_TwoDComponent_twoD_plugin_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./visualizationComponents/TwoDComponent/twoD-plugin.component */ 36481);
+/* harmony import */ var _metronic_app_core_core_module__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @metronic/app/core/core.module */ 95760);
+/* harmony import */ var _visualizationComponents_TableComponent_table_plugin_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./visualizationComponents/TableComponent/table-plugin-component */ 31209);
+/* harmony import */ var _visualizationComponents_MapComponent_map_plugin_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./visualizationComponents/MapComponent/map-plugin.component */ 53605);
+/* harmony import */ var _visualizationComponents_AlignmentViewComponent_alignment_view_plugin_component__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./visualizationComponents/AlignmentViewComponent/alignment-view-plugin-component */ 37536);
+/* harmony import */ var _asymmetrik_ngx_leaflet__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! @asymmetrik/ngx-leaflet */ 76651);
+/* harmony import */ var _asymmetrik_ngx_leaflet_markercluster__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! @asymmetrik/ngx-leaflet-markercluster */ 46597);
+/* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! @angular/material/button */ 4859);
+/* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! @angular/material/input */ 284);
+/* harmony import */ var _angular_material_menu__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! @angular/material/menu */ 28255);
+/* harmony import */ var _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! @angular/material/toolbar */ 83683);
+/* harmony import */ var _angular_material_slider__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! @angular/material/slider */ 87314);
+/* harmony import */ var _shared_dnd_directive__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @shared/dnd.directive */ 7015);
+/* harmony import */ var _angular_material_select__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! @angular/material/select */ 84385);
+/* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! @angular/material/icon */ 97392);
+/* harmony import */ var _angular_material_progress_spinner__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! @angular/material/progress-spinner */ 51572);
+/* harmony import */ var _visualizationComponents_CrosstabComponent_crosstab_plugin_component__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./visualizationComponents/CrosstabComponent/crosstab-plugin.component */ 66324);
+/* harmony import */ var _visualizationComponents_AggregateComponent_aggregate_component__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./visualizationComponents/AggregateComponent/aggregate.component */ 45624);
+/* harmony import */ var ngx_bootstrap_tooltip__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ngx-bootstrap/tooltip */ 8397);
+/* harmony import */ var ngx_bootstrap_tabs__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ngx-bootstrap/tabs */ 89079);
+/* harmony import */ var ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ngx-bootstrap/modal */ 80018);
+/* harmony import */ var ngx_bootstrap_dropdown__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ngx-bootstrap/dropdown */ 23077);
+/* harmony import */ var ngx_bootstrap_popover__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ngx-bootstrap/popover */ 33574);
+/* harmony import */ var _unovis_angular__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! @unovis/angular */ 60253);
+/* harmony import */ var _unovis_angular__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! @unovis/angular */ 96686);
+/* harmony import */ var _visualizationComponents_GanttComponent_gantt_plugin_component__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./visualizationComponents/GanttComponent/gantt-plugin.component */ 67698);
+/* harmony import */ var _visualizationComponents_GanttComponent_gantt_chart_gantt_chart_component__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component */ 84168);
+/* harmony import */ var _visualizationComponents_GanttComponent_gantt_chart_gantt_chart_service__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service */ 50322);
+/* harmony import */ var _visualizationComponents_HeatmapComponent_heatmap_component__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./visualizationComponents/HeatmapComponent/heatmap.component */ 2875);
+/* harmony import */ var angular_google_tag_manager__WEBPACK_IMPORTED_MODULE_66__ = __webpack_require__(/*! angular-google-tag-manager */ 29090);
 var _class;
 
 
@@ -153,9 +159,15 @@ var _class;
 // import { ServiceProxyModule } from '@shared/service-proxies/service-proxy.module';
 
 // import { AbpModule } from 'abp-ng2-module/dist/src/abp.module';
-
+// import { ModalModule, TooltipModule, TabsModule, BsDropdownModule, PopoverModule } from 'ngx-bootstrap';
 // import { TableModule } from 'primeng/components/table/table';
 // import { FileUploadModule, ListboxModule, RadioButtonModule, CalendarModule, PaginatorModule, ProgressBarModule, ConfirmDialogModule, DropdownModule, AccordionModule, SidebarModule, MultiSelect, MultiSelectModule, SliderModule } from 'primeng/primeng';
+
+
+
+
+
+
 
 
 
@@ -211,36 +223,36 @@ window['$'] = jquery__WEBPACK_IMPORTED_MODULE_2__;
 let TestedComponent = (_class = class TestedComponent {
   constructor() {}
 }, _class.ctorParameters = () => [], _class);
-TestedComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_26__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_27__.Component)({
+TestedComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_30__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_31__.Component)({
   template: `<h1>Test2</h1>`,
   selector: `app-tested`
-}), (0,tslib__WEBPACK_IMPORTED_MODULE_26__.__metadata)("design:paramtypes", [])], TestedComponent);
+}), (0,tslib__WEBPACK_IMPORTED_MODULE_30__.__metadata)("design:paramtypes", [])], TestedComponent);
 
 let AppModule = class AppModule {};
-AppModule = (0,tslib__WEBPACK_IMPORTED_MODULE_26__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_27__.NgModule)({
-  declarations: [_app_component__WEBPACK_IMPORTED_MODULE_1__.AppComponent, _microbe_trace_next_plugin_component__WEBPACK_IMPORTED_MODULE_7__.MicrobeTraceNextHomeComponent, _filesComponent_files_plugin_component__WEBPACK_IMPORTED_MODULE_11__.FilesComponent, _visualizationComponents_TwoDComponent_twoD_plugin_component__WEBPACK_IMPORTED_MODULE_14__.TwoDComponent, _visualizationComponents_TableComponent_table_plugin_component__WEBPACK_IMPORTED_MODULE_16__.TableComponent, _golden_layout_host_component__WEBPACK_IMPORTED_MODULE_6__.GoldenLayoutHostComponent, _visualizationComponents_MapComponent_map_plugin_component__WEBPACK_IMPORTED_MODULE_17__.MapComponent, TestedComponent, _shared_dnd_directive__WEBPACK_IMPORTED_MODULE_19__.DndDirective, _visualizationComponents_PhylogeneticComponent_phylogenetic_plugin_component__WEBPACK_IMPORTED_MODULE_12__.PhylogeneticComponent, _visualizationComponents_TimelineComponent_timeline_component_component__WEBPACK_IMPORTED_MODULE_13__.TimelineComponent, _visualizationComponents_AlignmentViewComponent_alignment_view_plugin_component__WEBPACK_IMPORTED_MODULE_18__.AlignmentViewComponent, _visualizationComponents_CrosstabComponent_crosstab_plugin_component__WEBPACK_IMPORTED_MODULE_20__.CrosstabComponent, _visualizationComponents_AggregateComponent_aggregate_component__WEBPACK_IMPORTED_MODULE_21__.AggregateComponent, _visualizationComponents_GanttComponent_gantt_chart_gantt_chart_component__WEBPACK_IMPORTED_MODULE_23__.GanttChartComponent, _visualizationComponents_GanttComponent_gantt_plugin_component__WEBPACK_IMPORTED_MODULE_22__.GanttComponent, _visualizationComponents_HeatmapComponent_heatmap_component__WEBPACK_IMPORTED_MODULE_25__.HeatmapComponent],
-  imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_28__.BrowserModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_29__.BrowserAnimationsModule, _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule,
+AppModule = (0,tslib__WEBPACK_IMPORTED_MODULE_30__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_31__.NgModule)({
+  declarations: [_app_component__WEBPACK_IMPORTED_MODULE_1__.AppComponent, _microbe_trace_next_plugin_component__WEBPACK_IMPORTED_MODULE_6__.MicrobeTraceNextHomeComponent, _filesComponent_files_plugin_component__WEBPACK_IMPORTED_MODULE_10__.FilesComponent, _visualizationComponents_TwoDComponent_twoD_plugin_component__WEBPACK_IMPORTED_MODULE_13__.TwoDComponent, _visualizationComponents_TableComponent_table_plugin_component__WEBPACK_IMPORTED_MODULE_15__.TableComponent, _golden_layout_host_component__WEBPACK_IMPORTED_MODULE_5__.GoldenLayoutHostComponent, _visualizationComponents_MapComponent_map_plugin_component__WEBPACK_IMPORTED_MODULE_16__.MapComponent, TestedComponent, _shared_dnd_directive__WEBPACK_IMPORTED_MODULE_18__.DndDirective, _visualizationComponents_PhylogeneticComponent_phylogenetic_plugin_component__WEBPACK_IMPORTED_MODULE_11__.PhylogeneticComponent, _visualizationComponents_TimelineComponent_timeline_component_component__WEBPACK_IMPORTED_MODULE_12__.TimelineComponent, _visualizationComponents_AlignmentViewComponent_alignment_view_plugin_component__WEBPACK_IMPORTED_MODULE_17__.AlignmentViewComponent, _visualizationComponents_CrosstabComponent_crosstab_plugin_component__WEBPACK_IMPORTED_MODULE_19__.CrosstabComponent, _visualizationComponents_AggregateComponent_aggregate_component__WEBPACK_IMPORTED_MODULE_20__.AggregateComponent, _visualizationComponents_GanttComponent_gantt_chart_gantt_chart_component__WEBPACK_IMPORTED_MODULE_27__.GanttChartComponent, _visualizationComponents_GanttComponent_gantt_plugin_component__WEBPACK_IMPORTED_MODULE_26__.GanttComponent, _visualizationComponents_HeatmapComponent_heatmap_component__WEBPACK_IMPORTED_MODULE_29__.HeatmapComponent],
+  imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_32__.BrowserModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_33__.BrowserAnimationsModule, _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule,
   //ngCommon.CommonModule,
-  _angular_forms__WEBPACK_IMPORTED_MODULE_30__.FormsModule,
+  _angular_forms__WEBPACK_IMPORTED_MODULE_34__.FormsModule,
   // GoldenLayoutModule.forRoot(config),
-  _angular_common_http__WEBPACK_IMPORTED_MODULE_31__.HttpClientModule, _angular_material_button__WEBPACK_IMPORTED_MODULE_32__.MatButtonModule, _angular_material_input__WEBPACK_IMPORTED_MODULE_33__.MatInputModule, _angular_material_menu__WEBPACK_IMPORTED_MODULE_34__.MatMenuModule, _angular_material_slider__WEBPACK_IMPORTED_MODULE_35__.MatSliderModule, _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_36__.MatToolbarModule, _angular_material_select__WEBPACK_IMPORTED_MODULE_37__.MatSelectModule, _angular_material_progress_spinner__WEBPACK_IMPORTED_MODULE_38__.MatProgressSpinnerModule, _angular_material_icon__WEBPACK_IMPORTED_MODULE_39__.MatIconModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_31__.HttpClientJsonpModule, ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.ModalModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.TooltipModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.TabsModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.BsDropdownModule.forRoot(), ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.PopoverModule.forRoot(), primeng_fileupload__WEBPACK_IMPORTED_MODULE_40__.FileUploadModule,
+  _angular_common_http__WEBPACK_IMPORTED_MODULE_35__.HttpClientModule, _angular_material_button__WEBPACK_IMPORTED_MODULE_36__.MatButtonModule, _angular_material_input__WEBPACK_IMPORTED_MODULE_37__.MatInputModule, _angular_material_menu__WEBPACK_IMPORTED_MODULE_38__.MatMenuModule, _angular_material_slider__WEBPACK_IMPORTED_MODULE_39__.MatSliderModule, _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_40__.MatToolbarModule, _angular_material_select__WEBPACK_IMPORTED_MODULE_41__.MatSelectModule, _angular_material_progress_spinner__WEBPACK_IMPORTED_MODULE_42__.MatProgressSpinnerModule, _angular_material_icon__WEBPACK_IMPORTED_MODULE_43__.MatIconModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_35__.HttpClientJsonpModule, ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_23__.ModalModule.forRoot(), ngx_bootstrap_tooltip__WEBPACK_IMPORTED_MODULE_21__.TooltipModule.forRoot(), ngx_bootstrap_tabs__WEBPACK_IMPORTED_MODULE_22__.TabsModule.forRoot(), ngx_bootstrap_dropdown__WEBPACK_IMPORTED_MODULE_24__.BsDropdownModule.forRoot(), ngx_bootstrap_popover__WEBPACK_IMPORTED_MODULE_25__.PopoverModule.forRoot(), primeng_fileupload__WEBPACK_IMPORTED_MODULE_44__.FileUploadModule,
   // AbpModule,
   _app_routing_module__WEBPACK_IMPORTED_MODULE_0__.AppRoutingModule, _shared_utils_utils_module__WEBPACK_IMPORTED_MODULE_3__.UtilsModule,
   //AppCommonModule.forRoot(),
   // ServiceProxyModule,
-  primeng_table__WEBPACK_IMPORTED_MODULE_41__.TableModule, primeng_listbox__WEBPACK_IMPORTED_MODULE_42__.ListboxModule, primeng_radiobutton__WEBPACK_IMPORTED_MODULE_43__.RadioButtonModule, primeng_calendar__WEBPACK_IMPORTED_MODULE_44__.CalendarModule, primeng_paginator__WEBPACK_IMPORTED_MODULE_45__.PaginatorModule,
+  primeng_table__WEBPACK_IMPORTED_MODULE_45__.TableModule, primeng_listbox__WEBPACK_IMPORTED_MODULE_46__.ListboxModule, primeng_radiobutton__WEBPACK_IMPORTED_MODULE_47__.RadioButtonModule, primeng_calendar__WEBPACK_IMPORTED_MODULE_48__.CalendarModule, primeng_paginator__WEBPACK_IMPORTED_MODULE_49__.PaginatorModule,
   //PrimeNgFileUploadModule,
-  primeng_progressbar__WEBPACK_IMPORTED_MODULE_46__.ProgressBarModule,
+  primeng_progressbar__WEBPACK_IMPORTED_MODULE_50__.ProgressBarModule,
   //PerfectScrollbarModule,
-  _metronic_app_core_core_module__WEBPACK_IMPORTED_MODULE_15__.CoreModule,
+  _metronic_app_core_core_module__WEBPACK_IMPORTED_MODULE_14__.CoreModule,
   //NgxChartsModule,
   //TextMaskModule,
   //ImageCropperModule,
-  primeng_confirmdialog__WEBPACK_IMPORTED_MODULE_47__.ConfirmDialogModule, primeng_dropdown__WEBPACK_IMPORTED_MODULE_48__.DropdownModule, primeng_tabview__WEBPACK_IMPORTED_MODULE_49__.TabViewModule, primeng_selectbutton__WEBPACK_IMPORTED_MODULE_50__.SelectButtonModule, primeng_tree__WEBPACK_IMPORTED_MODULE_51__.TreeModule, primeng_dialog__WEBPACK_IMPORTED_MODULE_52__.DialogModule, primeng_accordion__WEBPACK_IMPORTED_MODULE_53__.AccordionModule, primeng_sidebar__WEBPACK_IMPORTED_MODULE_54__.SidebarModule, primeng_multiselect__WEBPACK_IMPORTED_MODULE_55__.MultiSelectModule, primeng_slider__WEBPACK_IMPORTED_MODULE_56__.SliderModule, _asymmetrik_ngx_leaflet__WEBPACK_IMPORTED_MODULE_57__.LeafletModule, _asymmetrik_ngx_leaflet_markercluster__WEBPACK_IMPORTED_MODULE_58__.LeafletMarkerClusterModule, primeng_orderlist__WEBPACK_IMPORTED_MODULE_59__.OrderListModule, angular_google_tag_manager__WEBPACK_IMPORTED_MODULE_60__.GoogleTagManagerModule.forRoot({
+  primeng_confirmdialog__WEBPACK_IMPORTED_MODULE_51__.ConfirmDialogModule, primeng_dropdown__WEBPACK_IMPORTED_MODULE_52__.DropdownModule, primeng_tabview__WEBPACK_IMPORTED_MODULE_53__.TabViewModule, primeng_selectbutton__WEBPACK_IMPORTED_MODULE_54__.SelectButtonModule, primeng_tree__WEBPACK_IMPORTED_MODULE_55__.TreeModule, primeng_dialog__WEBPACK_IMPORTED_MODULE_56__.DialogModule, primeng_accordion__WEBPACK_IMPORTED_MODULE_57__.AccordionModule, primeng_sidebar__WEBPACK_IMPORTED_MODULE_58__.SidebarModule, primeng_multiselect__WEBPACK_IMPORTED_MODULE_59__.MultiSelectModule, primeng_slider__WEBPACK_IMPORTED_MODULE_60__.SliderModule, _asymmetrik_ngx_leaflet__WEBPACK_IMPORTED_MODULE_61__.LeafletModule, _asymmetrik_ngx_leaflet_markercluster__WEBPACK_IMPORTED_MODULE_62__.LeafletMarkerClusterModule, _unovis_angular__WEBPACK_IMPORTED_MODULE_63__.VisGraphModule, _unovis_angular__WEBPACK_IMPORTED_MODULE_64__.VisSingleContainerModule, primeng_orderlist__WEBPACK_IMPORTED_MODULE_65__.OrderListModule, angular_google_tag_manager__WEBPACK_IMPORTED_MODULE_66__.GoogleTagManagerModule.forRoot({
     id: 'G-0MWHB1NG2M'
   })],
-  exports: [primeng_selectbutton__WEBPACK_IMPORTED_MODULE_50__.SelectButtonModule],
-  providers: [_shared_common_session_app_session_service__WEBPACK_IMPORTED_MODULE_8__.AppSessionService, _shared_common_ui_app_ui_customization_service__WEBPACK_IMPORTED_MODULE_9__.AppUiCustomizationService, _shared_common_nav_app_url_service__WEBPACK_IMPORTED_MODULE_10__.AppUrlService, _visualizationComponents_GanttComponent_gantt_chart_gantt_chart_service__WEBPACK_IMPORTED_MODULE_24__.GanttChartService, _golden_layout_component_service__WEBPACK_IMPORTED_MODULE_5__.GoldenLayoutComponentService],
+  exports: [primeng_selectbutton__WEBPACK_IMPORTED_MODULE_54__.SelectButtonModule],
+  providers: [_shared_common_session_app_session_service__WEBPACK_IMPORTED_MODULE_7__.AppSessionService, _shared_common_ui_app_ui_customization_service__WEBPACK_IMPORTED_MODULE_8__.AppUiCustomizationService, _shared_common_nav_app_url_service__WEBPACK_IMPORTED_MODULE_9__.AppUrlService, _visualizationComponents_GanttComponent_gantt_chart_gantt_chart_service__WEBPACK_IMPORTED_MODULE_28__.GanttChartService, _golden_layout_component_service__WEBPACK_IMPORTED_MODULE_4__.GoldenLayoutComponentService],
   bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_1__.AppComponent]
 })], AppModule);
 
@@ -314,7 +326,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "CommonService": () => (/* binding */ CommonService)
 /* harmony export */ });
-/* harmony import */ var _home_ylb9_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@angular-devkit/build-angular/node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js */ 49671);
+/* harmony import */ var _Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@angular-devkit/build-angular/node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js */ 49671);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! tslib */ 70655);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/core */ 94650);
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs */ 591);
@@ -325,15 +337,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var papaparse__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(papaparse__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ 17489);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ngx-bootstrap */ 11109);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! moment */ 15439);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _workers_workModule__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../workers/workModule */ 87634);
-/* harmony import */ var _shared_utils_local_storage_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @shared/utils/local-storage.service */ 3469);
-/* harmony import */ var _app_helperClasses_auspiceHandler__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @app/helperClasses/auspiceHandler */ 60817);
-/* harmony import */ var _shared_common_app_component_base__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @shared/common/app-component-base */ 40506);
-/* harmony import */ var _microbe_trace_next_plugin_visuals__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../microbe-trace-next-plugin-visuals */ 57643);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! moment */ 15439);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _workers_workModule__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../workers/workModule */ 87634);
+/* harmony import */ var _shared_utils_local_storage_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @shared/utils/local-storage.service */ 3469);
+/* harmony import */ var _app_helperClasses_auspiceHandler__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @app/helperClasses/auspiceHandler */ 60817);
+/* harmony import */ var _shared_common_app_component_base__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @shared/common/app-component-base */ 40506);
+/* harmony import */ var _microbe_trace_next_plugin_visuals__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../microbe-trace-next-plugin-visuals */ 57643);
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/common/http */ 80529);
+/* harmony import */ var ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ngx-bootstrap/utils */ 94559);
 
 var _class;
 
@@ -343,7 +355,7 @@ var _class;
 
 
 
-
+// import { window } from 'ngx-bootstrap';
 
 
 
@@ -356,9 +368,10 @@ var _class;
 
 
 
+
 // import { GoldenLayoutService } from '@embedded-enterprises/ng6-golden-layout';
 // import { ConsoleReporter } from 'jasmine';
-let CommonService = (_class = class CommonService extends _shared_common_app_component_base__WEBPACK_IMPORTED_MODULE_10__.AppComponentBase {
+let CommonService = (_class = class CommonService extends _shared_common_app_component_base__WEBPACK_IMPORTED_MODULE_9__.AppComponentBase {
   setLinkTableElement(element) {
     this.linkElementSource.next(element);
   }
@@ -420,6 +433,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       return {
         nodes: [],
         links: [],
+        unoNodes: [],
+        unoLinks: [],
         clusters: [],
         nodeFields: ['index', '_id', 'selected', 'cluster', 'visible', 'degree', 'origin'],
         nodeExclusions: [],
@@ -534,6 +549,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         'link-color-table-frequencies': false,
         'link-color-variable': 'None',
         'link-directed': false,
+        'link-bidirectional': false,
         'link-label-variable': 'None',
         'link-label-decimal-length': 3,
         'link-length': 0.125,
@@ -547,6 +563,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         "link-width-min": 3,
         'link-width-variable': 'None',
         'link-width-reciprocal': true,
+        'link-origin-array-order': [],
         'map-basemap-show': false,
         'map-collapsing-on': true,
         'map-counties-show': false,
@@ -582,10 +599,10 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         'node-label-variable': 'None',
         'node-label-orientation': 'Right',
         'node-opacity': 0,
-        'node-radius': 250,
+        'node-radius': 20,
         'node-radius-variable': 'None',
-        "node-radius-min": 250,
-        "node-radius-max": 4500,
+        "node-radius-min": 20,
+        "node-radius-max": 100,
         'node-symbol': 'symbolCircle',
         'node-symbol-table-counts': true,
         'node-symbol-table-frequencies': false,
@@ -702,7 +719,25 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           nodeColorsTableKeys: {},
           linkColorsTable: {},
           linkColorsTableKeys: {},
-          nodeSymbols: ['symbolCircle', 'symbolCross', 'symbolDiamond', 'symbolSquare', 'symbolStar', 'symbolTriangle', 'symbolWye', 'symbolTriangleDown', 'symbolTriangleLeft', 'symbolTriangleRight', 'symbolDiamondAlt', 'symbolDiamondSquare', 'symbolPentagon', 'symbolHexagon', 'symbolHexagonAlt', 'symbolOctagon', 'symbolOctagonAlt', 'symbolX'],
+          nodeSymbols: ['symbolCircle',
+          // 'symbolCross',
+          'symbolDiamond', 'symbolSquare',
+          // 'symbolStar',
+          'symbolTriangle',
+          // 'symbolWye',
+          // 'symbolTriangleDown',
+          // 'symbolTriangleLeft',
+          // 'symbolTriangleRight',
+          // 'symbolDiamondAlt',
+          // 'symbolDiamondSquare',
+          // 'symbolPentagon',
+          'symbolHexagon'
+          // 'symbolHexagonAlt',
+          // 'symbolOctagon',
+          // 'symbolOctagonAlt',
+          // 'symbolX'
+          ],
+
           nodeSymbolsTable: {},
           nodeSymbolsTableKeys: {},
           nodeValueNames: {},
@@ -748,54 +783,54 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
      * @returns {Object} where keys are the values to group (ie. subtype B,C,D...) and values are counts of the number of node for each key
      */
     this.createPolygonColorMap = () => {
-      if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.polygonGroups || !ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["polygons-color-show"]) {
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.polygonColorMap = () => ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["polygon-color"];
+      if (!ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.polygonGroups || !ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["polygons-color-show"]) {
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.polygonColorMap = () => ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["polygon-color"];
         return [];
       }
       let aggregates = {};
-      let groups = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.polygonGroups;
+      let groups = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.polygonGroups;
       // groups array where key = value to group by; and values = [nodes] that share that value
       // for group by subtype; keys are ['B', 'C', 'D']
       groups.forEach(d => {
         aggregates[d.key] = d.values.length;
       });
       let values = Object.keys(aggregates);
-      if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["polygon-color-table-counts-sort"] == 'ASC') values.sort(function (a, b) {
+      if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["polygon-color-table-counts-sort"] == 'ASC') values.sort(function (a, b) {
         return aggregates[a] - aggregates[b];
-      });else if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["polygon-color-table-counts-sort"] == 'DESC') values.sort(function (a, b) {
+      });else if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["polygon-color-table-counts-sort"] == 'DESC') values.sort(function (a, b) {
         return aggregates[b] - aggregates[a];
       });
-      if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["polygon-color-table-name-sort"] == 'ASC') values.sort(function (a, b) {
+      if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["polygon-color-table-name-sort"] == 'ASC') values.sort(function (a, b) {
         return a - b;
-      });else if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["polygon-color-table-name-sort"] == 'DESC') values.sort(function (a, b) {
+      });else if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["polygon-color-table-name-sort"] == 'DESC') values.sort(function (a, b) {
         return b - a;
       });
       // adds more colors when number of polygons > number of colors
-      if (values.length > ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.polygonColors.length) {
+      if (values.length > ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.polygonColors.length) {
         let colors = [];
-        let m = Math.ceil(values.length / ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.polygonColors.length);
+        let m = Math.ceil(values.length / ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.polygonColors.length);
         while (m-- > 0) {
-          colors = colors.concat(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.polygonColors);
+          colors = colors.concat(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.polygonColors);
         }
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.polygonColors = colors;
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.polygonColors = colors;
       }
       // adds more alpha values when number of polygons > number of alpha values
       // alpha value are used for transparency
-      if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.polygonAlphas) ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.polygonAlphas = new Array(values.length).fill(1);
-      if (values.length > ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.polygonAlphas.length) {
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.polygonAlphas = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.polygonAlphas.concat(new Array(values.length - ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.polygonAlphas.length).fill(0.5));
+      if (!ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.polygonAlphas) ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.polygonAlphas = new Array(values.length).fill(1);
+      if (values.length > ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.polygonAlphas.length) {
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.polygonAlphas = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.polygonAlphas.concat(new Array(values.length - ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.polygonAlphas.length).fill(0.5));
       }
-      if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.polygonColorMap === undefined || ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.polygonColorMap.domain === undefined)
+      if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.polygonColorMap === undefined || ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.polygonColorMap.domain === undefined)
         // updates the function that defines which color and transparency value to use for each polygon
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.polygonColorMap = d3__WEBPACK_IMPORTED_MODULE_1__.scaleOrdinal(this.session.style['polygonColors']).domain(values);
-      if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.polygonAlphaMap === undefined || ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.polygonColorMap.domain === undefined) ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.polygonAlphaMap = d3__WEBPACK_IMPORTED_MODULE_1__.scaleOrdinal(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.polygonAlphas).domain(values);
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.polygonColorMap = d3__WEBPACK_IMPORTED_MODULE_1__.scaleOrdinal(this.session.style['polygonColors']).domain(values);
+      if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.polygonAlphaMap === undefined || ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.polygonColorMap.domain === undefined) ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.polygonAlphaMap = d3__WEBPACK_IMPORTED_MODULE_1__.scaleOrdinal(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.polygonAlphas).domain(values);
       return aggregates;
     };
     /**
      * @returns {any[]} Returns an array with a copy of each node object
      */
     this.getNetworkNodes = () => {
-      let nodes = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.network.nodes;
+      let nodes = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.network.nodes;
       let n = nodes.length;
       let out = [];
       for (let i = 0; i < n; i++) {
@@ -815,8 +850,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    * temp.mapData, session.files, session.meta)
    */
   initialize() {
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context == undefined ? {} : ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context;
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService = this;
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context == undefined ? {} : ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context;
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService = this;
     this.reset();
   }
   /**
@@ -832,15 +867,21 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    * Set commonService.session and commonService.temp back to default values
    */
   clearData() {
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.sessionSkeleton();
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.tempSkeleton();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.sessionSkeleton();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.tempSkeleton();
+  }
+  /**
+   * Update Legacy Node Symbols if loading new files
+   */
+  updateLegacyNodeSymbols() {
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeSymbols = ['symbolCircle', 'symbolSquare', 'symbolTriangle', 'symbolHexagon', 'symbolDiamond'];
   }
   /**
    * @returns a default node object
    */
   defaultNode() {
     return {
-      index: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes.length,
+      index: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes.length,
       _id: '',
       selected: false,
       cluster: 1,
@@ -904,7 +945,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    */
   addNode(newNode, check = null) {
     //  If no _id, set _id to id
-    if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.isNumber(newNode._id)) {
+    if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.isNumber(newNode._id)) {
       newNode._id = '' + newNode._id;
       if (!newNode._id || newNode._id === '') {
         newNode._id = newNode.id;
@@ -915,26 +956,26 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       }
     }
     newNode._id = newNode._id.trim();
-    if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeExclusions.indexOf(newNode._id) > -1) {
+    if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeExclusions.indexOf(newNode._id) > -1) {
       return 0;
     }
     if (check) {
-      let nodes = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes;
+      let nodes = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes;
       const n = nodes.length;
       for (let i = 0; i < n; i++) {
         let node = nodes[i];
         if (node._id == newNode._id) {
-          newNode.origin = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.uniq(newNode.origin.concat(node.origin));
+          newNode.origin = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.uniq(newNode.origin.concat(node.origin));
           Object.assign(node, newNode);
           return 0;
         }
       }
     }
-    let newElement = Object.assign(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.defaultNode(), newNode);
+    let newElement = Object.assign(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.defaultNode(), newNode);
     if (newNode.hasOwnProperty('data') && newNode.data.hasOwnProperty('data')) {
       newElement.data = newNode.data.data;
     }
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes.push(newElement);
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes.push(newElement);
     return 1;
   }
   /**
@@ -944,7 +985,17 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    * @returns {number} - `1` if a new link was added to the array, `0` otherwise.
    */
   addLink(newLink, check = true) {
-    const serv = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService;
+    if (newLink.source === "KF773571" && newLink.target === "KF773578") {
+      console.log('new link 1: ', JSON.stringify(newLink));
+      // console.log('new link 2: ', JSON.stringify(newLink));
+    }
+
+    if (newLink.source === "KF773430" && newLink.target === "KF773432") {
+      console.log('new link 2: ', JSON.stringify(newLink));
+      // console.log('new link 2: ', JSON.stringify(newLink));
+    }
+
+    const serv = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService;
     const matrix = serv.temp.matrix;
     if (typeof newLink.source == 'number') {
       newLink.source = newLink.source.toString().trim();
@@ -987,6 +1038,16 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         newLink.target = oldLink.target;
       }
       lodash__WEBPACK_IMPORTED_MODULE_4__.merge(oldLink, newLink);
+      if (oldLink.origin.length > 0) {
+        console.log('old link origin: ', oldLink.origin);
+        // Array order hasn't been set yet, so we need to set it
+        if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-origin-array-order"].length == 0) {
+          ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-origin-array-order"] = oldLink.origin;
+        }
+        console.log('old link array order: ', ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-origin-array-order"]);
+        oldLink.origin = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-origin-array-order"];
+        console.log('old link origin: ', oldLink.origin);
+      }
       // TODO remove when confident this function never causes issues - used to debug easier
       // Object.assign(oldLink, newLink);
       // Object.assign(newLink, oldLink);
@@ -1024,15 +1085,18 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           hasDistance: false
         }, newLink);
       }
+      // Always add the new link without merging
+      sdlinks.push(newLink);
       matrix[newLink.source][newLink.target] = newLink;
       matrix[newLink.target][newLink.source] = newLink;
-      sdlinks.push(newLink);
       linkIsNew = 1;
     }
+    return linkIsNew;
     // TODO Remove when not needed
     // window.context.commonService.session.data.linkFilteredValues = [...window.context.commonService.session.data.links];
-    return linkIsNew;
+    // return linkIsNew;
   }
+
   /**
    * Removes duplicate elements from an array.
    * @param {Array} a - The array to be processed.
@@ -1052,6 +1116,107 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     }
     return out;
   }
+  getSelectedNode(nodes) {
+    return nodes.find(node => node.selected);
+  }
+  /**
+   * This takes the information needed for twod network from microbetrace session file
+   */
+  // public legacyMicrobetraceAdapter (json : MicrobeTraceSessionGraphData) : GraphData {
+  //     let nodes : NodeDatum[] = json.nodes.map(x => {
+  //         return {
+  //             id: x.id,
+  //             color: ""
+  //         }
+  //     });
+  //     let links : LinkDatum[] = json.links.map(x => {
+  //         return {
+  //             source: x.source,
+  //             target: x.target,
+  //             chapter : String(x.distance)
+  //         }
+  //     });
+  //     return {
+  //         nodes : nodes,
+  //         links : links
+  //     }
+  // }
+  getColorByIndex(index) {
+    let variable = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["node-color-variable"];
+    let color = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["node-color"];
+    if (variable == 'None') {
+      return color;
+    } else {
+      return ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.nodeColorMap(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes[index][variable]);
+    }
+  }
+  convertToGraphDataArray(microbeData) {
+    const nodes = microbeData.nodes.map(node => ({
+      ...node,
+      id: node._id,
+      group: node.cluster,
+      color: this.getColorByIndex(node.index) // Add or override the color property
+    }));
+
+    const links = microbeData.links.map(link => ({
+      ...link,
+      source: link.source,
+      target: link.target,
+      group: link.cluster ?? null,
+      chapter: link.distance ? link.distance.toString() : null // Convert distance to string for chapter
+    }));
+
+    return {
+      nodes,
+      links
+    };
+  }
+  updateNodesAndGeneratePanels(graphData) {
+    // Update nodes with new group information based on foci
+    const updatedNodes = graphData.nodes.map(node => ({
+      ...node,
+      group: node[ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["polygons-foci"]] // Set the group property based on the foci
+    }));
+    // Generate panels based on the updated nodes
+    const uniqueGroups = Array.from(new Set(updatedNodes.map(node => node.group)));
+    const panels = uniqueGroups.map(group => {
+      const groupNodes = updatedNodes.filter(node => node.group === group);
+      const groupColor = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.polygonColorMap(group) || '#000'; // Use color map or default color
+      //   window.context.commonService.temp.style.polygonColorMap(group[window.context.commonService.session.style.widgets['polygons-foci']]);
+      return {
+        nodes: groupNodes.map(node => node.id),
+        label: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["polygons-label-show"] ? `${ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["polygons-foci"]} ${group}` : '',
+        labelPosition: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["polygons-label-orientation"] ? ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["polygons-label-orientation"] : 'top',
+        borderColor: groupColor,
+        borderWidth: 2,
+        fillColor: groupColor,
+        color: groupColor,
+        padding: 10,
+        dashedOutline: true
+        // sideIconSymbol: '⚽',
+        // sideIconShape: GraphNodeShape.Circle,
+        // sideIconShapeStroke: '#777',
+        // sideIconCursor: 'pointer',
+        // sideIconFontSize: '24px',
+        // sideIconShapeSize: 50,
+      };
+    });
+
+    const groups = uniqueGroups.map(group => ({
+      key: group,
+      values: updatedNodes.filter(node => node.group === group)
+    }));
+    return {
+      updatedNodes,
+      panels,
+      groups
+    };
+  }
+  halveLinksArray(links) {
+    const halfIndex = Math.ceil(links.length / 4); // Ensures that for an odd number of links, the larger half is returned
+    console.log('new links: ', links.slice(0, 500));
+    return links.slice(0, 10000);
+  }
   /**
    * I think this function allows users to import an svg image into MT. Not sure if it currently works.
    * @param svg
@@ -1064,15 +1229,15 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         const $node = document.getElementById(node);
         const gephid = $node.attr('class');
         nodes.push(gephid);
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addNode({
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.addNode({
           id: gephid + '',
           color: $node.attr('fill'),
           size: parseFloat($node.attr('r')),
           origin: ['Scraped Gephi SVG']
         }, false);
       });
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.push('color');
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.push('size');
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.push('color');
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.push('size');
       $xml.find('#edges path').each((i, link) => {
         const $link = $(link);
         const coords = $link.attr('class').split(' ');
@@ -1082,14 +1247,14 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           color: $link.attr('stroke'),
           origin: ['Scraped MicrobeTrace SVG']
         };
-        base[ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-distance-metric"]] = 0;
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addLink(base, true);
+        base[ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["default-distance-metric"]] = 0;
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.addLink(base, true);
       });
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.linkFields.push('color');
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.linkFields.push('color');
     } else {
       $xml.find('.nodes g').each((i, node) => {
         nodes.push($(node).attr('transform').slice(10, -1).split(',').map(parseFloat));
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addNode({
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.addNode({
           id: i + '',
           origin: ['Scraped SVG']
         }, false);
@@ -1108,11 +1273,11 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           target: target + '',
           origin: ['Scraped SVG']
         };
-        base[ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-distance-metric"]] = 0;
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addLink(base, true);
+        base[ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["default-distance-metric"]] = 0;
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.addLink(base, true);
       });
     }
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.runHamsters();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.runHamsters();
   }
   /**
    * Loads JSON, MicrobeTrace, or HivTrace files into MicrobeTrace
@@ -1138,17 +1303,17 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       return;
     }
     if (extension == 'microbetrace') {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session = this.sessionSkeleton();
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.applySession(data);
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session = this.sessionSkeleton();
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.applySession(data);
     } else {
       if (data.meta && data.tree) {
         // window.context.commonService.applyAuspice(data);
       } else {
         if (data.version) {
-          ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.applyGHOST(data);
+          ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.applyGHOST(data);
         } else {
           console.log("Trying to load HIVTrace file");
-          ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.applyHIVTrace(data);
+          ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.applyHIVTrace(data);
         }
       }
     }
@@ -1178,20 +1343,20 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       };
     }
     const oldSession = stashObject.session;
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.matrix = [];
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.files = oldSession.files;
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.state = oldSession.state;
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style = oldSession.style;
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.meta.startTime = Date.now();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.matrix = [];
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.files = oldSession.files;
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.state = oldSession.state;
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style = oldSession.style;
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.meta.startTime = Date.now();
     if (oldSession.layout) {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.layout = oldSession.layout;
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.layout = oldSession.layout;
     }
     // layout.root.removeChild(layout.root.contentItems[0]);
     const nodes = oldSession.data.nodes,
       links = oldSession.data.links,
       n = nodes.length,
       m = links.length;
-    for (let i = 0; i < n; i++) ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addNode(nodes[i]);
+    for (let i = 0; i < n; i++) ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.addNode(nodes[i]);
     for (let j = 0; j < m; j++) {
       // Add distance property for files saved prior to distance visibility fix
       if (links[j].origin.includes('Genetic Distance')) {
@@ -1200,22 +1365,22 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       } else if (links[j].distance && links[j].distance > 0) {
         links[j].hasDistance = true;
       }
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addLink(links[j]);
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.addLink(links[j]);
     }
     // for (let j = 0; j < m; j++) window.context.commonService.addLink(links[j]);
     ['nodeFields', 'linkFields', 'clusterFields', 'nodeExclusions'].forEach(v => {
-      if (oldSession.data[v]) ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data[v] = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.uniq(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data[v].concat(oldSession.data[v]));
+      if (oldSession.data[v]) ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data[v] = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.uniq(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data[v].concat(oldSession.data[v]));
     });
     // TODO: See about this process data functionality
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.processData();
-    if (oldSession.network) ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.network = oldSession.network;
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.processData();
+    if (oldSession.network) ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.network = oldSession.network;
     if (oldSession.data.geoJSONLayerName !== "") {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.geoJSON = oldSession.data.geoJSON;
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.geoJSONLayerName = oldSession.data.geoJSONLayerName;
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.geoJSON = oldSession.data.geoJSON;
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.geoJSONLayerName = oldSession.data.geoJSONLayerName;
     }
     // TODO see if this is needed
     // sessionApplied = true;
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.applyStyle(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style);
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.applyStyle(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style);
     // TODO: See if this is needed
     // if (!links[0]['distance']) {
     //     if (links[0]['tn93']) {
@@ -1224,7 +1389,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     //         window.context.commonService.session.style.widgets['link-sort-variable'] = 'snps';
     //     }
     // }
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.finishUp();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.finishUp();
     // TODO: implement this later
     // $("#network-statistics-show").parent().trigger("click");
   }
@@ -1235,7 +1400,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    */
   processData() {
     let nodes = this.session.data.nodes;
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFilteredValues = nodes;
+    console.log('processing data: ', nodes);
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFilteredValues = nodes;
     //Add links for nodes with no edges
     // this.uniqueNodes.forEach(x => {
     //     this.commonService.addLink(Object.assign({
@@ -1255,29 +1421,30 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     if (this.debugMode) {
       console.log('applying style: ', style);
     }
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style = style;
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets = Object.assign({}, ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.defaultWidgets(), style.widgets);
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.createLinkColorMap();
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.createNodeColorMap();
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.createPolygonColorMap();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style = style;
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets = Object.assign({}, ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.defaultWidgets(), style.widgets);
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.createLinkColorMap();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.createNodeColorMap();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.createPolygonColorMap();
     // finds id s in template/html where id=widget name, updated the value to the new value in the style file
     let $id = null;
-    for (let id in ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets) {
+    for (let id in ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets) {
       $id = $("#" + id);
       if ($id.length > 0) {
-        if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.includes(["radio", "checkbox"], $id[0].type)) {
-          if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets[id]) $id.trigger("click");
+        if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.includes(["radio", "checkbox"], $id[0].type)) {
+          if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets[id]) $id.trigger("click");
         } else {
           if (id == 'default-distance-metric') {
-            $id.val(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets[id].toLowerCase());
-            $("#" + id + '2').val(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets[id].toLowerCase());
+            $id.val(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets[id].toLowerCase());
+            $("#" + id + '2').val(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets[id].toLowerCase());
           } else {
-            $id.val(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets[id]);
+            $id.val(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets[id]);
           }
         }
       }
     }
-    this.visuals.microbeTrace.applyStyleFileSettings();
+    // TODO uncomment if was meant to be
+    // this.visuals.microbeTrace.applyStyleFileSettings();
     if (this.visuals.filesPlugin) {
       this.visuals.filesPlugin.applyStyleFileSettings();
     }
@@ -1306,8 +1473,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
 
   applyHIVTrace(hivtrace) {
     console.log("Running applyHIVTrace");
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.resetData();
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.meta.startTime = Date.now();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.resetData();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.meta.startTime = Date.now();
     hivtrace["trace_results"]["Nodes"].forEach(node => {
       let newNode = {
         _id: node.id,
@@ -1317,14 +1484,14 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         console.log("had patient_attributes");
         newNode = JSON.parse(JSON.stringify(node.patient_attributes));
         Object.keys(hivtrace["trace_results"]["Nodes"][0]["patient_attributes"]).forEach(key => {
-          if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.includes(key)) ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.push(key);
+          if (!ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.includes(key)) ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.push(key);
         });
       }
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addNode(newNode, false);
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.addNode(newNode, false);
     });
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.processData();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.processData();
     let n = hivtrace["trace_results"]["Edges"].length;
-    let metric = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-distance-metric"];
+    let metric = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["default-distance-metric"];
     for (let i = 0; i < n; i++) {
       let link = hivtrace["trace_results"]["Edges"][i];
       let newLink = {
@@ -1335,24 +1502,24 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       };
       newLink[metric] = parseFloat(link.length);
       newLink["distance"] = newLink[metric];
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addLink(newLink, false);
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.addLink(newLink, false);
     }
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.linkFields.push(metric);
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.runHamsters();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.linkFields.push(metric);
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.runHamsters();
   }
   applyGHOST(ghost) {
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.sessionSkeleton();
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.meta.startTime = Date.now();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.sessionSkeleton();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.meta.startTime = Date.now();
     ghost["samples"].forEach(node => {
       let newNode = JSON.parse(JSON.stringify(node));
       newNode.origin = ["GHOST Import"];
       newNode.genotypes = JSON.stringify(newNode.genotypes);
       newNode._id = "" + newNode._id;
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addNode(newNode, false);
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.addNode(newNode, false);
     });
     ["genotypes", "group", "_id", "name"].forEach(key => {
-      if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.includes(key)) {
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.push(key);
+      if (!ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.includes(key)) {
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.push(key);
       }
     });
     let links = ghost["links"];
@@ -1366,16 +1533,16 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         origin: ["GHOST Import"],
         visible: true
       });
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addLink(newLink, false);
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.addLink(newLink, false);
     }
     ["density", "dist", "shared", "src_genotype", "src_haps", "tgt_genotype", "tgt_haps"].forEach(key => {
-      if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.linkFields.includes(key)) ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.linkFields.push(key);
+      if (!ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.linkFields.includes(key)) ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.linkFields.push(key);
     });
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.runHamsters();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.runHamsters();
   }
   applyAuspice(auspice) {
     return new Promise(resolve => {
-      const auspiceHandler = new _app_helperClasses_auspiceHandler__WEBPACK_IMPORTED_MODULE_9__["default"](ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService);
+      const auspiceHandler = new _app_helperClasses_auspiceHandler__WEBPACK_IMPORTED_MODULE_8__["default"](ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService);
       const auspiceData = auspiceHandler.run(auspice);
       resolve(auspiceData);
     });
@@ -1394,8 +1561,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         resolve(auspiceDataHolder);
       });
     });
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.updateNetwork();
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.updateStatistics();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.updateNetwork();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.updateStatistics();
   }
   /**
    * Decodes the given `x` using the utf-8 TextDecoder object.
@@ -1403,7 +1570,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    * @returns {string} - The decoded string.
    */
   decode(x) {
-    return ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.decoder.decode(x);
+    return ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.decoder.decode(x);
   }
   /**
    * Asynchronously parses fasta text on another thread to generate an array of nodes with id and seq
@@ -1412,10 +1579,10 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    */
   parseFASTA(text) {
     return new Promise(resolve => {
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_6__.WorkerModule();
       let response = computer.compute_parse_fastaWorker.postMessage(text);
       computer.compute_parse_fastaWorker.onmessage().subscribe(response => {
-        let nodes = JSON.parse(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.decode(new Uint8Array(response.data.nodes)));
+        let nodes = JSON.parse(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.decode(new Uint8Array(response.data.nodes)));
         if (this.debugMode) {
           console.log("FASTA Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
         }
@@ -1430,14 +1597,14 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    */
   parseCSVMatrix(file) {
     return new Promise(resolve => {
-      let check = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.files.length > 1;
+      let check = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.files.length > 1;
       const origin = [file.name];
       let nn = 0,
         nl = 0;
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_6__.WorkerModule();
       computer.compute_parse_csv_matrixWorker.postMessage(file.contents);
       computer.compute_parse_csv_matrixWorker.onmessage = response => {
-        const data = JSON.parse(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.decode(new Uint8Array(response.data.data)));
+        const data = JSON.parse(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.decode(new Uint8Array(response.data.data)));
         if (this.debugMode) {
           console.log('CSV Matrix Transit time: ', (Date.now() - response.data.start).toLocaleString(), 'ms');
         }
@@ -1445,8 +1612,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         const nodes = data.nodes;
         const tn = nodes.length;
         for (let i = 0; i < tn; i++) {
-          nn += ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addNode({
-            _id: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.filterXSS(nodes[i]),
+          nn += ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.addNode({
+            _id: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.filterXSS(nodes[i]),
             origin: origin
           }, check);
         }
@@ -1454,7 +1621,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         const tl = links.length;
         for (let j = 0; j < tl; j++) {
           // console.log('has distance is true: ', JSON.stringify(links[j]));
-          nl += ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addLink(Object.assign(links[j], {
+          nl += ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.addLink(Object.assign(links[j], {
             origin: origin,
             hasDistance: true,
             distanceOrigin: origin
@@ -1478,31 +1645,31 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    * @returns
    */
   auspiceCallBack(auspiceData) {
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.clearData();
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.sessionSkeleton();
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.meta.startTime = Date.now();
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.tree = auspiceData['tree'];
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.newickString = auspiceData['newick'];
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.clearData();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.sessionSkeleton();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.meta.startTime = Date.now();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.tree = auspiceData['tree'];
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.newickString = auspiceData['newick'];
     let nodeCount = 0;
     auspiceData['nodes'].forEach(node => {
       if (!/NODE0*/.exec(node.id)) {
         const nodeKeys = Object.keys(node);
         nodeKeys.forEach(key => {
-          if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.indexOf(key) === -1) {
-            ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.push(key);
+          if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.indexOf(key) === -1) {
+            ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.push(key);
           }
           if (!node.hasOwnProperty('origin')) {
             node.origin = [];
           }
-          nodeCount += ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addNode(node, true);
+          nodeCount += ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.addNode(node, true);
         });
       }
     });
     let linkCount = 0;
     auspiceData['links'].forEach(link => {
-      linkCount += ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addLink(link, true);
+      linkCount += ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.addLink(link, true);
     });
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.runHamsters();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.runHamsters();
     // this.showMessage(` - Parsed ${nodeCount} New Nodes and ${linkCount} new Links from Auspice file.`);
     this.processData();
     return nodeCount;
@@ -1520,13 +1687,13 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     let start = Date.now();
     if (!count) count = 1000;
     if (!snps) snps = 100;
-    if (!seed) seed = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.reference;
+    if (!seed) seed = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.reference;
     let sampleCodons = ["GCA", "GCC", "GCG", "GCT", "AAC", "AAT", "GAC", "GAT", "TGC", "TGT", "GAC", "GAT", "GAA", "GAG", "TTC", "TTT", "GGA", "GGC", "GGG", "GGT", "CAC", "CAT", "ATA", "ATC", "ATT", "AAA", "AAG", "CTA", "CTC", "CTG", "CTT", "TTA", "TTG", "ATG", "AAC", "AAT", "CCA", "CCC", "CCG", "CCT", "CAA", "CAG", "AGA", "AGG", "CGA", "CGC", "CGG", "CGT", "AGC", "AGT", "TCA", "TCC", "TCG", "TCT", "ACA", "ACC", "ACG", "ACT", "GTA", "GTC", "GTG", "GTT", "TGG", "TAC", "TAT", "CAA", "CAG", "GAA", "GAG"];
     let sampleSNPs = ["A", "C", "G", "T"];
     let sample = (vec, nCodons) => {
       let samples = [];
       for (let x = 0; x < nCodons; x++) {
-        let idx = Math.floor(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.r01() * vec.length);
+        let idx = Math.floor(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.r01() * vec.length);
         samples.push(vec[idx]);
       }
       return samples;
@@ -1538,13 +1705,13 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     });
     while (seqs.length < count) {
       // number codons to vary
-      let nCodons = Math.floor(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.r01() * 10) + 1;
+      let nCodons = Math.floor(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.r01() * 10) + 1;
       // randomly select this many to check for existence
       let randomCodonSet = sample(sampleCodons, nCodons).join("");
       // try again if not present
       if (seqs[seqs.length - 1].seq.indexOf(randomCodonSet) == -1) continue;
       // sequence to mutate
-      let oldseed = seqs[Math.floor(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.r01() * seqs.length)].seq;
+      let oldseed = seqs[Math.floor(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.r01() * seqs.length)].seq;
       // select codons to replace randomCodonSet
       let replacementCodonSet = sample(sampleCodons, nCodons).join("");
       // replace codon set
@@ -1552,10 +1719,10 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       // add snp substitutions randomly across entire sequence
       // - randomly sample addedSNP
       // - randomly pick SNPS to replace
-      let addedSNPs = Math.floor(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.r01() * snps);
+      let addedSNPs = Math.floor(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.r01() * snps);
       for (let j = 0; j < addedSNPs; j++) {
         let randomSNP = sample(sampleSNPs, 1)[0];
-        let locOfSNP = Math.floor(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.r01() * seed.length);
+        let locOfSNP = Math.floor(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.r01() * seed.length);
         newseed = newseed.substr(0, locOfSNP) + randomSNP + newseed.substr(locOfSNP + 1);
       }
       seqs.push({
@@ -1575,10 +1742,10 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       }
       let n = params.nodes.length;
       let referenceLength = params.reference.length;
-      let aligner = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let aligner = new _workers_workModule__WEBPACK_IMPORTED_MODULE_6__.WorkerModule();
       aligner.compute_align_swWorker.postMessage(params);
       aligner.compute_align_swWorker.onmessage().subscribe(response => {
-        let subset = JSON.parse(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.decode(new Uint8Array(response.data.nodes)));
+        let subset = JSON.parse(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.decode(new Uint8Array(response.data.nodes)));
         console.log("Alignment transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
         let start = Date.now();
         let minPadding = Infinity,
@@ -1597,9 +1764,9 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
             d._seq = d._seq.padEnd(referenceLength, "-");
           }
         }
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.push('_score');
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.push('_padding');
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.push('_cigar');
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.push('_score');
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.push('_padding');
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.push('_cigar');
         console.log("Alignment Padding time: ", (Date.now() - start).toLocaleString(), "ms");
         resolve(subset);
       });
@@ -1608,7 +1775,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   computeConsensus(nodes = null) {
     if (!nodes) nodes = this.session.data.nodes.filter(d => d.seq);
     return new Promise(resolve => {
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_6__.WorkerModule();
       computer.compute_consensusWorker.postMessage({
         data: nodes
       });
@@ -1616,7 +1783,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         if (this.debugMode) {
           console.log("Consensus Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
         }
-        resolve(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.decode(new Uint8Array(response.data.consensus)));
+        resolve(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.decode(new Uint8Array(response.data.consensus)));
       });
       //let computer: WorkerModule = new WorkerModule();
       //let response = computer.compute_consensus({ data: nodes });
@@ -1627,10 +1794,10 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
 
   computeAmbiguityCounts() {
     return new Promise(resolve => {
-      let nodes = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes;
+      let nodes = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes;
       let subset = nodes.filter(d => d.seq);
       const subsetLength = subset.length;
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_6__.WorkerModule();
       computer.compute_ambiguity_countsWorker.postMessage(subset);
       computer.compute_ambiguity_countsWorker.onmessage().subscribe(response => {
         console.log("Ambiguity Count Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
@@ -1639,7 +1806,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         for (let j = 0; j < subsetLength; j++) {
           nodes[subset[j].index]._ambiguity = dists[j];
         }
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.push('_ambiguity');
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.push('_ambiguity');
         console.log("Ambiguity Count Merge time: ", (Date.now() - start).toLocaleString(), "ms");
         resolve();
       });
@@ -1660,7 +1827,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   computeConsensusDistances() {
     return new Promise(resolve => {
       let start = Date.now();
-      let nodes = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes;
+      let nodes = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes;
       let nodesLength = nodes.length;
       let subset = [];
       for (let i = 0; i < nodesLength; i++) {
@@ -1678,10 +1845,10 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         }
       }
       let subsetLength = subset.length;
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_6__.WorkerModule();
       computer.compute_consensusWorker.postMessage({
         data: {
-          consensus: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.consensus,
+          consensus: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.consensus,
           subset: subset,
           start: start
         }
@@ -1693,7 +1860,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         for (let j = 0; j < subsetLength; j++) {
           nodes[subset[j].index]._diff = dists[j];
         }
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.push('_diff');
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.push('_diff');
         console.log("Consensus Difference Merge time: ", (Date.now() - start).toLocaleString(), "ms");
         resolve();
       });
@@ -1707,27 +1874,27 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   computeLinks(subset) {
     return new Promise(resolve => {
       let k = 0;
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_6__.WorkerModule();
       computer.compute_linksWorker.postMessage({
         nodes: subset,
-        metric: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-distance-metric"],
-        strategy: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["ambiguity-resolution-strategy"],
-        threshold: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["ambiguity-threshold"]
+        metric: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["default-distance-metric"],
+        strategy: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["ambiguity-resolution-strategy"],
+        threshold: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["ambiguity-threshold"]
       });
       computer.compute_linksWorker.onmessage().subscribe(response => {
-        let dists = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-distance-metric"].toLowerCase() == 'snps' ? new Uint16Array(response.data.links) : new Float32Array(response.data.links);
+        let dists = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["default-distance-metric"].toLowerCase() == 'snps' ? new Uint16Array(response.data.links) : new Float32Array(response.data.links);
         if (this.debugMode) {
           console.log("Links Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
         }
         let start = Date.now();
-        let check = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.files.length > 1;
+        let check = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.files.length > 1;
         let n = subset.length;
         let l = 0;
         for (let i = 0; i < n; i++) {
           let sourceID = subset[i]._id;
           for (let j = 0; j < i; j++) {
             let targetID = subset[j]._id;
-            k += ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addLink({
+            k += ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.addLink({
               source: sourceID,
               target: targetID,
               distance: dists[l++],
@@ -1749,13 +1916,13 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     let start = Date.now();
     return new Promise(resolve => {
       let dm = '';
-      if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.newick) {
-        let treeObj = patristic__WEBPACK_IMPORTED_MODULE_2__.parseNewick(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.newick);
+      if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.newick) {
+        let treeObj = patristic__WEBPACK_IMPORTED_MODULE_2__.parseNewick(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.newick);
         dm = treeObj.toMatrix();
       } else {
-        let labels = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes.map(d => d._id);
+        let labels = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes.map(d => d._id);
         labels = labels.sort();
-        let metric = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-sort-variable"];
+        let metric = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-sort-variable"];
         const n = labels.length;
         dm = new Array(n);
         let m = new Array(n);
@@ -1763,7 +1930,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           dm[i] = new Array(n);
           dm[i][i] = 0;
           let source = labels[i];
-          let row = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.matrix[source];
+          let row = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.matrix[source];
           if (!row) {
             console.error('Incompletely populated temp.matrix! Couldn\'t find ' + source);
             continue;
@@ -1790,21 +1957,21 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       console.log('computing tree');
     }
     return new Promise(resolve => {
-      if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.treeObj) {
-        resolve(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.treeObj.toNewick());
-      } else if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.newick) {
-        resolve(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.newick);
+      if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.treeObj) {
+        resolve(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.treeObj.toNewick());
+      } else if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.newick) {
+        resolve(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.newick);
       } else {
-        let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.getDM().then(dm => {
+        let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_6__.WorkerModule();
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.getDM().then(dm => {
           computer.compute_treeWorker.postMessage({
             // labels: Object.keys(window.context.commonService.temp.matrix).sort(), <- This doesn't work because temp.matrix retains blank objects
-            labels: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes.map(a => a._id),
+            labels: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes.map(a => a._id),
             matrix: dm,
-            round: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["tree-round"]
+            round: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["tree-round"]
           });
           computer.compute_treeWorker.onmessage().subscribe(response => {
-            const treeObj = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.decode(new Uint8Array(response.data.tree));
+            const treeObj = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.decode(new Uint8Array(response.data.tree));
             const treeString = patristic__WEBPACK_IMPORTED_MODULE_2__.parseJSON(treeObj).toNewick();
             if (this.debugMode) {
               console.log('Tree Transit time: ', (Date.now() - response.data.start).toLocaleString(), 'ms');
@@ -1817,10 +1984,10 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   }
   computeDirectionality() {
     return new Promise(resolve => {
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_6__.WorkerModule();
       computer.compute_directionalityWorker.postMessage({
-        links: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.links,
-        tree: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.tree
+        links: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.links,
+        tree: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.tree
       });
       computer.compute_directionalityWorker.onmessage().subscribe(response => {
         let flips = new Uint8Array(response.data.output);
@@ -1831,7 +1998,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         let n = flips.length;
         for (let i = 0; i < n; i++) {
           if (flips[i]) {
-            let fliplink = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.links[i];
+            let fliplink = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.links[i];
             let fliptemp = fliplink.source;
             fliplink.source = fliplink.target;
             fliplink.target = fliptemp;
@@ -1847,12 +2014,12 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   }
   computeMST() {
     return new Promise((resolve, reject) => {
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_6__.WorkerModule();
       computer.compute_mstWorker.postMessage({
-        links: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.links,
-        matrix: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.matrix,
-        epsilon: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["filtering-epsilon"],
-        metric: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-sort-variable"]
+        links: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.links,
+        matrix: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.matrix,
+        epsilon: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["filtering-epsilon"],
+        metric: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-sort-variable"]
       });
       computer.compute_mstWorker.onmessage().subscribe(response => {
         if (response.data == "Error") {
@@ -1863,7 +2030,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           console.log("MST Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
         }
         const start = Date.now();
-        let links = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.links;
+        let links = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.links;
         const numLinks = links.length;
         for (let i = 0; i < numLinks; i++) {
           links[i].nn = output[i] ? true : false;
@@ -1877,12 +2044,12 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   }
   computeNN() {
     return new Promise((resolve, reject) => {
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_6__.WorkerModule();
       computer.compute_nnWorker.postMessage({
-        links: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.links,
-        matrix: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.matrix,
-        epsilon: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["filtering-epsilon"],
-        metric: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-sort-variable"]
+        links: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.links,
+        matrix: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.matrix,
+        epsilon: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["filtering-epsilon"],
+        metric: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-sort-variable"]
       });
       computer.compute_nnWorker.onmessage().subscribe(response => {
         if (response.data == "Error") {
@@ -1893,7 +2060,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           console.log("NN Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
         }
         const start = Date.now();
-        let links = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.links;
+        let links = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.links;
         const numLinks = links.length;
         for (let i = 0; i < numLinks; i++) {
           links[i].nn = output[i] ? true : false;
@@ -1907,9 +2074,9 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   }
   computeTriangulation() {
     return new Promise((resolve, reject) => {
-      const metric = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-sort-variable"];
-      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_7__.WorkerModule();
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.getDM().then(dm => {
+      const metric = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-sort-variable"];
+      let computer = new _workers_workModule__WEBPACK_IMPORTED_MODULE_6__.WorkerModule();
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.getDM().then(dm => {
         computer.compute_triangulationWorker.postMessage({
           matrix: dm
         });
@@ -1919,16 +2086,16 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
             console.log("Triangulation Transit time: ", (Date.now() - response.data.start).toLocaleString(), "ms");
           }
           let start = Date.now();
-          let matrix = JSON.parse(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.decode(new Uint8Array(response.data.matrix)));
-          let labels = Object.keys(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.matrix);
+          let matrix = JSON.parse(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.decode(new Uint8Array(response.data.matrix)));
+          let labels = Object.keys(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.matrix);
           const n = labels.length;
           for (let i = 0; i < n; i++) {
             let source = labels[i];
-            let row = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.matrix[source];
+            let row = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.matrix[source];
             for (let j = 0; j < i; j++) {
               let target = labels[j];
               if (!row[target]) {
-                ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.addLink({
+                ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.addLink({
                   source: source,
                   target: target,
                   origin: ['Triangulation'],
@@ -1947,12 +2114,13 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     });
   }
   runHamsters() {
-    return (0,_home_ylb9_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-      if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["triangulate-false"]) ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.computeTriangulation();
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.computeNN();
-      yield ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.computeTree();
-      if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["infer-directionality-false"]) ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.computeDirectionality();
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.finishUp();
+    return (0,_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+      console.log('running hamsters');
+      if (!ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["triangulate-false"]) ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.computeTriangulation();
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.computeNN();
+      yield ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.computeTree();
+      if (!ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["infer-directionality-false"]) ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.computeDirectionality();
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.finishUp();
     })();
   }
   /**
@@ -1963,24 +2131,24 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    */
   finishUp() {
     var _this = this;
-    return (0,_home_ylb9_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-      clearTimeout(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.messageTimeout);
+    return (0,_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+      clearTimeout(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.messageTimeout);
       // cycles through each node and link and if variable in nodeFields/linkFields not a key for the node/link, it is added with value of null
       ["node", "link"].forEach(v => {
-        let n = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data[v + "s"].length;
-        let fields = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data[v + "Fields"];
+        let n = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data[v + "s"].length;
+        let fields = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data[v + "Fields"];
         for (let i = 0; i < n; i++) {
-          let d = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data[v + "s"][i];
+          let d = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data[v + "s"][i];
           fields.forEach(field => {
             if (!(field in d)) d[field] = null;
           });
         }
       });
       // patch missing date fields to earliest date in the the data
-      let fields = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields;
-      let nodeSkeleton = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.dataSkeleton();
+      let fields = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields;
+      let nodeSkeleton = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.dataSkeleton();
       let fieldsToCheck = fields.filter(f => !nodeSkeleton.nodeFields.includes(f) && f != '_ambiguity' && f != '_diff');
-      let n = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes.length;
+      let n = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes.length;
       let k = fieldsToCheck.length;
       // for each field in fieldsToCheck (fieldsToCheck are nodeFields that are not default from dataSkeleton() and also not '_ambiguity' and not '_diff' )
       for (let j = 0; j < k; j++) {
@@ -1988,9 +2156,9 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         let times = [];
         // for each node check if node[field] is valid time and if so push to times []
         for (let i = 0; i < n; i++) {
-          let node = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes[i];
+          let node = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes[i];
           if (node[field] != null) {
-            let time = moment__WEBPACK_IMPORTED_MODULE_6___default()(node[field]);
+            let time = moment__WEBPACK_IMPORTED_MODULE_5___default()(node[field]);
             if (time.isValid() && isNaN(node[field]))
               //#315
               times.push(time.toDate());
@@ -2001,7 +2169,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           let minTime = Math.min(...times);
           let minTimeString = new Date(minTime).toString();
           // for each node d, if d[field] == null or empty string ("", " ", "  " ...) set d[field] to minTimeString
-          ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes.forEach(d => {
+          ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes.forEach(d => {
             if (d[field] == null || d[field] && String(d[field]).trim() == "") {
               d[field] = minTimeString;
             }
@@ -2011,14 +2179,14 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       ;
       // TODO:: See if this is needed
       // this.foldMultiSelect();
-      $("#search-field").html(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.map(field => '<option value="' + field + '">' + ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.titleize(field) + "</option>").join("\n")).val(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["search-field"]);
+      $("#search-field").html(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.map(field => '<option value="' + field + '">' + ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.titleize(field) + "</option>").join("\n")).val(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["search-field"]);
       $("#search-form").css("display", "flex");
-      $("#link-sort-variable").html(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.linkFields.map(field => '<option value="' + field + '">' + ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.titleize(field) + "</option>").join("\n")).val(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-sort-variable"]);
-      $("#node-color-variable").html("<option selected>None</option>" + ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.map(field => '<option value="' + field + '">' + ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.titleize(field) + "</option>").join("\n")).val(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["node-color-variable"]);
-      $("#default-distance-metric").val(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-distance-metric"]);
-      $("#link-color-variable").html("<option>None</option>" + ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.linkFields.map(field => '<option value="' + field + '">' + ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.titleize(field) + "</option>").join("\n")).val(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-color-variable"]);
+      $("#link-sort-variable").html(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.linkFields.map(field => '<option value="' + field + '">' + ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.titleize(field) + "</option>").join("\n")).val(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-sort-variable"]);
+      $("#node-color-variable").html("<option selected>None</option>" + ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.map(field => '<option value="' + field + '">' + ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.titleize(field) + "</option>").join("\n")).val(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["node-color-variable"]);
+      $("#default-distance-metric").val(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["default-distance-metric"]);
+      $("#link-color-variable").html("<option>None</option>" + ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.linkFields.map(field => '<option value="' + field + '">' + ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.titleize(field) + "</option>").join("\n")).val(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-color-variable"]);
       try {
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.updateThresholdHistogram();
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.updateThresholdHistogram();
       } catch (error) {
         console.error(error);
         $("#loading-information-modal").hide();
@@ -2027,25 +2195,25 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         //.ondismiss(() => window.location.reload());
       }
 
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.setLinkVisibility(true);
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.setLinkVisibility(true);
       $("#SettingsTab").attr("data-target", "#global-settings-modal");
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.meta.loadTime = Date.now() - ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.meta.startTime;
-      console.log("Total load time:", ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.meta.loadTime.toLocaleString(), "ms");
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.meta.loadTime = Date.now() - ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.meta.startTime;
+      console.log("Total load time:", ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.meta.loadTime.toLocaleString(), "ms");
       _this.tagClusters().then(() => {
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.setClusterVisibility(true);
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.setLinkVisibility(true);
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.setNodeVisibility(true);
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.setClusterVisibility(true);
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.setLinkVisibility(true);
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.setNodeVisibility(true);
         ["cluster", "link", "node"].forEach(thing => $(document).trigger(thing + "-visibility")); // $window.trigger(thing + "-visibility"));
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.updateStatistics();
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.updateStatistics();
         $("#network-statistics-wrapper").fadeIn();
         // console.log
       });
 
       setTimeout(() => {
         if (_this.debugMode) {
-          console.log('launching view: ', ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-view"]);
+          console.log('launching view: ', ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["default-view"]);
         }
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.launchView(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-view"]);
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.launchView(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["default-view"]);
         //window.context.commonService.launchView('Aggregate');
         //setTimeout(() => { $('#overlay button').click()}, 100)
         // currently loading all views isn't ready and is leading to bugs where default data is seeping in when new data is loaded
@@ -2076,7 +2244,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           return _delayFunction.apply(this, arguments);
         }
         function _delayFunction() {
-          _delayFunction = (0,_home_ylb9_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* (x, callback) {
+          _delayFunction = (0,_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* (x, callback) {
             yield new Promise(resolve => setTimeout(resolve, x)).then(() => {
               callback();
             });
@@ -2087,24 +2255,24 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           return _loadOtherViews.apply(this, arguments);
         }
         function _loadOtherViews() {
-          _loadOtherViews = (0,_home_ylb9_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
-            ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.layout.content.forEach( /*#__PURE__*/function () {
-              var _ref = (0,_home_ylb9_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* (view) {
+          _loadOtherViews = (0,_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+            ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.layout.content.forEach( /*#__PURE__*/function () {
+              var _ref = (0,_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* (view) {
                 let viewName = convertName(view.type);
-                if (view.type == ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-view"]) {
+                if (view.type == ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["default-view"]) {
                   return;
                 } else if (viewName) {
-                  ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.visuals.microbeTrace.Viewclick(viewName);
+                  ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.visuals.microbeTrace.Viewclick(viewName);
                 }
                 if (viewName == 'Epi Curve') {
-                  ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.visuals.epiCurve.viewActive = false;
+                  ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.visuals.epiCurve.viewActive = false;
                 }
               });
               return function (_x3) {
                 return _ref.apply(this, arguments);
               };
             }());
-            ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.visuals.microbeTrace.Viewclick(convertName(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-view"]));
+            ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.visuals.microbeTrace.Viewclick(convertName(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["default-view"]));
           });
           return _loadOtherViews.apply(this, arguments);
         }
@@ -2131,11 +2299,11 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     this.foldExposures();
   }
   foldRaces() {
-    if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.find(x => x === "Race")) {
+    if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.find(x => x === "Race")) {
       return;
     }
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.push("Race");
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.push("RaceDetails");
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.push("Race");
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.push("RaceDetails");
     const races = [{
       id: "RaceAsian",
       displayValue: "Asian"
@@ -2152,8 +2320,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       id: "RaceNativeHawaiian",
       displayValue: "Native Hawaiian"
     }];
-    if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes) {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes.forEach(node => {
+    if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes) {
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes.forEach(node => {
         if (!node.Race) {
           let selectedRace = "";
           let raceDetails = [];
@@ -2176,15 +2344,15 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     }
     //Remove race fields from nodeFields
     races.forEach(race => {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.filter(x => x != race.id);
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.filter(x => x != race.id);
     });
   }
   foldExposures() {
-    if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.find(x => x === "Exposure")) {
+    if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.find(x => x === "Exposure")) {
       return;
     }
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.push("Exposure");
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.push("ExposureDetails");
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.push("Exposure");
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.push("ExposureDetails");
     const exposures = [{
       id: "ExposureInfoDomesticTraveled",
       displayValue: "Domestic Traveled"
@@ -2219,15 +2387,15 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       id: "ExposureInfoKnownCovid19ContactnCoVID",
       displayValue: "Known Covid19 Contact nCoVID"
     }];
-    if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes) {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes.forEach((node, index) => {
+    if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes) {
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes.forEach((node, index) => {
         if (!node.Exposure) {
           let selectedRace = "";
           let exposureDetails = [];
           exposures.forEach(exposure => {
             if (exposure.id != "ExposureInfoWorkplaceIsCriticalInfra" && exposure.id != "ExposureInfoWorkplaceSetting" && node[exposure.id] && node[exposure.id].toLowerCase() === "true") {
               if (exposure.id === "ExposureInfoWorkplace") {
-                exposureDetails.push(`${exposure.displayValue} {"Is the workplace critical infrastructure" : "${ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes[index].ExposureInfoWorkplaceIsCriticalInfra}", "Workplace Setting" : "${ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes[index].ExposureInfoWorkplaceSetting}"}`);
+                exposureDetails.push(`${exposure.displayValue} {"Is the workplace critical infrastructure" : "${ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes[index].ExposureInfoWorkplaceIsCriticalInfra}", "Workplace Setting" : "${ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes[index].ExposureInfoWorkplaceSetting}"}`);
               } else {
                 exposureDetails.push(exposure.displayValue);
               }
@@ -2247,7 +2415,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     }
     //Remove exposure fields from nodeFields
     exposures.forEach(exposure => {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFields.filter(x => x != exposure.id);
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFields.filter(x => x != exposure.id);
     });
   }
   /**
@@ -2256,7 +2424,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    * @returns a list of node objects
    */
   getVisibleNodes(copy = false) {
-    let nodes = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodeFilteredValues;
+    let nodes = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodeFilteredValues;
     let n = nodes.length;
     let out = [];
     for (let i = 0; i < n; i++) {
@@ -2281,7 +2449,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    * @returns a array of link objects;
    */
   getVisibleLinks(copy = false) {
-    let links = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.links;
+    let links = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.links;
     let n = links.length;
     let out = [],
       link = null;
@@ -2304,7 +2472,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    * @returns a list of cluster objects
    */
   getVisibleClusters(copy = false) {
-    let clusters = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.clusters;
+    let clusters = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.clusters;
     if (this.debugMode) {
       console.log('get vis: ', clusters);
     }
@@ -2330,14 +2498,14 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    */
   updateStatistics() {
     if ($("#network-statistics-hide").is(":checked")) return;
-    let vnodes = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.getVisibleNodes();
-    let vlinks = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.getVisibleLinks();
+    let vnodes = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.getVisibleNodes();
+    let vlinks = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.getVisibleLinks();
     let linkCount = 0;
     let clusterCount = 0;
-    if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["timeline-date-field"] == 'None') {
+    if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["timeline-date-field"] == 'None') {
       linkCount = vlinks.length;
       // const minSize = window.context.commonService.session.style.widgets['cluster-minimum-size'];
-      clusterCount = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.clusters.filter(cluster => cluster.visible && cluster.nodes > 1).length;
+      clusterCount = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.clusters.filter(cluster => cluster.visible && cluster.nodes > 1).length;
     } else {
       let n = vlinks.length;
       for (let i = 0; i < n; i++) {
@@ -2351,7 +2519,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         let id = vnodes[i].cluster;
         if (clusters[id]) clusters[id]++;else clusters[id] = 1;
       }
-      clusterCount = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.clusters.filter(cluster => clusters[cluster.id] && clusters[cluster.id] > 2 && cluster.visible && cluster.nodes > 1).length;
+      clusterCount = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.clusters.filter(cluster => clusters[cluster.id] && clusters[cluster.id] > 2 && cluster.visible && cluster.nodes > 1).length;
     }
     let singletons = vnodes.filter(d => d.degree == 0).length;
     $("#numberOfSelectedNodes").text(vnodes.filter(d => d.selected).length.toLocaleString());
@@ -2365,22 +2533,22 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    * @returns {Object} where keys are the values to group (ie. subtype B,C,D...) and values are counts of the number of node for each key
    */
   createNodeColorMap() {
-    let variable = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["node-color-variable"];
+    let variable = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["node-color-variable"];
     if (variable == "None") {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.nodeColorMap = () => ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["node-color"];
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.nodeColorMap = () => ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["node-color"];
       return [];
     }
     let nodeColors;
-    if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTable && ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTable[variable]) {
-      nodeColors = [...ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTable[variable]];
+    if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTable && ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTable[variable]) {
+      nodeColors = [...ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTable[variable]];
     } else {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTable = {};
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTableKeys = {};
-      nodeColors = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTable[variable] = [...ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColors];
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTable = {};
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTableKeys = {};
+      nodeColors = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTable[variable] = [...ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColors];
     }
     // populates aggregates object where key is the value and the value is the count of number of nodes with that value
     let aggregates = {};
-    let nodes = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes;
+    let nodes = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes;
     let n = nodes.length;
     for (let i = 0; i < n; i++) {
       let d = nodes[i];
@@ -2394,25 +2562,25 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     }
     // adds more colors and alpha values when number of node options > number of colors/alphas
     let values = Object.keys(aggregates);
-    if (values.length > ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColors.length) {
+    if (values.length > ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColors.length) {
       let colors = [];
-      let m = Math.ceil(values.length / ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColors.length);
+      let m = Math.ceil(values.length / ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColors.length);
       while (m-- > 0) {
-        colors = colors.concat(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColors);
+        colors = colors.concat(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColors);
       }
       nodeColors = colors;
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColors = colors;
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColors = colors;
     }
-    if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeAlphas) ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeAlphas = new Array(values.length).fill(1);
-    if (values.length > ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeAlphas.length) {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeAlphas = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeAlphas.concat(new Array(values.length - ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeAlphas.length).fill(1));
+    if (!ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeAlphas) ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeAlphas = new Array(values.length).fill(1);
+    if (values.length > ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeAlphas.length) {
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeAlphas = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeAlphas.concat(new Array(values.length - ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeAlphas.length).fill(1));
     }
-    if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTableHistory) {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTableHistory = {
+    if (!ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTableHistory) {
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTableHistory = {
         "null": "#EAE553"
       };
     }
-    let keys = Object.keys(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTableHistory);
+    let keys = Object.keys(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTableHistory);
     //Update Table History
     values.forEach((val, ind) => {
       // Get index of value in history
@@ -2420,25 +2588,25 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       //If found in history set previous color
       if (index !== -1) {
         // Update color of where value currently is
-        nodeColors[ind] = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTableHistory[val];
+        nodeColors[ind] = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTableHistory[val];
         //If value not found in history, add it
       } else {
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTableHistory[val] = nodeColors[ind];
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTableHistory[val] = nodeColors[ind];
       }
       if (val === "null") {
         nodeColors[ind] = "#EAE553";
       }
     });
-    if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["node-timeline-variable"] == 'None') {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTableKeys[variable] = values;
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTable[variable] = nodeColors;
+    if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["node-timeline-variable"] == 'None') {
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTableKeys[variable] = values;
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTable[variable] = nodeColors;
     } else {
       // During timeline mode, user Pause and switch to a different Node varaible but nodeColorsTableKeys[variable] is not available
-      if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTableKeys[variable]) {
+      if (!ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTableKeys[variable]) {
         let aggregatesTL = {};
-        let nodesTL = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.network.timelineNodes;
+        let nodesTL = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.network.timelineNodes;
         let n = nodesTL.length;
-        let nodeColorsTL = [...ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColors];
+        let nodeColorsTL = [...ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColors];
         for (let i = 0; i < n; i++) {
           let d = nodesTL[i];
           if (!d.visible) continue;
@@ -2458,22 +2626,22 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           }
           nodeColorsTL = colors;
         }
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTableKeys[variable] = valuesTL;
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTable[variable] = nodeColorsTL;
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTableKeys[variable] = valuesTL;
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTable[variable] = nodeColorsTL;
       }
       let key;
       let tempNodeColors = [];
       for (let v of values) {
-        let table = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColorsTableKeys[variable];
+        let table = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColorsTableKeys[variable];
         key = table.findIndex(k => k === v);
         tempNodeColors.push(nodeColors[key]);
       }
-      nodeColors = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.nodeColor = tempNodeColors; // temp node color maps saved only under timeline
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.nodeColorKeys = [...values];
+      nodeColors = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.nodeColor = tempNodeColors; // temp node color maps saved only under timeline
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.nodeColorKeys = [...values];
     }
     // updates the function that defines which color and transparency value to use for each node
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.nodeColorMap = d3__WEBPACK_IMPORTED_MODULE_1__.scaleOrdinal(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeColors).domain(values);
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.nodeAlphaMap = d3__WEBPACK_IMPORTED_MODULE_1__.scaleOrdinal(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.nodeAlphas).domain(values);
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.nodeColorMap = d3__WEBPACK_IMPORTED_MODULE_1__.scaleOrdinal(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeColors).domain(values);
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.nodeAlphaMap = d3__WEBPACK_IMPORTED_MODULE_1__.scaleOrdinal(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.nodeAlphas).domain(values);
     return aggregates;
   }
   /**
@@ -2481,31 +2649,32 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    * @returns {Object} where keys are the values to group (ie. origin A, origin B) and values are counts of the number of links for each key
    */
   createLinkColorMap() {
-    let variable = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-color-variable"];
+    let variable = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-color-variable"];
     if (this.debugMode) {
       console.log('link var: ', variable);
     }
     if (variable == "None") {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.linkColorMap = () => ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-color"];
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.linkAlphaMap = () => 1 - ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-opacity"];
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.linkColorMap = () => ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-color"];
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.linkAlphaMap = () => 1 - ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-opacity"];
       return [];
     }
     let linkColors;
-    if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTable && ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTable[variable]) {
-      linkColors = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTable[variable];
+    if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColorsTable && ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColorsTable[variable]) {
+      linkColors = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColorsTable[variable];
     } else if (variable == 'source' || variable == 'target') {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTable = {};
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTableKeys = {};
-      linkColors = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTable[variable] = [d3__WEBPACK_IMPORTED_MODULE_1__.schemeCategory10[0]].concat(d3__WEBPACK_IMPORTED_MODULE_1__.schemeCategory10.slice(2));
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColors = [d3__WEBPACK_IMPORTED_MODULE_1__.schemeCategory10[0]].concat(d3__WEBPACK_IMPORTED_MODULE_1__.schemeCategory10.slice(2));
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColorsTable = {};
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColorsTableKeys = {};
+      linkColors = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColorsTable[variable] = [d3__WEBPACK_IMPORTED_MODULE_1__.schemeCategory10[0]].concat(d3__WEBPACK_IMPORTED_MODULE_1__.schemeCategory10.slice(2));
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColors = [d3__WEBPACK_IMPORTED_MODULE_1__.schemeCategory10[0]].concat(d3__WEBPACK_IMPORTED_MODULE_1__.schemeCategory10.slice(2));
     } else {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTable = {};
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTableKeys = {};
-      linkColors = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTable[variable] = d3__WEBPACK_IMPORTED_MODULE_1__.schemePaired;
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColors = d3__WEBPACK_IMPORTED_MODULE_1__.schemePaired;
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColorsTable = {};
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColorsTableKeys = {};
+      linkColors = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColorsTable[variable] = d3__WEBPACK_IMPORTED_MODULE_1__.schemePaired;
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColors = d3__WEBPACK_IMPORTED_MODULE_1__.schemePaired;
     }
     let aggregates = {};
-    let links = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.getVisibleLinks();
+    let multiLinkCount = 0; // Initialize Multi-Link count
+    let links = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.getVisibleLinks();
     let i = 0,
       n = links.length,
       l;
@@ -2520,23 +2689,11 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
             aggregates[o] = 1;
           }
         });
+        // Count Multi-Links separately
+        if (l.origin.length == 2) {
+          multiLinkCount++;
+        }
       }
-    } else if (variable == 'source' || variable == 'target') {
-      // first loop is to populates color in the same order as nodeColorMap would be
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes.forEach(node => {
-        aggregates[node._id] = 0;
-      });
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.links.forEach(link => {
-        if (!link.visible) {
-          return;
-        }
-        let node = link[variable];
-        if (node in aggregates) {
-          aggregates[node]++;
-        } else {
-          aggregates[node] = 1;
-        }
-      });
     } else {
       while (i < n) {
         l = links[i++];
@@ -2549,29 +2706,46 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         }
       }
     }
+    // Add Multi-Link to aggregates if it exists
+    if (multiLinkCount > 0) {
+      aggregates["Duo-Link"] = multiLinkCount;
+    }
+    // Adjust counts for other links by subtracting Multi-Link count
+    Object.keys(aggregates).forEach(key => {
+      if (key !== "Duo-Link") {
+        aggregates[key] -= multiLinkCount; // Subtract Multi-Link count
+      }
+    });
+    // Ensure counts do not go below zero
+    Object.keys(aggregates).forEach(key => {
+      if (aggregates[key] < 0) {
+        aggregates[key] = 0;
+      }
+    });
     let values = Object.keys(aggregates);
     // adds more colors/alphas when they are less than length of values
     if (values.length > this.session.style.linkColors.length) {
       let colors = [];
-      let cycles = Math.ceil(values.length / ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColors.length);
-      while (cycles-- > 0) colors = colors.concat(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColors);
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColors = colors;
+      let cycles = Math.ceil(values.length / ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColors.length);
+      while (cycles-- > 0) colors = colors.concat(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColors);
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColors = colors;
+      console.log('link colors: ', ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColors);
     }
-    if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkAlphas) {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkAlphas = [1];
+    if (!ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkAlphas) {
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkAlphas = [1];
     }
-    if (values.length > ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkAlphas.length) {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkAlphas = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkAlphas.concat(new Array(values.length - ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkAlphas.length).fill(1));
+    if (values.length > ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkAlphas.length) {
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkAlphas = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkAlphas.concat(new Array(values.length - ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkAlphas.length).fill(1));
     }
-    if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["node-timeline-variable"] == 'None') {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTableKeys[variable] = values;
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTable[variable] = linkColors;
+    if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["node-timeline-variable"] == 'None') {
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColorsTableKeys[variable] = values;
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColorsTable[variable] = linkColors;
     } else {
       // During timeline mode, user Pause and switch to a different link varaible but linkColorsTableKeys[variable] is not available
-      if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTableKeys[variable]) {
+      if (!ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColorsTableKeys[variable]) {
         let aggregatesTL = {};
-        let linksTL = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.getVisibleLinks();
-        let linkColorsTL = [...ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColors];
+        let linksTL = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.getVisibleLinks();
+        let linkColorsTL = [...ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColors];
         let i = 0,
           n = linksTL.length,
           l;
@@ -2579,8 +2753,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           while (i < n) {
             l = linksTL[i++];
             if (!l.visible) continue;
-            let src = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.network.timelineNodes.find(dd => dd._id == l.source || dd.id == l.source);
-            let tgt = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.network.timelineNodes.find(dd => dd._id == l.target || dd.id == l.target);
+            let src = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.network.timelineNodes.find(dd => dd._id == l.source || dd.id == l.source);
+            let tgt = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.network.timelineNodes.find(dd => dd._id == l.target || dd.id == l.target);
             if (src === undefined || src.visible === false) continue;
             if (tgt === undefined || tgt.visible === false) continue;
             l.origin.forEach(o => {
@@ -2595,8 +2769,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           while (i < n) {
             l = linksTL[i++];
             if (!l.visible) continue;
-            let src = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.network.timelineNodes.find(dd => dd._id == l.source || dd.id == l.source);
-            let tgt = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.network.timelineNodes.find(dd => dd._id == l.target || dd.id == l.target);
+            let src = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.network.timelineNodes.find(dd => dd._id == l.source || dd.id == l.source);
+            let tgt = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.network.timelineNodes.find(dd => dd._id == l.target || dd.id == l.target);
             if (src === undefined || src.visible === false) continue;
             if (tgt === undefined || tgt.visible === false) continue;
             let lv = l[variable];
@@ -2614,22 +2788,22 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           while (cycles-- > 0) colors = colors.concat(linkColorsTL);
           linkColorsTL = colors;
         }
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTableKeys[variable] = valuesTL;
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTable[variable] = linkColorsTL;
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColorsTableKeys[variable] = valuesTL;
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColorsTable[variable] = linkColorsTL;
       }
       let key;
       let tempLinkColors = [];
       for (let v of values) {
-        let table = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColorsTableKeys[variable];
+        let table = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColorsTableKeys[variable];
         key = table.findIndex(k => k === v);
         tempLinkColors.push(linkColors[key]);
       }
-      linkColors = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.linkColor = tempLinkColors; // temp link color maps saved only under timeline
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.linkColorsKeys = [...values];
+      linkColors = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.linkColor = tempLinkColors; // temp link color maps saved only under timeline
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.linkColorsKeys = [...values];
     }
     // updates the function that defines which color and transparency value to use for each link
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.linkColorMap = d3__WEBPACK_IMPORTED_MODULE_1__.scaleOrdinal(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkColors).domain(values);
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.style.linkAlphaMap = d3__WEBPACK_IMPORTED_MODULE_1__.scaleOrdinal(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.linkAlphas).domain(values);
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.linkColorMap = d3__WEBPACK_IMPORTED_MODULE_1__.scaleOrdinal(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkColors).domain(values);
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.style.linkAlphaMap = d3__WEBPACK_IMPORTED_MODULE_1__.scaleOrdinal(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.linkAlphas).domain(values);
     return aggregates;
   }
   /**
@@ -2643,11 +2817,12 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     const mapData = this.temp.mapData;
     this.temp = this.tempSkeleton();
     this.temp.mapData = mapData;
-    const files = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.files;
-    const meta = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.meta;
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.sessionSkeleton();
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.files = files;
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.meta = meta;
+    const files = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.files;
+    const meta = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.meta;
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.sessionSkeleton();
+    console.log('reset called');
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.files = files;
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.meta = meta;
     //window.context.commonService.layout.unbind("stateChanged");
     //this.layout.root.replaceChild(this.layout.root.contentItems[0], {
     //    type: "stack",
@@ -2662,26 +2837,35 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    * commonService.session.style.widgets. Filters 'Demo_outbreak_NodeList.csv' from files
    */
   resetData() {
+    console.log('launch reset');
     const newTempSkeleton = this.tempSkeleton();
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.matrix = newTempSkeleton.matrix;
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.matrix = newTempSkeleton.matrix;
     this.temp.trees = newTempSkeleton.trees;
-    const files = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.files.filter(obj => obj.name !== 'Demo_outbreak_NodeList.csv');
-    const meta = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.meta;
+    console.log('session files1', JSON.stringify(this.visuals.microbeTrace.commonService.session.files));
+    console.log('session files2', JSON.stringify(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.files));
+    const files = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.files.filter(obj => obj.name !== 'Demo_outbreak_NodeList.csv');
+    const meta = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.meta;
+    console.log('session files3', JSON.stringify(this.visuals.microbeTrace.commonService.session.files));
+    console.log('session files4', JSON.stringify(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.files));
     const newSessionSkeleton = this.sessionSkeleton();
     this.session.data = newSessionSkeleton.data;
     this.session.network = newSessionSkeleton.network;
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.files = files;
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.meta = meta;
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets = this.defaultWidgets();
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.files = files;
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.meta = meta;
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets = this.defaultWidgets();
+    console.log('session data files: ', JSON.stringify(files));
+    console.log('session data matrix: ', JSON.stringify(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.matrix));
+    console.log('session data nodes: ', JSON.stringify(this.session.data.nodes));
+    console.log('session data nodes common: ', JSON.stringify(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes));
     // default values are 'tn93' and 0.015, so not sure if this if statement is every true
-    if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-distance-metric"] !== 'snps' && ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-threshold"] >= 1) {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.visuals.microbeTrace.SelectedLinkThresholdVariable = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-threshold"];
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.visuals.microbeTrace.onLinkThresholdChanged();
+    if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["default-distance-metric"] !== 'snps' && ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-threshold"] >= 1) {
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.visuals.microbeTrace.SelectedLinkThresholdVariable = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-threshold"];
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.visuals.microbeTrace.onLinkThresholdChanged();
     }
   }
   getJurisdictions() {
     return new Promise(resolve => {
-      let path = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.appRootUrl() + 'assets/common/data/state_county_fips.csv';
+      let path = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.appRootUrl() + 'assets/common/data/state_county_fips.csv';
       $.get(path, response => {
         resolve(papaparse__WEBPACK_IMPORTED_MODULE_3__.parse(response, {
           header: true
@@ -2709,18 +2893,18 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       let parts = type.split(".");
       let name = parts[0],
         format = parts[1];
-      if (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.mapData[name]) {
-        return resolve(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.mapData[name]);
+      if (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.mapData[name]) {
+        return resolve(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.mapData[name]);
       }
       switch (name) {
         case "zipcodes":
           if (format == "csv") {
             let path = /*window.context.commonService.appRootUrl() +*/'assets/common/data/zipcodes.csv';
             $.get(path, response => {
-              ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.mapData[name] = papaparse__WEBPACK_IMPORTED_MODULE_3__.parse(response, {
+              ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.mapData[name] = papaparse__WEBPACK_IMPORTED_MODULE_3__.parse(response, {
                 header: true
               }).data;
-              resolve(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.mapData[name]);
+              resolve(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.mapData[name]);
             });
           }
           break;
@@ -2728,8 +2912,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           if (format == "json") {
             let path = /*window.context.commonService.appRootUrl() +*/'assets/common/data/countries.json';
             $.get(path, response => {
-              ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.mapData[name] = response;
-              resolve(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.mapData[name]);
+              ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.mapData[name] = response;
+              resolve(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.mapData[name]);
             });
           }
           break;
@@ -2737,8 +2921,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           if (format == "json") {
             let path = /*window.context.commonService.appRootUrl() +*/'assets/common/data/counties.json';
             $.get(path, response => {
-              ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.mapData[name] = response;
-              resolve(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.mapData[name]);
+              ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.mapData[name] = response;
+              resolve(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.mapData[name]);
             });
           }
           break;
@@ -2746,8 +2930,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           if (format == "json") {
             let path = /*window.context.commonService.appRootUrl() +*/'assets/common/data/states.json';
             $.get(path, response => {
-              ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.mapData[name] = response;
-              resolve(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.mapData[name]);
+              ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.mapData[name] = response;
+              resolve(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.mapData[name]);
             });
           }
           break;
@@ -2755,8 +2939,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           if (format == "json") {
             let path = /*window.context.commonService.appRootUrl() +*/'assets/common/data/land.json';
             $.get(path, response => {
-              ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.mapData[name] = response;
-              resolve(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.mapData[name]);
+              ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.mapData[name] = response;
+              resolve(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.mapData[name]);
             });
           }
           break;
@@ -2764,8 +2948,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           if (format == "json") {
             let path = /*window.context.commonService.appRootUrl() +*/'assets/common/data/stars.json';
             $.get(path, response => {
-              ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.mapData[name] = response;
-              resolve(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.mapData[name]);
+              ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.mapData[name] = response;
+              resolve(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.mapData[name]);
             });
           }
           break;
@@ -2807,7 +2991,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   }
   launchView(view, callback = null) {
     // this.srv.createNewComponent(this.srv.getRegisteredComponents()[1]);
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.LoadViewEvent.emit(view);
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.LoadViewEvent.emit(view);
     // if (!this.temp.componentCache[view]) {
     //    $.get("components/" + view + ".html", response => {
     //        this.temp.componentCache[view] = response;
@@ -3004,7 +3188,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     selectorTextArr.push("#" + svgNode.id);
     let nClasses = svgNode.classList.length;
     for (let c = 0; c < nClasses; c++) {
-      if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.includes("." + svgNode.classList[c], selectorTextArr)) {
+      if (!ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.includes("." + svgNode.classList[c], selectorTextArr)) {
         selectorTextArr.push("." + svgNode.classList[c]);
       }
     }
@@ -3013,12 +3197,12 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     let nNodes = nodes.length;
     for (let i = 0; i < nNodes; i++) {
       let id = nodes[i]._id;
-      if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.includes("#" + id, selectorTextArr)) {
+      if (!ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.includes("#" + id, selectorTextArr)) {
         selectorTextArr.push("#" + id);
       }
       let classes = nodes[i].classList;
       for (let d = 0; d < classes.length; d++) {
-        if (!ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.includes("." + classes[d], selectorTextArr)) {
+        if (!ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.includes("." + classes[d], selectorTextArr)) {
           selectorTextArr.push("." + classes[d]);
         }
       }
@@ -3057,22 +3241,22 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    * @returns
    */
   exportHIVTRACE() {
-    let links = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.links.filter(l => l.visible);
+    let links = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.links.filter(l => l.visible);
     let geneticLinks = links.filter(l => l.origin.includes("Genetic Distance"));
     let sequences = new Set(geneticLinks.map(l => l.source).concat(geneticLinks.map(l => l.target))).size;
     let pas = {};
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes.forEach(d => {
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes.forEach(d => {
       Object.keys(d).forEach(key => {
         if (pas[key]) return;
         pas[key] = {
           label: key,
-          type: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.titleize(typeof d[key])
+          type: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.titleize(typeof d[key])
         };
       });
     });
     return JSON.stringify({
       trace_results: {
-        "Cluster sizes": ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.clusters.map(c => c.size),
+        "Cluster sizes": ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.clusters.map(c => c.size),
         Degrees: {
           Distribution: [],
           Model: "Waring",
@@ -3090,12 +3274,12 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         Edges: links.map(l => ({
           attributes: ["BULK"],
           directed: false,
-          length: l[ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-sort-variable"]],
+          length: l[ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-sort-variable"]],
           removed: false,
           sequences: [l.source, l.target],
-          source: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes.findIndex(d => d._id == l.source),
+          source: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes.findIndex(d => d._id == l.source),
           support: 0,
-          target: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes.findIndex(d => d._id == l.target)
+          target: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes.findIndex(d => d._id == l.target)
         })),
         "HIV Stages": {
           "A-1": 0,
@@ -3111,12 +3295,12 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           "Subjects with": 0
         },
         "Network Summary": {
-          Clusters: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.clusters.length,
+          Clusters: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.clusters.length,
           Edges: links.length,
-          Nodes: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes.length,
+          Nodes: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes.length,
           "Sequences used to make links": sequences
         },
-        Nodes: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes.map(d => ({
+        Nodes: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes.map(d => ({
           attributes: [],
           baseline: null,
           cluster: d.cluster,
@@ -3129,7 +3313,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
           "contaminant-ids": [],
           contaminants: "remove",
           "edge-filtering": "remove",
-          threshold: ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-threshold"]
+          threshold: ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-threshold"]
         }
       }
     }, null, 2);
@@ -3168,14 +3352,14 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   tagClusters() {
     return new Promise(resolve => {
       let start = Date.now();
-      let clusters = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.clusters = [];
-      let nodes = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes,
-        links = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.links,
+      let clusters = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.clusters = [];
+      let nodes = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes,
+        links = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.links,
         labels = nodes.map(d => d._id);
       let numNodes = nodes.length,
         numLinks = links.length;
-      let tempnodes = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.nodes = [];
-      let lsv = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-sort-variable"];
+      let tempnodes = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.nodes = [];
+      let lsv = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-sort-variable"];
       /**
        * A function that performs a depth-first search.
        * @param id - The ID of the node to start the search from.
@@ -3201,7 +3385,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         let clusterID = cluster.id;
         node.cluster = clusterID;
         cluster.nodes++;
-        let row = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.temp.matrix[id];
+        let row = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.temp.matrix[id];
         if (!row) return;
         for (let j = 0; j < numNodes; j++) {
           let l = row[labels[j]];
@@ -3278,9 +3462,9 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    */
   setNodeVisibility(silent) {
     let start = Date.now();
-    let dateField = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["timeline-date-field"];
-    let nodes = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.nodes,
-      clusters = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.clusters;
+    let dateField = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["timeline-date-field"];
+    let nodes = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.nodes,
+      clusters = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.clusters;
     let n = nodes.length;
     for (let i = 0; i < n; i++) {
       let node = nodes[i];
@@ -3300,7 +3484,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         node.visible = node.visible && cluster.visible;
       }
       if (dateField != "None") {
-        node.visible = node.visible && moment__WEBPACK_IMPORTED_MODULE_6___default()(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.state.timeEnd).toDate() >= moment__WEBPACK_IMPORTED_MODULE_6___default()(node[dateField]).toDate();
+        node.visible = node.visible && moment__WEBPACK_IMPORTED_MODULE_5___default()(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.state.timeEnd).toDate() >= moment__WEBPACK_IMPORTED_MODULE_5___default()(node[dateField]).toDate();
       }
       if (node._id === "NIMR_NG894803") {
         console.log('setting node vis 2: ', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(node));
@@ -3320,19 +3504,23 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    */
   setLinkVisibility(silent, checkCluster = true) {
     let start = Date.now();
-    let metric = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-sort-variable"],
-      threshold = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-threshold"],
-      showNN = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-show-nn"];
-    let links = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.links;
-    let clusters = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.clusters;
+    let metric = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-sort-variable"],
+      threshold = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-threshold"],
+      showNN = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-show-nn"];
+    let links = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.links;
+    let clusters = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.clusters;
     let n = links.length;
     if (this.debugMode) {
       console.log(`Setting Link Visibility with ${metric} ${threshold} ${showNN}`);
     }
     for (let i = 0; i < n; i++) {
       let link = links[i];
+      if (link.source === "KF773429" && link.target === "KF773430" || link.source === "KF773430" && link.target === "KF773429") {
+        console.log('setting link vis: ', lodash__WEBPACK_IMPORTED_MODULE_4__.cloneDeep(link));
+      }
       let visible = true;
       let overrideNN = false;
+      // Add back the distance origin if it was removed and the link has distance to it
       if (link.hasDistance && !link.origin.includes(link.distanceOrigin)) {
         link.origin.push(link.distanceOrigin);
       }
@@ -3350,6 +3538,31 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
         }
       } else {
         if (link.hasDistance) {
+          visible = link[metric] < threshold;
+          if (!visible) {
+            // Only need to get distance origin and override if there are other files using a distance metric, otherwise the else code block below would be executed since the link would not have distance
+            if (link.origin.length > 1 && link.origin.filter(fileName => {
+              const hasAuspice = /[Aa]uspice/.test(fileName);
+              const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
+              return fileName && !includesDistanceOrigin && !hasAuspice;
+            }).length > 0) {
+              link.origin = link.origin.filter(fileName => {
+                const hasAuspice = /[Aa]uspice/.test(fileName);
+                const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
+                return fileName && !includesDistanceOrigin && !hasAuspice;
+              });
+              overrideNN = true;
+              visible = true;
+            }
+            if (link.origin.length > 1) {
+              link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
+              visible = true;
+            }
+            // If the origin array has an origin left after filtering out and its not the distance origin, then we need to show it
+            if (link.origin[0] !== link.distanceOrigin) {
+              visible = true;
+            }
+          }
           visible = link[metric] <= threshold;
           if (!visible) {
             // Only need to get distance origin and override if there are other files using a distance metric, otherwise the else code block below would be executed since the link would not have distance
@@ -3386,6 +3599,9 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       if (cluster && checkCluster) {
         visible = visible && cluster.visible;
       }
+      if (visible && link.origin.length > 1) {
+        link.origin = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-origin-array-order"];
+      }
       link.visible = visible;
     }
     if (!silent) $(document).trigger("link-visibility");
@@ -3399,8 +3615,8 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
    */
   setClusterVisibility(silent) {
     //let start = Date.now();
-    let min = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["cluster-minimum-size"];
-    let clusters = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.clusters;
+    let min = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["cluster-minimum-size"];
+    let clusters = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.clusters;
     let n = clusters.length;
     for (let i = 0; i < n; i++) {
       let cluster = clusters[i];
@@ -3412,12 +3628,12 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
   }
 
   updatePinNodes(copy) {
-    let nodes = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.network.nodes;
+    let nodes = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.network.nodes;
     let n = nodes.length;
     for (let i = 0; i < n; i++) {
       let node = nodes[i];
       if (copy && node.fixed) node.preFixed = true;
-      if (!copy && ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.network.timelineNodes[i].preFixed) {
+      if (!copy && ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.network.timelineNodes[i].preFixed) {
         node.fixed = true;
         node.fx = node.x;
         node.fy = node.y;
@@ -3425,14 +3641,14 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     }
   }
   updateNetwork() {
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.setLinkVisibility(true);
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.tagClusters().then(() => {
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.setClusterVisibility(true);
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.setLinkVisibility(true);
+    ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.tagClusters().then(() => {
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.setClusterVisibility(true);
       $(document).trigger("cluster-visibility");
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.setLinkVisibility(true);
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.setNodeVisibility(true);
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.setLinkVisibility(true);
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.setNodeVisibility(true);
       ["cluster", "link", "node"].forEach(thing => $(document).trigger(thing + "-visibility"));
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.updateStatistics();
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.updateStatistics();
     });
   }
   /**
@@ -3457,7 +3673,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
       data = Array(n),
       dist = null;
     for (let i = 0; i < n; i++) {
-      dist = parseFloat(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.data.links[i][lsv]);
+      dist = parseFloat(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.data.links[i][lsv]);
       data[i] = dist;
       if (dist < min) min = dist;
       if (dist > max) max = dist;
@@ -3474,11 +3690,11 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
      */
     function updateThreshold() {
       let xc = d3__WEBPACK_IMPORTED_MODULE_1__.mouse(svg.node())[0];
-      let decimalPlaces = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-distance-metric"].toLowerCase() === "tn93" ? 3 : 0;
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-threshold"] = xc / width * range * 1.05 + min;
-      $("#link-threshold").val(parseFloat(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-threshold"].toFixed(decimalPlaces)));
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.visuals.microbeTrace.SelectedLinkThresholdVariable = parseFloat(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["link-threshold"].toFixed(decimalPlaces));
-      ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.visuals.microbeTrace.onLinkThresholdChanged();
+      let decimalPlaces = ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["default-distance-metric"].toLowerCase() === "tn93" ? 3 : 0;
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-threshold"] = xc / width * range * 1.05 + min;
+      $("#link-threshold").val(parseFloat(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-threshold"].toFixed(decimalPlaces)));
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.visuals.microbeTrace.SelectedLinkThresholdVariable = parseFloat(ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["link-threshold"].toFixed(decimalPlaces));
+      ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.visuals.microbeTrace.onLinkThresholdChanged();
     }
     svg.on("click", () => {
       updateThreshold();
@@ -3486,13 +3702,13 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
     });
     svg.on("mouseover", () => {
       let xc = d3__WEBPACK_IMPORTED_MODULE_1__.mouse(svg.node())[0];
-      $('#filtering-threshold').prop('title', "Whats the maximum genetic distance you're willing to call a link? " + (ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.session.style.widgets["default-distance-metric"].toLowerCase() === "tn93" ? (xc / width * range * 1.05 + min).toLocaleString() : Math.round(xc / width * range * 1.05 + min).toLocaleString()));
+      $('#filtering-threshold').prop('title', "Whats the maximum genetic distance you're willing to call a link? " + (ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.session.style.widgets["default-distance-metric"].toLowerCase() === "tn93" ? (xc / width * range * 1.05 + min).toLocaleString() : Math.round(xc / width * range * 1.05 + min).toLocaleString()));
     });
     svg.on("mousedown", () => {
       d3__WEBPACK_IMPORTED_MODULE_1__.event.preventDefault();
       svg.on("mousemove", updateThreshold);
       svg.on("mouseup mouseleave", () => {
-        ngx_bootstrap__WEBPACK_IMPORTED_MODULE_5__.window.context.commonService.updateNetwork();
+        ngx_bootstrap_utils__WEBPACK_IMPORTED_MODULE_11__.window.context.commonService.updateNetwork();
         svg.on("mousemove", null).on("mouseup", null).on("mouseleave", null);
       });
     });
@@ -3500,9 +3716,9 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
 }, _class.ctorParameters = () => [{
   type: _angular_core__WEBPACK_IMPORTED_MODULE_12__.Injector
 }, {
-  type: _shared_utils_local_storage_service__WEBPACK_IMPORTED_MODULE_8__.LocalStorageService
+  type: _shared_utils_local_storage_service__WEBPACK_IMPORTED_MODULE_7__.LocalStorageService
 }, {
-  type: _microbe_trace_next_plugin_visuals__WEBPACK_IMPORTED_MODULE_11__.MicrobeTraceNextVisuals
+  type: _microbe_trace_next_plugin_visuals__WEBPACK_IMPORTED_MODULE_10__.MicrobeTraceNextVisuals
 }, {
   type: _angular_common_http__WEBPACK_IMPORTED_MODULE_14__.HttpClient
 }], _class.propDecorators = {
@@ -3512,7 +3728,7 @@ let CommonService = (_class = class CommonService extends _shared_common_app_com
 }, _class);
 CommonService = (0,tslib__WEBPACK_IMPORTED_MODULE_15__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_12__.Directive)(), (0,_angular_core__WEBPACK_IMPORTED_MODULE_12__.Injectable)({
   providedIn: 'root'
-}), (0,tslib__WEBPACK_IMPORTED_MODULE_15__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_12__.Injector, _shared_utils_local_storage_service__WEBPACK_IMPORTED_MODULE_8__.LocalStorageService, _microbe_trace_next_plugin_visuals__WEBPACK_IMPORTED_MODULE_11__.MicrobeTraceNextVisuals, _angular_common_http__WEBPACK_IMPORTED_MODULE_14__.HttpClient])], CommonService);
+}), (0,tslib__WEBPACK_IMPORTED_MODULE_15__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_12__.Injector, _shared_utils_local_storage_service__WEBPACK_IMPORTED_MODULE_7__.LocalStorageService, _microbe_trace_next_plugin_visuals__WEBPACK_IMPORTED_MODULE_10__.MicrobeTraceNextVisuals, _angular_common_http__WEBPACK_IMPORTED_MODULE_14__.HttpClient])], CommonService);
 
 
 /***/ }),
@@ -3528,7 +3744,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "FilesComponent": () => (/* binding */ FilesComponent)
 /* harmony export */ });
-/* harmony import */ var _home_ylb9_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@angular-devkit/build-angular/node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js */ 49671);
+/* harmony import */ var _Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@angular-devkit/build-angular/node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js */ 49671);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! tslib */ 70655);
 /* harmony import */ var _files_plugin_component_html_ngResource__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./files-plugin.component.html?ngResource */ 76969);
 /* harmony import */ var _files_plugin_component_less_ngResource__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./files-plugin.component.less?ngResource */ 16132);
@@ -4080,17 +4296,21 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
    */
   launchClick() {
     console.log(this.displayloadingInformationModal);
+    this.visuals.microbeTrace.commonService.updateLegacyNodeSymbols();
     const thresholdOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"];
     const metricOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["default-distance-metric"];
     const ambiguityOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["ambiguity-resolution-strategy"];
     const viewOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["default-view"];
+    console.log('launch click');
     if (this.commonService.session.network.launched) {
+      console.log('launch click launched ', this.commonService.session.network.launched);
       this.visuals.microbeTrace.commonService.session.data = this.visuals.microbeTrace.commonService.sessionSkeleton().data;
       const newTempSkeleton = this.visuals.microbeTrace.commonService.tempSkeleton();
       this.visuals.microbeTrace.commonService.temp.trees = newTempSkeleton.trees;
       $('#launch').text('Update');
       this.visuals.twoD.isLoading = true;
     } else if (!this.commonService.session.network.launched) {
+      console.log('launch click not launched ', this.commonService.session.network.launched);
       this.visuals.microbeTrace.commonService.resetData();
       this.visuals.microbeTrace.commonService.session.network.launched = true;
     }
@@ -4100,6 +4320,7 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
     this.visuals.microbeTrace.commonService.session.style.widgets["default-view"] = viewOnLaunch;
     this.visuals.microbeTrace.commonService.session.messages = [];
     this.messages = [];
+    console.log('session files', this.visuals.microbeTrace.commonService.session.files);
     this.displayloadingInformationModal = true;
     this.showMessage("Starting...");
     setTimeout(() => {
@@ -4485,6 +4706,7 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
             skipEmptyLines: true,
             step: data => {
               let node = data.data;
+              console.log('session node: ', node);
               if (node[file.field1] && node[file.field1].toString().trim()) {
                 let safeNode = {
                   _id: this.visuals.microbeTrace.commonService.filterXSS('' + node[file.field1]),
@@ -4624,7 +4846,7 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
    */
   processSequence() {
     var _this = this;
-    return (0,_home_ylb9_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+    return (0,_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
       if (!_this.visuals.microbeTrace.commonService.session.meta.anySequences) return _this.visuals.microbeTrace.commonService.runHamsters();
       _this.visuals.microbeTrace.commonService.session.data.nodeFields.push('seq');
       let subset = [];
@@ -5091,7 +5313,7 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
    */
   readFastas() {
     var _this2 = this;
-    return (0,_home_ylb9_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+    return (0,_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
       const fastas = _this2.visuals.microbeTrace.commonService.session.files.filter(f => _this2.visuals.microbeTrace.commonService.includes(f.extension, 'fas'));
       const nodeFilesWithSeqs = _this2.visuals.microbeTrace.commonService.session.files.filter(f => f.format === "node" && f.field2 != "None" && f.field2 != "");
       if (fastas.length === 0 && nodeFilesWithSeqs.length === 0) return [];
@@ -5149,7 +5371,7 @@ let FilesComponent = (_class = class FilesComponent extends _app_base_component_
   }
   updatePreview(data) {
     var _this3 = this;
-    return (0,_home_ylb9_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+    return (0,_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
       if (!data) {
         data = yield _this3.readFastas();
       }
@@ -5306,8 +5528,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "GoldenLayoutHostComponent": () => (/* binding */ GoldenLayoutHostComponent)
 /* harmony export */ });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! tslib */ 70655);
-/* harmony import */ var _home_ylb9_MicrobeTrace_src_app_golden_layout_host_component_ts_css_ngResource_home_ylb9_MicrobeTrace_node_modules_ngtools_webpack_src_loaders_inline_resource_js_data_CiAgICA6aG9zdCB7CiAgICAgIGhlaWdodDogMTAwJTsKICAgICAgd2lkdGg6IDEwMCU7CiAgICAgIHBhZGRpbmc6IDA7CiAgICAgIGRpc3BsYXk6IGJsb2NrOwogICAgICBwb3NpdGlvbjogcmVsYXRpdmU7CiAgICB9CiAgICA_3D_home_ylb9_MicrobeTrace_src_app_golden_layout_host_component_ts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/app/golden-layout-host.component.ts.css?ngResource!=!./node_modules/@ngtools/webpack/src/loaders/inline-resource.js?data=CiAgICA6aG9zdCB7CiAgICAgIGhlaWdodDogMTAwJTsKICAgICAgd2lkdGg6IDEwMCU7CiAgICAgIHBhZGRpbmc6IDA7CiAgICAgIGRpc3BsYXk6IGJsb2NrOwogICAgICBwb3NpdGlvbjogcmVsYXRpdmU7CiAgICB9CiAgICA%3D!./src/app/golden-layout-host.component.ts */ 91874);
-/* harmony import */ var _home_ylb9_MicrobeTrace_src_app_golden_layout_host_component_ts_css_ngResource_home_ylb9_MicrobeTrace_node_modules_ngtools_webpack_src_loaders_inline_resource_js_data_CiAgICA6aG9zdCB7CiAgICAgIGhlaWdodDogMTAwJTsKICAgICAgd2lkdGg6IDEwMCU7CiAgICAgIHBhZGRpbmc6IDA7CiAgICAgIGRpc3BsYXk6IGJsb2NrOwogICAgICBwb3NpdGlvbjogcmVsYXRpdmU7CiAgICB9CiAgICA_3D_home_ylb9_MicrobeTrace_src_app_golden_layout_host_component_ts__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_home_ylb9_MicrobeTrace_src_app_golden_layout_host_component_ts_css_ngResource_home_ylb9_MicrobeTrace_node_modules_ngtools_webpack_src_loaders_inline_resource_js_data_CiAgICA6aG9zdCB7CiAgICAgIGhlaWdodDogMTAwJTsKICAgICAgd2lkdGg6IDEwMCU7CiAgICAgIHBhZGRpbmc6IDA7CiAgICAgIGRpc3BsYXk6IGJsb2NrOwogICAgICBwb3NpdGlvbjogcmVsYXRpdmU7CiAgICB9CiAgICA_3D_home_ylb9_MicrobeTrace_src_app_golden_layout_host_component_ts__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_src_app_golden_layout_host_component_ts_css_ngResource_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_ngtools_webpack_src_loaders_inline_resource_js_data_CiAgICA6aG9zdCB7CiAgICAgIGhlaWdodDogMTAwJTsKICAgICAgd2lkdGg6IDEwMCU7CiAgICAgIHBhZGRpbmc6IDA7CiAgICAgIGRpc3BsYXk6IGJsb2NrOwogICAgICBwb3NpdGlvbjogcmVsYXRpdmU7CiAgICB9CiAgICA_3D_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_src_app_golden_layout_host_component_ts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/app/golden-layout-host.component.ts.css?ngResource!=!./node_modules/@ngtools/webpack/src/loaders/inline-resource.js?data=CiAgICA6aG9zdCB7CiAgICAgIGhlaWdodDogMTAwJTsKICAgICAgd2lkdGg6IDEwMCU7CiAgICAgIHBhZGRpbmc6IDA7CiAgICAgIGRpc3BsYXk6IGJsb2NrOwogICAgICBwb3NpdGlvbjogcmVsYXRpdmU7CiAgICB9CiAgICA%3D!./src/app/golden-layout-host.component.ts */ 91874);
+/* harmony import */ var _Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_src_app_golden_layout_host_component_ts_css_ngResource_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_ngtools_webpack_src_loaders_inline_resource_js_data_CiAgICA6aG9zdCB7CiAgICAgIGhlaWdodDogMTAwJTsKICAgICAgd2lkdGg6IDEwMCU7CiAgICAgIHBhZGRpbmc6IDA7CiAgICAgIGRpc3BsYXk6IGJsb2NrOwogICAgICBwb3NpdGlvbjogcmVsYXRpdmU7CiAgICB9CiAgICA_3D_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_src_app_golden_layout_host_component_ts__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_src_app_golden_layout_host_component_ts_css_ngResource_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_ngtools_webpack_src_loaders_inline_resource_js_data_CiAgICA6aG9zdCB7CiAgICAgIGhlaWdodDogMTAwJTsKICAgICAgd2lkdGg6IDEwMCU7CiAgICAgIHBhZGRpbmc6IDA7CiAgICAgIGRpc3BsYXk6IGJsb2NrOwogICAgICBwb3NpdGlvbjogcmVsYXRpdmU7CiAgICB9CiAgICA_3D_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_src_app_golden_layout_host_component_ts__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/core */ 94650);
 /* harmony import */ var golden_layout__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! golden-layout */ 13761);
 /* harmony import */ var _golden_layout_component_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./golden-layout-component.service */ 90893);
@@ -5543,7 +5765,7 @@ let GoldenLayoutHostComponent = (_class = class GoldenLayoutHostComponent {
 GoldenLayoutHostComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_14__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_12__.Component)({
   selector: 'app-golden-layout-host',
   template: '<ng-template #componentViewContainer></ng-template>',
-  styles: [(_home_ylb9_MicrobeTrace_src_app_golden_layout_host_component_ts_css_ngResource_home_ylb9_MicrobeTrace_node_modules_ngtools_webpack_src_loaders_inline_resource_js_data_CiAgICA6aG9zdCB7CiAgICAgIGhlaWdodDogMTAwJTsKICAgICAgd2lkdGg6IDEwMCU7CiAgICAgIHBhZGRpbmc6IDA7CiAgICAgIGRpc3BsYXk6IGJsb2NrOwogICAgICBwb3NpdGlvbjogcmVsYXRpdmU7CiAgICB9CiAgICA_3D_home_ylb9_MicrobeTrace_src_app_golden_layout_host_component_ts__WEBPACK_IMPORTED_MODULE_0___default())]
+  styles: [(_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_src_app_golden_layout_host_component_ts_css_ngResource_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_ngtools_webpack_src_loaders_inline_resource_js_data_CiAgICA6aG9zdCB7CiAgICAgIGhlaWdodDogMTAwJTsKICAgICAgd2lkdGg6IDEwMCU7CiAgICAgIHBhZGRpbmc6IDA7CiAgICAgIGRpc3BsYXk6IGJsb2NrOwogICAgICBwb3NpdGlvbjogcmVsYXRpdmU7CiAgICB9CiAgICA_3D_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_src_app_golden_layout_host_component_ts__WEBPACK_IMPORTED_MODULE_0___default())]
 }), (0,tslib__WEBPACK_IMPORTED_MODULE_14__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_12__.ApplicationRef, _angular_core__WEBPACK_IMPORTED_MODULE_12__.ElementRef, _golden_layout_component_service__WEBPACK_IMPORTED_MODULE_1__.GoldenLayoutComponentService])], GoldenLayoutHostComponent);
 
 
@@ -6637,17 +6859,24 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
         }
         $(document).trigger("node-selected");
       });
+      let firstSelected = false;
       // selects that meets current search criteria
       for (let i = 0; i < n; i++) {
-        let node = nodes[i];
-        if (!node[field]) {
-          node.selected = false;
-        }
-        if (typeof node[field] == "string") {
-          node.selected = vre.test(node[field]);
-        }
-        if (typeof node[field] == "number") {
-          node.selected = node[field] + "" == val;
+        if (!firstSelected) {
+          let node = nodes[i];
+          if (!node[field]) {
+            node.selected = false;
+          }
+          if (typeof node[field] == "string") {
+            node.selected = vre.test(node[field]);
+            firstSelected = true;
+          }
+          if (typeof node[field] == "number") {
+            node.selected = node[field] + "" == val;
+            firstSelected = true;
+          }
+        } else {
+          break;
         }
       }
       if (!nodes.some(node => node.selected)) console.log('no matches');
@@ -6788,8 +7017,8 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
    */
   onBackgroundChanged() {
     this.visuals.microbeTrace.commonService.session.style.widgets['background-color'] = this.visuals.microbeTrace.SelectedBackgroundColorVariable;
-    if ($('#network') != undefined) {
-      $('#network').css('background-color', this.SelectedBackgroundColorVariable);
+    if ($('div.unovis-single-container > svg:first-of-type') != undefined) {
+      $('div.unovis-single-container > svg:first-of-type').css('background-color', this.SelectedBackgroundColorVariable);
     }
   }
   /**
@@ -7041,6 +7270,7 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
     let linkColorTable = $(tableId).empty().append("<tr>" + ("<th class='p-1 table-header-row'><div class='header-content'><span contenteditable>Link " + this.commonService.titleize(this.SelectedColorLinksByVariable) + "</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>") + "<th class='table-header-row tableCount'><div class='header-content'><span contenteditable>Count</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>" + "<th class='table-header-row tableFrequency'><div class='header-content'><span contenteditable>Frequency</span><a class='sort-button' style='cursor: pointer'>⇅</a></div></th>" + "<th>Color</th>" + "</tr>");
     if (!this.visuals.microbeTrace.commonService.session.style.linkValueNames) this.visuals.microbeTrace.commonService.session.style.linkValueNames = {};
     let aggregates = this.visuals.microbeTrace.commonService.createLinkColorMap();
+    console.log('link aggregates: ', aggregates);
     let vlinks = this.visuals.microbeTrace.commonService.getVisibleLinks();
     let aggregateValues = Object.keys(aggregates);
     const disabled = isEditable ? '' : 'disabled';
@@ -7048,6 +7278,10 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
       if (aggregates[value] == 0) {
         return;
       }
+      console.log('link color aggregates value: ', aggregates[value]);
+      console.log('link color value: ', value);
+      console.log('link color map: ', this.visuals.microbeTrace.commonService.temp.style.linkColorMap);
+      console.log('link color map value: ', this.visuals.microbeTrace.commonService.temp.style.linkColorMap(value));
       // Grab color of link from session
       const color = this.visuals.microbeTrace.commonService.temp.style.linkColorMap(value);
       // Create color input element with color value and assign id to retrieve new value on change
@@ -7163,6 +7397,7 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
       this.visuals.microbeTrace.commonService.updateStatistics();
       return;
     }
+    console.log('timeline variable: ', variable);
     if (!this.visuals.microbeTrace.commonService.temp.style.nodeColor) $("#node-color-variable").trigger("change");
     // let el: HTMLElement = this.pinBtn.nativeElement;
     // console.log('pin : ', el);
@@ -7201,10 +7436,13 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
       vnodes = JSON.parse(JSON.stringify(this.visuals.microbeTrace.commonService.session.data.nodes));
     vnodes.forEach(d => {
       let time = moment__WEBPACK_IMPORTED_MODULE_14___default()(d[field]);
+      console.log('time moment: ', time);
       if (time.isValid()) {
+        console.log('time moment value: ', d[field]);
         d[field] = time.toDate();
         times.push(d[field]);
       } else {
+        console.log('time moment not value: ', d[field]);
         d[field] = null;
       }
     });
@@ -7228,8 +7466,10 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
         bottom: 0,
         left: 50
       },
-      width = $('#network').parent().width() * 4 / 5 - margin.left - margin.right,
+      width = $('#visualwrapper').width() * 4 / 5 - margin.left - margin.right,
       height = 200 - margin.top - margin.bottom;
+    console.log('time network width: ', $('#visualwrapper').width());
+    console.log('time width: ', width);
     var svgTimeline = d3__WEBPACK_IMPORTED_MODULE_7__.select("#global-timeline").append("svg").attr("width", width + margin.left + margin.right).attr("height", 120);
     ////////// slider //////////
     this.currentTimelineValue = 0;
@@ -7240,11 +7480,20 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
     if (playButton.text() == "Pause") playButton.text("Play");
     this.xAttribute = d3__WEBPACK_IMPORTED_MODULE_7__.scaleTime().domain([startDate, endDate]).range([0, this.currentTimelineTargetValue]).clamp(true).nice();
     var slider = svgTimeline.append("g").attr("class", "slider").attr("transform", "translate(30," + height / 2 + ")");
-    slider.append("line").attr("class", "track").attr("x1", this.xAttribute.range()[0]).attr("x2", this.xAttribute.range()[1]).select(function () {
-      return this.parentNode.appendChild(this.cloneNode(true));
-    }).attr("class", "track-inset").select(function () {
-      return this.parentNode.appendChild(this.cloneNode(true));
-    }).attr("class", "track-overlay").call(d3__WEBPACK_IMPORTED_MODULE_7__.drag().on("start.interrupt", function () {
+    console.log('attribute: ', this.xAttribute.range());
+    console.log('attributex: ', this.xAttribute.range()[0]);
+    slider.append("line").attr("class", "track").attr("x1", this.xAttribute.range()[0]).attr("x2", this.xAttribute.range()[1]).attr("stroke", "#ddd") // Ensure this is a visible color
+    .attr("stroke-width", "10px") // Ensure this is a sufficient width
+    // Pre D3
+    // .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+    .each(function () {
+      this.parentNode.appendChild(this.cloneNode(true));
+    }).attr("class", "track-inset").each(function () {
+      this.parentNode.appendChild(this.cloneNode(true));
+    })
+    // Pre D3
+    // .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+    .attr("class", "track-overlay").call(d3__WEBPACK_IMPORTED_MODULE_7__.drag().on("start.interrupt", function () {
       slider.interrupt();
     }).on("start drag", function () {
       that.currentTimelineTargetValue = d3__WEBPACK_IMPORTED_MODULE_7__.event.x;
@@ -14170,7 +14419,7 @@ let PhylogeneticComponent = (_class = class PhylogeneticComponent extends _app_b
       }
     };
     this.showContextMenu = d => {
-      d3__WEBPACK_IMPORTED_MODULE_8__.event.preventDefault();
+      // d3.event.preventDefault();
       this.hideTooltip();
       const tree = this.tree;
       const leftVal = this.getContextLeftVal(d3__WEBPACK_IMPORTED_MODULE_8__.event.pageX);
@@ -14220,14 +14469,17 @@ let PhylogeneticComponent = (_class = class PhylogeneticComponent extends _app_b
         let htmlValue = this.SelectedLeafTooltipVariable;
         let [X, Y] = this.getRelativeMousePosition();
         // $('#tooltip').css({ top: d3.event.pageY - 28, left: d3.event.pageX + 8, position: 'absolute' });
-        const leftVal = X + 8;
-        const topVal = Y - 28;
+        // const leftVal = X + 8;
+        // const topVal = Y - 28;
         let node = this.commonService.session.data.nodes.find(n => n.id === d[0].data.id);
         if (node === undefined) {
           node = this.commonService.session.data.nodes.find(n => n._id === d[0].data.id);
           if (htmlValue === "id") htmlValue = "_id";
         }
         console.log(node);
+        // Pre D3
+        const leftVal = d3__WEBPACK_IMPORTED_MODULE_8__.event.pageX + 8;
+        const topVal = d3__WEBPACK_IMPORTED_MODULE_8__.event.pageY - 28;
         d3__WEBPACK_IMPORTED_MODULE_8__.select('#phyloTooltip').html(node[htmlValue]).style('position', 'absolute').style('display', 'block').style('left', `${leftVal}px`).style('top', `${topVal}px`).style('z-index', 1000).transition().duration(100).style('opacity', 1).style('color', '#333333').style('background', '#f5f5f5').style('border', '1px solid #cccccc').style('border-radius', '.25rem').style('padding', '.25rem');
       }
     };
@@ -14321,7 +14573,8 @@ let PhylogeneticComponent = (_class = class PhylogeneticComponent extends _app_b
     let labelVar = event;
     this.tree.eachLeafLabel(label => {
       d3__WEBPACK_IMPORTED_MODULE_8__.select(label).text(data => {
-        let id = data.data.id;
+        // let id = data.data.id;
+        let id = "1";
         let node = this.commonService.session.network.nodes.find(node => node._id == id);
         return node[labelVar];
       }).attr('dx', 8);
@@ -14448,10 +14701,10 @@ let PhylogeneticComponent = (_class = class PhylogeneticComponent extends _app_b
    * @returns an array [X, Y] of the position of mouse relative to twodcomponent. Global position (i.e. d3.event.pageX) doesn't work for a dashboard
    */
   getRelativeMousePosition() {
-    let rect = d3__WEBPACK_IMPORTED_MODULE_8__.select('phylogeneticcomponent').node().getBoundingClientRect();
-    let X = d3__WEBPACK_IMPORTED_MODULE_8__.event.pageX - rect.left;
-    let Y = d3__WEBPACK_IMPORTED_MODULE_8__.event.pageY - rect.top;
-    return [X, Y];
+    // let rect = d3.select('phylogeneticcomponent').node().getBoundingClientRect();
+    // let X = d3.event.pageX - rect.left;
+    // let Y = d3.event.pageY - rect.top; 
+    return [0, 0];
   }
 }, _class.ctorParameters = () => [{
   type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Injector
@@ -15219,6 +15472,7 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     }
     this.x = d3__WEBPACK_IMPORTED_MODULE_4__.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]);
     this.y = d3__WEBPACK_IMPORTED_MODULE_4__.scaleLinear().range([this.height, 0]);
+    //@ts-ignore
     this.histogram = d3__WEBPACK_IMPORTED_MODULE_4__.histogram().value(d => d[field]).domain(this.x.domain()).thresholds(binInterval);
     this.svg = d3__WEBPACK_IMPORTED_MODULE_4__.select(this.epiCurveSVGElement.nativeElement).attr("width", this.width + this.margin.left + this.margin.right).attr("height", this.height + this.margin.top + this.margin.bottom);
     //.attr("transform", `translate(0, ${this.margin.top})`);
@@ -15285,6 +15539,7 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     }
     this.x = d3__WEBPACK_IMPORTED_MODULE_4__.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]);
     this.y = d3__WEBPACK_IMPORTED_MODULE_4__.scaleLinear().range([this.height, 0]);
+    //@ts-ignore
     this.histogram = d3__WEBPACK_IMPORTED_MODULE_4__.histogram().domain(this.x.domain()).thresholds(binInterval);
     this.svg = d3__WEBPACK_IMPORTED_MODULE_4__.select(this.epiCurveSVGElement.nativeElement).attr("width", this.width + this.margin.left + this.margin.right).attr("height", this.height + this.margin.top + this.margin.bottom).attr("transform", `translate(0, ${this.margin.top})`);
     const epiCurve = this.svg.append("g").classed("epiCurve-epi-curve", true).attr("transform", `translate(${this.margin.left}, 5)`);
@@ -15501,19 +15756,27 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
     let minTime = Math.min(...times);
     let maxTime = Math.max(...times);
     if (this.widgets['epiCurve-binSize'] == 'Day') {
+      //@ts-ignore
       this.timeDomainStart = d3__WEBPACK_IMPORTED_MODULE_4__.timeMonth(minTime);
+      //@ts-ignore
       this.timeDomainEnd = d3__WEBPACK_IMPORTED_MODULE_4__.timeMonth.ceil(maxTime);
       return d3__WEBPACK_IMPORTED_MODULE_4__.timeDay.range(this.timeDomainStart, this.timeDomainEnd);
     } else if (this.widgets['epiCurve-binSize'] == 'Week') {
+      //@ts-ignore
       this.timeDomainStart = d3__WEBPACK_IMPORTED_MODULE_4__.timeMonth(minTime);
+      //@ts-ignore
       this.timeDomainEnd = d3__WEBPACK_IMPORTED_MODULE_4__.timeMonth.ceil(maxTime);
       return d3__WEBPACK_IMPORTED_MODULE_4__.timeMonday.range(this.timeDomainStart, this.timeDomainEnd);
     } else if (this.widgets['epiCurve-binSize'] == 'Month') {
+      //@ts-ignore
       this.timeDomainStart = d3__WEBPACK_IMPORTED_MODULE_4__.timeMonth(minTime);
+      //@ts-ignore
       this.timeDomainEnd = d3__WEBPACK_IMPORTED_MODULE_4__.timeMonth.ceil(maxTime);
       return d3__WEBPACK_IMPORTED_MODULE_4__.timeMonth.range(this.timeDomainStart, this.timeDomainEnd);
     } else if (this.widgets['epiCurve-binSize'] == 'Quarter') {
+      //@ts-ignore
       this.timeDomainStart = d3__WEBPACK_IMPORTED_MODULE_4__.timeMonth(minTime, 3);
+      //@ts-ignore
       this.timeDomainEnd = d3__WEBPACK_IMPORTED_MODULE_4__.timeMonth.ceil(maxTime, 3);
       // for quarter we may need to update earliest month so that quarters are consistant (always start on Jan, April, July, or October)
       if ([1, 2].includes(this.timeDomainStart.getMonth())) {
@@ -15527,7 +15790,9 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
       }
       return d3__WEBPACK_IMPORTED_MODULE_4__.timeMonth.range(this.timeDomainStart, this.timeDomainEnd, 3);
     } else if (this.widgets['epiCurve-binSize'] == 'Year') {
+      //@ts-ignore
       this.timeDomainStart = d3__WEBPACK_IMPORTED_MODULE_4__.timeYear(minTime);
+      //@ts-ignore
       this.timeDomainEnd = d3__WEBPACK_IMPORTED_MODULE_4__.timeYear.ceil(maxTime);
       return d3__WEBPACK_IMPORTED_MODULE_4__.timeYear.range(this.timeDomainStart, this.timeDomainEnd);
     } else {
@@ -15600,9 +15865,9 @@ let TimelineComponent = (_class = class TimelineComponent extends _app_base_comp
       xAxis = d3__WEBPACK_IMPORTED_MODULE_4__.axisBottom(this.x).ticks(d3__WEBPACK_IMPORTED_MODULE_4__.timeMonth.every(this.tickInterval)).tickFormat(d3__WEBPACK_IMPORTED_MODULE_4__.timeFormat("%b %Y"));
       xLabelOffset = -25;
     } else if (this.widgets['epiCurve-binSize'] == 'Quarter') {
-      xAxis = d3__WEBPACK_IMPORTED_MODULE_4__.axisBottom(this.x).ticks(d3__WEBPACK_IMPORTED_MODULE_4__.timeMonth.every(this.tickInterval < 3 ? this.tickInterval * 3 : 12)).tickFormat(d => d <= d3__WEBPACK_IMPORTED_MODULE_4__.timeYear(d) ? d.getFullYear() : null);
+      xAxis = d3__WEBPACK_IMPORTED_MODULE_4__.axisBottom(this.x).ticks(d3__WEBPACK_IMPORTED_MODULE_4__.timeMonth.every(this.tickInterval < 3 ? this.tickInterval * 3 : 12)).tickFormat(d => d <= d3__WEBPACK_IMPORTED_MODULE_4__.timeYear(d) ? d.getFullYear().toString() : null);
     } else {
-      xAxis = d3__WEBPACK_IMPORTED_MODULE_4__.axisBottom(this.x).ticks(d3__WEBPACK_IMPORTED_MODULE_4__.timeMonth.every(this.tickInterval)).tickFormat(d => d <= d3__WEBPACK_IMPORTED_MODULE_4__.timeYear(d) ? d.getFullYear() : null);
+      xAxis = d3__WEBPACK_IMPORTED_MODULE_4__.axisBottom(this.x).ticks(d3__WEBPACK_IMPORTED_MODULE_4__.timeMonth.every(this.tickInterval)).tickFormat(d => d <= d3__WEBPACK_IMPORTED_MODULE_4__.timeYear(d) ? d.getFullYear().toString() : null);
     }
     return [xAxis, xLabelOffset];
   }
@@ -15938,6 +16203,85 @@ TimelineComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_12__.__decorate)([(0,_angu
 
 /***/ }),
 
+/***/ 65594:
+/*!****************************************************************!*\
+  !*** ./src/app/visualizationComponents/TwoDComponent/data2.ts ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "links": () => (/* binding */ links),
+/* harmony export */   "nodes": () => (/* binding */ nodes),
+/* harmony export */   "panels": () => (/* binding */ panels)
+/* harmony export */ });
+/* harmony import */ var _unovis_ts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @unovis/ts */ 95171);
+
+const nodes = [{
+  id: 'node1',
+  group: 'group1',
+  label: 'Node 1',
+  shape: _unovis_ts__WEBPACK_IMPORTED_MODULE_0__.GraphNodeShape.Circle
+}, {
+  id: 'node2',
+  group: 'group1',
+  label: 'Node 2',
+  shape: _unovis_ts__WEBPACK_IMPORTED_MODULE_0__.GraphNodeShape.Circle
+}, {
+  id: 'node3',
+  group: 'group2',
+  label: 'Node 3',
+  shape: _unovis_ts__WEBPACK_IMPORTED_MODULE_0__.GraphNodeShape.Square
+}, {
+  id: 'node4',
+  group: 'group2',
+  label: 'Node 4',
+  shape: _unovis_ts__WEBPACK_IMPORTED_MODULE_0__.GraphNodeShape.Square
+}];
+const links = [{
+  source: 'node1',
+  target: 'node2'
+}, {
+  source: 'node3',
+  target: 'node4'
+}, {
+  source: 'node1',
+  target: 'node3'
+}, {
+  source: 'node2',
+  target: 'node4'
+}];
+const panels = [{
+  nodes: ['node1', 'node2'],
+  label: 'Group 1',
+  borderColor: '#E3116C',
+  borderWidth: 2,
+  padding: 10,
+  dashedOutline: true,
+  sideIconSymbol: '⚽',
+  sideIconShape: _unovis_ts__WEBPACK_IMPORTED_MODULE_0__.GraphNodeShape.Circle,
+  sideIconShapeStroke: '#777',
+  sideIconCursor: 'pointer',
+  sideIconFontSize: '24px',
+  sideIconShapeSize: 50
+}, {
+  nodes: ['node3', 'node4'],
+  label: 'Group 2',
+  borderColor: '#00A1E4',
+  borderWidth: 2,
+  padding: 10,
+  dashedOutline: true,
+  sideIconSymbol: '🏀',
+  sideIconShape: _unovis_ts__WEBPACK_IMPORTED_MODULE_0__.GraphNodeShape.Square,
+  sideIconShapeStroke: '#777',
+  sideIconCursor: 'pointer',
+  sideIconFontSize: '24px',
+  sideIconShapeSize: 50
+}];
+
+/***/ }),
+
 /***/ 36481:
 /*!********************************************************************************!*\
   !*** ./src/app/visualizationComponents/TwoDComponent/twoD-plugin.component.ts ***!
@@ -15949,30 +16293,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "TwoDComponent": () => (/* binding */ TwoDComponent)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! tslib */ 70655);
-/* harmony import */ var _twoD_plugin_component_html_ngResource__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./twoD-plugin.component.html?ngResource */ 75066);
-/* harmony import */ var _twoD_plugin_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./twoD-plugin.component.scss?ngResource */ 80122);
-/* harmony import */ var _twoD_plugin_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_twoD_plugin_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/core */ 94650);
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/platform-browser */ 11481);
-/* harmony import */ var _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../contactTraceCommonServices/common.service */ 37822);
-/* harmony import */ var ngx_bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ngx-bootstrap */ 11109);
-/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! d3 */ 92925);
-/* harmony import */ var d3_force_attract__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! d3-force-attract */ 11314);
-/* harmony import */ var _angular_cdk_clipboard__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/cdk/clipboard */ 64425);
+/* harmony import */ var _Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@angular-devkit/build-angular/node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js */ 49671);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! tslib */ 70655);
+/* harmony import */ var _twoD_plugin_component_html_ngResource__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./twoD-plugin.component.html?ngResource */ 75066);
+/* harmony import */ var _twoD_plugin_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./twoD-plugin.component.scss?ngResource */ 80122);
+/* harmony import */ var _twoD_plugin_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_twoD_plugin_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/core */ 94650);
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/platform-browser */ 11481);
+/* harmony import */ var _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../contactTraceCommonServices/common.service */ 37822);
+/* harmony import */ var ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ngx-bootstrap */ 11109);
+/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! d3 */ 92925);
+/* harmony import */ var _angular_cdk_clipboard__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/cdk/clipboard */ 64425);
 /* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! file-saver */ 94327);
 /* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var dom_to_image_more__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! dom-to-image-more */ 57489);
-/* harmony import */ var dom_to_image_more__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(dom_to_image_more__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _helperClasses_dialogSettings__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../helperClasses/dialogSettings */ 30796);
+/* harmony import */ var _helperClasses_dialogSettings__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../helperClasses/dialogSettings */ 30796);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! lodash */ 17489);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var _app_helperClasses_customShapes__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @app/helperClasses/customShapes */ 71863);
 /* harmony import */ var _app_base_component_directive__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @app/base-component.directive */ 75738);
 /* harmony import */ var save_svg_as_png__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! save-svg-as-png */ 2033);
 /* harmony import */ var save_svg_as_png__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(save_svg_as_png__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var golden_layout__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! golden-layout */ 10478);
-/* harmony import */ var angular_google_tag_manager__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! angular-google-tag-manager */ 29090);
-var _class;
+/* harmony import */ var golden_layout__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! golden-layout */ 10478);
+/* harmony import */ var angular_google_tag_manager__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! angular-google-tag-manager */ 29090);
+/* harmony import */ var _unovis_ts__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @unovis/ts */ 95171);
+/* harmony import */ var _unovis_ts__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @unovis/ts */ 61663);
+/* harmony import */ var _data2__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./data2 */ 65594);
 
+var _class;
 
 
 
@@ -15991,7 +16338,116 @@ var _class;
 
 
 
+
+
 let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_directive__WEBPACK_IMPORTED_MODULE_10__.BaseComponentDirective {
+  // onNodeSelectionBrush = (selectedNodes: GraphNode[], event: any)  => this.onSelectionBrush(selectedNodes)
+  // onNodeSelectionDrag = (selectedNodes: GraphNode[], event: any) => this.onSelectionDrag(selectedNodes)
+  onSelectionBrush(nodes) {
+    console.log('onSelectionNode: ', nodes);
+  }
+  getLinkStyle(l) {
+    if (l.source['_id'] === "KF773429" && l.target['_id'] === "KF773430" || l.source['_id'] === "KF773430" && l.target['_id'] === "KF773429") {
+      console.log('setting link dashed: ', lodash__WEBPACK_IMPORTED_MODULE_8__.cloneDeep(l));
+    }
+    return l['origin'].length > 1 ? _unovis_ts__WEBPACK_IMPORTED_MODULE_13__.GraphLinkStyle.Dashed : _unovis_ts__WEBPACK_IMPORTED_MODULE_13__.GraphLinkStyle.Solid;
+  }
+  onSelectionDrag(nodes) {
+    console.log('onSelectionDrag: ', nodes);
+  }
+  getLinkDistance() {
+    let dist = Math.random() * 100;
+    console.log('getLinkDistance: ', dist);
+    return dist;
+  }
+  getNodeSize(node) {
+    let defaultSize = this.widgets['node-radius'];
+    let size = defaultSize,
+      med = defaultSize,
+      oldrng,
+      min,
+      max;
+    let sizeVariable = this.widgets['node-radius-variable'];
+    // console.log('in size: ', this.widgets['node-radius-variable'])
+    // console.log('in size 2: ', this.widgets['node-radius']);
+    // if (this.widgets['node-radius'] > 90) this.widgets['node-radius'] = 10;
+    // console.log('node index by size: ',this.widgets['node-radius-variable'] );
+    // console.log('node Radius Var: ', this.widgets['node-radius']);
+    if (this.widgets['node-radius-variable'] == 'None') {
+      return this.widgets['node-radius'];
+    } else {
+      let v = node[sizeVariable];
+      if (!this.isNumber(v)) v = this.nodeMid;
+      // Check the type of v before calling linkScale
+      // Ensure v is a number before using linkScale
+      if (typeof v === 'number') {
+        let scaleValue = this.nodeScale(v);
+        console.log('link scale', scaleValue);
+        return scaleValue;
+      } else {
+        console.error('v is not a number:', v);
+        return this.nodeScale; // Default to scalar if v is not a number
+      }
+      // return this.visuals.twoD.commonService.temp.style.nodeColorMap(this.visuals.twoD.commonService.session.data.nodes[index][variable]);
+    }
+  }
+
+  getNodeColor(node) {
+    let variable = this.widgets['node-color-variable'];
+    let color = this.widgets['node-color'];
+    // Set cluster to group if showing paralell grouping
+    if (variable == "cluster" && this.showParallel) {
+      variable = "group";
+    }
+    return variable == 'None' ? color : this.visuals.twoD.commonService.temp.style.nodeColorMap(node[variable]);
+  }
+  getLinkWidth(link) {
+    let scalar = this.widgets['link-width'];
+    let variable = this.widgets['link-width-variable'];
+    if (variable == 'None') return scalar;else {
+      let mid = (this.linkMax - this.linkMin) / 2 + this.linkMin;
+      let v = link[variable];
+      if (!this.isNumber(v)) v = mid;
+      // Ensure v is a number before using linkScale
+      if (typeof v === 'number') {
+        let scaleValue = this.linkScale(v);
+        return scaleValue;
+      } else {
+        return scalar; // Default to scalar if v is not a number
+      }
+    }
+  }
+  // Method to handle shape change from the dropdown
+  onNodeShapeChange(newShape) {
+    this.selectedNodeShape = newShape;
+    this._rerender();
+  }
+  getLinkColor(link) {
+    let variable = this.widgets['link-color-variable'];
+    let color = this.widgets['link-color'];
+    if (link.source.id === "KF773429" && link.target.id === "KF773430" || link.source.id === "KF773430" && link.target.id === "KF773429") {
+      console.log('link variable: ', link[variable]);
+    }
+    // Convert hex color to RGBA
+    const hexToRgba = (hex, alpha) => {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    };
+    let finalColor;
+    let alphaValue;
+    if ((variable == 'Origin' || variable == 'origin') && link.origin.length > 1) {
+      finalColor = this.visuals.twoD.commonService.temp.style.linkColorMap("Duo-Link");
+      alphaValue = this.visuals.twoD.commonService.temp.style.linkAlphaMap("Duo-Link");
+      // this.visuals.twoD.commonService.temp.style.linkColorMap("Multi-Link"), alphaValue;
+    } else {
+      finalColor = variable == 'None' ? color : this.visuals.twoD.commonService.temp.style.linkColorMap(link[variable]);
+      alphaValue = this.visuals.twoD.commonService.temp.style.linkAlphaMap(link[variable]);
+    }
+    console.log('final color: ', link.origin, finalColor, alphaValue);
+    return hexToRgba(finalColor, alphaValue);
+  }
   constructor(injector, eventManager, commonService, container, elRef, cdref, clipboard, gtmService) {
     super(elRef.nativeElement);
     this.eventManager = eventManager;
@@ -16000,21 +16456,116 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     this.cdref = cdref;
     this.clipboard = clipboard;
     this.gtmService = gtmService;
-    this.DisplayGlobalSettingsDialogEvent = new _angular_core__WEBPACK_IMPORTED_MODULE_12__.EventEmitter();
+    this.DisplayGlobalSettingsDialogEvent = new _angular_core__WEBPACK_IMPORTED_MODULE_14__.EventEmitter();
     this.svgStyle = {
       'height': '0px',
       'width': '1000px'
+    };
+    this.vizLoaded = true;
+    this.data2 = {
+      nodes: _data2__WEBPACK_IMPORTED_MODULE_12__.nodes,
+      links: _data2__WEBPACK_IMPORTED_MODULE_12__.links
+    };
+    this.layoutParallelNodesPerColumn = 4;
+    this.layoutType2 = _unovis_ts__WEBPACK_IMPORTED_MODULE_13__.GraphLayoutType.Parallel;
+    this.layoutNodeGroup = d => d.group;
+    this.layoutParallelNodeSubGroup = d => d.id;
+    this.panels = _data2__WEBPACK_IMPORTED_MODULE_12__.panels;
+    this.layoutType = _unovis_ts__WEBPACK_IMPORTED_MODULE_13__.GraphLayoutType.Force;
+    this.containerHeight = 800; // or any other number you want
+    this.graphData = {
+      nodes: [],
+      links: []
+    };
+    this.showParallel = false;
+    this.selectedNodeId = undefined;
+    this.forceLayoutSettings = {
+      fixNodePositionAfterSimulation: true,
+      linkDistance: this.getLinkDistance()
+    };
+    this.selectedNodeShape = 'circle'; // Default shape
+    this.linkLabel = l => this.getLinkLabel(l);
+    this.nodeLabel = n => this.getNodeLabel(n);
+    this.nodeShape = n => this.getNodeShape(n);
+    this.linkStroke = l => this.getLinkColor(l);
+    this.linkStyle = l => this.getLinkStyle(l);
+    this.linkWidth = l => this.getLinkWidth(l);
+    this.linkArrow = l => this.getLinkArrow(l);
+    this.nodeFill = n => this.getNodeColor(n);
+    this.nodeStroke = n => this.getNodeStroke(n);
+    this.nodeSize = n => this.getNodeSize(n);
+    this.events = {
+      [_unovis_ts__WEBPACK_IMPORTED_MODULE_15__.Graph.selectors.node]: {
+        click: d => {
+          console.log('selected node is: ', d);
+          this.selectedNodeId = d.id;
+          this._rerender();
+          // config.selectedNodeId = d.id
+          // Set the selected node id here, e.g.: config.selectedNodeId = d.id
+          // and trigger the component update if required by your UI framework
+        },
+
+        mouseover: (d, event) => {
+          console.log('hovered node in: ', d);
+          this.showNodeTooltip(d, event);
+          // Perform actions on hover, such as highlighting or displaying additional information
+        },
+
+        mouseout: d => {
+          console.log('hovered node out: ', d);
+          this.hideTooltip();
+        },
+        brush: (selectedNodes, event) => {
+          this.onSelectionBrush(selectedNodes);
+        },
+        drag: (selectedNodes, event) => {
+          this.onSelectionDrag(selectedNodes);
+        }
+      },
+      [_unovis_ts__WEBPACK_IMPORTED_MODULE_15__.Graph.selectors.link]: {
+        mouseover: (d, event) => {
+          console.log('hovered link is: ', d);
+          this.showLinkTooltip(d, event);
+          // Perform actions on hover, such as highlighting or displaying additional information
+        },
+
+        mouseout: () => {
+          this.hideTooltip();
+        }
+      }
+    };
+    this.getNodeStroke = n => {
+      if (n.id == this.selectedNodeId) {
+        return this.widgets['selected-node-stroke-color'];
+      } else {
+        return '#000';
+      }
+    };
+    this.nodeStrokeWidth = n => {
+      return this.nodeBorderWidth;
+    };
+    this.getLinkArrow = link => {
+      if (this.widgets['link-directed'] && this.widgets['link-bidirectional']) {
+        return "double";
+      }
+      return this.widgets['link-directed'];
     };
     this.customShapes = new _app_helperClasses_customShapes__WEBPACK_IMPORTED_MODULE_9__.CustomShapes();
     this.symbolTableWrapper = null;
     this.linkColorTableWrapper = null;
     this.nodeColorTableWrapper = null;
+    this.linkMin = 3;
+    this.linkMax = 27;
+    this.linkMid = 1;
+    this.nodeMin = 3;
+    this.nodeMax = 27;
+    this.nodeMid = 1;
+    this.autoFit = true;
     this.ShowNetworkAttributes = false;
     this.ShowStatistics = true;
     this.Show2DExportPane = false;
     this.Show2DSettingsPane = false;
     this.IsDataAvailable = false;
-    this.svg = null;
     this.halfWidth = null;
     this.halfHeight = null;
     this.transform = null;
@@ -16035,7 +16586,7 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     //Polygon Tab
     this.SelectedPolygonLabelVariable = "None";
     this.SelectedPolygonColorVariable = "None";
-    this.SelectedPolygonLabelOrientationVariable = "Right";
+    this.SelectedPolygonLabelOrientationVariable = "top";
     this.SelectedPolygonLabelSizeVariable = 0.0;
     this.SelectedPolygonGatherValue = 0.0;
     this.CenterPolygonVariable = "None";
@@ -16044,7 +16595,6 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     this.SelectedPolygonColorTableShowVariable = "Hide";
     // Node Tab    
     this.SelectedNodeLabelVariable = "None";
-    this.SelectedNodeLabelOrientationVariable = "Right";
     this.SelectedNodeTooltipVariable = "None";
     this.SelectedNodeSymbolVariable = "None";
     this.SelectedNodeShapeVariable = "symbolCircle";
@@ -16097,7 +16647,15 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       label: 'Show',
       value: true
     }];
+    this.bidirectionalOptions = [{
+      label: 'Hide',
+      value: 'Hide'
+    }, {
+      label: 'Show',
+      value: 'Show'
+    }];
     this.SelectedLinkArrowTypeVariable = "Hide";
+    this.SelectedLinkBidirectionalTypeVariable = "Hide";
     // Network 
     this.NeighborTypes = [{
       label: 'Normal',
@@ -16142,9 +16700,9 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     this.ShowNodeSymbolTable = false;
     this.ShowPolygonColorTable = false;
     this.ShowAdvancedExport = true;
-    this.NodeSymbolTableWrapperDialogSettings = new _helperClasses_dialogSettings__WEBPACK_IMPORTED_MODULE_8__.DialogSettings('#node-symbol-table-wrapper', false);
-    this.PolygonColorTableWrapperDialogSettings = new _helperClasses_dialogSettings__WEBPACK_IMPORTED_MODULE_8__.DialogSettings('#polygon-color-table-wrapper', false);
-    this.Node2DNetworkExportDialogSettings = new _helperClasses_dialogSettings__WEBPACK_IMPORTED_MODULE_8__.DialogSettings('#network-settings-pane', false);
+    this.NodeSymbolTableWrapperDialogSettings = new _helperClasses_dialogSettings__WEBPACK_IMPORTED_MODULE_7__.DialogSettings('#node-symbol-table-wrapper', false);
+    this.PolygonColorTableWrapperDialogSettings = new _helperClasses_dialogSettings__WEBPACK_IMPORTED_MODULE_7__.DialogSettings('#polygon-color-table-wrapper', false);
+    this.Node2DNetworkExportDialogSettings = new _helperClasses_dialogSettings__WEBPACK_IMPORTED_MODULE_7__.DialogSettings('#network-settings-pane', false);
     this.ContextSelectedNodeAttributes = [];
     /**
      * Converts table such as node color table, link color table or node symbol table from dialog window into element on twoD network svg when
@@ -16163,32 +16721,59 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       let containerWidth = container.getBBox().width;
       let rightPosition = containerWidth - wrapper.offsetWidth;
       console.log('right: ', rightPosition);
-      let foreignObj = d3__WEBPACK_IMPORTED_MODULE_4__.select(container).append("svg:foreignObject").attr("x", leftOffset ? rightPosition : wrapper.offsetLeft).attr("y", wrapper.offsetTop + topOffset).attr("width", wrapper.offsetWidth).attr("height", wrapper.offsetHeight);
-      let body = foreignObj.append("xhtml:body").append("table").style('position', 'absolute').style('top', '0').style('width', '100%').style('height', '100%').attr('cellpadding', '1px').attr("class", "table-bordered");
-      // .html(nodeColorTable.innerHTML); SVG doesn't translate
-      let thead = body.append("thead"),
-        tbody = body.append("tbody");
-      thead.append("tr").selectAll("th").data(columns).enter().append("th").text(function (column) {
-        return column;
-      });
-      let rows = tbody.selectAll("tr").data(data).enter().append("tr");
-      let cells = rows.selectAll("td").data(function (row) {
-        return columns.map(function (column) {
-          return {
-            column: column,
-            value: row[column.split(" ")[0]]
-          };
-        });
-      }).enter().append("td").html(function (d) {
-        return d.value;
-      });
-      return foreignObj;
+      // PRE D3
+      return null;
+      // let foreignObj = d3.select(container).append("svg:foreignObject")
+      //   .attr("x", (leftOffset) ? rightPosition : wrapper.offsetLeft)
+      //   .attr("y", wrapper.offsetTop + topOffset)
+      //   .attr("width", wrapper.offsetWidth)
+      //   .attr("height", wrapper.offsetHeight);
+      // let body = foreignObj 
+      //   .append("xhtml:body")
+      //   .append("table")
+      //   .style('position', 'absolute')
+      //   .style('top', '0')
+      //   .style('width', '100%')
+      //   .style('height', '100%')
+      //   .attr('cellpadding', '1px')
+      //   .attr("class", "table-bordered");
+      //   // .html(nodeColorTable.innerHTML); SVG doesn't translate
+      // let thead = body.append("thead"),
+      //     tbody = body.append("tbody");
+      // thead.append("tr")
+      //   .selectAll("th")
+      //   .data(columns)
+      //   .enter()
+      //   .append("th")
+      //   .text(function(column) { return column; });
+      // let rows = tbody.selectAll("tr")
+      //   .data(data)
+      //   .enter()
+      //   .append("tr");
+      // let cells = rows.selectAll("td")
+      //   .data(function(row) {
+      //     return columns.map(function(column) {
+      //         return {column: column, value: row[column.split(" ")[0]]};
+      //     });
+      //   })
+      //   .enter()
+      //   .append("td")
+      //   .html(function(d) { return d.value; });
+      // return foreignObj;
     };
+
     this.polygonNodeSelected = null;
+    this.svgDefs = `
+    <path id="blob" d="M 19.415 1.0564 C 20.585 2.47 20.225 5.89 21.665 8.2612 C 23.06 10.678 26.345 12.046 28.325 14.554 C 30.305 17.1076 31.025 20.8012 28.865 21.9412 C 26.75 23.1268 21.755 21.7588 18.605 23.3092 C 15.455 24.8596 14.105 29.3284 12.485 29.8756 C 10.865 30.3772 8.93 27.0028 6.41 25.042 C 3.89 23.1268 0.83 22.6708 0.38 20.9836 C -0.07 19.2964 2.135 16.378 2.54 13.642 C 2.945 10.9516 1.55 8.4892 2.135 7.03 C 2.72 5.5708 5.285 5.1148 7.355 4.294 C 9.47 3.4276 11.135 2.1964 13.34 1.2388 C 15.545 0.3268 18.245 -0.3116 19.415 1.0564 Z"/>
+    <path id="cloud" d="M 14 -1 A 9 9 90 0 0 5 8 A 9 9 90 0 0 5.1055 9.3125 A 6 6 90 0 0 1 15 A 6 6 90 0 0 7 21 L 22 21 A 7 7 90 0 0 29 14 A 7 7 90 0 0 22.9414 7.0703 A 9 9 90 0 0 14 -1 z"/>
+    <polygon id="diamond" points="0,15 15,0 30,15 15,30"/>
+    <polygon id="house" points="4,18 4,30 13,30 13,24 17,24 17,30 26,30 26,18 30,18 15,0 0,18"/>
+    `;
+    // this.setExpanded(this.mainSite);
     this.visuals = commonService.visuals;
     this.commonService.visuals.twoD = this;
     this.widgets = this.commonService.session.style.widgets;
-    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_3__.window.addEventListener('resize', () => {
+    ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.window.addEventListener('resize', () => {
       // Replace this with the logic to determine the current show/hide state
       const showState = this.widgets['network-gridlines-show'];
       this.drawGridlines(showState);
@@ -16201,12 +16786,21 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       this.viewActive = true;
       this.cdref.detectChanges();
     });
+    // Initialize the selectedNodeShape from the settings
+    this.selectedNodeShape = this.widgets['node-symbol'] || 'circle';
   }
   ngOnInit() {
     this.visuals.twoD.commonService.updateNetwork();
     this.InitView();
   }
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+    // Apply CSS variables programmatically
+    const root = document.documentElement;
+    root.style.setProperty('--vis-graph-brush-selection-opacity', '1');
+    root.style.setProperty('--vis-graph-brushed-node-stroke-color', '#ff0000');
+    root.style.setProperty('--vis-graph-brushed-node-label-text-color', '#00ff00');
+    root.style.setProperty('--vis-graph-brushed-node-icon-fill-color', '#0000ff');
+  }
   /** Initializes the view.
    *
    * Defines the structure of the svg of twoD network and adds functionalities such as click, zoom, forces, etc...
@@ -16216,6 +16810,7 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    *
    */
   InitView() {
+    var _this = this;
     this.gtmService.pushTag({
       event: "page_view",
       page_location: "/2d_network",
@@ -16229,9 +16824,13 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     // Use this method to prepare your variables before they're used in the template
     this.commonService.session.style.widgets['node-tooltip-variable'] = this.ensureArray(this.commonService.session.style.widgets['node-tooltip-variable']);
     this.commonService.session.style.widgets['link-tooltip-variable'] = this.ensureArray(this.commonService.session.style.widgets['link-tooltip-variable']);
+    let that = this;
     if (this.visuals.twoD.IsDataAvailable === true && this.visuals.twoD.zoom === null) {
-      d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').exit().remove();
-      this.visuals.twoD.svg = d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').append('g');
+      // PRE D3
+      d3__WEBPACK_IMPORTED_MODULE_5__.select('svg#viz-force').append('g').attr('class', 'horizontal-gridlines');
+      d3__WEBPACK_IMPORTED_MODULE_5__.select('svg#viz-force').append('g').attr('class', 'vertical-gridlines');
+      // d3.select('svg#network').exit().remove();
+      // this.visuals.twoD.svg = d3.select('svg#network').append('g');
       // populate this.twoD.FieldList with [None, ...nodeFields]
       this.visuals.twoD.FieldList = [];
       this.visuals.twoD.FieldList.push({
@@ -16289,139 +16888,65 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
         'height': '100%',
         'min-width.%': 100
       };
-      this.visuals.twoD.zoom = d3__WEBPACK_IMPORTED_MODULE_4__.zoom().on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3__WEBPACK_IMPORTED_MODULE_4__.event.transform));
-      // this.visuals.twoD.brush = d3.brush();
       this.visuals.twoD.halfWidth = $('#network').parent().width() / 2;
       this.visuals.twoD.halfHeight = $('#network').parent().parent().parent().height() / 2;
-      this.visuals.twoD.transform = d3__WEBPACK_IMPORTED_MODULE_4__.zoomTransform(d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').node());
-      //this.widgets = this.widgets;
-      let zoom = d3__WEBPACK_IMPORTED_MODULE_4__.zoom().filter(() => !this.ctrlPressed).on('zoom', () => this.visuals.twoD.svg.attr('transform', this.visuals.twoD.transform = d3__WEBPACK_IMPORTED_MODULE_4__.event.transform));
-      let width = d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').node().getBoundingClientRect().width;
-      let height = d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').node().getBoundingClientRect().height;
-      let svgSelection = d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network');
-      let svgWidth = svgSelection.node().getBoundingClientRect().width;
-      let svgHeight = svgSelection.node().getBoundingClientRect().height;
-      this.visuals.twoD.brush = d3__WEBPACK_IMPORTED_MODULE_4__.brush().extent([[0, 0], [svgWidth, svgHeight]]) // Set the extent to cover the entire SVG
-      .on('start', () => {
-        this.dragging = true;
-        this.visuals.twoD.commonService.session.network.nodes.forEach(d => {
-          if (d.visible) d._previouslySelected = d.selected;
-        });
-      }).on('brush', () => {
-        let e = d3__WEBPACK_IMPORTED_MODULE_4__.event;
-        if (e.sourceEvent.type == 'end') return;
-        let selection0 = this.visuals.twoD.transform.invert(e.selection[0]),
-          selection1 = this.visuals.twoD.transform.invert(e.selection[1]);
-        //if (this.visuals.twoD.commonService.includes($(this).selection, null)) return;
-        this.visuals.twoD.commonService.session.network.nodes.forEach(d => {
-          let exp = selection0[0] <= d.x && d.x <= selection1[0] && selection0[1] <= d.y && d.y <= selection1[1];
-          d.selected = (d._previouslySelected ^ exp) == 1;
-        });
-      }).on('end', () => {
-        this.dragging = false;
-        if (d3__WEBPACK_IMPORTED_MODULE_4__.event.selection == null) return;
-        this.visuals.twoD.commonService.session.network.nodes.forEach(d => delete d._previouslySelected);
-        this.visuals.twoD.commonService.session.data.nodes.forEach(d => {
-          let match = this.visuals.twoD.commonService.session.network.nodes.find(node => node._id == d._id);
-          if (match) d.selected = match.selected;
-        });
-        this.visuals.twoD.render(true);
-        console.log('render drag');
-        $(document).trigger('node-selected');
-      });
-      d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').html(null) //Let's make sure the canvas is blank.
-      .on('click', () => this.visuals.twoD.hideContextMenu()).call(zoom);
-      d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').append('g').attr('class', 'horizontal-gridlines');
-      d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').append('g').attr('class', 'vertical-gridlines');
-      d3__WEBPACK_IMPORTED_MODULE_4__.select(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_3__.window).on('keydown', () => {
-        const event = d3__WEBPACK_IMPORTED_MODULE_4__.event;
-        const keyToCheck = this.isMac ? 'metaKey' : 'ctrlKey';
-        if (event[keyToCheck] && !this.dragging) {
-          this.ctrlPressed = true;
-          this.toggleBrush(true);
-        }
-      });
-      d3__WEBPACK_IMPORTED_MODULE_4__.select(ngx_bootstrap__WEBPACK_IMPORTED_MODULE_3__.window).on('keyup', () => {
-        const event = d3__WEBPACK_IMPORTED_MODULE_4__.event;
-        const keyToCheck = this.isMac ? 'metaKey' : 'ctrlKey';
-        if (event[keyToCheck] && !this.dragging) {
-          this.ctrlPressed = false;
-          this.toggleBrush(false);
-        }
-      });
-      this.visuals.twoD.svg = d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').append('g');
-      this.visuals.twoD.svg.append('g').attr('class', 'clusters');
-      this.visuals.twoD.svg.append('g').attr('class', 'links');
-      this.visuals.twoD.svg.append('g').attr('class', 'nodes');
-      this.visuals.twoD.svg.append('g').attr('class', 'clustersLabels');
-      d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').append('g').attr('class', 'brush').call(this.visuals.twoD.brush);
-      this.visuals.twoD.svg.append('svg:defs').append('marker').attr('id', 'end-arrow').attr('viewBox', '0 0 10 10').attr('refX', 20).attr('refY', 5).attr('markerWidth', 4).attr('markerHeight', 4).attr('orient', 'auto').append('svg:path').attr('d', 'M0,0 L0,10 L10,5 z');
-      this.visuals.twoD.force = d3__WEBPACK_IMPORTED_MODULE_4__.forceSimulation().force('link', d3__WEBPACK_IMPORTED_MODULE_4__.forceLink().id(d => d._id).distance(l => l.origin.length * this.widgets['link-length']).strength(this.widgets['network-link-strength'])).force('charge', d3__WEBPACK_IMPORTED_MODULE_4__.forceManyBody().strength(-this.widgets['node-charge'])).force('gravity', (0,d3_force_attract__WEBPACK_IMPORTED_MODULE_5__.forceAttract)().target([this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight]).strength(this.widgets['network-gravity'])).force('center', d3__WEBPACK_IMPORTED_MODULE_4__.forceCenter(this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight));
-      if (this.widgets['network-friction']) this.visuals.twoD.force.velocityDecay(this.widgets['network-friction']);
-      // this.visuals.twoD.clipboard.on('success', ()=>this.hideContextMenu());
-      let that = this;
-      // this.visuals.twoD.eventManager.addGlobalEventListener('window', 'node-color-change', () => {
-      //     this.visuals.twoD.updateNodeColors;
-      // });
-      // $( document ).on( "node-color-change", function( ) {
-      //     that.visuals.twoD.updateNodeColors;
-      // });
-      // // this.visuals.twoD.eventManager.addGlobalEventListener('window', 'link-color-change', () => {
-      // //     this.visuals.twoD.updateLinkColor;
-      // // });
-      // $( document ).on( "link-color-change", function( ) {
-      //     that.visuals.twoD.updateLinkColor;
-      // });
-      // // this.visuals.twoD.eventManager.addGlobalEventListener('window', 'background-color-change', () => {
-      // //     $('#network').css('background-color', this.widgets['background-color']);
-      // // });
-      // $( document ).on( "background-color-change", function( ) {
-      //     $('#network').css('background-color', that.widgets['background-color']);
-      // });
-      // // this.visuals.twoD.eventManager.addGlobalEventListener('document', 'node-visibility link-visibility cluster-visibility node-selected', () => {
-      // //     this.visuals.twoD.render(false);
-      // // });
-      // $( document ).on( "node-selected", function( ) {
-      //         that.visuals.twoD.render(false);
-      // });
+      this.containerHeight = this.visuals.twoD.halfHeight * 2 - 40;
+      let networkData = {
+        nodes: this.visuals.twoD.commonService.getVisibleNodes(),
+        links: this.visuals.twoD.commonService.getVisibleLinks()
+      };
+      this.data = this.visuals.twoD.commonService.convertToGraphDataArray(networkData);
+      // Now update panels
+      this.updatePanels();
+      console.log('data: ', this.data);
       $(document).on("node-visibility", function () {
-        if (!that.isLoading) {
-          console.log('render node-vis');
-          that.isLoading = true;
-          that.visuals.twoD.render(false);
-          setTimeout(() => {
-            that.isLoading = false;
-          }, 1000);
-        }
+        // if (!that.isLoading) {
+        //     console.log('render node-vis');
+        //     that.isLoading = true;
+        //     that.visuals.twoD.render(false);
+        //     setTimeout(() => {
+        //         that.isLoading = false;
+        //       }, 1000);
+        // }
+        // let networkData = { 
+        //     nodes : that.visuals.twoD.commonService.getVisibleNodes(), 
+        //     links : that.visuals.twoD.commonService.getVisibleLinks()
+        // }
+        // that.data = that.visuals.twoD.commonService.convertToGraphDataArray(networkData);
       });
-      $(document).on("link-visibility", function () {
+      $(document).on("link-visibility", /*#__PURE__*/(0,_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
         if (!that.isLoading) {
-          console.log('render link-vis');
           that.isLoading = true;
-          that.visuals.twoD.render(false);
-          setTimeout(() => {
-            that.isLoading = false;
-          }, 1000);
+          yield that._rerender();
+          that.isLoading = false;
         }
-      });
+      }));
       $(document).on("cluster-visibility", function () {
-        if (!that.isLoading) {
-          console.log('render clus-vis');
-          that.isLoading = true;
-          that.visuals.twoD.render(true);
-          setTimeout(() => {
-            that.isLoading = false;
-          }, 1000);
-        }
+        // if (!that.isLoading) {
+        //     // console.log('render clus-vis');
+        //     that.isLoading = true;
+        //     that.visuals.twoD.render(true);
+        //     setTimeout(() => {
+        //         that.isLoading = false;
+        //       }, 1000);
+        // }     
+        // let networkData = { 
+        //     nodes : that.visuals.twoD.commonService.getVisibleNodes(), 
+        //     links : that.visuals.twoD.commonService.getVisibleLinks()
+        // }
+        // that.data = that.visuals.twoD.commonService.convertToGraphDataArray(networkData);
       });
       $(document).on("node-selected", function () {
         if (!that.isLoading) {
-          console.log('render node-sel');
-          that.isLoading = true;
-          that.visuals.twoD.render(true);
-          setTimeout(() => {
-            that.isLoading = false;
-          }, 1000);
+          let mtSelectedNode = that.commonService.getSelectedNode(that.commonService.getVisibleNodes());
+          if (mtSelectedNode && mtSelectedNode.id) {
+            that.selectedNodeId = mtSelectedNode.id;
+          } else if (mtSelectedNode && !mtSelectedNode.id) {
+            that.selectedNodeId = mtSelectedNode._id;
+          }
+          that._rerender();
+          console.log('node-selected in 2d: ', that.selectedNodeId);
+          console.log('node-selected in data: ', that.data.nodes.find(node => node.id == that.selectedNodeId));
         }
       });
       this.visuals.twoD.eventManager.addGlobalEventListener('window', "node-selected", () => {
@@ -16434,25 +16959,16 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       this.visuals.microbeTrace.onShowStatisticsChanged();
       this.loadSettings();
       //For some mysterious reason, this really needed a delay...
-      setTimeout(() => {
-        if (this.widgets['node-symbol-variable'] !== 'None') {
+      setTimeout( /*#__PURE__*/(0,_Users_evanmoscoso_Desktop_EvanGit_MicrobeTrace_node_modules_angular_devkit_build_angular_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])(function* () {
+        if (_this.widgets['node-symbol-variable'] !== 'None') {
           $('#node-symbol-variable').change(); //.trigger('change');
         }
+
+        console.log('data: ', _this.data);
         // Call render and then set isLoading to false to allo triggering of other renders
-        console.log('norm render');
-        this.visuals.twoD.render();
-        setTimeout(() => {
-          this.isLoading = false;
-        }, 1000);
-      }, 1);
-      setTimeout(() => {
-        // sometimes (~1/10) MT loads but twoD nodes are displayed offscreen - like the fit command isn't executed - DC
-        this.visuals.twoD.fit(undefined, undefined);
-        // Ensure brush is off
-        this.toggleBrush(false);
-        // Add a little force for effect in landing
-        this.visuals.twoD.force.alpha(1).alphaTarget(0).restart();
-      }, 3000);
+        yield _this.visuals.twoD.render();
+        _this.isLoading = false;
+      }), 1);
     }
   }
   // Method to ensure the value is an array
@@ -16471,7 +16987,11 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    * @param {boolean} enable - If true, pointer events are enabled; otherwise, they are disabled
    */
   toggleBrush(enable) {
-    d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network g.brush').attr('pointer-events', enable ? 'all' : 'none').select('rect.overlay').attr('pointer-events', enable ? 'all' : 'none');
+    // PRE D3
+    // d3.select('svg#network g.brush')
+    //   .attr('pointer-events', enable ? 'all' : 'none')
+    //   .select('rect.overlay')
+    //   .attr('pointer-events', enable ? 'all' : 'none');
   }
   /**
    * XXXXX empty function XXXXX
@@ -16490,34 +17010,35 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
   /**
    * @returns an array [X, Y] of the position of mouse relative to twodcomponent. Global position (i.e. d3.event.pageX) doesn't work for a dashboard
    */
-  getRelativeMousePosition() {
-    let rect = d3__WEBPACK_IMPORTED_MODULE_4__.select('twodcomponent').node().getBoundingClientRect();
-    let X = d3__WEBPACK_IMPORTED_MODULE_4__.event.pageX - rect.left;
-    let Y = d3__WEBPACK_IMPORTED_MODULE_4__.event.pageY - rect.top;
+  getRelativeMousePosition(event) {
+    // Get position based on container, which may be paralell viz or not
+    let rect = !this.showParallel ? document.getElementById('viz-force').getBoundingClientRect() : document.getElementById('viz-paralell').getBoundingClientRect();
+    const X = event['clientX'] - rect.left;
+    const Y = event['clientY'] - rect.top;
     return [X, Y];
   }
   /**
    * @returns an array [width, height] of the svg image
    */
   getImageDimensions() {
-    let parent = this.svg.node().parentElement;
-    return [parent.clientWidth, parent.clientHeight];
+    // let parent = this.svg.node().parentElement;
+    // return [parent.clientWidth, parent.clientHeight] 
   }
   /**
    * Sets CalculatedResolution variable to string such as '1250 x 855px'. Only called when export is first opened
    */
   setCalculatedResolution() {
-    let [width, height] = this.getImageDimensions();
-    this.CalculatedResolution = Math.round(width * this.SelectedNetworkExportScaleVariable) + " x " + Math.round(height * this.SelectedNetworkExportScaleVariable) + "px";
+    // let [width, height] = this.getImageDimensions();
+    // this.CalculatedResolution = (Math.round(width * this.SelectedNetworkExportScaleVariable) + " x " + Math.round(height * this.SelectedNetworkExportScaleVariable) + "px");
   }
   /**
    * Updates CalculatedResolution variable to string such as '1250 x 855px' based on ImageDimensions and SelectedNetworkExportScaleVariable.
    * This is called anytime SelectedNetworkExportScaleVariable is updated.
    */
   updateCalculatedResolution(event) {
-    let [width, height] = this.getImageDimensions();
-    this.CalculatedResolution = Math.round(width * this.SelectedNetworkExportScaleVariable) + " x " + Math.round(height * this.SelectedNetworkExportScaleVariable) + "px";
-    this.cdref.detectChanges();
+    // let [width, height] = this.getImageDimensions();
+    // this.CalculatedResolution = (Math.round(width * this.SelectedNetworkExportScaleVariable) + " x " + Math.round(height * this.SelectedNetworkExportScaleVariable) + "px");
+    // this.cdref.detectChanges();
   }
   /**
    * Opens Global Setting Dialog
@@ -16571,49 +17092,54 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
   exportWork() {
     let network = document.getElementById('network');
     let $network = $(network);
-    let watermark = d3__WEBPACK_IMPORTED_MODULE_4__.select(network).append('text').attr('xlink:href', this.visuals.twoD.commonService.watermark).attr('height', 128).attr('width', 128).attr('x', 10).style('opacity', $('#network-export-opacity').val());
-    let filetype = this.SelectedNetworkExportFileTypeListVariable,
-      filename = this.SelectedNetworkExportFilenameVariable;
-    if (filetype == 'svg') {
-      network.style.height = '100%';
-      network.style.width = '100%';
-      let content = this.visuals.twoD.commonService.unparseSVG(network);
-      let blob = new Blob([content], {
-        type: 'image/svg+xml;charset=utf-8'
-      });
-      file_saver__WEBPACK_IMPORTED_MODULE_6__(blob, filename + '.' + filetype);
-      watermark.remove();
-      const style = this.svgStyle;
-      network.style.height = style.height;
-      network.style.width = style.width;
-    } else {
-      setTimeout(() => {
-        const scale = this.visuals.twoD.SelectedNetworkExportScaleVariable;
-        const element = document.querySelector('TwoDComponent').parentElement;
-        dom_to_image_more__WEBPACK_IMPORTED_MODULE_7__.toBlob(element, {
-          width: element.clientWidth * scale,
-          height: element.clientHeight * scale,
-          style: {
-            transform: 'scale(' + scale + ')',
-            transformOrigin: 'top left'
-          },
-          quality: this.visuals.twoD.SelectedNetworkExportQualityVariable
-        }).then(blob => {
-          file_saver__WEBPACK_IMPORTED_MODULE_6__(blob, filename + '.' + filetype);
-          watermark.remove();
-          this.visuals.twoD.isExporting = false;
-          // this.visuals.microbeTrace.clearTable("#node-symbol-table-bottom");
-          // this.visuals.microbeTrace.clearTable("#node-color-table-bottom");
-          // this.visuals.microbeTrace.clearTable("#link-color-table-bottom");
-          // this.visuals.microbeTrace.GlobalSettingsDialogSettings.restoreStateAfterExport();
-          // this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.restoreStateAfterExport();
-          // this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.restoreStateAfterExport();
-          // this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.restoreStateAfterExport();
-          // this.visuals.twoD.PolygonColorTableWrapperDialogSettings.restoreStateAfterExport();
-          // this.visuals.twoD.Node2DNetworkExportDialogSettings.restoreStateAfterExport();
-        });
-      }, 1000);
-    }
+    // PRE D3
+    // let watermark = d3.select(network).append('text')
+    // .attr('xlink:href', this.visuals.twoD.commonService.watermark)
+    // .attr('height', 128)
+    // .attr('width', 128)
+    // .attr('x', 10)
+    // .style('opacity', $('#network-export-opacity').val());
+    // let filetype = this.SelectedNetworkExportFileTypeListVariable, 
+    //     filename = this.SelectedNetworkExportFilenameVariable;
+    // if (filetype == 'svg') {
+    //     network.style.height = '100%';
+    //     network.style.width = '100%';
+    //     let content = this.visuals.twoD.commonService.unparseSVG(network);
+    //     let blob = new Blob([content], { type: 'image/svg+xml;charset=utf-8' });
+    //     saveAs(blob, filename + '.' + filetype);
+    //     watermark.remove();
+    //     const style: any = this.svgStyle;
+    //     network.style.height = style.height;
+    //     network.style.width = style.width;
+    // } else {
+    //     setTimeout(() => {
+    //         const scale: number = this.visuals.twoD.SelectedNetworkExportScaleVariable;
+    //         const element = document.querySelector('TwoDComponent').parentElement;
+    //         domToImage.toBlob(element, {
+    //             width: element.clientWidth * scale,
+    //             height: element.clientHeight * scale,
+    //             style: {
+    //                 transform: 'scale(' + scale + ')',
+    //                 transformOrigin: 'top left'
+    //             },
+    //             quality: this.visuals.twoD.SelectedNetworkExportQualityVariable
+    //         })
+    //             .then((blob) => {
+    //                 saveAs(blob, filename + '.' + filetype);
+    //                 watermark.remove();
+    //                 this.visuals.twoD.isExporting = false;
+    //                 // this.visuals.microbeTrace.clearTable("#node-symbol-table-bottom");
+    //                 // this.visuals.microbeTrace.clearTable("#node-color-table-bottom");
+    //                 // this.visuals.microbeTrace.clearTable("#link-color-table-bottom");
+    //                 // this.visuals.microbeTrace.GlobalSettingsDialogSettings.restoreStateAfterExport();
+    //                 // this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.restoreStateAfterExport();
+    //                 // this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.restoreStateAfterExport();
+    //                 // this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.restoreStateAfterExport();
+    //                 // this.visuals.twoD.PolygonColorTableWrapperDialogSettings.restoreStateAfterExport();
+    //                 // this.visuals.twoD.Node2DNetworkExportDialogSettings.restoreStateAfterExport();
+    //             });
+    //     }, 1000);
+    // }
   }
   /**
    * Exports twoD network svg as an svg, png, jpeg, or webp image
@@ -16621,8 +17147,15 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
   exportWork2() {
     let network = document.getElementById('network');
     let $network = $(network);
+    // PRE D3
     // add microbeTrace logo as a watermark
-    let watermark = d3__WEBPACK_IMPORTED_MODULE_4__.select(network).append('image').attr('xlink:href', this.visuals.twoD.commonService.watermark).attr('height', 128).attr('width', 128).attr('x', 35).attr('y', 35).style('opacity', $('#network-export-opacity').val());
+    // let watermark = d3.select(network).append('image')
+    //     .attr('xlink:href', this.visuals.twoD.commonService.watermark)
+    //     .attr('height', 128)
+    //     .attr('width', 128)
+    //     .attr('x', 35)
+    //     .attr('y', 35)
+    //     .style('opacity', $('#network-export-opacity').val());
     let filetype = this.SelectedNetworkExportFileTypeListVariable;
     let filename = this.SelectedNetworkExportFilenameVariable;
     // add node color table
@@ -16734,17 +17267,23 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     }
     // add network statistics table
     let statsDiv = document.getElementById('network-statistics-wrapper');
-    let foreignObjStats = d3__WEBPACK_IMPORTED_MODULE_4__.select(network).append("svg:foreignObject").attr("x", statsDiv.offsetLeft).attr("y", statsDiv.offsetTop - 10).attr("width", statsDiv.offsetWidth).attr("height", statsDiv.offsetHeight);
-    foreignObjStats.append("xhtml:body").html(statsDiv.innerHTML);
+    // PRE D3
+    // let foreignObjStats = d3.select(network).append("svg:foreignObject")
+    //     .attr("x", statsDiv.offsetLeft)
+    //     .attr("y", statsDiv.offsetTop-10)
+    //     .attr("width", statsDiv.offsetWidth)
+    //     .attr("height", statsDiv.offsetHeight);
+    // foreignObjStats.append("xhtml:body").html(statsDiv.innerHTML);
     if (filetype == 'svg') {
       let content = this.visuals.twoD.commonService.unparseSVG(network);
       let blob = new Blob([content], {
         type: 'image/svg+xml;charset=utf-8'
       });
       file_saver__WEBPACK_IMPORTED_MODULE_6__(blob, filename + '.' + filetype);
-      if (watermark) {
-        watermark.remove();
-      }
+      // PRE D3
+      // if (watermark){
+      //     watermark.remove();
+      // }
       if (nodeLegend) {
         nodeLegend.remove();
       }
@@ -16754,9 +17293,9 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       if (symbolLegend) {
         symbolLegend.remove();
       }
-      if (foreignObjStats) {
-        foreignObjStats.remove();
-      }
+      // if (foreignObjStats){
+      //     foreignObjStats.remove();
+      // }
     } else {
       (0,save_svg_as_png__WEBPACK_IMPORTED_MODULE_11__.saveSvgAsPng)(network, filename + '.' + filetype, {
         scale: this.SelectedNetworkExportScaleVariable,
@@ -16764,9 +17303,10 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
         encoderType: 'image/' + filetype,
         encoderOptions: this.SelectedNetworkExportQualityVariable
       }).then(() => {
-        if (watermark) {
-          watermark.remove();
-        }
+        // PRE D3
+        // if (watermark){
+        //     watermark.remove();
+        // }
         if (nodeLegend) {
           nodeLegend.remove();
         }
@@ -16776,9 +17316,9 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
         if (symbolLegend) {
           symbolLegend.remove();
         }
-        if (foreignObjStats) {
-          foreignObjStats.remove();
-        }
+        // if (foreignObjStats){
+        //     foreignObjStats.remove();
+        // }
       });
     }
   }
@@ -16793,187 +17333,158 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       console.log('rendering');
       if (!$('#network').length) return;
       $("#numberOfSelectedNodes").text(this.visuals.twoD.commonService.session.data.nodes.filter(d => d.selected).length.toLocaleString());
-      const start = Date.now();
-      let newNodes = this.visuals.twoD.commonService.getVisibleNodes(true);
-      let oldNodes;
-      if (this.widgets["timeline-date-field"] != 'None') oldNodes = this.visuals.twoD.commonService.session.network.timelineNodes;else oldNodes = this.visuals.twoD.commonService.session.network.nodes;
-      if (newNodes.length === 0 && this.widgets["timeline-date-field"] == 'None') return;
+      // const start = Date.now();
+      // let newNodes = this.visuals.twoD.commonService.getVisibleNodes(true);
+      // let oldNodes;
+      // if(this.widgets["timeline-date-field"] != 'None')
+      //     oldNodes = this.visuals.twoD.commonService.session.network.timelineNodes;
+      // else
+      //     oldNodes = this.visuals.twoD.commonService.session.network.nodes;
+      // if (newNodes.length === 0 && this.widgets["timeline-date-field"] == 'None') return;
       // match newNodes to oldNodes so that position variables can be updated in newNodes
-      newNodes.forEach((d, i) => {
-        let match = oldNodes.find(d2 => {
-          if (!d2.id) {
-            d2.id = d2._id;
-          }
-          if (!d.id) {
-            d.id = d._id;
-          }
-          return d2.id == d.id;
-        });
-        if (match) {
-          ['x', 'y', 'fx', 'fy', 'vx', 'vy', 'fixed'].forEach(v => {
-            if (typeof match[v] != "undefined") {
-              d[v] = match[v];
-            }
-          });
-        }
-      });
-      this.visuals.twoD.commonService.session.network.nodes = newNodes;
+      // newNodes.forEach((d, i) => {
+      //     let match = oldNodes.find(d2 =>  {
+      //         if(!d2.id) {
+      //             d2.id = d2._id;
+      //         }
+      //         if(!d.id){
+      //             d.id = d._id;
+      //         }
+      //         return d2.id == d.id
+      //     });            
+      //     if (match) {
+      //         ['x', 'y', 'fx', 'fy', 'vx', 'vy', 'fixed'].forEach(v => {
+      //             if (typeof match[v] != "undefined") {
+      //                 d[v] = match[v];
+      //             } 
+      //         });
+      //     }
+      // });
+      // this.visuals.twoD.commonService.session.network.nodes = newNodes;
+      // PRE D3
       // sets functionality for nodes, as well as node border and node text/label position
-      let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(newNodes, d => d._id).join(enter => {
-        let g = enter.append('g').attr('tabindex', '0').call(d3__WEBPACK_IMPORTED_MODULE_4__.drag() //A bunch of mouse handlers.
-        .on('start', x => this.visuals.twoD.dragstarted(x)).on('drag', x => this.visuals.twoD.dragged(x)).on('end', x => this.visuals.twoD.dragended(x))).on('mouseenter focusin', x => this.visuals.twoD.showNodeTooltip(x)).on('mouseout focusout', x => this.visuals.twoD.hideTooltip()).on('contextmenu', x => this.visuals.twoD.showContextMenu(x)).on('click', x => this.visuals.twoD.clickHandler(x)).on('keydown', n => {
-          if (d3__WEBPACK_IMPORTED_MODULE_4__.event.code == 'Space') this.visuals.twoD.clickHandler(n);
-          if (d3__WEBPACK_IMPORTED_MODULE_4__.event.shiftKey && d3__WEBPACK_IMPORTED_MODULE_4__.event.key == 'F10') this.visuals.twoD.showContextMenu(n);
-        });
-        g.append('path').style('stroke', 'black').style('stroke-width', '2px');
-        g.append('text').attr('dy', 5).attr('dx', 8);
-        return g;
-      });
+      // let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(newNodes, d => d._id)
+      //     .join(
+      //         enter => {
+      //             let g = enter.append('g')
+      //                 .attr('tabindex', '0')
+      //                 .call(d3.drag() //A bunch of mouse handlers.
+      //                     .on('start', (x) => this.visuals.twoD.dragstarted(x))
+      //                     .on('drag', (x) => this.visuals.twoD.dragged(x))
+      //                     .on('end', (x) => this.visuals.twoD.dragended(x)))
+      //                 .on('mouseenter focusin', (x) => this.visuals.twoD.showNodeTooltip(x))
+      //                 .on('mouseout focusout', (x) => this.visuals.twoD.hideTooltip())
+      //                 .on('contextmenu', (x) => this.visuals.twoD.showContextMenu(x))
+      //                 .on('click', (x) => this.visuals.twoD.clickHandler(x))
+      //                 .on('keydown', n => {
+      //                     if (d3.event.code == 'Space') this.visuals.twoD.clickHandler(n);
+      //                     if (d3.event.shiftKey && d3.event.key == 'F10') this.visuals.twoD.showContextMenu(n);
+      //                 });
+      //                g.append('path')
+      //                 .style('stroke', 'black')
+      //                 .style('stroke-width', '2px');
+      //             g.append('text')
+      //                 .attr('dy', 5)
+      //                 .attr('dx', 8);
+      //             return g;
+      //         }
+      //     );
       // updates node properties (color, shape, label, size, etc...)
-      this.visuals.twoD.redrawNodes();
-      this.visuals.twoD.redrawLabels();
-      this.visuals.twoD.redrawNodeBorder();
-      this.visuals.twoD.updateNodeColors();
+      // this.visuals.twoD.redrawNodes();
+      // this.visuals.twoD.redrawLabels();
+      // this.visuals.twoD.redrawNodeBorder();
+      // this.visuals.twoD.updateNodeColors();
       // sets link functionality
-      let vlinks = this.visuals.twoD.getVLinks();
-      let links = this.visuals.twoD.svg.select('g.links').selectAll('line').data(vlinks).join('line').attr('stroke-width', this.widgets['link-width']).attr('opacity', 1 - this.widgets['link-opacity']).on('mouseenter', x => this.visuals.twoD.showLinkTooltip(x)).on('mouseout', x => this.visuals.twoD.hideTooltip());
+      // let vlinks = this.visuals.twoD.getVLinks();
+      // let links = this.visuals.twoD.svg.select('g.links').selectAll('line').data(vlinks)
+      //     .join('line')
+      //     .attr('stroke-width', this.widgets['link-width'])
+      //     .attr('opacity', 1 - this.widgets['link-opacity'])
+      //     .on('mouseenter', (x) => this.visuals.twoD.showLinkTooltip(x))
+      //     .on('mouseout', (x) => this.visuals.twoD.hideTooltip());
       // updates link color and width
-      this.visuals.twoD.updateLinkColor();
-      this.visuals.twoD.scaleLinkWidth();
+      // this.visuals.twoD.updateLinkColor();
+      // this.visuals.twoD.scaleLinkWidth();
       // defines link labels
-      let linklabels = this.visuals.twoD.svg.select('g.links').selectAll('text').data(vlinks).join('text').attr('text-anchor', 'middle').attr('dy', this.widgets['link-width'] + 2).text(l => {
-        const labelValue = l[this.widgets['link-label-variable']];
-        if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
-          if (this.widgets['default-distance-metric'] == 'snps') {
-            return Math.round(parseFloat(labelValue));
-          } else {
-            return parseFloat(labelValue).toFixed(this.widgets['link-label-decimal-length']);
-          }
-        } else {
-          return labelValue;
-        }
-      });
+      // let linklabels = this.visuals.twoD.svg.select('g.links').selectAll('text').data(vlinks)
+      //     .join('text')
+      //     .attr('text-anchor', 'middle')
+      //     .attr('dy', this.widgets['link-width'] + 2)
+      //     .text((l) => {
+      //         const labelValue = l[this.widgets['link-label-variable']];
+      //         if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
+      //             if(this.widgets['default-distance-metric'] == 'snps') {
+      //                 return Math.round(parseFloat(labelValue));
+      //             } else {
+      //                 return parseFloat(labelValue).toFixed(this.widgets['link-label-decimal-length']);
+      //             }
+      //         } else {
+      //             return labelValue;
+      //         }
+      //       });
       /**
        * Updates node and link position, and position and angle of link label
        */
-      let layoutTick = () => {
-        nodes.attr('transform', d => {
-          var ew = d.fixed ? `translate(${d.fx}, ${d.fy})` : `translate(${d.x}, ${d.y})`;
-          return ew;
-        });
-        links.attr('x1', l => l.source.x).attr('y1', l => l.source.y).attr('x2', l => l.target.x).attr('y2', l => l.target.y);
-        if (this.widgets['link-label-variable'] !== 'None') {
-          linklabels.attr('x', l => (l.source.x + l.target.x) / 2).attr('y', l => (l.source.y + l.target.y) / 2).attr('transform', l => 'rotate(' + this.visuals.twoD.calcAngle(l.source, l.target) + ' ' + (l.source.x + l.target.x) / 2 + ' ' + (l.source.y + l.target.y) / 2 + ')');
-        }
-      };
-      let foci = this.widgets['polygons-foci'];
-      let gather = this.widgets['polygons-gather-force'];
-      let fill = this.widgets['polygon-color'];
-      var opacity;
-      if (this.widgets['polygons-color-show']) {
-        fill = d => this.visuals.twoD.commonService.temp.style.polygonColorMap(d.key);
-        opacity = d => this.visuals.twoD.commonService.temp.style.polygonAlphaMap(d.key);
-      } else {
-        opacity = 0.4;
-      }
-      d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.clusters').html(null);
-      d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.clustersLabels').html(null);
-      let groups = d3__WEBPACK_IMPORTED_MODULE_4__.nest().key(function (d) {
-        return d[foci];
-      }).entries(newNodes).map(function (d) {
-        var key = d.key;
-        var values = d.values.map(function (dd) {
-          dd.foci = key;
-          return dd;
-        });
-        return {
-          'key': key,
-          'values': values
-        };
-      });
-      groups = groups.filter(group => group.values.length > 2 && group.key != 'null'); // remove group by empty
-      let groupPath = function (d) {
-        return "M" + d3__WEBPACK_IMPORTED_MODULE_4__.polygonHull(d.values.map(function (i) {
-          return [i.x, i.y];
-        })).join("L") + "Z";
-      };
-      let polygonTextCord = function (d) {
-        return d3__WEBPACK_IMPORTED_MODULE_4__.polygonHull(d.values.map(function (i) {
-          return [i.x, i.y];
-        }));
-      };
-      let clusters = new Array(groups.length); // The largest node for each cluster.
-      newNodes.forEach(d => {
-        let r = d[foci];
-        let i = d.foci;
-        if (!clusters[i] || r > clusters[i].radius) clusters[i] = d;
-      });
-      /**
-       * Similar to layoutTick, but adds functionalities for polygons
-       *
-       * Updates node and link position, and position and angle of link label.
-       * Adds polygons, polygon mouse handlers, and polygon labels
-       */
-      let polygonsTick = () => {
-        newNodes.forEach(function (o, i) {
-          o.y += (clusters[o.foci].y - o.y) * gather;
-          o.x += (clusters[o.foci].x - o.x) * gather;
-        });
-        nodes.attr('transform', d => `translate(${d.x}, ${d.y})`);
-        links.attr('x1', l => l.source.x).attr('y1', l => l.source.y).attr('x2', l => l.target.x).attr('y2', l => l.target.y);
-        if (this.widgets['link-label-variable'] !== 'None') {
-          linklabels.attr('x', l => (l.source.x + l.target.x) / 2).attr('y', l => (l.source.y + l.target.y) / 2).attr('transform', l => 'rotate(' + this.calcAngle(l.source, l.target) + ' ' + (l.source.x + l.target.x) / 2 + ' ' + (l.source.y + l.target.y) / 2 + ')');
-        }
-        d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.clusters').selectAll('path').data(groups).attr("d", groupPath).enter().insert("path", "circle").style("fill", fill).style("stroke", fill).style("stroke-width", 40).style("stroke-linejoin", "round").style("opacity", opacity).attr("d", groupPath);
-        d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.clusters').selectAll('path').call(d3__WEBPACK_IMPORTED_MODULE_4__.drag() //A bunch of mouse handlers.
-        .on('start', x => this.visuals.twoD.polygonDragStarted(x)).on('drag', x => this.visuals.twoD.polygonDragged(x)).on('end', x => this.visuals.twoD.polygonDragEnded(x)));
-        // (x) => this.visuals.twoD.dragstarted(x)
-        if (this.widgets['polygons-label-show']) {
-          let g = d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.clustersLabels').text("").selectAll('text').data(groups).enter().append("text").attr('transform', function (d) {
-            return "translate(" + d3__WEBPACK_IMPORTED_MODULE_4__.polygonCentroid(polygonTextCord(d)) + ")";
-          }).text(d => this.visuals.twoD.commonService.titleize("" + d.key));
-          d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.clustersLabels').selectAll('text').attr("class", "WashingT").call(d3__WEBPACK_IMPORTED_MODULE_4__.drag().on("start", this.visuals.twoD.polygonLabelDragStarted).on("drag", this.visuals.twoD.polygonLabelDragged).on("end", this.visuals.twoD.polygonLabelDragEnded));
-          this.redrawPolygonLabels();
-        }
-      };
-      if (this.widgets['polygons-show']) this.visuals.twoD.commonService.temp.polygonGroups = groups;else delete this.visuals.twoD.commonService.temp.polygonGroups;
-      let handleTick = d => {
-        if (d) {
-          return polygonsTick;
-        } else return layoutTick;
-      };
-      this.visuals.twoD.force.nodes(this.visuals.twoD.commonService.session.network.nodes).on('tick', handleTick(this.widgets['polygons-show']));
-      this.visuals.twoD.force.force('link').links(vlinks);
-      this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
-      $('#node-symbol-variable').trigger('change');
-      this.visuals.twoD.ShowStatistics = showStatistics;
-      this.visuals.twoD.cdref.detectChanges();
-      // Get the new SVG dimensions after the network is generated
-      let newSvgWidth = d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').node().getBoundingClientRect().width;
-      let newSvgHeight = d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').node().getBoundingClientRect().height;
-      // Update the brush extent
-      this.visuals.twoD.brush.extent([[0, 0], [newSvgWidth, newSvgHeight]]);
-      // Recall the brush to apply the new extent
-      d3__WEBPACK_IMPORTED_MODULE_4__.select('g.brush').call(this.visuals.twoD.brush);
+      // let layoutTick = () => {
+      //      nodes
+      //         .attr('transform', d => {
+      //             var ew =
+      //                 d.fixed ?
+      //                     `translate(${d.fx}, ${d.fy})` :
+      //                     `translate(${d.x}, ${d.y})`;
+      //             return ew;
+      //         }
+      //         );
+      //     links
+      //         .attr('x1', l => l.source.x)
+      //         .attr('y1', l => l.source.y)
+      //         .attr('x2', l => l.target.x)
+      //         .attr('y2', l => l.target.y);
+      //     if (this.widgets['link-label-variable'] !== 'None') {
+      //         linklabels
+      //             .attr('x', l => (l.source.x + l.target.x) / 2)
+      //             .attr('y', l => (l.source.y + l.target.y) / 2)
+      //             .attr('transform', l => 'rotate(' +
+      //                 this.visuals.twoD.calcAngle(l.source, l.target) + ' ' +
+      //                 (l.source.x + l.target.x) / 2 + ' ' +
+      //                 (l.source.y + l.target.y) / 2 + ')'
+      //             );
+      //     }
+      // };
+      // this.visuals.twoD.force.nodes(this.visuals.twoD.commonService.session.network.nodes).on('tick', handleTick(this.widgets['polygons-show']));
+      // this.visuals.twoD.force.force('link').links(vlinks);
+      // this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+      // $('#node-symbol-variable').trigger('change');
+      // this.visuals.twoD.ShowStatistics = showStatistics;
+      // this.visuals.twoD.cdref.detectChanges();
+      // // Get the new SVG dimensions after the network is generated
+      // let newSvgWidth = d3.select('svg#network').node().getBoundingClientRect().width;
+      // let newSvgHeight = d3.select('svg#network').node().getBoundingClientRect().height;
+      // // Update the brush extent
+      // this.visuals.twoD.brush.extent([[0, 0], [newSvgWidth, newSvgHeight]]);
+      // // Recall the brush to apply the new extent
+      // d3.select('g.brush').call(this.visuals.twoD.brush);
     }
   }
+
+  // PRE D3
   /**
    * This function is called when a polygonLabel drag is started; it moves <text> element to last under g.clusterLabels and adds class polygonText to the element
    */
   polygonLabelDragStarted(d) {
-    d3__WEBPACK_IMPORTED_MODULE_4__.select(this).raise().attr("class", "polygonText");
+    // d3.select(this).raise().attr("class", "polygonText");
   }
   /**
    * Moves location of polygon label when it is dragged by updating transform="translate(x,y)"
    */
   polygonLabelDragged(d) {
-    d3__WEBPACK_IMPORTED_MODULE_4__.select(this).attr("transform", "translate(" + d3__WEBPACK_IMPORTED_MODULE_4__.event.x + "," + d3__WEBPACK_IMPORTED_MODULE_4__.event.y + ")");
+    // d3.select(this).attr("transform", "translate(" + d3.event.x + "," + d3.event.y + ")");
   }
   /**
    * This function is called when a polygonLabel drag is ended; it removes class polygonText from <text> element
    */
   polygonLabelDragEnded(d) {
-    d3__WEBPACK_IMPORTED_MODULE_4__.select(this).attr("class", "");
+    // d3.select(this).attr("class", "");
   }
   /**
    * Generates Polygon Color Selection Table, updates polygonColorMap and polygonAlphaMap functions, and then calls render to show/update network
@@ -17017,9 +17528,8 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       that.visuals.twoD.commonService.session.style['polygonAlphas'].splice(i, 1, that.visuals.twoD.commonService.temp.style.polygonAlphaMap(value));
       let colorinput = $('<input type="color" value="' + that.visuals.twoD.commonService.temp.style.polygonColorMap(value) + '">').on("change", function () {
         that.visuals.twoD.commonService.session.style['polygonColors'].splice(i, 1, $(this).val());
-        that.visuals.twoD.commonService.temp.style.polygonColorMap = d3__WEBPACK_IMPORTED_MODULE_4__.scaleOrdinal(that.visuals.twoD.commonService.session.style['polygonColors']).domain(values);
-        console.log('render poly color inside');
-        that.render();
+        that.visuals.twoD.commonService.temp.style.polygonColorMap = d3__WEBPACK_IMPORTED_MODULE_5__.scaleOrdinal(that.visuals.twoD.commonService.session.style['polygonColors']).domain(values);
+        that._rerender();
       });
       let alphainput = $("<a>⇳</a>").on("click", e => {
         $("#color-transparency-wrapper").css({
@@ -17027,20 +17537,24 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
           left: e.clientX,
           display: "block"
         });
-        $("#color-transparency").val(that.visuals.twoD.commonService.session.style['polygonAlphas'][i]).one("change", function () {
+        $("#color-transparency").val(that.visuals.twoD.commonService.session.style['polygonAlphas'][i]).on("change", function () {
           that.visuals.twoD.commonService.session.style['polygonAlphas'].splice(i, 1, parseFloat($(this).val()));
-          that.visuals.twoD.commonService.temp.style.polygonAlphaMap = d3__WEBPACK_IMPORTED_MODULE_4__.scaleOrdinal(that.visuals.twoD.commonService.session.style['polygonAlphas']).domain(values);
+          that.visuals.twoD.commonService.temp.style.polygonAlphaMap = d3__WEBPACK_IMPORTED_MODULE_5__.scaleOrdinal(that.visuals.twoD.commonService.session.style['polygonAlphas']).domain(values);
           $("#color-transparency-wrapper").fadeOut();
-          console.log('render poly color trans');
-          that.render();
+          that._rerender();
         });
       });
       let cell = $("<td></td>").append(colorinput).append(alphainput);
       let row = $("<tr>" + "<td data-value='" + value + "'>" + (that.visuals.twoD.commonService.session.style['polygonValueNames'][value] ? that.visuals.twoD.commonService.session.style['polygonValueNames'][value] : that.visuals.twoD.commonService.titleize("" + value)) + "</td>" + (that.widgets["polygon-color-table-counts"] ? "<td>" + aggregates[value] + "</td>" : "") + (that.widgets["polygon-color-table-frequencies"] ? "<td>" + (aggregates[value] / total).toLocaleString() + "</td>" : "") + "</tr>").append(cell);
       polygonColorTable.append(row);
     });
-    this.visuals.twoD.commonService.temp.style.polygonColorMap = d3__WEBPACK_IMPORTED_MODULE_4__.scaleOrdinal(this.visuals.twoD.commonService.session.style['polygonColors']).domain(values);
-    this.visuals.twoD.commonService.temp.style.polygonAlphaMap = d3__WEBPACK_IMPORTED_MODULE_4__.scaleOrdinal(this.visuals.twoD.commonService.session.style['polygonAlphas']).domain(values);
+    // PRE D3
+    // this.visuals.twoD.commonService.temp.style.polygonColorMap = d3
+    //   .scaleOrdinal(this.visuals.twoD.commonService.session.style['polygonColors'])
+    //   .domain(values);
+    //   this.visuals.twoD.commonService.temp.style.polygonAlphaMap = d3
+    //   .scaleOrdinal(this.visuals.twoD.commonService.session.style['polygonAlphas'])
+    //   .domain(values);
     polygonColorTable.find("td").on("dblclick", function () {
       // $(this).attr("contenteditable", true).focus();
     }).on("focusout", function () {
@@ -17076,26 +17590,16 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     function getCellValue(row, index) {
       return $(row).children('td').eq(index).text();
     }
-    // this.sortable("#polygon-color-table", { items: "tr" });
-    if (!this.isLoading) {
-      console.log('render update poly color');
-      this.isLoading = true;
-      this.visuals.twoD.render();
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 2000);
-    }
   }
   /**
    * This function is called when polygon-show widget is updated from the template.
    * That widget controls whether polygons are shown or not
    *
-   * XXXXX I think this function wasn't updated with the move to Angular; most of the code
-   * seems redundant/unnecessary. I think only line needed is this.render(). XXXXX
    */
-  polygonsToggle(e) {
-    this.widgets['polygons-show'] = e;
-    if (e) {
+  polygonsToggle(flag) {
+    this.widgets['polygons-show'] = flag;
+    this.showParallel = flag;
+    if (flag) {
       if (this.widgets['polygons-color-show'] == true) {
         $('#polygons-color-show').click();
       } else {
@@ -17114,14 +17618,6 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       $("#polygon-color-table").empty();
       this.visuals.twoD.PolygonColorTableWrapperDialogSettings.setVisibility(false);
     }
-    if (!this.isLoading) {
-      console.log('render poly toggle');
-      this.isLoading = true;
-      this.render();
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 1000);
-    }
   }
   /**
    * This function is called when polygon-color-show widget is updated from the template.
@@ -17136,9 +17632,10 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       $("#polygon-color-value-row").slideUp();
       $("#polygon-color-table-row").slideDown();
       this.visuals.twoD.PolygonColorTableWrapperDialogSettings.setVisibility(true);
-      this.visuals.twoD.updatePolygonColors();
+      // this.visuals.twoD.updatePolygonColors();
       setTimeout(() => {
         this.visuals.twoD.updatePolygonColors();
+        this._rerender();
       }, 200);
     } else {
       this.widgets['polygons-color-show'] = false;
@@ -17146,14 +17643,6 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       $("#polygon-color-table-row").slideUp();
       $("#polygon-color-table").empty();
       this.visuals.twoD.PolygonColorTableWrapperDialogSettings.setVisibility(false);
-    }
-    if (!this.isLoading) {
-      console.log('render poly color toggle');
-      this.isLoading = true;
-      this.visuals.twoD.render();
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 1000);
     }
   }
   /**
@@ -17166,8 +17655,7 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    */
   onPolygonColorChanged(e) {
     this.widgets["polygon-color"] = e;
-    console.log('render poly color changed');
-    this.visuals.twoD.render();
+    this._rerender();
   }
   /**
    * This function is called when polygon-color-table-visible widget is updated from the template.
@@ -17183,34 +17671,7 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     } else {
       this.visuals.twoD.onPolygonColorTableChange('Hide');
     }
-    console.log('render poly color table toggle');
-    this.visuals.twoD.render();
-  }
-  /**
-   * Adds polygon labels an sets their size and orientation
-   */
-  redrawPolygonLabels() {
-    let nodes = d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.clustersLabels').selectAll('text');
-    let size = this.widgets['polygons-label-size'],
-      orientation = this.widgets['polygons-label-orientation'];
-    nodes.style('font-size', size + 'px');
-    switch (orientation) {
-      case 'Left':
-        nodes.attr('text-anchor', 'end').attr('dx', -8).attr('dy', (size - 4) / 2);
-        break;
-      case 'Top':
-        nodes.attr('text-anchor', 'middle').attr('dx', 0).attr('dy', 4 - size);
-        break;
-      case 'Bottom':
-        nodes.attr('text-anchor', 'middle').attr('dx', 0).attr('dy', size + 4);
-        break;
-      case 'Right':
-        nodes.attr('text-anchor', 'start').attr('dx', 8).attr('dy', (size - 4) / 2);
-        break;
-      default:
-        // 'Middle':
-        nodes.attr('text-anchor', 'middle').attr('dx', 0).attr('dy', (size - 4) / 2);
-    }
+    this.visuals.twoD._rerender();
   }
   /**
    * Executed when a polygon drag is start. All nodes within that polygon have variable selected set to true; other nodes have variable selected
@@ -17347,63 +17808,67 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    * @param n node/nodes
    */
   dragstarted(n) {
-    if (!d3__WEBPACK_IMPORTED_MODULE_4__.event.active) this.visuals.twoD.force.alphaTarget(0.3).restart();
+    // if (!d3.event.active) this.visuals.twoD.force.alphaTarget(0.3).restart();
     function setNode(d) {
       d.fx = d.x;
       d.fy = d.y;
     }
-    this.visuals.twoD.multidrag = n.selected;
-    this.visuals.twoD.selected = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes).filter(d => d.selected);
-    if (this.visuals.twoD.multidrag) {
-      this.visuals.twoD.selected.each(setNode);
-    } else {
-      setNode(n);
-    }
+    // this.visuals.twoD.multidrag = n.selected;
+    // this.visuals.twoD.selected = this.visuals.twoD.svg.select('g.nodes')
+    //     .selectAll('g')
+    //     .data(this.visuals.twoD.commonService.session.network.nodes)
+    //     .filter(d => d.selected);
+    // if (this.visuals.twoD.multidrag) {
+    //     this.visuals.twoD.selected.each(setNode);
+    // } else {
+    //     setNode(n);
+    // }
   }
+
   /**
    * When a node (or multiple nodes) is dragged, update value fx and fy for each node selected
    * @param n node/nodes
    */
   dragged(n) {
-    function updateNode(d) {
-      d.fx += d3__WEBPACK_IMPORTED_MODULE_4__.event.dx;
-      d.fy += d3__WEBPACK_IMPORTED_MODULE_4__.event.dy;
-    }
-    if (this.visuals.twoD.multidrag) {
-      this.visuals.twoD.selected.each(updateNode);
-    } else {
-      updateNode(n);
-    }
+    // function updateNode(d) {
+    //     d.fx += d3.event.dx;
+    //     d.fy += d3.event.dy;
+    // }
+    // if (this.visuals.twoD.multidrag) {
+    //     this.visuals.twoD.selected.each(updateNode);
+    // } else {
+    //     updateNode(n);
+    // }
   }
   /**
    * When a node (or multiple nodes) is ended, update value fx and fy to null (unless node is pinned) for each node selected
    * @param n node/nodes
    */
   dragended(n) {
-    if (!d3__WEBPACK_IMPORTED_MODULE_4__.event.active) this.visuals.twoD.force.alphaTarget(0);
-    let that = this;
-    function unsetNode(d) {
-      if (!d.fixed) {
-        d.fx = null;
-        d.fy = null;
-      } else {
-        // save node location back to temp network for pinned network
-        if (that.widgets["timeline-date-field"] != 'None') {
-          let node = that.visuals.twoD.commonService.session.network.timelineNodes.find(d2 => d2._id == d._id);
-          if (node) {
-            node.x = d.x;
-            node.y = d.y;
-            node.fx = d.fx;
-            node.fy = d.fy;
-          }
-        }
-      }
-    }
-    if (this.visuals.twoD.multidrag) {
-      this.visuals.twoD.selected.each(unsetNode);
-    } else {
-      unsetNode(n);
-    }
+    // if (!d3.event.active) this.visuals.twoD.force.alphaTarget(0);
+    // let that = this;
+    // function unsetNode(d) {
+    //     if (!d.fixed) {
+    //         d.fx = null;
+    //         d.fy = null;
+    //     } else {
+    //         // save node location back to temp network for pinned network
+    //         if(that.widgets["timeline-date-field"] != 'None') {
+    //           let node = that.visuals.twoD.commonService.session.network.timelineNodes.find(d2 => d2._id == d._id);
+    //           if(node) {
+    //             node.x = d.x;
+    //             node.y = d.y;
+    //             node.fx = d.fx;
+    //             node.fy = d.fy;
+    //           }
+    //         }
+    //       }
+    // }
+    // if (this.visuals.twoD.multidrag) {
+    //     this.visuals.twoD.selected.each(unsetNode);
+    // } else {
+    //     unsetNode(n);
+    // }
   }
   /**
    * Click event handler, updates the node.selected value
@@ -17411,19 +17876,30 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    */
   clickHandler(n) {
     //console.log('event: ',d3.event)
-    if (d3__WEBPACK_IMPORTED_MODULE_4__.event && d3__WEBPACK_IMPORTED_MODULE_4__.event.key === "Shift") {
-      this.visuals.twoD.commonService.session.data.nodes.find(node => node._id == n._id).selected = !n.selected;
-    } else {
-      this.visuals.twoD.commonService.session.data.nodes.forEach(node => {
-        if (node._id == n._id) {
-          node.selected = !node.selected;
-        } else {
-          node.selected = false;
-        }
-      });
-    }
+    // if (d3.event && d3.event.key === "Shift") {
+    //     this.visuals.twoD.commonService.session.data.nodes.find(node => node._id == n._id).selected = !n.selected;
+    // } else {
+    //     this.visuals.twoD.commonService.session.data.nodes.forEach(node => {
+    //         if (node._id == n._id) {
+    //             node.selected = !node.selected;
+    //         } else {
+    //             node.selected = false;
+    //         }
+    //     });
+    // }
+    // if (d3.event && d3.event.key === "Shift") {
+    //     this.visuals.twoD.commonService.session.data.nodes.find(node => node._id == n._id).selected = !n.selected;
+    // } else {
+    //     this.visuals.twoD.commonService.session.data.nodes.forEach(node => {
+    //         if (node._id == n._id) {
+    //             node.selected = !n.selected;
+    //         } else {
+    //             node.selected = false;
+    //         }
+    //     });
+    // }
     // this.visuals.twoD.render(false);
-    $(document).trigger('node-selected');
+    // $(document).trigger('node-selected');
   }
   /**
    * Used from Context Menu and copy node's ID to the user's clipboard
@@ -17446,54 +17922,52 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    * @param d the node right clicked
    */
   showContextMenu(d) {
-    d3__WEBPACK_IMPORTED_MODULE_4__.event.preventDefault();
-    this.visuals.twoD.hideTooltip();
-    $('#copyID').attr('data-clipboard-text', d._id);
-    if (d.seq === null || d.seq === undefined || d.seq === "") {
-      $('#copySeq').prop('disabled', true);
-    } else {
-      $('#copySeq').prop('disabled', false).attr('data-clipboard-text', d.seq);
-    }
-    d3__WEBPACK_IMPORTED_MODULE_4__.select('#viewAttributes').on('click', () => {
-      this.visuals.twoD.ContextSelectedNodeAttributes = [];
-      this.visuals.twoD.hideContextMenu();
-      this.visuals.twoD.ShowNetworkAttributes = true;
-      this.visuals.twoD.cdref.detectChanges();
-      let nd = this.visuals.twoD.commonService.session.data.nodes.find(nd => nd._id == d._id);
-      for (let attribute in nd) {
-        if (attribute[0] == '_' && attribute !== '_id' || attribute == 'data') continue; // DC: where is data being added as an attribute to each node should data be removed here
-        this.visuals.twoD.ContextSelectedNodeAttributes.push({
-          attribute: this.visuals.twoD.commonService.titleize(attribute),
-          value: d[attribute]
-        });
-      }
-      this.visuals.twoD.ContextSelectedNodeAttributes = this.visuals.twoD.ContextSelectedNodeAttributes.filter(x => x.attribute !== "Seq" && x.value !== undefined && x.value !== null && x.value !== "").concat(this.visuals.twoD.ContextSelectedNodeAttributes.filter(x => x.attribute !== "Seq" && (x.value === undefined || x.value === null || x.value === ""))).concat(this.visuals.twoD.ContextSelectedNodeAttributes.filter(x => x.attribute === "Seq"));
-    }).node().focus();
-    if (d.fixed) {
-      $('#pinNode').text('Unpin Node').on('click', () => {
-        d.fx = null;
-        d.fy = null;
-        d.fixed = false;
-        this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
-        this.visuals.twoD.hideContextMenu();
-      });
-    } else {
-      $('#pinNode').text('Pin Node').on('click', () => {
-        d.fx = d.x;
-        d.fy = d.y;
-        d.fixed = true;
-        this.visuals.twoD.hideContextMenu();
-      });
-    }
-    let [X, Y] = this.getRelativeMousePosition();
-    $('#context-menu').css({
-      'z-index': 1000,
-      'display': 'block',
-      'left': X - 200 + 'px',
-      'top': Y + 30 + 'px'
-    }).animate({
-      'opacity': 1
-    }, 80);
+    // d3.event.preventDefault();
+    // this.visuals.twoD.hideTooltip();
+    // $('#copyID').attr('data-clipboard-text', d._id);
+    // if (d.seq === null || d.seq === undefined || d.seq === "") {
+    //     $('#copySeq').prop('disabled', true);
+    // } else {
+    //     $('#copySeq').prop('disabled', false).attr('data-clipboard-text', d.seq);
+    // }
+    // d3.select('#viewAttributes').on('click', () => {
+    //     this.visuals.twoD.ContextSelectedNodeAttributes = [];
+    //     this.visuals.twoD.hideContextMenu();
+    //     this.visuals.twoD.ShowNetworkAttributes = true;
+    //     this.visuals.twoD.cdref.detectChanges();
+    //     let nd = this.visuals.twoD.commonService.session.data.nodes.find(nd => nd._id == d._id);
+    //     for (let attribute in nd) {
+    //         if (attribute[0] == '_' && attribute !== '_id' || attribute == 'data') continue; // DC: where is data being added as an attribute to each node should data be removed here
+    //         this.visuals.twoD.ContextSelectedNodeAttributes.push({attribute: this.visuals.twoD.commonService.titleize(attribute), value: d[attribute]});
+    //     }
+    //     this.visuals.twoD.ContextSelectedNodeAttributes = this.visuals.twoD.ContextSelectedNodeAttributes
+    //         .filter(x=>x.attribute !== "Seq" && x.value !== undefined && x.value !== null && x.value !== "" )
+    //         .concat(this.visuals.twoD.ContextSelectedNodeAttributes.filter(x=>x.attribute !== "Seq" && (x.value === undefined || x.value === null || x.value === "" )))
+    //         .concat(this.visuals.twoD.ContextSelectedNodeAttributes.filter(x=>x.attribute === "Seq"));
+    // }).node().focus();
+    // if (d.fixed) {
+    //     $('#pinNode').text('Unpin Node').on('click', () => {
+    //         d.fx = null;
+    //         d.fy = null;
+    //         d.fixed = false;
+    //         this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+    //         this.visuals.twoD.hideContextMenu();
+    //     });
+    // } else {
+    //     $('#pinNode').text('Pin Node').on('click', () => {
+    //         d.fx = d.x;
+    //         d.fy = d.y;
+    //         d.fixed = true;
+    //         this.visuals.twoD.hideContextMenu();
+    //     });
+    // }
+    // let [X, Y] = this.getRelativeMousePosition();
+    // $('#context-menu').css({
+    //     'z-index': 1000,
+    //     'display': 'block',
+    //     'left': (X-200) + 'px',
+    //     'top': (Y+30) + 'px',
+    // }).animate({ 'opacity': 1 }, 80);
   }
   /**
    * Hides the Context Menu
@@ -17577,39 +18051,43 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       }
     }
     // highlights current node and its neighbors
-    this.visuals.twoD.svg.select('g.nodes').selectAll('g').selectAll('path').attr('opacity', d => this.visuals.twoD.commonService.includes(neighbors, d._id) ? 1 : .1);
+    // this.visuals.twoD.svg
+    //     .select('g.nodes')
+    //     .selectAll('g')
+    //     .selectAll('path')
+    //     .attr('opacity', d => this.visuals.twoD.commonService.includes(neighbors, d._id) ? 1 : .1);
     // hightlights all of current node's links
-    this.visuals.twoD.svg.select('g.links').selectAll('line').data(links).attr('opacity', l => this.visuals.twoD.commonService.includes(lindices, l.index) ? .1 : 1);
+    // this.visuals.twoD.svg
+    //     .select('g.links')
+    //     .selectAll('line')
+    //     .data(links)
+    //     .attr('opacity', l => this.visuals.twoD.commonService.includes(lindices, l.index) ? .1 : 1);
   }
+
   /**
    * Gets data from current node needed for tooltip and displays it in the tooltip also hightlights neighbors if that option is selected
    * @param d a node
    */
-  showNodeTooltip(d) {
-    if (this.widgets['node-highlight']) this.visuals.twoD.highlightNeighbors(d);
+  showNodeTooltip(d, event) {
     // If no tooltip variable is selected, we shouldn't show a tooltip
-    if (this.widgets['node-tooltip-variable'].length > 0 && this.widgets['node-tooltip-variable'][0] == 'None') return;
-    this.visuals.twoD.SelectedNodeTooltipVariable = this.widgets['node-tooltip-variable'];
-    // Tooltip variables can be a single string or an array
-    let tooltipVariables = this.visuals.twoD.SelectedNodeTooltipVariable;
-    if (!Array.isArray(tooltipVariables)) {
-      tooltipVariables = [tooltipVariables];
+    if (this.widgets['node-tooltip-variable'].length > 0 && this.widgets['node-tooltip-variable'][0] == 'None') {
+      if (this.widgets['node-highlight']) {
+        this.selectedNodeId = d.id;
+        this._rerender();
+      }
+      return;
     }
-    // Generate the HTML for the tooltip
-    let tooltipHtml = '';
-    if (tooltipVariables.length > 1) {
-      tooltipHtml = this.tabulate(tooltipVariables.map(variable => [this.titleize(variable), d[variable]]));
-    } else {
-      tooltipHtml = d[tooltipVariables[0]];
+    if (this.widgets['node-highlight']) {
+      console.log('in flag: ');
+      this.selectedNodeId = d.id;
+      this._rerender();
     }
-    let [X, Y] = this.getRelativeMousePosition();
-    d3__WEBPACK_IMPORTED_MODULE_4__.select('#tooltip').html(tooltipHtml).style('position', 'absolute').style('left', X + 10 + 'px').style('top', Y - 10 + 'px').style('z-index', 1000).transition().duration(100).style('opacity', 1);
   }
   /**
    * Gets data from current link needed for tooltip and displays it in the tooltip
    * @param d link
    */
-  showLinkTooltip(d) {
+  showLinkTooltip(d, event) {
     let v = this.visuals.twoD.SelectedLinkTooltipVariable;
     if (v == 'None') return;
     // Tooltip variables can be a single string or an array
@@ -17645,19 +18123,18 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     } else {
       tooltipHtml = getData(d, tooltipVariables[0]);
     }
-    let [X, Y] = this.getRelativeMousePosition();
-    d3__WEBPACK_IMPORTED_MODULE_4__.select('#tooltip').html(tooltipHtml).style('position', 'absolute').style('left', X + 10 + 'px').style('top', Y - 10 + 'px').style('z-index', 1000).transition().duration(100).style('opacity', 1);
+    let [X, Y] = this.getRelativeMousePosition(event);
+    d3__WEBPACK_IMPORTED_MODULE_5__.select('#tooltip').html(tooltipHtml).style('position', 'absolute').style('left', X + 10 + 'px').style('top', Y - 10 + 'px').style('z-index', 1000).transition().duration(100).style('opacity', 1);
   }
   /**
    * Hides the Tooltip
    */
   hideTooltip() {
     if (this.widgets['node-highlight']) {
-      this.visuals.twoD.svg.select('g.nodes').selectAll('g').selectAll('path').attr('opacity', 1);
-      let linkOpacity = 1 - this.widgets['link-opacity'];
-      this.visuals.twoD.svg.select('g.links').selectAll('line').attr('opacity', linkOpacity);
+      this.selectedNodeId = undefined;
+      this._rerender();
     }
-    let tooltip = d3__WEBPACK_IMPORTED_MODULE_4__.select('#tooltip');
+    let tooltip = d3__WEBPACK_IMPORTED_MODULE_5__.select('#tooltip');
     tooltip.transition().duration(100).style('opacity', 0).on('end', () => tooltip.style('z-index', -1));
   }
   /**
@@ -17673,112 +18150,117 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
   redrawNodes() {
     //Things to track in the function:
     //* Shapes:
-    let type = d3__WEBPACK_IMPORTED_MODULE_4__[this.widgets['node-symbol']];
+    // let type = d3[this.widgets['node-symbol']];
     let symbolVariable = this.widgets['node-symbol-variable'];
-    // Custom Shape Selected
-    if (type === undefined) {
-      type = this.customShapes.shapes[this.widgets['node-symbol']];
-    }
-    //* Sizes:
-    let defaultSize = this.widgets['node-radius'];
-    let size = defaultSize,
-      med = defaultSize,
-      oldrng,
-      min,
-      max;
-    let sizeVariable = this.widgets['node-radius-variable'];
-    let scale;
-    let nodes;
-    if (sizeVariable !== 'None') {
-      if (this.widgets["timeline-date-field"] == 'None') nodes = this.visuals.twoD.commonService.session.network.nodes;else nodes = this.visuals.twoD.commonService.session.network.timelineNodes;
-      let n = this.visuals.twoD.commonService.session.network.nodes.length;
-      min = Number.MAX_VALUE;
-      max = Number.MIN_VALUE;
-      for (let i = 0; i < n; i++) {
-        let size = this.visuals.twoD.commonService.session.network.nodes[i][sizeVariable];
-        if (typeof size == 'undefined') continue;
-        if (size < min) min = size;
-        if (size > max) max = size;
-      }
-      oldrng = max - min;
-      med = oldrng / 2;
-      let maxWidth = this.widgets['node-radius-max'];
-      let minWidth = this.widgets['node-radius-min'];
-      scale = d3__WEBPACK_IMPORTED_MODULE_4__.scaleLinear().domain([min, max]).range([minWidth, maxWidth]);
-    }
-    nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes);
-    // TODO: Hides table row by default if no symbol variable - clean up
-    if (symbolVariable === 'None') {
-      $('#node-symbol-table-row').slideUp();
-    }
-    // console.log('nodes: ', nodes);
-    let that = this;
-    nodes.selectAll('path').each(function (d) {
-      if (symbolVariable !== 'None') {
-        type = d3__WEBPACK_IMPORTED_MODULE_4__[that.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
-        if (type === undefined) {
-          type = that.customShapes.shapes[that.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
-        }
-      }
-      if (sizeVariable !== 'None') {
-        size = d[sizeVariable];
-        if (!that.isNumber(size)) size = med;
-        size = scale(size);
-      }
-      d3__WEBPACK_IMPORTED_MODULE_4__.select(this).attr('d', d3__WEBPACK_IMPORTED_MODULE_4__.symbol().size(size).type(type));
-    });
+    // // Custom Shape Selected
+    // if (type === undefined) {
+    //     type = this.customShapes.shapes[this.widgets['node-symbol']];
+    // }
+    // //* Sizes:
+    // let defaultSize = this.widgets['node-radius'];
+    // let size = defaultSize, med = defaultSize, oldrng, min, max;
+    // let sizeVariable = this.widgets['node-radius-variable'];
+    // let scale;
+    // let nodes;
+    // if (sizeVariable !== 'None') {
+    //     if (this.widgets["timeline-date-field"] == 'None') nodes = this.visuals.twoD.commonService.session.network.nodes;
+    //     else nodes = this.visuals.twoD.commonService.session.network.timelineNodes;
+    //     let n = this.visuals.twoD.commonService.session.network.nodes.length;
+    //     min = Number.MAX_VALUE;
+    //     max = Number.MIN_VALUE;
+    //     for (let i = 0; i < n; i++) {
+    //         let size = this.visuals.twoD.commonService.session.network.nodes[i][sizeVariable];
+    //         if (typeof size == 'undefined') continue;
+    //         if (size < min) min = size;
+    //         if (size > max) max = size;
+    //     }
+    //     oldrng = max - min;
+    //     med = oldrng / 2;
+    //     let maxWidth = this.widgets['node-radius-max'];
+    //     let minWidth = this.widgets['node-radius-min'];
+    //     // scale = d3.scaleLinear()
+    //     // .domain([min, max])
+    //     // .range([minWidth, maxWidth]);
+    //     }
+    // nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes);
+    // // TODO: Hides table row by default if no symbol variable - clean up
+    // if(symbolVariable === 'None') {
+    //     $('#node-symbol-table-row').slideUp();
+    // }
+    // // console.log('nodes: ', nodes);
+    // let that = this;
+    // nodes.selectAll('path').each(function (d) {
+    //     if (symbolVariable !== 'None') {
+    //         // type = d3[that.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
+    //         // if (type === undefined) {
+    //         //     type = that.customShapes.shapes[that.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
+    //         // }
+    //     } 
+    //     if (sizeVariable !== 'None') {
+    //       size = d[sizeVariable];
+    //       if (!that.isNumber(size)) size = med;
+    //       size = scale(size);
+    //     }
+    //     // d3.select(this).attr('d', d3.symbol().size(size).type(type));    
+    //   });
   }
+
   /**
    * redraws/updates node borders based on node-border-width
    */
   redrawNodeBorder() {
-    let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes);
-    nodes.selectAll('path').style('stroke', 'black').style('stroke-width', this.widgets['node-border-width']);
+    // let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes);
+    // nodes
+    //   .selectAll('path')
+    //   .style('stroke', 'black')
+    //   .style('stroke-width', this.widgets['node-border-width']);
   }
   /**
    * uses values from node-label-variable, node-label-size, and node-label-orietation to add/remove labels from the the nodes
    */
   redrawLabels() {
-    let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes).select('text'),
-      labelVar = this.widgets['node-label-variable'];
-    if (labelVar == 'None') {
-      nodes.text('');
-    } else {
-      let size = this.widgets['node-label-size'],
-        orientation = this.widgets['node-label-orientation'];
-      nodes.text(n => n[labelVar]).style('font-size', size + 'px');
-      switch (orientation) {
-        case 'Left':
-          nodes.attr('text-anchor', 'end').attr('dx', -8).attr('dy', (size - 4) / 2);
-          break;
-        case 'Top':
-          nodes.attr('text-anchor', 'middle').attr('dx', 0).attr('dy', 4 - size);
-          break;
-        case 'Bottom':
-          nodes.attr('text-anchor', 'middle').attr('dx', 0).attr('dy', size + 4);
-          break;
-        case 'Middle':
-          nodes.attr('text-anchor', 'middle').attr('dx', 0).attr('dy', (size - 4) / 2);
-          break;
-        default:
-          //'right'
-          nodes.attr('text-anchor', 'start').attr('dx', 8).attr('dy', (size - 4) / 2);
-      }
-    }
-  }
-  //Polygon Events
-  /**
-   * XXXXX Not sure functionality of this function; it is only called during loadSettings, not in template;
-   * also polygon-label-row is not found in the template; need to reevaluate if function is needed XXXXX
-   */
-  onPolygonLabelVariableChange(e) {
-    this.widgets['polygons-label-variable'] = e;
-    if (e == 'None') {
-      $('.polygon-label-row').slideUp();
-    } else {
-      $('.polygon-label-row').css('display', 'flex');
-    }
-    this.redrawPolygonLabels();
+    // let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes).select('text'),
+    //     labelVar = this.widgets['node-label-variable'];
+    // if (labelVar == 'None') {
+    //     nodes.text('');
+    // } else {
+    //     let size = this.widgets['node-label-size'],
+    //         orientation = this.widgets['node-label-orientation'];
+    //     nodes
+    //         .text(n => n[labelVar])
+    //         .style('font-size', size + 'px');
+    //     switch (orientation) {
+    //         case 'Left':
+    //             nodes
+    //                 .attr('text-anchor', 'end')
+    //                 .attr('dx', -8)
+    //                 .attr('dy', (size - 4) / 2);
+    //             break;
+    //         case 'Top':
+    //             nodes
+    //                 .attr('text-anchor', 'middle')
+    //                 .attr('dx', 0)
+    //                 .attr('dy', 4 - size);
+    //             break;
+    //         case 'Bottom':
+    //             nodes
+    //                 .attr('text-anchor', 'middle')
+    //                 .attr('dx', 0)
+    //                 .attr('dy', size + 4);
+    //             break;
+    //         case 'Middle':
+    //             nodes
+    //                 .attr('text-anchor', 'middle')
+    //                 .attr('dx', 0)
+    //                 .attr('dy', (size - 4) / 2);
+    //             break;
+    //         default: //'right'
+    //             nodes
+    //                 .attr('text-anchor', 'start')
+    //                 .attr('dx', 8)
+    //                 .attr('dy', (size - 4) / 2);
+    //     }
+    // }
   }
   /**
    * This is called when the variable used to grouped by/created polygons is changed
@@ -17787,12 +18269,13 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    */
   centerPolygons(e) {
     this.widgets['polygons-foci'] = e;
-    console.log('render center poly');
-    this.visuals.twoD.render();
+    this._rerender();
     if (this.widgets['polygons-color-show'] == true) {
       $("#polygon-color-table").empty();
       this.visuals.twoD.updatePolygonColors();
+      //   this._rerender();
     }
+
     if (e == 'None') {
       $('#color-polygons').slideDown();
       $('#polygon-color-value-row').slideDown();
@@ -17802,33 +18285,19 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     }
   }
   /**
-   * Updates polygon-label-size widget and then redraws polygon labels
-   */
-  setPolygonLabelSize(size) {
-    this.widgets['polygons-label-size'] = parseFloat(size);
-    this.visuals.twoD.redrawPolygonLabels();
-  }
-  /**
    * Calls setPolygonLabelSize to update polygon-label-size widget and then redraws polygon labels
    */
   onPolygonLabelSizeChange(e) {
-    this.setPolygonLabelSize(e);
+    this.widgets['polygons-label-size'] = parseFloat(e);
+    document.documentElement.style.setProperty('--vis-graph-panel-label-font-size', e + 'px');
+    this.cdref.detectChanges();
   }
   /**
    * Updates polygons-label-orientation widget and then redraws polygon labels
    */
   onPolygonLabelOrientationChange(e) {
     this.widgets['polygons-label-orientation'] = e;
-    this.visuals.twoD.redrawPolygonLabels();
-  }
-  /**
-   * Updates polygons-gather-force and then renders the network again
-   */
-  onPolygonGatherChange(e) {
-    let v = parseFloat(e);
-    this.widgets['polygons-gather-force'] = v;
-    console.log('render poly gather');
-    this.visuals.twoD.render();
+    this._rerender();
   }
   /**
    * Updates polygons-label-show widget and the renders the network again
@@ -17837,37 +18306,11 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     if (e) {
       this.widgets['polygons-label-show'] = true;
       $('.polygons-label-row').slideDown();
-      console.log('render poly label show');
-      this.visuals.twoD.render();
     } else {
       this.widgets['polygons-label-show'] = false;
       $('.polygons-label-row').slideUp();
-      console.log('render poly label hide');
-      this.visuals.twoD.render();
     }
-  }
-  /**
-   * XXXXX Function not used/executed XXXXX
-   */
-  onPolygonShowChange(e) {
-    if (e == "Show") {
-      this.widgets['polygons-label-show'] = true;
-      $('.polygons-label-row').slideDown();
-      console.log('render poly show change');
-      this.visuals.twoD.render();
-      //If hidden by default, unhide to perform slide up and down
-      //  if(!this.ShowGlobalSettingsNodeColorTable){
-      //     this.ShowGlobalSettingsNodeColorTable = true;
-      // } else {
-      //     $('#node-color-table-row').slideDown();
-      // }
-    } else {
-      this.widgets['polygons-label-show'] = false;
-      $('#node-color-value-row').slideDown();
-      $('#node-color-table-row').slideUp();
-      console.log('render poly hide change');
-      this.visuals.twoD.render();
-    }
+    this._rerender();
   }
   /**
    * XXXXX reevaluate if need to be combined with polygonColorsTableToggle; when called from polygonColorsTableToggle e is 'Show'/'Hide' when called
@@ -17896,7 +18339,64 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     } else {
       $('.node-label-row').css('display', 'flex');
     }
-    this.redrawLabels();
+    this._rerender();
+  }
+  /**
+   * Gets the label for a node based on node label variable
+   * @param node the node retrieve to get the value of the variable
+   */
+  getNodeLabel(node) {
+    // If no label variable then should be none
+    return this.widgets['node-label-variable'] == 'None' ? '' : node[this.widgets['node-label-variable']];
+  }
+  /**
+   * Gets the label for a link based on link label variable
+   * @param node the link we retrieve to get the value of the variable
+   */
+  getLinkLabel(link) {
+    // console.log('link variable: ',this.widgets['link-label-variable'] );
+    let labelVariable = this.widgets['link-label-variable'];
+    // If no label variable then should be none
+    if (labelVariable == 'None') {
+      return {
+        text: ''
+      };
+    } else {
+      // console.log('link variable2: ',this.visuals.twoD.commonService.session.data.links[index]);
+      if (labelVariable == 'source_id') {
+        return link['source']['id'];
+      } else if (labelVariable == 'source_index') {
+        return link['source']['index'];
+      } else if (labelVariable == 'target_id') {
+        return link['target']['id'];
+      } else if (labelVariable == 'target_index') {
+        return link['target']['index'];
+      } else if (labelVariable != 'distance') {
+        return {
+          text: link[labelVariable]
+        };
+      }
+      console.log('cluster link: ', link);
+      const labelValue = link[labelVariable];
+      if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
+        // console.log('is number');
+        if (this.widgets['default-distance-metric'] == 'snps') {
+          return {
+            text: Math.round(parseFloat(labelValue))
+          };
+        } else {
+          return labelValue != 0 ? {
+            text: parseFloat(labelValue).toFixed(this.widgets['link-label-decimal-length'])
+          } : {
+            text: ''
+          };
+        }
+      } else {
+        return {
+          text: labelValue
+        };
+      }
+    }
   }
   /**
    * Calls setNodeLabelSize to update label-size and redraw labels
@@ -17909,7 +18409,7 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    */
   setNodeLabelSize(size) {
     this.widgets['node-label-size'] = parseFloat(size);
-    this.visuals.twoD.redrawLabels();
+    document.documentElement.style.setProperty('--vis-graph-node-label-font-size', `${this.SelectedNodeLabelSizeVariable}pt`);
   }
   /**
    * Updates node-label-orientation and then redraws labels
@@ -17928,10 +18428,7 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       selectedValue = [selectedValue];
     }
     this.widgets['node-tooltip-variable'] = selectedValue;
-    // removed redrawLabels because it doesn't have anything to do with tooltip
-    //this.visuals.twoD.redrawLabels();
   }
-
   onNodeSymbolVariableChange(e, setVisibility = true) {
     this.widgets['node-symbol-variable'] = this.SelectedNodeSymbolVariable;
     if (setVisibility) {
@@ -17959,9 +18456,28 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
         this.onNodeSymbolTableChange('Hide');
       }
     }
-    this.visuals.twoD.cdref.detectChanges();
+    // if(e !== 'None' && setVisibility){
+    //     this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.setVisibility(true);
+    //     this.visuals.twoD.SelectedNetworkTableTypeVariable = "Show";
+    //     if (this.SelectedNodeSymbolVariable !== 'None') {
+    //         $('#node-symbol-row').slideUp();
+    //         //If hidden by default, unhide to perform slide up and down
+    //         if(!this.ShowNodeSymbolTable){
+    //             this.ShowNodeSymbolTable = true;
+    //         } else {
+    //             $('#node-symbol-table-row').slideDown();
+    //         }
+    //     // No shape by variable selected
+    //     // show shape, hide table 
+    //     } else {
+    //         $('#node-symbol-row').slideDown();
+    //         $('#node-symbol-table-row').slideUp();
+    //         this.onNodeSymbolTableChange('Hide');
+    //     }
+    // }
+    // this.visuals.twoD.cdref.detectChanges();
     this.generateNodeSymbolSelectionTable("#node-symbol-table", e);
-    this.visuals.twoD.redrawNodes();
+    this._rerender();
   }
   generateNodeSymbolSelectionTable(tableId, variable, isEditable = true) {
     this.visuals.microbeTrace.clearTable(tableId);
@@ -17971,127 +18487,121 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     }, {
       key: "symbolTriangle",
       value: '&#9650; (Up Triangle)'
-    }, {
-      key: "symbolTriangleDown",
-      value: '&#9660; (Down Triangle)'
-    }, {
-      key: "symbolTriangleLeft",
-      value: '&#9664; (Left Triangle)'
-    }, {
-      key: "symbolTriangleRight",
-      value: '&#9654; (Right Triangle)'
-    }, {
+    },
+    // { key: "symbolTriangleDown", value: '&#9660; (Down Triangle)' },
+    // { key: "symbolTriangleLeft", value: '&#9664; (Left Triangle)' },
+    // { key: "symbolTriangleRight", value: '&#9654; (Right Triangle)' },
+    {
       key: "symbolDiamond",
       value: '&#10731; (Vertical Diamond)'
-    }, {
-      key: "symbolDiamondAlt",
-      value: '&#10731; (Horizontal Diamond)'
-    }, {
+    },
+    // { key: "symbolDiamondAlt", value: '&#10731; (Horizontal Diamond)' },
+    {
       key: "symbolSquare",
       value: '&#9632; (Square)'
-    }, {
-      key: "symbolDiamondSquare",
-      value: '&#9670; (Tilted Square)'
-    }, {
-      key: "symbolPentagon",
-      value: '&#11039; (Pentagon)'
-    }, {
+    },
+    // { key: "symbolDiamondSquare", value: '&#9670; (Tilted Square)' },
+    // { key: "symbolPentagon", value: '&#11039; (Pentagon)' },
+    {
       key: "symbolHexagon",
       value: '&#11042; (Hexagon)'
-    }, {
-      key: "symbolHexagonAlt",
-      value: '&#11043; (Tilted Hexagon)'
-    }, {
-      key: "symbolOctagon",
-      value: '&#11042; (Octagon)'
-    }, {
-      key: "symbolOctagonAlt",
-      value: '&#11043; (Tilted Octagon)'
-    }, {
-      key: "symbolCross",
-      value: '&#10010; (Addition Sign)'
-    }, {
-      key: "symbolX",
-      value: '&#10006; (Multiplication Sign)'
-    }, {
-      key: "symbolWye",
-      value: '&#120300; (Wye)'
-    }, {
-      key: "symbolStar",
-      value: '&#9733; (Star)'
-    }];
-    let table = $(tableId);
-    const disabled = isEditable ? '' : 'disabled';
-    this.widgets['node-symbol-variable'] = variable;
-    if (variable === 'None' && !isEditable) return;
-    let values = [];
-    let aggregates = {};
-    let nodes = this.visuals.twoD.commonService.session.data.nodes;
-    let n = nodes.length;
-    let vnodes = 0;
-    for (let i = 0; i < n; i++) {
-      let d = nodes[i];
-      if (!d.visible) continue;
-      vnodes++;
-      let dv = d[variable];
-      if (values.indexOf(dv) == -1) values.push(dv);
-      if (dv in aggregates) {
-        aggregates[dv]++;
-      } else {
-        aggregates[dv] = 1;
-      }
     }
-    if (values.length > this.visuals.twoD.commonService.session.style.nodeSymbols.length) {
-      let symbols = [];
-      let m = Math.ceil(values.length / this.visuals.twoD.commonService.session.style.nodeSymbols.length);
-      while (m-- > 0) {
-        symbols = symbols.concat(this.visuals.twoD.commonService.session.style.nodeSymbols);
+    // { key: "symbolHexagonAlt", value: '&#11043; (Tilted Hexagon)' },
+    // { key: "symbolOctagon", value: '&#11042; (Octagon)' },
+    // { key: "symbolOctagonAlt", value: '&#11043; (Tilted Octagon)' },
+    // { key: "symbolCross", value: '&#10010; (Addition Sign)' },
+    // { key: "symbolX", value: '&#10006; (Multiplication Sign)' },
+    // { key: "symbolWye", value: '&#120300; (Wye)' },
+    // { key: "symbolStar", value: '&#9733; (Star)' },
+    ];
+
+    setTimeout(() => {
+      let table = $(tableId);
+      const disabled = isEditable ? '' : 'disabled';
+      this.widgets['node-symbol-variable'] = variable;
+      if (variable === 'None' && !isEditable) return;
+      let values = [];
+      let aggregates = {};
+      let nodes = this.visuals.twoD.commonService.session.data.nodes;
+      let n = nodes.length;
+      let vnodes = 0;
+      for (let i = 0; i < n; i++) {
+        let d = nodes[i];
+        if (!d.visible) continue;
+        vnodes++;
+        let dv = d[variable];
+        if (values.indexOf(dv) == -1) values.push(dv);
+        if (dv in aggregates) {
+          aggregates[dv]++;
+        } else {
+          aggregates[dv] = 1;
+        }
       }
-      this.visuals.twoD.commonService.session.style.nodeSymbols = symbols;
-    }
-    table.empty().append("<tr>" + `<th class="${isEditable ? 'table-header-row' : ''}" ${isEditable ? 'contenteditable' : ''}><div class="header-content sortable">Node ${this.commonService.titleize(variable)}<a class='sort-button' style='cursor: pointer'>⇅</a></div></th>` + (this.widgets['node-symbol-table-counts'] ? `<th class="table-header-row"><div class="header-content sortable">Count<a class='sort-button' style='cursor: pointer'>⇅</a></div></th>` : '') + (this.widgets['node-symbol-table-frequencies'] ? `<th class="table-header-row"><div class="header-content sortable">Frequency<a class='sort-button' style='cursor: pointer'>⇅</a></div></th>` : '') + '<th>Shape</th>' + '</tr>');
-    let options = $('#node-symbol2').html();
-    values.sort((a, b) => {
-      return aggregates[b] - aggregates[a];
-    });
-    this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3__WEBPACK_IMPORTED_MODULE_4__.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
-    values.forEach((v, i) => {
-      let selector = $(`<select ${disabled}></select>`).append(options).val(this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v)).on('change', e => {
-        this.visuals.twoD.commonService.session.style.nodeSymbols.splice(i, 1, e.target.value);
-        this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3__WEBPACK_IMPORTED_MODULE_4__.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
-        this.visuals.twoD.redrawNodes();
+      if (values.length > this.visuals.twoD.commonService.session.style.nodeSymbols.length) {
+        let symbols = [];
+        let m = Math.ceil(values.length / this.visuals.twoD.commonService.session.style.nodeSymbols.length);
+        while (m-- > 0) {
+          symbols = symbols.concat(this.visuals.twoD.commonService.session.style.nodeSymbols);
+        }
+        this.visuals.twoD.commonService.session.style.nodeSymbols = symbols;
+        console.log('node symbols: ', symbols);
+      }
+      table.empty().append("<tr>" + `<th class="${isEditable ? 'table-header-row' : ''}" ${isEditable ? 'contenteditable' : ''}><div class="header-content sortable">Node ${this.commonService.titleize(variable)}<a class='sort-button' style='cursor: pointer'>⇅</a></div></th>` + (this.widgets['node-symbol-table-counts'] ? `<th class="table-header-row"><div class="header-content sortable">Count<a class='sort-button' style='cursor: pointer'>⇅</a></div></th>` : '') + (this.widgets['node-symbol-table-frequencies'] ? `<th class="table-header-row"><div class="header-content sortable">Frequency<a class='sort-button' style='cursor: pointer'>⇅</a></div></th>` : '') + '<th>Shape</th>' + '</tr>');
+      values.sort((a, b) => {
+        return aggregates[b] - aggregates[a];
       });
-      let symbolText = symbolMapping.find(x => x.key === this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v));
-      let cell = $('<td></td>').append(isEditable ? selector : symbolText ? symbolText.value : '');
-      let row = $('<tr>' + `<td ${isEditable ? 'contenteditable' : ''}> ${this.visuals.twoD.commonService.titleize('' + v)} </td> ` + (this.widgets['node-symbol-table-counts'] ? '<td>' + aggregates[v] + '</td>' : '') + (this.widgets['node-symbol-table-frequencies'] ? '<td>' + (aggregates[v] / vnodes).toLocaleString() + '</td>' : '') + '</tr>').append(cell);
-      table.append(row);
-    });
-    let isAscending = true; // add this line before the click event handler
-    // The sorting functionality is added here
-    $(tableId).on('click', 'th', function () {
-      let table = $(this).parents('table').eq(0);
-      let rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
-      isAscending = !isAscending; // replace 'this.asc' with 'isAscending'
-      if (!isAscending) {
-        rows = rows.reverse();
+      this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3__WEBPACK_IMPORTED_MODULE_5__.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
+      values.forEach((v, i) => {
+        // PRE D3
+        // Manually create options instead of using the existing select
+        let optionsHtml = `
+                    <option value="symbolCircle" ${this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v) === 'circle' ? 'selected' : ''}>&nbsp;&#11044; (Circle)</option>
+                    <option value="symbolSquare" ${this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v) === 'square' ? 'selected' : ''}>&nbsp;&#9632; (Square)</option>
+                    <option value="symbolHexagon" ${this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v) === 'hexagon' ? 'selected' : ''}>&nbsp;&#11042; (Hexagon)</option>
+                    <option value="symbolTriangle" ${this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v) === 'triangle' ? 'selected' : ''}>&nbsp;&#9650; (Triangle)</option>
+                    <option value="symbolDiamond" ${this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v) === 'diamond' ? 'selected' : ''}>&nbsp;&#10731; (Diamond)</option>
+                `;
+        // console.log('symbol each value: ', v, this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v));
+        let selector = $(`<select ${disabled}></select>`).append(optionsHtml).val(this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v)).on('change', e => {
+          this.visuals.twoD.commonService.session.style.nodeSymbols.splice(i, 1, e.target.value);
+          this.visuals.twoD.commonService.temp.style.nodeSymbolMap = d3__WEBPACK_IMPORTED_MODULE_5__.scaleOrdinal(this.visuals.twoD.commonService.session.style.nodeSymbols).domain(values);
+          this._rerender();
+          // this.visuals.twoD.redrawNodes();
+        });
+
+        let symbolText = symbolMapping.find(x => x.key === this.visuals.twoD.commonService.temp.style.nodeSymbolMap(v));
+        let cell = $('<td></td>').append(isEditable ? selector : symbolText ? symbolText.value : '');
+        let row = $('<tr>' + `<td ${isEditable ? 'contenteditable' : ''}> ${this.visuals.twoD.commonService.titleize('' + v)} </td> ` + (this.widgets['node-symbol-table-counts'] ? '<td>' + aggregates[v] + '</td>' : '') + (this.widgets['node-symbol-table-frequencies'] ? '<td>' + (aggregates[v] / vnodes).toLocaleString() + '</td>' : '') + '</tr>').append(cell);
+        table.append(row);
+      });
+      let isAscending = true; // add this line before the click event handler
+      // The sorting functionality is added here
+      $(tableId).on('click', 'th', function () {
+        let table = $(this).parents('table').eq(0);
+        let rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
+        isAscending = !isAscending; // replace 'this.asc' with 'isAscending'
+        if (!isAscending) {
+          rows = rows.reverse();
+        }
+        for (let i = 0; i < rows.length; i++) {
+          table.append(rows[i]);
+        }
+      });
+      function comparer(index) {
+        return function (a, b) {
+          let valA = getCellValue(a, index),
+            valB = getCellValue(b, index);
+          console.log(`Comparing: ${valA} and ${valB}`); // New line
+          return !isNaN(Number(valA)) && !isNaN(Number(valB)) ? Number(valA) - Number(valB) : valA.toString().localeCompare(valB);
+        };
       }
-      for (let i = 0; i < rows.length; i++) {
-        table.append(rows[i]);
+      function getCellValue(row, index) {
+        return $(row).children('td').eq(index).text();
       }
-    });
-    function comparer(index) {
-      return function (a, b) {
-        let valA = getCellValue(a, index),
-          valB = getCellValue(b, index);
-        console.log(`Comparing: ${valA} and ${valB}`); // New line
-        return !isNaN(Number(valA)) && !isNaN(Number(valB)) ? Number(valA) - Number(valB) : valA.toString().localeCompare(valB);
-      };
-    }
-    function getCellValue(row, index) {
-      return $(row).children('td').eq(index).text();
-    }
+    }, 100);
   }
   onNodeRadiusVariableChange(e) {
+    this.widgets['node-radius-variable'] = e;
     if (e == 'None') {
       $('#node-max-radius-row').slideUp();
       $('#node-min-radius-row').slideUp();
@@ -18101,43 +18611,168 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
       $('#node-min-radius-row').css('display', 'flex');
       $('#node-radius-row').slideUp();
     }
-    this.widgets['node-radius-variable'] = e;
-    this.visuals.twoD.redrawNodes();
+    this._rerender();
   }
   /**
    * Updates node-radius-max widget and redraws nodes
    */
   onNodeRadiusMaxChange(e) {
     this.widgets['node-radius-max'] = e;
-    this.visuals.twoD.redrawNodes();
+    this.updateMinMaxNode();
+    this._rerender();
   }
   /**
    * Updates node-radius-min widget and redraws nodes
    */
   onNodeRadiusMinChange(e) {
     this.widgets['node-radius-min'] = e;
-    this.visuals.twoD.redrawNodes();
+    this.updateMinMaxNode();
+    this._rerender();
   }
   /**
    * Updates node-border-width widget and redraws nodes
    */
   onNodeBorderWidthChange(e) {
     this.widgets['node-border-width'] = e;
-    this.visuals.twoD.redrawNodeBorder();
+    this.updateMinMaxNode();
+    this._rerender();
   }
   /**
    * Updates node-radius widget and redraws nodes
    */
   onNodeRadiusChange(e) {
     this.widgets['node-radius'] = e;
-    this.visuals.twoD.redrawNodes();
+    this._rerender();
+  }
+  /**
+   * Rerenders whole data set by resetting data object
+   */
+  _rerender() {
+    if (this.data === undefined) {
+      return;
+    }
+    if (this.visuals.microbeTrace.commonService.session.style.widgets['node-timeline-variable'] != 'None') {
+      this.autoFit = false;
+    } else {
+      this.autoFit = true;
+    }
+    let networkData = {
+      nodes: this.visuals.twoD.commonService.getVisibleNodes(),
+      links: this.visuals.twoD.commonService.getVisibleLinks()
+    };
+    console.log('link vis rerender: ', this.visuals.twoD.commonService.getVisibleLinks());
+    this.data = this.visuals.twoD.commonService.convertToGraphDataArray(networkData);
+    // document.documentElement.style.setProperty('--vis-graph-panel-fill-color', `${this.SelectedNodeLabelSizeVariable}pt`);
+    // Update the panels
+    this.updatePanels();
+  }
+  updatePanels() {
+    if (this.layoutType2 === _unovis_ts__WEBPACK_IMPORTED_MODULE_13__.GraphLayoutType.Parallel) {
+      // Update nodes and generate new panels
+      const {
+        updatedNodes,
+        panels,
+        groups
+      } = this.commonService.updateNodesAndGeneratePanels(this.data);
+      // Update data with updated nodes
+      this.data = {
+        ...this.data,
+        nodes: updatedNodes
+      };
+      // Ensure panels are deep cloned
+      this.panels = JSON.parse(JSON.stringify(panels));
+      // Update polygonGroups
+      this.visuals.twoD.commonService.temp.polygonGroups = groups;
+      // Use setTimeout to trigger change detection in the next tick
+      setTimeout(() => {
+        this.cdref.detectChanges();
+        this.cdref.markForCheck();
+      }, 0);
+    }
+  }
+  getNodeShape(node) {
+    //* Shapes:
+    let symbolVariable = this.widgets['node-symbol-variable'];
+    if (symbolVariable == "None") {
+      console.log('node symbol: ', this.selectedNodeShape);
+      return this.selectedNodeShape;
+      // return this.widgets['node-symbol-variable'];
+    } else {
+      let type = this.visuals.twoD.commonService.temp.style.nodeSymbolMap(node[symbolVariable]);
+      switch (type) {
+        case 'symbolCircle':
+          return 'circle';
+        case 'symbolSquare':
+          return 'square';
+        case 'symbolHexagon':
+          return 'hexagon';
+        case 'symbolTriangle':
+          return 'triangle';
+        case 'symbolDiamond':
+          return `<use href="#diamond" stroke-width="3" />`;
+      }
+      // if (type === undefined) {
+      //     type = that.customShapes.shapes[that.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
+      // }
+    }
+    // // Custom Shape Selected
+    // if (type === undefined) {
+    //     type = this.customShapes.shapes[this.widgets['node-symbol']];
+    // }
+    // //* Sizes:
+    // let defaultSize = this.widgets['node-radius'];
+    // let size = defaultSize, med = defaultSize, oldrng, min, max;
+    // let sizeVariable = this.widgets['node-radius-variable'];
+    // let scale;
+    // let nodes;
+    // if (sizeVariable !== 'None') {
+    //     if (this.widgets["timeline-date-field"] == 'None') nodes = this.visuals.twoD.commonService.session.network.nodes;
+    //     else nodes = this.visuals.twoD.commonService.session.network.timelineNodes;
+    //     let n = this.visuals.twoD.commonService.session.network.nodes.length;
+    //     min = Number.MAX_VALUE;
+    //     max = Number.MIN_VALUE;
+    //     for (let i = 0; i < n; i++) {
+    //         let size = this.visuals.twoD.commonService.session.network.nodes[i][sizeVariable];
+    //         if (typeof size == 'undefined') continue;
+    //         if (size < min) min = size;
+    //         if (size > max) max = size;
+    //     }
+    //     oldrng = max - min;
+    //     med = oldrng / 2;
+    //     let maxWidth = this.widgets['node-radius-max'];
+    //     let minWidth = this.widgets['node-radius-min'];
+    //     // scale = d3.scaleLinear()
+    //     // .domain([min, max])
+    //     // .range([minWidth, maxWidth]);
+    //     }
+    // nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes);
+    // // TODO: Hides table row by default if no symbol variable - clean up
+    // if(symbolVariable === 'None') {
+    //     $('#node-symbol-table-row').slideUp();
+    // }
+    // // console.log('nodes: ', nodes);
+    // let that = this;
+    // nodes.selectAll('path').each(function (d) {
+    //     if (symbolVariable !== 'None') {
+    //         // type = d3[that.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
+    //         // if (type === undefined) {
+    //         //     type = that.customShapes.shapes[that.visuals.twoD.commonService.temp.style.nodeSymbolMap(d[symbolVariable])];
+    //         // }
+    //     } 
+    //     if (sizeVariable !== 'None') {
+    //       size = d[sizeVariable];
+    //       if (!that.isNumber(size)) size = med;
+    //       size = scale(size);
+    //     }
+    //     // d3.select(this).attr('d', d3.symbol().size(size).type(type));    
+    //   });
   }
   /**
    * Updates node-symbol widget and redraws nodes
    */
   onNodeSymbolChange(e) {
     this.widgets['node-symbol'] = e;
-    this.visuals.twoD.redrawNodes();
+    this._rerender();
   }
   /**
    * Sets whether node symbol table is visible or not
@@ -18162,9 +18797,6 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     e = e.filter(item => item !== 'None');
     this.widgets['link-tooltip-variable'] = e;
     this.visuals.twoD.SelectedLinkTooltipVariable = this.widgets['link-tooltip-variable'];
-    // not sure if redraw labels is necessary - it doesn't deal with link or tooltip
-    this.visuals.twoD.redrawLabels();
-    //TODO: umm.... do something here?
   }
   /**
    * Updates link-label-variable widget and link labels
@@ -18172,56 +18804,21 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
   onLinkLabelVariableChange(e) {
     let label = e;
     this.widgets['link-label-variable'] = label;
-    if (label == 'None') {
-      this.visuals.twoD.svg.select('g.links').selectAll('text').text('');
-    } else {
-      this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.visuals.twoD.getLLinks()).text(l => {
-        if (label == 'source_id') {
-          return l['source']['id'];
-        } else if (label == 'source_index') {
-          return l['source']['index'];
-        } else if (label == 'target_id') {
-          return l['target']['id'];
-        } else if (label == 'target_index') {
-          return l['target']['index'];
-        } else if (label != 'distance') {
-          return l[this.widgets['link-label-variable']];
-        }
-        const labelValue = l[this.widgets['link-label-variable']];
-        if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
-          if (this.widgets['default-distance-metric'] == 'snps') {
-            return Math.round(parseFloat(labelValue));
-          } else {
-            return parseFloat(labelValue).toFixed(this.widgets['link-label-decimal-length']);
-          }
-        } else {
-          return labelValue;
-        }
-      });
-      this.visuals.twoD.force.alpha(0.01).alphaTarget(0).restart();
-    }
+    this._rerender();
   }
   /**
    * Updates link-label-decimal-length widget and updates label with updated number of decimal points
    */
   onLinkDecimalVariableChange(e) {
     this.widgets['link-label-decimal-length'] = e;
-    this.visuals.twoD.svg.select('g.links').selectAll('text').data(this.getLLinks()).text(l => {
-      const labelValue = l[this.widgets['link-label-variable']];
-      if (typeof labelValue === 'number' || !isNaN(parseFloat(labelValue))) {
-        return parseFloat(labelValue).toFixed(this.widgets['link-label-decimal-length']);
-      } else {
-        return labelValue;
-      }
-    });
+    this._rerender();
   }
   /**
    * Updates link-opacity widget and the opacity for all links
    */
   onLinkOpacityChange(e) {
     this.widgets['link-opacity'] = e;
-    let opacity = 1 - e;
-    this.visuals.twoD.svg.select('g.links').selectAll('line').attr('opacity', opacity);
+    this._rerender();
   }
   updateLinkWidthRows(e) {
     if (e == 'None') {
@@ -18246,7 +18843,49 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
   onLinkWidthVariableChange(e) {
     this.updateLinkWidthRows(e);
     this.widgets['link-width-variable'] = e;
-    this.visuals.twoD.scaleLinkWidth();
+    this.updateMinMaxLink();
+    this._rerender();
+  }
+  updateMinMaxNode() {
+    this.visNodes = this.commonService.getVisibleNodes();
+    let n = this.visNodes.length;
+    let maxWidth = this.widgets['node-radius-max'];
+    let minWidth = this.widgets['node-radius-min'];
+    let sizeVariable = this.widgets['node-radius-variable'];
+    this.nodeMin = Number.MAX_VALUE;
+    this.nodeMax = Number.MIN_VALUE;
+    for (let i = 0; i < n; i++) {
+      let size = this.visNodes[i][sizeVariable];
+      if (typeof size == 'undefined') continue;
+      if (size < this.nodeMin) this.nodeMin = size;
+      if (size > this.nodeMax) this.nodeMax = size;
+    }
+    this.nodeMid = (this.nodeMax - this.nodeMin) / 2;
+    this.nodeScale = d3__WEBPACK_IMPORTED_MODULE_5__.scaleLinear().domain([this.nodeMin, this.nodeMax]).range([minWidth, maxWidth]);
+  }
+  updateMinMaxLink() {
+    let maxWidth = this.widgets['link-width-max'];
+    if (maxWidth == 'None') {
+      this.widgets['link-width-max'] = 15;
+      maxWidth = 15;
+    }
+    let minWidth = this.widgets['link-width-min'];
+    if (minWidth == 'None') {
+      this.widgets['link-width-min'] = 0;
+      minWidth = 0;
+    }
+    let variable = this.widgets['link-width-variable'];
+    this.visLinks = this.getVLinks();
+    let n = this.visLinks.length;
+    this.linkMax = -Infinity;
+    this.linkMin = Infinity;
+    for (let i = 0; i < n; i++) {
+      let l = this.visLinks[i][variable];
+      if (!this.isNumber(l)) return;
+      if (l > this.linkMax) this.linkMax = l;
+      if (l < this.linkMin) this.linkMin = l;
+    }
+    this.linkScale = d3__WEBPACK_IMPORTED_MODULE_5__.scaleLinear().domain([this.linkMin, this.linkMax]).range([minWidth, maxWidth]);
   }
   /**
    * Updates link-width-reciprocal widget and updates link width
@@ -18267,27 +18906,30 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
   onLinkWidthChange(e) {
     this.widgets['link-width'] = e;
     this.visuals.twoD.scaleLinkWidth();
+    this._rerender();
   }
   /**
    * Updates link-width-max widget and link width
    */
   onLinkWidthMaxChange(e) {
     this.widgets['link-width-max'] = e;
-    this.visuals.twoD.scaleLinkWidth();
+    this.updateMinMaxLink();
+    this._rerender();
   }
   /**
    * Updates link-width-min widget and link width
    */
   onLinkWidthMinChange(e) {
     this.widgets['link-width-min'] = e;
-    this.visuals.twoD.scaleLinkWidth();
+    this.updateMinMaxLink();
+    this._rerender();
   }
   /**
    * Updates link-length widget and link force distance
    */
   onLinkLengthChange(e) {
-    this.visuals.twoD.force.force('link').distance(e);
-    this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+    // this.visuals.twoD.force.force('link').distance(e);
+    // this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
     this.widgets['link-length'] = e;
   }
   /**
@@ -18295,12 +18937,22 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    */
   onLinkDirectedUndirectedChange(e) {
     if (e == "Show") {
-      this.visuals.twoD.svg.select('g.links').selectAll('line').attr('marker-end', 'url(#end-arrow)');
+      $('#link-bidirectional-row').slideDown();
+      $('#link-bidirectional-row').css('display', 'flex');
       this.widgets['link-directed'] = true;
     } else {
-      this.visuals.twoD.svg.select('g.links').selectAll('line').attr('marker-end', null);
       this.widgets['link-directed'] = false;
+      $("#link-bidirectional-row").slideUp();
     }
+    this._rerender();
+  }
+  onLinkBidirectionalChange(e) {
+    if (e == "Show") {
+      this.widgets['link-bidirectional'] = true;
+    } else {
+      this.widgets['link-bidirectional'] = false;
+    }
+    this._rerender();
   }
   /**
    * Updates node-highlight widget. When true and a node is mouseoved current node, all it of links, and neighbor nodes will be highlighted
@@ -18317,39 +18969,54 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    * @param show wheither to show or hide gridlines
    */
   drawGridlines(show) {
+    const container = document.getElementById('viz-force');
+    // Ensure the container exists
+    if (!container) return;
     // Reset width and height in case they have changed
-    this.visuals.twoD.halfWidth = $('#network').parent().width() / 2;
-    this.visuals.twoD.halfHeight = $('#network').parent().parent().parent().height() / 2;
+    this.visuals.twoD.halfWidth = container.parentElement.offsetWidth / 2;
+    this.visuals.twoD.halfHeight = container.parentElement.parentElement.parentElement.offsetHeight / 2;
+    // Create or select horizontal gridlines group
+    let horizontalGridlinesGroup = container.querySelector('g.horizontal-gridlines');
+    if (!horizontalGridlinesGroup) {
+      horizontalGridlinesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      horizontalGridlinesGroup.classList.add('horizontal-gridlines');
+      container.querySelector('svg').insertBefore(horizontalGridlinesGroup, container.querySelector('svg').firstChild);
+    }
+    // Create or select vertical gridlines group
+    let verticalGridlinesGroup = container.querySelector('g.vertical-gridlines');
+    if (!verticalGridlinesGroup) {
+      verticalGridlinesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      verticalGridlinesGroup.classList.add('vertical-gridlines');
+      container.querySelector('svg').insertBefore(verticalGridlinesGroup, container.querySelector('svg').firstChild);
+    }
+    // Clear existing lines
+    horizontalGridlinesGroup.innerHTML = '';
+    verticalGridlinesGroup.innerHTML = '';
     if (show) {
-      let range = Math.ceil(Math.max(this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight) / 50);
-      let ords = Object.keys(new Array(range).fill(null)).map(parseFloat);
+      const range = Math.ceil(Math.max(this.visuals.twoD.halfWidth, this.visuals.twoD.halfHeight) / 50);
+      const ords = Array.from({
+        length: range
+      }, (_, i) => i);
       // Horizontal lines
-      let horizontalLines = d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.horizontal-gridlines').selectAll('line').data(ords);
-      // Exit selection: remove extra lines
-      horizontalLines.exit().remove();
-      // Update selection: modify existing lines
-      horizontalLines.attr('x2', this.visuals.twoD.halfWidth * 2);
-      // Enter selection: add new lines
-      horizontalLines.enter().append('line').attr('x1', 0).attr('x2', this.visuals.twoD.halfWidth * 2).attr('y1', function (d) {
-        return d * 100;
-      }).attr('y2', function (d) {
-        return d * 100;
-      }).attr('stroke', 'lightgray');
+      ords.forEach(d => {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', '0');
+        line.setAttribute('x2', (this.visuals.twoD.halfWidth * 2).toString());
+        line.setAttribute('y1', (d * 100).toString());
+        line.setAttribute('y2', (d * 100).toString());
+        line.setAttribute('stroke', 'lightgray');
+        horizontalGridlinesGroup.appendChild(line);
+      });
       // Vertical lines
-      let verticalLines = d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.vertical-gridlines').selectAll('line').data(ords);
-      // Exit selection: remove extra lines
-      verticalLines.exit().remove();
-      // Update selection: modify existing lines
-      verticalLines.attr('y2', this.visuals.twoD.halfHeight * 2);
-      // Enter selection: add new lines
-      verticalLines.enter().append('line').attr('x1', function (d) {
-        return d * 100;
-      }).attr('x2', function (d) {
-        return d * 100;
-      }).attr('y1', 0).attr('y2', this.visuals.twoD.halfHeight * 2).attr('stroke', 'lightgray');
-    } else {
-      d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.horizontal-gridlines').html(null);
-      d3__WEBPACK_IMPORTED_MODULE_4__.select('#network g.vertical-gridlines').html(null);
+      ords.forEach(d => {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', (d * 100).toString());
+        line.setAttribute('x2', (d * 100).toString());
+        line.setAttribute('y1', '0');
+        line.setAttribute('y2', (this.visuals.twoD.halfHeight * 2).toString());
+        line.setAttribute('stroke', 'lightgray');
+        verticalGridlinesGroup.appendChild(line);
+      });
     }
   }
   /**
@@ -18370,8 +19037,8 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    * @param {number} e value from 0-400
    */
   onNodeChargeChange(e) {
-    this.visuals.twoD.force.force('charge').strength(-e);
-    this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+    // this.visuals.twoD.force.force('charge').strength(-e);
+    // this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
     this.widgets['node-charge'] = e;
   }
   /**
@@ -18379,8 +19046,8 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    * @param {number} e value from 0.025-1
    */
   onNetworkGravityChange(e) {
-    this.visuals.twoD.force.force('gravity').strength(e);
-    this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+    // this.visuals.twoD.force.force('gravity').strength(e);
+    // this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
     this.widgets['network-gravity'] = e;
   }
   /**
@@ -18388,8 +19055,8 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    * @param {number} e value from 0-1 (default 0.4)
    */
   onNetworkFrictionChange(e) {
-    this.visuals.twoD.force.velocityDecay(e);
-    this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+    // this.visuals.twoD.force.velocityDecay(e);
+    // this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
     this.widgets['network-friction'] = e;
   }
   /**
@@ -18399,8 +19066,8 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
   onNetworkLinkStrengthVariableChange(e) {
     //console.log('st change: ', e);
     let v = parseFloat(e);
-    this.visuals.twoD.force.force('link').strength(v);
-    this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+    // this.visuals.twoD.force.force('link').strength(v);
+    // this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
     this.widgets['network-link-strength'] = e;
   }
   /**
@@ -18418,133 +19085,163 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
   updateNodeColors() {
     //debugger;
     let variable = this.widgets['node-color-variable'];
-    let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').select('path').data(this.visuals.twoD.commonService.session.network.nodes).classed('selected', d => d.selected);
-    let col = this.widgets['node-color'];
+    let color = this.widgets['node-color'];
+    // let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').select('path').data(this.visuals.twoD.commonService.session.network.nodes).classed('selected', d => d.selected);
+    // let col = this.widgets['node-color'];
     let stroke = this.widgets['selected-node-stroke-color'];
     let stroke_width = parseInt(this.widgets['selected-node-stroke-width']);
     if (variable == 'None') {
-      nodes.attr('fill', col).attr('opacity', 1);
+      this.data.nodes.forEach(x => {
+        x.color = color;
+      });
+      // nodes
+      // .attr('fill', col).attr('opacity', 1);
       // this.context.microbeTrace.clearTable("#node-color-table-bottom");
     } else {
-      nodes.attr('fill', d => this.visuals.twoD.commonService.temp.style.nodeColorMap(d[variable])).attr('opacity', d => this.visuals.twoD.commonService.temp.style.nodeAlphaMap(d[variable]));
+      this.data.nodes.forEach((x, index) => {
+        x.color = this.visuals.twoD.commonService.temp.style.nodeColorMap(this.visuals.twoD.commonService.session.data.nodes[index][variable]);
+      });
+      // nodes
+      //     .attr('fill', d => this.visuals.twoD.commonService.temp.style.nodeColorMap(d[variable]))
+      //     .attr('opacity', d => this.visuals.twoD.commonService.temp.style.nodeAlphaMap(d[variable]));
       //  this.context.microbeTrace.generateNodeColorTable("#node-color-table-bottom", false);
     }
-
-    Array.from(nodes._groups).forEach(x => {
-      x.forEach(y => {
-        if (!this.visuals.twoD.commonService.session.data.nodes.find(z => y.__data__.index == z.index)) {
-          y.style['opacity'] = 0;
-        }
-      });
-    });
-    let _selected = this.visuals.twoD.commonService.session.data.nodes.filter(d => d.selected);
-    /*/
-     * Add a color that shows the node is selected.
-    /*/
-    if (_selected.length > 0) {
-      Array.from(nodes._groups).filter(x => {
-        x.filter(y => {
-          /*/
-           * Turn on the node(s) selected.
-          /*/
-          if (y['__data__'].selected == true) {
-            y.style['stroke'] = stroke;
-            y.style['strokeWidth'] = stroke_width;
-          } else {
-            /*/
-             * Otherwise, turn on the node(s) selected.
-            /*/
-            y.style['stroke'] = "#000000";
-            y.style['strokeWidth'] = this.widgets['node-border-width'];
-          }
-        });
-      });
-    } else {
-      Array.from(nodes._groups).filter(x => {
-        x.filter(y => {
-          /*/
-              * Otherwise, turn on the node(s) selected.
-          /*/
-          y.style['stroke'] = "#000000";
-          y.style['strokeWidth'] = this.widgets['node-border-width'];
-        });
-      });
-    }
+    // Array.from(nodes._groups).forEach((x: any)=>{
+    //     x.forEach(y=>{
+    //         if(!this.visuals.twoD.commonService.session.data.nodes.find(z => y.__data__.index === z.index)){
+    //             y.style['opacity'] = 0;
+    //         }
+    //     })
+    // })
+    // this.data.nodes.forEach( (x, index) => {
+    //     x.color = this.visuals.twoD.commonService.temp.style.nodeColorMap(this.visuals.twoD.commonService.session.data.nodes[index][variable]);
+    // })
+    this._rerender();
+    this.cdref.markForCheck();
+    this.cdref.detectChanges();
+    // (data: Datum, event: MouseEvent, i: number, els: (SVGElement | HTMLElement)[])
+    // /*/
+    //  * Add a color that shows the node is selected.
+    // /*/
+    // if (_selected.length > 0) {
+    //     Array.from(nodes._groups).filter(x => {
+    //         (<any>x).filter(y => {
+    //             /*/
+    //              * Turn on the node(s) selected.
+    //             /*/
+    //             if (y['__data__'].selected == true) {
+    //                 y.style['stroke'] = stroke;
+    //                 y.style['strokeWidth'] = stroke_width;
+    //             }
+    //             else {
+    //                 /*/
+    //                  * Otherwise, turn on the node(s) selected.
+    //                 /*/
+    //                 y.style['stroke'] = "#000000";
+    //                 y.style['strokeWidth'] = this.widgets['node-border-width'];
+    //             }
+    //         });
+    //     });
+    // }
+    // else {
+    //     Array.from(nodes._groups).filter(x => {
+    //         (<any>x).filter(y => {
+    //             /*/
+    //                 * Otherwise, turn on the node(s) selected.
+    //             /*/
+    //             y.style['stroke'] = "#000000";
+    //             y.style['strokeWidth'] = this.widgets['node-border-width'];
+    //         });
+    //     });
+    // }
   }
+
   /**
    * Updates the color of links and transparency based on link-color-variable and value from linkColorMap and linkAlphaMap
    */
   updateLinkColor() {
-    let variable = this.widgets['link-color-variable'];
-    // console.log('updating variable: ',variable );
-    let links = this.visuals.twoD.svg.select('g.links').selectAll('line');
-    if (variable == 'None') {
-      let color = this.widgets['link-color'],
-        opacity = 1 - this.widgets['link-opacity'];
-      links.attr('stroke', color).attr('opacity', opacity);
-      // this.context.microbeTrace.clearTable("#link-color-table-bottom");
-    } else {
-      // this.context.microbeTrace.generateNodeLinkTable("#link-color-table-bottom", false);
-      if (variable == 'source' || variable == 'target') {
-        links.data(this.getVLinks()).attr('stroke', l => this.visuals.twoD.commonService.temp.style.linkColorMap(l[variable]['_id'])).attr('opacity', l => this.visuals.twoD.commonService.temp.style.linkAlphaMap(l[variable]['_id'])).attr('stroke-dasharray', l => {
-          //This quirky little algorithm creates the dasharray code necessary to make dash-y links.
-          let length = 15;
-          let out = new Array(l.origins * 2);
-          let ofs = new Array(l.origins).fill(1);
-          let ons = new Array(l.origins).fill(0);
-          ons[l.oNum] = 1;
-          ofs[l.oNum] = 0;
-          for (let i = 0; i < l.origins; i++) {
-            out[2 * i] = ons[i] * length;
-            out[2 * i + 1] = ofs[i] * length;
-          }
-          return out.join(', ');
-        });
-      } else {
-        links.data(this.getVLinks()).attr('stroke', l => this.visuals.twoD.commonService.temp.style.linkColorMap(l[variable])).attr('opacity', l => this.visuals.twoD.commonService.temp.style.linkAlphaMap(l[variable])).attr('stroke-dasharray', l => {
-          //This quirky little algorithm creates the dasharray code necessary to make dash-y links.
-          let length = 15;
-          let out = new Array(l.origins * 2);
-          let ofs = new Array(l.origins).fill(1);
-          let ons = new Array(l.origins).fill(0);
-          ons[l.oNum] = 1;
-          ofs[l.oNum] = 0;
-          for (let i = 0; i < l.origins; i++) {
-            out[2 * i] = ons[i] * length;
-            out[2 * i + 1] = ofs[i] * length;
-          }
-          return out.join(', ');
-        });
-      }
-    }
+    // let variable = this.widgets['link-color-variable'];
+    // // console.log('updating variable: ',variable );
+    // let links = this.visuals.twoD.svg.select('g.links').selectAll('line');
+    // if (variable == 'None') {
+    //     let color = this.widgets['link-color'],
+    //         opacity = 1 - this.widgets['link-opacity'];
+    //     links
+    //         .attr('stroke', color)
+    //         .attr('opacity', opacity);
+    //     // this.context.microbeTrace.clearTable("#link-color-table-bottom");
+    // } else {
+    //     // this.context.microbeTrace.generateNodeLinkTable("#link-color-table-bottom", false);
+    //     if (variable == 'source' || variable == 'target') {
+    //         links
+    //         .data(this.getVLinks())
+    //         .attr('stroke', l => this.visuals.twoD.commonService.temp.style.linkColorMap(l[variable]['_id']))
+    //         .attr('opacity', l => this.visuals.twoD.commonService.temp.style.linkAlphaMap(l[variable]['_id']))
+    //         .attr('stroke-dasharray', l => {
+    //             //This quirky little algorithm creates the dasharray code necessary to make dash-y links.
+    //             let length = 15;
+    //             let out = new Array(l.origins * 2);
+    //             let ofs = new Array(l.origins).fill(1);
+    //             let ons = new Array(l.origins).fill(0);
+    //             ons[l.oNum] = 1;
+    //             ofs[l.oNum] = 0;
+    //             for (let i = 0; i < l.origins; i++) {
+    //                 out[2 * i] = ons[i] * length;
+    //                 out[2 * i + 1] = ofs[i] * length;
+    //             }
+    //             return out.join(', ');
+    //         });
+    //     } else {
+    //         links
+    //             .data(this.getVLinks())
+    //             .attr('stroke', l => this.visuals.twoD.commonService.temp.style.linkColorMap(l[variable]))
+    //             .attr('opacity', l => this.visuals.twoD.commonService.temp.style.linkAlphaMap(l[variable]))
+    //             .attr('stroke-dasharray', l => {
+    //                 //This quirky little algorithm creates the dasharray code necessary to make dash-y links.
+    //                 let length = 15;
+    //                 let out = new Array(l.origins * 2);
+    //                 let ofs = new Array(l.origins).fill(1);
+    //                 let ons = new Array(l.origins).fill(0);
+    //                 ons[l.oNum] = 1;
+    //                 ofs[l.oNum] = 0;
+    //                 for (let i = 0; i < l.origins; i++) {
+    //                     out[2 * i] = ons[i] * length;
+    //                     out[2 * i + 1] = ofs[i] * length;
+    //                 }
+    //                 return out.join(', ');
+    //             });
+    //     }
+    // }
+    this._rerender();
   }
   /**
    * Updates the width of the links using link-width, link-width-variable, link-width-max, link-width-min, and link-width-reciprocal
    */
   scaleLinkWidth() {
-    let scalar = this.widgets['link-width'];
-    let variable = this.widgets['link-width-variable'];
-    let vlinks = this.visuals.twoD.getVLinks();
-    let links = this.visuals.twoD.svg.select('g.links').selectAll('line').data(vlinks);
-    if (variable == 'None') return links.attr('stroke-width', scalar);
-    let n = vlinks.length;
-    let maxWidth = this.widgets['link-width-max'];
-    let minWidth = this.widgets['link-width-min'];
-    let max = -Infinity;
-    let min = Infinity;
-    for (let i = 0; i < n; i++) {
-      let l = vlinks[i][variable];
-      if (!this.visuals.twoD.isNumber(l)) return;
-      if (l > max) max = l;
-      if (l < min) min = l;
-    }
-    let mid = (max - min) / 2 + min;
-    let scale = d3__WEBPACK_IMPORTED_MODULE_4__.scaleLinear().domain(this.widgets['link-width-reciprocal'] ? [max, min] : [min, max]).range([minWidth, maxWidth]);
-    links.attr('stroke-width', d => {
-      let v = d[variable];
-      if (!this.visuals.twoD.isNumber(v)) v = mid;
-      return scale(v);
-    });
+    // let scalar = this.widgets['link-width'];
+    // let variable = this.widgets['link-width-variable'];
+    // let vlinks = this.visuals.twoD.getVLinks();
+    // if (variable == 'None') return  scalar;
+    // let n = vlinks.length;
+    // let maxWidth = this.widgets['link-width-max'];
+    // let minWidth = this.widgets['link-width-min'];
+    // let max = -Infinity;
+    // let min = Infinity;
+    // for (let i = 0; i < n; i++) {
+    //     let l = vlinks[i][variable];
+    //     if (!this.visuals.twoD.isNumber(l)) return;
+    //     if (l > max) max = l;
+    //     if (l < min) min = l;
+    // }
+    // let mid = (max - min) / 2 + min;
+    // let scale = d3.scaleLinear()
+    //     .domain(this.widgets['link-width-reciprocal'] ? [max, min] : [min, max])
+    //     .range([minWidth, maxWidth]);
+    // links.attr('stroke-width', d => {
+    //     let v = d[variable];
+    //     if (!this.visuals.twoD.isNumber(v)) v = mid;
+    //     return scale(v);
+    // });
   }
   /**
    * centers the view
@@ -18553,17 +19250,22 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    * @returns
    */
   fit(thing, bounds) {
-    if (!bounds) bounds = this.visuals.twoD.svg.node().getBBox();
-    if (bounds.width == 0 || bounds.height == 0) return; // nothing to fit
-    let parent = this.visuals.twoD.svg.node().parentElement.parentElement,
-      midX = bounds.x + bounds.width / 2,
-      midY = bounds.y + bounds.height / 2;
-    let scale = 0.8 / Math.max(bounds.width / parent.clientWidth, bounds.height / parent.clientHeight);
-    const w = parent.clientWidth / 2 - midX * scale;
-    const h = parent.clientHeight / 2 - midY * scale;
-    d3__WEBPACK_IMPORTED_MODULE_4__.select('svg#network').transition().duration(750).call(this.visuals.twoD.zoom.transform, d3__WEBPACK_IMPORTED_MODULE_4__.zoomIdentity.translate(w, h)
-    //.translate(parent.parentNode.clientWidth / 2 - midX, parent.parentNode.clientHeight / 2 - midY)
-    .scale(scale));
+    // if (!bounds) bounds = this.visuals.twoD.svg.node().getBBox();
+    // if (bounds.width == 0 || bounds.height == 0) return; // nothing to fit
+    // let parent = this.visuals.twoD.svg.node().parentElement.parentElement,
+    //     midX = bounds.x + bounds.width / 2,
+    //     midY = bounds.y + bounds.height / 2;
+    // let scale = 0.8 / Math.max(bounds.width / parent.clientWidth, bounds.height / parent.clientHeight);
+    // const w = parent.clientWidth / 2 - midX*scale ;
+    // const h = parent.clientHeight / 2 - midY*scale;
+    // PRE D3
+    // d3.select('svg#network')
+    //     .transition()
+    //     .duration(750)
+    //     .call(this.visuals.twoD.zoom.transform, d3.zoomIdentity
+    //         .translate(w, h)
+    //         //.translate(parent.parentNode.clientWidth / 2 - midX, parent.parentNode.clientHeight / 2 - midY)
+    //         .scale(scale));
   }
   /**
    * XXXXX Function is never called; Review if necessary XXXXX
@@ -18616,21 +19318,26 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    * On click of Pin All Nodes button, pin/unpins all nodes
    */
   openPinAllNodes() {
-    let nodes = this.visuals.twoD.svg.select('g.nodes').selectAll('g').data(this.visuals.twoD.commonService.session.network.nodes).select('path');
-    if (this.visuals.twoD.commonService.session.network.allPinned) {
-      nodes.each(function (d) {
-        delete d.fx;
-        delete d.fy;
-        d.fixed = false;
-      });
-      this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
-    } else {
-      nodes.each(function (d) {
-        d.fx = d.x;
-        d.fy = d.y;
-        d.fixed = true;
-      });
-    }
+    // this.showParallel = !this.showParallel;
+    // let nodes = this.visuals.twoD.svg
+    //     .select('g.nodes')
+    //     .selectAll('g')
+    //     .data(this.visuals.twoD.commonService.session.network.nodes)
+    //     .select('path');
+    // if (this.visuals.twoD.commonService.session.network.allPinned) {
+    //     nodes.each(function (d) {
+    //         delete d.fx;
+    //         delete d.fy;
+    //         d.fixed = false;
+    //     });
+    //     this.visuals.twoD.force.alpha(0.3).alphaTarget(0).restart();
+    // } else {
+    //     nodes.each(function (d) {
+    //         d.fx = d.x;
+    //         d.fy = d.y;
+    //         d.fixed = true;
+    //     });
+    // }
     this.visuals.twoD.commonService.session.network.allPinned = !this.visuals.twoD.commonService.session.network.allPinned;
   }
   /**
@@ -18652,16 +19359,16 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    */
   updateVisualization() {
     if (!this.isLoading) {
-      console.log('render update vis');
-      this.isLoading = true;
-      this.render();
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 1000);
+      // console.log('render update vis');
+      // this.isLoading = true;
+      // this.render();
+      // setTimeout(() => {
+      //     this.isLoading = false;
+      //   }, 1000);
     }
   }
   applyStyleFileSettings() {
-    this.widgets = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_3__.window.context.commonService.session.style.widgets;
+    this.widgets = ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.window.context.commonService.session.style.widgets;
     this.loadSettings();
   }
   ngOnDestroy() {
@@ -18680,7 +19387,7 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
   onFilterDataChange() {
     console.log('render filter change');
     // render doesn't do anything unless this.isLoading == true; so need to ensure that before call render
-    this.render(false);
+    this._rerender();
   }
   /**
    * Sets twoD component variable based on the value in the appropriate widget and then calls appropriate function to update the view
@@ -18689,13 +19396,9 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
    * (ie. onPolygonLabelVariableChange, onPolygonLabelVariableChange, onPolygonLabelOrientationChange all call redrawPolygonLabels) XXXXX
    */
   loadSettings() {
-    //this.context.twoD.zoom = null;
-    //Polygons|Label
-    this.SelectedPolygonLabelVariable = this.widgets['polygons-label-variable'];
-    this.onPolygonLabelVariableChange(this.SelectedPolygonLabelVariable);
     //Polygons|Label Size
     this.SelectedPolygonLabelSizeVariable = this.widgets['polygons-label-size'];
-    this.setPolygonLabelSize(this.SelectedPolygonLabelSizeVariable);
+    this.onPolygonLabelSizeChange(this.SelectedPolygonLabelSizeVariable);
     //Node|Orientation
     this.SelectedPolygonLabelOrientationVariable = this.widgets['polygons-label-orientation'];
     this.onPolygonLabelOrientationChange(this.SelectedPolygonLabelOrientationVariable);
@@ -18710,10 +19413,6 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     //Node|Label Size
     this.SelectedNodeLabelSizeVariable = this.widgets['node-label-size'];
     this.setNodeLabelSize(this.SelectedNodeLabelSizeVariable);
-    //Node|Orientation
-    this.SelectedNodeLabelOrientationVariable = this.widgets['node-label-orientation'];
-    this.onNodeLabelOrientationChange(this.SelectedNodeLabelOrientationVariable);
-    //Nodes|Tooltip
     if (!Array.isArray(this.widgets['node-tooltip-variable'])) {
       this.widgets['node-tooltip-variable'] = [this.widgets['node-tooltip-variable']];
     }
@@ -18789,41 +19488,44 @@ let TwoDComponent = (_class = class TwoDComponent extends _app_base_component_di
     //Network|Link Strength
     this.SelecetedNetworkLinkStrengthVariable = this.widgets['network-link-strength'];
     this.onNetworkFrictionChange(this.SelecetedNetworkLinkStrengthVariable);
+    if (this.widgets['polygon-label-orientation'] !== 'top' || this.widgets['polygon-label-orientation'] !== 'bottom') {
+      this.widgets['polygon-label-orientation'] = 'top';
+    }
     //Network|Polygon Orientation
     this.SelectedPolygonLabelOrientationVariable = this.widgets['polygon-label-orientation'];
     this.onPolygonLabelOrientationChange(this.SelectedPolygonLabelOrientationVariable);
   }
 }, _class.ctorParameters = () => [{
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_12__.Injector
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_14__.Injector
 }, {
-  type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_13__.EventManager
+  type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_16__.EventManager
 }, {
-  type: _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_2__.CommonService
+  type: _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_3__.CommonService
 }, {
-  type: golden_layout__WEBPACK_IMPORTED_MODULE_14__.ComponentContainer,
+  type: golden_layout__WEBPACK_IMPORTED_MODULE_17__.ComponentContainer,
   decorators: [{
-    type: _angular_core__WEBPACK_IMPORTED_MODULE_12__.Inject,
+    type: _angular_core__WEBPACK_IMPORTED_MODULE_14__.Inject,
     args: [_app_base_component_directive__WEBPACK_IMPORTED_MODULE_10__.BaseComponentDirective.GoldenLayoutContainerInjectionToken]
   }]
 }, {
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_12__.ElementRef
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_14__.ElementRef
 }, {
-  type: _angular_core__WEBPACK_IMPORTED_MODULE_12__.ChangeDetectorRef
+  type: _angular_core__WEBPACK_IMPORTED_MODULE_14__.ChangeDetectorRef
 }, {
-  type: _angular_cdk_clipboard__WEBPACK_IMPORTED_MODULE_15__.Clipboard
+  type: _angular_cdk_clipboard__WEBPACK_IMPORTED_MODULE_18__.Clipboard
 }, {
-  type: angular_google_tag_manager__WEBPACK_IMPORTED_MODULE_16__.GoogleTagManagerService
+  type: angular_google_tag_manager__WEBPACK_IMPORTED_MODULE_19__.GoogleTagManagerService
 }], _class.propDecorators = {
   DisplayGlobalSettingsDialogEvent: [{
-    type: _angular_core__WEBPACK_IMPORTED_MODULE_12__.Output
+    type: _angular_core__WEBPACK_IMPORTED_MODULE_14__.Output
   }]
 }, _class);
-TwoDComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_17__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_12__.Component)({
+TwoDComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_20__.__decorate)([(0,_angular_core__WEBPACK_IMPORTED_MODULE_14__.Component)({
   selector: 'TwoDComponent',
-  template: _twoD_plugin_component_html_ngResource__WEBPACK_IMPORTED_MODULE_0__,
-  changeDetection: _angular_core__WEBPACK_IMPORTED_MODULE_12__.ChangeDetectionStrategy.OnPush,
-  styles: [(_twoD_plugin_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1___default())]
-}), (0,tslib__WEBPACK_IMPORTED_MODULE_17__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_12__.Injector, _angular_platform_browser__WEBPACK_IMPORTED_MODULE_13__.EventManager, _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_2__.CommonService, golden_layout__WEBPACK_IMPORTED_MODULE_14__.ComponentContainer, _angular_core__WEBPACK_IMPORTED_MODULE_12__.ElementRef, _angular_core__WEBPACK_IMPORTED_MODULE_12__.ChangeDetectorRef, _angular_cdk_clipboard__WEBPACK_IMPORTED_MODULE_15__.Clipboard, angular_google_tag_manager__WEBPACK_IMPORTED_MODULE_16__.GoogleTagManagerService])], TwoDComponent);
+  template: _twoD_plugin_component_html_ngResource__WEBPACK_IMPORTED_MODULE_1__,
+  changeDetection: _angular_core__WEBPACK_IMPORTED_MODULE_14__.ChangeDetectionStrategy.OnPush,
+  styles: [(_twoD_plugin_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_2___default())]
+}), (0,tslib__WEBPACK_IMPORTED_MODULE_20__.__metadata)("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_14__.Injector, _angular_platform_browser__WEBPACK_IMPORTED_MODULE_16__.EventManager, _contactTraceCommonServices_common_service__WEBPACK_IMPORTED_MODULE_3__.CommonService, golden_layout__WEBPACK_IMPORTED_MODULE_17__.ComponentContainer, _angular_core__WEBPACK_IMPORTED_MODULE_14__.ElementRef, _angular_core__WEBPACK_IMPORTED_MODULE_14__.ChangeDetectorRef, _angular_cdk_clipboard__WEBPACK_IMPORTED_MODULE_18__.Clipboard, angular_google_tag_manager__WEBPACK_IMPORTED_MODULE_19__.GoogleTagManagerService])], TwoDComponent);
 
 (function (TwoDComponent) {
   TwoDComponent.componentTypeName = '2D Network';
@@ -19539,7 +20241,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! tslib */ 70655);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 94650);
-/* harmony import */ var _services_layout_config_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/layout-config.service */ 48302);
+/* harmony import */ var _services_layout_config_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/layout-config.service */ 54127);
 /* harmony import */ var object_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! object-path */ 68624);
 /* harmony import */ var object_path__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(object_path__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _services_layout_layout_ref_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/layout/layout-ref.service */ 89414);
@@ -19720,7 +20422,7 @@ MenuHorizontalDirective = (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__decorate)([(0,
 
 /***/ }),
 
-/***/ 48302:
+/***/ 54127:
 /*!************************************************************************!*\
   !*** ./src/assets/metronic/app/core/services/layout-config.service.ts ***!
   \************************************************************************/
@@ -22106,7 +22808,7 @@ var ___CSS_LOADER_API_NO_SOURCEMAP_IMPORT___ = __webpack_require__(/*! ../../nod
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ 40479);
 var ___CSS_LOADER_EXPORT___ = ___CSS_LOADER_API_IMPORT___(___CSS_LOADER_API_NO_SOURCEMAP_IMPORT___);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "#main-tabset {\n  height: 100%;\n}\n\n#phylocanvas {\n  height: 100%;\n}\n\nbody .ui-tabview {\n  height: 100% !important;\n}\n\nbody .ui-tabview .ui-tabview-panels {\n  height: 100% !important;\n}\n\nbody .ui-tabview .ui-tabview-panels .ui-tabview-panel {\n  height: 100% !important;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "#main-tabset {\n  height: 100%;\n}\n\n#phylocanvas {\n  height: 100%;\n}\n\nbody .ui-tabview {\n  height: 100% !important;\n}\n\nbody .ui-tabview .ui-tabview-panels {\n  height: 100% !important;\n}\n\nbody .ui-tabview .ui-tabview-panels .ui-tabview-panel {\n  height: 100% !important;\n}\n\n:root {\n  --vis-graph-node-label-background: black;\n}", ""]);
 // Exports
 module.exports = ___CSS_LOADER_EXPORT___.toString();
 
@@ -22268,7 +22970,7 @@ var ___CSS_LOADER_API_NO_SOURCEMAP_IMPORT___ = __webpack_require__(/*! ../../../
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ 40479);
 var ___CSS_LOADER_EXPORT___ = ___CSS_LOADER_API_IMPORT___(___CSS_LOADER_API_NO_SOURCEMAP_IMPORT___);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".dialogSize {\n  width: 30vw;\n  height: 150px;\n  min-width: 150px;\n}\n\n:host {\n  position: absolute;\n  overflow: hidden;\n  z-index: 1 !important;\n  padding: 1px;\n  /*top: 37px !important;\n  left: 1px !important; \n  width: 99% !important; */\n}\n\n.network {\n  margin-top: 0 !important;\n  cursor: grab;\n}\n\n.ui-dropdown {\n  width: 100% !important;\n}\n\n.display-none {\n  display: none;\n}\n\n.bottom-table {\n  font-size: 0.5vmax;\n}\n\n#node-max-radius-row, #node-min-radius-row {\n  display: none;\n}\n\n.clusters path {\n  cursor: grab;\n}\n\n:host ::ng-deep .p-accordion-tab:not(.p-accordion-tab-active) .p-toggleable-content {\n  height: 0;\n  overflow: hidden;\n}\n:host ::ng-deep .p-accordion-tab.p-accordion-tab-active .p-toggleable-content {\n  height: auto !important;\n  overflow: auto !important;\n}\n\n/* Button appearance on hover */\n.btn-icon:hover {\n  transform: scale(1.1); /* Slight enlarge on hover */\n  background-color: rgba(0, 0, 0, 0.1); /* Subtle background color on hover */\n}\n\n.btn-icon {\n  margin-right: 10px;\n  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);\n}\n\n.flaticon-settings:before {\n  font-weight: 800 !important;\n}\n\n.flaticon-pin:before {\n  font-weight: 800 !important;\n}\n\n.flaticon-download:before {\n  font-weight: 800 !important;\n}\n\n#network-export-filename {\n  height: 42px;\n}\n\n#network-attribute-table {\n  border-spacing: 0;\n  width: 100%;\n  border: 1px solid #ddd;\n}\n\n#network-attribute-table td, #network-attribute-table th {\n  text-align: left;\n  padding: 2px;\n  border: 1px solid #ddd;\n}\n\n#network-attribute-table tr:nth-child(even) {\n  background-color: #f2f2f2;\n}\n\n#network-attribute-table tr:nth-child(odd) {\n  background-color: #fff;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".dialogSize {\n  width: 30vw;\n  height: 150px;\n  min-width: 150px;\n}\n\n:host {\n  position: absolute;\n  overflow: hidden;\n  z-index: 1 !important;\n  padding: 1px;\n  /*top: 37px !important;\n  left: 1px !important; \n  width: 99% !important; */\n}\n\n:root {\n  --vis-graph-brush-selection-opacity: 0.5;\n  --vis-graph-brushed-node-stroke-color: #ff0000;\n  --vis-graph-brushed-node-label-text-color: #00ff00;\n  --vis-graph-brushed-node-icon-fill-color: #0000ff;\n}\n\n::ng-deep .css-1vv8bkf-link-arrow {\n  fill: #4e5f99;\n}\n::ng-deep .css-uryleg-label-background {\n  fill: transparent !important;\n}\n::ng-deep .css-14dxyvq-background {\n  fill: transparent !important;\n}\n\n.network {\n  margin-top: 0 !important;\n  cursor: grab;\n}\n\n.ui-dropdown {\n  width: 100% !important;\n}\n\n.display-none {\n  display: none;\n}\n\n.bottom-table {\n  font-size: 0.5vmax;\n}\n\n#node-max-radius-row, #node-min-radius-row {\n  display: none;\n}\n\n.clusters path {\n  cursor: grab;\n}\n\n:host ::ng-deep .p-accordion-tab:not(.p-accordion-tab-active) .p-toggleable-content {\n  height: 0;\n  overflow: hidden;\n}\n:host ::ng-deep .p-accordion-tab.p-accordion-tab-active .p-toggleable-content {\n  height: auto !important;\n  overflow: auto !important;\n}\n\n/* Button appearance on hover */\n.btn-icon:hover {\n  transform: scale(1.1); /* Slight enlarge on hover */\n  background-color: rgba(0, 0, 0, 0.1); /* Subtle background color on hover */\n}\n\n.btn-icon {\n  margin-right: 10px;\n  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);\n}\n\n.flaticon-settings:before {\n  font-weight: 800 !important;\n}\n\n.flaticon-pin:before {\n  font-weight: 800 !important;\n}\n\n.flaticon-download:before {\n  font-weight: 800 !important;\n}\n\n#network-export-filename {\n  height: 42px;\n}\n\n#network-attribute-table {\n  border-spacing: 0;\n  width: 100%;\n  border: 1px solid #ddd;\n}\n\n#network-attribute-table td, #network-attribute-table th {\n  text-align: left;\n  padding: 2px;\n  border: 1px solid #ddd;\n}\n\n#network-attribute-table tr:nth-child(even) {\n  background-color: #f2f2f2;\n}\n\n#network-attribute-table tr:nth-child(odd) {\n  background-color: #fff;\n}\n\n:root {\n  --vis-graph-link-label-background: black;\n  --vis-dark-graph-link-label-background: black;\n}", ""]);
 // Exports
 module.exports = ___CSS_LOADER_EXPORT___.toString();
 
@@ -22659,7 +23361,7 @@ module.exports = "﻿﻿<div class=\"m-content\">\n\n    <div id=\"file-panel\" 
 /***/ ((module) => {
 
 "use strict";
-module.exports = "<div class=\"m-content\">   \n    <div class=\"m-portlet m-portlet--mobile\" style=\"height:100%;\">\n\n        <mat-toolbar id=\"top-toolbar\" class=\"nav-bar\">\n                <div class=\"navbar-logo\">\n                    <span class=\"microbe-font\">Microbe</span>\n                    <span class=\"trace-font\">Trace</span>\n                    <span><img alt=\"microbetrace\" class=\"mt-icon-toolbar\" [src]=\"appRootUrl() + 'assets/images/Logo.png'\"></span>\n                  </div>\n                  <div class=\"menu-items\">\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"fileMenu\"><i class=\"far nav-icon flaticon-file-1\"></i>File<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #fileMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <!-- <button mat-menu-item (click)=\"FileClick('Stash Session')\">Stash</button> -->\n                      <!-- <button mat-menu-item (click)=\"FileClick('Recall Session')\">Recall</button> -->\n                      <button mat-menu-item (click)=\"FileClick('Save Session')\">Save</button>\n                      <!-- <button mat-menu-item (click)=\"FileClick('Open Session')\">Open</button> -->\n                      <button mat-menu-item (click)=\"FileClick('Open URL')\">Open URL</button>\n                      <button mat-menu-item (click)=\"FileClick('Add Data')\">Add Data</button>\n                      <!-- <button mat-menu-item (click)=\"FileClick('New Session')\">New</button> -->\n                    </mat-menu>\n                    <button class=\"navbar-item\" (click)=\"DisplayGlobalSettingsDialog()\" mat-button><i class=\"far nav-icon flaticon-cogwheel-2\"></i>Settings</button>\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"viewMenu\"><i class=\"far nav-icon flaticon-web\"></i>View<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #viewMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <button mat-menu-item (click)=\"Viewclick('2D Network')\">2D Network</button>\n                      <button mat-menu-item (click)=\"Viewclick('Table')\">Table</button>\n                      <button mat-menu-item (click)=\"Viewclick('Map')\">Map</button>\n                      <button mat-menu-item (click)=\"Viewclick('Epi Curve')\">Epi Curve</button>\n                      <button mat-menu-item (click)=\"Viewclick('Phylogenetic Tree')\">Phylogenetic Tree</button>\n                      <button mat-menu-item (click)=\"Viewclick('Alignment View')\">Alignment View</button>\n                      <button mat-menu-item (click)=\"Viewclick('Crosstab')\">CrossTab</button>\n                      <button mat-menu-item (click)=\"Viewclick('Aggregate')\">Aggregate</button>\n                      <button mat-menu-item (click)=\"Viewclick('Gantt Chart')\">Gantt Chart</button>\n                    </mat-menu>\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"windowMenu\"><i class=\"far nav-icon flaticon-web\"></i>Window<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #windowMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <button mat-menu-item (click)=\"WindowClick('Reload Screen')\">Reload</button>\n                      <button mat-menu-item (click)=\"WindowClick('Fullscreen')\">Fullscreen</button>\n                    </mat-menu>\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"helpMenu\"><i class=\"far nav-icon flaticon-questions-circular-button\"></i>Help<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #helpMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <a href=\"https://github.com/CDCgov/MicrobeTrace/wiki\" class=\"dropdown-item ifOnline\" target=\"_blank\" rel=\"noreferrer noopener\" mat-menu-item>Help</a>\n                      <a href=\"https://github.com/CDCgov/MicrobeTrace/issues/new\" class=\"dropdown-item ifOnline\" target=\"_blank\" rel=\"noreferrer noopener\" mat-menu-item>Report Bug</a>\n                      <button (click)=\"HelpClick('About')\" mat-menu-item>About</button>\n                    </mat-menu>\n                    <!-- <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"langMenu\"><i class=\"far nav-icon flaticon-earth-globe\"></i>Language<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #langMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <button mat-menu-item >English</button>\n                      <button mat-menu-item >Spanish</button>\n                    </mat-menu> -->\n                  </div>\n            <div id=\"search-form\" class=\"form-inline navbar-form\">\n                <label for=\"search\">Search</label>\n                <div class=\"autocomplete-wrapper\">\n                    <input type=\"search\" id=\"search\" class=\"form-control form-control-sm\" (input)=\"onSearch()\" [(ngModel)]=\"searchText\" placeholder=\"Nodes\">\n                    <ul id=\"search-results\"></ul>\n                </div>\n            <button id=\"casesensitivebutton\" (click)=\"onCaseSensitiveChange()\" type=\"button\" class=\"btn btn-light btn-sm\" data-toggle=\"button\" aria-pressed=\"false\" autocomplete=\"off\" title=\"Match Case\">\n                <span>C</span>\n            </button>     \n            <button id=\"wholewordbutton\" type=\"button\" (click)=\"onWholeWordChange()\" class=\"btn btn-light btn-sm\" data-toggle=\"button\" aria-pressed=\"false\" autocomplete=\"off\" title=\"Match Whole Word\">\n                <span>W</span>\n            </button>      \n        \n            <select [(ngModel)]=\"searchField\" (ngModelChange)=\"onSearchFieldChange($event)\" id=\"search-field\"  class=\"form-control form-control-sm nodeValues\">\n                <option val=\"id\">ID</option>\n            </select>\n            </div> \n          </mat-toolbar>\n\n        <div id=\"visualwrapper\" class=\"kt-container  kt-grid__item kt-grid__item--fluid \" style=\"margin: 6px 6px 0 6px;\">\n            <div class=\"kt-portlet kt-portlet--mobile\" style=\"height:100%\">\n                <div class=\"kt-portlet__head kt-portlet__head--lg\" style=\"height:100%\">\n                    <div class=\"m-portlet__body\" style=\"flex: 1 100%; max-width:100%; height:100%\">\n                        <!-- TODO: Add back or replace-->\n                        <!-- <golden-layout-root #goldenLayout></golden-layout-root> -->\n                        <app-golden-layout-host #goldenLayoutHost></app-golden-layout-host>             \n                    </div>\n                </div>\n            </div>\n\n        <p-dialog class=\"table-z-index\" id=\"global-settings-link-color-table\" \n            [position]=\"GlobalSettingsLinkColorDialogSettings.linkLeft\" \n            [(visible)]=\"GlobalSettingsLinkColorDialogSettings.isVisible\"  \n            [style]=\"{'z-index': '1'}\"\n            (onShow)=\"showLinkColorTable()\"\n            (onHide)=\"hideLinkColorTable()\"\n            >\n            <ng-template pTemplate=\"header\">\n                <div style=\"display: flex; justify-content: space-between; width: 100%;\">\n                    <span>Link Color Table</span>\n                    <span style=\"overflow: visible; position: relative;\">\n                        <button title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"toggleColorTableSettings('link-color')\"><i class=\"pi pi-cog\"></i></button>\n                        <div id=\"linkColorTableSettings\" class=\"dropdown-menu\" style=\"display: none;\">\n                            <button id=\"linkColorCounts\" class=\"dropdown-item\" (click)=\"toggleColorTableColumns('link-color', 'tableCounts')\">\n                                <span>Show Counts</span>\n                                <i [className]=\"this.widgets['link-color-table-counts'] ? 'pi pi-check' : 'pi pi-times'\" style=\"line-height: 1.5\"></i>\n                            </button>\n                            <button id=\"linkColorFrequencies\" class=\"dropdown-item\" (click)=\"toggleColorTableColumns('link-color', 'tableFreq')\">\n                                <span>Show Frequencies</span>\n                                <i [className]=\"this.widgets['link-color-table-frequencies'] ? 'pi pi-check' : 'pi pi-times'\" style=\"line-height: 1.5\"></i>\n                            </button>\n                        </div>\n                    </span>\n                </div>\n            </ng-template>\n            <div style=\"max-height: 50vh\">\n                <table id=\"link-color-table\" style=\"width:100%;height:100%;\"></table>\n            </div>\n        </p-dialog>\n\n\n        <p-dialog id=\"global-settings-node-color-table\" \n            [position]=\"GlobalSettingsNodeColorDialogSettings.nodeLeft\" \n            [(visible)]=\"GlobalSettingsNodeColorDialogSettings.isVisible\"  \n            (onShow)=\"showNodeColorTable()\"\n            (onHide)=\"hideNodeColorTable()\"      \n                    >       \n            <ng-template pTemplate=\"header\">\n                <div style=\"display: flex; justify-content: space-between; width: 100%;\">\n                    <span>Node Color Table</span>\n                    <span style=\"overflow: visible; position: relative;\">\n                        <button title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"toggleColorTableSettings('node-color')\"><i class=\"pi pi-cog\"></i></button>\n                        <div id=\"nodeColorTableSettings\" class=\"dropdown-menu\" style=\"display: none;\">\n                            <button id=\"nodeColorCounts\" class=\"dropdown-item\" (click)=\"toggleColorTableColumns('node-color', 'tableCounts')\">\n                                <span>Show Counts</span>\n                                <i [className]=\"this.widgets['node-color-table-counts'] ? 'pi pi-check' : 'pi pi-times'\" style=\"line-height: 1.5\"></i>\n                            </button>\n                            <button id=\"nodeColorFrequencies\" class=\"dropdown-item\" (click)=\"toggleColorTableColumns('node-color', 'tableFreq')\">\n                                <span>Show Frequencies</span>\n                                <i [className]=\"this.widgets['node-color-table-frequencies'] ? 'pi pi-check' : 'pi pi-times'\" style=\"line-height: 1.5\"></i>\n                            </button>\n                        </div>\n                    </span>\n                </div>\n            </ng-template>\n            <div style=\"max-height: 50vh\">\n                <table id=\"node-color-table\" style=\"width:100%;height:100%;\"></table>\n            </div>\n        </p-dialog>\n        </div>\n    \n        <div id=\"overlay\" appDnd (fileDropped)=\"prepareFilesLists($event)\">\n            <input class=\"dnd-input\" type=\"file\" #fileDropRef id=\"fileDropRef\" multiple (change)=\"prepareFilesLists($event.target.files)\" />\n            <div class=\"welcome-msg\">\n                <div id=\"welcome-title\" class=\"top\">\n                    <span class=\"primary\">Welcome to </span>\n                    <span class=\"microbe primary\">Microbe</span>\n                    <span class=\"primary\">Trace&#8482;</span>\n                    <!-- <span><img class=\"mt-icon\" src=\"../../assets/images/Logo.png\"></span> -->\n                    <!-- Swap/Uncomment when building productions -->\n                    <span><img alt=\"microbetrace\" class=\"mt-icon\" [src]=\"appRootUrl() + 'assets/images/Logo.png'\"></span>\n                </div>\n                <div id=\"welcome-description\" class=\"bottom primary\">The Visualization Multitool for Molecular Epidemiology and Bioinformatics</div>\n            </div>\n            <div id=\"add-data-container\" class=\"add-data-container\">\n                <div class=\"files-msg\">\n                    <span class=\"primary\">Click </span>\n                    <a class=\"here-link primary\" for=\"fileDropRef\">here</a>\n                    <span class=\"primary\"> or Drag & Drop files to load data</span>\n                </div>\n                <div class=\"add-btns primary\">\n                    <!-- TODO: add back in when recall is ready-->\n                    <!-- <button mat-raised-button color=\"primary\" class=\"recall\" (click)=\"recallClicked()\">Recall Previous Session</button> -->\n                    <button mat-raised-button color=\"primary\" (click)=\"continueClicked()\">Continue with Sample Dataset</button>\n                </div>\n            </div>\n            <!-- <div id=\"onload-container\" class=\"launch-options-container primary\">\n                <span class=\"onload-bold\">Onload Settings:</span>\n                <span>Distance Metric: <span class=\"option-value\" [matMenuTriggerFor]=\"metricMenu\">{{metric}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\n                <span id=\"ambiguities-menu\">Ambiguities: <span class=\"option-value\" [matMenuTriggerFor]=\"ambiMenu\">{{ambiguity}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\n                <span>View to Launch: <span class=\"option-value\" [matMenuTriggerFor]=\"viewMenuBottom\">{{launchView}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\n                <span class=\"threshold-option\">Link Threshold: \n                    <form class=\"threshold-input\">\n                    <mat-form-field class=\"threshold-input-length\">\n                        <mat-label></mat-label>\n                      <input matInput (input)=\"updateThreshold($event)\" [value]=\"threshold\">\n                    </mat-form-field>\n                  </form>\n                </span>\n            </div>\n            <mat-menu #metricMenu=\"matMenu\"overlapTrigger=\"false\">\n                <button mat-menu-item (click)=\"updateMetric('TN93')\">TN93</button>\n                <button mat-menu-item (click)=\"updateMetric('SNPs')\">SNPs</button>\n            </mat-menu>\n            <mat-menu #ambiMenu=\"matMenu\" overlapTrigger=\"false\">\n                <button mat-menu-item (click)=\"updateAmbiguity('Average')\">Average</button>\n                <button mat-menu-item (click)=\"updateAmbiguity('Resolve')\">Resolve</button>\n                <button mat-menu-item (click)=\"updateAmbiguity('Skip')\">Skip</button>\n                <button mat-menu-item (click)=\"updateAmbiguity('GapMM')\">GapMM</button>\n                <button mat-menu-item (click)=\"updateAmbiguity('HIV-Trace -g')\">HIV-Trace -g</button>\n            </mat-menu>\n            <mat-menu #viewMenuBottom=\"matMenu\" overlapTrigger=\"false\">\n                <button mat-menu-item (click)=\"updateLaunchView('2D Network')\">2D Network</button>\n                <button mat-menu-item (click)=\"updateLaunchView('Table')\">Table</button>\n                <button mat-menu-item (click)=\"updateLaunchView('Map')\">Bubbles</button>\n                <button mat-menu-item (click)=\"updateLaunchView('Phylogenetic Tree')\">Phylogenetic Tree</button>\n            </mat-menu> -->\n        </div>\n\n\n        <p-dialog id=\"ledger-loader-modal\" [(visible)]=\"displayLedgerLoaderDialog\" header=\"Blockchain Ledgers\" styleClass=\"ui-dialog\" [contentStyle]=\"{'max-height':'50vh'}\">\n\n            <div class=\"position-relative\" #ledgerloadDiv>\n                <div class=\"loader\">\n                    <i class=\"fa fa-spinner fa-spin\" style=\"font-size:40px;z-index:1;display:none;\" #ledgerloader></i>\n                </div>\n            </div>\n\n            <div style=\"min-height: 100px;\">\n                <p-tree [value]=\"ledgerOptions\" selectionMode=\"checkbox\"  [filter]=\"true\" [(selection)]=\"ledgerOptionSelected\" *ngIf=\"ledgerOptions && ledgerOptions.length > 0\" scrollHeight=\"flex\"></p-tree>\n            </div>\n\n            <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-error\" (click)=\"ToggleDisplayLedgerLoaderDialog()\">Cancel</button>\n                <button type=\"button\" id=\"stash-data2\" class=\"btn btn-primary\" (click)=\"DisplayLedgerLoaderDialog('Load')\" [disabled]=\"!ledgerOptionSelected || ledgerOptionSelected.length === 0\">Load</button>\n            </div>\n\n        </p-dialog><!-- /.modal -->\n        \n\n\n        <p-dialog id=\"global-settings-modal\" \n                    [(visible)]=\"GlobalSettingsDialogSettings.isVisible\"  \n                    header=\"Global Settings\" >\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        <tabset #globalSettingsTab class=\"tab-container tabbable-line\" style='width: 100%; height: 100%;'>\n                            <tab heading=\"{{'Filtering' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\n\n                                <div id=\"filtering-config\" role=\"tabpanel\" aria-labelledby=\"filtering-tab\">\n                                    <div class=\"form-group row\" title=\"By what metric would you like to measure distance?\">\n                                        <div class=\"col-4\">Distance Metric</div>\n                                        <div class=\"col-8\">\n                                            <select id=\"default-distance-metric\" class=\"form-control form-control-sm mr-5\" [(ngModel)]=\"SelectedDistanceMetricVariable\" (ngModelChange)=\"onDistanceMetricChanged()\">\n                                                <option value=\"tn93\">TN93</option>\n                                                <option value=\"snps\">SNPs</option>\n                                            </select>\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"By what algorithm would you like to prune links from the network?\">\n                                        <div class=\"col-4\">Prune With</div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"PruneWityTypes\" [(ngModel)]=\"SelectedPruneWityTypesVariable\" (onChange)=\"onPruneWithTypesChanged()\"></p-selectButton>\n                                        </div>\n                                    </div>\n                                    <div id=\"filtering-epsilon-row\" class=\"form-group row\" style=\"display: none;\" title=\"Select a value for epislon to add links back to minimum spanning network. See 'A Novel Network Representation of SARS-CoV-2 Sequencing Data' for algorithm details.\">\n                                        <div class=\"col-4\">\n                                            <label for=\"filtering-epsilon\">Epsilon: {{ SelectedEpsilonValue }}</label>\n                                        </div>\n                                        <div class=\"col-8\">\n                                            <input type=\"range\" class=\"form-control form-control-sm\" min=\"-8\" max=\"2\" step=\".01\" [(ngModel)]=\"widgets['filtering-epsilon']\" (ngModelChange)=\"onEpsilonValueChange()\">\n                                        </div>\n                                    </div>                                    \n                                    <div class=\"form-group row\" title=\"What's the minimum number of nodes a cluster must have in order to be visible?\">\n                                        <div class=\"col-4\">\n                                            <label for=\"cluster-minimum-size\">Minimum Cluster Size</label>\n                                        </div>\n                                        <div class=\"col-8\">\n                                            <input type=\"number\" class=\"form-control form-control-sm\" min=\"1\" value=\"1\" step=\"1\" [(ngModel)]=\"SelectedClusterMinimumSizeVariable\" (ngModelChange)=\"onMinimumClusterSizeChanged()\">\n                                        </div>\n                                    </div>\n                                    <div id=\"filtering-wrapper\">\n                                        <div class=\"form-group row\" title=\"By what variable would you like to prune links from the network?\">\n                                            <div class=\"col-4\"><label for=\"link-sort-variable\">Filter Links on</label></div>\n                                            <div class=\"col-8\">\n                                                <p-dropdown id=\"link-sort-variable\" [options]=\"ToolTipFieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedLinkSortVariable\" (onChange)=\"onLinkSortChanged()\"></p-dropdown>\n                                            </div>\n                                        </div>\n                                        <div class=\"form-group row\" id=\"filtering-threshold\" title=\"What's the maximum genetic distance you're willing to call a link?\">\n                                            <div class=\"col-4\"><label for=\"link-threshold\">Filtering Threshold</label></div>\n                                            <div class=\"col-8\"><svg id=\"link-threshold-sparkline\" #linkThresholdSparkline style=\"width: 280px; height: 48px;\"></svg></div>\n                                            <div class=\"col-8  offset-4\">\n                                                <input type=\"number\" class=\"form-control form-control-sm\" id=\"link-threshold\" min=\"-1\" value=\"1\" step=\"0.001\" [(ngModel)]=\"SelectedLinkThresholdVariable\" (ngModelChange)=\"onLinkThresholdChanged()\">\n                                            </div>\n                                        </div>\n                                        <div class=\"form-group row\" title=\"Click to reveal all hidden elements of the network.\">\n                                            <div class=\"col-4\"><label for=\"reveal-all\">Reveal</label></div>\n                                            <div class=\"col-8\">\n                                              <button type=\"button\" id=\"reveal-all\" (click)=\"revealClicked()\" class=\"btn btn-light btn-sm w-100\">Everything</button>\n                                            </div>\n                                          </div>\n                                    </div>\n                                    <div class=\"form-group row\" hidden title=\"Click to reveal all hidden elements of the network.\">\n                                        <div class=\"col-4\"><label for=\"RevealAllTab\">Reveal</label></div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"RevealTypes\" [(ngModel)]=\"SelectedRevealTypesVariable\" (onChange)=\"updateGlobalSettingsModel()\"></p-selectButton>\n                                        </div>\n                                    </div>\n                                    <hr>\n                                    <div class=\"form-group row\" title=\"Display a table of overview statistics for the network\">\n                                        <div class=\"col-4\">Statistics</div>\n                                        <div class=\"col-8\">\n                                            <!-- <p-selectButton [options]=\"StatisticsTypes\" [(ngModel)]=\"SelectedStatisticsTypesVariable\" (onChange)=\"onShowStatisticsChanged()\"></p-selectButton> -->\n                                        </div>\n                                    </div>\n                                </div>\n                            </tab>\n                            <tab heading=\"{{'Styling' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\n\n                                <div id=\"style-config\" role=\"tabpanel\" aria-labelledby=\"style-tab\">\n                                    <div class=\"form-group row\" title=\"By what variable nodes be colored?\">\n                                        <div class=\"col-4\"><label for=\"node-color-variable\">Color Nodes By</label></div>\n                                        <div class=\"col-8\">\n                                            <p-dropdown id=\"node-color-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedColorNodesByVariable\" (onChange)=\"onColorNodesByChanged()\"></p-dropdown>\n                                        </div>\n                                    </div>\n                                    <div id=\"node-color-table-row\" [hidden]=\"!ShowGlobalSettingsNodeColorTable\" class=\"form-group row\" title=\"Should MicrobeTrace display the table of colors?\">\n                                        <div class=\"col-4\"><label>Nodes Color Table</label></div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"NodeColorTableTypes\" [(ngModel)]=\"SelectedNodeColorTableTypesVariable\" (onChange)=\"onNodeColorTableChanged()\"></p-selectButton>\n                                        </div>\n                                    </div>\n\n\n                                    <div id=\"node-color-value-row\" class=\"form-group row\" title=\"What color should the nodes be?\">\n                                        <div class=\"col-4\"><label for=\"node-color\">Nodes</label></div>\n                                        <div class=\"col-8\">\n                                            <input type=\"color\" id=\"node-color\" class=\"form-control form-control-sm\" value=\"#1f77b4\" [(ngModel)]=\"SelectedNodeColorVariable\" (ngModelChange)=\"onNodeColorChanged()\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"By what variable should links be colored?\">\n                                        <div class=\"col-4\"><label for=\"link-color-variable\">Color Links By</label></div>\n                                        <div class=\"col-8\">\n                                            <p-dropdown id=\"link-tooltip-variable\" [options]=\"ToolTipFieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedColorLinksByVariable\" (onChange)=\"onColorLinksByChanged()\"></p-dropdown>\n                                        </div>\n                                    </div>\n                                    <div id=\"link-color-table-row\" [hidden]=\"!ShowGlobalSettingsLinkColorTable\"  class=\"form-group row\" title=\"Should MicrobeTrace display the table of colors?\">\n                                        <div class=\"col-4\"><label>Link Color Table</label></div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"LinkColorTableTypes\" [(ngModel)]=\"SelectedLinkColorTableTypesVariable\" (onChange)=\"onLinkColorTableChanged()\"></p-selectButton>\n                                        </div>\n                                    </div>\n\n                                    <div id=\"link-color-value-row\" class=\"form-group row\" title=\"What color should the links be?\">\n                                        <div class=\"col-4\"><label for=\"link-color\">Links</label></div>\n                                        <div class=\"col-8\">\n                                            <input type=\"color\" id=\"link-color\" class=\"form-control form-control-sm\" [(ngModel)]=\"SelectedLinkColorVariable\" (ngModelChange)=\"onLinkColorChanged()\">\n                                        </div>\n                                    </div>\n\n                                    <div class=\"form-group row\" title=\"What color should denote selection?\">\n                                        <div class=\"col-4\"><label for=\"selected-color\">Selected</label></div>\n                                        <div class=\"col-8\">\n                                            <input type=\"color\" id=\"selected-color\" class=\"form-control form-control-sm\" value=\"#ff8300\" [(ngModel)]=\"SelectedColorVariable\" (ngModelChange)=\"updateGlobalSettingsModel()\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"What color should the background be?\">\n                                        <div class=\"col-4\"><label for=\"background-color\">Background</label></div>\n                                        <div class=\"col-8\">\n                                            <input type=\"color\" id=\"background-color\" class=\"form-control form-control-sm\" value=\"#ffffff\" [(ngModel)]=\"SelectedBackgroundColorVariable\" (ngModelChange)=\"onBackgroundChanged()\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"Load an existing MicrobeTrace style file\">\n                                        <div class=\"col-4\">Apply Style</div>\n                                        <div class=\"col-8\">\n                                            <input type=\"file\" id=\"apply-style\" class=\"d-none\" accept=\".style\" [(ngModel)]=\"SelectedApplyStyleVariable\" (change)=\"onApplyStyle($event)\">\n                                            <label class=\"custom-file-label\" for=\"apply-style\">Choose MicrobeTrace Style File</label>\n                                        </div>\n                                    </div>\n                                </div>\n                            </tab>\n\n                            <tab heading=\"{{'Timeline' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\n                                <div id=\"timeline-config\" role=\"tabpanel\" aria-labelledby=\"timeline-tab\">\n                                    <div class=\"form-group row\" title=\"By what variable timeline applied?\">\n                                        <div class=\"col-4\"><label for=\"node-timeline-variable\">Timeline By</label></div>\n                                        <div class=\"col-8\">\n                                            <p-dropdown id=\"node-timeline-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedTimelineVariable\" (onChange)=\"onTimelineChanged($event.value)\"></p-dropdown>\n                                        </div>\n                                      </div>\n                                </div> \n                            </tab>\n                        </tabset>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"modal-footer\">\n                <div class=\"btn-group\" data-toggle=\"buttons\">\n                    <button type=\"button\" class=\"btn btn-primary\" (click)=\"GlobalSettingsDialogSettings.setVisibility(false)\">Done</button>\n                </div>\n            </div>\n        </p-dialog><!-- /.modal -->\n\n        <p-dialog id=\"session-recall-modal\" [(visible)]=\"displayRecallStashDialog\" header=\"Recall Stash\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div #stashes id=\"recall-stashes-available\" class=\"table-sm\"></div>\n\n                    <div class=\"modal-footer\">\n                        <button *ngIf=\"!HideThisForNow\" type=\"button\" class=\"btn btn-danger\" id=\"recall-delete-stash\" (click)=\"DisplayRecallStashDialog('Delete')\">Delete</button>\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayRecallStashDialog('Cancel')\">Cancel</button>\n                        <button type=\"button\" class=\"btn btn-success\" id=\"recall-load-stash\" (click)=\"DisplayRecallStashDialog('Recall')\">Recall</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog><!-- /.modal -->\n\n        <p-dialog id=\"open-auspice-url\" [(visible)]=\"displayUrlDialog\" header=\"Open Auspice JSON via URL\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        <input type=\"text\" id=\"auspice-url\" class=\"form-control form-control-sm\" [(ngModel)]=\"auspiceUrlVal\" placeholder=\"URL of Auspice JSON to open\" />\n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayUrlDialog('Cancel')\">Cancel</button>\n                        <button type=\"button\" class=\"btn btn-success\" id=\"url-open-button\" (click)=\"DisplayUrlDialog('Open')\">Open</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog><!-- /.modal -->\n\n        <p-dialog id=\"open-old-mt\" [(visible)]=\"displayMTDialog\" header=\"Open Auspice JSON in classic MicrobeTrace\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        Welcome to the newest version of MicrobeTrace! If you'd like to open your auspice JSON file in the previous version of MicrobeTrace, please click this link: <br />\n                        <a href=\"https://microbetrace.cdc.gov/MicrobeTrace/?url={{auspiceUrlVal}}\">https://microbetrace.cdc.gov/MicrobeTrace/?url={{auspiceUrlVal}}</a>\n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayMTDialog('Cancel')\">Close</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog><!-- /.modal -->\n\n        <p-dialog id=\"session-stash-modal\" [(visible)]=\"displayStashDialog\" header=\"Save Session\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n\n                    <div class=\"modal-body\">\n                        <div class=\"form-group row\" title=\"What would you like to call this session?\">\n                            <div class=\"col-7\">\n                                <input style=\"height:42px\" type=\"text\" id=\"stash-name\" class=\"form-control form-control-sm\" [(ngModel)]=\"saveFileName\" placeholder=\"Name your session!\">\n                            </div>\n                            <div class=\"col-5\">\n                                <p-dropdown [options]=\"saveFileTypeOptions\" [(ngModel)]=\"selectedSaveFileType\" appendTo=\"body\"></p-dropdown>\n                            </div>\n                        </div>\n                        <div *ngIf=\"selectedSaveFileType=='session'\" class=\"form-group row\" title=\"Should MicrobeTrace compress this save file?\">\n                            <div class=\"col\">\n                                <div class=\"form-check form-check-inline\">\n                                    <input class=\"form-check-input\" type=\"checkbox\" id=\"save-file-compress\" checked>\n                                    <label class=\"form-check-label\" for=\"save-file-compress\">Compress?</label>\n                                  </div>\n                              <div id=\"cluster-checkbox-container\" class=\"form-check form-check-inline\">\n                                <input class=\"form-check-input\" [(ngModel)]=\"saveByCluster\" type=\"checkbox\" id=\"save-file-cluster\">\n                                <label class=\"form-check-label\" for=\"save-file-cluster\">By Cluster</label>\n                              </div>\n                            </div>\n                         </div>\n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn btn-error\" (click)=\"DisplayStashDialog('Cancel')\">Cancel</button>\n                        <button type=\"button\" id=\"stash-data\" class=\"btn btn-primary\" (click)=\"DisplayStashDialog('Save')\" [disabled]=\"saveFileName === undefined || saveFileName === ''\">Save</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog><!-- /.modal -->\n\n\n        <p-dialog id=\"about-dialog\" [(visible)]=\"displayAbout\" header=\"About Microbetrace\">\n            <div class=\"modal-dialog modal-lg\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        <h3>\n                            <span>{{\"MicrobeTrace\" | localize}} </span>\n                            <small>v<span id=\"version\">{{version}}</span></small>\n                        </h3>\n                        <p>\n                            MicrobeTrace is an interactive web application that renders existing data from high-risk contact networks\n                            in an easy-to-use Graphical User Interface (GUI). The network visualization can be customized according to\n                            supplemental data sources and mathematical inferences like the most probable transmission pathways.\n                            MicrobeTrace is a highly responsive, visual sequence analytics tool which can reduce the gap between data\n                            production and analytics and help you to discover, understand, and display relationships (links) between\n                            patients (nodes). MicrobeTrace can be deployed on laptops to locations without any Internet access, thereby\n                            reducing both the startup cost and analysis time and effort.\n                          </p>\n                          <p class=\"about-links\">\n                            <a href=\"https://github.com/CDCgov/MicrobeTrace/wiki\" target=\"_blank\" rel=\"noreferrer noopener\">\n                              Click Here to Learn More\n                            </a>\n                          </p>\n                          <p>\n                            MicrobeTrace was built by the Molecular Epidemiology and Bionformatics Team at the CDC in Atlanta.</p>\n                            <a class=\"about-links\" href=\"https://cdcgov.github.io/MEBT\" target=\"_blank\" rel=\"noreferrer noopener\" style=\"display: block;\">\n                              Click Here to See MEBT's Other Tools\n                            </a>\n                          \n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn btn-success\" (click)=\"DisplayAbout()\">Close</button>\n                    </div>\n                </div>\n            </div>\n        </p-dialog>\n\n        <div id=\"main-panel\" class=\"pane-container pane-horizontal\">\n            <noscript class=\"container-fluid\">\n              <div class=\"jumbotron\">\n                <h1>Sorry!</h1>\n                <p class=\"lead\">MicrobeTrace requires Javascript to run. Please <a href=\"https://www.enable-javascript.com/\">enable Javascript</a> and refresh MicrobeTrace.</p>\n              </div>\n            </noscript>\n            <div id=\"global-timeline-wrapper\" style=\"display: none;\">\n              <div id=\"global-timeline\" align=\"center\">\n                <div><button type=\"button\" id=\"timeline-play-button\" class=\"btn btn-light btn-sm\" (click)=\"playTimeline()\">{{playBtnText}}</button>\n                <span id=\"global-timeline-field\" contenteditable></span></div>\n                <!-- <svg></svg>\n                <mat-slider></mat-slider> -->\n              </div>  \n            </div>\n          </div>\n\n       \n        <!-- <p-dialog class=\"table-z-index\" id=\"global-settings-link-color-table\" \n                    [position]=\"GlobalSettingsLinkColorDialogSettings.linkLeft\" \n                    [(visible)]=\"GlobalSettingsLinkColorDialogSettings.isVisible\"  \n                    header=\"Link Color Table\" [style]=\"{'z-index': '1'}\"\n                    (onShow)=\"SelectedLinkColorTableTypesVariable='Show'\"\n                    (onHide)=\"SelectedLinkColorTableTypesVariable='Hide'\"\n                    >\n            <div class=\"col-12\" style=\"max-height: 50vh\">\n                <table id=\"link-color-table\" style=\"width:100%;height:100%;\"></table>\n            </div>\n        </p-dialog> -->\n\n        <div id=\"color-transparency-wrapper\">\n            <input type=\"range\" class=\"custom-range\" id=\"color-transparency\" min=\"0\" max=\"1\" step=\"0.05\" value=\"1\" >\n        </div>\n\n\n    </div>\n</div>\n";
+module.exports = "<div class=\"m-content\">   \n    <div class=\"m-portlet m-portlet--mobile\" style=\"height:100%;\">\n\n        <mat-toolbar id=\"top-toolbar\" class=\"nav-bar\">\n                <div class=\"navbar-logo\">\n                    <span class=\"microbe-font\">Microbe</span>\n                    <span class=\"trace-font\">Trace</span>\n                    <span><img alt=\"microbetrace\" class=\"mt-icon-toolbar\" [src]=\"appRootUrl() + 'assets/images/Logo.png'\"></span>\n                  </div>\n                  <div class=\"menu-items\">\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"fileMenu\"><i class=\"far nav-icon flaticon-file-1\"></i>File<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #fileMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <!-- <button mat-menu-item (click)=\"FileClick('Stash Session')\">Stash</button> -->\n                      <!-- <button mat-menu-item (click)=\"FileClick('Recall Session')\">Recall</button> -->\n                      <button mat-menu-item (click)=\"FileClick('Save Session')\">Save</button>\n                      <!-- <button mat-menu-item (click)=\"FileClick('Open Session')\">Open</button> -->\n                      <button mat-menu-item (click)=\"FileClick('Open URL')\">Open URL</button>\n                      <button mat-menu-item (click)=\"FileClick('Add Data')\">Add Data</button>\n                      <!-- <button mat-menu-item (click)=\"FileClick('New Session')\">New</button> -->\n                    </mat-menu>\n                    <button class=\"navbar-item\" (click)=\"DisplayGlobalSettingsDialog()\" mat-button><i class=\"far nav-icon flaticon-cogwheel-2\"></i>Settings</button>\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"viewMenu\"><i class=\"far nav-icon flaticon-web\"></i>View<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #viewMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <button mat-menu-item (click)=\"Viewclick('2D Network')\">2D Network</button>\n                      <button mat-menu-item (click)=\"Viewclick('Table')\">Table</button>\n                      <button mat-menu-item (click)=\"Viewclick('Map')\">Map</button>\n                      <button mat-menu-item (click)=\"Viewclick('Epi Curve')\">Epi Curve</button>\n                      <button mat-menu-item (click)=\"Viewclick('Phylogenetic Tree')\">Phylogenetic Tree</button>\n                      <button mat-menu-item (click)=\"Viewclick('Alignment View')\">Alignment View</button>\n                      <button mat-menu-item (click)=\"Viewclick('Crosstab')\">CrossTab</button>\n                      <button mat-menu-item (click)=\"Viewclick('Aggregate')\">Aggregate</button>\n                      <button mat-menu-item (click)=\"Viewclick('Gantt Chart')\">Gantt Chart</button>\n                    </mat-menu>\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"windowMenu\"><i class=\"far nav-icon flaticon-web\"></i>Window<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #windowMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <button mat-menu-item (click)=\"WindowClick('Reload Screen')\">Reload</button>\n                      <button mat-menu-item (click)=\"WindowClick('Fullscreen')\">Fullscreen</button>\n                    </mat-menu>\n                    <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"helpMenu\"><i class=\"far nav-icon flaticon-questions-circular-button\"></i>Help<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #helpMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <a href=\"https://github.com/CDCgov/MicrobeTrace/wiki\" class=\"dropdown-item ifOnline\" target=\"_blank\" rel=\"noreferrer noopener\" mat-menu-item>Help</a>\n                      <a href=\"https://github.com/CDCgov/MicrobeTrace/issues/new\" class=\"dropdown-item ifOnline\" target=\"_blank\" rel=\"noreferrer noopener\" mat-menu-item>Report Bug</a>\n                      <button (click)=\"HelpClick('About')\" mat-menu-item>About</button>\n                    </mat-menu>\n                    <!-- <button class=\"navbar-item\" mat-button [matMenuTriggerFor]=\"langMenu\"><i class=\"far nav-icon flaticon-earth-globe\"></i>Language<span class=\"dropdown-symbol\">&#9660;</span></button>\n                    <mat-menu #langMenu=\"matMenu\" overlapTrigger=\"false\">\n                      <button mat-menu-item >English</button>\n                      <button mat-menu-item >Spanish</button>\n                    </mat-menu> -->\n                  </div>\n            <div id=\"search-form\" class=\"form-inline navbar-form\">\n                <label for=\"search\">Search</label>\n                <div class=\"autocomplete-wrapper\">\n                    <input type=\"search\" id=\"search\" class=\"form-control form-control-sm\" (input)=\"onSearch()\" [(ngModel)]=\"searchText\" placeholder=\"Nodes\">\n                    <ul id=\"search-results\"></ul>\n                </div>\n            <button id=\"casesensitivebutton\" (click)=\"onCaseSensitiveChange()\" type=\"button\" class=\"btn btn-light btn-sm\" data-toggle=\"button\" aria-pressed=\"false\" autocomplete=\"off\" title=\"Match Case\">\n                <span>C</span>\n            </button>     \n            <button id=\"wholewordbutton\" type=\"button\" (click)=\"onWholeWordChange()\" class=\"btn btn-light btn-sm\" data-toggle=\"button\" aria-pressed=\"false\" autocomplete=\"off\" title=\"Match Whole Word\">\n                <span>W</span>\n            </button>      \n        \n            <select [(ngModel)]=\"searchField\" (ngModelChange)=\"onSearchFieldChange($event)\" id=\"search-field\"  class=\"form-control form-control-sm nodeValues\">\n                <option val=\"id\">ID</option>\n            </select>\n            </div> \n          </mat-toolbar>\n\n        <div id=\"visualwrapper\" class=\"kt-container  kt-grid__item kt-grid__item--fluid \" style=\"margin: 6px 6px 0 6px;\">\n            <div class=\"kt-portlet kt-portlet--mobile\" style=\"height:100%\">\n                <div class=\"kt-portlet__head kt-portlet__head--lg\" style=\"height:100%\">\n                    <div class=\"m-portlet__body\" style=\"flex: 1 100%; max-width:100%; height:100%\">\n                        <!-- TODO: Add back or replace-->\n                        <!-- <golden-layout-root #goldenLayout></golden-layout-root> -->\n                        <app-golden-layout-host #goldenLayoutHost></app-golden-layout-host>             \n                    </div>\n                </div>\n            </div>\n\n        <p-dialog class=\"table-z-index\" id=\"global-settings-link-color-table\" \n            [position]=\"GlobalSettingsLinkColorDialogSettings.linkLeft\" \n            [(visible)]=\"GlobalSettingsLinkColorDialogSettings.isVisible\"  \n            [style]=\"{'z-index': '1'}\"\n            (onShow)=\"showLinkColorTable()\"\n            (onHide)=\"hideLinkColorTable()\"\n            >\n            <ng-template pTemplate=\"header\">\n                <div style=\"display: flex; justify-content: space-between; width: 100%;\">\n                    <span>Link Color Table</span>\n                    <span style=\"overflow: visible; position: relative;\">\n                        <button title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"toggleColorTableSettings('link-color')\"><i class=\"pi pi-cog\"></i></button>\n                        <div id=\"linkColorTableSettings\" class=\"dropdown-menu\" style=\"display: none;\">\n                            <button id=\"linkColorCounts\" class=\"dropdown-item\" (click)=\"toggleColorTableColumns('link-color', 'tableCounts')\">\n                                <span>Show Counts</span>\n                                <i [className]=\"this.widgets['link-color-table-counts'] ? 'pi pi-check' : 'pi pi-times'\" style=\"line-height: 1.5\"></i>\n                            </button>\n                            <button id=\"linkColorFrequencies\" class=\"dropdown-item\" (click)=\"toggleColorTableColumns('link-color', 'tableFreq')\">\n                                <span>Show Frequencies</span>\n                                <i [className]=\"this.widgets['link-color-table-frequencies'] ? 'pi pi-check' : 'pi pi-times'\" style=\"line-height: 1.5\"></i>\n                            </button>\n                        </div>\n                    </span>\n                </div>\n            </ng-template>\n            <div style=\"max-height: 50vh\">\n                <table id=\"link-color-table\" style=\"width:100%;height:100%;\"></table>\n            </div>\n        </p-dialog>\n\n\n        <p-dialog id=\"global-settings-node-color-table\" \n            [position]=\"GlobalSettingsNodeColorDialogSettings.nodeLeft\" \n            [(visible)]=\"GlobalSettingsNodeColorDialogSettings.isVisible\"  \n            (onShow)=\"showNodeColorTable()\"\n            (onHide)=\"hideNodeColorTable()\"      \n                    >       \n            <ng-template pTemplate=\"header\">\n                <div style=\"display: flex; justify-content: space-between; width: 100%;\">\n                    <span>Node Color Table</span>\n                    <span style=\"overflow: visible; position: relative;\">\n                        <button title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"toggleColorTableSettings('node-color')\"><i class=\"pi pi-cog\"></i></button>\n                        <div id=\"nodeColorTableSettings\" class=\"dropdown-menu\" style=\"display: none;\">\n                            <button id=\"nodeColorCounts\" class=\"dropdown-item\" (click)=\"toggleColorTableColumns('node-color', 'tableCounts')\">\n                                <span>Show Counts</span>\n                                <i [className]=\"this.widgets['node-color-table-counts'] ? 'pi pi-check' : 'pi pi-times'\" style=\"line-height: 1.5\"></i>\n                            </button>\n                            <button id=\"nodeColorFrequencies\" class=\"dropdown-item\" (click)=\"toggleColorTableColumns('node-color', 'tableFreq')\">\n                                <span>Show Frequencies</span>\n                                <i [className]=\"this.widgets['node-color-table-frequencies'] ? 'pi pi-check' : 'pi pi-times'\" style=\"line-height: 1.5\"></i>\n                            </button>\n                        </div>\n                    </span>\n                </div>\n            </ng-template>\n            <div style=\"max-height: 50vh\">\n                <table id=\"node-color-table\" style=\"width:100%;height:100%;\"></table>\n            </div>\n        </p-dialog>\n        </div>\n    \n        <div id=\"overlay\" appDnd (fileDropped)=\"prepareFilesLists($event)\">\n            <input class=\"dnd-input\" type=\"file\" #fileDropRef id=\"fileDropRef\" multiple (change)=\"prepareFilesLists($event.target.files)\" />\n            <div class=\"welcome-msg\">\n                <div id=\"welcome-title\" class=\"top\">\n                    <span class=\"primary\">Welcome to </span>\n                    <span class=\"microbe primary\">Microbe</span>\n                    <span class=\"primary\">Trace&#8482;</span>\n                    <!-- <span><img class=\"mt-icon\" src=\"../../assets/images/Logo.png\"></span> -->\n                    <!-- Swap/Uncomment when building productions -->\n                    <span><img alt=\"microbetrace\" class=\"mt-icon\" [src]=\"appRootUrl() + 'assets/images/Logo.png'\"></span>\n                </div>\n                <div id=\"welcome-description\" class=\"bottom primary\">The Visualization Multitool for Molecular Epidemiology and Bioinformatics</div>\n            </div>\n            <div id=\"add-data-container\" class=\"add-data-container\">\n                <div class=\"files-msg\">\n                    <span class=\"primary\">Click </span>\n                    <a class=\"here-link primary\" for=\"fileDropRef\">here</a>\n                    <span class=\"primary\"> or Drag & Drop files to load data</span>\n                </div>\n                <div class=\"add-btns primary\">\n                    <!-- TODO: add back in when recall is ready-->\n                    <!-- <button mat-raised-button color=\"primary\" class=\"recall\" (click)=\"recallClicked()\">Recall Previous Session</button> -->\n                    <button mat-raised-button color=\"primary\" (click)=\"continueClicked()\">Continue with Sample Dataset</button>\n                </div>\n            </div>\n            <!-- <div id=\"onload-container\" class=\"launch-options-container primary\">\n                <span class=\"onload-bold\">Onload Settings:</span>\n                <span>Distance Metric: <span class=\"option-value\" [matMenuTriggerFor]=\"metricMenu\">{{metric}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\n                <span id=\"ambiguities-menu\">Ambiguities: <span class=\"option-value\" [matMenuTriggerFor]=\"ambiMenu\">{{ambiguity}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\n                <span>View to Launch: <span class=\"option-value\" [matMenuTriggerFor]=\"viewMenuBottom\">{{launchView}} <span class=\"onload-dropdown-symbol\">&#9660;</span></span></span>\n                <span class=\"threshold-option\">Link Threshold: \n                    <form class=\"threshold-input\">\n                    <mat-form-field class=\"threshold-input-length\">\n                        <mat-label></mat-label>\n                      <input matInput (input)=\"updateThreshold($event)\" [value]=\"threshold\">\n                    </mat-form-field>\n                  </form>\n                </span>\n            </div>\n            <mat-menu #metricMenu=\"matMenu\"overlapTrigger=\"false\">\n                <button mat-menu-item (click)=\"updateMetric('TN93')\">TN93</button>\n                <button mat-menu-item (click)=\"updateMetric('SNPs')\">SNPs</button>\n            </mat-menu>\n            <mat-menu #ambiMenu=\"matMenu\" overlapTrigger=\"false\">\n                <button mat-menu-item (click)=\"updateAmbiguity('Average')\">Average</button>\n                <button mat-menu-item (click)=\"updateAmbiguity('Resolve')\">Resolve</button>\n                <button mat-menu-item (click)=\"updateAmbiguity('Skip')\">Skip</button>\n                <button mat-menu-item (click)=\"updateAmbiguity('GapMM')\">GapMM</button>\n                <button mat-menu-item (click)=\"updateAmbiguity('HIV-Trace -g')\">HIV-Trace -g</button>\n            </mat-menu>\n            <mat-menu #viewMenuBottom=\"matMenu\" overlapTrigger=\"false\">\n                <button mat-menu-item (click)=\"updateLaunchView('2D Network')\">2D Network</button>\n                <button mat-menu-item (click)=\"updateLaunchView('Table')\">Table</button>\n                <button mat-menu-item (click)=\"updateLaunchView('Map')\">Bubbles</button>\n                <button mat-menu-item (click)=\"updateLaunchView('Phylogenetic Tree')\">Phylogenetic Tree</button>\n            </mat-menu> -->\n        </div>\n\n\n        <p-dialog id=\"ledger-loader-modal\" [(visible)]=\"displayLedgerLoaderDialog\" header=\"Blockchain Ledgers\" styleClass=\"ui-dialog\" [contentStyle]=\"{'max-height':'50vh'}\">\n\n            <div class=\"position-relative\" #ledgerloadDiv>\n                <div class=\"loader\">\n                    <i class=\"fa fa-spinner fa-spin\" style=\"font-size:40px;z-index:1;display:none;\" #ledgerloader></i>\n                </div>\n            </div>\n\n            <div style=\"min-height: 100px;\">\n                <p-tree [value]=\"ledgerOptions\" selectionMode=\"checkbox\"  [filter]=\"true\" [(selection)]=\"ledgerOptionSelected\" *ngIf=\"ledgerOptions && ledgerOptions.length > 0\" scrollHeight=\"flex\"></p-tree>\n            </div>\n\n            <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-error\" (click)=\"ToggleDisplayLedgerLoaderDialog()\">Cancel</button>\n                <button type=\"button\" id=\"stash-data2\" class=\"btn btn-primary\" (click)=\"DisplayLedgerLoaderDialog('Load')\" [disabled]=\"!ledgerOptionSelected || ledgerOptionSelected.length === 0\">Load</button>\n            </div>\n\n        </p-dialog><!-- /.modal -->\n        \n\n\n        <p-dialog id=\"global-settings-modal\" \n                    [(visible)]=\"GlobalSettingsDialogSettings.isVisible\"  \n                    header=\"Global Settings\" >\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        <tabset #globalSettingsTab class=\"tab-container tabbable-line\" style='width: 100%; height: 100%;'>\n                            <tab heading=\"{{'Filtering' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\n\n                                <div id=\"filtering-config\" role=\"tabpanel\" aria-labelledby=\"filtering-tab\">\n                                    <div class=\"form-group row\" title=\"By what metric would you like to measure distance?\">\n                                        <div class=\"col-4\">Distance Metric</div>\n                                        <div class=\"col-8\">\n                                            <select id=\"default-distance-metric\" class=\"form-control form-control-sm mr-5\" [(ngModel)]=\"SelectedDistanceMetricVariable\" (ngModelChange)=\"onDistanceMetricChanged()\">\n                                                <option value=\"tn93\">TN93</option>\n                                                <option value=\"snps\">SNPs</option>\n                                            </select>\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"By what algorithm would you like to prune links from the network?\">\n                                        <div class=\"col-4\">Prune With</div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"PruneWityTypes\" [(ngModel)]=\"SelectedPruneWityTypesVariable\" (onChange)=\"onPruneWithTypesChanged()\"></p-selectButton>\n                                        </div>\n                                    </div>\n                                    <div id=\"filtering-epsilon-row\" class=\"form-group row\" style=\"display: none;\" title=\"Select a value for epislon to add links back to minimum spanning network. See 'A Novel Network Representation of SARS-CoV-2 Sequencing Data' for algorithm details.\">\n                                        <div class=\"col-4\">\n                                            <label for=\"filtering-epsilon\">Epsilon: {{ SelectedEpsilonValue }}</label>\n                                        </div>\n                                        <div class=\"col-8\">\n                                            <input type=\"range\" class=\"form-control form-control-sm\" min=\"-8\" max=\"2\" step=\".01\" [(ngModel)]=\"widgets['filtering-epsilon']\" (ngModelChange)=\"onEpsilonValueChange()\">\n                                        </div>\n                                    </div>                                    \n                                    <div class=\"form-group row\" title=\"What's the minimum number of nodes a cluster must have in order to be visible?\">\n                                        <div class=\"col-4\">\n                                            <label for=\"cluster-minimum-size\">Minimum Cluster Size</label>\n                                        </div>\n                                        <div class=\"col-8\">\n                                            <input type=\"number\" class=\"form-control form-control-sm\" min=\"1\" value=\"1\" step=\"1\" [(ngModel)]=\"SelectedClusterMinimumSizeVariable\" (ngModelChange)=\"onMinimumClusterSizeChanged()\">\n                                        </div>\n                                    </div>\n                                    <div id=\"filtering-wrapper\">\n                                        <div class=\"form-group row\" title=\"By what variable would you like to prune links from the network?\">\n                                            <div class=\"col-4\"><label for=\"link-sort-variable\">Filter Links on</label></div>\n                                            <div class=\"col-8\">\n                                                <p-dropdown id=\"link-sort-variable\" [options]=\"ToolTipFieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedLinkSortVariable\" (onChange)=\"onLinkSortChanged()\"></p-dropdown>\n                                            </div>\n                                        </div>\n                                        <div class=\"form-group row\" id=\"filtering-threshold\" title=\"What's the maximum genetic distance you're willing to call a link?\">\n                                            <div class=\"col-4\"><label for=\"link-threshold\">Filtering Threshold</label></div>\n                                            <div class=\"col-8\"><svg id=\"link-threshold-sparkline\" #linkThresholdSparkline style=\"width: 280px; height: 48px;\"></svg></div>\n                                            <div class=\"col-8  offset-4\">\n                                                <input type=\"number\" class=\"form-control form-control-sm\" id=\"link-threshold\" min=\"-1\" value=\"1\" step=\"0.001\" [(ngModel)]=\"SelectedLinkThresholdVariable\" (ngModelChange)=\"onLinkThresholdChanged()\">\n                                            </div>\n                                        </div>\n                                        <div class=\"form-group row\" title=\"Click to reveal all hidden elements of the network.\">\n                                            <div class=\"col-4\"><label for=\"reveal-all\">Reveal</label></div>\n                                            <div class=\"col-8\">\n                                              <button type=\"button\" id=\"reveal-all\" (click)=\"revealClicked()\" class=\"btn btn-light btn-sm w-100\">Everything</button>\n                                            </div>\n                                          </div>\n                                    </div>\n                                    <div class=\"form-group row\" hidden title=\"Click to reveal all hidden elements of the network.\">\n                                        <div class=\"col-4\"><label for=\"RevealAllTab\">Reveal</label></div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"RevealTypes\" [(ngModel)]=\"SelectedRevealTypesVariable\" (onChange)=\"updateGlobalSettingsModel()\"></p-selectButton>\n                                        </div>\n                                    </div>\n                                    <hr>\n                                    <div class=\"form-group row\" title=\"Display a table of overview statistics for the network\">\n                                        <div class=\"col-4\">Statistics</div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"StatisticsTypes\" [(ngModel)]=\"SelectedStatisticsTypesVariable\" (onChange)=\"onShowStatisticsChanged()\"></p-selectButton>\n                                        </div>\n                                    </div>\n                                </div>\n                            </tab>\n                            <tab heading=\"{{'Styling' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\n\n                                <div id=\"style-config\" role=\"tabpanel\" aria-labelledby=\"style-tab\">\n                                    <div class=\"form-group row\" title=\"By what variable nodes be colored?\">\n                                        <div class=\"col-4\"><label for=\"node-color-variable\">Color Nodes By</label></div>\n                                        <div class=\"col-8\">\n                                            <p-dropdown id=\"node-color-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedColorNodesByVariable\" (onChange)=\"onColorNodesByChanged()\"></p-dropdown>\n                                        </div>\n                                    </div>\n                                    <div id=\"node-color-table-row\" [hidden]=\"!ShowGlobalSettingsNodeColorTable\" class=\"form-group row\" title=\"Should MicrobeTrace display the table of colors?\">\n                                        <div class=\"col-4\"><label>Nodes Color Table</label></div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"NodeColorTableTypes\" [(ngModel)]=\"SelectedNodeColorTableTypesVariable\" (onChange)=\"onNodeColorTableChanged()\"></p-selectButton>\n                                        </div>\n                                    </div>\n\n\n                                    <div id=\"node-color-value-row\" class=\"form-group row\" title=\"What color should the nodes be?\">\n                                        <div class=\"col-4\"><label for=\"node-color\">Nodes</label></div>\n                                        <div class=\"col-8\">\n                                            <input type=\"color\" id=\"node-color\" class=\"form-control form-control-sm\" value=\"#1f77b4\" [(ngModel)]=\"SelectedNodeColorVariable\" (ngModelChange)=\"onNodeColorChanged()\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"By what variable should links be colored?\">\n                                        <div class=\"col-4\"><label for=\"link-color-variable\">Color Links By</label></div>\n                                        <div class=\"col-8\">\n                                            <p-dropdown id=\"link-tooltip-variable\" [options]=\"ToolTipFieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedColorLinksByVariable\" (onChange)=\"onColorLinksByChanged()\"></p-dropdown>\n                                        </div>\n                                    </div>\n                                    <div id=\"link-color-table-row\" [hidden]=\"!ShowGlobalSettingsLinkColorTable\"  class=\"form-group row\" title=\"Should MicrobeTrace display the table of colors?\">\n                                        <div class=\"col-4\"><label>Link Color Table</label></div>\n                                        <div class=\"col-8\">\n                                            <p-selectButton [options]=\"LinkColorTableTypes\" [(ngModel)]=\"SelectedLinkColorTableTypesVariable\" (onChange)=\"onLinkColorTableChanged()\"></p-selectButton>\n                                        </div>\n                                    </div>\n\n                                    <div id=\"link-color-value-row\" class=\"form-group row\" title=\"What color should the links be?\">\n                                        <div class=\"col-4\"><label for=\"link-color\">Links</label></div>\n                                        <div class=\"col-8\">\n                                            <input type=\"color\" id=\"link-color\" class=\"form-control form-control-sm\" [(ngModel)]=\"SelectedLinkColorVariable\" (ngModelChange)=\"onLinkColorChanged()\">\n                                        </div>\n                                    </div>\n\n                                    <div class=\"form-group row\" title=\"What color should denote selection?\">\n                                        <div class=\"col-4\"><label for=\"selected-color\">Selected</label></div>\n                                        <div class=\"col-8\">\n                                            <input type=\"color\" id=\"selected-color\" class=\"form-control form-control-sm\" value=\"#ff8300\" [(ngModel)]=\"SelectedColorVariable\" (ngModelChange)=\"updateGlobalSettingsModel()\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"What color should the background be?\">\n                                        <div class=\"col-4\"><label for=\"background-color\">Background</label></div>\n                                        <div class=\"col-8\">\n                                            <input type=\"color\" id=\"background-color\" class=\"form-control form-control-sm\" value=\"#ffffff\" [(ngModel)]=\"SelectedBackgroundColorVariable\" (ngModelChange)=\"onBackgroundChanged()\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\" title=\"Load an existing MicrobeTrace style file\">\n                                        <div class=\"col-4\">Apply Style</div>\n                                        <div class=\"col-8\">\n                                            <input type=\"file\" id=\"apply-style\" class=\"d-none\" accept=\".style\" [(ngModel)]=\"SelectedApplyStyleVariable\" (change)=\"onApplyStyle($event)\">\n                                            <label class=\"custom-file-label\" for=\"apply-style\">Choose MicrobeTrace Style File</label>\n                                        </div>\n                                    </div>\n                                </div>\n                            </tab>\n\n                            <tab heading=\"{{'Timeline' | localize}}\" customClass=\"m-tabs__item\" style='width: 400px; height: 100%;'>\n                                <div id=\"timeline-config\" role=\"tabpanel\" aria-labelledby=\"timeline-tab\">\n                                    <div class=\"form-group row\" title=\"By what variable timeline applied?\">\n                                        <div class=\"col-4\"><label for=\"node-timeline-variable\">Timeline By</label></div>\n                                        <div class=\"col-8\">\n                                            <p-dropdown id=\"node-timeline-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedTimelineVariable\" (onChange)=\"onTimelineChanged($event.value)\"></p-dropdown>\n                                        </div>\n                                      </div>\n                                </div> \n                            </tab>\n                        </tabset>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"modal-footer\">\n                <div class=\"btn-group\" data-toggle=\"buttons\">\n                    <button type=\"button\" class=\"btn btn-primary\" (click)=\"GlobalSettingsDialogSettings.setVisibility(false)\">Done</button>\n                </div>\n            </div>\n        </p-dialog><!-- /.modal -->\n\n        <p-dialog id=\"session-recall-modal\" [(visible)]=\"displayRecallStashDialog\" header=\"Recall Stash\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div #stashes id=\"recall-stashes-available\" class=\"table-sm\"></div>\n\n                    <div class=\"modal-footer\">\n                        <button *ngIf=\"!HideThisForNow\" type=\"button\" class=\"btn btn-danger\" id=\"recall-delete-stash\" (click)=\"DisplayRecallStashDialog('Delete')\">Delete</button>\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayRecallStashDialog('Cancel')\">Cancel</button>\n                        <button type=\"button\" class=\"btn btn-success\" id=\"recall-load-stash\" (click)=\"DisplayRecallStashDialog('Recall')\">Recall</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog><!-- /.modal -->\n\n        <p-dialog id=\"open-auspice-url\" [(visible)]=\"displayUrlDialog\" header=\"Open Auspice JSON via URL\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        <input type=\"text\" id=\"auspice-url\" class=\"form-control form-control-sm\" [(ngModel)]=\"auspiceUrlVal\" placeholder=\"URL of Auspice JSON to open\" />\n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayUrlDialog('Cancel')\">Cancel</button>\n                        <button type=\"button\" class=\"btn btn-success\" id=\"url-open-button\" (click)=\"DisplayUrlDialog('Open')\">Open</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog><!-- /.modal -->\n\n        <p-dialog id=\"open-old-mt\" [(visible)]=\"displayMTDialog\" header=\"Open Auspice JSON in classic MicrobeTrace\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        Welcome to the newest version of MicrobeTrace! If you'd like to open your auspice JSON file in the previous version of MicrobeTrace, please click this link: <br />\n                        <a href=\"https://microbetrace.cdc.gov/MicrobeTrace/?url={{auspiceUrlVal}}\">https://microbetrace.cdc.gov/MicrobeTrace/?url={{auspiceUrlVal}}</a>\n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn\" (click)=\"DisplayMTDialog('Cancel')\">Close</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog><!-- /.modal -->\n\n        <p-dialog id=\"session-stash-modal\" [(visible)]=\"displayStashDialog\" header=\"Save Session\">\n            <div class=\"modal-dialog\" role=\"document\">\n                <div class=\"modal-content\">\n\n                    <div class=\"modal-body\">\n                        <div class=\"form-group row\" title=\"What would you like to call this session?\">\n                            <div class=\"col-7\">\n                                <input style=\"height:42px\" type=\"text\" id=\"stash-name\" class=\"form-control form-control-sm\" [(ngModel)]=\"saveFileName\" placeholder=\"Name your session!\">\n                            </div>\n                            <div class=\"col-5\">\n                                <p-dropdown [options]=\"saveFileTypeOptions\" [(ngModel)]=\"selectedSaveFileType\" appendTo=\"body\"></p-dropdown>\n                            </div>\n                        </div>\n                        <div *ngIf=\"selectedSaveFileType=='session'\" class=\"form-group row\" title=\"Should MicrobeTrace compress this save file?\">\n                            <div class=\"col\">\n                                <div class=\"form-check form-check-inline\">\n                                    <input class=\"form-check-input\" type=\"checkbox\" id=\"save-file-compress\" checked>\n                                    <label class=\"form-check-label\" for=\"save-file-compress\">Compress?</label>\n                                  </div>\n                              <div id=\"cluster-checkbox-container\" class=\"form-check form-check-inline\">\n                                <input class=\"form-check-input\" [(ngModel)]=\"saveByCluster\" type=\"checkbox\" id=\"save-file-cluster\">\n                                <label class=\"form-check-label\" for=\"save-file-cluster\">By Cluster</label>\n                              </div>\n                            </div>\n                         </div>\n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn btn-error\" (click)=\"DisplayStashDialog('Cancel')\">Cancel</button>\n                        <button type=\"button\" id=\"stash-data\" class=\"btn btn-primary\" (click)=\"DisplayStashDialog('Save')\" [disabled]=\"saveFileName === undefined || saveFileName === ''\">Save</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </p-dialog><!-- /.modal -->\n\n\n        <p-dialog id=\"about-dialog\" [(visible)]=\"displayAbout\" header=\"About Microbetrace\">\n            <div class=\"modal-dialog modal-lg\" role=\"document\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-body\">\n                        <h3>\n                            <span>{{\"MicrobeTrace\" | localize}} </span>\n                            <small>v<span id=\"version\">{{version}}</span></small>\n                        </h3>\n                        <p>\n                            MicrobeTrace is an interactive web application that renders existing data from high-risk contact networks\n                            in an easy-to-use Graphical User Interface (GUI). The network visualization can be customized according to\n                            supplemental data sources and mathematical inferences like the most probable transmission pathways.\n                            MicrobeTrace is a highly responsive, visual sequence analytics tool which can reduce the gap between data\n                            production and analytics and help you to discover, understand, and display relationships (links) between\n                            patients (nodes). MicrobeTrace can be deployed on laptops to locations without any Internet access, thereby\n                            reducing both the startup cost and analysis time and effort.\n                          </p>\n                          <p class=\"about-links\">\n                            <a href=\"https://github.com/CDCgov/MicrobeTrace/wiki\" target=\"_blank\" rel=\"noreferrer noopener\">\n                              Click Here to Learn More\n                            </a>\n                          </p>\n                          <p>\n                            MicrobeTrace was built by the Molecular Epidemiology and Bionformatics Team at the CDC in Atlanta.</p>\n                            <a class=\"about-links\" href=\"https://cdcgov.github.io/MEBT\" target=\"_blank\" rel=\"noreferrer noopener\" style=\"display: block;\">\n                              Click Here to See MEBT's Other Tools\n                            </a>\n                          \n                    </div>\n                    <div class=\"modal-footer\">\n                        <button type=\"button\" class=\"btn btn-success\" (click)=\"DisplayAbout()\">Close</button>\n                    </div>\n                </div>\n            </div>\n        </p-dialog>\n\n        <div id=\"main-panel\" class=\"pane-container pane-horizontal\">\n            <noscript class=\"container-fluid\">\n              <div class=\"jumbotron\">\n                <h1>Sorry!</h1>\n                <p class=\"lead\">MicrobeTrace requires Javascript to run. Please <a href=\"https://www.enable-javascript.com/\">enable Javascript</a> and refresh MicrobeTrace.</p>\n              </div>\n            </noscript>\n            <div id=\"global-timeline-wrapper\" style=\"display: none;\">\n              <div id=\"global-timeline\" align=\"center\">\n                <div><button type=\"button\" id=\"timeline-play-button\" class=\"btn btn-light btn-sm\" (click)=\"playTimeline()\">{{playBtnText}}</button>\n                <span id=\"global-timeline-field\" contenteditable></span></div>\n                <!-- <svg></svg>\n                <mat-slider></mat-slider> -->\n              </div>  \n            </div>\n          </div>\n\n       \n        <!-- <p-dialog class=\"table-z-index\" id=\"global-settings-link-color-table\" \n                    [position]=\"GlobalSettingsLinkColorDialogSettings.linkLeft\" \n                    [(visible)]=\"GlobalSettingsLinkColorDialogSettings.isVisible\"  \n                    header=\"Link Color Table\" [style]=\"{'z-index': '1'}\"\n                    (onShow)=\"SelectedLinkColorTableTypesVariable='Show'\"\n                    (onHide)=\"SelectedLinkColorTableTypesVariable='Hide'\"\n                    >\n            <div class=\"col-12\" style=\"max-height: 50vh\">\n                <table id=\"link-color-table\" style=\"width:100%;height:100%;\"></table>\n            </div>\n        </p-dialog> -->\n\n        <div id=\"color-transparency-wrapper\">\n            <input type=\"range\" class=\"custom-range\" id=\"color-transparency\" min=\"0\" max=\"1\" step=\"0.05\" value=\"1\" >\n        </div>\n\n\n    </div>\n</div>\n";
 
 /***/ }),
 
@@ -22780,7 +23482,7 @@ module.exports = "<div #epiCurve id=\"epiCurve\">\n  <svg #epiCurveSVG id=\"epiC
 /***/ ((module) => {
 
 "use strict";
-module.exports = "﻿﻿\n\n<span id=\"tooltip\" style=\"background-color: white;\"></span>\n\n<div id=\"tool-btn-container\" class=\"m-portlet\">\n    <span style=\"overflow: visible; position: relative; width: 110px;\">\n        <a title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openSettings()\"><i class=\"flaticon-settings primary\"></i></a>\n    </span>\n    <span style=\"overflow: visible; position: relative; width: 110px;\">\n        <a title=\"Export Screen\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openExport()\"><i class=\"flaticon-download primary\"></i></a>\n    </span>\n    <span style=\"overflow: visible; position: relative; width: 110px;\">\n        <a title=\"Center Screen\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openCenter()\"><i class=\"flaticon-eye primary\"></i></a>\n    </span>\n    <span style=\"overflow: visible; position: relative; width: 110px;\">\n        <a #pinbutton title=\"Pin All Nodes\" id=\"pinbutton\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openPinAllNodes()\"\n            [style.background]=\"commonService.session.network.allPinned ? 'lightblue': 'transparent'\"\n        ><i class=\"flaticon-pin primary\"></i></a>\n    </span>\n</div>\n\n<svg id=\"network\" class=\"network\" [ngStyle]=\"svgStyle\" (click)=\"networkWhitespaceClicked()\"></svg>\n\n<!-- May be able to remove this section <div class=row>, related to exportWork which isn't currently used-->\n<div class=\"row\">\n    <div class=\"col-md-4\">\n      <h2 *ngIf=\"isExporting && commonService.session.style.widgets['node-symbol-variable'] != 'None'\" class=\"bottom-table\">\n          Node Shapes\n        </h2>\n      <table id=\"node-symbol-table-bottom\" class=\"bottom-table\"></table>          \n    </div>\n    <div class=\"col-md-4\">\n        <h2 *ngIf=\"isExporting && commonService.session.style.widgets['node-color-variable'] != 'None'\" class=\"bottom-table\">\n            Node Colors\n        </h2>\n        <table id=\"node-color-table-bottom\" class=\"bottom-table\"></table>          \n      </div>\n      <div class=\"col-md-4\">\n        <h2 *ngIf=\"isExporting && commonService.session.style.widgets['link-color-variable'] != 'None'\" class=\"bottom-table\">\n            Link Colors\n        </h2>\n        <table id=\"link-color-table-bottom\" class=\"bottom-table\"></table>          \n      </div>\n  </div>\n\n<div class=\"m-content\" *ngIf=\"IsDataAvailable == false\">\n    <div id=\"file-panel\" class=\"container-fluid\" style=\"height:500px;\">\n        <div id=\"file-prompt\" class=\"d-flex justify-content-center\">\n            <h1><b>Please add data files to load...</b></h1>\n            <br />\n        </div>\n    </div>\n</div>\n\n\n\n<!-- <p-sidebar [(visible)]=\"ShowStatistics\" position=\"right\">\n\n    <div id=\"color-transparency-wrapper\" *ngIf=\"false\">\n        <input type=\"range\" class=\"custom-range\" id=\"color-transparency\" min=\"0\" max=\"1\" step=\"0.05\" value=\"1\" [(ngModel)]=\"SelectedColorTransparencyVariable\" (change)=\"onSelectedColorTransparencyVariableChange($event)\">\n    </div>\n\n\n</p-sidebar>  -->\n\n<div id=\"network-statistics-wrapper\">\n    <div id=\"network-statistics-draghandle\"><span class=\"oi oi-move\"></span></div>\n    <table id=\"network-statistics-table\">\n        <tr>\n            <td class=\"text-right\">\n                <span id=\"numberOfNodes\"></span>\n                (<span id=\"numberOfSelectedNodes\"></span>)\n            </td>\n            <td>Nodes (Selected)</td>\n        </tr>\n        <tr>\n            <td id=\"numberOfVisibleLinks\" class=\"text-right\"></td>\n            <td>Links</td>\n        </tr>\n        <tr>\n            <td id=\"numberOfDisjointComponents\" class=\"text-right\"></td>\n            <td>Clusters</td>\n        </tr>\n        <tr>\n            <td id=\"numberOfSingletonNodes\" class=\"text-right\"></td>\n            <td>Singletons</td>\n        </tr>\n    </table>\n</div>\n\n\n\n<div class=\"view-controls\">\n    <p-dialog *ngIf=\"viewActive\" id=\"network-settings-pane\" \n                [(visible)]=\"Node2DNetworkExportDialogSettings.isVisible\"  \n                header=\"2D Network Settings\" appendTo=\"body\"\n                >\n        <tabset class=\"tab-container tabbable-line\">\n            <tab heading=\"{{'Nodes' | localize}}\" [active]=\"true\" customClass=\"m-tabs__item\">\n                <p-accordion>\n                    <p-accordionTab [selected]=\"false\" style=\"color:#495057\" header=\"Labels and Tooltips\">\n                        <div #nodecontrolslabels>\n                            <div class=\"form-group row\" title=\"What field should be displayed as a label for the node?\">\n                                <div class=\"col-4\"><label for=\"node-label-variable\">Label</label></div>\n                                <div class=\"col-8\">\n                                    <p-dropdown id=\"node-label-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedNodeLabelVariable\" (ngModelChange)=\"onNodeLabelVaribleChange($event)\"></p-dropdown>\n                                </div>\n                            </div>\n                            <div class=\"form-group row node-label-row\" title=\"How big should node labels be?\">\n                                <div class=\"col-4\"><label for=\"node-label-size\">Label Size</label></div>\n                                <div class=\"col-8\"><input type=\"range\" class=\"custom-range\" id=\"node-label-size\" min=\"6\" value=\"16\" max=\"72\" [(ngModel)]=\"SelectedNodeLabelSizeVariable\" (change)=\"onNodeLabelSizeChange($event)\"></div>\n                            </div>\n                            <div class=\"form-group row node-label-row\" title=\"How should the labels be oriented relative to their nodes?\">\n                                <div class=\"col-4\"><label for=\"node-label-orientation\">Orientation</label></div>\n                                <div class=\"col-8\">\n                                    <select id=\"node-label-orientation\" [(ngModel)]=\"SelectedNodeLabelOrientationVariable\" (ngModelChange)=\"onNodeLabelOrientationChange($event)\">\n                                        <option selected>Right</option>\n                                        <option>Left</option>\n                                        <option>Top</option>\n                                        <option>Bottom</option>\n                                        <option>Middle</option>\n                                    </select>\n                                </div>\n                            </div>\n                            <div class=\"form-group row\" title=\"What node data should be displayed as a tooltip for the node?\">\n                                <div class=\"col-4\">\n                                    <label for=\"node-tooltip-variable\">Tooltip</label>\n                                </div>\n                                <div class=\"col-8\">\n                                    <p-multiSelect [options]=\"commonService.session.data['nodeFields']\" appendTo=\"body\" [showToggleAll]=false [showHeader]=false [style]=\"{'max-width': '100%'}\"\n                                    [(ngModel)]=\"commonService.session.style.widgets['node-tooltip-variable']\" (onChange)=\"onNodeTooltipVariableChange($event.value)\"\n                                    ></p-multiSelect>\n                                </div>\n                            </div>\n                        </div>\n                    </p-accordionTab>\n\n                    <p-accordionTab style=\"color:#495057\" header=\"Shapes and Sizes\">\n                        <div #nodecontrolsshapes>\n                            <div class=\"form-group row\" title=\"Which variable should determine the shape of the node?\">\n                                <div class=\"col-4\">\n                                    <label for=\"node-symbol-variable\">Shape By</label>\n                                </div>\n                                <div class=\"col-8\">\n                                    <p-dropdown id=\"node-symbol-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedNodeSymbolVariable\" (ngModelChange)=\"onNodeSymbolVariableChange($event)\"></p-dropdown>\n                                </div>\n                            </div>\n                            <div id=\"node-symbol-table-row\" [hidden]=\"!ShowNodeSymbolTable\" class=\"form-group row\" title=\"What shape should the nodes be?\">\n                                <div class=\"col-4\">Table</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton [options]=\"TableTypes\" [(ngModel)]=\"SelectedNetworkTableTypeVariable\" (ngModelChange)=\"onNodeSymbolTableChange($event)\"></p-selectButton>\n                                </div>\n                            </div>\n\n                            <div id=\"node-symbol-row\" [hidden]=\"ShowNodeSymbolWrapper\" class=\"form-group row\" title=\"What shape should the nodes be?\">\n                                <div class=\"col-4\"><label for=\"node-symbol\">Shape</label></div>\n                                <div class=\"col-8\">\n                                    <select id=\"node-symbol\" class=\"form-control form-control-sm\" [(ngModel)]=\"SelectedNodeShapeVariable\" (ngModelChange)=\"onNodeSymbolChange($event)\">\n\n                                        <option value=\"symbolCircle\" selected>&nbsp;&#11044; (Circle)</option>\n                                        <option value=\"symbolTriangle\">&nbsp;&#9650; (Up Triangle)</option>\n                                        <option value=\"symbolTriangleDown\">&nbsp;&#9660; (Down Triangle)</option>\n                                        <option value=\"symbolTriangleLeft\">&nbsp;&#9664; (Left Triangle)</option>\n                                        <option value=\"symbolTriangleRight\">&nbsp;&#9654; (Right Triangle)</option>\n                                        <option value=\"symbolDiamond\">&nbsp;&#10731; (Vertical Diamond)</option>\n                                        <option value=\"symbolDiamondAlt\">&nbsp;&#10731; (Horizontal Diamond)</option>\n                                        <option value=\"symbolSquare\">&nbsp;&#9632; (Square)</option>\n                                        <option value=\"symbolDiamondSquare\">&nbsp;&#9670; (Tilted Square)</option>\n                                        <option value=\"symbolPentagon\">&nbsp;&#11039; (Pentagon)</option>\n                                        <option value=\"symbolHexagon\">&nbsp;&#11042; (Hexagon)</option>\n                                        <option value=\"symbolHexagonAlt\">&nbsp;&#11043; (Tilted Hexagon)</option>\n                                        <option value=\"symbolOctagon\">&nbsp;&#11042; (Octagon)</option>\n                                        <option value=\"symbolOctagonAlt\">&nbsp;&#11043; (Tilted Octagon)</option>\n                                        <option value=\"symbolCross\">&nbsp;&#10010; (Addition Sign)</option>\n                                        <option value=\"symbolX\">&nbsp;&#10006; (Multiplication Sign)</option>\n                                        <option value=\"symbolWye\">&nbsp;&#120300; (Wye)</option>\n                                        <option value=\"symbolStar\">&nbsp;&#9733; (Star)</option>\n                                    </select>\n                                </div>\n                            </div>\n\n                            <div class=\"form-group row\" title=\"Which variable should determine the size of the node?\">\n                                <div class=\"col-4\"><label for=\"node-radius-variable\">Size By</label></div>\n                                <div class=\"col-8\">\n                                    <p-dropdown id=\"node-radius-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedNodeRadiusVariable\" (ngModelChange)=\"onNodeRadiusVariableChange($event)\"></p-dropdown>\n                                </div>\n                            </div>\n                            <div id=\"node-max-radius-row\" class=\"form-group row\" title=\"Should node max radius to this variable?\">\n                                <div class=\"col-4\"><label for=\"node-radius-max\">Max Size</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"range\" class=\"custom-range\" id=\"node-radius-max\" min=\"100\" value=\"4500\" step=\"1\" max=\"5000\" [(ngModel)]=\"SelectedNodeRadiusSizeMaxVariable\" (ngModelChange)=\"onNodeRadiusMaxChange($event)\">\n                                </div>\n                              </div>\n                              <div id=\"node-min-radius-row\" class=\"form-group row\" title=\"Should node min radius to this variable?\">\n                                <div class=\"col-4\"><label for=\"node-radius-min\">Min Size</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"range\" class=\"custom-range\" id=\"node-radius-min\" min=\"100\" value=\"250\" step=\"1\" max=\"5000\" [(ngModel)]=\"SelectedNodeRadiusSizeMinVariable\" (ngModelChange)=\"onNodeRadiusMinChange($event)\">\n                                </div>\n                            </div>\n                            <div id=\"node-radius-row\" class=\"form-group row\" title=\"How big should the nodes be?\">\n                                <div class=\"col-4\"><label for=\"node-radius\">Size</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"range\" class=\"custom-range\" id=\"node-radius\" min=\"100\" value=\"250\" step=\"1\" max=\"5000\" [(ngModel)]=\"SelectedNodeRadiusSizeVariable\" (ngModelChange)=\"onNodeRadiusChange($event)\">\n                                </div>\n                            </div>\n\n                            <div class=\"form-group row\" title=\"What should the width of the node border be?\">\n                                <div class=\"col-4\"><label for=\"node-radius-variable\">Border Width</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"number\" class=\"form-control form-control-sm\" id=\"node-border-width\" min=\"0\" step=\"0.1\" value=\"2\" [(ngModel)]=\"nodeBorderWidth\" (ngModelChange)=\"onNodeBorderWidthChange($event)\">\n                                </div>\n                            </div>\n\n                        </div>\n                    </p-accordionTab>\n\n                    <p-accordionTab style=\"color:#495057\" [selected]=\"false\" header=\"Colors\">\n                        <button pButton type=\"button\" label=\"Show Colors\" class=\"ui-button-raised\" (click)=\"showGlobalSettings()\"></button>\n                    </p-accordionTab>\n\n                </p-accordion>\n            </tab>\n\n            <tab heading=\"{{'Links' | localize}}\" customClass=\"m-tabs__item\">\n                <p-accordion>\n                    <p-accordionTab style=\"color:#495057\" header=\"Labels and Tooltips\">\n                        <div #linkcontrolslabels>\n                            <div class=\"form-group row\" title=\"What data should be displayed when you hover over a link?\">\n                                <div class=\"col-4\"><label for=\"link-tooltip-variable\">Tooltip</label></div>\n                                <div class=\"col-8\">\n                                    <p-multiSelect [options]=\"LinkToolTipList\" appendTo=\"body\" [showToggleAll]=false [showHeader]=false [style]=\"{'max-width': '100%'}\"\n                                    [(ngModel)]=\"commonService.session.style.widgets['link-tooltip-variable']\" (onChange)=\"onLinkTooltipVariableChange($event.value)\"\n                                    ></p-multiSelect>\n                                    <!--mat-select multiple [(value)]=\"commonService.session.style.widgets['link-tooltip-variable']\" (valueChange)=\"onLinkTooltipVariableChange($event)\">\n                                        <mat-option *ngFor=\"let option of LinkToolTipList\" [value]=\"option.value\">\n                                          {{option.label}}\n                                        </mat-option>\n                                      </mat-select-->\n                                </div>\n                            </div>\n                            <div class=\"form-group row\" title=\"What data should be displayed when you hover over a link?\">\n                                <div class=\"col-4\"><label for=\"link-label-variable\">Label</label></div>\n                                <div class=\"col-8\">\n                                    <p-dropdown id=\"link-label-variable\" [options]=\"ToolTipFieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedLinkLabelVariable\" (ngModelChange)=\"onLinkLabelVariableChange($event)\"></p-dropdown>\n                                </div>\n                            </div>\n                            <div class=\"form-group row\" title=\"How many decimals should the number labels have?\">\n                                <div class=\"col-4\"><label for=\"link-label-decimal-length\">Decimal Length</label></div>\n                                <div class=\"col-8\"><input type=\"number\" class=\"form-control form-control-sm\" id=\"link-label-decimal-length\" min=\"0\" step=\"1\" max=\"6\" value=\"3\"  [(ngModel)]=\"SelectedLinkDecimalVariable\"  (ngModelChange)=\"onLinkDecimalVariableChange($event)\">\n                                </div>\n                              </div>  \n                        </div>\n                    </p-accordionTab>\n\n                    <p-accordionTab style=\"color:#495057\" header=\"Shapes and Sizes\">\n                        <div #linkcontrolsshapes>\n                            <div id=\"link-transparency-row\" class=\"form-group row\" title=\"How transparent should the links be?\">\n                                <div class=\"col-4\"><label for=\"link-opacity\">Transparency</label></div>\n                                <div class=\"col-8\"><input type=\"range\" class=\"custom-range\" id=\"link-opacity\" min=\"0\" max=\"1\" value=\"0\" step=\"0.01\" [(ngModel)]=\"SelectedLinkTransparencyVariable\" (ngModelChange)=\"onLinkOpacityChange($event)\"></div>\n                            </div>\n                            <div class=\"form-group row\" title=\"Which variable should determine the width of a link?\">\n                                <div class=\"col-4\"><label for=\"link-width-variable\">Width By</label></div>\n                                <div class=\"col-8\">\n                                    <p-dropdown id=\"link-width-variable\" [options]=\"ToolTipFieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedLinkWidthByVariable\" (ngModelChange)=\"onLinkWidthVariableChange($event)\"></p-dropdown>\n                                </div>\n                            </div>\n                            <div id=\"link-max-width-row\" class=\"form-group row display-none\" title=\"Should link max widths to this variable?\">\n                                <div class=\"col-4\"><label for=\"link-width-max\">Max Width</label></div>\n                                <div class=\"col-8\"><input type=\"range\" class=\"custom-range\" id=\"link-width-max\" min=\"0.3\" max=\"30\" step=\".3\" value=\"27\" [(ngModel)]=\"SelectedLinkWidthMax\" (ngModelChange)=\"onLinkWidthMaxChange($event)\"></div>\n                              </div>\n                              <div id=\"link-min-width-row\" class=\"form-group row display-none\" title=\"Should link min widths to this variable?\">\n                                <div class=\"col-4\"><label for=\"link-width-min\">Min Width</label></div>\n                                <div class=\"col-8\"><input type=\"range\" class=\"custom-range\" id=\"link-width-min\" min=\"0.3\" max=\"30\" step=\".3\" value=\"3\" [(ngModel)]=\"SelectedLinkWidthMin\" (ngModelChange)=\"onLinkWidthMinChange($event)\"></div>\n                              </div>\n                            <div id=\"link-reciprocalthickness-row\" class=\"form-group row display-none\" title=\"Should link widths be proportioned to the reciprocal of this variable?\">\n                                <div class=\"col-4\">Reciprocal</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"link-width-reciprocal-non-reciprocal\" appendTo=\"body\"  [options]=\"ReciprocalTypes\" [(ngModel)]=\"SelectedLinkReciprocalTypeVariable\" (ngModelChange)=\"onLinkWidthReciprocalNonReciprocalChange($event)\"></p-selectButton>\n                                </div>\n                            </div>\n                            <div class=\"form-group row\" id=\"link-width-row\" title=\"How thick should the links be?\">\n                                <div class=\"col-4\"><label for=\"link-width\">Width</label></div>\n                                <div class=\"col-8\"><input type=\"range\" class=\"custom-range\" id=\"link-width\" min=\"0.3\" max=\"30\" step=\".3\" value=\"3\" [(ngModel)]=\"SelectedLinkWidthVariable\" (ngModelChange)=\"onLinkWidthChange($event)\"></div>\n                            </div>\n                            <div class=\"form-group row\" title=\"How long should links be?\">\n                                <div class=\"col-4\"><label for=\"link-length\">Length</label></div>\n                                <div class=\"col-8\"><input type=\"range\" class=\"custom-range\" id=\"link-length\" min=\"0\" max=\"200\" value=\"50\" [(ngModel)]=\"SelectedLinkLengthVariable\" (ngModelChange)=\"onLinkLengthChange($event)\"></div>\n                            </div>\n                            <div class=\"form-group row hideForHIVTrace\" title=\"Shoul arrowheads pointing to the\">\n                                <div class=\"col-4\">Arrows</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"link-directed-undirected\" [options]=\"ArrowTypes\" [(ngModel)]=\"SelectedLinkArrowTypeVariable\" (ngModelChange)=\"onLinkDirectedUndirectedChange($event)\"></p-selectButton>\n                                </div>\n                            </div>\n                        </div>\n                    </p-accordionTab>\n\n\n                    <p-accordionTab style=\"color:#495057\" header=\"Colors\">\n                        <button pButton type=\"button\" label=\"Show Colors\" class=\"ui-button-raised\" (click)=\"showGlobalSettings()\"></button>\n                    </p-accordionTab>\n\n                </p-accordion>\n            </tab>\n\n            <tab heading=\"{{'Network' | localize}}\" customClass=\"m-tabs__item\">\n                <p-accordion>\n                    <p-accordionTab style=\"color:#495057\" header=\"Display\">\n                        <div #networkcontrolslabels>\n                            <div class=\"form-group row\" title=\"Should MicrobeTrace Highlight a node's neighbors when you hover on it?\">\n                                <div class=\"col-4\">Neighbors</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"dont-highlight-neighbors-highlight-neighbors\" [options]=\"NeighborTypes\" [(ngModel)]=\"SelectedNetworkNeighborTypeVariable\" (ngModelChange)=\"onDontHighlightNeighborsHighlightNeighborsChange($event)\"></p-selectButton>\n                                </div>\n                            </div>\n                            <div class=\"form-group row\" title=\"Should MicrobeTrace Highlight a node's neighbors when you hover on it?\">\n                                <div class=\"col-4\">Gridlines</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"network-gridlines-show-hide\" [options]=\"GridLineTypes\" [(ngModel)]=\"SelectedNetworkGridLineTypeVariable\" (ngModelChange)=\"onNetworkGridlinesShowHideChange($event)\"></p-selectButton>\n                                </div>\n                            </div>\n                        </div>\n                    </p-accordionTab>\n                    <p-accordionTab style=\"color:#495057\" header=\"Physics\">\n                        <div #networkcontrolsphysics>\n                            <div class=\"form-group row\" title=\"How strongly are the nodes repulsed by each other?\">\n                                <div class=\"col-4\"><label for=\"node-charge\">Charge</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"range\" class=\"custom-range\" id=\"node-charge\" min=\"0\" max=\"400\" value=\"200\" [(ngModel)]=\"SelectedNetworkChargeVariable\" (ngModelChange)=\"onNodeChargeChange($event)\">\n                                </div>\n                            </div>\n                            <div class=\"form-group row\" title=\"How attractive is the mass of the graph?\">\n                                <div class=\"col-4\"><label for=\"network-gravity\">Gravity</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"range\" class=\"custom-range\" id=\"network-gravity\" min=\"0.025\" max=\"1\" value=\"0.05\" step=\"0.025\" [(ngModel)]=\"SelectedNetworkGravityVariable\" (ngModelChange)=\"onNetworkGravityChange($event)\">\n                                </div>\n                            </div>\n                            <div class=\"form-group row\" title=\"How quickly should moving nodes lose their momentum?\">\n                                <div class=\"col-4\"><label for=\"network-friction\">Friction</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"range\" class=\"custom-range\" id=\"network-friction\" min=\"0\" max=\"1\" value=\"0.4\" step=\"0.025\" [(ngModel)]=\"SelectedNetworkFrictionVariable\" (ngModelChange)=\"onNetworkFrictionChange($event)\">\n                                </div>\n                            </div>\n                            <div class=\"form-group row\" title=\"How quickly should moving nodes lose their momentum?\">\n                                <div class=\"col-4\"><label for=\"network-link-strength\">Link Strength</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"range\" class=\"custom-range\" id=\"network-link-strength\" min=\"0\" max=\"1\" value=\"0.4\" step=\"0.025\" [(ngModel)]=\"SelecetedNetworkLinkStrengthVariable\" (ngModelChange)=\"onNetworkLinkStrengthVariableChange($event)\">\n                                </div>\n                            </div>\n                        </div>\n                    </p-accordionTab>                   \n                    <p-accordionTab style=\"color:#495057\" header=\"Colors\">\n                        <button pButton type=\"button\" label=\"Show Colors\" class=\"ui-button-raised\" (click)=\"showGlobalSettings()\" ></button>\n                    </p-accordionTab>\n                </p-accordion>\n            </tab>\n            <tab heading=\"{{'Polygons' | localize}}\" customClass=\"m-tabs__item\">\n                <p-accordion>\n                    <p-accordionTab style=\"color:#495057\" header=\"Polygon Controls\" id=\"polygons-controls-accordion\">\n                          <div id=\"polygons-controls\" class=\"show\" data-parent=\"#polygons-controls-accordion\">\n                            <div class=\"card-body\">\n                              <div class=\"form-group row\" title=\"Show polygons?\">\n                                <div class=\"col-4\">Polygons</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"colorPolygonsTable\" [options]=\"hideShowOptions\" [(ngModel)]=\"commonService.session.style.widgets['polygons-show']\" (ngModelChange)=\"polygonsToggle($event)\"></p-selectButton>\n                                </div>\n                              </div>\n                              <div *ngIf=\"commonService.session.style.widgets['polygons-show']\" class=\"form-group row polygons-settings-row\" title=\"What Foci should be used when creating convex hulls?\">\n                                <div class=\"col-4\"><label for=\"polygons-foci\">Group By</label></div>\n                                <div class=\"col-8\">\n                                    <p-dropdown id=\"polygons-foci\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"commonService.session.style.widgets['polygons-foci']\" (ngModelChange)=\"centerPolygons($event)\"></p-dropdown>\n                                </div>\n                              </div>\n                              <div *ngIf=\"commonService.session.style.widgets['polygons-show']\" class=\"form-group row polygons-settings-row\" title=\"What amount of gather force should be used?\">\n                                <div class=\"col-4\">\n                                  <label for=\"polygons-gather-force\">Gather</label>\n                                </div>\n                                <div class=\"col-8\">\n                                <input type=\"range\" class=\"custom-range\" id=\"polygons-gather-force\" min=\"0\" value=\"0\" step=\"0.0001\" max=\".02\" [(ngModel)]=\"commonService.session.style.widgets['polygons-gather-force']\" (ngModelChange)=\"onPolygonGatherChange($event)\">\n                                </div>\n                              </div>\n                            </div>\n                          </div>\n                    </p-accordionTab>\n                    <p-accordionTab *ngIf=\"commonService.session.style.widgets['polygons-show']\" style=\"color:#495057\" header=\"Labels\" id=\"polygons-controls-accordion\">\n                          <div id=\"polygons-controls-labels\" data-parent=\"#polygons-controls-accordion\">\n                            <div class=\"card-body\">\n                              <div class=\"form-group row\" title=\"Show polygons label?\">\n                                <div class=\"col-4\">Label Polygons</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"polygons-label-visibility\" [options]=\"hideShowOptions\" [(ngModel)]=\"commonService.session.style.widgets['polygons-label-show']\" (ngModelChange)=\"onPolygonLabelShowChange($event)\"></p-selectButton>\n                                </div>\n                              </div>\n                              <div class=\"form-group row polygons-label-row\" title=\"How big should polygon labels be?\">\n                                <div class=\"col-4\"><label for=\"polygons-label-size\">Label Size</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"range\" class=\"custom-range\" id=\"polygons-label-size\" min=\"6\" value=\"16\" step=\"1\" max=\"72\" [(ngModel)]=\"commonService.session.style.widgets['polygons-label-size']\" (ngModelChange)=\"onPolygonLabelSizeChange($event)\">\n                                </div>\n                              </div>\n                              <div class=\"form-group row polygons-label-row\" title=\"How should the labels be oriented relative to center of polygon?\">\n                                <div class=\"col-4\"><label for=\"polygons-label-orientation\">Orientation</label></div>\n                                <div class=\"col-8\">\n                                    <select id=\"polygon-label-orientation\" [(ngModel)]=\"SelectedPolygonLabelOrientationVariable\" (ngModelChange)=\"onPolygonLabelOrientationChange($event)\">\n                                        <option selected>Right</option>\n                                        <option>Left</option>\n                                        <option>Top</option>\n                                        <option>Bottom</option>\n                                        <option>Middle</option>\n                                    </select>                                \n                                </div>\n                              </div>\n                            </div>\n                          </div>\n                        </p-accordionTab>\n                        <!-- style=\"display: none;\" -->\n                        <p-accordionTab *ngIf=\"commonService.session.style.widgets['polygons-show']\" style=\"color:#495057\" header=\"Colors\" id=\"polygons-controls-accordion\">  \n                          <div id=\"polygons-controls-colors\" data-parent=\"#polygons-controls-accordion\">\n                            <div class=\"card-body\">\n                              <div id=\"color-polygons\" class=\"form-group row\" title=\"Show polygons colored?\">\n                                <div class=\"col-4\">Color Polygons</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"colorPolygons\" [options]=\"hideShowOptions\" [(ngModel)]=\"commonService.session.style.widgets['polygons-color-show']\" (ngModelChange)=\"polygonColorsToggle($event)\"></p-selectButton>\n                                </div>\n                              </div>\n                              <div *ngIf=\"commonService.session.style.widgets['polygons-color-show']\" id=\"polygon-color-table-row\" class=\"form-group row\" title=\"Should MicrobeTrace display the table of colors?\">\n                                <div class=\"col-4\">Polygon Color Table</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"colorPolygonsTable\" [options]=\"hideShowOptions\" [(ngModel)]=\"commonService.session.style.widgets['polygon-color-table-visible']\" (ngModelChange)=\"polygonColorsTableToggle($event)\"></p-selectButton>\n                                </div>\n                              </div>\n                              <div *ngIf=\"!commonService.session.style.widgets['polygons-color-show']\" id=\"polygon-color-value-row\" class=\"form-group row\" title=\"What color should the polygons be?\">\n                                <div class=\"col-4\"><label for=\"polygon-color\">Polygons</label></div>\n                                <div class=\"col-8\">\n                                  <input type=\"color\" id=\"polygon-color\" class=\"form-control form-control-sm\" value=\"#1f77b4\" [(ngModel)]=\"commonService.session.style.widgets['polygon-color']\" (ngModelChange)=\"onPolygonColorChanged($event)\">\n                                </div>\n                              </div>              \n                            </div>\n                          </div>\n                    </p-accordionTab>\n                </p-accordion>\n            </tab>\n        </tabset>\n\n    </p-dialog>\n\n\n\n</div>\n\n    <p-dialog id=\"node-symbol-table-wrapper\" \n                [position]=\"NodeSymbolTableWrapperDialogSettings.shapeRight\"\n                [(visible)]=\"NodeSymbolTableWrapperDialogSettings.isVisible\"  \n                header=\"Node Symbol Selection Table\"  \n                [style]=\"{width: '45vw', maxWidth: '450px'}\"\n                (onHide)=\"onNodeSymbolTableChange('Hide')\"\n                (onShow)=\"onNodeSymbolTableChange('Show')\"\n                >\n        <div class=\"col-12\" style=\"width:100%;max-height:50vh;\" title=\"Node Shapes and Size Selection.\">          \n             <table id=\"node-symbol-table\" style=\"width:100%;height:100%;\"></table>          \n        </div>\n        <select id=\"node-symbol2\" [hidden]=\"'true'\" class=\"form-control form-control-sm\">\n\n            <option value=\"symbolCircle\" selected>&nbsp;&#11044; (Circle)</option>\n            <option value=\"symbolTriangle\">&nbsp;&#9650; (Up Triangle)</option>\n            <option value=\"symbolTriangleDown\">&nbsp;&#9660; (Down Triangle)</option>\n            <option value=\"symbolTriangleLeft\">&nbsp;&#9664; (Left Triangle)</option>\n            <option value=\"symbolTriangleRight\">&nbsp;&#9654; (Right Triangle)</option>\n            <option value=\"symbolDiamond\">&nbsp;&#10731; (Vertical Diamond)</option>\n            <option value=\"symbolDiamondAlt\">&nbsp;&#10731; (Horizontal Diamond)</option>\n            <option value=\"symbolSquare\">&nbsp;&#9632; (Square)</option>\n            <option value=\"symbolDiamondSquare\">&nbsp;&#9670; (Tilted Square)</option>\n            <option value=\"symbolPentagon\">&nbsp;&#11039; (Pentagon)</option>\n            <option value=\"symbolHexagon\">&nbsp;&#11042; (Hexagon)</option>\n            <option value=\"symbolHexagonAlt\">&nbsp;&#11043; (Tilted Hexagon)</option>\n            <option value=\"symbolOctagon\">&nbsp;&#11042; (Octagon)</option>\n            <option value=\"symbolOctagonAlt\">&nbsp;&#11043; (Tilted Octagon)</option>\n            <option value=\"symbolCross\">&nbsp;&#10010; (Addition Sign)</option>\n            <option value=\"symbolX\">&nbsp;&#10006; (Multiplication Sign)</option>\n            <option value=\"symbolWye\">&nbsp;&#120300; (Wye)</option>\n            <option value=\"symbolStar\">&nbsp;&#9733; (Star)</option>\n        </select>\n\n    </p-dialog>\n\n    <p-dialog id=\"polygon-color-table-wrapper\" \n                [position]=\"PolygonColorTableWrapperDialogSettings.polygonRight\" \n                [(visible)]=\"PolygonColorTableWrapperDialogSettings.isVisible\"  \n                header=\"Polygon Color Selection Table\" \n                [style]=\"{width: '45vw', maxWidth: '450px'}\" \n                (onHide)=\"onPolygonColorTableChange(false)\"\n                (onShow)=\"onPolygonColorTableChange(true)\"\n                >\n        <div class=\"col-12\" style=\"width:100%;max-height:50vh;\" title=\"Polygon Color Selection.\">          \n             <table id=\"polygon-color-table\" style=\"width:100%;height:100%;\"></table>          \n        </div>\n        <select id=\"polygon-color2\" [hidden]=\"'true'\" class=\"form-control form-control-sm\">\n\n            <option value=\"symbolCircle\" selected>&nbsp;&#11044; (Circle)</option>\n            <option value=\"symbolTriangle\">&nbsp;&#9650; (Up Triangle)</option>\n            <option value=\"symbolTriangleDown\">&nbsp;&#9660; (Down Triangle)</option>\n            <option value=\"symbolTriangleLeft\">&nbsp;&#9664; (Left Triangle)</option>\n            <option value=\"symbolTriangleRight\">&nbsp;&#9654; (Right Triangle)</option>\n            <option value=\"symbolDiamond\">&nbsp;&#10731; (Vertical Diamond)</option>\n            <option value=\"symbolDiamondAlt\">&nbsp;&#10731; (Horizontal Diamond)</option>\n            <option value=\"symbolSquare\">&nbsp;&#9632; (Square)</option>\n            <option value=\"symbolDiamondSquare\">&nbsp;&#9670; (Tilted Square)</option>\n            <option value=\"symbolPentagon\">&nbsp;&#11039; (Pentagon)</option>\n            <option value=\"symbolHexagon\">&nbsp;&#11042; (Hexagon)</option>\n            <option value=\"symbolHexagonAlt\">&nbsp;&#11043; (Tilted Hexagon)</option>\n            <option value=\"symbolOctagon\">&nbsp;&#11042; (Octagon)</option>\n            <option value=\"symbolOctagonAlt\">&nbsp;&#11043; (Tilted Octagon)</option>\n            <option value=\"symbolCross\">&nbsp;&#10010; (Addition Sign)</option>\n            <option value=\"symbolX\">&nbsp;&#10006; (Multiplication Sign)</option>\n            <option value=\"symbolWye\">&nbsp;&#120300; (Wye)</option>\n            <option value=\"symbolStar\">&nbsp;&#9733; (Star)</option>\n        </select>\n\n    </p-dialog>\n\n    <!-- <p-dialog id=\"polygon-color-table-wrapper\" class=\"floater\">\n        <div id=\"polygon-color-table-draghandle\"><span class=\"oi oi-move\"></span></div>\n        <table id=\"polygon-color-table\"></table>\n    </p-dialog> -->\n\n\n\n\n\n<div id=\"node-symbol-table-context\" class=\"dropdown-menu\">\n    <a href=\"#\" id=\"node-symbol-table-move\" class=\"dropdown-item\">Pin</a>\n    <a href=\"#\" id=\"node-symbol-table-context-hide\" class=\"dropdown-item\">Hide</a>\n    <a href=\"#\" id=\"node-symbol-table-expand\" class=\"dropdown-item\">Expand</a>\n    <a href=\"#\" id=\"node-symbol-table-counts\" class=\"dropdown-item\">Toggle Counts</a>\n    <a href=\"#\" id=\"node-symbol-table-frequencies\" class=\"dropdown-item\">Toggle Frequencies</a>\n</div>\n\n  \n  <div id=\"polygon-color-table-context\" class=\"dropdown-menu\">\n    <a href=\"#\" id=\"polygon-color-table-drag\" class=\"dropdown-item\">Drag/Arrow Keys</a>\n    <a href=\"#\" id=\"polygon-color-table-context-hide\" class=\"dropdown-item\">Hide</a>\n    <a href=\"#\" id=\"polygon-color-table-expand\" class=\"dropdown-item\">Expand</a>\n    <a href=\"#\" id=\"polygon-color-table-counts\" class=\"dropdown-item\">Toggle Counts</a>\n    <a href=\"#\" id=\"polygon-color-table-frequencies\" class=\"dropdown-item\">Toggle Frequencies</a>\n  </div>\n\n<div id=\"context-menu\" class=\"dropdown-menu\">\n    <a href=\"javascript:;\" id=\"pinNode\" class=\"dropdown-item\">Pin Node</a>\n    <button id=\"copyID\" class=\"dropdown-item\" (click)=\"copyID()\">Copy ID</button>\n    <button id=\"copySeq\" class=\"dropdown-item\" (click)=\"copySeq()\">Copy Sequence</button>\n    <a href=\"javascript:;\" id=\"viewAttributes\" class=\"dropdown-item\">View Attributes</a>\n</div>\n\n\n<p-dialog id=\"network-attribute-table-wrapper\" [(visible)]=\"ShowNetworkAttributes\" header=\"Node Attributes\" [style]=\"{width: '35vw'}\" >\n    <div class=\"col-12\" style=\"width:100%;\">        \n        <table id=\"network-attribute-table\" style=\"width:100%\">\n            <tr *ngFor=\"let item of ContextSelectedNodeAttributes\">\n                <td>\n                    <strong>\n                        {{item.attribute}}\n                    </strong>\n                </td>\n                <td>{{item.value}}</td>\n            </tr>\n        </table>\n    </div>\n</p-dialog>\n\n\n\n<p-dialog *ngIf=\"viewActive\" id=\"network-export-modal\" [(visible)]=\"Show2DExportPane\" header=\"Export Network Image\" class=\"dialogSize\" (onHide)=\"onCloseExport()\" appendTo=\"body\">\n    <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n                <div class=\"modal-body\" style='min-width: 400px; height: 100%;'>\n                    <div class=\"form-group row\">\n                    <div class=\"col-8\">\n                        <input type=\"text\" id=\"network-export-filename\" class=\"form-control form-control-sm\" placeholder=\"Filename\" [(ngModel)]=\"SelectedNetworkExportFilenameVariable\" (ngModelChange)=\"onDataChange($event)\">\n                    </div>\n                    <div class=\"col-4\">\n                        <p-dropdown id=\"network-export-filetype\" [options]=\"NetworkExportFileTypeList\" [(ngModel)]=\"SelectedNetworkExportFileTypeListVariable\" (ngModelChange)=\"onNetworkExportFiletypeChange($event)\"></p-dropdown>\n                    </div>\n                </div>\n                <div>\n\n                    <div [hidden]=\"!ShowAdvancedExport\">\n                        <p-accordion>\n                            <p-accordionTab style=\"color:#495057\" header=\"Advanced\">\n                                <div id=\"network-export-advanced\">\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-3\">\n                                            <label for=\"network-export-scale\">Scale</label>\n                                        </div>\n                                        <div class=\"col-9\">\n                                            <input type=\"number\" id=\"network-export-scale\" class=\"form-control form-control-sm\" min=\"0\" max=\"2\" step=\"0.1\" value=\"1\" [(ngModel)]=\"SelectedNetworkExportScaleVariable\" (ngModelChange)=\"updateCalculatedResolution($event)\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-3\">Resolution</div>\n                                        <div id=\"network-export-dimensions\" class=\"col-9 text-right\">{{CalculatedResolution}}</div>\n                                    </div>\n                                    <div class=\"row\">\n                                        <div class=\"col-3\">\n                                            <label for=\"network-export-quality\">Quality</label>\n                                        </div>\n                                        <div class=\"col-9\">\n                                            <input type=\"range\" class=\"custom-range\" id=\"network-export-quality\" min=\"0\" max=\"1.0\" value=\"0.92\" step=\"0.01\" [(ngModel)]=\"SelectedNetworkExportQualityVariable\">\n                                        </div>\n                                    </div>\n\n                                </div>\n                            </p-accordionTab>\n                        </p-accordion>\n                    </div>\n                </div>\n            </div>\n            <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-error\" (click)=\"Show2DExportPane = !Show2DExportPane\">Cancel</button>\n                <button type=\"button\" id=\"network-export\" class=\"btn btn-primary\" (click)=\"exportVisualization($event)\">Export</button>\n            </div>\n        </div><!-- /.modal-content -->\n    </div><!-- /.modal-dialog -->\n</p-dialog><!-- /.modal -->\n";
+module.exports = "﻿﻿\n\n<span id=\"tooltip\" style=\"background-color: white;\"></span>\n\n<div id=\"tool-btn-container\" class=\"m-portlet\">\n    <span style=\"overflow: visible; position: relative; width: 110px;\">\n        <a title=\"Settings\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openSettings()\"><i class=\"flaticon-settings primary\"></i></a>\n    </span>\n    <span style=\"overflow: visible; position: relative; width: 110px;\">\n        <a title=\"Export Screen\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openExport()\"><i class=\"flaticon-download primary\"></i></a>\n    </span>\n    <span style=\"overflow: visible; position: relative; width: 110px;\">\n        <a title=\"Center Screen\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openCenter()\"><i class=\"flaticon-eye primary\"></i></a>\n    </span>\n    <span style=\"overflow: visible; position: relative; width: 110px;\">\n        <a #pinbutton title=\"Pin All Nodes\" id=\"pinbutton\" class=\"btn btn-sm btn-clean btn-icon btn-icon-md\" style=\"float:left\" (click)=\"openPinAllNodes()\"\n            [style.background]=\"commonService.session.network.allPinned ? 'lightblue': 'transparent'\"\n        ><i class=\"flaticon-pin primary\"></i></a>\n    </span>\n</div>\n\n<vis-single-container id=\"viz-force\" *ngIf=\"!showParallel && data !== undefined\" [data]=\"data\" [svgDefs]=\"svgDefs\" [height]=\"containerHeight\">\n    <vis-graph\n      [layoutType]=\"layoutType\"\n      [layoutAutofit]=\"autoFit\"\n      [forceLayoutSettings]=\"forceLayoutSettings\"\n      [linkLabel]=\"linkLabel\"\n      [linkWidth]=\"linkWidth\"\n      [linkStroke]=\"linkStroke\"\n      [linkArrow]=\"linkArrow\"\n      [linkStyle]=\"linkStyle\"\n      [nodeFill]=\"nodeFill\"\n      [nodeStroke]=\"nodeStroke\"\n      [nodeStrokeWidth]=\"nodeStrokeWidth\"\n      [nodeLabel]=\"nodeLabel\"\n      [nodeShape]=\"nodeShape\"\n      [nodeSize]=\"nodeSize\"\n      [events]=\"events\"\n      [selectedNodeId]=\"selectedNodeId\"\n      (onNodeSelectionBrush)=\"onNodeSelectionBrush($event.selectedNodes, $event.event)\"\n      (onNodeSelectionDrag)=\"onNodeSelectionDrag($event.selectedNodes, $event.event)\"\n      ></vis-graph>\n</vis-single-container>\n\n<vis-single-container  id=\"viz-paralell\" *ngIf=\"showParallel && data !== undefined\" [data]=\"data\" [height]=\"containerHeight\">\n    <vis-graph\n        [layoutType]=\"layoutType2\"\n        [layoutAutofit]=\"autoFit\"\n        [layoutNodeGroup]=\"layoutNodeGroup\"\n        [layoutParallelNodeSubGroup]=\"layoutParallelNodeSubGroup\"\n        [layoutParallelNodesPerColumn]=\"7\"\n        [layoutParallelSubGroupsPerRow]=\"4\"\n        [linkLabel]=\"linkLabel\"\n        [linkWidth]=\"linkWidth\"\n        [linkStroke]=\"linkStroke\"\n        [linkArrow]=\"linkArrow\"\n        [nodeFill]=\"nodeFill\"\n        [nodeStroke]=\"nodeStroke\"\n        [nodeStrokeWidth]=\"nodeStrokeWidth\"\n        [nodeLabel]=\"nodeLabel\"\n        [nodeShape]=\"nodeShape\"\n        [panels]=\"panels\"\n    ></vis-graph>\n  </vis-single-container>\n  \n<!-- <vis-single-container *ngIf=\"showParallel\" [data]=\"data2\" [height]=\"containerHeight\">\n    <vis-graph\n      [events]=\"events2\"\n      [layoutType]=\"layoutType2\"\n      [layoutGroupOrder]=\"layoutGroupOrder\"\n      [layoutParallelNodesPerColumn]=\"layoutParallelNodesPerColumn\"\n      [panels]=\"panels\"\n    ></vis-graph>\n  </vis-single-container> -->\n\n<!-- <div id=\"network\"></div> -->\n\n<!-- <svg id=\"network\" class=\"network\" [ngStyle]=\"svgStyle\" (click)=\"networkWhitespaceClicked()\"></svg> -->\n\n<!-- May be able to remove this section <div class=row>, related to exportWork which isn't currently used-->\n<div class=\"row\">\n    <div class=\"col-md-4\">\n      <h2 *ngIf=\"isExporting && commonService.session.style.widgets['node-symbol-variable'] != 'None'\" class=\"bottom-table\">\n          Node Shapes\n        </h2>\n      <table id=\"node-symbol-table-bottom\" class=\"bottom-table\"></table>          \n    </div>\n    <div class=\"col-md-4\">\n        <h2 *ngIf=\"isExporting && commonService.session.style.widgets['node-color-variable'] != 'None'\" class=\"bottom-table\">\n            Node Colors\n        </h2>\n        <table id=\"node-color-table-bottom\" class=\"bottom-table\"></table>          \n      </div>\n      <div class=\"col-md-4\">\n        <h2 *ngIf=\"isExporting && commonService.session.style.widgets['link-color-variable'] != 'None'\" class=\"bottom-table\">\n            Link Colors\n        </h2>\n        <table id=\"link-color-table-bottom\" class=\"bottom-table\"></table>          \n      </div>\n  </div>\n\n<div class=\"m-content\" *ngIf=\"IsDataAvailable == false\">\n    <div id=\"file-panel\" class=\"container-fluid\" style=\"height:500px;\">\n        <div id=\"file-prompt\" class=\"d-flex justify-content-center\">\n            <h1><b>Please add data files to load...</b></h1>\n            <br />\n        </div>\n    </div>\n</div>\n\n\n\n<!-- <p-sidebar [(visible)]=\"ShowStatistics\" position=\"right\">\n\n    <div id=\"color-transparency-wrapper\" *ngIf=\"false\">\n        <input type=\"range\" class=\"custom-range\" id=\"color-transparency\" min=\"0\" max=\"1\" step=\"0.05\" value=\"1\" [(ngModel)]=\"SelectedColorTransparencyVariable\" (change)=\"onSelectedColorTransparencyVariableChange($event)\">\n    </div>\n\n\n</p-sidebar>  -->\n\n<div id=\"network-statistics-wrapper\">\n    <div id=\"network-statistics-draghandle\"><span class=\"oi oi-move\"></span></div>\n    <table id=\"network-statistics-table\">\n        <tr>\n            <td class=\"text-right\">\n                <span id=\"numberOfNodes\"></span>\n                (<span id=\"numberOfSelectedNodes\"></span>)\n            </td>\n            <td>Nodes (Selected)</td>\n        </tr>\n        <tr>\n            <td id=\"numberOfVisibleLinks\" class=\"text-right\"></td>\n            <td>Links</td>\n        </tr>\n        <tr>\n            <td id=\"numberOfDisjointComponents\" class=\"text-right\"></td>\n            <td>Clusters</td>\n        </tr>\n        <tr>\n            <td id=\"numberOfSingletonNodes\" class=\"text-right\"></td>\n            <td>Singletons</td>\n        </tr>\n    </table>\n</div>\n\n\n\n<div class=\"view-controls\">\n    <p-dialog *ngIf=\"viewActive\" id=\"network-settings-pane\" \n                [(visible)]=\"Node2DNetworkExportDialogSettings.isVisible\"  \n                header=\"2D Network Settings\" appendTo=\"body\"\n                >\n        <tabset class=\"tab-container tabbable-line\">\n            <tab heading=\"{{'Nodes' | localize}}\" [active]=\"true\" customClass=\"m-tabs__item\">\n                <p-accordion>\n                    <p-accordionTab [selected]=\"false\" style=\"color:#495057\" header=\"Labels and Tooltips\">\n                        <div #nodecontrolslabels>\n                            <div class=\"form-group row\" title=\"What field should be displayed as a label for the node?\">\n                                <div class=\"col-4\"><label for=\"node-label-variable\">Label</label></div>\n                                <div class=\"col-8\">\n                                    <p-dropdown id=\"node-label-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedNodeLabelVariable\" (ngModelChange)=\"onNodeLabelVaribleChange($event)\"></p-dropdown>\n                                </div>\n                            </div>\n                            <div class=\"form-group row node-label-row\" title=\"How big should node labels be?\">\n                                <div class=\"col-4\"><label for=\"node-label-size\">Label Size</label></div>\n                                <div class=\"col-8\"><input type=\"range\" class=\"custom-range\" id=\"node-label-size\" min=\"6\" value=\"16\" max=\"72\" [(ngModel)]=\"SelectedNodeLabelSizeVariable\" (change)=\"onNodeLabelSizeChange($event)\"></div>\n                            </div>\n                            <div class=\"form-group row\" title=\"What node data should be displayed as a tooltip for the node?\">\n                                <div class=\"col-4\">\n                                    <label for=\"node-tooltip-variable\">Tooltip</label>\n                                </div>\n                                <div class=\"col-8\">\n                                    <p-multiSelect [options]=\"commonService.session.data['nodeFields']\" appendTo=\"body\" [showToggleAll]=false [showHeader]=false [style]=\"{'max-width': '100%'}\"\n                                    [(ngModel)]=\"commonService.session.style.widgets['node-tooltip-variable']\" (onChange)=\"onNodeTooltipVariableChange($event.value)\"\n                                    ></p-multiSelect>\n                                </div>\n                            </div>\n                        </div>\n                    </p-accordionTab>\n\n                    <p-accordionTab style=\"color:#495057\" header=\"Shapes and Sizes\">\n                        <div #nodecontrolsshapes>\n                            <div class=\"form-group row\" title=\"Which variable should determine the shape of the node?\">\n                                <div class=\"col-4\">\n                                    <label for=\"node-symbol-variable\">Shape By</label>\n                                </div>\n                                <div class=\"col-8\">\n                                    <p-dropdown id=\"node-symbol-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedNodeSymbolVariable\" (ngModelChange)=\"onNodeSymbolVariableChange($event)\"></p-dropdown>\n                                </div>\n                            </div>\n                            <div id=\"node-symbol-table-row\" [hidden]=\"!ShowNodeSymbolTable\" class=\"form-group row\" title=\"What shape should the nodes be?\">\n                                <div class=\"col-4\">Table</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton [options]=\"TableTypes\" [(ngModel)]=\"SelectedNetworkTableTypeVariable\" (ngModelChange)=\"onNodeSymbolTableChange($event)\"></p-selectButton>\n                                </div>\n                            </div>\n\n                            <div id=\"node-symbol-row\" [hidden]=\"ShowNodeSymbolWrapper\" class=\"form-group row\" title=\"What shape should the nodes be?\">\n                                <div class=\"col-4\"><label for=\"node-symbol\">Shape</label></div>\n                                <div class=\"col-8\">\n                                    <select id=\"node-symbol\" class=\"form-control form-control-sm\" [(ngModel)]=\"selectedNodeShape\" (ngModelChange)=\"onNodeShapeChange($event)\">\n                                        <option value=\"symbolCircle\" selected>&nbsp;&#11044; (Circle)</option>\n                                        <option value=\"symbolSquare\">&nbsp;&#9632; (Square)</option>\n                                        <option value=\"symbolHexagon\">&nbsp;&#11042; (Hexagon)</option>\n                                        <option value=\"symbolTriangle\">&nbsp;&#9650; (Triangle)</option>\n                                    </select>\n                                        <!-- <option value=\"symbolCircle\" selected>&nbsp;&#11044; (Circle)</option>\n                                        <option value=\"symbolTriangle\">&nbsp;&#9650; (Up Triangle)</option>\n                                        <option value=\"symbolTriangleDown\">&nbsp;&#9660; (Down Triangle)</option>\n                                        <option value=\"symbolTriangleLeft\">&nbsp;&#9664; (Left Triangle)</option>\n                                        <option value=\"symbolTriangleRight\">&nbsp;&#9654; (Right Triangle)</option>\n                                        <option value=\"symbolDiamond\">&nbsp;&#10731; (Vertical Diamond)</option>\n                                        <option value=\"symbolDiamondAlt\">&nbsp;&#10731; (Horizontal Diamond)</option>\n                                        <option value=\"symbolSquare\">&nbsp;&#9632; (Square)</option>\n                                        <option value=\"symbolDiamondSquare\">&nbsp;&#9670; (Tilted Square)</option>\n                                        <option value=\"symbolPentagon\">&nbsp;&#11039; (Pentagon)</option>\n                                        <option value=\"symbolHexagon\">&nbsp;&#11042; (Hexagon)</option>\n                                        <option value=\"symbolHexagonAlt\">&nbsp;&#11043; (Tilted Hexagon)</option>\n                                        <option value=\"symbolOctagon\">&nbsp;&#11042; (Octagon)</option>\n                                        <option value=\"symbolOctagonAlt\">&nbsp;&#11043; (Tilted Octagon)</option>\n                                        <option value=\"symbolCross\">&nbsp;&#10010; (Addition Sign)</option>\n                                        <option value=\"symbolX\">&nbsp;&#10006; (Multiplication Sign)</option>\n                                        <option value=\"symbolWye\">&nbsp;&#120300; (Wye)</option>\n                                        <option value=\"symbolStar\">&nbsp;&#9733; (Star)</option> -->\n                                    <!-- </select> -->\n                                </div>\n                            </div>\n\n                            <div class=\"form-group row\" title=\"Which variable should determine the size of the node?\">\n                                <div class=\"col-4\"><label for=\"node-radius-variable\">Size By</label></div>\n                                <div class=\"col-8\">\n                                    <p-dropdown id=\"node-radius-variable\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedNodeRadiusVariable\" (ngModelChange)=\"onNodeRadiusVariableChange($event)\"></p-dropdown>\n                                </div>\n                            </div>\n                            <div id=\"node-max-radius-row\" class=\"form-group row\" title=\"Should node max radius to this variable?\">\n                                <div class=\"col-4\"><label for=\"node-radius-max\">Max Size</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"range\" class=\"custom-range\" id=\"node-radius-max\" min=\"20\" value=\"25\" step=\"1\" max=\"60\" [(ngModel)]=\"SelectedNodeRadiusSizeMaxVariable\" (ngModelChange)=\"onNodeRadiusMaxChange($event)\">\n                                </div>\n                              </div>\n                              <div id=\"node-min-radius-row\" class=\"form-group row\" title=\"Should node min radius to this variable?\">\n                                <div class=\"col-4\"><label for=\"node-radius-min\">Min Size</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"range\" class=\"custom-range\" id=\"node-radius-min\" min=\"5\" value=\"10\" step=\"1\" max=\"55\" [(ngModel)]=\"SelectedNodeRadiusSizeMinVariable\" (ngModelChange)=\"onNodeRadiusMinChange($event)\">\n                                </div>\n                            </div>\n                            <div id=\"node-radius-row\" class=\"form-group row\" title=\"How big should the nodes be?\">\n                                <div class=\"col-4\"><label for=\"node-radius\">Size</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"range\" class=\"custom-range\" id=\"node-radius\" min=\"0\" value=\"50\" step=\"1\" max=\"100\" [(ngModel)]=\"SelectedNodeRadiusSizeVariable\" (ngModelChange)=\"onNodeRadiusChange($event)\">\n                                </div>\n                            </div>\n\n                            <div class=\"form-group row\" title=\"What should the width of the node border be?\">\n                                <div class=\"col-4\"><label for=\"node-radius-variable\">Border Width</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"number\" class=\"form-control form-control-sm\" id=\"node-border-width\" min=\"0\" step=\"0.5\" value=\"2\" [(ngModel)]=\"nodeBorderWidth\" (ngModelChange)=\"onNodeBorderWidthChange($event)\">\n                                </div>\n                            </div>\n\n                        </div>\n                    </p-accordionTab>\n\n                    <p-accordionTab style=\"color:#495057\" [selected]=\"false\" header=\"Colors\">\n                        <button pButton type=\"button\" label=\"Show Colors\" class=\"ui-button-raised\" (click)=\"showGlobalSettings()\"></button>\n                    </p-accordionTab>\n\n                </p-accordion>\n            </tab>\n\n            <tab heading=\"{{'Links' | localize}}\" customClass=\"m-tabs__item\">\n                <p-accordion>\n                    <p-accordionTab style=\"color:#495057\" header=\"Labels and Tooltips\">\n                        <div #linkcontrolslabels>\n                            <div class=\"form-group row\" title=\"What data should be displayed when you hover over a link?\">\n                                <div class=\"col-4\"><label for=\"link-tooltip-variable\">Tooltip</label></div>\n                                <div class=\"col-8\">\n                                    <p-multiSelect [options]=\"LinkToolTipList\" appendTo=\"body\" [showToggleAll]=false [showHeader]=false [style]=\"{'max-width': '100%'}\"\n                                    [(ngModel)]=\"commonService.session.style.widgets['link-tooltip-variable']\" (onChange)=\"onLinkTooltipVariableChange($event.value)\"\n                                    ></p-multiSelect>\n                                    <!--mat-select multiple [(value)]=\"commonService.session.style.widgets['link-tooltip-variable']\" (valueChange)=\"onLinkTooltipVariableChange($event)\">\n                                        <mat-option *ngFor=\"let option of LinkToolTipList\" [value]=\"option.value\">\n                                          {{option.label}}\n                                        </mat-option>\n                                      </mat-select-->\n                                </div>\n                            </div>\n                            <div class=\"form-group row\" title=\"What data should be displayed when you hover over a link?\">\n                                <div class=\"col-4\"><label for=\"link-label-variable\">Label</label></div>\n                                <div class=\"col-8\">\n                                    <p-dropdown id=\"link-label-variable\" [options]=\"ToolTipFieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedLinkLabelVariable\" (ngModelChange)=\"onLinkLabelVariableChange($event)\"></p-dropdown>\n                                </div>\n                            </div>\n                            <div class=\"form-group row\" title=\"How many decimals should the number labels have?\">\n                                <div class=\"col-4\"><label for=\"link-label-decimal-length\">Decimal Length</label></div>\n                                <div class=\"col-8\"><input type=\"number\" class=\"form-control form-control-sm\" id=\"link-label-decimal-length\" min=\"0\" step=\"1\" max=\"6\" value=\"3\"  [(ngModel)]=\"SelectedLinkDecimalVariable\"  (ngModelChange)=\"onLinkDecimalVariableChange($event)\">\n                                </div>\n                              </div>  \n                        </div>\n                    </p-accordionTab>\n\n                    <p-accordionTab style=\"color:#495057\" header=\"Shapes and Sizes\">\n                        <div #linkcontrolsshapes>\n                            <div id=\"link-transparency-row\" class=\"form-group row\" title=\"How transparent should the links be?\">\n                                <div class=\"col-4\"><label for=\"link-opacity\">Transparency</label></div>\n                                <div class=\"col-8\"><input type=\"range\" class=\"custom-range\" id=\"link-opacity\" min=\"0\" max=\"1\" value=\"0\" step=\"0.01\" [(ngModel)]=\"SelectedLinkTransparencyVariable\" (ngModelChange)=\"onLinkOpacityChange($event)\"></div>\n                            </div>\n                            <div class=\"form-group row\" title=\"Which variable should determine the width of a link?\">\n                                <div class=\"col-4\"><label for=\"link-width-variable\">Width By</label></div>\n                                <div class=\"col-8\">\n                                    <p-dropdown id=\"link-width-variable\" [options]=\"ToolTipFieldList\" appendTo=\"body\" [(ngModel)]=\"SelectedLinkWidthByVariable\" (ngModelChange)=\"onLinkWidthVariableChange($event)\"></p-dropdown>\n                                </div>\n                            </div>\n                            <div id=\"link-max-width-row\" class=\"form-group row display-none\" title=\"Should link max widths to this variable?\">\n                                <div class=\"col-4\"><label for=\"link-width-max\">Max Width</label></div>\n                                <div class=\"col-8\"><input type=\"range\" class=\"custom-range\" id=\"link-width-max\" min=\"0.3\" max=\"20\" step=\".3\" value=\"8\" [(ngModel)]=\"SelectedLinkWidthMax\" (ngModelChange)=\"onLinkWidthMaxChange($event)\"></div>\n                              </div>\n                              <div id=\"link-min-width-row\" class=\"form-group row display-none\" title=\"Should link min widths to this variable?\">\n                                <div class=\"col-4\"><label for=\"link-width-min\">Min Width</label></div>\n                                <div class=\"col-8\"><input type=\"range\" class=\"custom-range\" id=\"link-width-min\" min=\"0.3\" max=\"20\" step=\".3\" value=\"3\" [(ngModel)]=\"SelectedLinkWidthMin\" (ngModelChange)=\"onLinkWidthMinChange($event)\"></div>\n                              </div>\n                            <div id=\"link-reciprocalthickness-row\" class=\"form-group row display-none\" title=\"Should link widths be proportioned to the reciprocal of this variable?\">\n                                <div class=\"col-4\">Reciprocal</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"link-width-reciprocal-non-reciprocal\" appendTo=\"body\"  [options]=\"ReciprocalTypes\" [(ngModel)]=\"SelectedLinkReciprocalTypeVariable\" (ngModelChange)=\"onLinkWidthReciprocalNonReciprocalChange($event)\"></p-selectButton>\n                                </div>\n                            </div>\n                            <div class=\"form-group row\" id=\"link-width-row\" title=\"How thick should the links be?\">\n                                <div class=\"col-4\"><label for=\"link-width\">Width</label></div>\n                                <div class=\"col-8\"><input type=\"range\" class=\"custom-range\" id=\"link-width\" min=\"0.3\" max=\"30\" step=\".3\" value=\"3\" [(ngModel)]=\"SelectedLinkWidthVariable\" (ngModelChange)=\"onLinkWidthChange($event)\"></div>\n                            </div>\n                            <div class=\"form-group row\" title=\"How long should links be?\">\n                                <div class=\"col-4\"><label for=\"link-length\">Length</label></div>\n                                <div class=\"col-8\"><input type=\"range\" class=\"custom-range\" id=\"link-length\" min=\"0\" max=\"200\" value=\"50\" [(ngModel)]=\"SelectedLinkLengthVariable\" (ngModelChange)=\"onLinkLengthChange($event)\"></div>\n                            </div>\n                            <div class=\"form-group row hideForHIVTrace\" title=\"Shoul arrowheads pointing to the\">\n                                <div class=\"col-4\">Arrows</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"link-directed-undirected\" [options]=\"ArrowTypes\" [(ngModel)]=\"SelectedLinkArrowTypeVariable\" (ngModelChange)=\"onLinkDirectedUndirectedChange($event)\"></p-selectButton>\n                                </div>\n                            </div>\n                            <div id=\"link-bidirectional-row\" class=\"form-group row display-none\" title=\"Should links be bidirectional?\">\n                                <div class=\"col-4\">Bidirectional</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"link-bidirectional\" [options]=\"bidirectionalOptions\" [(ngModel)]=\"SelectedLinkBidirectionalTypeVariable\" (ngModelChange)=\"onLinkBidirectionalChange($event)\"></p-selectButton>\n                                </div>\n                            </div>\n                        </div>\n                    </p-accordionTab>\n\n\n                    <p-accordionTab style=\"color:#495057\" header=\"Colors\">\n                        <button pButton type=\"button\" label=\"Show Colors\" class=\"ui-button-raised\" (click)=\"showGlobalSettings()\"></button>\n                    </p-accordionTab>\n\n                </p-accordion>\n            </tab>\n\n            <tab heading=\"{{'Network' | localize}}\" customClass=\"m-tabs__item\">\n                <p-accordion>\n                    <p-accordionTab style=\"color:#495057\" header=\"Display\">\n                        <div #networkcontrolslabels>\n                            <div class=\"form-group row\" title=\"Should MicrobeTrace Highlight a node's neighbors when you hover on it?\">\n                                <div class=\"col-4\">Neighbors</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"dont-highlight-neighbors-highlight-neighbors\" [options]=\"NeighborTypes\" [(ngModel)]=\"SelectedNetworkNeighborTypeVariable\" (ngModelChange)=\"onDontHighlightNeighborsHighlightNeighborsChange($event)\"></p-selectButton>\n                                </div>\n                            </div>\n                            <div class=\"form-group row\" title=\"Should MicrobeTrace Highlight a node's neighbors when you hover on it?\">\n                                <div class=\"col-4\">Gridlines</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"network-gridlines-show-hide\" [options]=\"GridLineTypes\" [(ngModel)]=\"SelectedNetworkGridLineTypeVariable\" (ngModelChange)=\"onNetworkGridlinesShowHideChange($event)\"></p-selectButton>\n                                </div>\n                            </div>\n                        </div>\n                    </p-accordionTab>\n                    <p-accordionTab style=\"color:#495057\" header=\"Physics\">\n                        <div #networkcontrolsphysics>\n                            <div class=\"form-group row\" title=\"How strongly are the nodes repulsed by each other?\">\n                                <div class=\"col-4\"><label for=\"node-charge\">Charge</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"range\" class=\"custom-range\" id=\"node-charge\" min=\"0\" max=\"400\" value=\"200\" [(ngModel)]=\"SelectedNetworkChargeVariable\" (ngModelChange)=\"onNodeChargeChange($event)\">\n                                </div>\n                            </div>\n                            <div class=\"form-group row\" title=\"How attractive is the mass of the graph?\">\n                                <div class=\"col-4\"><label for=\"network-gravity\">Gravity</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"range\" class=\"custom-range\" id=\"network-gravity\" min=\"0.025\" max=\"1\" value=\"0.05\" step=\"0.025\" [(ngModel)]=\"SelectedNetworkGravityVariable\" (ngModelChange)=\"onNetworkGravityChange($event)\">\n                                </div>\n                            </div>\n                            <div class=\"form-group row\" title=\"How quickly should moving nodes lose their momentum?\">\n                                <div class=\"col-4\"><label for=\"network-friction\">Friction</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"range\" class=\"custom-range\" id=\"network-friction\" min=\"0\" max=\"1\" value=\"0.4\" step=\"0.025\" [(ngModel)]=\"SelectedNetworkFrictionVariable\" (ngModelChange)=\"onNetworkFrictionChange($event)\">\n                                </div>\n                            </div>\n                            <div class=\"form-group row\" title=\"How quickly should moving nodes lose their momentum?\">\n                                <div class=\"col-4\"><label for=\"network-link-strength\">Link Strength</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"range\" class=\"custom-range\" id=\"network-link-strength\" min=\"0\" max=\"1\" value=\"0.4\" step=\"0.025\" [(ngModel)]=\"SelecetedNetworkLinkStrengthVariable\" (ngModelChange)=\"onNetworkLinkStrengthVariableChange($event)\">\n                                </div>\n                            </div>\n                        </div>\n                    </p-accordionTab>                   \n                </p-accordion>\n            </tab>\n            <tab heading=\"{{'Polygons' | localize}}\" customClass=\"m-tabs__item\">\n                <p-accordion>\n                    <p-accordionTab style=\"color:#495057\" header=\"Polygon Controls\" id=\"polygons-controls-accordion\">\n                          <div id=\"polygons-controls\" class=\"show\" data-parent=\"#polygons-controls-accordion\">\n                            <div class=\"card-body\">\n                              <div class=\"form-group row\" title=\"Show polygons?\">\n                                <div class=\"col-4\">Polygons</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"colorPolygonsTable\" [options]=\"hideShowOptions\" [(ngModel)]=\"commonService.session.style.widgets['polygons-show']\" (ngModelChange)=\"polygonsToggle($event)\"></p-selectButton>\n                                </div>\n                              </div>\n                              <div *ngIf=\"commonService.session.style.widgets['polygons-show']\" class=\"form-group row polygons-settings-row\" title=\"What Foci should be used when creating convex hulls?\">\n                                <div class=\"col-4\"><label for=\"polygons-foci\">Group By</label></div>\n                                <div class=\"col-8\">\n                                    <p-dropdown id=\"polygons-foci\" [options]=\"FieldList\" appendTo=\"body\" [(ngModel)]=\"commonService.session.style.widgets['polygons-foci']\" (ngModelChange)=\"centerPolygons($event)\"></p-dropdown>\n                                </div>\n                              </div>\n                            </div>\n                          </div>\n                    </p-accordionTab>\n                    <p-accordionTab *ngIf=\"commonService.session.style.widgets['polygons-show']\" style=\"color:#495057\" header=\"Labels\" id=\"polygons-controls-accordion\">\n                          <div id=\"polygons-controls-labels\" data-parent=\"#polygons-controls-accordion\">\n                            <div class=\"card-body\">\n                              <div class=\"form-group row\" title=\"Show polygons label?\">\n                                <div class=\"col-4\">Label Polygons</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"polygons-label-visibility\" [options]=\"hideShowOptions\" [(ngModel)]=\"commonService.session.style.widgets['polygons-label-show']\" (ngModelChange)=\"onPolygonLabelShowChange($event)\"></p-selectButton>\n                                </div>\n                              </div>\n                              <div class=\"form-group row polygons-label-row\" title=\"How big should polygon labels be?\">\n                                <div class=\"col-4\"><label for=\"polygons-label-size\">Label Size</label></div>\n                                <div class=\"col-8\">\n                                    <input type=\"range\" class=\"custom-range\" id=\"polygons-label-size\" min=\"6\" value=\"16\" step=\"1\" max=\"72\" [(ngModel)]=\"commonService.session.style.widgets['polygons-label-size']\" (ngModelChange)=\"onPolygonLabelSizeChange($event)\">\n                                </div>\n                              </div>\n                              <div class=\"form-group row polygons-label-row\" title=\"How should the labels be oriented relative to center of polygon?\">\n                                <div class=\"col-4\"><label for=\"polygons-label-orientation\">Orientation</label></div>\n                                <div class=\"col-8\">\n                                    <select id=\"polygon-label-orientation\" [(ngModel)]=\"SelectedPolygonLabelOrientationVariable\" (ngModelChange)=\"onPolygonLabelOrientationChange($event)\">\n                                        <option selected>top</option>\n                                        <option>bottom</option>\n                                    </select>                                \n                                </div>\n                              </div>\n                            </div>\n                          </div>\n                        </p-accordionTab>\n                        <!-- style=\"display: none;\" -->\n                        <p-accordionTab *ngIf=\"commonService.session.style.widgets['polygons-show']\" style=\"color:#495057\" header=\"Colors\" id=\"polygons-controls-accordion\">  \n                          <div id=\"polygons-controls-colors\" data-parent=\"#polygons-controls-accordion\">\n                            <div class=\"card-body\">\n                              <div id=\"color-polygons\" class=\"form-group row\" title=\"Show polygons colored?\">\n                                <div class=\"col-4\">Color Polygons</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"colorPolygons\" [options]=\"hideShowOptions\" [(ngModel)]=\"commonService.session.style.widgets['polygons-color-show']\" (ngModelChange)=\"polygonColorsToggle($event)\"></p-selectButton>\n                                </div>\n                              </div>\n                              <div *ngIf=\"commonService.session.style.widgets['polygons-color-show']\" id=\"polygon-color-table-row\" class=\"form-group row\" title=\"Should MicrobeTrace display the table of colors?\">\n                                <div class=\"col-4\">Polygon Color Table</div>\n                                <div class=\"col-8\">\n                                    <p-selectButton id=\"colorPolygonsTable\" [options]=\"hideShowOptions\" [(ngModel)]=\"commonService.session.style.widgets['polygon-color-table-visible']\" (ngModelChange)=\"polygonColorsTableToggle($event)\"></p-selectButton>\n                                </div>\n                              </div>\n                              <div *ngIf=\"!commonService.session.style.widgets['polygons-color-show']\" id=\"polygon-color-value-row\" class=\"form-group row\" title=\"What color should the polygons be?\">\n                                <div class=\"col-4\"><label for=\"polygon-color\">Polygons</label></div>\n                                <div class=\"col-8\">\n                                  <input type=\"color\" id=\"polygon-color\" class=\"form-control form-control-sm\" value=\"#1f77b4\" [(ngModel)]=\"commonService.session.style.widgets['polygon-color']\" (ngModelChange)=\"onPolygonColorChanged($event)\">\n                                </div>\n                              </div>              \n                            </div>\n                          </div>\n                    </p-accordionTab>\n                </p-accordion>\n            </tab>\n        </tabset>\n\n    </p-dialog>\n\n\n\n</div>\n\n    <p-dialog id=\"node-symbol-table-wrapper\" \n                [position]=\"NodeSymbolTableWrapperDialogSettings.shapeRight\"\n                [(visible)]=\"NodeSymbolTableWrapperDialogSettings.isVisible\"  \n                header=\"Node Symbol Selection Table\"  \n                [style]=\"{width: '45vw', maxWidth: '450px'}\"\n                (onHide)=\"onNodeSymbolTableChange('Hide')\"\n                (onShow)=\"onNodeSymbolTableChange('Show')\"\n                >\n        <div class=\"col-12\" style=\"width:100%;max-height:50vh;\" title=\"Node Shapes and Size Selection.\">          \n             <table id=\"node-symbol-table\" style=\"width:100%;height:100%;\"></table>          \n        </div>\n    \n<!--         \n            <option value=\"symbolCircle\" selected>&nbsp;&#11044; (Circle)</option>\n            <option value=\"symbolTriangle\">&nbsp;&#9650; (Up Triangle)</option>\n            <option value=\"symbolTriangleDown\">&nbsp;&#9660; (Down Triangle)</option>\n            <option value=\"symbolTriangleLeft\">&nbsp;&#9664; (Left Triangle)</option>\n            <option value=\"symbolTriangleRight\">&nbsp;&#9654; (Right Triangle)</option>\n            <option value=\"symbolDiamond\">&nbsp;&#10731; (Vertical Diamond)</option>\n            <option value=\"symbolDiamondAlt\">&nbsp;&#10731; (Horizontal Diamond)</option>\n            <option value=\"symbolSquare\">&nbsp;&#9632; (Square)</option>\n            <option value=\"symbolDiamondSquare\">&nbsp;&#9670; (Tilted Square)</option>\n            <option value=\"symbolPentagon\">&nbsp;&#11039; (Pentagon)</option>\n            <option value=\"symbolHexagon\">&nbsp;&#11042; (Hexagon)</option>\n            <option value=\"symbolHexagonAlt\">&nbsp;&#11043; (Tilted Hexagon)</option>\n            <option value=\"symbolOctagon\">&nbsp;&#11042; (Octagon)</option>\n            <option value=\"symbolOctagonAlt\">&nbsp;&#11043; (Tilted Octagon)</option>\n            <option value=\"symbolCross\">&nbsp;&#10010; (Addition Sign)</option>\n            <option value=\"symbolX\">&nbsp;&#10006; (Multiplication Sign)</option>\n            <option value=\"symbolWye\">&nbsp;&#120300; (Wye)</option>\n            <option value=\"symbolStar\">&nbsp;&#9733; (Star)</option>\n        </select> -->\n\n    </p-dialog>\n\n    <p-dialog id=\"polygon-color-table-wrapper\" \n                [position]=\"PolygonColorTableWrapperDialogSettings.polygonRight\" \n                [(visible)]=\"PolygonColorTableWrapperDialogSettings.isVisible\"  \n                header=\"Group Color Selection Table\" \n                [style]=\"{width: '45vw', maxWidth: '450px'}\" \n                (onHide)=\"onPolygonColorTableChange(false)\"\n                (onShow)=\"onPolygonColorTableChange(true)\"\n                >\n        <div class=\"col-12\" style=\"width:100%;max-height:50vh;\" title=\"Group Color Selection.\">          \n             <table id=\"polygon-color-table\" style=\"width:100%;height:100%;\"></table>          \n        </div>\n        <select id=\"polygon-color2\" [hidden]=\"'true'\" class=\"form-control form-control-sm\">\n\n            <option value=\"symbolCircle\" selected>&nbsp;&#11044; (Circle)</option>\n            <option value=\"symbolTriangle\">&nbsp;&#9650; (Up Triangle)</option>\n            <!-- <option value=\"symbolTriangleDown\">&nbsp;&#9660; (Down Triangle)</option>\n            <option value=\"symbolTriangleLeft\">&nbsp;&#9664; (Left Triangle)</option>\n            <option value=\"symbolTriangleRight\">&nbsp;&#9654; (Right Triangle)</option>\n            <option value=\"symbolDiamond\">&nbsp;&#10731; (Vertical Diamond)</option>\n            <option value=\"symbolDiamondAlt\">&nbsp;&#10731; (Horizontal Diamond)</option> -->\n            <option value=\"symbolSquare\">&nbsp;&#9632; (Square)</option>\n            <!-- <option value=\"symbolDiamondSquare\">&nbsp;&#9670; (Tilted Square)</option>\n            <option value=\"symbolPentagon\">&nbsp;&#11039; (Pentagon)</option> -->\n            <option value=\"symbolHexagon\">&nbsp;&#11042; (Hexagon)</option>\n            <!-- <option value=\"symbolHexagonAlt\">&nbsp;&#11043; (Tilted Hexagon)</option>\n            <option value=\"symbolOctagon\">&nbsp;&#11042; (Octagon)</option>\n            <option value=\"symbolOctagonAlt\">&nbsp;&#11043; (Tilted Octagon)</option>\n            <option value=\"symbolCross\">&nbsp;&#10010; (Addition Sign)</option>\n            <option value=\"symbolX\">&nbsp;&#10006; (Multiplication Sign)</option>\n            <option value=\"symbolWye\">&nbsp;&#120300; (Wye)</option>\n            <option value=\"symbolStar\">&nbsp;&#9733; (Star)</option> -->\n        </select>\n\n    </p-dialog>\n\n    <!-- <p-dialog id=\"polygon-color-table-wrapper\" class=\"floater\">\n        <div id=\"polygon-color-table-draghandle\"><span class=\"oi oi-move\"></span></div>\n        <table id=\"polygon-color-table\"></table>\n    </p-dialog> -->\n\n\n\n\n\n<div id=\"node-symbol-table-context\" class=\"dropdown-menu\">\n    <a href=\"#\" id=\"node-symbol-table-move\" class=\"dropdown-item\">Pin</a>\n    <a href=\"#\" id=\"node-symbol-table-context-hide\" class=\"dropdown-item\">Hide</a>\n    <a href=\"#\" id=\"node-symbol-table-expand\" class=\"dropdown-item\">Expand</a>\n    <a href=\"#\" id=\"node-symbol-table-counts\" class=\"dropdown-item\">Toggle Counts</a>\n    <a href=\"#\" id=\"node-symbol-table-frequencies\" class=\"dropdown-item\">Toggle Frequencies</a>\n</div>\n\n  \n  <div id=\"polygon-color-table-context\" class=\"dropdown-menu\">\n    <a href=\"#\" id=\"polygon-color-table-drag\" class=\"dropdown-item\">Drag/Arrow Keys</a>\n    <a href=\"#\" id=\"polygon-color-table-context-hide\" class=\"dropdown-item\">Hide</a>\n    <a href=\"#\" id=\"polygon-color-table-expand\" class=\"dropdown-item\">Expand</a>\n    <a href=\"#\" id=\"polygon-color-table-counts\" class=\"dropdown-item\">Toggle Counts</a>\n    <a href=\"#\" id=\"polygon-color-table-frequencies\" class=\"dropdown-item\">Toggle Frequencies</a>\n  </div>\n\n<div id=\"context-menu\" class=\"dropdown-menu\">\n    <a href=\"javascript:;\" id=\"pinNode\" class=\"dropdown-item\">Pin Node</a>\n    <button id=\"copyID\" class=\"dropdown-item\" (click)=\"copyID()\">Copy ID</button>\n    <button id=\"copySeq\" class=\"dropdown-item\" (click)=\"copySeq()\">Copy Sequence</button>\n    <a href=\"javascript:;\" id=\"viewAttributes\" class=\"dropdown-item\">View Attributes</a>\n</div>\n\n\n<p-dialog id=\"network-attribute-table-wrapper\" [(visible)]=\"ShowNetworkAttributes\" header=\"Node Attributes\" [style]=\"{width: '35vw'}\" >\n    <div class=\"col-12\" style=\"width:100%;\">        \n        <table id=\"network-attribute-table\" style=\"width:100%\">\n            <tr *ngFor=\"let item of ContextSelectedNodeAttributes\">\n                <td>\n                    <strong>\n                        {{item.attribute}}\n                    </strong>\n                </td>\n                <td>{{item.value}}</td>\n            </tr>\n        </table>\n    </div>\n</p-dialog>\n\n\n\n<p-dialog *ngIf=\"viewActive\" id=\"network-export-modal\" [(visible)]=\"Show2DExportPane\" header=\"Export Network Image\" class=\"dialogSize\" (onHide)=\"onCloseExport()\" appendTo=\"body\">\n    <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n                <div class=\"modal-body\" style='min-width: 400px; height: 100%;'>\n                    <div class=\"form-group row\">\n                    <div class=\"col-8\">\n                        <input type=\"text\" id=\"network-export-filename\" class=\"form-control form-control-sm\" placeholder=\"Filename\" [(ngModel)]=\"SelectedNetworkExportFilenameVariable\" (ngModelChange)=\"onDataChange($event)\">\n                    </div>\n                    <div class=\"col-4\">\n                        <p-dropdown id=\"network-export-filetype\" [options]=\"NetworkExportFileTypeList\" [(ngModel)]=\"SelectedNetworkExportFileTypeListVariable\" (ngModelChange)=\"onNetworkExportFiletypeChange($event)\"></p-dropdown>\n                    </div>\n                </div>\n                <div>\n\n                    <div [hidden]=\"!ShowAdvancedExport\">\n                        <p-accordion>\n                            <p-accordionTab style=\"color:#495057\" header=\"Advanced\">\n                                <div id=\"network-export-advanced\">\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-3\">\n                                            <label for=\"network-export-scale\">Scale</label>\n                                        </div>\n                                        <div class=\"col-9\">\n                                            <input type=\"number\" id=\"network-export-scale\" class=\"form-control form-control-sm\" min=\"0\" max=\"2\" step=\"0.1\" value=\"1\" [(ngModel)]=\"SelectedNetworkExportScaleVariable\" (ngModelChange)=\"updateCalculatedResolution($event)\">\n                                        </div>\n                                    </div>\n                                    <div class=\"form-group row\">\n                                        <div class=\"col-3\">Resolution</div>\n                                        <div id=\"network-export-dimensions\" class=\"col-9 text-right\">{{CalculatedResolution}}</div>\n                                    </div>\n                                    <div class=\"row\">\n                                        <div class=\"col-3\">\n                                            <label for=\"network-export-quality\">Quality</label>\n                                        </div>\n                                        <div class=\"col-9\">\n                                            <input type=\"range\" class=\"custom-range\" id=\"network-export-quality\" min=\"0\" max=\"1.0\" value=\"0.92\" step=\"0.01\" [(ngModel)]=\"SelectedNetworkExportQualityVariable\">\n                                        </div>\n                                    </div>\n\n                                </div>\n                            </p-accordionTab>\n                        </p-accordion>\n                    </div>\n                </div>\n            </div>\n            <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-error\" (click)=\"Show2DExportPane = !Show2DExportPane\">Cancel</button>\n                <button type=\"button\" id=\"network-export\" class=\"btn btn-primary\" (click)=\"exportVisualization($event)\">Export</button>\n            </div>\n        </div><!-- /.modal-content -->\n    </div><!-- /.modal-dialog -->\n</p-dialog><!-- /.modal -->\n";
 
 /***/ })
 
