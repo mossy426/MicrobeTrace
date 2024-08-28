@@ -97,8 +97,10 @@ export class CrosstabComponent extends BaseComponentDirective implements OnInit,
 
     this.updateTable();
 
-    // offsets: 70 table-wrapper padding-top, 60 p-paginator, 10 table-wrapper padding-bottom
-    this.scrollHeight = ($('crosstabcomponent').height() - 70 - 10) + 'px';
+    // offsets: 70 table-wrapper padding-top, 10 table-wrapper padding-bottom
+    let pFooterHeight = this.selectedSize == 'p-datatable-sm' ? 41 : this.selectedSize == 'p-datatable-lg' ? 65 : 57;
+    console.log('abc', pFooterHeight);
+    this.scrollHeight = ($('crosstabcomponent').height() - 70 - 10 - pFooterHeight) + 'px';
     let width = ($('crosstabcomponent').width() - 23) + 'px';
     this.tableStyle = {
         'max-width' : width,
@@ -306,6 +308,18 @@ export class CrosstabComponent extends BaseComponentDirective implements OnInit,
       this.convertToProportion();
     } else {
       this.updateTable();
+    }
+  }
+
+  formatTableTitle() {
+    if (this.xVariable != 'None' && this.yVariable != 'None') {
+      return `${this.commonService.capitalize(this.xVariable.replace("_", ""))} vs ${this.commonService.capitalize(this.yVariable.replace("_",""))}`
+    } else if (this.xVariable != 'None') {
+      return `${this.commonService.capitalize(this.xVariable.replace("_", ""))}`
+    } else if (this.yVariable != 'None') {
+      return `${this.commonService.capitalize(this.yVariable.replace("_",""))}`
+    } else {
+      return ''
     }
   }
 
@@ -565,12 +579,20 @@ export class CrosstabComponent extends BaseComponentDirective implements OnInit,
    * Resizes the component as need based on how the goldenlayout dashboard is resized
    */
   goldenLayoutComponentResize() {
-    this.scrollHeight = ($('crosstabcomponent').height() - 70 - 10) + 'px';
+    let pFooterHeight = this.selectedSize == 'p-datatable-sm' ? 41 : this.selectedSize == 'p-datatable-lg' ? 65 : 57;
+    console.log('abc', pFooterHeight);
+    this.scrollHeight = ($('crosstabcomponent').height() - 70 - 10 - pFooterHeight) + 'px';
     let width = ($('crosstabcomponent').width() - 23) + 'px';
     this.tableStyle = {
         'width' : width,
         'display': 'block'
     }
+  }
+
+  onTableSizeChange() {
+    let pFooterHeight = this.selectedSize == 'p-datatable-sm' ? 41 : this.selectedSize == 'p-datatable-lg' ? 65 : 57;
+    console.log('abc', pFooterHeight);
+    this.scrollHeight = ($('crosstabcomponent').height() - 70 - 10 - pFooterHeight) + 'px';
   }
 
 }

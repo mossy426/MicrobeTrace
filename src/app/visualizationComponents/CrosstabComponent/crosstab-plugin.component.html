@@ -47,6 +47,9 @@
         [scrollHeight]="scrollHeight"
         [tableStyle]="tableStyle"
         ScrollWidth="100%">
+        <ng-template pTemplate="caption">
+          <div style="display: flex; justify-content: center; font-weight: bold; font-size:large;">{{ formatTableTitle() }}</div>
+        </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th *ngFor="let col of SelectedTableData.tableColumns" pSortableColumn="{{col.field}}" pReorderableColumn>
@@ -101,7 +104,7 @@
     <div class="form-group row" title="What size would you like the Table's font to be?">
       <div class="col-3"><label for="table-font-size">Size</label></div>
       <div class="col-9">
-        <p-selectButton [options]="sizes" [(ngModel)]="selectedSize" [multiple]="false" optionLabel="name" optionValue="class"></p-selectButton>
+        <p-selectButton [options]="sizes" [(ngModel)]="selectedSize" [multiple]="false" optionLabel="name" optionValue="class" (onChange)="onTableSizeChange()"></p-selectButton>
       </div>
     </div>
   </p-dialog>
