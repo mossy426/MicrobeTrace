@@ -27,6 +27,9 @@
                       <button mat-menu-item (click)="Viewclick('Epi Curve')">Epi Curve</button>
                       <button mat-menu-item (click)="Viewclick('Phylogenetic Tree')">Phylogenetic Tree</button>
                       <button mat-menu-item (click)="Viewclick('Alignment View')">Alignment View</button>
+                      <button mat-menu-item (click)="Viewclick('Crosstab')">CrossTab</button>
+                      <button mat-menu-item (click)="Viewclick('Aggregate')">Aggregate</button>
+                      <button mat-menu-item (click)="Viewclick('Gantt Chart')">Gantt Chart</button>
                     </mat-menu>
                     <button class="navbar-item" mat-button [matMenuTriggerFor]="windowMenu"><i class="far nav-icon flaticon-web"></i>Window<span class="dropdown-symbol">&#9660;</span></button>
                     <mat-menu #windowMenu="matMenu" overlapTrigger="false">
@@ -239,6 +242,14 @@
                                         <div class="col-4">Prune With</div>
                                         <div class="col-8">
                                             <p-selectButton [options]="PruneWityTypes" [(ngModel)]="SelectedPruneWityTypesVariable" (onChange)="onPruneWithTypesChanged()"></p-selectButton>
+                                        </div>
+                                    </div>
+                                    <div id="filtering-epsilon-row" class="form-group row" style="display: none;" title="Select a value for epislon to add links back to minimum spanning network. See 'A Novel Network Representation of SARS-CoV-2 Sequencing Data' for algorithm details.">
+                                        <div class="col-4">
+                                            <label for="filtering-epsilon">Epsilon: {{ SelectedEpsilonValue }}</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input type="range" class="form-control form-control-sm" min="-8" max="2" step=".01" [(ngModel)]="widgets['filtering-epsilon']" (ngModelChange)="onEpsilonValueChange()">
                                         </div>
                                     </div>                                    
                                     <div class="form-group row" title="What's the minimum number of nodes a cluster must have in order to be visible?">

@@ -813,7 +813,7 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
               link[key] = parseFloat(link[key]);
             } else if (key === 'origin') {
               // related to zenhub#810: link list csv was exported from table view and unable to be loaded correctly; this code create a new linkField when it runs into field called origin 
-              link['originColumnFromFile'] = link['origin']
+              link['originColumnFromFile'] = link['origin'].split('\n')
               safeLink['originColumnFromFile'] = link['originColumnFromFile'];
               link['origin'] = origin;
 

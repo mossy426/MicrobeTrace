@@ -16,7 +16,7 @@
   <div class="tab-pane fade show active" id="table-node-settings" role="tabpanel" aria-labelledby="nodes-tab">
     <div class="tab-content">
       <div class="tab-pane fade show active" role="tabpanel">
-        <div class="form-group row">
+        <div class="form-group row" title="Select the type of graph based on the number of date field you wish to display.">
           <div class="col-4">
             <label>Graph Type</label>
           </div>
@@ -24,48 +24,48 @@
             <p-dropdown [options]="graphTypes" appendTo="body"  [(ngModel)]="selectedGraphType" (ngModelChange)="onGraphTypeChange()"></p-dropdown>
           </div>
         </div>
-        <div class="form-group row">
+        <div class="form-group row" title="Select a date field from your data. One is required to generate graph.">
           <div class="col-4">
             <label>Date Field</label>
           </div>  
           <div class="col-6" style="padding-right: 5px">
             <p-dropdown id="epiCurve-date-field" [options]="FieldList" appendTo="body"  [(ngModel)]="SelectedDateFieldVariable" (ngModelChange)="onDateFieldChange(0)"></p-dropdown>
           </div>
-          <div class="col-2" style="padding: 0px 15px 0px 10px" *ngIf="selectedGraphType!='Single Date Field' || widgets['epiCurve-stackColorBy'] == 'None'">
+          <div class="col-2" style="padding: 0px 15px 0px 10px" *ngIf="selectedGraphType!='Single Date Field' || widgets['epiCurve-stackColorBy'] == 'None'" title="Select a color for this date field.">
             <input type="color" id="epi-color-select" class="form-control" style="padding: 5px 8px;" [(ngModel)]="widgets['epiCurve-colors'][0]" (change)="onNodeColorChanged()">
           </div>  
         </div>
-        <div class="form-group row additionalDateField" *ngIf="selectedGraphType!='Single Date Field'">
+        <div class="form-group row additionalDateField" *ngIf="selectedGraphType!='Single Date Field'" title="Select an additional date field.">
           <div class="col-4">
             <label>Date Field 2</label>
           </div>
           <div class="col-6" style="padding-right: 5px">
             <p-dropdown id="epiCurve-date-field" [options]="FieldList" appendTo="body"  [(ngModel)]="SelectedDateFieldVariable2" (ngModelChange)="onDateFieldChange(1)"></p-dropdown>
           </div>
-          <div class="col-2" style="padding: 0px 15px 0px 10px">
+          <div class="col-2" style="padding: 0px 15px 0px 10px" title="Select a color for this date field.">
             <input type="color" id="node-color" class="form-control" style="padding: 5px 8px;" [(ngModel)]="widgets['epiCurve-colors'][1]" (change)="onNodeColorChanged()">
           </div>
         </div>
-        <div class="form-group row additionalDateField" *ngIf="selectedGraphType!='Single Date Field'">
+        <div class="form-group row additionalDateField" *ngIf="selectedGraphType!='Single Date Field'" title="Select an additional date field.">
           <div class="col-4">
             <label>Date Field 3</label>
           </div>
           <div class="col-6" style="padding-right: 5px">
             <p-dropdown id="epiCurve-date-field" [options]="FieldList" appendTo="body"  [(ngModel)]="SelectedDateFieldVariable3" (ngModelChange)="onDateFieldChange(2)"></p-dropdown>
           </div>
-          <div class="col-2" style="padding: 0px 15px 0px 10px">
+          <div class="col-2" style="padding: 0px 15px 0px 10px" title="Select a color for this date field.">
             <input type="color" id="node-color" class="form-control" style="padding: 5px 8px;" [(ngModel)]="widgets['epiCurve-colors'][2]" (change)="onNodeColorChanged()">
           </div>
         </div>
-        <div class="form-group row" id="useNodeColorRow" *ngIf="selectedGraphType=='Single Date Field'">
+        <div class="form-group row" id="useNodeColorRow" *ngIf="selectedGraphType=='Single Date Field'" title="Select a field to use to color the graph. Optional">
           <div class="col-4">
-            <label>Stack Color By</label>
+            <label>Color By</label>
           </div>
           <div class="col-6" style="padding-right: 5px">
             <p-dropdown id="epiCurve-date-field" [options]="FieldListStack" appendTo="body"  [(ngModel)]="this.widgets['epiCurve-stackColorBy']" (ngModelChange)="onUseNodeColorChange()"></p-dropdown>
           </div>
         </div>
-        <div class="form-group row">
+        <div class="form-group row" title="Select the size to bin the data by.">
           <div class="col-4">
             <label>Bin Size</label>
           </div>
@@ -75,13 +75,13 @@
         </div>
         <div class="form-group row" title="What interval to display ticks on x axis" id="epi-tick-size">
           <div class="col-4">
-              <label for="cluster-minimum-size">Tick Interval</label>
+              <label for="cluster-minimum-size">X-axis Interval</label>
           </div>
           <div class="col-8">
               <input type="number" class="form-control form-control-sm" min="1" max="4" step="1" [(ngModel)]="tickInterval" (ngModelChange)="onTickIntevalChange()">
           </div>
       </div>
-        <div class="form-group row">
+        <div class="form-group row" title="Show data noncumulatively or cumulatively.">
           <div class="col-4">Epi Curve</div>
           <div class="col-8">
             <div class="btn-group btn-group-toggle w-100">
@@ -96,7 +96,7 @@
             </div>
           </div>
         </div>
-        <div class="form-group row" id="useNodeColorRow">
+        <div class="form-group row" id="useNodeColorRow" title="Select where to display the legend.">
           <div class="col-4">
             <label>Legend Position</label>
           </div>

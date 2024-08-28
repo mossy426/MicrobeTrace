@@ -21,6 +21,8 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { saveSvgAsPng } from 'save-svg-as-png';
 import { ComponentContainer } from 'golden-layout';
+import { MicrobeTraceNextHomeComponent } from '../../microbe-trace-next-plugin.component';
+import { GoogleTagManagerService } from 'angular-google-tag-manager';
 
 import { data, NodeDatum, LinkDatum, GraphData } from './data';
 import { GraphCircleLabel, Graph, GraphForceLayoutSettings, GraphLayoutType, GraphNode, GraphLink, GraphPanelConfig, GraphLinkStyle } from '@unovis/ts';
@@ -467,7 +469,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
         elRef: ElementRef,
         private cdref: ChangeDetectorRef,
-        private clipboard: Clipboard) {
+        private clipboard: Clipboard,
+        private gtmService: GoogleTagManagerService) {
 
             super(elRef.nativeElement);
 
@@ -520,6 +523,11 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     InitView() {
 
+        this.gtmService.pushTag({
+            event: "page_view",
+            page_location: "/2d_network",
+            page_title: "2D Network View"
+        });
         this.visuals.twoD.IsDataAvailable = (this.visuals.twoD.commonService.session.data.nodes.length === 0 ? false : true);
         if (!this.widgets['default-distance-metric']) {
           this.widgets['default-distance-metric'] = 
@@ -2498,6 +2506,34 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             if(setVisibility){
                 this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.setVisibility(true);
                 this.visuals.twoD.SelectedNetworkTableTypeVariable = "Show";
+
+                if (this.SelectedNodeSymbolVariable !== 'None') {
+
+                    $('#node-symbol-row').slideUp();
+                    
+                    //If hidden by default, unhide to perform slide up and down
+                    if(!this.ShowNodeSymbolTable){
+                        this.ShowNodeSymbolTable = true;
+                    } else {
+                        $('#node-symbol-table-row').slideDown();
+                    }
+
+                    if (!this.ShowNodeSymbolWrapper) {
+                        this.ShowNodeSymbolWrapper = true;
+                    }
+                // No shape by variable selected
+                // show shape, hide table 
+                } else {
+
+                    $('#node-symbol-row').slideDown();
+                    $('#node-symbol-table-row').slideUp();
+                    if (this.ShowNodeSymbolWrapper) {
+                        this.ShowNodeSymbolWrapper = false;
+                    }
+                    this.onNodeSymbolTableChange('Hide');
+
+                }
+    
             }
             // if(e !== 'None' && setVisibility){
             //     this.visuals.twoD.NodeSymbolTableWrapperDialogSettings.setVisibility(true);
@@ -2954,20 +2990,29 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this._rerender();
     }
 
+    updateLinkWidthRows(e) {
+        if (e == 'None') {
+            setTimeout(() => {
+                $('#link-reciprocalthickness-row').slideUp();
+                $('#link-max-width-row').slideUp();
+                $('#link-min-width-row').slideUp();
+                $('#link-width-row').slideDown();
+            }, 5)
+        } else {
+            setTimeout(() => {
+                $('#link-reciprocalthickness-row').css('display', 'flex');
+                $('#link-max-width-row').css('display', 'flex');
+                $('#link-min-width-row').css('display', 'flex');
+                $('#link-width-row').slideUp();
+            }, 5)
+        }
+    }
+
     /**
      * Updates link-width-variable widget and updates link width; Also cause min, max and reciprocal link width row to appear/disappear
      */
     onLinkWidthVariableChange(e) {
-        if (e == 'None') {
-            $('#link-reciprocalthickness-row').slideUp();
-            $('#link-max-width-row').slideUp();
-            $('#link-min-width-row').slideUp();
-
-        } else {
-            $('#link-reciprocalthickness-row').css('display', 'flex');
-            $('#link-max-width-row').css('display', 'flex');
-            $('#link-min-width-row').css('display', 'flex');
-        }
+        this.updateLinkWidthRows(e);
         this.widgets['link-width-variable'] = e;
         this.updateMinMaxLink();
         this._rerender();
@@ -3309,8 +3354,15 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         // })
 
         
+        // Array.from(nodes._groups).forEach((x: any)=>{
+        //     x.forEach(y=>{
+        //         if(!this.visuals.twoD.commonService.session.data.nodes.find(z => y.__data__.index == z.index)){
+        //             y.style['opacity'] = 0;
+        //         }
+        //     })
+        // })
 
-        let _selected: any = this.visuals.twoD.commonService.session.data.nodes.filter(d => d.selected);
+        // let _selected: any = this.visuals.twoD.commonService.session.data.nodes.filter(d => d.selected);
         // this.data.nodes.forEach( (x, index) => {
 
         //     x.color = this.visuals.twoD.commonService.temp.style.nodeColorMap(this.visuals.twoD.commonService.session.data.nodes[index][variable]);
@@ -3513,7 +3565,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     openSettings() {
         (this.visuals.twoD.Node2DNetworkExportDialogSettings.isVisible) ? this.visuals.twoD.Node2DNetworkExportDialogSettings.setVisibility(false) : this.visuals.twoD.Node2DNetworkExportDialogSettings.setVisibility(true);
        this.visuals.twoD.ShowStatistics = !this.visuals.twoD.Show2DSettingsPane;
-
+       this.updateLinkWidthRows(this.SelectedLinkWidthByVariable);
     }
 
     /**
@@ -3672,6 +3724,9 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this.onNodeTooltipVariableChange(this.SelectedNodeTooltipVariable);
 
         //Nodes|Shape By Table
+        if (this.widgets['node-symbol-variable'] != undefined && this.widgets['node-symbol-variable'] != 'None') {
+            this.widgets["node-symbol-table-visible"] = 'Show';
+        }
         this.SelectedNetworkTableTypeVariable = this.widgets["node-symbol-table-visible"];
         this.onNodeSymbolTableChange(this.SelectedNetworkTableTypeVariable);
 
@@ -3692,6 +3747,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         this.SelectedNodeRadiusSizeVariable = this.widgets['node-radius'].toString();
         this.onNodeRadiusChange(this.SelectedNodeRadiusSizeVariable);
 
+        this.nodeBorderWidth = this.widgets['node-border-width']
 
         //Links|Tooltip
         this.SelectedLinkTooltipVariable = this.widgets['link-tooltip-variable'];

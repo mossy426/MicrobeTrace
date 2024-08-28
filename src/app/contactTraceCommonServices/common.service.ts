@@ -112,7 +112,7 @@ export class CommonService extends AppComponentBase implements OnInit {
                 'visible',
                 'cluster',
                 'origin',
-                'nearest neighbor',
+                'nn',
                 'directed'
             ],
             clusterFields: [
@@ -2218,7 +2218,51 @@ export class CommonService extends AppComponentBase implements OnInit {
                 console.log('launching view: ',window.context.commonService.session.style.widgets['default-view']);
             }
             window.context.commonService.launchView(window.context.commonService.session.style.widgets['default-view']);
-            //window.context.commonService.launchView('Alignment View');
+            //window.context.commonService.launchView('Aggregate');
+            //setTimeout(() => { $('#overlay button').click()}, 100)
+            // currently loading all views isn't ready and is leading to bugs where default data is seeping in when new data is loaded
+            //delayFunction(10, loadOtherViews) 
+            function convertName(s: string) {
+                // can't do alignment view yet;
+                if (s == 'geo_map') {
+                    return 'Map';
+                } else if (s == 'table') {
+                    return 'Table'
+                } else if (s == 'timeline') {
+                    return 'Epi Curve' 
+                } else if (s == '2d_network') {
+                    return '2D Network'
+                } else if (s == 'sequences') {
+                    //return 'Alignment View';
+                    return false;
+                    // need to add crosstab as well and fix alignment view; they are not being added to cs.session.layout.content;
+                    // on another note it doesn't close all previous view when new data is added from overlay
+                } else if (s == 'phylogenetic_tree') {
+                    return 'Phylogenetic Tree'
+                } else {
+                    console.log(`view ${s} is not currently defined`);
+                    return false;
+                }
+            }
+            async function delayFunction(x, callback) {
+                await new Promise(resolve => setTimeout(resolve, x)).then(() => {
+                    callback();
+                })
+            }
+            async function loadOtherViews() {
+                window.context.commonService.session.layout.content.forEach(async view => {
+                    let viewName = convertName(view.type)
+                    if (view.type == window.context.commonService.session.style.widgets['default-view']) {
+                        return;
+                    } else if (viewName){
+                        window.context.commonService.visuals.microbeTrace.Viewclick(viewName);
+                    }
+                    if (viewName == 'Epi Curve') {
+                        window.context.commonService.visuals.epiCurve.viewActive = false;
+                    }
+                })
+                window.context.commonService.visuals.microbeTrace.Viewclick(convertName( window.context.commonService.session.style.widgets['default-view']))
+            }
 
         }, 1000);
         
@@ -3743,6 +3787,29 @@ export class CommonService extends AppComponentBase implements OnInit {
 
                     }
 
+                    visible = link[metric] <= threshold;
+
+                    if (!visible) {
+
+                    // Only need to get distance origin and override if there are other files using a distance metric, otherwise the else code block below would be executed since the link would not have distance
+                        if (
+                            link.origin.length > 1 &&
+                            link.origin.filter(fileName => {
+                            const hasAuspice = /[Aa]uspice/.test(fileName);
+                            const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
+                            return fileName && !includesDistanceOrigin && !hasAuspice;
+                            }).length > 0
+                        ) {
+                            // Set visible and origin to only show the file outside of Distance
+                            link.origin = link.origin.filter(fileName => {
+                            const hasAuspice = /[Aa]uspice/.test(fileName);
+                            const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
+                            return fileName && !includesDistanceOrigin && !hasAuspice;
+                            });
+                            overrideNN = true;
+                            visible = true;
+                        }
+                    }
                 } else {
 
                     // If has no distance, then link should be visible and unnaffected by NN
@@ -3758,8 +3825,8 @@ export class CommonService extends AppComponentBase implements OnInit {
                 visible = visible && link.nn;
                 // Keep link visible of not nearest neighbor, but still connected via an edge list
                 if (!visible && link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0) {
-                link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
-                visible = true;
+                    link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
+                    visible = true;
                 }
             }
 

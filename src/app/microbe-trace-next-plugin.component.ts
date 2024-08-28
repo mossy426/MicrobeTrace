@@ -5,6 +5,9 @@ import { TwoDComponent } from './visualizationComponents/TwoDComponent/twoD-plug
 import { TableComponent } from './visualizationComponents/TableComponent/table-plugin-component';
 import { MapComponent } from './visualizationComponents/MapComponent/map-plugin.component';
 import { PhylogeneticComponent } from './visualizationComponents/PhylogeneticComponent/phylogenetic-plugin.component';
+import { GanttComponent } from './visualizationComponents/GanttComponent/gantt-plugin.component';
+import { GanttChartComponent } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component';
+import { GanttChartService } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service';
 import * as d3 from 'd3';
 import { window, TabsetComponent } from 'ngx-bootstrap';
 import { TabView } from 'primeng/tabview';
@@ -122,6 +125,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         { label: 'Nearest Neighbor', value: 'Nearest Neighbor' }
     ];
     SelectedPruneWityTypesVariable: string = 'None';
+    SelectedEpsilonValue: string;
 
 
     SelectedClusterMinimumSizeVariable: any = 0;
@@ -787,6 +791,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
         if (this.SelectedColorNodesByVariable != this.widgets['node-color-variable']){
             this.SelectedColorNodesByVariable = this.widgets['node-color-variable'];
+            this.getGlobalSettingsData();
             this.onColorNodesByChanged();
         }
         
@@ -801,7 +806,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         }
     }
 
-
+    onEpsilonValueChange() {
+        this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"] =false;
+        this.onPruneWithTypesChanged(); 
+    }
 
     onPruneWithTypesChanged() {
 
@@ -810,29 +818,40 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         //debugger;
 
         if (this.visuals.microbeTrace.SelectedPruneWityTypesVariable == "None") {
+            $('#filtering-epsilon-row').slideUp();
             this.visuals.microbeTrace.commonService.session.style.widgets["link-show-nn"] = false;
             this.visuals.microbeTrace.commonService.updateNetwork();
 
             this.visuals.microbeTrace.updatedVisualization();
         }
         else {
+            this.SelectedEpsilonValue = Math.pow(10, this.widgets['filtering-epsilon']).toPrecision(3);
+            window.context.commonService.session.style.widgets["filtering-epsilon"] = this.widgets['filtering-epsilon'];
             this.visuals.microbeTrace.commonService.session.style.widgets["link-show-nn"] = true;
-
+            $('#filtering-epsilon-row').slideDown();
             // TODO:: Removed to fix nearest neighbor bug as it's unesscary as of now.  Remove later if it appears to not be neded.
-            // if(!this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]) {
-            //     this.visuals.microbeTrace.commonService.computeMST().then(this.visuals.microbeTrace.commonService.updateNetwork);
-            //     this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"] = true;
-            //     console.log('updated compute:' , this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]);
-            //   } else {
+            if(!this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]) {
+                this.visuals.microbeTrace.commonService.computeMST().then(() => {
+                    this.visuals.microbeTrace.commonService.updateNetwork();
+                    this.visuals.microbeTrace.updatedVisualization();
 
-            //     console.log('onPrun in else else');
+                    if ('tableComp' in this.commonService.visuals) {
+                        if (this.commonService.visuals.tableComp.dataSetViewSelected == 'Link') {
+                            this.commonService.visuals.tableComp.openSelectDataSetScreen({value: 'Link'});
+                        }
+                    }
+                });
+                 this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"] = true;
+                 console.log('updated compute:' , this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]);
+                 return;
+               } else {
 
-            //     this.visuals.microbeTrace.commonService.updateNetwork();
+                console.log('onPrun in else else');
 
-            //   }
+                this.visuals.microbeTrace.commonService.updateNetwork();
 
-            this.visuals.microbeTrace.commonService.updateNetwork();
-
+               }
+            //this.visuals.microbeTrace.commonService.updateNetwork();
 
             this.visuals.microbeTrace.updatedVisualization();
         }
@@ -1432,7 +1451,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     hideLinkColorTable() {
         if (this.SelectedLinkColorTableTypesVariable != 'Hide') {
            this.SelectedLinkColorTableTypesVariable='Hide';
-           this.onNodeColorTableChanged()
+           this.onLinkColorTableChanged()
         }
     }
 
@@ -1450,8 +1469,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                 this.SelectedNodeColorTableTypesVariable = 'Show';
                 this.GlobalSettingsNodeColorDialogSettings.setVisibility(true);
                 this.cachedGlobalSettingsNodeColorVisibility = this.GlobalSettingsNodeColorDialogSettings.isVisible;
+                let prevColorNodesByVariable = this.SelectedColorNodesByVariable;
 
+                // this detect changes leads to SelectedColorNodesByVariable being set to default value when loading MT files that have both 2D and map view
                 this.cdref.detectChanges();
+                if (prevColorNodesByVariable != this.SelectedColorNodesByVariable) this.SelectedColorNodesByVariable = prevColorNodesByVariable;
             }
         }
 
@@ -1971,7 +1993,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         });
 
         this._goldenLayoutHostComponent.TabChangedEvent.subscribe((v) => {
-            if (v === "Files" || v === "Epi Curve" || v === "Alignment View" || v == "Table") {
+            if (v === "Files" || v === "Epi Curve" || v === "Alignment View" || v == "Table" || v == "Crosstab" || v == "Aggregate") {
                 this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
                 this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
             } else {
@@ -2096,6 +2118,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     private _removeGlView(view : string) {
+        console.log(`Removing ${view}`);
         this._goldenLayoutHostComponent.removeComponent(view);
         this.removeComponent(view);
     }
@@ -3044,6 +3067,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             x.isActive = false;
         });
 
+        console.log
+
         // this.tabView.tabs.map(x => {
 
         //     x.selected = false;
@@ -3071,6 +3096,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     loadSettings() {
+        this.getGlobalSettingsData();
 
         //Filtering|Prune With
         this.SelectedPruneWityTypesVariable = this.visuals.microbeTrace.commonService.session.style.widgets["link-show-nn"] ? "Nearest Neighbor" : "None";

@@ -19,6 +19,7 @@ import * as d3 from 'd3';
 import auspiceJson from '@app/helperClasses/auspice_example_formatted.json';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { ComponentContainer } from 'golden-layout';
+import { GoogleTagManagerService } from 'angular-google-tag-manager';
 
 
 /**
@@ -150,7 +151,8 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
               public commonService: CommonService,
               @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
               elRef: ElementRef,
-              private cdref: ChangeDetectorRef) {
+              private cdref: ChangeDetectorRef,
+              private gtmService: GoogleTagManagerService) {
 
     super(elRef.nativeElement);
 
@@ -336,11 +338,15 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
   ngOnInit() {
     let that = this;
 
+    this.gtmService.pushTag({
+            event: "page_view",
+            page_location: "/phylogenetic",
+            page_title: "Phylogenetic Tree View"
+        });
+
     $( document ).on( "node-selected", function( ) {
-
       that.updateNodeColors();
-
-  });
+    });
 
     
     this.goldenLayoutComponentResize()
