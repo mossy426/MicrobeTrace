@@ -40,5 +40,8 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "useDefineForClassFields": false
-  }
+  },
+  "exclude": [
+      "./src/app/visualizationComponents/GanttComponent/*"
+  ]
 }

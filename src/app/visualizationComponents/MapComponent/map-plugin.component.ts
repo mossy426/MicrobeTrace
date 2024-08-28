@@ -22,6 +22,7 @@ import { ColorIterator } from '../../helperClasses/colorIterator';
 import * as _ from 'lodash';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { ComponentContainer } from 'golden-layout';
+import { GoogleTagManagerService } from 'angular-google-tag-manager';
 
 declare var google: any;
 
@@ -239,7 +240,8 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
         public commonService: CommonService,
         @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
         elRef: ElementRef,
-        private cdref: ChangeDetectorRef) {
+        private cdref: ChangeDetectorRef,
+        private gtmService: GoogleTagManagerService) {
 
             super(elRef.nativeElement);
 
@@ -249,6 +251,12 @@ export class MapComponent extends BaseComponentDirective implements OnInit, Mico
 
 
     ngOnInit() {
+
+        this.gtmService.pushTag({
+            event: "page_view",
+            page_location: "/map",
+            page_title: "Map View"
+        });
 
         if (!this.NodeMapSettingsExportDialogSettings) {
             this.NodeMapSettingsExportDialogSettings = new DialogSettings('#map-settings-pane', false);

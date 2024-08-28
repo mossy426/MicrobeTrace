@@ -34,6 +34,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TreeModule } from 'primeng/tree';
 import { DialogModule } from 'primeng/dialog';
+import { OrderListModule } from 'primeng/orderlist';
 import { MicrobeTraceNextHomeComponent } from './microbe-trace-next-plugin.component';
 import { AppSessionService } from '@shared/common/session/app-session.service';
 import { AppUiCustomizationService } from '@shared/common/ui/app-ui-customization.service';
@@ -58,6 +59,8 @@ import { DndDirective } from '@shared/dnd.directive';
 import {MatSelectModule} from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CrosstabComponent } from './visualizationComponents/CrosstabComponent/crosstab-plugin.component';
+import { AggregateComponent } from './visualizationComponents/AggregateComponent/aggregate.component';
 
 
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -67,6 +70,11 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 
 import { VisGraphModule, VisSingleContainerModule } from '@unovis/angular';
+import { GanttComponent } from './visualizationComponents/GanttComponent/gantt-plugin.component';
+import { GanttChartComponent } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component';
+import { GanttChartService } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service';
+import { HeatmapComponent } from './visualizationComponents/HeatmapComponent/heatmap.component';
+import { GoogleTagManagerModule } from 'angular-google-tag-manager';
 
 // It is required to have JQuery as global in the window object.
 window['$'] = $;
@@ -95,6 +103,11 @@ export class TestedComponent {
     PhylogeneticComponent,
     TimelineComponent,
     AlignmentViewComponent,
+    CrosstabComponent,
+    AggregateComponent,
+    GanttChartComponent,
+    GanttComponent,
+    HeatmapComponent,
   ],
   imports: [
     BrowserModule,
@@ -149,7 +162,9 @@ export class TestedComponent {
     LeafletModule,
     LeafletMarkerClusterModule,
     VisGraphModule,
-    VisSingleContainerModule
+    VisSingleContainerModule,
+    OrderListModule,
+    GoogleTagManagerModule.forRoot({id: 'G-0MWHB1NG2M',})
   ],
   exports: [
     SelectButtonModule
@@ -158,7 +173,8 @@ export class TestedComponent {
     AppSessionService,
     AppUiCustomizationService,
     AppUrlService,
-    GoldenLayoutComponentService
+    GanttChartService,
+    GoldenLayoutComponentService,
   ],
   bootstrap: [AppComponent]
 })

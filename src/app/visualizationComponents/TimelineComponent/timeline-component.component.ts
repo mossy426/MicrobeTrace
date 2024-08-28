@@ -11,6 +11,7 @@ import * as saveAs from 'file-saver';
 import { saveSvgAsPng } from 'save-svg-as-png';
 import { window, TabsetComponent } from 'ngx-bootstrap';
 import { SelectItem } from 'primeng/api';
+import { GoogleTagManagerService } from 'angular-google-tag-manager';
 
 
 @Component({
@@ -74,8 +75,8 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
     private commonService: CommonService,
     @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer,
     elRef: ElementRef,
-    private cdref: ChangeDetectorRef
-    ) {
+    private cdref: ChangeDetectorRef,
+    private gtmService: GoogleTagManagerService) {
 
       super(elRef.nativeElement);
       this.visuals = commonService.visuals;
@@ -87,6 +88,11 @@ export class TimelineComponent extends BaseComponentDirective implements OnInit,
   }
   ngOnInit() {
 
+    this.gtmService.pushTag({
+            event: "page_view",
+            page_location: "/timeline",
+            page_title: "Timeline View"
+        });
     // populate this.twoD.FieldList with [None, ...nodeFields]
     this.visuals.epiCurve.FieldList = [];
     this.visuals.epiCurve.FieldListStack = [];
