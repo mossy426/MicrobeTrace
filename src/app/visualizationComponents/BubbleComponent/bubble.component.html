@@ -1,0 +1,66 @@
+<div class="aggregate-wrapper">
+    <div id="tool-btn-container" class="m-portlet">
+        <span style="overflow: visible; position: relative; width: 110px;">
+          <a title="Open Settings" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openSettings()"><i class="flaticon-settings primary"></i></a>
+        </span>
+        <span style="overflow: visible; position: relative; width: 110px;">
+          <a title="Export Crosstab Data" class="btn btn-sm btn-clean btn-icon btn-icon-md" style="float:left" (click)="openExport()"><i class="flaticon-download primary"></i></a>
+        </span>
+    </div>
+    <div style="margin-top: 10px" [ngStyle]="{'height.px': viewHeight, 'width.px': viewWidth}">
+        <vis-xy-container [data]="data"> <!--[height]="viewHeight" [width]="viewWidth"-->
+            <vis-scatter #scatter [x]="x" [y]="y" [size]="nodeSize" [color]="color" [strokeColor]="strokeColor" [strokeWidth]="2" [events]="events"></vis-scatter>
+            <vis-axis type="x" [tickValues]="X_tickValues" [tickFormat]="X_axisFormat" [gridLine]="false"></vis-axis>
+            <vis-axis type="y" [tickValues]="Y_tickValues" [tickFormat]="Y_axisFormat" [gridLine]="false"></vis-axis>
+            <vis-tooltip [triggers]="tooltipTriggers"></vis-tooltip>
+        </vis-xy-container>
+    </div>
+
+    <p-dialog *ngIf="viewActive" [(visible)]="settingsOpen" header="Bubble Settings" [contentStyle]="{'max-height': '70vh', 'width': '600px'}" appendTo="body">
+        <div class="form-group row" title="">
+            <div class="col-3"><a>X</a></div>
+            <div class="col-9">
+              <p-dropdown [options]="selectedFieldList" [(ngModel)]="xVariable" (ngModelChange)="onDataChange()" appendTo="body"></p-dropdown>
+            </div>
+        </div>
+        <div class="form-group row" title="">
+          <div class="col-3"><a>Y</a></div>
+          <div class="col-9">
+            <p-dropdown [options]="selectedFieldList" [(ngModel)]="yVariable" (ngModelChange)="onDataChange()" appendTo="body"></p-dropdown>
+          </div>
+        </div>
+        <div class="form-group row node-label-row" title="How big should the nodes be?">
+          <div class="col-4"><label for="node-label-size">Size</label></div>
+          <div class="col-8"><input type="range" class="custom-range" id="node-label-size" min="10" step="1" max="40" [(ngModel)]="nodeSize" (change)="onNodeSizeChange()"></div>
+        </div>
+        <div class="form-group row node-label-row" title="How big should the nodes be?">
+          <div class="col-4"><label for="node-label-size">Spacing</label></div>
+          <div class="col-8"><input type="range" class="custom-range" id="node-label-size" min=".01" step=".01" max=".15" [(ngModel)]="nodeSpacing" (change)="onNodeSpacingChange()"></div>
+        </div>
+        <button pButton type="button" label="Show Colors" class="ui-button-raised" (click)="showGlobalSettings()"></button>
+    </p-dialog>
+  
+    <p-dialog *ngIf="viewActive" [(visible)]="exportOpen" header="Bubble Export" [contentStyle]="{'max-height': '70vh', 'width': '600px'}" appendTo="body">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" style='width: 100%; height: 100%;'>
+                <div class="form-group row">
+                    <!--div class="col-9">
+                      <input type="text" style="height:42px" class="form-control form-control-sm"
+                          placeholder="Filename" [(ngModel)]="SelectedAggregateExportFilename">
+                    </div>
+                    <div class="col-3">
+                      <p-dropdown [options]="AggregateExportFileTypeList"
+                          [(ngModel)]="SelectedAggregateExportFileType" appendTo="body"></p-dropdown>
+                    </div-->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-error" (click)="exportOpen = !exportOpen">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="exportVisualization()">Export</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+    </p-dialog>
+
+</div>

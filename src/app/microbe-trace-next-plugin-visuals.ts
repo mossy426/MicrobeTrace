@@ -11,6 +11,7 @@ import { AlignmentViewComponent } from "./visualizationComponents/AlignmentViewC
 import { CrosstabComponent } from "./visualizationComponents/CrosstabComponent/crosstab-plugin.component";
 import { AggregateComponent } from "./visualizationComponents/AggregateComponent/aggregate.component";
 import { GanttComponent } from "./visualizationComponents/GanttComponent/gantt-plugin.component";
+import { BubbleComponent } from "./visualizationComponents/BubbleComponent/bubble.component";
 
 @Injectable({
     providedIn: 'root',
@@ -27,4 +28,5 @@ export class MicrobeTraceNextVisuals {
     public crossTab: CrosstabComponent;
     public aggregate: AggregateComponent;
     public gantt: GanttComponent;
+    public bubble: BubbleComponent;
 }

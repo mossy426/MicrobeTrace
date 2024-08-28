@@ -2003,7 +2003,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
                     this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
                     this.GlobalSettingsNodeColorDialogSettings.setVisibility(true);  
                 }
-                if (this.SelectedColorLinksByVariable == 'None' || v === "Phylogenetic Tree") {
+                if (this.SelectedColorLinksByVariable == 'None' || v === "Phylogenetic Tree" || v == 'Bubble') {
                     this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
                 } else {
                     this.GlobalSettingsLinkColorDialogSettings.setVisibility(true);

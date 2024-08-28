@@ -61,7 +61,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CrosstabComponent } from './visualizationComponents/CrosstabComponent/crosstab-plugin.component';
 import { AggregateComponent } from './visualizationComponents/AggregateComponent/aggregate.component';
-
+import { BubbleComponent } from './visualizationComponents/BubbleComponent/bubble.component';
 
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -69,7 +69,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 
-import { VisGraphModule, VisSingleContainerModule } from '@unovis/angular';
+import { VisGraphModule, VisSingleContainerModule, VisXYContainerModule, VisScatterModule, VisAxisModule, VisTooltipModule } from '@unovis/angular';
 import { GanttComponent } from './visualizationComponents/GanttComponent/gantt-plugin.component';
 import { GanttChartComponent } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component';
 import { GanttChartService } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service';
@@ -108,6 +108,7 @@ export class TestedComponent {
     GanttChartComponent,
     GanttComponent,
     HeatmapComponent,
+    BubbleComponent,
   ],
   imports: [
     BrowserModule,
@@ -164,7 +165,11 @@ export class TestedComponent {
     VisGraphModule,
     VisSingleContainerModule,
     OrderListModule,
-    GoogleTagManagerModule.forRoot({id: 'G-0MWHB1NG2M',})
+    GoogleTagManagerModule.forRoot({id: 'G-0MWHB1NG2M',}),
+    VisXYContainerModule, 
+    VisScatterModule, 
+    VisAxisModule,
+    VisTooltipModule,
   ],
   exports: [
     SelectButtonModule
