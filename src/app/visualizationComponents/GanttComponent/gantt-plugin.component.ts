@@ -156,6 +156,8 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
     this.container.on('show', () => { 
       this.viewActive = true; 
       this.cdref.detectChanges();
+      this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
+      this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
     })
   }
 
