@@ -5,6 +5,9 @@ import { TwoDComponent } from './visualizationComponents/TwoDComponent/twoD-plug
 import { TableComponent } from './visualizationComponents/TableComponent/table-plugin-component';
 import { MapComponent } from './visualizationComponents/MapComponent/map-plugin.component';
 import { PhylogeneticComponent } from './visualizationComponents/PhylogeneticComponent/phylogenetic-plugin.component';
+import { GanttComponent } from './visualizationComponents/GanttComponent/gantt-plugin.component';
+import { GanttChartComponent } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component';
+import { GanttChartService } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service';
 import * as d3 from 'd3';
 import { window, TabsetComponent } from 'ngx-bootstrap';
 import { TabView } from 'primeng/tabview';
@@ -518,20 +521,29 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
           });
   
+          let firstSelected = false;
+
           // selects that meets current search criteria
           for(let i = 0; i < n; i++){
   
-            let node = nodes[i];
+            if(!firstSelected){
+                let node = nodes[i];
 
-            if (!node[field]) {
-              node.selected = false;
+                if (!node[field]) {
+                  node.selected = false;
+                }
+                if (typeof node[field] == "string") {
+                  node.selected = vre.test(node[field]);
+                  firstSelected = true;
+                }
+                if (typeof node[field] == "number") {
+                  node.selected = (node[field] + "" == val);
+                  firstSelected = true;
+                }
+            } else {
+                break;
             }
-            if (typeof node[field] == "string") {
-              node.selected = vre.test(node[field]);
-            }
-            if (typeof node[field] == "number") {
-              node.selected = (node[field] + "" == val);
-            }
+            
           }
   
           if (!nodes.some(node => node.selected)) console.log('no matches');
@@ -700,8 +712,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     onBackgroundChanged() {
         this.visuals.microbeTrace.commonService.session.style.widgets['background-color'] = this.visuals.microbeTrace.SelectedBackgroundColorVariable;
 
-        if ($('#network') != undefined) {
-            $('#network').css('background-color', this.SelectedBackgroundColorVariable);
+        if ($('div.unovis-single-container > svg:first-of-type') != undefined) {
+            $('div.unovis-single-container > svg:first-of-type').css('background-color', this.SelectedBackgroundColorVariable);
         }
     }
 
@@ -1043,6 +1055,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             this.visuals.microbeTrace.commonService.session.style.linkValueNames = {};
             
         let aggregates = this.visuals.microbeTrace.commonService.createLinkColorMap();
+        console.log('link aggregates: ', aggregates);
         let vlinks = this.visuals.microbeTrace.commonService.getVisibleLinks();
         let aggregateValues = Object.keys(aggregates);
 
@@ -1053,6 +1066,11 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             if (aggregates[value] == 0) {
                 return;
             }
+            console.log('link color aggregates value: ', aggregates[value]);
+            console.log('link color value: ', value);
+            console.log('link color map: ', this.visuals.microbeTrace.commonService.temp.style.linkColorMap);
+            console.log('link color map value: ', this.visuals.microbeTrace.commonService.temp.style.linkColorMap(value));
+
             // Grab color of link from session
             const color = this.visuals.microbeTrace.commonService.temp.style.linkColorMap(value);
 
@@ -1062,7 +1080,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
                     // Need to get value from id since "this" keyword is used by angular
                     // Update that value at the index in the color table
-                    this.visuals.microbeTrace.commonService.session.style.linkColors.splice(i, 1,e.target['value']);
+                    (this.visuals.microbeTrace.commonService.session.style.linkColors as any).splice(i, 1,e.target['value']);
 
                     // Generate new color map with updated table
                     this.visuals.microbeTrace.commonService.temp.style.linkColorMap = d3
@@ -1206,6 +1224,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             this.visuals.microbeTrace.commonService.updateStatistics();
             return;
         }
+
+        console.log('timeline variable: ', variable);
         if(!this.visuals.microbeTrace.commonService.temp.style.nodeColor) $("#node-color-variable").trigger("change");
 
         // let el: HTMLElement = this.pinBtn.nativeElement;
@@ -1247,10 +1267,14 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         vnodes = JSON.parse(JSON.stringify(this.visuals.microbeTrace.commonService.session.data.nodes));
         vnodes.forEach(d => {
             let time = moment(d[field]); 
+            console.log('time moment: ', time);
             if (time.isValid()) {
+                console.log('time moment value: ', d[field]);
             d[field] = time.toDate();
             times.push(d[field]);
             } else {
+                console.log('time moment not value: ', d[field]);
+
             d[field] = null;
             }
         });
@@ -1274,8 +1298,10 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         let startDate = timeDomainStart;
         let endDate = timeDomainEnd;
         var margin = {top:50, right:50, bottom:0, left:50},
-            width = ($('#network').parent().width() * 4 / 5) - margin.left - margin.right,
+            width = ($('#visualwrapper').width() * 4 / 5) - margin.left - margin.right,
             height = 200 - margin.top - margin.bottom;
+        console.log('time network width: ', $('#visualwrapper').width());
+        console.log('time width: ', width);
         var svgTimeline = d3.select("#global-timeline")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -1297,18 +1323,29 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         var slider = svgTimeline.append("g")
             .attr("class", "slider")
             .attr("transform", "translate(30," + height/2 + ")");
+        
+            console.log('attribute: ', this.xAttribute.range());
+            console.log('attributex: ', this.xAttribute.range()[0]);
+
         slider.append("line")
             .attr("class", "track")
             .attr("x1", this.xAttribute.range()[0])
             .attr("x2", this.xAttribute.range()[1])
-            .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+            .attr("stroke", "#ddd")  // Ensure this is a visible color
+            .attr("stroke-width", "10px")  // Ensure this is a sufficient width
+            // Pre D3
+            // .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+            .each(function() { this.parentNode.appendChild(this.cloneNode(true)); })
+
             .attr("class", "track-inset")
-            .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+            .each(function() { this.parentNode.appendChild(this.cloneNode(true)); })
+            // Pre D3
+            // .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
             .attr("class", "track-overlay")
             .call(d3.drag()
                 .on("start.interrupt", function() { slider.interrupt(); })
                 .on("start drag", function() {
-                    that.currentTimelineTargetValue = d3.event.x;
+                    that.currentTimelineTargetValue = (d3 as any).event.x;
                     that.update(that.xAttribute.invert(that.currentTimelineTargetValue));
                     if (that.playBtnText == "Pause") {
                         that.playBtnText = "Play";
@@ -1414,7 +1451,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     hideLinkColorTable() {
         if (this.SelectedLinkColorTableTypesVariable != 'Hide') {
            this.SelectedLinkColorTableTypesVariable='Hide';
-           this.onNodeColorTableChanged()
+           this.onLinkColorTableChanged()
         }
     }
 
@@ -2081,6 +2118,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     }
 
     private _removeGlView(view : string) {
+        console.log(`Removing ${view}`);
         this._goldenLayoutHostComponent.removeComponent(view);
         this.removeComponent(view);
     }
@@ -3028,6 +3066,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
             x.isActive = false;
         });
+
+        console.log
 
         // this.tabView.tabs.map(x => {
 

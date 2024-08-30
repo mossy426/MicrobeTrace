@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "deploy": "ng build --configuration production --optimization=false --base-href https://cdcgov.github.io/MicrobeTrace/ && npx ngh --dir dist/MicrobeTrace"
+    "deploy": "ng build --configuration production --optimization=false --base-href https://mossy426.github.io/MicrobeTrace/ && npx ngh --dir dist/MicrobeTrace"
   },
   "browser": {
     "image-size": false
@@ -33,7 +33,11 @@
     "@google/markerclusterer": "^2.0.9",
     "@types/googlemaps": "^3.43.3",
     "@types/leaflet.markercluster": "^1.5.1",
+    "@unovis/angular": "^1.5.0-nikita.1",
+    "@unovis/ts": "^1.5.0-nikita.1",
     "3d-force-graph": "^1.55.13",
+    "angular-cli-ghpages": "^1.0.7",
+    "angular-google-tag-manager": "^1.10.0",
     "chart.js": "^2.9.4",
     "core-js": "^3.30.2",
     "d3-shape": "^3.1.0",
@@ -112,6 +116,7 @@
     "tslint": "^6.0.0",
     "typescript": "^4.9.5",
     "webpack": "^5.82.0",
+    "webpack-bundle-analyzer": "^4.10.2",
     "xlsx": "^0.18.5"
   }
 }

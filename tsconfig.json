@@ -12,12 +12,14 @@
     "importHelpers": true,
     "target": "ES2022",
     "skipLibCheck": true,
+    "strictNullChecks": false,
     "typeRoots": [
       "node_modules/@types",
       "googlemaps"
     ],
     "lib": [
       "es6",
+      "es2019",
       "es7",
       "dom"
     ],
@@ -38,5 +40,8 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "useDefineForClassFields": false
-  }
+  },
+  "exclude": [
+      "./src/app/visualizationComponents/GanttComponent/*"
+  ]
 }

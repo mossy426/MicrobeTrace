@@ -19,6 +19,7 @@ import * as d3 from 'd3';
 import auspiceJson from '@app/helperClasses/auspice_example_formatted.json';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { ComponentContainer } from 'golden-layout';
+import { GoogleTagManagerService } from 'angular-google-tag-manager';
 
 
 /**
@@ -150,7 +151,8 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
               public commonService: CommonService,
               @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
               elRef: ElementRef,
-              private cdref: ChangeDetectorRef) {
+              private cdref: ChangeDetectorRef,
+              private gtmService: GoogleTagManagerService) {
 
     super(elRef.nativeElement);
 
@@ -220,8 +222,8 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
             .on('contextmenu', (x) => this.showContextMenu(x))
             .on('click', (x) => this.clickHandler(x))
             .on('keydown', n => {
-              if (d3.event.code === 'Space') this.clickHandler(n);
-              if (d3.event.shiftKey && d3.event.key === 'F10') this.showContextMenu(n);
+              if ((d3 as any).event.code === 'Space') this.clickHandler(n);
+              if ((d3 as any).event.shiftKey && (d3 as any).event.key === 'F10') this.showContextMenu(n);
             });
           g.append('path')
             .style('stroke', 'black')
@@ -280,7 +282,7 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
     } else {
       d3.select(node).style('fill',  d => {
         const node_values = nodes.filter(m => {
-          if (m._id === d.data.id) {
+          if (m._id === (d as any).data.id) {
             return true;
           } else {
             return false;
@@ -336,11 +338,15 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
   ngOnInit() {
     let that = this;
 
+    this.gtmService.pushTag({
+            event: "page_view",
+            page_location: "/phylogenetic",
+            page_title: "Phylogenetic Tree View"
+        });
+
     $( document ).on( "node-selected", function( ) {
-
       that.updateNodeColors();
-
-  });
+    });
 
     
     this.goldenLayoutComponentResize()
@@ -440,7 +446,8 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
     let labelVar = event;
     this.tree.eachLeafLabel(label => {
       d3.select(label).text(data => {
-        let id = data.data.id;
+        // let id = data.data.id;
+        let id = "1"
         let node = this.commonService.session.network.nodes.find(node => node._id == id);
         return node[labelVar];
       }).attr('dx', 8)
@@ -602,11 +609,12 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
   }
 
   showContextMenu = (d) => {
-    d3.event.preventDefault();
+    // d3.event.preventDefault();
     this.hideTooltip();
     const tree = this.tree;
-    const leftVal = this.getContextLeftVal(d3.event.pageX);
-    const topVal = this.getContextTopVal(d3.event.pageY);
+    const leftVal = this.getContextLeftVal((d3 as any).event.pageX);
+    const topVal = this.getContextTopVal((d3 as any).event.pageY);
+
     d3.select('#phylo-context-menu')
     .style('z-index', 1000)
     .style('display', 'block')
@@ -640,7 +648,7 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
   }
 
   clickHandler = (n) => {
-    if (d3.event.ctrlKey) {
+    if ((d3 as any).event.ctrlKey) {
       this.visuals.phylogenetic.commonService.session.data.nodes.find(node => node._id === n._id).selected = !n.selected;
     } else {
       this.visuals.phylogenetic.commonService.session.data.nodes.forEach(node => {
@@ -661,8 +669,8 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
 
       // $('#tooltip').css({ top: d3.event.pageY - 28, left: d3.event.pageX + 8, position: 'absolute' });
 
-      const leftVal = X + 8;
-      const topVal = Y - 28;
+      // const leftVal = X + 8;
+      // const topVal = Y - 28;
       let node = this.commonService.session.data.nodes.find(n => n.id === d[0].data.id);
       if (node === undefined){ 
         node = this.commonService.session.data.nodes.find(n => n._id === d[0].data.id);
@@ -670,6 +678,9 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
           htmlValue = "_id";
       }
       console.log(node);
+      // Pre D3
+      const leftVal = (d3 as any).event.pageX + 8;
+      const topVal = (d3 as any).event.pageY - 28;
       d3.select('#phyloTooltip')
         .html(node[htmlValue])
         .style('position', 'absolute')
@@ -700,10 +711,10 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
      * @returns an array [X, Y] of the position of mouse relative to twodcomponent. Global position (i.e. d3.event.pageX) doesn't work for a dashboard
      */  
     getRelativeMousePosition() {
-      let rect = d3.select('phylogeneticcomponent').node().getBoundingClientRect();
-      let X = d3.event.pageX - rect.left;
-      let Y = d3.event.pageY - rect.top; 
-      return [X, Y];
+      // let rect = d3.select('phylogeneticcomponent').node().getBoundingClientRect();
+      // let X = d3.event.pageX - rect.left;
+      // let Y = d3.event.pageY - rect.top; 
+      return [0, 0];
     }
 
 }

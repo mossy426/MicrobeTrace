@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 // import { ServiceProxyModule } from '@shared/service-proxies/service-proxy.module';
 import { UtilsModule } from '@shared/utils/utils.module';
 // import { AbpModule } from 'abp-ng2-module/dist/src/abp.module';
-import { ModalModule, TooltipModule, TabsModule, BsDropdownModule, PopoverModule } from 'ngx-bootstrap';
+// import { ModalModule, TooltipModule, TabsModule, BsDropdownModule, PopoverModule } from 'ngx-bootstrap';
 // import { TableModule } from 'primeng/components/table/table';
 // import { FileUploadModule, ListboxModule, RadioButtonModule, CalendarModule, PaginatorModule, ProgressBarModule, ConfirmDialogModule, DropdownModule, AccordionModule, SidebarModule, MultiSelect, MultiSelectModule, SliderModule } from 'primeng/primeng';
 
@@ -63,6 +63,18 @@ import { CrosstabComponent } from './visualizationComponents/CrosstabComponent/c
 import { AggregateComponent } from './visualizationComponents/AggregateComponent/aggregate.component';
 
 
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+
+import { VisGraphModule, VisSingleContainerModule } from '@unovis/angular';
+import { GanttComponent } from './visualizationComponents/GanttComponent/gantt-plugin.component';
+import { GanttChartComponent } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component';
+import { GanttChartService } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service';
+import { HeatmapComponent } from './visualizationComponents/HeatmapComponent/heatmap.component';
+import { GoogleTagManagerModule } from 'angular-google-tag-manager';
 
 // It is required to have JQuery as global in the window object.
 window['$'] = $;
@@ -93,6 +105,9 @@ export class TestedComponent {
     AlignmentViewComponent,
     CrosstabComponent,
     AggregateComponent,
+    GanttChartComponent,
+    GanttComponent,
+    HeatmapComponent,
   ],
   imports: [
     BrowserModule,
@@ -146,7 +161,10 @@ export class TestedComponent {
     SliderModule,
     LeafletModule,
     LeafletMarkerClusterModule,
-    OrderListModule
+    VisGraphModule,
+    VisSingleContainerModule,
+    OrderListModule,
+    GoogleTagManagerModule.forRoot({id: 'G-0MWHB1NG2M',})
   ],
   exports: [
     SelectButtonModule
@@ -155,7 +173,8 @@ export class TestedComponent {
     AppSessionService,
     AppUiCustomizationService,
     AppUrlService,
-    GoldenLayoutComponentService
+    GanttChartService,
+    GoldenLayoutComponentService,
   ],
   bootstrap: [AppComponent]
 })

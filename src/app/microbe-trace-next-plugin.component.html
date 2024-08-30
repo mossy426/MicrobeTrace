@@ -29,6 +29,7 @@
                       <button mat-menu-item (click)="Viewclick('Alignment View')">Alignment View</button>
                       <button mat-menu-item (click)="Viewclick('Crosstab')">CrossTab</button>
                       <button mat-menu-item (click)="Viewclick('Aggregate')">Aggregate</button>
+                      <button mat-menu-item (click)="Viewclick('Gantt Chart')">Gantt Chart</button>
                     </mat-menu>
                     <button class="navbar-item" mat-button [matMenuTriggerFor]="windowMenu"><i class="far nav-icon flaticon-web"></i>Window<span class="dropdown-symbol">&#9660;</span></button>
                     <mat-menu #windowMenu="matMenu" overlapTrigger="false">
@@ -290,7 +291,7 @@
                                     <div class="form-group row" title="Display a table of overview statistics for the network">
                                         <div class="col-4">Statistics</div>
                                         <div class="col-8">
-                                            <!-- <p-selectButton [options]="StatisticsTypes" [(ngModel)]="SelectedStatisticsTypesVariable" (onChange)="onShowStatisticsChanged()"></p-selectButton> -->
+                                            <p-selectButton [options]="StatisticsTypes" [(ngModel)]="SelectedStatisticsTypesVariable" (onChange)="onShowStatisticsChanged()"></p-selectButton>
                                         </div>
                                     </div>
                                 </div>

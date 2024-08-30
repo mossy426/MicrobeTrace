@@ -10,7 +10,7 @@ import { SelectItem } from 'primeng/api';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { ComponentContainer } from 'golden-layout';
 import * as saveAs from 'file-saver';
-
+import { GoogleTagManagerService } from 'angular-google-tag-manager';
 
 
 /**
@@ -94,7 +94,8 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
         elRef: ElementRef,
         private cdref: ChangeDetectorRef,
         private eventManager: EventManager,
-        private commonService: CommonService) {
+        private commonService: CommonService,
+        private gtmService: GoogleTagManagerService) {
 
         super(elRef.nativeElement);
 
@@ -106,6 +107,11 @@ export class TableComponent extends BaseComponentDirective implements OnInit, On
     ngOnInit() {
         // this.InitView();
 
+        this.gtmService.pushTag({
+            event: "page_view",
+            page_location: "/table",
+            page_title: "Table View"
+        });
         this.dataSetView = [];
         this.dataSetView.push({ label: 'Nodes', value: 'Node' });
         this.dataSetView.push({ label: 'Links', value: 'Link' });

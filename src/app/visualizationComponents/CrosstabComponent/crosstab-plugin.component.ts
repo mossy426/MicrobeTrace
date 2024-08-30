@@ -12,7 +12,7 @@ import { BaseComponentDirective } from '@app/base-component.directive';
 import { MicobeTraceNextPluginEvents } from '../../helperClasses/interfaces';
 import { MicrobeTraceNextVisuals } from '../../microbe-trace-next-plugin-visuals';
 import { CommonService } from '../../contactTraceCommonServices/common.service';
-
+import { GoogleTagManagerService } from 'angular-google-tag-manager';
 
 @Component({
   selector: 'CrosstabComponent',
@@ -81,7 +81,8 @@ export class CrosstabComponent extends BaseComponentDirective implements OnInit,
     public commonService: CommonService,
     @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
     elRef: ElementRef,
-    private cdref: ChangeDetectorRef) {
+    private cdref: ChangeDetectorRef,
+    private gtmService: GoogleTagManagerService) {
 
       super(elRef.nativeElement);
 
@@ -91,6 +92,12 @@ export class CrosstabComponent extends BaseComponentDirective implements OnInit,
   }
 
   ngOnInit() {
+
+    this.gtmService.pushTag({
+            event: "page_view",
+            page_location: "/crosstab",
+            page_title: "Crosstab View"
+        });
 
     this.updateFieldLists();
     this.setWidgets();

@@ -5,7 +5,7 @@ import * as patristic from 'patristic';
 import * as GoldenLayout from 'golden-layout';
 import * as Papa from 'papaparse';
 import * as _ from 'lodash';
-import { window } from 'ngx-bootstrap';
+// import { window } from 'ngx-bootstrap';
 import moment from 'moment';
 import { WorkerModule } from '../workers/workModule';
 import { LocalStorageService } from '@shared/utils/local-storage.service';
@@ -21,6 +21,12 @@ import { StashObjects, StashObject } from '../helperClasses/interfaces';
 import { MicrobeTraceNextVisuals } from '../microbe-trace-next-plugin-visuals';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { window } from 'ngx-bootstrap/utils';
+// import { MicrobeTraceLink, MicrobeTraceNode, MicrobeTraceSessionGraphData } from '@app/visualizationComponents/TwoDComponent/mockdata';
+import { GraphData, LinkDatum, NodeDatum } from '@app/visualizationComponents/TwoDComponent/data';
+import { group } from 'console';
+import { GraphNodeShape, GraphPanelConfig } from '@unovis/ts';
+
 // import { GoldenLayoutService } from '@embedded-enterprises/ng6-golden-layout';
 // import { ConsoleReporter } from 'jasmine';
 
@@ -85,6 +91,8 @@ export class CommonService extends AppComponentBase implements OnInit {
         return {
             nodes: [],
             links: [],
+            unoNodes: [],
+            unoLinks: [],
             clusters: [],
             nodeFields: [
                 'index',
@@ -228,6 +236,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             'link-color-table-frequencies': false,
             'link-color-variable': 'None',
             'link-directed': false,
+            'link-bidirectional': false,
             'link-label-variable': 'None',
             'link-label-decimal-length' : 3,
             'link-length': 0.125,
@@ -241,6 +250,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             "link-width-min":3,
             'link-width-variable': 'None',
             'link-width-reciprocal': true,
+            'link-origin-array-order': [],
             'map-basemap-show': false,
             'map-collapsing-on': true,
             'map-counties-show': false,
@@ -276,10 +286,10 @@ export class CommonService extends AppComponentBase implements OnInit {
             'node-label-variable': 'None',
             'node-label-orientation': 'Right',
             'node-opacity' : 0,
-            'node-radius': 250,
+            'node-radius': 20,
             'node-radius-variable': 'None',
-            "node-radius-min": 250,
-            "node-radius-max": 4500,
+            "node-radius-min": 20,
+            "node-radius-max": 100,
             'node-symbol': 'symbolCircle',
             'node-symbol-table-counts': true,
             'node-symbol-table-frequencies': false,
@@ -379,7 +389,8 @@ export class CommonService extends AppComponentBase implements OnInit {
                 nodes: [],
                 timelineNodes: [],
                 initialLoad: false,
-                launched : false
+                launched : false,
+                
             },
             state: {
                 timeStart: 0,
@@ -401,23 +412,23 @@ export class CommonService extends AppComponentBase implements OnInit {
                 linkColorsTableKeys: {},
                 nodeSymbols: [
                     'symbolCircle',
-                    'symbolCross',
+                    // 'symbolCross',
                     'symbolDiamond',
                     'symbolSquare',
-                    'symbolStar',
+                    // 'symbolStar',
                     'symbolTriangle',
-                    'symbolWye',
-                    'symbolTriangleDown',
-                    'symbolTriangleLeft',
-                    'symbolTriangleRight',
-                    'symbolDiamondAlt',
-                    'symbolDiamondSquare',
-                    'symbolPentagon',
-                    'symbolHexagon',
-                    'symbolHexagonAlt',
-                    'symbolOctagon',
-                    'symbolOctagonAlt',
-                    'symbolX'
+                    // 'symbolWye',
+                    // 'symbolTriangleDown',
+                    // 'symbolTriangleLeft',
+                    // 'symbolTriangleRight',
+                    // 'symbolDiamondAlt',
+                    // 'symbolDiamondSquare',
+                    // 'symbolPentagon',
+                    'symbolHexagon'
+                    // 'symbolHexagonAlt',
+                    // 'symbolOctagon',
+                    // 'symbolOctagonAlt',
+                    // 'symbolX'
                 ],
                 nodeSymbolsTable: {},
                 nodeSymbolsTableKeys: {},
@@ -525,6 +536,20 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         window.context.commonService.temp = window.context.commonService.tempSkeleton();
     }
+
+    /**
+     * Update Legacy Node Symbols if loading new files
+     */
+    updateLegacyNodeSymbols() {
+        window.context.commonService.session.style.nodeSymbols = [
+            'symbolCircle',
+            'symbolSquare',
+            'symbolTriangle',
+            'symbolHexagon',
+            'symbolDiamond'
+        ]
+    }
+
 
     /**
      * @returns a default node object
@@ -657,20 +682,30 @@ export class CommonService extends AppComponentBase implements OnInit {
      */
     addLink(newLink: any, check: any = true): number {
 
+        if(newLink.source === "KF773571" && newLink.target === "KF773578"){
+            console.log('new link 1: ', JSON.stringify(newLink));
+            // console.log('new link 2: ', JSON.stringify(newLink));
+        }
+
+        if(newLink.source === "KF773430" && newLink.target === "KF773432"){
+            console.log('new link 2: ', JSON.stringify(newLink));
+            // console.log('new link 2: ', JSON.stringify(newLink));
+        }
+    
         const serv = window.context.commonService;
         const matrix = serv.temp.matrix;
-
+    
         if (typeof newLink.source == 'number') {
-            newLink.source = newLink.source.toString().trim()
+            newLink.source = newLink.source.toString().trim();
         } else {
             newLink.source = newLink.source.trim();
         }
         if (typeof newLink.target == 'number') {
-            newLink.target = newLink.target.toString().trim()
+            newLink.target = newLink.target.toString().trim();
         } else {
             newLink.target = newLink.target.trim();
-        } 
-
+        }
+    
         if (!matrix[newLink.source]) {
             matrix[newLink.source] = {};
         }
@@ -680,6 +715,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         if (newLink.source == newLink.target) return 0;
         let linkIsNew = 1;
         let sdlinks = serv.session.data.links;
+
         if (matrix[newLink.source][newLink.target]) {
             let oldLink = matrix[newLink.source][newLink.target];
             let myorigin = this.uniq(newLink.origin.concat(oldLink.origin));
@@ -708,6 +744,21 @@ export class CommonService extends AppComponentBase implements OnInit {
             
 
             _.merge(oldLink, newLink);
+
+            if (oldLink.origin.length > 0) {
+                console.log('old link origin: ', oldLink.origin);
+                // Array order hasn't been set yet, so we need to set it
+                if (window.context.commonService.session.style.widgets['link-origin-array-order'].length == 0) {
+                    window.context.commonService.session.style.widgets['link-origin-array-order'] = oldLink.origin;
+                }
+
+                console.log('old link array order: ', window.context.commonService.session.style.widgets['link-origin-array-order']);
+
+
+                oldLink.origin = window.context.commonService.session.style.widgets['link-origin-array-order'];
+                console.log('old link origin: ', oldLink.origin);
+
+            }
 
             // TODO remove when confident this function never causes issues - used to debug easier
             // Object.assign(oldLink, newLink);
@@ -747,18 +798,25 @@ export class CommonService extends AppComponentBase implements OnInit {
                 origin: [],
                 hasDistance: false
                 }, newLink);
+    
             }
+               // Always add the new link without merging
+               sdlinks.push(newLink);
+               matrix[newLink.source][newLink.target] = newLink;
+               matrix[newLink.target][newLink.source] = newLink;
 
-            matrix[newLink.source][newLink.target] = newLink;
-            matrix[newLink.target][newLink.source] = newLink;
-            sdlinks.push(newLink);
+               linkIsNew = 1;
 
-            linkIsNew = 1;
         }
+
+
+        
+       
+        return linkIsNew;
 
         // TODO Remove when not needed
         // window.context.commonService.session.data.linkFilteredValues = [...window.context.commonService.session.data.links];
-        return linkIsNew;
+        // return linkIsNew;
     };
 
     /**
@@ -780,6 +838,126 @@ export class CommonService extends AppComponentBase implements OnInit {
         }
         return out;
     }
+
+    public getSelectedNode(nodes: any[]): any {
+        return nodes.find(node => node.selected);
+    }
+    
+    /**
+     * This takes the information needed for twod network from microbetrace session file
+     */
+    // public legacyMicrobetraceAdapter (json : MicrobeTraceSessionGraphData) : GraphData {
+
+    //     let nodes : NodeDatum[] = json.nodes.map(x => {
+    //         return {
+    //             id: x.id,
+    //             color: ""
+    //         }
+    //     });
+
+    //     let links : LinkDatum[] = json.links.map(x => {
+    //         return {
+    //             source: x.source,
+    //             target: x.target,
+    //             chapter : String(x.distance)
+    //         }
+    //     });
+
+    //     return {
+    //         nodes : nodes,
+    //         links : links
+    //     }
+
+    // }
+
+    getColorByIndex( index : number ) {
+
+        let variable = window.context.commonService.session.style.widgets['node-color-variable'];
+        let color = window.context.commonService.session.style.widgets['node-color'];
+
+
+        if (variable == 'None') {
+
+            return color;
+
+        } else {
+
+            return window.context.commonService.temp.style.nodeColorMap( window.context.commonService.session.data.nodes[index][variable]);
+
+        }
+    }
+
+    public convertToGraphDataArray(microbeData: any): GraphData {
+        const nodes = microbeData.nodes.map((node) => ({
+          ...node, // Spread existing properties
+          id: node._id, // Ensure the id property is set correctly
+          group: node.cluster,
+          color: this.getColorByIndex(node.index) // Add or override the color property
+        }));
+      
+        const links = microbeData.links.map((link) => ({
+          ...link, // Spread existing properties
+          source: link.source, // Ensure source is correctly set
+          target: link.target, // Ensure target is correctly set
+          group: link.cluster ?? null, // Ensure group is set, default to null if undefined
+          chapter: link.distance ? link.distance.toString() : null // Convert distance to string for chapter
+        }));
+      
+        return {
+          nodes,
+          links
+        };
+      }
+      updateNodesAndGeneratePanels(graphData: any): { updatedNodes: any[], panels: any[], groups: any[] } {
+        // Update nodes with new group information based on foci
+        const updatedNodes = graphData.nodes.map(node => ({
+          ...node,
+          group: node[window.context.commonService.session.style.widgets['polygons-foci']] // Set the group property based on the foci
+        }));
+      
+        // Generate panels based on the updated nodes
+        const uniqueGroups = Array.from(new Set(updatedNodes.map(node => node.group)));
+      
+        const panels = uniqueGroups.map(group => {
+          const groupNodes = updatedNodes.filter(node => node.group === group);
+          const groupColor = window.context.commonService.temp.style.polygonColorMap(group) || '#000'; // Use color map or default color
+
+        //   window.context.commonService.temp.style.polygonColorMap(group[window.context.commonService.session.style.widgets['polygons-foci']]);
+
+          return {
+            nodes: groupNodes.map(node => node.id),
+            label: (window.context.commonService.session.style.widgets['polygons-label-show']) ? `${window.context.commonService.session.style.widgets['polygons-foci']} ${group}` : '',
+            labelPosition: (window.context.commonService.session.style.widgets['polygons-label-orientation']) ? window.context.commonService.session.style.widgets['polygons-label-orientation'] : 'top',
+            borderColor: groupColor,
+            borderWidth: 2,
+            fillColor: groupColor,
+            color: groupColor,
+            padding: 10,
+            dashedOutline: true,
+            // sideIconSymbol: '⚽',
+            // sideIconShape: GraphNodeShape.Circle,
+            // sideIconShapeStroke: '#777',
+            // sideIconCursor: 'pointer',
+            // sideIconFontSize: '24px',
+            // sideIconShapeSize: 50,
+          };
+        });
+
+        const groups = uniqueGroups.map(group => ({
+            key: group,
+            values: updatedNodes.filter(node => node.group === group)
+          }));
+      
+        return { updatedNodes, panels, groups };
+      }
+
+      public halveLinksArray(links: LinkDatum[]): LinkDatum[] {
+        const halfIndex = Math.ceil(links.length / 4); // Ensures that for an odd number of links, the larger half is returned
+        
+        console.log('new links: ', links.slice(0, 500))
+        return links.slice(0, 10000);
+    }
+
 
     /**
      * I think this function allows users to import an svg image into MT. Not sure if it currently works.
@@ -1005,6 +1183,8 @@ export class CommonService extends AppComponentBase implements OnInit {
      */
     processData() {
         let nodes = this.session.data.nodes;
+        console.log('processing data: ', nodes);
+
         window.context.commonService.session.data.nodeFilteredValues = nodes;
         //Add links for nodes with no edges
         // this.uniqueNodes.forEach(x => {
@@ -1054,7 +1234,8 @@ export class CommonService extends AppComponentBase implements OnInit {
             }
         }
 
-        this.visuals.microbeTrace.applyStyleFileSettings();
+        // TODO uncomment if was meant to be
+        // this.visuals.microbeTrace.applyStyleFileSettings();
         if (this.visuals.filesPlugin) {
             this.visuals.filesPlugin.applyStyleFileSettings();
         }
@@ -1920,6 +2101,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
     async runHamsters() {
 
+        console.log('running hamsters');
         if (!window.context.commonService.session.style.widgets['triangulate-false']) window.context.commonService.computeTriangulation();
         window.context.commonService.computeNN();
         await window.context.commonService.computeTree();
@@ -2520,14 +2702,17 @@ export class CommonService extends AppComponentBase implements OnInit {
         }
 
         let aggregates = {};
+        let multiLinkCount = 0; // Initialize Multi-Link count
         let links = window.context.commonService.getVisibleLinks();
         let i = 0,
             n = links.length,
             l;
+
         if (variable == "origin" || variable == "Origin") {
             while (i < n) {
                 l = links[i++];
                 if (!l.visible) continue;
+
                 l.origin.forEach(o => {
                     if (o in aggregates) {
                         aggregates[o]++;
@@ -2535,21 +2720,12 @@ export class CommonService extends AppComponentBase implements OnInit {
                         aggregates[o] = 1;
                     }
                 });
-            }
-        } else if (variable == 'source' || variable == 'target') {
-            // first loop is to populates color in the same order as nodeColorMap would be
-            window.context.commonService.session.data.nodes.forEach((node) => {
-                aggregates[node._id] = 0;
-            })
-            window.context.commonService.session.data.links.forEach((link) => {
-                if (!link.visible) {return;}
-                let node = link[variable];
-                if (node in aggregates) {
-                    aggregates[node] ++;
-                } else {
-                    aggregates[node] = 1;
+
+                // Count Multi-Links separately
+                if (l.origin.length == 2) {  
+                    multiLinkCount++;
                 }
-            })
+            }
         } else {
             while (i < n) {
                 l = links[i++];
@@ -2562,6 +2738,26 @@ export class CommonService extends AppComponentBase implements OnInit {
                 }
             }
         }
+
+        // Add Multi-Link to aggregates if it exists
+        if (multiLinkCount > 0) {
+            aggregates["Duo-Link"] = multiLinkCount;
+        }
+
+        // Adjust counts for other links by subtracting Multi-Link count
+        Object.keys(aggregates).forEach(key => {
+            if (key !== "Duo-Link") {
+                aggregates[key] -= multiLinkCount; // Subtract Multi-Link count
+            }
+        });
+
+        // Ensure counts do not go below zero
+        Object.keys(aggregates).forEach(key => {
+            if (aggregates[key] < 0) {
+                aggregates[key] = 0;
+            }
+        });
+
         let values = Object.keys(aggregates);
         // adds more colors/alphas when they are less than length of values
         if (values.length > this.session.style.linkColors.length) {
@@ -2569,6 +2765,7 @@ export class CommonService extends AppComponentBase implements OnInit {
             let cycles = Math.ceil(values.length / window.context.commonService.session.style.linkColors.length);
             while (cycles-- > 0) colors = colors.concat(window.context.commonService.session.style.linkColors);
             window.context.commonService.session.style.linkColors = colors;
+            console.log('link colors: ', window.context.commonService.session.style.linkColors);
         }
 
         if (!window.context.commonService.session.style.linkAlphas) {
@@ -2580,10 +2777,10 @@ export class CommonService extends AppComponentBase implements OnInit {
             );
         }
 
-        if ( window.context.commonService.session.style.widgets["node-timeline-variable"] == 'None') {
+        if (window.context.commonService.session.style.widgets["node-timeline-variable"] == 'None') {
             window.context.commonService.session.style.linkColorsTableKeys[variable] = values;
             window.context.commonService.session.style.linkColorsTable[variable] = linkColors;
-          } else {
+        } else {
       
             // During timeline mode, user Pause and switch to a different link varaible but linkColorsTableKeys[variable] is not available
             if(! window.context.commonService.session.style.linkColorsTableKeys[variable]) {
@@ -2649,8 +2846,8 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         // updates the function that defines which color and transparency value to use for each link
         window.context.commonService.temp.style.linkColorMap = d3
-            .scaleOrdinal(window.context.commonService.session.style.linkColors)
-            .domain(values);
+        .scaleOrdinal(window.context.commonService.session.style.linkColors)
+        .domain(values);
         window.context.commonService.temp.style.linkAlphaMap = d3
             .scaleOrdinal(window.context.commonService.session.style.linkAlphas)
             .domain(values);
@@ -2675,6 +2872,7 @@ export class CommonService extends AppComponentBase implements OnInit {
         groups.forEach(d => {
             aggregates[d.key] = d.values.length;
         });
+
 
         let values = Object.keys(aggregates);
     
@@ -2738,6 +2936,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         window.context.commonService.session = window.context.commonService.sessionSkeleton();
 
+        console.log('reset called');
         window.context.commonService.session.files = files;
         window.context.commonService.session.meta = meta;
         //window.context.commonService.layout.unbind("stateChanged");
@@ -2756,13 +2955,24 @@ export class CommonService extends AppComponentBase implements OnInit {
      */
     resetData() {
 
+        console.log('launch reset');
+
         const newTempSkeleton = this.tempSkeleton();
 
         window.context.commonService.temp.matrix = newTempSkeleton.matrix;
         this.temp.trees = newTempSkeleton.trees;
 
+        console.log('session files1', JSON.stringify(this.visuals.microbeTrace.commonService.session.files));
+        console.log('session files2', JSON.stringify(window.context.commonService.session.files));
+
+
         const files = window.context.commonService.session.files.filter( obj => obj.name !== 'Demo_outbreak_NodeList.csv');
         const meta = window.context.commonService.session.meta;
+
+        console.log('session files3', JSON.stringify(this.visuals.microbeTrace.commonService.session.files));
+        console.log('session files4', JSON.stringify(window.context.commonService.session.files));
+
+
 
         const newSessionSkeleton = this.sessionSkeleton();
         this.session.data = newSessionSkeleton.data;
@@ -2771,7 +2981,12 @@ export class CommonService extends AppComponentBase implements OnInit {
         window.context.commonService.session.files = files;
         window.context.commonService.session.meta = meta;
         window.context.commonService.session.style.widgets = this.defaultWidgets();
+        
 
+        console.log('session data files: ', JSON.stringify(files));
+        console.log('session data matrix: ', JSON.stringify(window.context.commonService.temp.matrix));
+        console.log('session data nodes: ', JSON.stringify(this.session.data.nodes));
+        console.log('session data nodes common: ',  JSON.stringify(window.context.commonService.session.data.nodes));
         // default values are 'tn93' and 0.015, so not sure if this if statement is every true
         if (window.context.commonService.session.style.widgets['default-distance-metric'] !== 'snps' &&
           window.context.commonService.session.style.widgets['link-threshold'] >= 1) {
@@ -3495,34 +3710,82 @@ export class CommonService extends AppComponentBase implements OnInit {
             console.log(`Setting Link Visibility with ${metric} ${threshold} ${showNN}`);
         }
 
+        
+
         for (let i = 0; i < n; i++) {
+            
+
             let link = links[i];
+
+            if((link.source === "KF773429" && link.target === "KF773430") || (link.source === "KF773430" && link.target === "KF773429")) {
+                console.log('setting link vis: ', _.cloneDeep(link));
+            }
+
 
             let visible = true;
             let overrideNN = false;
 
-            if (link.hasDistance && !link.origin.includes(link.distanceOrigin)) {
+            // Add back the distance origin if it was removed and the link has distance to it
+            if ( link.hasDistance && !link.origin.includes(link.distanceOrigin)) {
                 link.origin.push(link.distanceOrigin);
             }
-
 
             // No distance value
             if (link[metric] == null) {
 
                 // If origin file exists for link outside of distance, keep visible
                 if (link.origin.filter(fileName => !fileName.includes(link.distanceOrigin)).length > 0) {
-                // Set visible and origin to only show the from the file outside of Distance
-                link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
-                overrideNN = true;
-                visible = true;
+                    // Set visible and origin to only show the from the file outside of Distance
+                    link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
+                    overrideNN = true;
+                    visible = true;
                 } else {
-                link.visible = false;
-                continue;
+                    link.visible = false;
+                    continue;
                 }
 
             } else {
 
                 if (link.hasDistance) {
+
+
+                    visible = link[metric] < threshold;
+
+
+                    if (!visible) {
+
+                        // Only need to get distance origin and override if there are other files using a distance metric, otherwise the else code block below would be executed since the link would not have distance
+                        if (
+                            link.origin.length > 1 &&
+                            link.origin.filter(fileName => {
+                            const hasAuspice = /[Aa]uspice/.test(fileName);
+                            const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
+                            return fileName && !includesDistanceOrigin && !hasAuspice;
+                            }).length > 0
+                        ) {
+
+                            link.origin = link.origin.filter(fileName => {
+                            const hasAuspice = /[Aa]uspice/.test(fileName);
+                            const includesDistanceOrigin = fileName.includes(link.distanceOrigin);
+                            return fileName && !includesDistanceOrigin && !hasAuspice;
+                            });
+
+                            overrideNN = true;
+                            visible = true;
+                        } 
+                        if (link.origin.length > 1) {
+                            link.origin = link.origin.filter(fileName => !fileName.includes(link.distanceOrigin));
+                            visible = true;
+                        }
+
+
+                        // If the origin array has an origin left after filtering out and its not the distance origin, then we need to show it
+                        if (link.origin[0] !== link.distanceOrigin) {
+                            visible = true;
+                        }
+
+
+                    }
 
                     visible = link[metric] <= threshold;
 
@@ -3557,6 +3820,7 @@ export class CommonService extends AppComponentBase implements OnInit {
 
             }
 
+
             if (visible && showNN && !overrideNN) {
                 visible = visible && link.nn;
                 // Keep link visible of not nearest neighbor, but still connected via an edge list
@@ -3570,6 +3834,10 @@ export class CommonService extends AppComponentBase implements OnInit {
             if (cluster && checkCluster) {
 
                 visible = visible && cluster.visible;
+            }
+
+            if(visible && link.origin.length > 1){
+                link.origin = window.context.commonService.session.style.widgets['link-origin-array-order'];
             }
 
             link.visible = visible;
@@ -3688,12 +3956,12 @@ export class CommonService extends AppComponentBase implements OnInit {
 
         let bins = d3
             .histogram()
-            .domain(x.domain())
+            .domain((x as any).domain())
             .thresholds(x.ticks(ticks))(data);
 
         let y = d3
             .scaleLinear()
-            .domain([0, d3.max(bins, d => d.length)])
+            .domain([0, d3.max(bins, d => (d as any).length)])
             .range([height, 0]);
 
         let bar = svg
@@ -3714,7 +3982,7 @@ export class CommonService extends AppComponentBase implements OnInit {
          * Uses the position on the histogram to set the link thresehold value
          */
         function updateThreshold() {
-            let xc = d3.mouse(svg.node())[0];
+            let xc = (d3 as any).mouse(svg.node())[0];
             let decimalPlaces = (window.context.commonService.session.style.widgets['default-distance-metric'].toLowerCase() === "tn93") ? 3 : 0;
 
             window.context.commonService.session.style.widgets["link-threshold"] = (xc / width) * range * 1.05 + min;
@@ -3730,12 +3998,12 @@ export class CommonService extends AppComponentBase implements OnInit {
         });
 
         svg.on("mouseover", () => {
-            let xc = d3.mouse(svg.node())[0];
+            let xc = (d3 as any).mouse(svg.node())[0];
             $('#filtering-threshold').prop('title', "Whats the maximum genetic distance you're willing to call a link? " + ((window.context.commonService.session.style.widgets['default-distance-metric'].toLowerCase() === "tn93") ? ((xc / width) * range * 1.05 + min).toLocaleString() : Math.round(((xc / width) * range * 1.05 + min)).toLocaleString()));
           });
 
         svg.on("mousedown", () => {
-            d3.event.preventDefault();
+            (d3 as any).event.preventDefault();
             svg.on("mousemove", updateThreshold);
             svg.on("mouseup mouseleave", () => {
                 window.context.commonService.updateNetwork();
