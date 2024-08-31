@@ -15,7 +15,7 @@
           styleClass="p-datatable-sm p-datatable-gridlines"
           [tableStyle]="tableStyle">
           <ng-template pTemplate="caption">
-            <div style="display: flex; justify-content: center; font-weight: bold; font-size: large;">Table of {{ formatTableTitle(SelectedDataFields[i])}} </div>
+            <div style="display: flex; justify-content: center; font-weight: bold; font-size: large;">{{ formatTableTitle(SelectedDataFields[i])}} </div>
           </ng-template>
           <ng-template pTemplate="header" let-columns>
             <tr>
