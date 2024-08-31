@@ -205,8 +205,9 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
 
     this.nodeIds.forEach( (element: string) => {
       const nodeData = this.visuals.gantt.commonService.session.data.nodes.filter(x => x._id == element)
-      const startDate = nodeData[0][startVariable];
-      const endDate = nodeData[0][endVariable];
+      const hasTimeZone: RegExp = /GMT.\d{4}/;
+      const startDate = hasTimeZone.exec(nodeData[0][startVariable])? nodeData[0][startVariable].substring(4,15) : nodeData[0][startVariable];
+      const endDate = hasTimeZone.exec(nodeData[0][endVariable])? nodeData[0][endVariable].substring(4,15) : nodeData[0][endVariable];
       const regExp: RegExp = /^.*$/;
       if (startDate && endDate && regExp.exec(startDate) && regExp.exec(endDate)) {
         const entry = [{ from: startDate, to: endDate, info: dateName }]
@@ -299,7 +300,7 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
         console.log(deserialized);
         const style = deserialized.getElementsByTagName('style');
         console.log(style);
-        style[0].innerHTML = ".tooltip { display: none !important;}";
+        style[0].innerHTML = ".tooltip { display: none !important; } .small { font-size: 80%; font-family: Roboto, 'Helvetica Neue', sans-serif; }";
         const serializer = new XMLSerializer();
         svgContent = serializer.serializeToString(deserialized);
         const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
