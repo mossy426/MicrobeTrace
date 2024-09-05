@@ -1,21 +1,27 @@
 import { Injector, Component, Output, EventEmitter, 
-  ElementRef, ChangeDetectorRef, Inject } from '@angular/core';
+  ElementRef, ChangeDetectorRef, Inject, OnInit, ViewContainerRef,
+  ViewChild} from '@angular/core';
 import { EventManager } from '@angular/platform-browser';
 import { CommonService } from '@app/contactTraceCommonServices/common.service';
 import * as _ from 'lodash';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { ComponentContainer } from 'golden-layout';
-import * as Plotly from 'plotly.js';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
 import { DialogSettings } from '../../helperClasses/dialogSettings';
+import { PlotlyModule } from 'angular-plotly.js';
+import { AngleUpIcon } from 'primeng/icons/angleup';
+import { SelectItem } from 'primeng/api';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+
 
 @Component({
   selector: 'HeatmapComponent',
   templateUrl: './heatmap.component.html',
   styleUrls: ['./heatmap.component.scss']
 })
-export class HeatmapComponent {
+export class HeatmapComponent extends BaseComponentDirective implements OnInit {
 
+  @ViewChild('heatmapContainer', {read: ViewContainerRef}) heatmapContainer: ViewContainerRef;
   @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
 
   labels: string[];
@@ -26,7 +32,28 @@ export class HeatmapComponent {
   visuals: any;
   nodeIds: string[];
   viewActive: boolean;
+  heatmapData: object;
+  FieldList: SelectItem[] = [];
+  heatmapLayout: object;
+  heatmapConfig: object;
+  invertX: boolean;
+  invertY: boolean;
+  heatmapShowLabels: boolean;
+  loColor: string;
+  medColor: string;
+  hiColor: string;
   HeatmapSettingsDialogSettings: DialogSettings = new DialogSettings('#heatmap-settings-pane', false);
+  invertOptions: object = [
+    { label: "Forward", value: false },
+    { label: "Reversed", value: true }
+  ];
+    
+  hideShowOptions: object = [
+    { label: 'Hide', value: false },
+    { label: 'Show', value: true }
+  ];
+
+
 
   constructor(injector: Injector,
         private eventManager: EventManager,
@@ -34,14 +61,24 @@ export class HeatmapComponent {
         @Inject(BaseComponentDirective.GoldenLayoutContainerInjectionToken) private container: ComponentContainer, 
         elRef: ElementRef,
         private cdref: ChangeDetectorRef,
-        private clipboard: Clipboard,
-        private gtmService: GoogleTagManagerService) {
+        private gtmService: GoogleTagManagerService,
+        private plotlyModule: PlotlyModule) {
+          super(elRef.nativeElement);
           this.visuals = commonService.visuals;
           this.visuals.heatmap = this;
+          this.invertX = this.commonService.session.style.widgets['heatmap-invertX'];
+          this.invertY = this.commonService.session.style.widgets['heatmap-invertY'];
+          this.heatmapShowLabels = this.commonService.session.style.widgets['heatmap-axislabels-show'];
+          this.loColor = this.commonService.session.style.widgets['heatmap-color-low'];
+          this.medColor = this.commonService.session.style.widgets['heatmap-color-medium'];
+          this.hiColor = this.commonService.session.style.widgets['heatmap-color-high']
         }
 
   openSettings(): void {
+    console.log("opening setting dialog");
+    console.log(this.visuals.heatmap.HeatmapSettingsDialogSettings.isVisible);
     this.visuals.heatmap.HeatmapSettingsDialogSettings.setVisibility(true);
+    console.log(this.visuals.heatmap.HeatmapSettingsDialogSettings.isVisible);
   }
   
   openExport(): void {}
@@ -50,6 +87,7 @@ export class HeatmapComponent {
   
   ngOnInit(): void {
 
+    this.viewActive = true;
     this.gtmService.pushTag({
             event: "page_view",
             page_location: "/heatmap",
@@ -89,6 +127,47 @@ export class HeatmapComponent {
       this.viewActive = true; 
       this.cdref.detectChanges();
     })
+
+    const labels = this.nodeIds;
+    const xLabels = labels.map(d => 'N' + d);
+    const yLabels = xLabels.slice();
+    const metric = this.commonService.session.style.widgets['link-sort-variable'];
+    const n = xLabels.length;
+
+    const config = {
+      autotick: false,
+      showticklabels: this.heatmapShowLabels
+    };
+
+    if (!config.showticklabels) {
+      config["ticks"] = '';
+    }
+
+    this.commonService.getDM().then(dm => {
+      console.log(dm);
+      this.heatmapData = [{
+        x: xLabels,
+        y: yLabels,
+        z: dm,
+        type: 'heatmap',
+        colorscale: [
+          [0, this.loColor],
+          [0.5, this.medColor],
+          [1, this.hiColor]
+        ]
+      }]
+      this.heatmapLayout = {
+          xaxis: config,
+          yaxis: config,
+          width: $('#heatmap').parent().width(),
+          height: $('#heatmap').parent().height()
+        }
+      this.heatmapConfig = {
+          displaylogo: false,
+          displayModeBar: false
+        }
+      this.plot = PlotlyModule.plotlyjs.newPlot('heatmap', this.heatmapData, this.heatmapLayout, this.heatmapConfig);
+    });
   }
 
   goldenLayoutComponentResize() {
@@ -103,52 +182,57 @@ export class HeatmapComponent {
   
   redrawHeatmap() {
     if (!$('#heatmap').length) return;
-    if (this.plot) Plotly.purge('heatmap');
+    if (this.plot) PlotlyModule.plotlyjs.purge('heatmap');
     const labels = this.nodeIds;
     const xLabels = labels.map(d => 'N' + d);
     const yLabels = xLabels.slice();
     const metric = this.commonService.session.style.widgets['link-sort-variable'];
-    const n = xLabels.length;
-    let matrix = this.commonService.temp.matrix;
 
-    if (this.commonService.session.style.widgets['heatmap-invertX']) {
-      matrix.forEach(l => l.reverse());
-      xLabels.reverse();
-    }
-
-    if (this.commonService.session.style.widgets['heatmap-invertY']) {
-      matrix.reverse();
-      yLabels.reverse();
-    }
 
     let config = {
       autotick: false,
-      showticklabels: this.commonService.session.style.widgets['heatmap-axislabels-show']
+      showticklabels: this.heatmapShowLabels
     };
 
     if (!config.showticklabels) {
       config["ticks"] = '';
     }
 
-    this.plot = Plotly.newPlot('heatmap', [{
-      x: xLabels,
-      y: yLabels,
-      z: matrix,
-      type: 'heatmap',
-      colorscale: [
-        [0, this.commonService.session.style.widgets['heatmap-color-low']],
-        [0.5, this.commonService.session.style.widgets['heatmap-color-medium']],
-        [1, this.commonService.session.style.widgets['heatmap-color-high']]
-      ]
-    }], {
-        xaxis: config,
-        yaxis: config,
-        width: $('#heatmap').parent().width(),
-        height: $('#heatmap').parent().height()
-      }, {
-        displaylogo: false,
-        displayModeBar: false
-      });
+    this.commonService.getDM().then(dm => {
+      console.log(dm);
+      if (this.commonService.session.style.widgets['heatmap-invertX']) {
+        console.log("Reversing X Axis");
+        dm.forEach(l => l.reverse());
+        xLabels.reverse();
+      }
+
+      if (this.commonService.session.style.widgets['heatmap-invertY']) {
+        dm.reverse();
+        yLabels.reverse();
+      }
+      this.heatmapData = [{
+        x: xLabels,
+        y: yLabels,
+        z: dm,
+        type: 'heatmap',
+        colorscale: [
+          [0, this.loColor],
+          [0.5, this.medColor],
+          [1, this.hiColor]
+        ]
+      }]
+      this.heatmapLayout = {
+          xaxis: config,
+          yaxis: config,
+          width: $('#heatmap').parent().width(),
+          height: $('#heatmap').parent().height()
+        }
+      this.heatmapConfig = {
+          displaylogo: false,
+          displayModeBar: false
+        }
+      this.plot = PlotlyModule.plotlyjs.newPlot('heatmap', this.heatmapData, this.heatmapLayout, this.heatmapConfig);
+    });
       this.setBackground();
     }
 

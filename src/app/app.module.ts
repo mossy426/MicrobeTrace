@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, Component } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import * as $ from 'jquery';
@@ -67,9 +67,13 @@ import { GanttChartComponent } from './visualizationComponents/GanttComponent/ga
 import { GanttChartService } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service';
 import { HeatmapComponent } from './visualizationComponents/HeatmapComponent/heatmap.component';
 import { GoogleTagManagerModule } from 'angular-google-tag-manager';
+import * as PlotlyJS from 'plotly.js-dist-min';
+import { PlotlyModule } from 'angular-plotly.js';
 
 // It is required to have JQuery as global in the window object.
 window['$'] = $;
+
+PlotlyModule.plotlyjs = PlotlyJS;
 
 @Component({
   template: `<h1>Test2</h1>`,
@@ -154,7 +158,9 @@ export class TestedComponent {
     LeafletModule,
     LeafletMarkerClusterModule,
     OrderListModule,
-    GoogleTagManagerModule.forRoot({id: 'G-0MWHB1NG2M',})
+    GoogleTagManagerModule.forRoot({id: 'G-0MWHB1NG2M',}),
+    CommonModule,
+    PlotlyModule
   ],
   exports: [
     SelectButtonModule
