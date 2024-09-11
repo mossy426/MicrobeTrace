@@ -211,6 +211,7 @@ public refresh(): void {
   this.x = d3.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]);
   this.y = d3.scaleLinear().range([this.height, 0]);
 
+  //@ts-ignore
   this.histogram = d3.histogram().value(d => d[field as string]).domain(this.x.domain()).thresholds(binInterval);
 
   this.svg = d3.select(this.epiCurveSVGElement.nativeElement)
@@ -316,6 +317,7 @@ private refreshMulti(): void {
   this.x = d3.scaleTime().domain([this.timeDomainStart, this.timeDomainEnd]).rangeRound([0, this.width]);
   this.y = d3.scaleLinear().range([this.height, 0]);
 
+  //@ts-ignore
   this.histogram = d3.histogram().domain(this.x.domain()).thresholds(binInterval);
 
   this.svg = d3.select(this.epiCurveSVGElement.nativeElement)
@@ -602,19 +604,27 @@ calculateBinInterval(times) {
   let maxTime = Math.max(...times);
 
   if (this.widgets['epiCurve-binSize'] == 'Day') {
+    //@ts-ignore
     this.timeDomainStart = d3.timeMonth(minTime);
+    //@ts-ignore
     this.timeDomainEnd = d3.timeMonth.ceil(maxTime);
     return d3.timeDay.range(this.timeDomainStart, this.timeDomainEnd);
   } else if (this.widgets['epiCurve-binSize'] == 'Week') {
+    //@ts-ignore
     this.timeDomainStart = d3.timeMonth(minTime);
+    //@ts-ignore
     this.timeDomainEnd = d3.timeMonth.ceil(maxTime);
     return d3.timeMonday.range(this.timeDomainStart, this.timeDomainEnd);
   } else if (this.widgets['epiCurve-binSize'] == 'Month') {
+    //@ts-ignore
     this.timeDomainStart = d3.timeMonth(minTime);
+    //@ts-ignore
     this.timeDomainEnd = d3.timeMonth.ceil(maxTime);
     return d3.timeMonth.range(this.timeDomainStart, this.timeDomainEnd);
   } else if (this.widgets['epiCurve-binSize'] == 'Quarter') {
+    //@ts-ignore
     this.timeDomainStart = d3.timeMonth(minTime, 3);
+    //@ts-ignore
     this.timeDomainEnd = d3.timeMonth.ceil(maxTime, 3);
     // for quarter we may need to update earliest month so that quarters are consistant (always start on Jan, April, July, or October)
     if ([1, 2].includes(this.timeDomainStart.getMonth())){
@@ -628,7 +638,9 @@ calculateBinInterval(times) {
     }
     return d3.timeMonth.range(this.timeDomainStart, this.timeDomainEnd, 3);
   } else if (this.widgets['epiCurve-binSize'] == 'Year') {
+    //@ts-ignore
     this.timeDomainStart = d3.timeYear(minTime);
+    //@ts-ignore
     this.timeDomainEnd = d3.timeYear.ceil(maxTime);
     return d3.timeYear.range(this.timeDomainStart, this.timeDomainEnd);
   } else {
@@ -705,9 +717,13 @@ configureXAxisSettings() {
     xAxis = d3.axisBottom(this.x).ticks(d3.timeMonth.every(this.tickInterval)).tickFormat(d3.timeFormat("%b %Y"))
     xLabelOffset = -25;
   } else if (this.widgets['epiCurve-binSize'] == 'Quarter') {
-    xAxis = d3.axisBottom(this.x).ticks(d3.timeMonth.every(this.tickInterval < 3 ? this.tickInterval*3: 12)).tickFormat(d => d <= d3.timeYear(d) ? d.getFullYear() : null)
+    xAxis = d3.axisBottom(this.x)
+      .ticks(d3.timeMonth.every(this.tickInterval < 3 ? this.tickInterval * 3 : 12))
+      .tickFormat((d: Date) => d <= d3.timeYear(d) ? d.getFullYear().toString() : null);
   } else {
-    xAxis = d3.axisBottom(this.x).ticks(d3.timeMonth.every(this.tickInterval)).tickFormat(d => d <= d3.timeYear(d) ? d.getFullYear() : null)
+    xAxis = d3.axisBottom(this.x)
+      .ticks(d3.timeMonth.every(this.tickInterval))
+      .tickFormat((d: Date) => d <= d3.timeYear(d) ? d.getFullYear().toString() : null);
   }
   return [xAxis, xLabelOffset]
 }

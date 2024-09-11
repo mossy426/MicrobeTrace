@@ -3,3 +3,16 @@
     overflow: hidden;
     z-index: 1 !important;
   }
+
+#gantt {
+  background-color: #fff;
+}
+
+:host ::ng-deep {
+  .p-accordion-tab.p-accordion-tab-active {
+    .p-toggleable-content {
+      height: auto !important;
+      overflow: auto !important;
+    }
+  }
+}

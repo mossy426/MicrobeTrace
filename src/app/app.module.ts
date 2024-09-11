@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 // import { ServiceProxyModule } from '@shared/service-proxies/service-proxy.module';
 import { UtilsModule } from '@shared/utils/utils.module';
 // import { AbpModule } from 'abp-ng2-module/dist/src/abp.module';
-import { ModalModule, TooltipModule, TabsModule, BsDropdownModule, PopoverModule } from 'ngx-bootstrap';
+// import { ModalModule, TooltipModule, TabsModule, BsDropdownModule, PopoverModule } from 'ngx-bootstrap';
 // import { TableModule } from 'primeng/components/table/table';
 // import { FileUploadModule, ListboxModule, RadioButtonModule, CalendarModule, PaginatorModule, ProgressBarModule, ConfirmDialogModule, DropdownModule, AccordionModule, SidebarModule, MultiSelect, MultiSelectModule, SliderModule } from 'primeng/primeng';
 
@@ -62,6 +62,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CrosstabComponent } from './visualizationComponents/CrosstabComponent/crosstab-plugin.component';
 import { AggregateComponent } from './visualizationComponents/AggregateComponent/aggregate.component';
 
+
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+
+import { VisGraphModule, VisSingleContainerModule } from '@unovis/angular';
 import { GanttComponent } from './visualizationComponents/GanttComponent/gantt-plugin.component';
 import { GanttChartComponent } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component';
 import { GanttChartService } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service';
@@ -157,6 +165,8 @@ export class TestedComponent {
     SliderModule,
     LeafletModule,
     LeafletMarkerClusterModule,
+    VisGraphModule,
+    VisSingleContainerModule,
     OrderListModule,
     GoogleTagManagerModule.forRoot({id: 'G-0MWHB1NG2M',}),
     CommonModule,

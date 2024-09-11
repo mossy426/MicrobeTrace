@@ -51,6 +51,13 @@ p-dialog {
 //     flex: 0 0 auto;
 // }
 
+:root {
+    --vis-graph-brush-selection-opacity: 0.5; // Adjust the opacity value as needed
+    --vis-graph-brushed-node-stroke-color: #ff0000; // Adjust the color as needed
+    --vis-graph-brushed-node-label-text-color: #00ff00; // Adjust the color as needed
+    --vis-graph-brushed-node-icon-fill-color: #0000ff; // Adjust the color as needed
+  }
+
 .margin-left-5 {
     margin-left: 5px !important;
 }
@@ -451,7 +458,7 @@ body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active, body .ui-tab
 .lm_tab {
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    padding: 10px !important;
+    padding: 5px 10px !important;
     display: flex !important; 
 }
 

@@ -32,6 +32,8 @@
               "src/map.microbetrace",
               "src/outbreak.microbetrace",
               "src/outbreaknorm.microbetrace",
+              "src/Bulg.microbetrace",
+              "src/test3.microbetrace",
               "src/outbreakover.microbetrace",
               "src/assets/parse-csv-matrix.js",
               "src/assets/papaparse.min.js"
@@ -121,7 +123,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
-                  "maximumError": "20mb"
+                  "maximumError": "25mb"
                 }
               ]
             }

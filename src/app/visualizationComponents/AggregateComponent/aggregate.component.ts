@@ -82,7 +82,6 @@ export class AggregateComponent extends BaseComponentDirective implements OnInit
       this.updateFieldOptions();
   }
 
-  // XXX need to fix this XXX
   ngOnInit(): void {
 
     this.gtmService.pushTag({
@@ -128,13 +127,13 @@ export class AggregateComponent extends BaseComponentDirective implements OnInit
 
     if (dataset == 'Node') {
       rawdata = this.commonService.getVisibleNodes();
-      tableColumns = [{field:'groupName', header: 'Grouped By ' + this.commonService.capitalize(field)}, {field:'count', header:'Number of Nodes'}, {field:'percent', header:'Percent of Total Nodes'}];
+      tableColumns = [{field:'groupName', header: this.commonService.capitalize(field)}, {field:'count', header:'Number of Nodes'}, {field:'percent', header:'Percent of Total Nodes'}];
     } else if (dataset == 'Link') {
       rawdata = this.commonService.getVisibleLinks();
-      tableColumns = [{field:'groupName', header: 'Grouped By ' + this.commonService.capitalize(field)}, {field:'count', header:'Number of Links'}, {field:'percent', header:'Percent of Total Links'}];
+      tableColumns = [{field:'groupName', header: this.commonService.capitalize(field)}, {field:'count', header:'Number of Links'}, {field:'percent', header:'Percent of Total Links'}];
     } else {
       rawdata = this.commonService.getVisibleClusters();
-      tableColumns = [{field:'groupName', header: 'Grouped By ' + this.commonService.capitalize(field)}, {field:'count', header:'Number of Clusters'}, {field:'percent', header:'Percent of Total Clusters'}];
+      tableColumns = [{field:'groupName', header: this.commonService.capitalize(field)}, {field:'count', header:'Number of Clusters'}, {field:'percent', header:'Percent of Total Clusters'}];
     }   
     
     // populate count array [{}, {}, ...] where each item/object is a row
@@ -224,9 +223,9 @@ export class AggregateComponent extends BaseComponentDirective implements OnInit
 
   formatTableTitle(inputString) {
     let fullField = inputString.split('-')
-    let datasetName = this.commonService.capitalize(fullField[0]);
+    //let datasetName = this.commonService.capitalize(fullField[0]);
     let colGroupName = this.commonService.capitalize(fullField.slice(1).join('-'));
-    return datasetName + " " + colGroupName;
+    return colGroupName;
   }
 
   updateNodeColors() {}

@@ -622,13 +622,16 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
   launchClick() {
 
     console.log(this.displayloadingInformationModal);
+    this.visuals.microbeTrace.commonService.updateLegacyNodeSymbols();
     const thresholdOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["link-threshold"];
     const metricOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["default-distance-metric"];
     const ambiguityOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["ambiguity-resolution-strategy"];
     const viewOnLaunch = this.visuals.microbeTrace.commonService.session.style.widgets["default-view"];
 
 
+    console.log('launch click');
     if( this.commonService.session.network.launched) {
+      console.log('launch click launched ', this.commonService.session.network.launched);
       this.visuals.microbeTrace.commonService.session.data = this.visuals.microbeTrace.commonService.sessionSkeleton().data;
       const newTempSkeleton = this.visuals.microbeTrace.commonService.tempSkeleton();
       this.visuals.microbeTrace.commonService.temp.trees = newTempSkeleton.trees;
@@ -636,6 +639,8 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
       this.visuals.twoD.isLoading = true;
     }
     else if (!this.commonService.session.network.launched) {
+      console.log('launch click not launched ', this.commonService.session.network.launched);
+
       this.visuals.microbeTrace.commonService.resetData();
       this.visuals.microbeTrace.commonService.session.network.launched = true;
     }
@@ -647,6 +652,8 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
 
     this.visuals.microbeTrace.commonService.session.messages = [];
     this.messages = [];
+
+    console.log('session files', this.visuals.microbeTrace.commonService.session.files);
 
     this.displayloadingInformationModal = true;
 
@@ -1084,6 +1091,8 @@ export class FilesComponent extends BaseComponentDirective implements OnInit {
               step: data => {
 
                 let node = data.data;
+
+                console.log('session node: ', node);
 
                 if (node[file.field1] && node[file.field1].toString().trim()) {
 

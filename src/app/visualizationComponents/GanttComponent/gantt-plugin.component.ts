@@ -76,10 +76,19 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
   GanttEndVariable: string = "";
   GanttEntryColor: string = "#000000";
   ganttEntries: object[] = [];
+  SelectedGanttChartImageFilenameVariable = "default_gantt_chart";
 
   // ganttChartData: Object[] = [];
 
+  NetworkExportFileTypeList: any = [
+    { label: 'png', value: 'png' },
+    { label: 'jpeg', value: 'jpeg' },
+    { label: 'svg', value: 'svg' }
+  ];
+
+  SelectedNetworkExportFileTypeListVariable = 'png';
   GanttSettingsDialogSettings: DialogSettings = new DialogSettings('#gantt-settings-pane', false);
+  isExportClosed: boolean;
 
   constructor(injector: Injector,
               private eventManager: EventManager,
@@ -108,8 +117,14 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
   openSettings(): void {
     this.visuals.gantt.GanttSettingsDialogSettings.setVisibility(true);
   }
-  openExport(): void {}
-  openCenter(): void {}
+  openExport(): void {
+    this.ShowGanttExportPane = true;
+
+    this.visuals.microbeTrace.GlobalSettingsDialogSettings.setStateBeforeExport();
+    //this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.setStateBeforeExport();
+    //this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.setStateBeforeExport();
+    this.isExportClosed = false;
+  }
 
   ngOnInit(): void {
 
@@ -182,8 +197,9 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
 
     this.nodeIds.forEach( (element: string) => {
       const nodeData = this.visuals.gantt.commonService.session.data.nodes.filter(x => x._id == element)
-      const startDate = nodeData[0][startVariable];
-      const endDate = nodeData[0][endVariable];
+      const hasTimeZone: RegExp = /GMT.\d{4}/;
+      const startDate = hasTimeZone.exec(nodeData[0][startVariable])? nodeData[0][startVariable].substring(4,15) : nodeData[0][startVariable];
+      const endDate = hasTimeZone.exec(nodeData[0][endVariable])? nodeData[0][endVariable].substring(4,15) : nodeData[0][endVariable];
       const regExp: RegExp = /^.*$/;
       if (startDate && endDate && regExp.exec(startDate) && regExp.exec(endDate)) {
         const entry = [{ from: startDate, to: endDate, info: dateName }]
@@ -252,7 +268,38 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
   listGanttEntries(): object[] {
     return this.ganttEntries;
   }
+  saveImage(event): void {
+    const fileName = this.SelectedGanttChartImageFilenameVariable;
+    const domId = 'gantt';
+    const exportImageType = this.SelectedNetworkExportFileTypeListVariable ;
+    const content = document.getElementById(domId);
+    if (exportImageType === 'png') {
+      domToImage.toPng(content).then(
+        dataUrl => {
+          saveAs(dataUrl, fileName);
+      });
+    } else if (exportImageType === 'jpeg') {
+        domToImage.toJpeg(content, { quality: 0.85 }).then(
+          dataUrl => {
+            saveAs(dataUrl, fileName);
+          });
+    } else if (exportImageType === 'svg') {
+        // The tooltips were being displayed as black bars, so I add a rule to hide them.
+        // Have to parse the string into a document, get the right element, add the rule, and reserialize it
+        let svgContent = this.visuals.gantt.commonService.unparseSVG(content);
+        const parser = new DOMParser();
+        const deserialized = parser.parseFromString(svgContent, 'text/xml')
+        console.log(deserialized);
+        const style = deserialized.getElementsByTagName('style');
+        console.log(style);
+        style[0].innerHTML = ".tooltip { display: none !important; } .small { font-size: 80%; font-family: Roboto, 'Helvetica Neue', sans-serif; }";
+        const serializer = new XMLSerializer();
+        svgContent = serializer.serializeToString(deserialized);
+        const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+        saveAs(blob, fileName);
+    }
 
+  }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
