@@ -11,9 +11,7 @@ import { ComponentContainer } from 'golden-layout';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
 import { DialogSettings } from '../../helperClasses/dialogSettings';
 import { PlotlyModule } from 'angular-plotly.js';
-import { AngleUpIcon } from 'primeng/icons/angleup';
 import { SelectItem } from 'primeng/api';
-import { ToggleButtonModule } from 'primeng/togglebutton';
 
 
 @Component({
@@ -51,13 +49,15 @@ export class HeatmapComponent extends BaseComponentDirective implements OnInit {
     { label: "No", value: false }
   ];
   SelectedImageFilenameVariable = "default_heatmap";
+  SelectedNetworkExportFileTypeVariable: string = "png";
   NetworkExportFileTypeList: object = [
     { label: 'png', value: 'png' },
     { label: 'jpeg', value: 'jpeg' },
     { label: 'svg', value: 'svg' }
   ];
-
-  SelectedNetworkExportFileTypeListVariable = 'png';
+  SelectedDistanceMatrixFilenameVariable: string = "distance_matrix.csv";
+  heatmapLabels: string[];
+  heatmapMetric: string;
     
   constructor(injector: Injector,
         private eventManager: EventManager,
@@ -76,6 +76,7 @@ export class HeatmapComponent extends BaseComponentDirective implements OnInit {
           this.loColor = this.commonService.session.style.widgets['heatmap-color-low'];
           this.medColor = this.commonService.session.style.widgets['heatmap-color-medium'];
           this.hiColor = this.commonService.session.style.widgets['heatmap-color-high']
+          this.heatmapMetric = this.commonService.session.style.widgets['default-distance-metric'].toUpperCase();
         }
 
   openSettings(): void {
@@ -147,7 +148,7 @@ export class HeatmapComponent extends BaseComponentDirective implements OnInit {
         dm.forEach(l => l.reverse());
         xLabels.reverse();
       }
-
+      this.heatmapLabels = xLabels;
       if (this.invertY) {
         dm.reverse();
         yLabels.reverse();
@@ -194,7 +195,7 @@ export class HeatmapComponent extends BaseComponentDirective implements OnInit {
     const labels = this.nodeIds;
     const xLabels = labels.map(d => 'N' + d);
     const yLabels = xLabels.slice();
-    const metric = this.commonService.session.style.widgets['link-sort-variable'];
+    this.heatmapMetric = this.commonService.session.style.widgets['default-distance-metric'].toUpperCase();
 
 
     const config = {
@@ -254,30 +255,59 @@ export class HeatmapComponent extends BaseComponentDirective implements OnInit {
     this.redrawHeatmap();
   }
 
-  saveImage(event): void {
+  saveImage(): void {
     const fileName = this.SelectedImageFilenameVariable;
     const domId = 'heatmap';
-    const exportImageType = this.SelectedNetworkExportFileTypeListVariable ;
+    const exportImageType = this.SelectedNetworkExportFileTypeVariable;
+    console.log(exportImageType);
     const content = document.getElementById(domId);
-    if (exportImageType === 'png') {
-      domToImage.toPng(content).then(
-        dataUrl => {
-          saveAs(dataUrl, fileName);
-      });
-    } else if (exportImageType === 'jpeg') {
-        domToImage.toJpeg(content, { quality: 0.85 }).then(
+    if (content) {
+      const fixedContent = this.fixGradient(content);
+      if (exportImageType === 'png') {
+        domToImage.toPng(content).then(
           dataUrl => {
-            saveAs(dataUrl, fileName);
-          });
-    } else if (exportImageType === 'svg') {
-        // The tooltips were being displayed as black bars, so I add a rule to hide them.
-        // Have to parse the string into a document, get the right element, add the rule, and reserialize it
-        let svgContent = this.visuals.gantt.commonService.unparseSVG(content);
-        const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
-        saveAs(blob, fileName);
+            saveAs(dataUrl, fileName+"."+exportImageType);
+        });
+      } else if (exportImageType === 'jpeg') {
+          domToImage.toJpeg(content, { quality: 0.85 }).then(
+            dataUrl => {
+              saveAs(dataUrl, fileName+"."+exportImageType);
+            });
+      } else if (exportImageType === 'svg') {
+          const svgContent = this.commonService.unparseSVG(fixedContent);
+          const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+          saveAs(blob, fileName+"."+exportImageType);
+      }
     }
-
   }
+
+  fixGradient(el: HTMLElement): HTMLElement {
+    const insertionPoint = el.getElementsByClassName("gradient_filled");
+    const startingUrl = insertionPoint[0]["style"]["fill"];
+    const idVal = startingUrl.substring(startingUrl.indexOf("#"));
+    insertionPoint[0]["style"]["fill"] = 'url("'+idVal;
+    return el;
+  }
+
+  saveDistanceMatrix(): void {
+    const fileName = this.SelectedDistanceMatrixFilenameVariable;
+    const labelArray = _.cloneDeep(this.heatmapLabels);
+    this.commonService.getDM().then(dm => {
+      let csvContent = "data:text/csv;charset=utf-8,";
+      if (this.heatmapShowLabels) {
+        labelArray.unshift("");
+        csvContent += labelArray.join(",") + "\n";
+        for(let i=0; i<dm.length; i++) {
+          dm[i].unshift(this.heatmapLabels[i]);
+          csvContent += dm[i].join(",") + "\n";
+        }
+      } else {
+        csvContent += dm.map(e => e.join(",")).join("\n");
+      }
+      saveAs(csvContent, fileName);
+    });
+    
+  } 
 }
 
 // eslint-disable-next-line @typescript-eslint/no-namespace

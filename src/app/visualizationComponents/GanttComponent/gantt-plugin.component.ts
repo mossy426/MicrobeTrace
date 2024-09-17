@@ -5,6 +5,8 @@ import { CommonService } from '@app/contactTraceCommonServices/common.service';
 import { SelectItem } from 'primeng/api';
 import { DialogSettings } from '@app/helperClasses/dialogSettings';
 import * as _ from 'lodash';
+import * as saveAs from 'file-saver';
+import * as domToImage from 'html-to-image';
 import { CustomShapes } from '@app/helperClasses/customShapes';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { ComponentContainer } from 'golden-layout';
