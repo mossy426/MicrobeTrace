@@ -82,27 +82,3 @@ p-dropdown .p-dropdown-label {
 .flaticon-download:before {
   font-weight: 800 !important;
 }
-
-#network-export-filename{
-  height: 42px;  
-}
-
-#network-attribute-table {
-  border-spacing: 0;
-  width: 100%;
-  border: 1px solid #ddd;
-}
-
-#network-attribute-table td, #network-attribute-table th {
-  text-align: left;
-  padding: 2px;
-  border: 1px solid #ddd;
-}
-
-#network-attribute-table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-#network-attribute-table tr:nth-child(odd) {
-  background-color: #fff;
-}
