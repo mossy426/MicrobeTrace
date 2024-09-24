@@ -101,24 +101,20 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body" style='min-width: 500px; height: 100%;'>
-                <p-accordion [multiple]="true">
-                    <p-accordionTab header="Export Image of Chart" style="color:#495057" [selected]="true">
-                        <div class="form-group row">
-                            <div class="col-8">
-                                <input type="text" id="gantt-image-filename" class="form-control form-control-sm"
-                                    placeholder="Image Filename" [(ngModel)]="SelectedGanttChartImageFilenameVariable">
-                            </div>
-                            <div class="col-3">
-                                <p-dropdown id="network-export-filetype" [options]="NetworkExportFileTypeList"
-                                    [(ngModel)]="SelectedNetworkExportFileTypeListVariable"></p-dropdown>
-                            </div>
-                            <div class="col-8">
-                                <button type="button" id="export-tree" class="btn btn-primary"
-                                    (click)="saveImage($event)">Save Image</button>
-                            </div>
-                        </div>
-                    </p-accordionTab>
-                </p-accordion>
+                <div class="form-group row">
+                    <div class="col-8">
+                        <input type="text" id="gantt-image-filename" class="form-control form-control-sm"
+                            placeholder="Image Filename" [(ngModel)]="SelectedGanttChartImageFilenameVariable">
+                    </div>
+                    <div class="col-3">
+                        <p-dropdown id="network-export-filetype" [options]="NetworkExportFileTypeList"
+                            [(ngModel)]="SelectedNetworkExportFileTypeListVariable"></p-dropdown>
+                    </div>
+                    <div class="col-8">
+                        <button type="button" id="export-tree" class="btn btn-primary"
+                            (click)="saveImage($event)">Save Image</button>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
             </div>

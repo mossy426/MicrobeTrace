@@ -17,6 +17,10 @@
   }
 }
 
+p-dropdown {
+    overflow: visible !important;
+}
+
 .btn-icon:hover {
   transform: scale(1.1); /* Slight enlarge on hover */
   background-color: rgba(0, 0, 0, 0.1); /* Subtle background color on hover */

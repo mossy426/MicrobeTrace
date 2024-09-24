@@ -14,7 +14,7 @@
   width: 99% !important; */ 
 }
 
-p-dropdown .p-dropdown-label {
+.p-component p-dropdown {
     overflow: visible !important;
 }
 
@@ -81,4 +81,8 @@ p-dropdown .p-dropdown-label {
 
 .flaticon-download:before {
   font-weight: 800 !important;
+}
+
+#network-export-filetype {
+  overflow: visible !important;
 }
