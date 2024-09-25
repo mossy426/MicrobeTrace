@@ -10,8 +10,9 @@ import { BaseComponentDirective } from '@app/base-component.directive';
 import { ComponentContainer } from 'golden-layout';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
 import { DialogSettings } from '../../helperClasses/dialogSettings';
-import { PlotlyModule } from 'angular-plotly.js';
+import { PlotlyComponent, PlotlyModule } from 'angular-plotly.js';
 import { SelectItem } from 'primeng/api';
+import { MicrobeTraceNextVisuals } from '../../microbe-trace-next-plugin-visuals';
 
 
 @Component({
@@ -28,8 +29,8 @@ export class HeatmapComponent extends BaseComponentDirective implements OnInit {
   xLabels: string[];
   yLabels: string[];
   matrix: object;
-  plot: any;
-  visuals: any;
+  plot: PlotlyComponent;
+  visuals: MicrobeTraceNextVisuals;
   nodeIds: string[];
   viewActive: boolean;
   heatmapData: object;
@@ -180,8 +181,12 @@ export class HeatmapComponent extends BaseComponentDirective implements OnInit {
   }
 
   goldenLayoutComponentResize(): void {
-    $('#heatmap').height($('heatmapcomponent').height()-19);
-    $('#heatmap').width($('heatmapcomponent').width()-1)
+    const height = $('heatmapcomponent').height();
+    const width = $('heatmapcomponent').width();
+    if (height)
+      $('#heatmap').height(height-19);
+    if (width)
+      $('#heatmap').width(width-1)
   }
 
   getNodeIds(): string[] {
