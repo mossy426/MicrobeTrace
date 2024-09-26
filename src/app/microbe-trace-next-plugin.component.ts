@@ -1,17 +1,11 @@
 ﻿import { ChangeDetectionStrategy, Component, OnInit, Injector, ViewChild, ViewChildren, AfterViewInit, ComponentRef, ViewContainerRef, QueryList, ElementRef, Output, EventEmitter, ChangeDetectorRef, OnDestroy, ViewEncapsulation, Renderer2 } from '@angular/core';
-import { ComponentFactoryResolver } from '@angular/core';
 import { CommonService } from './contactTraceCommonServices/common.service';
 import { TwoDComponent } from './visualizationComponents/TwoDComponent/twoD-plugin.component';
 import { TableComponent } from './visualizationComponents/TableComponent/table-plugin-component';
 import { MapComponent } from './visualizationComponents/MapComponent/map-plugin.component';
 import { PhylogeneticComponent } from './visualizationComponents/PhylogeneticComponent/phylogenetic-plugin.component';
-import { GanttComponent } from './visualizationComponents/GanttComponent/gantt-plugin.component';
-import { GanttChartComponent } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component';
-import { GanttChartService } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service';
 import * as d3 from 'd3';
 import { window, TabsetComponent } from 'ngx-bootstrap';
-import { TabView } from 'primeng/tabview';
-// import { TabPanel } from 'primeng/tabpanel';
 import { Button } from 'primeng/button';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { SelectItem, TreeNode } from 'primeng/api';
@@ -91,7 +85,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     displayRecallStashDialog: boolean = false;
     displayLedgerLoaderDialog: boolean = false;
     version: string = '2.0';
-    auspiceUrlVal: string = '';
+    auspiceUrlVal: string|null = '';
 
     saveFileName: string = '';
     saveByCluster: boolean = false;
@@ -227,6 +221,7 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     files: any[] = [];
 
     homepageTabs: HomePageTabItem[] = [];
+    currentUrl: string;
     // homepageTabs: HomePageTabItem[] = [
     //     {
     //         label: 'Files',
@@ -265,6 +260,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         this.dataSetView.push({ label: 'Clusters', value: 'Cluster' });
 
         this.dataSetViewSelected = "Node";
+
+        this.currentUrl = window.location.href;
 
         // setTimeout(() => {
         //     srv.createNewComponent(srv.getRegisteredComponents()[0]);
@@ -2181,6 +2178,16 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
 
     // }
 
+    officialInstance () {
+        const prodVal = RegExp(/https:\/\/microbetrace.cdc.gov\/MicrobeTrace/);
+        const devVal = RegExp(/https:\/\/cdcgov.github.io\/MicrobeTrace/);
+        if (prodVal.test(this.currentUrl) || devVal.test(this.currentUrl)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     showSpinner() {
         this.spinnerDivElement.nativeElement.style.display = "block";
         this.spinnerElement.nativeElement.style.display = "block";
@@ -2784,32 +2791,6 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
     //       $("#session-recall-modal").modal("hide");
     //     });
     //   });
-
-    GetComponentTypeByName(viewName: string) {
-        let _type: any = null;
-
-        switch (viewName) {
-
-            case "2D Network": {
-                _type = TwoDComponent;
-                break;
-            }
-            case "Table": {
-                _type = TableComponent;
-                break;
-            }
-            case "Map": {
-                _type = MapComponent;
-                break;
-            }
-            case "Phylogenetic Tree": {
-                _type = PhylogeneticComponent;
-                break;
-            }
-        }
-
-        return _type;
-    }
 
     Viewclick(viewName: string) {
 

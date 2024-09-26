@@ -1,6 +1,7 @@
 <div class="m-content">   
     <div class="m-portlet m-portlet--mobile" style="height:100%;">
 
+        <div *ngIf="!officialInstance()" id="url-warning-div">This is not an official MicrobeTrace instance, please visit our production instance at <a href="https://microbetrace.cdc.gov/MicrobeTrace">https://microbetrace.cdc.gov/MicrobeTrace</a> or our development instance at <a href="https://cdcgov.github.io/MicrobeTrace">https://cdcgov.github.io/MicrobeTrace</a></div>
         <mat-toolbar id="top-toolbar" class="nav-bar">
                 <div class="navbar-logo">
                     <span class="microbe-font">Microbe</span>
