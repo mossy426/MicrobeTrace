@@ -2184,6 +2184,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         if (prodVal.test(this.currentUrl) || devVal.test(this.currentUrl)) {
             return true;
         } else {
+            const el: HTMLElement | null = this.getElementById("overlay");
+            if (el) el.style.top = "84px";
             return false;
         }
     }
