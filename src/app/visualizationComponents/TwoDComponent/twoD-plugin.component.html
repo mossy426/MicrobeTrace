@@ -36,6 +36,7 @@
       [nodeShape]="nodeShape"
       [nodeSize]="nodeSize"
       [events]="events"
+      [zoomScaleExtent]="zoomScaleExtent"
       [selectedNodeId]="selectedNodeId"
       (onNodeSelectionBrush)="onNodeSelectionBrush($event.selectedNodes, $event.event)"
       (onNodeSelectionDrag)="onNodeSelectionDrag($event.selectedNodes, $event.event)"
@@ -59,6 +60,7 @@
         [nodeStrokeWidth]="nodeStrokeWidth"
         [nodeLabel]="nodeLabel"
         [nodeShape]="nodeShape"
+        [events]="events"
         [panels]="panels"
     ></vis-graph>
   </vis-single-container>
@@ -374,35 +376,7 @@
                                 </div>
                             </div>
                         </div>
-                    </p-accordionTab>
-                    <p-accordionTab style="color:#495057" header="Physics">
-                        <div #networkcontrolsphysics>
-                            <div class="form-group row" title="How strongly are the nodes repulsed by each other?">
-                                <div class="col-4"><label for="node-charge">Charge</label></div>
-                                <div class="col-8">
-                                    <input type="range" class="custom-range" id="node-charge" min="0" max="400" value="200" [(ngModel)]="SelectedNetworkChargeVariable" (ngModelChange)="onNodeChargeChange($event)">
-                                </div>
-                            </div>
-                            <div class="form-group row" title="How attractive is the mass of the graph?">
-                                <div class="col-4"><label for="network-gravity">Gravity</label></div>
-                                <div class="col-8">
-                                    <input type="range" class="custom-range" id="network-gravity" min="0.025" max="1" value="0.05" step="0.025" [(ngModel)]="SelectedNetworkGravityVariable" (ngModelChange)="onNetworkGravityChange($event)">
-                                </div>
-                            </div>
-                            <div class="form-group row" title="How quickly should moving nodes lose their momentum?">
-                                <div class="col-4"><label for="network-friction">Friction</label></div>
-                                <div class="col-8">
-                                    <input type="range" class="custom-range" id="network-friction" min="0" max="1" value="0.4" step="0.025" [(ngModel)]="SelectedNetworkFrictionVariable" (ngModelChange)="onNetworkFrictionChange($event)">
-                                </div>
-                            </div>
-                            <div class="form-group row" title="How quickly should moving nodes lose their momentum?">
-                                <div class="col-4"><label for="network-link-strength">Link Strength</label></div>
-                                <div class="col-8">
-                                    <input type="range" class="custom-range" id="network-link-strength" min="0" max="1" value="0.4" step="0.025" [(ngModel)]="SelecetedNetworkLinkStrengthVariable" (ngModelChange)="onNetworkLinkStrengthVariableChange($event)">
-                                </div>
-                            </div>
-                        </div>
-                    </p-accordionTab>                   
+                    </p-accordionTab>                 
                 </p-accordion>
             </tab>
             <tab heading="{{'Polygons' | localize}}" customClass="m-tabs__item">

@@ -123,12 +123,10 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                 // and trigger the component update if required by your UI framework
              },
              mouseover: (d: GraphNode, event: MouseEvent) => {
-                console.log('hovered node in: ', d);
                 this.showNodeTooltip(d, event);
                 // Perform actions on hover, such as highlighting or displaying additional information
               },
               mouseout: (d: GraphNode) => {
-                console.log('hovered node out: ', d);
                 this.hideTooltip();
               },
               brush: (selectedNodes: GraphNode[], event: any) => {
@@ -141,7 +139,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         },
         [Graph.selectors.link]: {
              mouseover: (d: GraphLink, event: MouseEvent) => {
-                console.log('hovered link is: ', d);
                 this.showLinkTooltip(d, event);
                 // Perform actions on hover, such as highlighting or displaying additional information
               },
@@ -288,8 +285,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             finalColor = (variable == 'None') ? color : this.visuals.twoD.commonService.temp.style.linkColorMap(link[variable]);
             alphaValue =this.visuals.twoD.commonService.temp.style.linkAlphaMap(link[variable])
         }
-
-        console.log('final color: ', link.origin, finalColor, alphaValue);
 
         return hexToRgba(finalColor, alphaValue);
 
@@ -462,6 +457,9 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
     ContextSelectedNodeAttributes: {attribute: string, value: string}[] = [];
 
     private visuals: MicrobeTraceNextVisuals;
+
+    // Set the zoom scale extent
+    zoomScaleExtent: [number, number] = [0.1, 2]; // Minimum zoom of 0.1 and maximum zoom of 2
 
     constructor(injector: Injector,
         private eventManager: EventManager,
@@ -940,7 +938,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      * Exports twoD network svg as an svg, png, jpeg, or webp image
      */
     exportWork2() {
-        let network = document.getElementById('network');
+        let network = document.getElementById('viz-force');
         let $network = $(network);
         // PRE D3
         // add microbeTrace logo as a watermark
@@ -1101,6 +1099,8 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             //     foreignObjStats.remove();
             // }
         } else {
+            console.log('network: ', network);
+            console.log('network: ', network.getBoundingClientRect());
             saveSvgAsPng(network, filename + '.' + filetype, {
                 scale: this.SelectedNetworkExportScaleVariable,
                 backgroundColor: this.widgets['background-color'],
@@ -1140,11 +1140,12 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
      */
     tabulate2 = (data, columns, wrapper, container, topOffset: number, leftOffset: boolean) => {
 
-        console.log('wrapper: ', wrapper);
-        console.log('left: ', wrapper.offsetLeft);
-        let containerWidth = container.getBBox().width;
-        let rightPosition = containerWidth - wrapper.offsetWidth;        
-        console.log('right: ', rightPosition);
+        // console.log('wrapper: ', wrapper);
+        // console.log('left: ', wrapper.offsetLeft);
+        // console.log('container: ', container);
+        // let containerWidth = container.getBBox().width;
+        // let rightPosition = containerWidth - wrapper.offsetWidth;        
+        // console.log('right: ', rightPosition);
 
         // PRE D3
 
@@ -1569,7 +1570,6 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         }
 
     }
-
     /**
      * This function is called when polygon-color-show widget is updated from the template.
      * This widget controls whether polygon should be colored the same or different.
@@ -2634,7 +2634,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
                     symbols = symbols.concat(this.visuals.twoD.commonService.session.style.nodeSymbols);
                 }
                 this.visuals.twoD.commonService.session.style.nodeSymbols = symbols;
-                console.log('node symbols: ', symbols);
+                // console.log('node symbols: ', symbols);
 
             }
 
@@ -2783,16 +2783,21 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
             return;
         } 
 
-        if (this.visuals.microbeTrace.commonService.session.style.widgets['node-timeline-variable'] != 'None') {
-            this.autoFit = false;
-        } else {
-            this.autoFit = true;
-        }
-
         let networkData = { 
             nodes: this.visuals.twoD.commonService.getVisibleNodes(), 
             links: this.visuals.twoD.commonService.getVisibleLinks()
         };
+
+
+        if(networkData.nodes.length !== 0) {
+            if (this.visuals.microbeTrace.commonService.session.style.widgets['node-timeline-variable'] != 'None') {
+                this.autoFit = false;
+            } else {
+                this.autoFit = true;
+            }  
+        } else {
+            this.autoFit = true; 
+        }
 
         console.log('link vis rerender: ', this.visuals.twoD.commonService.getVisibleLinks());
         
@@ -2800,13 +2805,18 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 
         // document.documentElement.style.setProperty('--vis-graph-panel-fill-color', `${this.SelectedNodeLabelSizeVariable}pt`);
 
+        setTimeout(() => {
+            this.cdref.detectChanges();
+            this.cdref.markForCheck();
+          }, 0);
+          
         // Update the panels
         this.updatePanels();
 
     }
 
       public updatePanels(): void {
-        if (this.layoutType2 === GraphLayoutType.Parallel) {
+        if (this.layoutType2 === GraphLayoutType.Parallel && this.showParallel) {
           // Update nodes and generate new panels
           const { updatedNodes, panels, groups } = this.commonService.updateNodesAndGeneratePanels(this.data);
     
@@ -2836,7 +2846,7 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
         let symbolVariable = this.widgets['node-symbol-variable'];
 
         if(symbolVariable == "None") {
-            console.log('node symbol: ', this.selectedNodeShape);
+            // console.log('node symbol: ', this.selectedNodeShape);
             return this.selectedNodeShape;
             // return this.widgets['node-symbol-variable'];
         } else {
@@ -3821,3 +3831,4 @@ export class TwoDComponent extends BaseComponentDirective implements OnInit, Mic
 export namespace TwoDComponent {
     export const componentTypeName = '2D Network';
 }
+
