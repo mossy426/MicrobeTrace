@@ -35,7 +35,7 @@
   left: -1px;
   right: -1px;
   border: solid 1px #CCC;
-  min: 50px;
+  min-height: 50px;
   max-height: 200px;
   overflow-y: scroll;
   list-style: none;
@@ -50,6 +50,17 @@
 .autocomplete-wrapper #search-results li:hover {
   background: #EEE;
   cursor: pointer;
+}
+
+#url-warning-div {
+  background-color: #f00;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.25rem;
+  text-align: center;
+  a {
+    color: #fff;
+  }
 }
 
 #search-form {

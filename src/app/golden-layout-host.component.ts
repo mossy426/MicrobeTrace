@@ -17,6 +17,7 @@ import { AlignmentViewComponent } from './visualizationComponents/AlignmentViewC
 import { CrosstabComponent } from './visualizationComponents/CrosstabComponent/crosstab-plugin.component';
 import { AggregateComponent } from './visualizationComponents/AggregateComponent/aggregate.component';
 import { GanttComponent } from './visualizationComponents/GanttComponent/gantt-plugin.component';
+import { HeatmapComponent } from './visualizationComponents/HeatmapComponent/heatmap.component';
 import { BubbleComponent } from './visualizationComponents/BubbleComponent/bubble.component';
 
 @Component({
@@ -73,6 +74,7 @@ export class GoldenLayoutHostComponent implements OnDestroy {
     this.goldenLayoutComponentService.registerComponentType(CrosstabComponent.componentTypeName, CrosstabComponent);
     this.goldenLayoutComponentService.registerComponentType(AggregateComponent.componentTypeName, AggregateComponent);
     this.goldenLayoutComponentService.registerComponentType(GanttComponent.componentTypeName, GanttComponent);
+    this.goldenLayoutComponentService.registerComponentType(HeatmapComponent.componentTypeName, HeatmapComponent);
     this.goldenLayoutComponentService.registerComponentType(BubbleComponent.componentTypeName, BubbleComponent);
   }
 

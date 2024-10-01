@@ -1,22 +1,16 @@
-﻿import { Injector, Component, Output, OnChanges, SimpleChange, EventEmitter, OnInit,
-  ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, Inject } from '@angular/core';
-import { AppComponentBase } from '@shared/common/app-component-base';
+﻿import { Injector, Component, Output, EventEmitter, OnInit,
+  ElementRef, ChangeDetectorRef, Inject } from '@angular/core';
 import { EventManager } from '@angular/platform-browser';
-import { MatMenu } from '@angular/material/menu';
 import { CommonService } from '@app/contactTraceCommonServices/common.service';
-import * as ClipboardJS from 'clipboard';
 import * as saveAs from 'file-saver';
 import * as domToImage from 'html-to-image';
 import { SelectItem } from 'primeng/api';
 import { DialogSettings } from '@app/helperClasses/dialogSettings';
-import { MicobeTraceNextPluginEvents } from '@app/helperClasses/interfaces';
 import * as _ from 'lodash';
 import { MicrobeTraceNextVisuals } from '@app/microbe-trace-next-plugin-visuals';
 import { CustomShapes } from '@app/helperClasses/customShapes';
 import TidyTree from './tidytree';
-import AuspiceHandler from '@app/helperClasses/auspiceHandler';
 import * as d3 from 'd3';
-import auspiceJson from '@app/helperClasses/auspice_example_formatted.json';
 import { BaseComponentDirective } from '@app/base-component.directive';
 import { ComponentContainer } from 'golden-layout';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
@@ -34,7 +28,7 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
 
   @Output() DisplayGlobalSettingsDialogEvent = new EventEmitter();
   viewActive: boolean = true;
-  svgStyle: {} = {
+  svgStyle: object = {
     height: '0px',
     width: '1000px'
   };
@@ -46,35 +40,30 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
   ShowPhylogeneticExportPane = false;
   ShowPhylogeneticSettingsPane = false;
   IsDataAvailable = false;
-  svg: any = null;
-  settings: any = this.commonService.session.style.widgets;
-  halfWidth: any = null;
-  halfHeight: any = null;
-  transform: any = null;
-  force: any = null;
-  radToDeg: any = (180 / Math.PI);
-  selected: any = null;
+  svg: any = {};
+  settings: object = this.commonService.session.style.widgets;
+  radToDeg: number = (180 / Math.PI);
+  selected: boolean = false;
   multidrag = false;
-  zoom: any = null;
-  brush: any = null;
+  zoom: number = 1;
   FieldList: SelectItem[] = [];
   ToolTipFieldList: SelectItem[] = [];
 
 
   // Tree Tab
-  TreeLayouts: any = [
+  TreeLayouts: object = [
     { label: 'Horizontal', value: 'horizontal' },
     { label: 'Vertical', value: 'vertical' },
     { label: 'Circular', value: 'circular' },
   ];
   SelectedTreeLayoutVariable = 'horizontal';
-  TreeModes: any = [
+  TreeModes: object = [
     { label: 'Smooth', value: 'smooth' },
     { label: 'Square', value: 'square' },
     { label: 'Straight', value: 'straight' },
   ];
   SelectedTreeModeVariable = 'square';
-  TreeTypes: any = [
+  TreeTypes: object = [
     { label: 'Weighted', value: 'weighted' },
     { label: 'Unweighted (Tree)', value: 'tree' },
     { label: 'Dendrogram', value: 'dendrogram' },
@@ -109,7 +98,7 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
   SelectedBranchDistanceSizeVariable = 12;
   SelectedBranchTooltipShowVariable = false;
 
-  hideShowOptions: any = [
+  hideShowOptions: object = [
     { label: 'Hide', value: false },
     { label: 'Show', value: true }
   ];
@@ -121,18 +110,18 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
   SelectedTreeImageFilenameVariable = 'default_tree';
   SelectedNewickStringFilenameVariable = 'default_tree.nwk';
 
-  NetworkExportFileTypeList: any = [
+  NetworkExportFileTypeList: object = [
     { label: 'png', value: 'png' },
     { label: 'jpeg', value: 'jpeg' },
     { label: 'svg', value: 'svg' }
   ];
 
   SelectedNetworkExportFileTypeListVariable = 'png';
-  SelectedNetworkExportScaleVariable: any = 1;
-  SelectedNetworkExportQualityVariable: any = 0.92;
-  CalculatedResolutionWidth: any = 1918;
-  CalculatedResolutionHeight: any = 909;
-  CalculatedResolution: any = ((this.CalculatedResolutionWidth * this.SelectedNetworkExportScaleVariable) + ' x ' + (
+  SelectedNetworkExportScaleVariable: number = 1;
+  SelectedNetworkExportQualityVariable: number = 0.92;
+  CalculatedResolutionWidth: number = 1918;
+  CalculatedResolutionHeight: number = 909;
+  CalculatedResolution: string = ((this.CalculatedResolutionWidth * this.SelectedNetworkExportScaleVariable) + ' x ' + (
     this.CalculatedResolutionHeight * this.SelectedNetworkExportScaleVariable) + 'px');
 
 
@@ -175,14 +164,14 @@ export class PhylogeneticComponent extends BaseComponentDirective implements OnI
       //@ts-ignore
       if (this.visuals.phylogenetic.commonService.session.data.hasOwnProperty("newickString") && this.visuals.phylogenetic.commonService.session.data.newickString) {
         //@ts-ignore
-        let newickString = this.visuals.phylogenetic.commonService.session.data.newickString;
+        const newickString = this.visuals.phylogenetic.commonService.session.data.newickString;
         const tree = this.buildTree(newickString);
         this.tree = tree;
         this.commonService.visuals.phylogenetic.tree = tree;
         this.hideTooltip();
         this.styleTree();
       } else {
-          let newickString = this.commonService.computeTree();
+          const newickString = this.commonService.computeTree();
           newickString.then((x) => {
             const tree = this.buildTree(x);
             this.tree = tree;
