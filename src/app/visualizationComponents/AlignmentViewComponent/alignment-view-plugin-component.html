@@ -271,11 +271,11 @@ Maintain Codon will convert codon CT- to X (Unknown).">
                     <div class="form-group row" title="Select a color scheme">
                         <div class="col-3"><label>Color Scheme</label></div>
                         <div class="col-9">
-                            <p-selectButton [options]="colorSchemeOptions" [(ngModel)]="this.widgets['alignView-colorSchemeName']"
+                            <p-selectButton [disabled]="selectedSeqType=='aa'" [options]="colorSchemeOptions" [(ngModel)]="this.widgets['alignView-colorSchemeName']"
                                 (onChange)="onSelectedColorChanged()"></p-selectButton>
                         </div>
                     </div>
-                    <div *ngIf="useCustomColorScheme" class="customColorSchemeSelection">
+                    <div *ngIf="useCustomColorScheme && selectedSeqType!='aa'" class="customColorSchemeSelection">
                         <div class="form-group row node-label-row" title="Select a custom color for each NT">
                             <label>A:
                                 <input type="color" class="form-control form-control-sm" [ngModel]="this.widgets['alignView-customColorScheme']['A']" (change)="updateColorScheme('A', $event)">

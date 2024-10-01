@@ -81,7 +81,7 @@ export function generateCanvas(seqs, config) {
           let seq = seqs[row];
           let y = row * ch + ch;
           for (let col = 0; col < longest; col++) {
-            let c = (refSeq[col] != seq[col] || seq[col]=='-')? seq[col]: '.';
+            let c = (refSeq[col] != seq[col] || seq[col]=='-' || refSeq[col] == ' ')? seq[col]: '.';
             if(!c) break;
             let x = col * cw + cw/2;
             context.fillText(c, x, y, cw);
