@@ -18,6 +18,7 @@ import { CrosstabComponent } from './visualizationComponents/CrosstabComponent/c
 import { AggregateComponent } from './visualizationComponents/AggregateComponent/aggregate.component';
 import { GanttComponent } from './visualizationComponents/GanttComponent/gantt-plugin.component';
 import { HeatmapComponent } from './visualizationComponents/HeatmapComponent/heatmap.component';
+import { SankeyComponent } from './visualizationComponents/SankeyComponent/sankey.component';
 
 @Component({
   selector: 'app-golden-layout-host',
@@ -74,6 +75,7 @@ export class GoldenLayoutHostComponent implements OnDestroy {
     this.goldenLayoutComponentService.registerComponentType(AggregateComponent.componentTypeName, AggregateComponent);
     this.goldenLayoutComponentService.registerComponentType(GanttComponent.componentTypeName, GanttComponent);
     this.goldenLayoutComponentService.registerComponentType(HeatmapComponent.componentTypeName, HeatmapComponent);
+    this.goldenLayoutComponentService.registerComponentType(SankeyComponent.componentTypeName, SankeyComponent);
 
   }
 

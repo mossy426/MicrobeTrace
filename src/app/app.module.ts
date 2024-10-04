@@ -69,7 +69,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 
-import { VisGraphModule, VisSingleContainerModule } from '@unovis/angular';
+import { VisGraphModule, VisSingleContainerModule, VisSankeyModule } from '@unovis/angular';
 import { GanttComponent } from './visualizationComponents/GanttComponent/gantt-plugin.component';
 import { GanttChartComponent } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.component';
 import { GanttChartService } from './visualizationComponents/GanttComponent/gantt-chart/gantt-chart.service';
@@ -77,6 +77,7 @@ import { HeatmapComponent } from './visualizationComponents/HeatmapComponent/hea
 import { GoogleTagManagerModule } from 'angular-google-tag-manager';
 import * as PlotlyJS from 'plotly.js-dist-min';
 import { PlotlyModule } from 'angular-plotly.js';
+import { SankeyComponent } from './visualizationComponents/SankeyComponent/sankey.component';
 
 // It is required to have JQuery as global in the window object.
 window['$'] = $;
@@ -112,6 +113,7 @@ export class TestedComponent {
     GanttChartComponent,
     GanttComponent,
     HeatmapComponent,
+    SankeyComponent,
   ],
   imports: [
     BrowserModule,
@@ -170,10 +172,12 @@ export class TestedComponent {
     OrderListModule,
     GoogleTagManagerModule.forRoot({id: 'G-0MWHB1NG2M',}),
     CommonModule,
-    PlotlyModule
+    PlotlyModule,
+    VisSankeyModule,
   ],
   exports: [
-    SelectButtonModule
+    SelectButtonModule,
+    SankeyComponent
   ],
   providers: [
     AppSessionService,

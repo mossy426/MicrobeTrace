@@ -12,6 +12,7 @@ import { CrosstabComponent } from "./visualizationComponents/CrosstabComponent/c
 import { AggregateComponent } from "./visualizationComponents/AggregateComponent/aggregate.component";
 import { GanttComponent } from "./visualizationComponents/GanttComponent/gantt-plugin.component";
 import { HeatmapComponent } from "./visualizationComponents/HeatmapComponent/heatmap.component";
+import { SankeyComponent } from "./visualizationComponents/SankeyComponent/sankey.component";
 
 @Injectable({
     providedIn: 'root',
@@ -29,4 +30,5 @@ export class MicrobeTraceNextVisuals {
     public aggregate: AggregateComponent;
     public gantt: GanttComponent;
     public heatmap: HeatmapComponent;
+    public sankey: SankeyComponent;
 }

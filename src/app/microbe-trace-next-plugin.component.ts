@@ -1052,7 +1052,9 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             this.visuals.microbeTrace.commonService.session.style.linkValueNames = {};
             
         let aggregates = this.visuals.microbeTrace.commonService.createLinkColorMap();
-        console.log('link aggregates: ', aggregates);
+        if (this.commonService.debugMode){
+            console.log('link aggregates: ', aggregates);
+        }
         let vlinks = this.visuals.microbeTrace.commonService.getVisibleLinks();
         let aggregateValues = Object.keys(aggregates);
 
@@ -1063,10 +1065,12 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
             if (aggregates[value] == 0) {
                 return;
             }
-            console.log('link color aggregates value: ', aggregates[value]);
-            console.log('link color value: ', value);
-            console.log('link color map: ', this.visuals.microbeTrace.commonService.temp.style.linkColorMap);
-            console.log('link color map value: ', this.visuals.microbeTrace.commonService.temp.style.linkColorMap(value));
+            if (this.commonService.debugMode) {
+                console.log('link color aggregates value: ', aggregates[value]);
+                console.log('link color value: ', value);
+                console.log('link color map: ', this.visuals.microbeTrace.commonService.temp.style.linkColorMap);
+                console.log('link color map value: ', this.visuals.microbeTrace.commonService.temp.style.linkColorMap(value));
+            }
 
             // Grab color of link from session
             const color = this.visuals.microbeTrace.commonService.temp.style.linkColorMap(value);
@@ -1990,7 +1994,8 @@ export class MicrobeTraceNextHomeComponent extends AppComponentBase implements A
         });
 
         this._goldenLayoutHostComponent.TabChangedEvent.subscribe((v) => {
-            if (v === "Files" || v === "Epi Curve" || v === "Alignment View" || v === "Table" || v === "Crosstab" || v === "Aggregate" || v === "Heatmap" || v === "Gantt Chart") {
+            console.log(v);
+            if (v === "Files" || v === "Epi Curve" || v === "Alignment View" || v === "Table" || v === "Crosstab" || v === "Aggregate" || v === "Heatmap" || v === "Gantt Chart" || v === "Sankey") {
                 this.GlobalSettingsLinkColorDialogSettings.setVisibility(false);
                 this.GlobalSettingsNodeColorDialogSettings.setVisibility(false);
             } else {

@@ -2457,7 +2457,9 @@ export class CommonService extends AppComponentBase implements OnInit {
                 if (link.visible) out.push(link);
             }
         }
-        console.log('get visible links: ', _.cloneDeep(out));
+        if (this.debugMode) {
+            console.log('get visible links: ', _.cloneDeep(out));
+        }
         return out;
     };
 

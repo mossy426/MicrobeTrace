@@ -1,14 +1,14 @@
 import { Injector, Component, Output, EventEmitter, OnInit,
   ViewChild, ViewContainerRef, ElementRef, ChangeDetectorRef, Inject } from '@angular/core';
 import { EventManager } from '@angular/platform-browser';
-import { CommonService } from '@app/contactTraceCommonServices/common.service';
+import { CommonService } from '../../contactTraceCommonServices/common.service';
 import { SelectItem } from 'primeng/api';
-import { DialogSettings } from '@app/helperClasses/dialogSettings';
+import { DialogSettings } from '../../helperClasses/dialogSettings';
 import * as _ from 'lodash';
 import * as saveAs from 'file-saver';
 import * as domToImage from 'html-to-image';
-import { CustomShapes } from '@app/helperClasses/customShapes';
-import { BaseComponentDirective } from '@app/base-component.directive';
+import { CustomShapes } from '../../helperClasses/customShapes';
+import { BaseComponentDirective } from '../../base-component.directive';
 import { ComponentContainer } from 'golden-layout';
 import { GanttChartService } from './gantt-chart/gantt-chart.service';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
@@ -29,36 +29,7 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
     width: '1000px'
   };
 
-  ganttChartData: object[] = [
-    {
-      name: 'Market Team',
-      color: '#EAC435',
-      timelines: {
-        'Market Research': [
-          {from: new Date('June 9, 2019'), to: new Date('July 20, 2019')},
-          {from: new Date('October 9, 2019'), to: new Date('November 20, 2019')}
-        ],
-        'User Documentation': [
-          {from: new Date('August 10, 2019'), to: new Date('September 15, 2019')}
-        ]
-      }
-    },
-    {
-      name: 'Development Team',
-      color: '#345995',
-      timelines: {
-        'Software Development': [
-          {from: new Date('July 9, 2019'), to: new Date('October 20, 2019')}
-        ],
-        'Testing': [
-          {from: new Date('October 25, 2019'), to: new Date('November 15, 2019')}
-        ],
-        'User Documentation': [
-          {from: new Date('August 1, 2019'), to: new Date('August 15, 2019')}
-        ]
-      }
-    }
-  ];
+  ganttChartData: object[] = [ ];
 
   private customShapes: CustomShapes = new CustomShapes();
 
@@ -67,8 +38,8 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
   ShowGanttExportPane = false;
   ShowGanttSettingsPane = false;
   IsDataAvailable = true;
-  svg: any = null;
-  settings: object = this.commonService.session.style.widgets;
+  //svg: any = null;
+  settings: object;
   visuals: MicrobeTraceNextVisuals;
   nodeIds: string[] = [];
   FieldList: SelectItem[] = [];
@@ -82,7 +53,7 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
 
   // ganttChartData: Object[] = [];
 
-  NetworkExportFileTypeList: any = [
+  NetworkExportFileTypeList = [
     { label: 'png', value: 'png' },
     { label: 'jpeg', value: 'jpeg' },
     { label: 'svg', value: 'svg' }
@@ -107,6 +78,7 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
     this.visuals = commonService.visuals;
     this.commonService.visuals.gantt = this;
     this.ganttChartService = ganttChartService;
+    this.settings = this.commonService.session.style.widgets;
   }
 
   dataAvail(): boolean {
@@ -117,14 +89,16 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
   }
 
   openSettings(): void {
+    this.gtmService.pushTag({
+            event: "open_settings",
+            page_location: "/gantt",
+            page_title: "Gantt Chart View"
+        });
     this.visuals.gantt.GanttSettingsDialogSettings.setVisibility(true);
   }
   openExport(): void {
     this.ShowGanttExportPane = true;
-
     this.visuals.microbeTrace.GlobalSettingsDialogSettings.setStateBeforeExport();
-    //this.visuals.microbeTrace.GlobalSettingsLinkColorDialogSettings.setStateBeforeExport();
-    //this.visuals.microbeTrace.GlobalSettingsNodeColorDialogSettings.setStateBeforeExport();
     this.isExportClosed = false;
   }
 
@@ -190,15 +164,19 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
     // return this.makeGanttEntry("_blank", "ipstart", "ipend", "#2ca02c");
   }
   goldenLayoutComponentResize() {
-    $('#gantt-plugin').height($('ganttcomponent').height()-19);
-    $('#gantt-plugin').width($('ganttcomponent').width()-1)
+    const height = $('ganttcomponent').height();
+    const width = $('ganttcomponent').width();
+    if (height)
+      $('#gantt-plugin').height(height-19);
+    if (width)
+      $('#gantt-plugin').width(width-1)
   }
 
   makeGanttEntry(dateName: string, startVariable: string, endVariable: string, entryColor: string): object {
     const timeline = {};
 
     this.nodeIds.forEach( (element: string) => {
-      const nodeData = this.visuals.gantt.commonService.session.data.nodes.filter(x => x._id == element)
+      const nodeData = this.visuals.gantt.commonService.session.data.nodes.filter(x => x._id == element);
       const hasTimeZone: RegExp = /GMT.\d{4}/;
       const startDate = hasTimeZone.exec(nodeData[0][startVariable])? nodeData[0][startVariable].substring(4,15) : nodeData[0][startVariable];
       const endDate = hasTimeZone.exec(nodeData[0][endVariable])? nodeData[0][endVariable].substring(4,15) : nodeData[0][endVariable];
@@ -270,37 +248,38 @@ export class GanttComponent extends BaseComponentDirective implements OnInit {
   listGanttEntries(): object[] {
     return this.ganttEntries;
   }
-  saveImage(event): void {
+  saveImage(): void {
     const fileName = this.SelectedGanttChartImageFilenameVariable;
     const domId = 'gantt';
     const exportImageType = this.SelectedNetworkExportFileTypeListVariable ;
-    const content = document.getElementById(domId);
-    if (exportImageType === 'png') {
-      domToImage.toPng(content).then(
-        dataUrl => {
-          saveAs(dataUrl, fileName);
-      });
-    } else if (exportImageType === 'jpeg') {
-        domToImage.toJpeg(content, { quality: 0.85 }).then(
+    const content: HTMLElement | null = document.getElementById(domId);
+    if (content) {
+      if (exportImageType === 'png') {
+        domToImage.toPng(content).then(
           dataUrl => {
             saveAs(dataUrl, fileName);
-          });
-    } else if (exportImageType === 'svg') {
-        // The tooltips were being displayed as black bars, so I add a rule to hide them.
-        // Have to parse the string into a document, get the right element, add the rule, and reserialize it
-        let svgContent = this.visuals.gantt.commonService.unparseSVG(content);
-        const parser = new DOMParser();
-        const deserialized = parser.parseFromString(svgContent, 'text/xml')
-        console.log(deserialized);
-        const style = deserialized.getElementsByTagName('style');
-        console.log(style);
-        style[0].innerHTML = ".tooltip { display: none !important; } .small { font-size: 80%; font-family: Roboto, 'Helvetica Neue', sans-serif; }";
-        const serializer = new XMLSerializer();
-        svgContent = serializer.serializeToString(deserialized);
-        const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
-        saveAs(blob, fileName);
+        });
+      } else if (exportImageType === 'jpeg') {
+          domToImage.toJpeg(content, { quality: 0.85 }).then(
+            dataUrl => {
+              saveAs(dataUrl, fileName);
+            });
+      } else if (exportImageType === 'svg') {
+          // The tooltips were being displayed as black bars, so I add a rule to hide them.
+          // Have to parse the string into a document, get the right element, add the rule, and reserialize it
+          let svgContent = this.visuals.gantt.commonService.unparseSVG(content);
+          const parser = new DOMParser();
+          const deserialized = parser.parseFromString(svgContent, 'text/xml')
+          console.log(deserialized);
+          const style = deserialized.getElementsByTagName('style');
+          console.log(style);
+          style[0].innerHTML = ".tooltip { display: none !important; } .small { font-size: 80%; font-family: Roboto, 'Helvetica Neue', sans-serif; }";
+          const serializer = new XMLSerializer();
+          svgContent = serializer.serializeToString(deserialized);
+          const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+          saveAs(blob, fileName);
+      }
     }
-
   }
 }
 
