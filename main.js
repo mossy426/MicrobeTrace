@@ -7123,27 +7123,23 @@ let MicrobeTraceNextHomeComponent = (_class = class MicrobeTraceNextHomeComponen
       ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__.window.context.commonService.session.style.widgets["filtering-epsilon"] = this.widgets['filtering-epsilon'];
       this.visuals.microbeTrace.commonService.session.style.widgets["link-show-nn"] = true;
       $('#filtering-epsilon-row').slideDown();
-      // TODO:: Removed to fix nearest neighbor bug as it's unesscary as of now.  Remove later if it appears to not be neded.
-      if (!this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]) {
-        this.visuals.microbeTrace.commonService.computeMST().then(() => {
-          this.visuals.microbeTrace.commonService.updateNetwork();
-          this.visuals.microbeTrace.updatedVisualization();
-          if ('tableComp' in this.commonService.visuals) {
-            if (this.commonService.visuals.tableComp.dataSetViewSelected == 'Link') {
-              this.commonService.visuals.tableComp.openSelectDataSetScreen({
-                value: 'Link'
-              });
-            }
-          }
-        });
-        this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"] = true;
-        console.log('updated compute:', this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]);
-        return;
-      } else {
-        console.log('onPrun in else else');
-        this.visuals.microbeTrace.commonService.updateNetwork();
-      }
-      //this.visuals.microbeTrace.commonService.updateNetwork();
+      // TODO:: Removed to fix NN issue
+      // if(!this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]) {
+      //     this.visuals.microbeTrace.commonService.computeMST().then(() => {
+      //         this.visuals.microbeTrace.commonService.updateNetwork();
+      //         this.visuals.microbeTrace.updatedVisualization();
+      //         if ('tableComp' in this.commonService.visuals) {
+      //             if (this.commonService.visuals.tableComp.dataSetViewSelected == 'Link') {
+      //                 this.commonService.visuals.tableComp.openSelectDataSetScreen({value: 'Link'});
+      //             }
+      //         }
+      //     });
+      //      this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"] = true;
+      //      console.log('updated compute:' , this.visuals.microbeTrace.commonService.session.style.widgets["mst-computed"]);
+      //      return;
+      //    } else {
+      this.visuals.microbeTrace.commonService.updateNetwork();
+      //    }
       this.visuals.microbeTrace.updatedVisualization();
     }
   }
