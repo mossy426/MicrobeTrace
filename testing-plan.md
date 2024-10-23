@@ -61,8 +61,26 @@ The testing plan covers the following aspects of MicrobeTrace:
   - Test utility functions (e.g., `convertName`, `delayFunction`) for correct outputs given various inputs.
 
 **Examples:**
-- Verify that `FilesComponent` correctly processes different file types (JSON, CSV, XLSX).
-- Ensure `CommonService` accurately updates session states when thresholds change.
+  - Verify that `FilesComponent` correctly processes different file types (JSON, CSV, XLSX).
+  - Ensure `CommonService` accurately updates session states when thresholds change.
+
+**Components**
+- Microbetraceplugin - Wrapper component for app + golden layout + holds timeline player
+- Files - Adding/updating files
+- 2D 
+- Timeline (Epi Curve)
+- Aggregate 
+- Alignment
+- Bubble
+- Crosstab
+- Gantt
+- Heatmap
+- Map
+- Phylogenetic
+- Table
+
+**Services**
+- Common - shared service that's accessed by all components that retrieves, stores, and manipulates session data
 
 ### 2. Integration Testing with Jasmine/Karma
 
