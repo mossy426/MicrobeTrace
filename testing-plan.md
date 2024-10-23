@@ -222,7 +222,7 @@ The testing plan covers the following aspects of MicrobeTrace:
 | **Develop Visual Regression Tests**  | Setup visual testing with BackstopJS.     | 2 Weeks      | QA Engineers               |
 | ** Optional CI/CD Integration**                | Integrate tests into CI/CD pipelines.     | 2 Weeks      | DevOps, QA Engineers       |
 
-*Total Estimated Duration: 21 Weeks*
+*Total Estimated Duration: 7 Weeks w/o CI/CD integration*
 
 ## Continuous Integration/Continuous Deployment (CI/CD) Integration
 
